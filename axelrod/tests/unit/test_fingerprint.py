@@ -3,16 +3,16 @@ import unittest
 from tempfile import mkstemp
 from unittest.mock import patch
 
-import numpy as np
-
-import matplotlib.pyplot
-from hypothesis import given, settings
-
 import axelrod as axl
-from axelrod.fingerprint import (create_points, create_jossann, create_probes,
-                                 create_edges, generate_data, reshape_data,
-                                 AshlockFingerprint, Point, TransitiveFingerprint)
+import matplotlib.pyplot
+import numpy as np
+from axelrod.fingerprint import (AshlockFingerprint, Point,
+                                 TransitiveFingerprint, create_edges,
+                                 create_jossann, create_points, create_probes,
+                                 generate_data, reshape_data)
 from axelrod.tests.property import strategy_lists
+
+from hypothesis import given, settings
 
 C, D = axl.Action.C, axl.Action.D
 
@@ -20,6 +20,7 @@ C, D = axl.Action.C, axl.Action.D
 class RecordedMksTemp(object):
     """This object records all results from RecordedMksTemp.mkstemp. It's for
     testing that temp files are created and then destroyed."""
+
     record = []
 
     @staticmethod
@@ -34,17 +35,32 @@ class RecordedMksTemp(object):
 
 
 class TestFingerprint(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.strategy = axl.WinStayLoseShift
         cls.probe = axl.TitForTat
-        cls.expected_points = [(0.0, 0.0), (0.0, 0.5), (0.0, 1.0),
-                               (0.5, 0.0), (0.5, 0.5), (0.5, 1.0),
-                               (1.0, 0.0), (1.0, 0.5), (1.0, 1.0)]
-        cls.expected_edges = [(0, 1), (0, 2), (0, 3),
-                              (0, 4), (0, 5), (0, 6),
-                              (0, 7), (0, 8), (0, 9)]
+        cls.expected_points = [
+            (0.0, 0.0),
+            (0.0, 0.5),
+            (0.0, 1.0),
+            (0.5, 0.0),
+            (0.5, 0.5),
+            (0.5, 1.0),
+            (1.0, 0.0),
+            (1.0, 0.5),
+            (1.0, 1.0),
+        ]
+        cls.expected_edges = [
+            (0, 1),
+            (0, 2),
+            (0, 3),
+            (0, 4),
+            (0, 5),
+            (0, 6),
+            (0, 7),
+            (0, 8),
+            (0, 9),
+        ]
 
     def test_create_points(self):
         test_points = create_points(0.5, progress_bar=False)
@@ -79,8 +95,7 @@ class TestFingerprint(unittest.TestCase):
         self.assertEqual(str(ja), "Dual Joss-Ann Random: 0.1: (0.5, 0.4)")
 
     def test_create_probes(self):
-        probes = create_probes(self.probe, self.expected_points,
-                               progress_bar=False)
+        probes = create_probes(self.probe, self.expected_points, progress_bar=False)
         self.assertEqual(len(probes), 9)
 
     def test_create_edges(self):
@@ -111,32 +126,33 @@ class TestFingerprint(unittest.TestCase):
             Point(1.0, 0.5): 1.0,
             Point(1.0, 1.0): 5.0,
         }
-        data = generate_data(interactions, self.expected_points,
-                             self.expected_edges)
+        data = generate_data(interactions, self.expected_points, self.expected_edges)
         self.assertEqual(data, expected)
 
     def test_reshape_data(self):
-        test_points = [Point(x=0.0, y=0.0),
-                       Point(x=0.0, y=0.5),
-                       Point(x=0.0, y=1.0),
-                       Point(x=0.5, y=0.0),
-                       Point(x=0.5, y=0.5),
-                       Point(x=0.5, y=1.0),
-                       Point(x=1.0, y=0.0),
-                       Point(x=1.0, y=0.5),
-                       Point(x=1.0, y=1.0)]
-        test_data = {Point(x=0.0, y=0.0): 5,
-                     Point(x=0.0, y=0.5): 9,
-                     Point(x=0.0, y=1.0): 3,
-                     Point(x=0.5, y=0.0): 8,
-                     Point(x=0.5, y=0.5): 2,
-                     Point(x=0.5, y=1.0): 4,
-                     Point(x=1.0, y=0.0): 2,
-                     Point(x=1.0, y=0.5): 1,
-                     Point(x=1.0, y=1.0): 9}
-        test_shaped_data = [[3, 4, 9],
-                            [9, 2, 1],
-                            [5, 8, 2]]
+        test_points = [
+            Point(x=0.0, y=0.0),
+            Point(x=0.0, y=0.5),
+            Point(x=0.0, y=1.0),
+            Point(x=0.5, y=0.0),
+            Point(x=0.5, y=0.5),
+            Point(x=0.5, y=1.0),
+            Point(x=1.0, y=0.0),
+            Point(x=1.0, y=0.5),
+            Point(x=1.0, y=1.0),
+        ]
+        test_data = {
+            Point(x=0.0, y=0.0): 5,
+            Point(x=0.0, y=0.5): 9,
+            Point(x=0.0, y=1.0): 3,
+            Point(x=0.5, y=0.0): 8,
+            Point(x=0.5, y=0.5): 2,
+            Point(x=0.5, y=1.0): 4,
+            Point(x=1.0, y=0.0): 2,
+            Point(x=1.0, y=0.5): 1,
+            Point(x=1.0, y=1.0): 9,
+        }
+        test_shaped_data = [[3, 4, 9], [9, 2, 1], [5, 8, 2]]
         plotting_data = reshape_data(test_data, test_points, 3)
         for i in range(len(plotting_data)):
             self.assertEqual(list(plotting_data[i]), test_shaped_data[i])
@@ -177,11 +193,10 @@ class TestFingerprint(unittest.TestCase):
 
     def test_progress_bar_fingerprint(self):
         af = AshlockFingerprint(self.strategy, self.probe)
-        data = af.fingerprint(turns=10, repetitions=2, step=0.5,
-                              progress_bar=True)
+        data = af.fingerprint(turns=10, repetitions=2, step=0.5, progress_bar=True)
         self.assertEqual(sorted(data.keys()), self.expected_points)
 
-    @patch('axelrod.fingerprint.mkstemp', RecordedMksTemp.mkstemp)
+    @patch("axelrod.fingerprint.mkstemp", RecordedMksTemp.mkstemp)
     def test_temp_file_creation(self):
 
         RecordedMksTemp.reset_record()
@@ -191,28 +206,29 @@ class TestFingerprint(unittest.TestCase):
         self.assertEqual(RecordedMksTemp.record, [])
 
         # Temp file is created and destroyed.
-        af.fingerprint(turns=1, repetitions=1, step=0.5, progress_bar=False,
-                       filename=None)
+        af.fingerprint(
+            turns=1, repetitions=1, step=0.5, progress_bar=False, filename=None
+        )
 
         self.assertEqual(len(RecordedMksTemp.record), 1)
         filename = RecordedMksTemp.record[0][1]
         self.assertIsInstance(filename, str)
-        self.assertNotEqual(filename, '')
+        self.assertNotEqual(filename, "")
         self.assertFalse(os.path.isfile(filename))
 
     def test_fingerprint_with_filename(self):
         filename = "test_outputs/test_fingerprint.csv"
         af = AshlockFingerprint(self.strategy, self.probe)
-        af.fingerprint(turns=1, repetitions=1, step=0.5, progress_bar=False,
-                       filename=filename)
-        with open(filename, 'r') as out:
+        af.fingerprint(
+            turns=1, repetitions=1, step=0.5, progress_bar=False, filename=filename
+        )
+        with open(filename, "r") as out:
             data = out.read()
             self.assertEqual(len(data.split("\n")), 20)
 
     def test_serial_fingerprint(self):
         af = AshlockFingerprint(self.strategy, self.probe)
-        data = af.fingerprint(turns=10, repetitions=2, step=0.5,
-                              progress_bar=False)
+        data = af.fingerprint(turns=10, repetitions=2, step=0.5, progress_bar=False)
         edge_keys = sorted(list(af.interactions.keys()))
         coord_keys = sorted(list(data.keys()))
         self.assertEqual(af.step, 0.5)
@@ -221,8 +237,9 @@ class TestFingerprint(unittest.TestCase):
 
     def test_parallel_fingerprint(self):
         af = AshlockFingerprint(self.strategy, self.probe)
-        af.fingerprint(turns=10, repetitions=2, step=0.5, processes=2,
-                       progress_bar=False)
+        af.fingerprint(
+            turns=10, repetitions=2, step=0.5, processes=2, progress_bar=False
+        )
         edge_keys = sorted(list(af.interactions.keys()))
         coord_keys = sorted(list(af.data.keys()))
         self.assertEqual(af.step, 0.5)
@@ -234,11 +251,11 @@ class TestFingerprint(unittest.TestCase):
         af.fingerprint(turns=10, repetitions=2, step=0.25, progress_bar=False)
         p = af.plot()
         self.assertIsInstance(p, matplotlib.pyplot.Figure)
-        q = af.plot(cmap='jet')
+        q = af.plot(cmap="jet")
         self.assertIsInstance(q, matplotlib.pyplot.Figure)
-        r = af.plot(interpolation='bicubic')
+        r = af.plot(interpolation="bicubic")
         self.assertIsInstance(r, matplotlib.pyplot.Figure)
-        t = af.plot(title='Title')
+        t = af.plot(title="Title")
         self.assertIsInstance(t, matplotlib.pyplot.Figure)
         u = af.plot(colorbar=False)
         self.assertIsInstance(u, matplotlib.pyplot.Figure)
@@ -247,104 +264,107 @@ class TestFingerprint(unittest.TestCase):
 
     def test_wsls_fingerprint(self):
         axl.seed(0)  # Fingerprinting is a random process
-        test_data = {Point(x=0.0, y=0.0): 3.000,
-                     Point(x=0.0, y=0.25): 1.710,
-                     Point(x=0.0, y=0.5): 1.440,
-                     Point(x=0.0, y=0.75): 1.080,
-                     Point(x=0.0, y=1.0): 0.500,
-                     Point(x=0.25, y=0.0): 3.000,
-                     Point(x=0.25, y=0.25): 2.280,
-                     Point(x=0.25, y=0.5): 1.670,
-                     Point(x=0.25, y=0.75): 1.490,
-                     Point(x=0.25, y=1.0): 0.770,
-                     Point(x=0.5, y=0.0): 3.000,
-                     Point(x=0.5, y=0.25): 2.740,
-                     Point(x=0.5, y=0.5): 2.240,
-                     Point(x=0.5, y=0.75): 1.730,
-                     Point(x=0.5, y=1.0): 1.000,
-                     Point(x=0.75, y=0.0): 3.000,
-                     Point(x=0.75, y=0.25): 3.520,
-                     Point(x=0.75, y=0.5): 2.830,
-                     Point(x=0.75, y=0.75): 1.750,
-                     Point(x=0.75, y=1.0): 1.250,
-                     Point(x=1.0, y=0.0): 3.000,
-                     Point(x=1.0, y=0.25): 4.440,
-                     Point(x=1.0, y=0.5): 4.410,
-                     Point(x=1.0, y=0.75): 4.440,
-                     Point(x=1.0, y=1.0): 1.300}
+        test_data = {
+            Point(x=0.0, y=0.0): 3.000,
+            Point(x=0.0, y=0.25): 1.710,
+            Point(x=0.0, y=0.5): 1.440,
+            Point(x=0.0, y=0.75): 1.080,
+            Point(x=0.0, y=1.0): 0.500,
+            Point(x=0.25, y=0.0): 3.000,
+            Point(x=0.25, y=0.25): 2.280,
+            Point(x=0.25, y=0.5): 1.670,
+            Point(x=0.25, y=0.75): 1.490,
+            Point(x=0.25, y=1.0): 0.770,
+            Point(x=0.5, y=0.0): 3.000,
+            Point(x=0.5, y=0.25): 2.740,
+            Point(x=0.5, y=0.5): 2.240,
+            Point(x=0.5, y=0.75): 1.730,
+            Point(x=0.5, y=1.0): 1.000,
+            Point(x=0.75, y=0.0): 3.000,
+            Point(x=0.75, y=0.25): 3.520,
+            Point(x=0.75, y=0.5): 2.830,
+            Point(x=0.75, y=0.75): 1.750,
+            Point(x=0.75, y=1.0): 1.250,
+            Point(x=1.0, y=0.0): 3.000,
+            Point(x=1.0, y=0.25): 4.440,
+            Point(x=1.0, y=0.5): 4.410,
+            Point(x=1.0, y=0.75): 4.440,
+            Point(x=1.0, y=1.0): 1.300,
+        }
         af = axl.AshlockFingerprint(self.strategy, self.probe)
-        data = af.fingerprint(turns=50, repetitions=2, step=0.25,
-                              progress_bar=False)
+        data = af.fingerprint(turns=50, repetitions=2, step=0.25, progress_bar=False)
 
         for key, value in data.items():
             self.assertAlmostEqual(value, test_data[key], places=2)
 
     def test_tft_fingerprint(self):
         axl.seed(0)  # Fingerprinting is a random process
-        test_data = {Point(x=0.0, y=0.0): 3.000,
-                     Point(x=0.0, y=0.25): 1.820,
-                     Point(x=0.0, y=0.5): 1.130,
-                     Point(x=0.0, y=0.75): 1.050,
-                     Point(x=0.0, y=1.0): 0.980,
-                     Point(x=0.25, y=0.0): 3.000,
-                     Point(x=0.25, y=0.25): 2.440,
-                     Point(x=0.25, y=0.5): 1.770,
-                     Point(x=0.25, y=0.75): 1.700,
-                     Point(x=0.25, y=1.0): 1.490,
-                     Point(x=0.5, y=0.0): 3.000,
-                     Point(x=0.5, y=0.25): 2.580,
-                     Point(x=0.5, y=0.5): 2.220,
-                     Point(x=0.5, y=0.75): 2.000,
-                     Point(x=0.5, y=1.0): 1.940,
-                     Point(x=0.75, y=0.0): 3.000,
-                     Point(x=0.75, y=0.25): 2.730,
-                     Point(x=0.75, y=0.5): 2.290,
-                     Point(x=0.75, y=0.75): 2.310,
-                     Point(x=0.75, y=1.0): 2.130,
-                     Point(x=1.0, y=0.0): 3.000,
-                     Point(x=1.0, y=0.25): 2.790,
-                     Point(x=1.0, y=0.5): 2.480,
-                     Point(x=1.0, y=0.75): 2.310,
-                     Point(x=1.0, y=1.0): 2.180}
+        test_data = {
+            Point(x=0.0, y=0.0): 3.000,
+            Point(x=0.0, y=0.25): 1.820,
+            Point(x=0.0, y=0.5): 1.130,
+            Point(x=0.0, y=0.75): 1.050,
+            Point(x=0.0, y=1.0): 0.980,
+            Point(x=0.25, y=0.0): 3.000,
+            Point(x=0.25, y=0.25): 2.440,
+            Point(x=0.25, y=0.5): 1.770,
+            Point(x=0.25, y=0.75): 1.700,
+            Point(x=0.25, y=1.0): 1.490,
+            Point(x=0.5, y=0.0): 3.000,
+            Point(x=0.5, y=0.25): 2.580,
+            Point(x=0.5, y=0.5): 2.220,
+            Point(x=0.5, y=0.75): 2.000,
+            Point(x=0.5, y=1.0): 1.940,
+            Point(x=0.75, y=0.0): 3.000,
+            Point(x=0.75, y=0.25): 2.730,
+            Point(x=0.75, y=0.5): 2.290,
+            Point(x=0.75, y=0.75): 2.310,
+            Point(x=0.75, y=1.0): 2.130,
+            Point(x=1.0, y=0.0): 3.000,
+            Point(x=1.0, y=0.25): 2.790,
+            Point(x=1.0, y=0.5): 2.480,
+            Point(x=1.0, y=0.75): 2.310,
+            Point(x=1.0, y=1.0): 2.180,
+        }
 
         af = axl.AshlockFingerprint(axl.TitForTat, self.probe)
-        data = af.fingerprint(turns=50, repetitions=2, step=0.25,
-                              progress_bar=False)
+        data = af.fingerprint(turns=50, repetitions=2, step=0.25, progress_bar=False)
 
         for key, value in data.items():
             self.assertAlmostEqual(value, test_data[key], places=2)
 
     def test_majority_fingerprint(self):
         axl.seed(0)  # Fingerprinting is a random process
-        test_data = {Point(x=0.0, y=0.0): 3.000,
-                     Point(x=0.0, y=0.25): 1.940,
-                     Point(x=0.0, y=0.5): 1.130,
-                     Point(x=0.0, y=0.75): 1.030,
-                     Point(x=0.0, y=1.0): 0.980,
-                     Point(x=0.25, y=0.0): 3.000,
-                     Point(x=0.25, y=0.25): 2.130,
-                     Point(x=0.25, y=0.5): 1.940,
-                     Point(x=0.25, y=0.75): 2.060,
-                     Point(x=0.25, y=1.0): 1.940,
-                     Point(x=0.5, y=0.0): 3.000,
-                     Point(x=0.5, y=0.25): 2.300,
-                     Point(x=0.5, y=0.5): 2.250,
-                     Point(x=0.5, y=0.75): 2.420,
-                     Point(x=0.5, y=1.0): 2.690,
-                     Point(x=0.75, y=0.0): 3.000,
-                     Point(x=0.75, y=0.25): 2.400,
-                     Point(x=0.75, y=0.5): 2.010,
-                     Point(x=0.75, y=0.75): 2.390,
-                     Point(x=0.75, y=1.0): 2.520,
-                     Point(x=1.0, y=0.0): 3.000,
-                     Point(x=1.0, y=0.25): 2.360,
-                     Point(x=1.0, y=0.5): 1.740,
-                     Point(x=1.0, y=0.75): 2.260,
-                     Point(x=1.0, y=1.0): 2.260}
+        test_data = {
+            Point(x=0.0, y=0.0): 3.000,
+            Point(x=0.0, y=0.25): 1.940,
+            Point(x=0.0, y=0.5): 1.130,
+            Point(x=0.0, y=0.75): 1.030,
+            Point(x=0.0, y=1.0): 0.980,
+            Point(x=0.25, y=0.0): 3.000,
+            Point(x=0.25, y=0.25): 2.130,
+            Point(x=0.25, y=0.5): 1.940,
+            Point(x=0.25, y=0.75): 2.060,
+            Point(x=0.25, y=1.0): 1.940,
+            Point(x=0.5, y=0.0): 3.000,
+            Point(x=0.5, y=0.25): 2.300,
+            Point(x=0.5, y=0.5): 2.250,
+            Point(x=0.5, y=0.75): 2.420,
+            Point(x=0.5, y=1.0): 2.690,
+            Point(x=0.75, y=0.0): 3.000,
+            Point(x=0.75, y=0.25): 2.400,
+            Point(x=0.75, y=0.5): 2.010,
+            Point(x=0.75, y=0.75): 2.390,
+            Point(x=0.75, y=1.0): 2.520,
+            Point(x=1.0, y=0.0): 3.000,
+            Point(x=1.0, y=0.25): 2.360,
+            Point(x=1.0, y=0.5): 1.740,
+            Point(x=1.0, y=0.75): 2.260,
+            Point(x=1.0, y=1.0): 2.260,
+        }
 
         af = axl.AshlockFingerprint(axl.GoByMajority, self.probe)
-        data = af.fingerprint(turns=50, repetitions=2, step=0.25,
-                              progress_bar=False)
+        data = af.fingerprint(turns=50, repetitions=2, step=0.25, progress_bar=False)
 
         for key, value in data.items():
             self.assertAlmostEqual(value, test_data[key], places=2)
@@ -358,67 +378,64 @@ class TestFingerprint(unittest.TestCase):
         """
         strategy, probe = strategy_pair
         af = AshlockFingerprint(strategy, probe)
-        data = af.fingerprint(turns=2, repetitions=2, step=0.5,
-                              progress_bar=False)
+        data = af.fingerprint(turns=2, repetitions=2, step=0.5, progress_bar=False)
         self.assertIsInstance(data, dict)
 
         af = AshlockFingerprint(strategy(), probe)
-        data = af.fingerprint(turns=2, repetitions=2, step=0.5,
-                              progress_bar=False)
+        data = af.fingerprint(turns=2, repetitions=2, step=0.5, progress_bar=False)
         self.assertIsInstance(data, dict)
 
         af = AshlockFingerprint(strategy, probe())
-        data = af.fingerprint(turns=2, repetitions=2, step=0.5,
-                              progress_bar=False)
+        data = af.fingerprint(turns=2, repetitions=2, step=0.5, progress_bar=False)
         self.assertIsInstance(data, dict)
 
         af = AshlockFingerprint(strategy(), probe())
-        data = af.fingerprint(turns=2, repetitions=2, step=0.5,
-                              progress_bar=False)
+        data = af.fingerprint(turns=2, repetitions=2, step=0.5, progress_bar=False)
         self.assertIsInstance(data, dict)
 
 
 class TestTransitiveFingerprint(unittest.TestCase):
-
     def test_init(self):
         player = axl.TitForTat()
         fingerprint = axl.TransitiveFingerprint(strategy=player)
         self.assertEqual(fingerprint.strategy, player)
-        self.assertEqual(fingerprint.opponents, [axl.Random(p) for p in
-                                                 np.linspace(0, 1, 50)])
+        self.assertEqual(
+            fingerprint.opponents, [axl.Random(p) for p in np.linspace(0, 1, 50)]
+        )
 
     def test_init_with_opponents(self):
         player = axl.TitForTat()
         opponents = [s() for s in axl.demo_strategies]
-        fingerprint = axl.TransitiveFingerprint(strategy=player,
-                                                opponents=opponents)
+        fingerprint = axl.TransitiveFingerprint(strategy=player, opponents=opponents)
         self.assertEqual(fingerprint.strategy, player)
         self.assertEqual(fingerprint.opponents, opponents)
 
     def test_init_with_not_default_number(self):
         player = axl.TitForTat()
         number_of_opponents = 10
-        fingerprint = axl.TransitiveFingerprint(strategy=player,
-                                                number_of_opponents=number_of_opponents)
+        fingerprint = axl.TransitiveFingerprint(
+            strategy=player, number_of_opponents=number_of_opponents
+        )
         self.assertEqual(fingerprint.strategy, player)
-        self.assertEqual(fingerprint.opponents, [axl.Random(p) for p in
-                                                 np.linspace(0, 1, 10)])
+        self.assertEqual(
+            fingerprint.opponents, [axl.Random(p) for p in np.linspace(0, 1, 10)]
+        )
 
     def test_fingerprint_with_filename(self):
         filename = "test_outputs/test_fingerprint.csv"
         strategy = axl.TitForTat()
         tf = TransitiveFingerprint(strategy)
-        tf.fingerprint(turns=1, repetitions=1, progress_bar=False,
-                       filename=filename)
-        with open(filename, 'r') as out:
+        tf.fingerprint(turns=1, repetitions=1, progress_bar=False, filename=filename)
+        with open(filename, "r") as out:
             data = out.read()
             self.assertEqual(len(data.split("\n")), 102)
 
     def test_serial_fingerprint(self):
         strategy = axl.TitForTat()
         tf = TransitiveFingerprint(strategy)
-        tf.fingerprint(repetitions=1, progress_bar=False,
-                       filename='test_outputs/tran_fin.csv')
+        tf.fingerprint(
+            repetitions=1, progress_bar=False, filename="test_outputs/tran_fin.csv"
+        )
         self.assertEqual(tf.data.shape, (50, 50))
 
     def test_parallel_fingerprint(self):
@@ -433,7 +450,7 @@ class TestTransitiveFingerprint(unittest.TestCase):
         filename = "test_outputs/test_fingerprint.csv"
         with open(filename, "w") as f:
             f.write(
-"""Interaction index,Player index,Opponent index,Repetition,Player name,Opponent name,Actions
+                """Interaction index,Player index,Opponent index,Repetition,Player name,Opponent name,Actions
 0,0,1,0,Player0,Player1,CCC
 0,1,0,0,Player1,Player0,DDD
 1,0,1,1,Player0,Player1,CCC
@@ -449,12 +466,12 @@ class TestTransitiveFingerprint(unittest.TestCase):
 6,0,4,2,Player0,Player4,DDD
 6,4,0,2,Player4,Player0,DDD
 7,0,4,3,Player0,Player4,DDD
-7,4,0,3,Player4,Player0,DDD""")
+7,4,0,3,Player4,Player0,DDD"""
+            )
         data = tf.analyse_cooperation_ratio(filename)
-        expected_data = np.array([[1, 1, 1],
-                                  [1, 1, 1 / 2],
-                                  [1 / 2, 1, 1 / 2],
-                                  [0, 0, 0]])
+        expected_data = np.array(
+            [[1, 1, 1], [1, 1, 1 / 2], [1 / 2, 1, 1 / 2], [0, 0, 0]]
+        )
         self.assertTrue(np.array_equal(data, expected_data))
 
     def test_plot(self):
@@ -467,7 +484,7 @@ class TestTransitiveFingerprint(unittest.TestCase):
         self.assertIsInstance(p, matplotlib.pyplot.Figure)
         p = tf.plot(cmap="jet")
         self.assertIsInstance(p, matplotlib.pyplot.Figure)
-        p = tf.plot(interpolation='bicubic')
+        p = tf.plot(interpolation="bicubic")
         self.assertIsInstance(p, matplotlib.pyplot.Figure)
         p = tf.plot(title="Title")
         self.assertIsInstance(p, matplotlib.pyplot.Figure)
@@ -484,4 +501,3 @@ class TestTransitiveFingerprint(unittest.TestCase):
         tf.fingerprint(turns=10, repetitions=2, progress_bar=False)
         p = tf.plot(ax=axarr[0, 0])
         self.assertIsInstance(p, matplotlib.pyplot.Figure)
-

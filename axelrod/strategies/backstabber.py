@@ -16,15 +16,15 @@ class BackStabber(Player):
     - Backstabber: Original name by Thomas Campbell
     """
 
-    name = 'BackStabber'
+    name = "BackStabber"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': {'length'},
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": {"length"},
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def strategy(self, opponent: Player) -> Action:
@@ -46,15 +46,15 @@ class DoubleCrosser(Player):
     - Double Crosser: Original name by Thomas Campbell
     """
 
-    name = 'DoubleCrosser'
+    name = "DoubleCrosser"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': {'length'},
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": {"length"},
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def strategy(self, opponent: Player) -> Action:
@@ -99,8 +99,7 @@ def _opponent_triggers_alt_strategy(opponent: Player) -> bool:
     return before_alt_strategy < current_round <= last_round_of_alt_strategy
 
 
-def _opponent_defected_in_first_n_rounds(opponent: Player, first_n_rounds: int
-                                         ) -> bool:
+def _opponent_defected_in_first_n_rounds(opponent: Player, first_n_rounds: int) -> bool:
     """
     If opponent defected in the first N rounds, return True. Else return False.
     """

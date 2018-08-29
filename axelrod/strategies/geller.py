@@ -4,10 +4,10 @@ indicated by their classifier). We do not recommend putting a lot of time in to
 optimising them.
 """
 
+from axelrod._strategy_utils import inspect_strategy
 from axelrod.action import Action
 from axelrod.player import Player
 from axelrod.random_ import random_choice
-from axelrod._strategy_utils import inspect_strategy
 
 C, D = Action.C, Action.D
 
@@ -38,15 +38,15 @@ class Geller(Player):
     - Geller: Original name by Martin Chorley (@martinjc)
     """
 
-    name = 'Geller'
+    name = "Geller"
     classifier = {
-        'memory_depth': float("inf"),
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': True,  # Finds out what opponent will do
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": True,  # Finds out what opponent will do
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     @staticmethod
@@ -72,15 +72,16 @@ class GellerCooperator(Geller):
 
     - Geller Cooperator: Original name by Karol Langner
     """
-    name = 'Geller Cooperator'
+
+    name = "Geller Cooperator"
     classifier = {
-        'memory_depth': float("inf"),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': True,  # Finds out what opponent will do
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": True,  # Finds out what opponent will do
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     @staticmethod
@@ -99,15 +100,16 @@ class GellerDefector(Geller):
 
     - Geller Defector: Original name by Karol Langner
     """
-    name = 'Geller Defector'
+
+    name = "Geller Defector"
     classifier = {
-        'memory_depth': float("inf"),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': True,  # Finds out what opponent will do
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": True,  # Finds out what opponent will do
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     @staticmethod

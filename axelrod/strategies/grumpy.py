@@ -15,19 +15,23 @@ class Grumpy(Player):
     - Grumpy: Original name by Jason Young
     """
 
-    name = 'Grumpy'
+    name = "Grumpy"
     classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
-    def __init__(self, starting_state: str ='Nice', grumpy_threshold: int =10,
-                 nice_threshold: int =-10) -> None:
+    def __init__(
+        self,
+        starting_state: str = "Nice",
+        grumpy_threshold: int = 10,
+        nice_threshold: int = -10,
+    ) -> None:
         """
         Parameters
         ----------
@@ -56,14 +60,14 @@ class Grumpy(Player):
 
         grumpiness = opponent.defections - opponent.cooperations
 
-        if self.state == 'Nice':
+        if self.state == "Nice":
             if grumpiness > self.grumpy_threshold:
-                self.state = 'Grumpy'
+                self.state = "Grumpy"
                 return D
             return C
 
-        if self.state == 'Grumpy':
+        if self.state == "Grumpy":
             if grumpiness < self.nice_threshold:
-                self.state = 'Nice'
+                self.state = "Nice"
                 return C
             return D

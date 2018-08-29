@@ -1,9 +1,9 @@
 import unittest
+
 from axelrod import all_strategies
 
 
 class TestNames(unittest.TestCase):
-
     def test_all_strategies_have_names(self):
         names = [s.name for s in all_strategies if s.name]
         self.assertEqual(len(names), len(all_strategies))

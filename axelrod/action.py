@@ -13,6 +13,7 @@ from typing import Iterable
 
 class UnknownActionError(ValueError):
     """Error indicating an unknown action was used."""
+
     def __init__(self, *args):
         super(UnknownActionError, self).__init__(*args)
 
@@ -41,10 +42,10 @@ class Action(Enum):
         return self.value < other.value
 
     def __repr__(self):
-        return '{}'.format(self.name)
+        return "{}".format(self.name)
 
     def __str__(self):
-        return '{}'.format(self.name)
+        return "{}".format(self.name)
 
     def flip(self):
         """Returns the opposite Action."""
@@ -72,9 +73,9 @@ class Action(Enum):
         UnknownActionError
             If the input string is not 'C' or 'D'
         """
-        if character == 'C':
+        if character == "C":
             return cls.C
-        if character == 'D':
+        if character == "D":
             return cls.D
         raise UnknownActionError('Character must be "C" or "D".')
 

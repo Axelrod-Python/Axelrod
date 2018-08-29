@@ -3,23 +3,24 @@ import random
 import types
 import unittest
 
-import numpy as np
-from hypothesis import given, settings
-from hypothesis.strategies import integers
-
 import axelrod
+import numpy as np
 from axelrod import DefaultGame, Player
 from axelrod.player import get_state_distribution_from_history, update_history
 from axelrod.tests.property import strategy_lists
 
+from hypothesis import given, settings
+from hypothesis.strategies import integers
 
 C, D = axelrod.Action.C, axelrod.Action.D
 
-short_run_time_short_mem = [s for s in axelrod.short_run_time_strategies
-                             if s().classifier["memory_depth"] <= 1]
+short_run_time_short_mem = [
+    s for s in axelrod.short_run_time_strategies if s().classifier["memory_depth"] <= 1
+]
 
 
 # Generic strategy functions for testing
+
 
 def cooperate(*args):
     return C
@@ -28,24 +29,25 @@ def cooperate(*args):
 def defect(*args):
     return D
 
+
 # Test classifier used to create tests players
 _test_classifier = {
-        'memory_depth': 0,
-        'stochastic': False,
-        'makes_use_of': None,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+    "memory_depth": 0,
+    "stochastic": False,
+    "makes_use_of": None,
+    "inspects_source": False,
+    "manipulates_source": False,
+    "manipulates_state": False,
 }
 
 
 class ParameterisedTestPlayer(Player):
     """A simple Player class for testing init parameters"""
 
-    name = 'ParameterisedTestPlayer'
+    name = "ParameterisedTestPlayer"
     classifier = _test_classifier
 
-    def __init__(self, arg_test1='testing1', arg_test2='testing2'):
+    def __init__(self, arg_test1="testing1", arg_test2="testing2"):
         super().__init__()
 
 
@@ -53,7 +55,7 @@ class TestPlayerClass(unittest.TestCase):
 
     name = "Player"
     player = Player
-    classifier = {'stochastic': False}
+    classifier = {"stochastic": False}
 
     def test_add_noise(self):
         axelrod.seed(1)
@@ -102,20 +104,20 @@ class TestPlayerClass(unittest.TestCase):
         player2 = axelrod.MockPlayer([C, D, C, D, D])
         match = axelrod.Match((player1, player2), turns=5)
         _ = match.play()
-        self.assertEqual(player1.state_distribution,
-                         {(C, C): 1, (C, D): 2, (D, C): 1, (D, D): 1})
-        self.assertEqual(player2.state_distribution,
-                         {(C, C): 1, (C, D): 1, (D, C): 2, (D, D): 1})
+        self.assertEqual(
+            player1.state_distribution, {(C, C): 1, (C, D): 2, (D, C): 1, (D, D): 1}
+        )
+        self.assertEqual(
+            player2.state_distribution, {(C, C): 1, (C, D): 1, (D, C): 2, (D, D): 1}
+        )
 
     def test_get_state_distribution_from_history(self):
         player = self.player()
         history_1 = [C, C, D, D, C]
         history_2 = [C, D, C, D, D]
-        get_state_distribution_from_history(
-            player, history_1, history_2)
+        get_state_distribution_from_history(player, history_1, history_2)
         self.assertEqual(
-            player.state_distribution,
-            {(C, C): 1, (C, D): 2, (D, C): 1, (D, D): 1}
+            player.state_distribution, {(C, C): 1, (C, D): 2, (D, C): 1, (D, D): 1}
         )
 
     def test_noisy_play(self):
@@ -143,16 +145,14 @@ class TestPlayerClass(unittest.TestCase):
         self.assertEqual(player.cooperations, 1)
 
     def test_strategy(self):
-        self.assertRaises(
-            NotImplementedError, self.player().strategy, self.player())
+        self.assertRaises(NotImplementedError, self.player().strategy, self.player())
 
     def test_clone(self):
         """Tests player cloning."""
         player1 = axelrod.Random(p=0.75)  # 0.5 is the default
         player2 = player1.clone()
         turns = 50
-        for op in [axelrod.Cooperator(), axelrod.Defector(),
-                   axelrod.TitForTat()]:
+        for op in [axelrod.Cooperator(), axelrod.Defector(), axelrod.TitForTat()]:
             player1.reset()
             player2.reset()
             seed = random.randint(0, 10 ** 6)
@@ -306,14 +306,22 @@ class TestPlayerClass(unittest.TestCase):
     def test_init_params(self):
         """Tests player correct parameters signature detection."""
         self.assertEqual(self.player.init_params(), {})
-        self.assertEqual(ParameterisedTestPlayer.init_params(),
-                         {'arg_test1': 'testing1', 'arg_test2': 'testing2'})
-        self.assertEqual(ParameterisedTestPlayer.init_params(arg_test1='other'),
-                         {'arg_test1': 'other', 'arg_test2': 'testing2'})
-        self.assertEqual(ParameterisedTestPlayer.init_params(arg_test2='other'),
-                         {'arg_test1': 'testing1', 'arg_test2': 'other'})
-        self.assertEqual(ParameterisedTestPlayer.init_params('other'),
-                         {'arg_test1': 'other', 'arg_test2': 'testing2'})
+        self.assertEqual(
+            ParameterisedTestPlayer.init_params(),
+            {"arg_test1": "testing1", "arg_test2": "testing2"},
+        )
+        self.assertEqual(
+            ParameterisedTestPlayer.init_params(arg_test1="other"),
+            {"arg_test1": "other", "arg_test2": "testing2"},
+        )
+        self.assertEqual(
+            ParameterisedTestPlayer.init_params(arg_test2="other"),
+            {"arg_test1": "testing1", "arg_test2": "other"},
+        )
+        self.assertEqual(
+            ParameterisedTestPlayer.init_params("other"),
+            {"arg_test1": "other", "arg_test2": "testing2"},
+        )
 
     def test_init_kwargs(self):
         """Tests player  correct parameters caching."""
@@ -323,36 +331,43 @@ class TestPlayerClass(unittest.TestCase):
         # Test that init_kwargs exist and are empty
         self.assertEqual(self.player().init_kwargs, {})
         # Test that passing a positional argument raises an error
-        self.assertRaises(TypeError, Player, 'test')
+        self.assertRaises(TypeError, Player, "test")
         # Test that passing a keyword argument raises an error
-        self.assertRaises(TypeError, Player, arg_test1='test')
+        self.assertRaises(TypeError, Player, arg_test1="test")
 
         # Tests for Players with init parameters
 
         # Test that init_kwargs exist and contains default values
-        self.assertEqual(ParameterisedTestPlayer().init_kwargs,
-                         {'arg_test1': 'testing1', 'arg_test2': 'testing2'})
+        self.assertEqual(
+            ParameterisedTestPlayer().init_kwargs,
+            {"arg_test1": "testing1", "arg_test2": "testing2"},
+        )
         # Test that passing a keyword argument successfully change the
         # init_kwargs dict.
-        self.assertEqual(ParameterisedTestPlayer(arg_test1='other').init_kwargs,
-                         {'arg_test1': 'other', 'arg_test2': 'testing2'})
-        self.assertEqual(ParameterisedTestPlayer(arg_test2='other').init_kwargs,
-                         {'arg_test1': 'testing1', 'arg_test2': 'other'})
+        self.assertEqual(
+            ParameterisedTestPlayer(arg_test1="other").init_kwargs,
+            {"arg_test1": "other", "arg_test2": "testing2"},
+        )
+        self.assertEqual(
+            ParameterisedTestPlayer(arg_test2="other").init_kwargs,
+            {"arg_test1": "testing1", "arg_test2": "other"},
+        )
         # Test that passing a positional argument successfully change the
         # init_kwargs dict.
-        self.assertEqual(ParameterisedTestPlayer('other', 'other2').init_kwargs,
-                         {'arg_test1': 'other', 'arg_test2': 'other2'})
+        self.assertEqual(
+            ParameterisedTestPlayer("other", "other2").init_kwargs,
+            {"arg_test1": "other", "arg_test2": "other2"},
+        )
         # Test that passing an unknown keyword argument or a spare one raises
         # an error.
-        self.assertRaises(TypeError, ParameterisedTestPlayer, arg_test3='test')
-        self.assertRaises(TypeError, ParameterisedTestPlayer, 'other', 'other',
-                          'other')
+        self.assertRaises(TypeError, ParameterisedTestPlayer, arg_test3="test")
+        self.assertRaises(TypeError, ParameterisedTestPlayer, "other", "other", "other")
 
 
 class TestOpponent(Player):
     """A player who only exists so we have something to test against"""
 
-    name = 'TestPlayer'
+    name = "TestPlayer"
     classifier = _test_classifier
 
     @staticmethod
@@ -362,6 +377,7 @@ class TestOpponent(Player):
 
 class TestPlayer(unittest.TestCase):
     """A Test class from which other player test classes are inherited."""
+
     player = TestOpponent
     expected_class_classifier = None
 
@@ -371,8 +387,8 @@ class TestPlayer(unittest.TestCase):
             player = self.player()
             self.assertEqual(len(player.history), 0)
             self.assertEqual(
-                player.match_attributes,
-                {'length': -1, 'game': DefaultGame, 'noise': 0})
+                player.match_attributes, {"length": -1, "game": DefaultGame, "noise": 0}
+            )
             self.assertEqual(player.cooperations, 0)
             self.assertEqual(player.defections, 0)
             self.classifier_test(self.expected_class_classifier)
@@ -387,26 +403,30 @@ class TestPlayer(unittest.TestCase):
         # Default
         player.set_match_attributes()
         t_attrs = player.match_attributes
-        self.assertEqual(t_attrs['length'], -1)
-        self.assertEqual(t_attrs['noise'], 0)
-        self.assertEqual(t_attrs['game'].RPST(), (3, 1, 0, 5))
+        self.assertEqual(t_attrs["length"], -1)
+        self.assertEqual(t_attrs["noise"], 0)
+        self.assertEqual(t_attrs["game"].RPST(), (3, 1, 0, 5))
 
         # Common
         player.set_match_attributes(length=200)
         t_attrs = player.match_attributes
-        self.assertEqual(t_attrs['length'], 200)
-        self.assertEqual(t_attrs['noise'], 0)
-        self.assertEqual(t_attrs['game'].RPST(), (3, 1, 0, 5))
+        self.assertEqual(t_attrs["length"], 200)
+        self.assertEqual(t_attrs["noise"], 0)
+        self.assertEqual(t_attrs["game"].RPST(), (3, 1, 0, 5))
 
         # Noisy
         player.set_match_attributes(length=200, noise=.5)
         t_attrs = player.match_attributes
-        self.assertEqual(t_attrs['noise'], .5)
+        self.assertEqual(t_attrs["noise"], .5)
 
     def test_reset_history_and_attributes(self):
         """Make sure resetting works correctly."""
-        for opponent in [axelrod.Defector(), axelrod.Random(),
-                         axelrod.Alternator(), axelrod.Cooperator()]:
+        for opponent in [
+            axelrod.Defector(),
+            axelrod.Random(),
+            axelrod.Alternator(),
+            axelrod.Cooperator(),
+        ]:
 
             player = self.player()
             clone = player.clone()
@@ -440,8 +460,12 @@ class TestPlayer(unittest.TestCase):
 
         turns = 50
         r = random.random()
-        for op in [axelrod.Cooperator(), axelrod.Defector(),
-                   axelrod.TitForTat(), axelrod.Random(p=r)]:
+        for op in [
+            axelrod.Cooperator(),
+            axelrod.Defector(),
+            axelrod.TitForTat(),
+            axelrod.Random(p=r),
+        ]:
             player1.reset()
             player2.reset()
             seed = random.randint(0, 10 ** 6)
@@ -452,10 +476,11 @@ class TestPlayer(unittest.TestCase):
             self.assertEqual(len(player1.history), turns)
             self.assertEqual(player1.history, player2.history)
 
-    @given(strategies=strategy_lists(max_size=5,
-                                    strategies=short_run_time_short_mem),
-           seed=integers(min_value=1, max_value=200),
-           turns=integers(min_value=1, max_value=200))
+    @given(
+        strategies=strategy_lists(max_size=5, strategies=short_run_time_short_mem),
+        seed=integers(min_value=1, max_value=200),
+        turns=integers(min_value=1, max_value=200),
+    )
     @settings(max_examples=1, max_iterations=1)
     def test_memory_depth_upper_bound(self, strategies, seed, turns):
         """
@@ -466,17 +491,28 @@ class TestPlayer(unittest.TestCase):
         if memory < float("inf"):
             for strategy in strategies:
                 opponent = strategy()
-                self.assertTrue(test_memory(player=player,
-                                            opponent=opponent,
-                                            seed=seed,
-                                            turns=turns,
-                                            memory_length=memory),
-                    msg="Failed for seed={} and opponent={}".format(seed, opponent))
+                self.assertTrue(
+                    test_memory(
+                        player=player,
+                        opponent=opponent,
+                        seed=seed,
+                        turns=turns,
+                        memory_length=memory,
+                    ),
+                    msg="Failed for seed={} and opponent={}".format(seed, opponent),
+                )
 
-    def versus_test(self, opponent, expected_actions,
-                    noise=None, seed=None, turns=10,
-                    match_attributes=None, attrs=None,
-                    init_kwargs=None):
+    def versus_test(
+        self,
+        opponent,
+        expected_actions,
+        noise=None,
+        seed=None,
+        turns=10,
+        match_attributes=None,
+        attrs=None,
+        init_kwargs=None,
+    ):
         """
         Tests a sequence of outcomes for two given players.
 
@@ -516,8 +552,12 @@ class TestPlayer(unittest.TestCase):
 
         player = self.player(**init_kwargs)
 
-        match = axelrod.Match((player, opponent), turns=turns, noise=noise,
-                              match_attributes=match_attributes)
+        match = axelrod.Match(
+            (player, opponent),
+            turns=turns,
+            noise=noise,
+            match_attributes=match_attributes,
+        )
         self.assertEqual(match.play(), expected_actions)
 
         if attrs:
@@ -538,24 +578,34 @@ class TestPlayer(unittest.TestCase):
             expected_class_classifier = player.classifier
         self.assertEqual(expected_class_classifier, self.player.classifier)
 
-        self.assertTrue('memory_depth' in player.classifier,
-                        msg="memory_depth not in classifier")
-        self.assertTrue('stochastic' in player.classifier,
-                        msg="stochastic not in classifier")
+        self.assertTrue(
+            "memory_depth" in player.classifier, msg="memory_depth not in classifier"
+        )
+        self.assertTrue(
+            "stochastic" in player.classifier, msg="stochastic not in classifier"
+        )
         for key in TestOpponent.classifier:
             self.assertEqual(
                 player.classifier[key],
                 self.expected_classifier[key],
-                msg="%s - Behaviour: %s != Expected Behaviour: %s" %
-                (key, player.classifier[key], self.expected_classifier[key]))
+                msg="%s - Behaviour: %s != Expected Behaviour: %s"
+                % (key, player.classifier[key], self.expected_classifier[key]),
+            )
 
 
 class TestMatch(unittest.TestCase):
     """Test class for heads up play between two given players. Plays an
     axelrod match between the two players."""
 
-    def versus_test(self, player1, player2, expected_actions1,
-                    expected_actions2, noise=None, seed=None):
+    def versus_test(
+        self,
+        player1,
+        player2,
+        expected_actions1,
+        expected_actions2,
+        noise=None,
+        seed=None,
+    ):
         """Tests a sequence of outcomes for two given players."""
         if len(expected_actions1) != len(expected_actions2):
             raise ValueError("Mismatched History lengths.")
@@ -590,7 +640,8 @@ def test_four_vector(test_class, expected_dictionary):
     player1 = test_class.player()
     for key in sorted(expected_dictionary.keys(), key=str):
         test_class.assertAlmostEqual(
-            player1._four_vector[key], expected_dictionary[key])
+            player1._four_vector[key], expected_dictionary[key]
+        )
 
 
 def test_memory(player, opponent, memory_length, seed=0, turns=10):
@@ -614,10 +665,12 @@ def test_memory(player, opponent, memory_length, seed=0, turns=10):
         results.append(player.history[-1])
     return results == expected_results
 
+
 class TestMemoryTest(unittest.TestCase):
     """
     Test for the memory test function.
     """
+
     def test_passes(self):
         """
         The memory test function returns True in this case as the correct mem

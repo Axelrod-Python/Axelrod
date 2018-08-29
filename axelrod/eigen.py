@@ -5,25 +5,26 @@ See also numpy.linalg.eig which calculates all the eigenvalues and
 eigenvectors.
 """
 
-import numpy
 from typing import Tuple
 
+import numpy
 
-def normalise(nvec: numpy.ndarray) -> numpy.ndarray:
+
+def _normalise(nvec: numpy.ndarray) -> numpy.ndarray:
     """Normalises the given numpy array."""
-    with numpy.errstate(invalid='ignore'):
+    with numpy.errstate(invalid="ignore"):
         result = nvec / numpy.sqrt(numpy.dot(nvec, nvec))
     return result
 
 
-def squared_error(vector_1: numpy.ndarray, vector_2: numpy.ndarray) -> float:
+def _squared_error(vector_1: numpy.ndarray, vector_2: numpy.ndarray) -> float:
     """Computes the squared error between two numpy arrays."""
     diff = vector_1 - vector_2
     s = numpy.dot(diff, diff)
     return numpy.sqrt(s)
 
 
-def power_iteration(mat: numpy.matrix, initial: numpy.ndarray) -> numpy.ndarray:
+def _power_iteration(mat: numpy.matrix, initial: numpy.ndarray) -> numpy.ndarray:
     """
     Generator of successive approximations.
 
@@ -41,12 +42,13 @@ def power_iteration(mat: numpy.matrix, initial: numpy.ndarray) -> numpy.ndarray:
 
     vec = initial
     while True:
-        vec = normalise(numpy.dot(mat, vec))
+        vec = _normalise(numpy.dot(mat, vec))
         yield vec
 
 
-def principal_eigenvector(mat: numpy.matrix, maximum_iterations=1000,
-                          max_error=1e-3) -> Tuple[numpy.ndarray, float]:
+def principal_eigenvector(
+    mat: numpy.matrix, maximum_iterations=1000, max_error=1e-3
+) -> Tuple[numpy.ndarray, float]:
     """
     Computes the (normalised) principal eigenvector of the given matrix.
 
@@ -60,6 +62,13 @@ def principal_eigenvector(mat: numpy.matrix, maximum_iterations=1000,
         The maximum number of iterations of the approximation
     max_error: float, 1e-8
         Exit criterion -- error threshold of the difference of successive steps
+
+    Returns
+    -------
+    ndarray
+        Eigenvector estimate for the input matrix
+    float
+        Eigenvalue corresonding to the returned eigenvector
     """
 
     mat_ = numpy.matrix(mat)
@@ -68,17 +77,16 @@ def principal_eigenvector(mat: numpy.matrix, maximum_iterations=1000,
 
     # Power iteration
     if not maximum_iterations:
-        maximum_iterations = float('inf')
+        maximum_iterations = float("inf")
     last = initial
-    for i, vector in enumerate(power_iteration(mat, initial=initial)):
+    for i, vector in enumerate(_power_iteration(mat, initial=initial)):
         if i > maximum_iterations:
             break
-        if squared_error(vector, last) < max_error:
+        if _squared_error(vector, last) < max_error:
             break
         last = vector
     # Compute the eigenvalue (Rayleigh quotient)
-    eigenvalue = numpy.dot(
-        numpy.dot(mat_, vector), vector) / numpy.dot(vector, vector)
+    eigenvalue = numpy.dot(numpy.dot(mat_, vector), vector) / numpy.dot(vector, vector)
     # Liberate the eigenvalue from numpy
     eigenvalue = float(eigenvalue)
     return vector, eigenvalue

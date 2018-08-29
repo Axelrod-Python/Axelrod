@@ -1,6 +1,7 @@
 """Tests for the Darwin PD strategy."""
 
 import axelrod
+
 from .test_player import TestPlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D
@@ -11,13 +12,13 @@ class TestDarwin(TestPlayer):
     name = "Darwin"
     player = axelrod.Darwin
     expected_classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': True,
-        'manipulates_source': False,
-        'manipulates_state': True
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": True,
+        "manipulates_source": False,
+        "manipulates_state": True,
     }
 
     @classmethod
@@ -43,19 +44,35 @@ class TestDarwin(TestPlayer):
         p1 = self.player()
         p1.reset()
 
-        self.versus_test(axelrod.Cooperator(), expected_actions=[(C, C)] * 5, attrs={'genome': [C] * 5})
+        self.versus_test(
+            axelrod.Cooperator(),
+            expected_actions=[(C, C)] * 5,
+            attrs={"genome": [C] * 5},
+        )
 
         expected_genome = [D] * 4 + [C]
-        self.versus_test(axelrod.Defector(), expected_actions=[(C, D)] * 5, attrs={'genome': expected_genome})
+        self.versus_test(
+            axelrod.Defector(),
+            expected_actions=[(C, D)] * 5,
+            attrs={"genome": expected_genome},
+        )
 
         # uses genome
         expected_actions = [(C, C)] + [(D, C)] * 3 + [(C, C)] * 2
         self.versus_test(axelrod.Cooperator(), expected_actions)
 
     def test_against_geller_and_mindreader(self):
-        self.versus_test(axelrod.GellerCooperator(), expected_actions=[(C, C)] * 2, attrs={'genome': [C, C]})
+        self.versus_test(
+            axelrod.GellerCooperator(),
+            expected_actions=[(C, C)] * 2,
+            attrs={"genome": [C, C]},
+        )
 
-        self.versus_test(axelrod.MindReader(), expected_actions=[(C, D)] * 2, attrs={'genome': [D, C]})
+        self.versus_test(
+            axelrod.MindReader(),
+            expected_actions=[(C, D)] * 2,
+            attrs={"genome": [D, C]},
+        )
 
     def test_reset_history_and_attributes(self):
         # Overwrite this method because Darwin does not reset

@@ -1,8 +1,9 @@
 """Tests for the GoByMajority strategies."""
 
 import axelrod
-from .test_player import TestPlayer
 from axelrod import MockPlayer
+
+from .test_player import TestPlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D
 
@@ -14,52 +15,66 @@ class TestHardGoByMajority(TestPlayer):
     default_soft = False
 
     expected_classifier = {
-        'stochastic': False,
-        'memory_depth': float('inf'),
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "stochastic": False,
+        "memory_depth": float("inf"),
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
-
 
     def test_memory_depth_infinite_soft_is_false(self):
         init_kwargs = {}
         if self.default_soft:
-            init_kwargs['soft'] = False
+            init_kwargs["soft"] = False
 
         opponent_actions = [C] * 50 + [D] * 100 + [C] * 52
-        actions = ([(D, C)] + [(C, C)] * 49 + [(C, D)] * 50 + [(D, D)] * 50 +
-                   [(D, C)] * 51 + [(C, C)])
+        actions = (
+            [(D, C)]
+            + [(C, C)] * 49
+            + [(C, D)] * 50
+            + [(D, D)] * 50
+            + [(D, C)] * 51
+            + [(C, C)]
+        )
         opponent = MockPlayer(actions=opponent_actions)
-        self.versus_test(opponent, expected_actions=actions,
-                         init_kwargs=init_kwargs)
+        self.versus_test(opponent, expected_actions=actions, init_kwargs=init_kwargs)
 
     def test_memory_depth_even_soft_is_false(self):
         memory_depth = 4
-        init_kwargs = {'memory_depth': memory_depth}
+        init_kwargs = {"memory_depth": memory_depth}
         if self.default_soft:
-            init_kwargs['soft'] = False
+            init_kwargs["soft"] = False
 
         opponent = MockPlayer(actions=[C] * memory_depth + [D] * memory_depth)
-        actions = ([(D, C)] + [(C, C)] * 3 + [(C, D)] * 2 + [(D, D)] * 2 +
-                   [(D, C)] * 3 + [(C, C)])
-        self.versus_test(opponent, expected_actions=actions,
-                         init_kwargs=init_kwargs)
+        actions = (
+            [(D, C)]
+            + [(C, C)] * 3
+            + [(C, D)] * 2
+            + [(D, D)] * 2
+            + [(D, C)] * 3
+            + [(C, C)]
+        )
+        self.versus_test(opponent, expected_actions=actions, init_kwargs=init_kwargs)
 
     def test_memory_depth_odd(self):
         memory_depth = 5
-        init_kwargs = {'memory_depth': memory_depth}
+        init_kwargs = {"memory_depth": memory_depth}
         if self.default_soft:
             first_action = [(C, C)]
         else:
             first_action = [(D, C)]
         opponent = MockPlayer(actions=[C] * memory_depth + [D] * memory_depth)
-        actions = (first_action + [(C, C)] * 4 + [(C, D)] * 3 + [(D, D)] * 2 +
-                   [(D, C)] * 3 + [(C, C)] * 2)
-        self.versus_test(opponent, expected_actions=actions,
-                         init_kwargs=init_kwargs)
+        actions = (
+            first_action
+            + [(C, C)] * 4
+            + [(C, D)] * 3
+            + [(D, D)] * 2
+            + [(D, C)] * 3
+            + [(C, C)] * 2
+        )
+        self.versus_test(opponent, expected_actions=actions, init_kwargs=init_kwargs)
 
     def test_default_values(self):
         player = self.player()
@@ -75,20 +90,19 @@ class TestGoByMajority(TestHardGoByMajority):
 
     def test_memory_depth_infinite_soft_is_true(self):
         opponent_actions = [C] * 50 + [D] * 100 + [C] * 52
-        actions = ([(C, C)] * 50 + [(C, D)] * 51 + [(D, D)] * 49 +
-                   [(D, C)] * 50 + [(C, C)] * 2)
+        actions = (
+            [(C, C)] * 50 + [(C, D)] * 51 + [(D, D)] * 49 + [(D, C)] * 50 + [(C, C)] * 2
+        )
         opponent = MockPlayer(actions=opponent_actions)
         self.versus_test(opponent, expected_actions=actions)
 
     def test_memory_depth_even_soft_is_true(self):
         memory_depth = 4
-        init_kwargs = {'memory_depth': memory_depth}
+        init_kwargs = {"memory_depth": memory_depth}
 
         opponent = MockPlayer([C] * memory_depth + [D] * memory_depth)
-        actions = ([(C, C)] * 4 + [(C, D)] * 3 + [(D, D)] +
-                   [(D, C)] * 2 + [(C, C)] * 2)
-        self.versus_test(opponent, expected_actions=actions,
-                         init_kwargs=init_kwargs)
+        actions = [(C, C)] * 4 + [(C, D)] * 3 + [(D, D)] + [(D, C)] * 2 + [(C, C)] * 2
+        self.versus_test(opponent, expected_actions=actions, init_kwargs=init_kwargs)
 
     def test_name(self):
         player = self.player(soft=True)
@@ -121,17 +135,16 @@ def factory_TestGoByRecentMajority(memory_depth, soft=True):
     class TestGoByRecentMajority(TestPlayer):
 
         name = "{} Go By Majority: {}".format(prefix, memory_depth)
-        player = getattr(axelrod, "{}GoByMajority{}".format(prefix2,
-                                                            memory_depth))
+        player = getattr(axelrod, "{}GoByMajority{}".format(prefix2, memory_depth))
 
         expected_classifier = {
-            'stochastic': False,
-            'memory_depth': memory_depth,
-            'makes_use_of': set(),
-            'long_run_time': False,
-            'inspects_source': False,
-            'manipulates_source': False,
-            'manipulates_state': False
+            "stochastic": False,
+            "memory_depth": memory_depth,
+            "makes_use_of": set(),
+            "long_run_time": False,
+            "inspects_source": False,
+            "manipulates_source": False,
+            "manipulates_state": False,
         }
 
         def test_strategy(self):
@@ -149,8 +162,7 @@ def factory_TestGoByRecentMajority(memory_depth, soft=True):
             else:
                 cooperations = int(memory_depth * 1.5) - 1
             defections = len(opponent_actions) - cooperations - 1
-            player_actions = (first_player_action + [C] * cooperations +
-                              [D] * defections)
+            player_actions = first_player_action + [C] * cooperations + [D] * defections
 
             actions = list(zip(player_actions, opponent_actions))
             self.versus_test(opponent, expected_actions=actions)

@@ -1,6 +1,7 @@
 """Tests for mind controllers and other wizards."""
 
 import axelrod
+
 from .test_player import TestPlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D
@@ -8,16 +9,16 @@ C, D = axelrod.Action.C, axelrod.Action.D
 
 class TestMindController(TestPlayer):
 
-    name = 'Mind Controller'
+    name = "Mind Controller"
     player = axelrod.MindController
     expected_classifier = {
-        'memory_depth': -10,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': True,  # Finds out what opponent will do
-        'manipulates_state': False
+        "memory_depth": -10,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": True,  # Finds out what opponent will do
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
@@ -64,13 +65,13 @@ class TestMindWarper(TestMindController):
     name = "Mind Warper"
     player = axelrod.MindWarper
     expected_classifier = {
-        'memory_depth': -10,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': True,  # Finds out what opponent will do
-        'manipulates_state': False
+        "memory_depth": -10,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": True,  # Finds out what opponent will do
+        "manipulates_state": False,
     }
 
     def test_setattr(self):
@@ -91,13 +92,13 @@ class TestMindBender(TestMindController):
     name = "Mind Bender"
     player = axelrod.MindBender
     expected_classifier = {
-        'memory_depth': -10,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': True,  # Finds out what opponent will do
-        'manipulates_state': False
+        "memory_depth": -10,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": True,  # Finds out what opponent will do
+        "manipulates_state": False,
     }
 
     def test_strategy(self):

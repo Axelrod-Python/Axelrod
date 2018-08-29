@@ -17,15 +17,15 @@ class AntiCycler(Player):
     - Anti Cycler: Original name by Marc Harper
     """
 
-    name = 'AntiCycler'
+    name = "AntiCycler"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
@@ -59,15 +59,15 @@ class Cycler(Player):
     - Cycler: Original name by Marc Harper
     """
 
-    name = 'Cycler'
+    name = "Cycler"
     classifier = {
-        'memory_depth': 2,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 2,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self, cycle: str = "CCD") -> None:
@@ -84,7 +84,7 @@ class Cycler(Player):
         super().__init__()
         self.cycle_str = cycle
         self.cycle = self.get_new_itertools_cycle()
-        self.classifier['memory_depth'] = len(cycle) - 1
+        self.classifier["memory_depth"] = len(cycle) - 1
 
     def get_new_itertools_cycle(self):
         return itertools.cycle(str_to_actions(self.cycle_str))
@@ -101,9 +101,10 @@ class CyclerDC(Cycler):
 
     - Cycler DC: Original name by Marc Harper
     """
-    name = 'Cycler DC'
+
+    name = "Cycler DC"
     classifier = copy.copy(Cycler.classifier)
-    classifier['memory_depth'] = 1
+    classifier["memory_depth"] = 1
 
     def __init__(self) -> None:
         super().__init__(cycle="DC")
@@ -118,9 +119,10 @@ class CyclerCCD(Cycler):
     - Cycler CCD: Original name by Marc Harper
     - Periodic player CCD: [Mittal2009]_
     """
-    name = 'Cycler CCD'
+
+    name = "Cycler CCD"
     classifier = copy.copy(Cycler.classifier)
-    classifier['memory_depth'] = 2
+    classifier["memory_depth"] = 2
 
     def __init__(self) -> None:
         super().__init__(cycle="CCD")
@@ -135,9 +137,10 @@ class CyclerDDC(Cycler):
     - Cycler DDC: Original name by Marc Harper
     - Periodic player DDC: [Mittal2009]_
     """
-    name = 'Cycler DDC'
+
+    name = "Cycler DDC"
     classifier = copy.copy(Cycler.classifier)
-    classifier['memory_depth'] = 2
+    classifier["memory_depth"] = 2
 
     def __init__(self) -> None:
         super().__init__(cycle="DDC")
@@ -151,9 +154,10 @@ class CyclerCCCD(Cycler):
 
     - Cycler CCCD: Original name by Marc Harper
     """
-    name = 'Cycler CCCD'
+
+    name = "Cycler CCCD"
     classifier = copy.copy(Cycler.classifier)
-    classifier['memory_depth'] = 3
+    classifier["memory_depth"] = 3
 
     def __init__(self) -> None:
         super().__init__(cycle="CCCD")
@@ -167,9 +171,10 @@ class CyclerCCCCCD(Cycler):
 
     - Cycler CCCD: Original name by Marc Harper
     """
-    name = 'Cycler CCCCCD'
+
+    name = "Cycler CCCCCD"
     classifier = copy.copy(Cycler.classifier)
-    classifier['memory_depth'] = 5
+    classifier["memory_depth"] = 5
 
     def __init__(self) -> None:
         super().__init__(cycle="CCCCCD")
@@ -184,9 +189,9 @@ class CyclerCCCDCD(Cycler):
     - Cycler CCCDCD: Original name by Marc Harper
     """
 
-    name = 'Cycler CCCDCD'
+    name = "Cycler CCCDCD"
     classifier = copy.copy(Cycler.classifier)
-    classifier['memory_depth'] = 5
+    classifier["memory_depth"] = 5
 
     def __init__(self) -> None:
         super().__init__(cycle="CCCDCD")

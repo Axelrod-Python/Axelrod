@@ -1,14 +1,12 @@
 """Utilities used by various strategies."""
 
 import itertools
-
 from functools import lru_cache
 
-from axelrod.player import update_history
 from axelrod.action import Action
+from axelrod.player import update_history
 from axelrod.strategies.cooperator import Cooperator
 from axelrod.strategies.defector import Defector
-
 
 C, D = Action.C, Action.D
 
@@ -50,7 +48,7 @@ def detect_cycle(history, min_size=1, max_size=12, offset=0):
 
 def inspect_strategy(inspector, opponent):
     """Inspects the strategy of an opponent.
-    
+
     Simulate one round of play with an opponent, unless the opponent has
     an inspection countermeasure.
 
@@ -66,7 +64,7 @@ def inspect_strategy(inspector, opponent):
     Action
         The action that would be taken by the opponent.
     """
-    if hasattr(opponent, 'foil_strategy_inspection'):
+    if hasattr(opponent, "foil_strategy_inspection"):
         return opponent.foil_strategy_inspection()
     else:
         return opponent.strategy(inspector)
@@ -74,7 +72,7 @@ def inspect_strategy(inspector, opponent):
 
 def _limited_simulate_play(player_1, player_2, h1):
     """Simulates a player's move.
-    
+
     After inspecting player_2's next move (allowing player_2's strategy
     method to set any internal variables as needed), update histories
     for both players. Note that player_1's move is an argument.
@@ -141,14 +139,14 @@ def _calculate_scores(p1, p2, game):
 
 
 def look_ahead(player_1, player_2, game, rounds=10):
-    """Returns an constant action that maximizes score by looking ahead.
+    """Returns a constant action that maximizes score by looking ahead.
 
     Parameters
     ----------
     player_1: Player
         The player that will look ahead.
     player_2: Player
-        The oppponent that will be inspected.
+        The opponent that will be inspected.
     game: Game
         The Game object used to score rounds.
     rounds: int
@@ -177,7 +175,7 @@ def look_ahead(player_1, player_2, game, rounds=10):
 @lru_cache()
 def recursive_thue_morse(n):
     """The recursive definition of the Thue-Morse sequence.
-    
+
     The first few terms of the Thue-Morse sequence are:
         0 1 1 0 1 0 0 1 1 0 0 1 0 1 1 0 . . .
     """

@@ -4,11 +4,10 @@ indicated by their classifier). We do not recommend putting a lot of time in to
 optimising it.
 """
 from collections import defaultdict
+from typing import Optional
 
 from axelrod.action import Action
 from axelrod.player import Player
-
-from typing import Optional
 
 C, D = Action.C, Action.D
 
@@ -37,17 +36,17 @@ class Darwin(Player):
 
     name = "Darwin"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'inspects_source': True,  # Checks to see if opponent is using simulated matches.
-        'long_run_time': False,
-        'makes_use_of': set(),
-        'manipulates_source': False,
-        'manipulates_state': True  # Does not reset properly.
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "inspects_source": True,  # Checks to see if opponent is using simulated matches.
+        "long_run_time": False,
+        "makes_use_of": set(),
+        "manipulates_source": False,
+        "manipulates_state": True,  # Does not reset properly.
     }
 
     genome = [C]
-    valid_callers = ["play"]    # What functions may invoke our strategy.
+    valid_callers = ["play"]  # What functions may invoke our strategy.
 
     def __init__(self) -> None:
         self.outcomes = None  # type: Optional[dict]
@@ -70,7 +69,7 @@ class Darwin(Player):
             outcome = self.outcomes[(self.history[-1], opponent.history[-1])]
             self.mutate(outcome, trial)
             # Update genome with selected response
-            Darwin.genome[trial-1] = self.response
+            Darwin.genome[trial - 1] = self.response
 
         if trial < len(Darwin.genome):
             # Return response from genome where available...
@@ -90,7 +89,7 @@ class Darwin(Player):
     def mutate(self, outcome: tuple, trial: int) -> None:
         """ Select response according to outcome. """
         if outcome[0] < 3 and (len(Darwin.genome) >= trial):
-            self.response = D if Darwin.genome[trial-1] == C else C
+            self.response = D if Darwin.genome[trial - 1] == C else C
 
     @staticmethod
     def reset_genome() -> None:

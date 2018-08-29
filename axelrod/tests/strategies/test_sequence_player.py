@@ -2,10 +2,10 @@
 import unittest
 
 import axelrod
-from .test_player import TestPlayer, TestOpponent
-from axelrod.strategies.sequence_player import SequencePlayer
 from axelrod._strategy_utils import recursive_thue_morse
+from axelrod.strategies.sequence_player import SequencePlayer
 
+from .test_player import TestOpponent, TestPlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D
 
@@ -20,6 +20,7 @@ class TestThueMoreGenerator(unittest.TestCase):
 class TestSequencePlayer(unittest.TestCase):
     def test_sequence_player(self):
         """Basic test for SequencePlayer."""
+
         def cooperate_gen():
             yield 1
         player = SequencePlayer(generator_function=cooperate_gen)
@@ -29,16 +30,16 @@ class TestSequencePlayer(unittest.TestCase):
 
 class TestThueMorse(TestPlayer):
 
-    name = 'ThueMorse'
+    name = "ThueMorse"
     player = axelrod.ThueMorse
     expected_classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
@@ -55,16 +56,16 @@ class TestThueMorse(TestPlayer):
 
 class TestThueMorseInverse(TestPlayer):
 
-    name = 'ThueMorseInverse'
+    name = "ThueMorseInverse"
     player = axelrod.ThueMorseInverse
     expected_classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):

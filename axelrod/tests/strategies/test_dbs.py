@@ -1,8 +1,10 @@
 """Tests DBS strategy."""
 
 import unittest
+
 import axelrod
 from axelrod.strategies import dbs
+
 from .test_player import TestPlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D
@@ -10,6 +12,7 @@ C, D = axelrod.Action.C, axelrod.Action.D
 
 class TestNode(unittest.TestCase):
     """Test for the base Node class."""
+
     node = dbs.Node()
 
     def test_get_siblings(self):
@@ -29,6 +32,7 @@ class TestTreeSearch(unittest.TestCase):
     considering an incoming position (C, C), (C, D), (D, C) or (D, D)).
     For each policy, we test the answer for all incoming position.
     """
+
     def setUp(self):
         """Initialization for tests."""
         # For each test, we check the answer against each possible
@@ -53,7 +57,8 @@ class TestTreeSearch(unittest.TestCase):
         for inp, out in zip(self.input_pos, expected_output):
             begin_node = dbs.DeterministicNode(inp[0], inp[1], depth=0)
             values = dbs.minimax_tree_search(
-                begin_node, self.cooperator_policy, max_depth=5)
+                begin_node, self.cooperator_policy, max_depth=5
+            )
             self.assertEqual(values.index(max(values)), out)
 
     def test_move_gen_cooperator(self):
@@ -62,8 +67,7 @@ class TestTreeSearch(unittest.TestCase):
         """
         expected_output = [D, D, D, D]
         for inp, out in zip(self.input_pos, expected_output):
-            out_move = dbs.move_gen(
-                inp, self.cooperator_policy, depth_search_tree=5)
+            out_move = dbs.move_gen(inp, self.cooperator_policy, depth_search_tree=5)
             self.assertEqual(out_move, out)
 
     def test_minimaxTreeSearch_defector(self):
@@ -75,8 +79,9 @@ class TestTreeSearch(unittest.TestCase):
         for inp, out in zip(self.input_pos, expected_output):
             begin_node = dbs.DeterministicNode(inp[0], inp[1], depth=0)
             values = dbs.minimax_tree_search(
-                begin_node, self.defector_policy, max_depth=5)
-            self.assertEqual(values.index(max(values)),out)
+                begin_node, self.defector_policy, max_depth=5
+            )
+            self.assertEqual(values.index(max(values)), out)
 
     def test_move_gen_defector(self):
         """
@@ -84,8 +89,7 @@ class TestTreeSearch(unittest.TestCase):
         """
         expected_output = [D, D, D, D]
         for inp, out in zip(self.input_pos, expected_output):
-            out_move = dbs.move_gen(
-                inp, self.defector_policy, depth_search_tree=5)
+            out_move = dbs.move_gen(inp, self.defector_policy, depth_search_tree=5)
             self.assertEqual(out_move, out)
 
     def test_minimaxTreeSearch_titForTat(self):
@@ -98,8 +102,9 @@ class TestTreeSearch(unittest.TestCase):
         for inp, out in zip(self.input_pos, expected_output):
             begin_node = dbs.DeterministicNode(inp[0], inp[1], depth=0)
             values = dbs.minimax_tree_search(
-                begin_node, self.titForTat_policy, max_depth=5)
-            self.assertEqual(values.index(max(values)),out)
+                begin_node, self.titForTat_policy, max_depth=5
+            )
+            self.assertEqual(values.index(max(values)), out)
 
     def test_last_node_titForTat(self):
         """
@@ -110,8 +115,9 @@ class TestTreeSearch(unittest.TestCase):
         for inp, out in zip(self.input_pos, expected_output):
             begin_node = dbs.DeterministicNode(inp[0], inp[1], depth=0)
             values = dbs.minimax_tree_search(
-                begin_node, self.titForTat_policy, max_depth=1)
-            self.assertEqual(values.index(max(values)),out)
+                begin_node, self.titForTat_policy, max_depth=1
+            )
+            self.assertEqual(values.index(max(values)), out)
 
     def test_move_gen_titForTat(self):
         """
@@ -119,8 +125,7 @@ class TestTreeSearch(unittest.TestCase):
         """
         expected_output = [C, C, C, C]
         for inp, out in zip(self.input_pos, expected_output):
-            out_move = dbs.move_gen(
-                inp, self.titForTat_policy, depth_search_tree=5)
+            out_move = dbs.move_gen(inp, self.titForTat_policy, depth_search_tree=5)
             self.assertEqual(out_move, out)
 
     def test_minimaxTreeSearch_alternator(self):
@@ -132,8 +137,9 @@ class TestTreeSearch(unittest.TestCase):
         for inp, out in zip(self.input_pos, expected_output):
             begin_node = dbs.DeterministicNode(inp[0], inp[1], depth=0)
             values = dbs.minimax_tree_search(
-                begin_node, self.alternator_policy, max_depth=5)
-            self.assertEqual(values.index(max(values)),out)
+                begin_node, self.alternator_policy, max_depth=5
+            )
+            self.assertEqual(values.index(max(values)), out)
 
     def test_move_gen_alternator(self):
         """
@@ -141,8 +147,7 @@ class TestTreeSearch(unittest.TestCase):
         """
         expected_output = [D, D, D, D]
         for inp, out in zip(self.input_pos, expected_output):
-            out_move = dbs.move_gen(inp, self.random_policy,
-                                    depth_search_tree=5)
+            out_move = dbs.move_gen(inp, self.random_policy, depth_search_tree=5)
             self.assertEqual(out_move, out)
 
     def test_minimaxTreeSearch_random(self):
@@ -154,8 +159,9 @@ class TestTreeSearch(unittest.TestCase):
         for inp, out in zip(self.input_pos, expected_output):
             begin_node = dbs.DeterministicNode(inp[0], inp[1], depth=0)
             values = dbs.minimax_tree_search(
-                begin_node, self.random_policy, max_depth=5)
-            self.assertEqual(values.index(max(values)),out)
+                begin_node, self.random_policy, max_depth=5
+            )
+            self.assertEqual(values.index(max(values)), out)
 
     def test_move_gen_random(self):
         """
@@ -163,8 +169,7 @@ class TestTreeSearch(unittest.TestCase):
         """
         expected_output = [D, D, D, D]
         for inp, out in zip(self.input_pos, expected_output):
-            out_move = dbs.move_gen(inp, self.random_policy,
-                                    depth_search_tree=5)
+            out_move = dbs.move_gen(inp, self.random_policy, depth_search_tree=5)
             self.assertEqual(out_move, out)
 
     def test_minimaxTreeSearch_grudger(self):
@@ -177,8 +182,9 @@ class TestTreeSearch(unittest.TestCase):
         for inp, out in zip(self.input_pos, expected_output):
             begin_node = dbs.DeterministicNode(inp[0], inp[1], depth=0)
             values = dbs.minimax_tree_search(
-                begin_node, self.grudger_policy, max_depth=5)
-            self.assertEqual(values.index(max(values)),out)
+                begin_node, self.grudger_policy, max_depth=5
+            )
+            self.assertEqual(values.index(max(values)), out)
 
     def test_move_gen_grudger(self):
         """
@@ -186,8 +192,7 @@ class TestTreeSearch(unittest.TestCase):
         """
         expected_output = [C, D, D, D]
         for inp, out in zip(self.input_pos, expected_output):
-            out_move = dbs.move_gen(
-                inp, self.grudger_policy, depth_search_tree=5)
+            out_move = dbs.move_gen(inp, self.grudger_policy, depth_search_tree=5)
             self.assertEqual(out_move, out)
 
 
@@ -196,37 +201,39 @@ class TestDBS(TestPlayer):
     player = axelrod.DBS
 
     expected_classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': True,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": True,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
         default_init_kwargs = {
-            'discount_factor': .75, 'promotion_threshold': 3,
-            'violation_threshold': 4, 'reject_threshold': 4,
-            'tree_depth': 5
-            }
+            "discount_factor": .75,
+            "promotion_threshold": 3,
+            "violation_threshold": 4,
+            "reject_threshold": 4,
+            "tree_depth": 5,
+        }
 
         # Test that DBS always cooperate against Cooperator.
         actions = [(C, C)] * 7
         self.versus_test(
             opponent=axelrod.Cooperator(),
             expected_actions=actions,
-            init_kwargs = default_init_kwargs
-            )
+            init_kwargs=default_init_kwargs,
+        )
 
         # Test if it correctly learns Alternator strategy.
         actions = [(C, C), (C, D)] * 3 + [(D, C), (C, D)] * 3
         self.versus_test(
             opponent=axelrod.Alternator(),
             expected_actions=actions,
-            init_kwargs = default_init_kwargs
-            )
+            init_kwargs=default_init_kwargs,
+        )
 
         # Check that algorithms take into account a change in opponent's
         # strategy.
@@ -235,22 +242,24 @@ class TestDBS(TestPlayer):
         self.versus_test(
             opponent=axelrod.MockPlayer(actions=mock_actions),
             expected_actions=exp_actions,
-            init_kwargs=default_init_kwargs
-            )
+            init_kwargs=default_init_kwargs,
+        )
 
         # Check that adaptation is faster if diminishing promotion_threshold.
         init_kwargs_2 = {
-            'discount_factor': .75, 'promotion_threshold': 2,
-            'violation_threshold': 4, 'reject_threshold': 4,
-            'tree_depth': 5
-            }
+            "discount_factor": .75,
+            "promotion_threshold": 2,
+            "violation_threshold": 4,
+            "reject_threshold": 4,
+            "tree_depth": 5,
+        }
         mock_actions = [C, C, C, D, D, D, D, D, D, D]
         exp_actions = [(C, C)] * 3 + [(C, D)] * 3 + [(D, D)] * 4
         self.versus_test(
             opponent=axelrod.MockPlayer(actions=mock_actions),
             expected_actions=exp_actions,
-            init_kwargs = init_kwargs_2
-            )
+            init_kwargs=init_kwargs_2,
+        )
 
         # Check that ShouldDemote mechanism works.
         # We play against Alternator for 12 turns to make the
@@ -258,15 +267,17 @@ class TestDBS(TestPlayer):
         # change opponent to Defector, hence triggering ShouldDemote
         # mechanism. For this test we use violation_threshold=3
         init_kwargs_3 = {
-            'discount_factor': .75, 'promotion_threshold': 3,
-            'violation_threshold': 3, 'reject_threshold': 3,
-            'tree_depth': 5
-            }
+            "discount_factor": .75,
+            "promotion_threshold": 3,
+            "violation_threshold": 3,
+            "reject_threshold": 3,
+            "tree_depth": 5,
+        }
         exp_actions = [(C, C), (C, D)] * 3 + [(D, C), (C, D)] * 3
         exp_actions += [(D, D), (C, D)] * 3 + [(D, D)]
         mock_actions = [C, D, C, D, C, D, C, D, C, D, C, D, D, D, D, D, D, D, D]
         self.versus_test(
             opponent=axelrod.MockPlayer(actions=mock_actions),
             expected_actions=exp_actions,
-            init_kwargs=init_kwargs_3
-            )
+            init_kwargs=init_kwargs_3,
+        )

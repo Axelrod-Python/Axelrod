@@ -20,15 +20,15 @@ class Grudger(Player):
     - Spite: [Beaufils1997]_
     """
 
-    name = 'Grudger'
+    name = "Grudger"
     classifier = {
-        'memory_depth': 1,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 1,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     @staticmethod
@@ -50,15 +50,15 @@ class ForgetfulGrudger(Player):
     - Forgetful Grudger: Original name by Geraint Palmer
     """
 
-    name = 'Forgetful Grudger'
+    name = "Forgetful Grudger"
     classifier = {
-        'memory_depth': 10,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 10,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
@@ -94,15 +94,15 @@ class OppositeGrudger(Player):
     - Opposite Grudger: Original name by Geraint Palmer
     """
 
-    name = 'Opposite Grudger'
+    name = "Opposite Grudger"
     classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     @staticmethod
@@ -123,15 +123,15 @@ class Aggravater(Player):
     - Aggravater: Original name by Thomas Campbell
     """
 
-    name = 'Aggravater'
+    name = "Aggravater"
     classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     @staticmethod
@@ -152,15 +152,15 @@ class SoftGrudger(Player):
     - Soft Grudger (SGRIM): [Li2011]_
     """
 
-    name = 'Soft Grudger'
+    name = "Soft Grudger"
     classifier = {
-        'memory_depth': 6,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 6,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
@@ -196,15 +196,15 @@ class GrudgerAlternator(Player):
     - Grudger Alternator: Original name by Geraint Palmer
     """
 
-    name = 'GrudgerAlternator'
+    name = "GrudgerAlternator"
     classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def strategy(self, opponent: Player) -> Action:
@@ -227,15 +227,15 @@ class EasyGo(Player):
     - Reverse Grudger (RGRIM): [Li2011]_
     """
 
-    name = 'EasyGo'
+    name = "EasyGo"
     classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     @staticmethod
@@ -260,18 +260,18 @@ class GeneralSoftGrudger(Player):
     - General Soft Grudger: Original Name by J. Taylor Smith
     """
 
-    name = 'General Soft Grudger'
+    name = "General Soft Grudger"
     classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
-    def __init__(self, n: int=1, d: int=4, c: int=2) -> None:
+    def __init__(self, n: int = 1, d: int = 4, c: int = 2) -> None:
         """
         Parameters
         ----------
@@ -307,7 +307,7 @@ class GeneralSoftGrudger(Player):
                 self.grudged = False
                 self.grudge_memory = 0
             return strategy
-        elif [D] * self.n == opponent.history[-self.n:]:
+        elif [D] * self.n == opponent.history[-self.n :]:
             self.grudged = True
             return D
 

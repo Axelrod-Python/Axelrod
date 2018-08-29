@@ -1,21 +1,24 @@
 """Test for the Resurrection strategy."""
 
 import axelrod
+
 from .test_player import TestPlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D
+
+
 class Resurrection(TestPlayer):
 
     name = "Resurrection"
     player = axelrod.Resurrection
     expected_classifier = {
-        'memory_depth': 5,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 5,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
@@ -30,18 +33,19 @@ class Resurrection(TestPlayer):
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (C, D), (D, C)]
         self.versus_test(axelrod.Alternator(), expected_actions=actions)
 
+
 class TestDoubleResurrection(TestPlayer):
 
     name = "DoubleResurrection"
     player = axelrod.DoubleResurrection
     expected_classifier = {
-        'memory_depth': 5,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 5,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):

@@ -7,15 +7,16 @@ See the various Meta strategies for another type of transformation.
 
 import collections
 import copy
-from importlib import import_module
 import inspect
 import random
+from importlib import import_module
 from typing import Any
-from numpy.random import choice
-from .action import Action
-from .random_ import random_choice
-from .player import defaultdict, Player
 
+from numpy.random import choice
+
+from .action import Action
+from .player import Player, defaultdict
+from .random_ import random_choice
 
 C, D = Action.C, Action.D
 
@@ -25,8 +26,7 @@ C, D = Action.C, Action.D
 # Alternator.
 
 
-def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
-                               reclassifier=None):
+def StrategyTransformerFactory(strategy_wrapper, name_prefix=None, reclassifier=None):
     """Modify an existing strategy dynamically by wrapping the strategy
     method with the argument `strategy_wrapper`.
 
@@ -65,8 +65,7 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
             factory_args = (strategy_wrapper, name_prefix, reclassifier)
             return (
                 DecoratorReBuilder(),
-                (factory_args,
-                 self.args, self.kwargs, self.name_prefix)
+                (factory_args, self.args, self.kwargs, self.name_prefix),
             )
 
         def __call__(self, PlayerClass):
@@ -116,8 +115,9 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
                     flip_play_attributes(self)
 
                 # Apply the wrapper
-                return strategy_wrapper(self, opponent, proposed_action,
-                                        *args, **kwargs)
+                return strategy_wrapper(
+                    self, opponent, proposed_action, *args, **kwargs
+                )
 
             # Modify the PlayerClass name
             new_class_name = PlayerClass.__name__
@@ -125,13 +125,13 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
             name_prefix = self.name_prefix
             if name_prefix:
                 # Modify the Player name (class variable inherited from Player)
-                new_class_name = ''.join([name_prefix, PlayerClass.__name__])
+                new_class_name = "".join([name_prefix, PlayerClass.__name__])
                 # Modify the Player name (class variable inherited from Player)
-                name = ' '.join([name_prefix, PlayerClass.name])
+                name = " ".join([name_prefix, PlayerClass.name])
 
-            original_classifier = copy.deepcopy(PlayerClass.classifier) # Copy
+            original_classifier = copy.deepcopy(PlayerClass.classifier)  # Copy
             if reclassifier is not None:
-                classifier = reclassifier(original_classifier, *args, **kwargs,)
+                classifier = reclassifier(original_classifier, *args, **kwargs)
             else:
                 classifier = original_classifier
 
@@ -140,7 +140,7 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
             def __repr__(self):
                 name = PlayerClass.__repr__(self)
                 # add eventual transformers' arguments in name
-                prefix = ': '
+                prefix = ": "
                 for arg in args:
                     try:
                         # Action has .name but should not be made into a list
@@ -150,8 +150,8 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
                         pass
                     except TypeError:
                         pass
-                    name = ''.join([name, prefix, str(arg)])
-                    prefix = ', '
+                    name = "".join([name, prefix, str(arg)])
+                    prefix = ", "
                 return name
 
             def reduce_for_decorated_class(self_):
@@ -166,7 +166,7 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
                 decorators = []
                 for class_ in self_.__class__.mro():
                     import_name = class_.__name__
-                    if hasattr(class_, 'decorator'):
+                    if hasattr(class_, "decorator"):
                         decorators.insert(0, class_.decorator)
                     if hasattr(class_module, import_name):
                         break
@@ -174,13 +174,14 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
                 return (
                     StrategyReBuilder(),
                     (decorators, import_name, self_.__module__),
-                    self_.__dict__
+                    self_.__dict__,
                 )
 
             # Define a new class and wrap the strategy method
             # Dynamically create the new class
             new_class = type(
-                new_class_name, (PlayerClass,),
+                new_class_name,
+                (PlayerClass,),
                 {
                     "name": name,
                     "original_class": PlayerClass,
@@ -191,9 +192,11 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
                     "classifier": classifier,
                     "__doc__": PlayerClass.__doc__,
                     "__reduce__": reduce_for_decorated_class,
-                })
+                },
+            )
 
             return new_class
+
     return Decorator
 
 
@@ -215,7 +218,7 @@ def is_strategy_static(player_class) -> bool:
     Returns True if `player_class.strategy` is a `staticmethod`, else False.
     """
     for class_ in player_class.mro():
-        method = inspect.getattr_static(class_, 'strategy', default=None)
+        method = inspect.getattr_static(class_, "strategy", default=None)
         if method is not None:
             return isinstance(method, staticmethod)
 
@@ -225,11 +228,13 @@ class DecoratorReBuilder(object):
     An object to build an anonymous Decorator obj from a set of pickle-able
     parameters.
     """
-    def __call__(self, factory_args: tuple, args: tuple, kwargs: dict,
-                 instance_name_prefix: str) -> Any:
+
+    def __call__(
+        self, factory_args: tuple, args: tuple, kwargs: dict, instance_name_prefix: str
+    ) -> Any:
 
         decorator_class = StrategyTransformerFactory(*factory_args)
-        kwargs['name_prefix'] = instance_name_prefix
+        kwargs["name_prefix"] = instance_name_prefix
         return decorator_class(*args, **kwargs)
 
 
@@ -238,13 +243,13 @@ class StrategyReBuilder(object):
     An object to build a new instance of a player from an old instance
     that could not normally be pickled.
     """
-    def __call__(self, decorators: list, import_name: str,
-                 module_name: str) -> Player:
+
+    def __call__(self, decorators: list, import_name: str, module_name: str) -> Player:
 
         module_ = import_module(module_name)
         import_class = getattr(module_, import_name)
 
-        if hasattr(import_class, 'decorator'):
+        if hasattr(import_class, "decorator"):
             return import_class()
         else:
             generated_class = import_class
@@ -256,6 +261,7 @@ class StrategyReBuilder(object):
 def compose_transformers(t1, t2):
     """Compose transformers without having to invoke the first on
     a PlayerClass."""
+
     class Composition(object):
         def __init__(self):
             self.t1 = t1
@@ -263,11 +269,11 @@ def compose_transformers(t1, t2):
 
         def __call__(self, PlayerClass):
             return t1(t2(PlayerClass))
+
     return Composition()
 
 
-def generic_strategy_wrapper(player, opponent, proposed_action, *args,
-                             **kwargs):
+def generic_strategy_wrapper(player, opponent, proposed_action, *args, **kwargs):
     """
     Strategy wrapper functions should be of the following form.
 
@@ -299,8 +305,7 @@ def flip_wrapper(player, opponent, action):
     return action.flip()
 
 
-FlipTransformer = StrategyTransformerFactory(
-    flip_wrapper, name_prefix="Flipped")
+FlipTransformer = StrategyTransformerFactory(flip_wrapper, name_prefix="Flipped")
 
 
 def dual_wrapper(player, opponent: Player, proposed_action: Action) -> Action:
@@ -376,14 +381,17 @@ def noisy_wrapper(player, opponent, action, noise=0.05):
         return action.flip()
     return action
 
+
 def noisy_reclassifier(original_classifier, noise):
     """Function to reclassify the strategy"""
     if noise not in (0, 1):
         original_classifier["stochastic"] = True
     return original_classifier
 
+
 NoisyTransformer = StrategyTransformerFactory(
-    noisy_wrapper, name_prefix="Noisy", reclassifier=noisy_reclassifier)
+    noisy_wrapper, name_prefix="Noisy", reclassifier=noisy_reclassifier
+)
 
 
 def forgiver_wrapper(player, opponent, action, p):
@@ -393,15 +401,17 @@ def forgiver_wrapper(player, opponent, action, p):
         return random_choice(p)
     return C
 
+
 def forgiver_reclassifier(original_classifier, p):
     """Function to reclassify the strategy"""
     if p not in (0, 1):
         original_classifier["stochastic"] = True
     return original_classifier
 
+
 ForgiverTransformer = StrategyTransformerFactory(
-    forgiver_wrapper, name_prefix="Forgiving",
-    reclassifier=forgiver_reclassifier)
+    forgiver_wrapper, name_prefix="Forgiving", reclassifier=forgiver_reclassifier
+)
 
 
 def nice_wrapper(player, opponent, action):
@@ -413,8 +423,7 @@ def nice_wrapper(player, opponent, action):
     return action
 
 
-NiceTransformer = StrategyTransformerFactory(
-    nice_wrapper, name_prefix="Nice")
+NiceTransformer = StrategyTransformerFactory(nice_wrapper, name_prefix="Nice")
 
 
 def initial_sequence(player, opponent, action, initial_seq):
@@ -426,19 +435,21 @@ def initial_sequence(player, opponent, action, initial_seq):
         return initial_seq[index]
     return action
 
+
 def initial_reclassifier(original_classifier, initial_seq):
     """
     If needed this extends the memory depth to be the length of the initial
     sequence
     """
-    original_classifier["memory_depth"] = max(len(initial_seq),
-                                            original_classifier["memory_depth"])
+    original_classifier["memory_depth"] = max(
+        len(initial_seq), original_classifier["memory_depth"]
+    )
     return original_classifier
 
 
-InitialTransformer = StrategyTransformerFactory(initial_sequence,
-                                            name_prefix="Initial",
-                                            reclassifier=initial_reclassifier)
+InitialTransformer = StrategyTransformerFactory(
+    initial_sequence, name_prefix="Initial", reclassifier=initial_reclassifier
+)
 
 
 def final_sequence(player, opponent, action, seq):
@@ -461,17 +472,19 @@ def final_sequence(player, opponent, action, seq):
         return seq[-index]
     return action
 
+
 def final_reclassifier(original_classifier, seq):
     """Reclassify the strategy"""
     original_classifier["makes_use_of"].update(["length"])
-    original_classifier["memory_depth"] = max(len(seq),
-                                            original_classifier["memory_depth"])
+    original_classifier["memory_depth"] = max(
+        len(seq), original_classifier["memory_depth"]
+    )
     return original_classifier
 
 
-FinalTransformer = StrategyTransformerFactory(final_sequence,
-                                              name_prefix="Final",
-                                              reclassifier=final_reclassifier)
+FinalTransformer = StrategyTransformerFactory(
+    final_sequence, name_prefix="Final", reclassifier=final_reclassifier
+)
 
 
 def history_track_wrapper(player, opponent, action):
@@ -484,7 +497,8 @@ def history_track_wrapper(player, opponent, action):
 
 
 TrackHistoryTransformer = StrategyTransformerFactory(
-    history_track_wrapper, name_prefix="HistoryTracking")
+    history_track_wrapper, name_prefix="HistoryTracking"
+)
 
 
 def deadlock_break_wrapper(player, opponent, action):
@@ -493,15 +507,18 @@ def deadlock_break_wrapper(player, opponent, action):
         return action
     last_round = (player.history[-1], opponent.history[-1])
     penultimate_round = (player.history[-2], opponent.history[-2])
-    if (penultimate_round, last_round) == ((C, D), (D, C)) or \
-       (penultimate_round, last_round) == ((D, C), (C, D)):
+    if (penultimate_round, last_round) == ((C, D), (D, C)) or (
+        penultimate_round,
+        last_round,
+    ) == ((D, C), (C, D)):
         # attempt to break deadlock by Cooperating
         return C
     return action
 
 
 DeadlockBreakingTransformer = StrategyTransformerFactory(
-    deadlock_break_wrapper, name_prefix="DeadlockBreaking")
+    deadlock_break_wrapper, name_prefix="DeadlockBreaking"
+)
 
 
 def grudge_wrapper(player, opponent, action, grudges):
@@ -511,22 +528,21 @@ def grudge_wrapper(player, opponent, action, grudges):
     return action
 
 
-GrudgeTransformer = StrategyTransformerFactory(
-    grudge_wrapper, name_prefix="Grudging")
+GrudgeTransformer = StrategyTransformerFactory(grudge_wrapper, name_prefix="Grudging")
 
 
 def apology_wrapper(player, opponent, action, myseq, opseq):
     length = len(myseq)
     if len(player.history) < length:
         return action
-    if (myseq == player.history[-length:]) and \
-       (opseq == opponent.history[-length:]):
+    if (myseq == player.history[-length:]) and (opseq == opponent.history[-length:]):
         return C
     return action
 
 
 ApologyTransformer = StrategyTransformerFactory(
-    apology_wrapper, name_prefix="Apologizing")
+    apology_wrapper, name_prefix="Apologizing"
+)
 
 
 def mixed_wrapper(player, opponent, action, probability, m_player):
@@ -552,19 +568,20 @@ def mixed_wrapper(player, opponent, action, probability, m_player):
         probability = [probability]
 
     # If a probability distribution, players is passed
-    if isinstance(probability, collections.Iterable) and \
-            isinstance(m_player, collections.Iterable):
+    if isinstance(probability, collections.Iterable) and isinstance(
+        m_player, collections.Iterable
+    ):
         mutate_prob = sum(probability)  # Prob of mutation
         if mutate_prob > 0:
             # Distribution of choice of mutation:
-            normalised_prob = [prob / mutate_prob
-                               for prob in probability]
+            normalised_prob = [prob / mutate_prob for prob in probability]
             if random.random() < mutate_prob:
                 p = choice(list(m_player), p=normalised_prob)()
                 p.history = player.history
                 return p.strategy(opponent)
 
     return action
+
 
 def mixed_reclassifier(original_classifier, probability, m_player):
     """Function to reclassify the strategy"""
@@ -585,8 +602,10 @@ def mixed_reclassifier(original_classifier, probability, m_player):
     original_classifier["stochastic"] = True
     return original_classifier
 
+
 MixedTransformer = StrategyTransformerFactory(
-    mixed_wrapper, name_prefix="Mutated", reclassifier=mixed_reclassifier)
+    mixed_wrapper, name_prefix="Mutated", reclassifier=mixed_reclassifier
+)
 
 
 def joss_ann_wrapper(player, opponent, proposed_action, probability):
@@ -623,6 +642,7 @@ def joss_ann_wrapper(player, opponent, proposed_action, probability):
     action = choice(options, p=probability)
     return action
 
+
 def jossann_reclassifier(original_classifier, probability):
     """
     Reclassify: note that if probabilities are (0, 1) or (1, 0) then we override
@@ -640,7 +660,8 @@ def jossann_reclassifier(original_classifier, probability):
 
 
 JossAnnTransformer = StrategyTransformerFactory(
-    joss_ann_wrapper, name_prefix="Joss-Ann", reclassifier=jossann_reclassifier)
+    joss_ann_wrapper, name_prefix="Joss-Ann", reclassifier=jossann_reclassifier
+)
 
 
 # Strategy wrappers as classes
@@ -664,7 +685,8 @@ class RetaliationWrapper(object):
 
 
 RetaliationTransformer = StrategyTransformerFactory(
-    RetaliationWrapper(), name_prefix="Retaliating")
+    RetaliationWrapper(), name_prefix="Retaliating"
+)
 
 
 class RetaliationUntilApologyWrapper(object):
@@ -686,4 +708,5 @@ class RetaliationUntilApologyWrapper(object):
 
 
 RetaliateUntilApologyTransformer = StrategyTransformerFactory(
-    RetaliationUntilApologyWrapper(), name_prefix="RUA")
+    RetaliationUntilApologyWrapper(), name_prefix="RUA"
+)

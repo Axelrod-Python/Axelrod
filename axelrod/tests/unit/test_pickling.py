@@ -4,7 +4,6 @@ import unittest
 import axelrod as axl
 import axelrod.strategy_transformers as st
 
-
 C, D = axl.Action.C, axl.Action.D
 
 
@@ -12,9 +11,7 @@ C, D = axl.Action.C, axl.Action.D
 
 # First set: special cases
 
-PointerToWrappedStrategy = st.FlipTransformer()(
-    st.FlipTransformer()(axl.Cooperator)
-)
+PointerToWrappedStrategy = st.FlipTransformer()(st.FlipTransformer()(axl.Cooperator))
 
 
 class MyDefector(axl.Player):
@@ -64,6 +61,7 @@ class SingleFlip(axl.Cooperator):
 
 
 # Second set: All the transformers
+
 
 @st.ApologyTransformer([D], [C], name_prefix=None)
 class Apology(axl.Cooperator):
@@ -143,14 +141,30 @@ class RetaliateUntilApology(axl.Cooperator):
 class TrackHistory(axl.Cooperator):
     pass
 
+
 @st.IdentityTransformer()
 class Identity(axl.Cooperator):
     pass
 
-transformed_no_prefix = [Apology, DeadlockBreaking, Flip, Final, Forgiver,
-                         Grudge, Initial, JossAnn, Mixed, Nice, Noisy,
-                         Retaliation, RetaliateUntilApology, TrackHistory, Dual,
-                         Identity]
+
+transformed_no_prefix = [
+    Apology,
+    DeadlockBreaking,
+    Flip,
+    Final,
+    Forgiver,
+    Grudge,
+    Initial,
+    JossAnn,
+    Mixed,
+    Nice,
+    Noisy,
+    Retaliation,
+    RetaliateUntilApology,
+    TrackHistory,
+    Dual,
+    Identity,
+]
 
 transformer_instances = [
     st.ApologyTransformer([D], [C]),
@@ -168,12 +182,11 @@ transformer_instances = [
     st.RetaliationTransformer(3),
     st.RetaliateUntilApologyTransformer(),
     st.TrackHistoryTransformer(),
-    st.IdentityTransformer()
+    st.IdentityTransformer(),
 ]
 
 
 class TestPickle(unittest.TestCase):
-
     def assert_equals_instance_from_pickling(self, original_instance):
         copy = pickle.loads(pickle.dumps(original_instance))
         self.assertEqual(copy, original_instance)
@@ -201,7 +214,7 @@ class TestPickle(unittest.TestCase):
             self.assert_equals_instance_from_pickling(player)
 
     def test_parameterized_player(self):
-        player = axl.Cycler('DDCCDD')
+        player = axl.Cycler("DDCCDD")
         self.assert_orignal_equals_pickled(player)
 
     def test_sequence_player(self):
@@ -259,13 +272,13 @@ class TestPickle(unittest.TestCase):
 
     def test_class_and_instance_name_different_single_flip(self):
         player = SingleFlip()
-        self.assertEqual(player.__class__.__name__, 'FlippedSingleFlip')
+        self.assertEqual(player.__class__.__name__, "FlippedSingleFlip")
 
         self.assert_orignal_equals_pickled(player)
 
     def test_class_and_instance_name_different_double_flip(self):
         player = DoubleFlip()
-        self.assertEqual(player.__class__.__name__, 'FlippedFlippedDoubleFlip')
+        self.assertEqual(player.__class__.__name__, "FlippedFlippedDoubleFlip")
 
         self.assert_orignal_equals_pickled(player)
 
@@ -273,8 +286,7 @@ class TestPickle(unittest.TestCase):
         player = MyCooperator()
         class_names = [class_.__name__ for class_ in MyCooperator.mro()]
         self.assertEqual(
-            class_names,
-            ['FlippedMyCooperator', 'MyCooperator', 'Player', 'object']
+            class_names, ["FlippedMyCooperator", "MyCooperator", "Player", "object"]
         )
 
         self.assert_orignal_equals_pickled(player)
@@ -285,8 +297,13 @@ class TestPickle(unittest.TestCase):
         class_names = [class_.__name__ for class_ in player.__class__.mro()]
         self.assertEqual(
             class_names,
-            ['FlippedFlippedCooperator', 'FlippedCooperator', 'Cooperator',
-             'Player', 'object']
+            [
+                "FlippedFlippedCooperator",
+                "FlippedCooperator",
+                "Cooperator",
+                "Player",
+                "object",
+            ],
         )
 
         self.assert_orignal_equals_pickled(player)
@@ -297,8 +314,13 @@ class TestPickle(unittest.TestCase):
         class_names = [class_.__name__ for class_ in player.__class__.mro()]
         self.assertEqual(
             class_names,
-            ['FlippedFlippedMyDefector', 'FlippedMyDefector', 'MyDefector',
-             'Player', 'object']
+            [
+                "FlippedFlippedMyDefector",
+                "FlippedMyDefector",
+                "MyDefector",
+                "Player",
+                "object",
+            ],
         )
 
         self.assert_orignal_equals_pickled(player)
@@ -321,23 +343,20 @@ class TestPickle(unittest.TestCase):
 
     def test_with_various_name_prefixes(self):
         no_prefix = Flip()
-        self.assertEqual(no_prefix.__class__.__name__, 'Flip')
+        self.assertEqual(no_prefix.__class__.__name__, "Flip")
         self.assert_orignal_equals_pickled(no_prefix)
 
         default_prefix = st.FlipTransformer()(axl.Cooperator)()
-        self.assertEqual(default_prefix.__class__.__name__,
-                         'FlippedCooperator')
+        self.assertEqual(default_prefix.__class__.__name__, "FlippedCooperator")
         self.assert_orignal_equals_pickled(default_prefix)
 
-        fliptastic = st.FlipTransformer(name_prefix='Fliptastic')
+        fliptastic = st.FlipTransformer(name_prefix="Fliptastic")
         new_prefix = fliptastic(axl.Cooperator)()
-        self.assertEqual(new_prefix.__class__.__name__,
-                         'FliptasticCooperator')
+        self.assertEqual(new_prefix.__class__.__name__, "FliptasticCooperator")
         self.assert_orignal_equals_pickled(new_prefix)
 
     def test_dynamic_class_no_name_prefix(self):
         player = st.FlipTransformer(name_prefix=None)(axl.Cooperator)()
 
-        self.assertEqual(player.__class__.__name__, 'Cooperator')
+        self.assertEqual(player.__class__.__name__, "Cooperator")
         self.assert_orignal_equals_pickled(player)
-

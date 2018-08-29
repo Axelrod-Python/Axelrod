@@ -2,23 +2,22 @@ import csv
 import os
 from collections import namedtuple
 from tempfile import mkstemp
+from typing import Any, List, Union
 
+import axelrod as axl
 import matplotlib.pyplot as plt
 import numpy as np
 import tqdm
-import dask.dataframe as dd
-import dask as da
+from axelrod import Player
+from axelrod.interaction_utils import (compute_final_score_per_turn,
+                                       read_interactions_from_file)
+from axelrod.strategy_transformers import DualTransformer, JossAnnTransformer
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
-import axelrod as axl
-from axelrod import Player
-from axelrod.strategy_transformers import JossAnnTransformer, DualTransformer
-from axelrod.interaction_utils import (
-    compute_final_score_per_turn, read_interactions_from_file)
+import dask as da
+import dask.dataframe as dd
 
-from typing import List, Any, Union
-
-Point = namedtuple('Point', 'x y')
+Point = namedtuple("Point", "x y")
 
 
 def create_points(step: float, progress_bar: bool = True) -> List[Point]:
@@ -88,15 +87,17 @@ def create_jossann(point: Point, probe: Any) -> Player:
         init_kwargs = {}
 
     if x + y >= 1:
-        joss_ann = DualTransformer()(
-            JossAnnTransformer((1 - x, 1 - y))(probe))(**init_kwargs)
+        joss_ann = DualTransformer()(JossAnnTransformer((1 - x, 1 - y))(probe))(
+            **init_kwargs
+        )
     else:
         joss_ann = JossAnnTransformer((x, y))(probe)(**init_kwargs)
     return joss_ann
 
 
-def create_probes(probe: Union[type, Player], points: list,
-                  progress_bar: bool = True) -> List[Player]:
+def create_probes(
+    probe: Union[type, Player], points: list, progress_bar: bool = True
+) -> List[Player]:
     """Creates a set of probe strategies over the unit square.
 
     Constructs probe strategies that correspond to points with coordinates
@@ -175,9 +176,10 @@ def generate_data(interactions: dict, points: list, edges: list) -> dict:
         A dictionary where the keys are Points of the form (x, y) and
         the values are the mean score for the corresponding interactions.
     """
-    edge_scores = [np.mean([
-        compute_final_score_per_turn(scores)[0]
-        for scores in interactions[edge]])
+    edge_scores = [
+        np.mean(
+            [compute_final_score_per_turn(scores)[0] for scores in interactions[edge]]
+        )
         for edge in edges
     ]
     point_scores = dict(zip(points, edge_scores))
@@ -207,14 +209,15 @@ def reshape_data(data: dict, points: list, size: int) -> np.ndarray:
         the standard origin.
     """
     ordered_data = [data[point] for point in points]
-    shaped_data = np.reshape(ordered_data, (size, size), order='F')
+    shaped_data = np.reshape(ordered_data, (size, size), order="F")
     plotting_data = np.flipud(shaped_data)
     return plotting_data
 
 
 class AshlockFingerprint(object):
-    def __init__(self, strategy: Union[type, Player],
-                 probe: Union[type, Player]=axl.TitForTat) -> None:
+    def __init__(
+        self, strategy: Union[type, Player], probe: Union[type, Player] = axl.TitForTat
+    ) -> None:
         """
         Parameters
         ----------
@@ -229,8 +232,9 @@ class AshlockFingerprint(object):
         self.strategy = strategy
         self.probe = probe
 
-    def construct_tournament_elements(self, step: float,
-                                      progress_bar: bool = True) -> tuple:
+    def construct_tournament_elements(
+        self, step: float, progress_bar: bool = True
+    ) -> tuple:
         """Build the elements required for a spatial tournament
 
         Parameters
@@ -256,8 +260,9 @@ class AshlockFingerprint(object):
         """
         self.points = create_points(step, progress_bar=progress_bar)
         edges = create_edges(self.points, progress_bar=progress_bar)
-        probe_players = create_probes(self.probe, self.points,
-                                      progress_bar=progress_bar)
+        probe_players = create_probes(
+            self.probe, self.points, progress_bar=progress_bar
+        )
 
         if isinstance(self.strategy, axl.Player):
             tournament_players = [self.strategy] + probe_players
@@ -267,10 +272,14 @@ class AshlockFingerprint(object):
         return edges, tournament_players
 
     def fingerprint(
-        self, turns: int = 50, repetitions: int = 10, step: float = 0.01,
-        processes: int = None, filename: str = None,
-        progress_bar: bool = True
-) -> dict:
+        self,
+        turns: int = 50,
+        repetitions: int = 10,
+        step: float = 0.01,
+        processes: int = None,
+        filename: str = None,
+        progress_bar: bool = True,
+    ) -> dict:
         """Build and play the spatial tournament.
 
         Creates the probes and their edges then builds a spatial tournament.
@@ -308,19 +317,23 @@ class AshlockFingerprint(object):
             temp_file_descriptor, filename = mkstemp()  # type: ignore
 
         edges, tourn_players = self.construct_tournament_elements(
-            step, progress_bar=progress_bar)
+            step, progress_bar=progress_bar
+        )
 
         self.step = step
-        self.spatial_tournament = axl.Tournament(tourn_players, turns=turns,
-                                                 repetitions=repetitions,
-                                                 edges=edges)
-        self.spatial_tournament.play(build_results=False,
-                                     filename=filename,
-                                     processes=processes,
-                                     progress_bar=progress_bar)
+        self.spatial_tournament = axl.Tournament(
+            tourn_players, turns=turns, repetitions=repetitions, edges=edges
+        )
+        self.spatial_tournament.play(
+            build_results=False,
+            filename=filename,
+            processes=processes,
+            progress_bar=progress_bar,
+        )
 
         self.interactions = read_interactions_from_file(
-            filename, progress_bar=progress_bar)
+            filename, progress_bar=progress_bar
+        )
 
         if temp_file_descriptor is not None:
             assert filename is not None
@@ -330,9 +343,14 @@ class AshlockFingerprint(object):
         self.data = generate_data(self.interactions, self.points, edges)
         return self.data
 
-    def plot(self, cmap: str = 'seismic', interpolation: str = 'none',
-             title: str = None, colorbar: bool = True,
-             labels: bool = True) -> plt.Figure:
+    def plot(
+        self,
+        cmap: str = "seismic",
+        interpolation: str = "none",
+        title: str = None,
+        colorbar: bool = True,
+        labels: bool = True,
+    ) -> plt.Figure:
         """Plot the results of the spatial tournament.
 
         Parameters
@@ -358,8 +376,7 @@ class AshlockFingerprint(object):
         size = int((1 / self.step) // 1) + 1
         plotting_data = reshape_data(self.data, self.points, size)
         fig, ax = plt.subplots()
-        cax = ax.imshow(
-            plotting_data, cmap=cmap, interpolation=interpolation)
+        cax = ax.imshow(plotting_data, cmap=cmap, interpolation=interpolation)
 
         if colorbar:
             max_score = max(self.data.values())
@@ -367,14 +384,14 @@ class AshlockFingerprint(object):
             ticks = [min_score, (max_score + min_score) / 2, max_score]
             fig.colorbar(cax, ticks=ticks)
 
-        plt.xlabel('$x$')
-        plt.ylabel('$y$', rotation=0)
-        ax.tick_params(axis='both', which='both', length=0)
-        plt.xticks([0, len(plotting_data) - 1], ['0', '1'])
-        plt.yticks([0, len(plotting_data) - 1], ['1', '0'])
+        plt.xlabel("$x$")
+        plt.ylabel("$y$", rotation=0)
+        ax.tick_params(axis="both", which="both", length=0)
+        plt.xticks([0, len(plotting_data) - 1], ["0", "1"])
+        plt.yticks([0, len(plotting_data) - 1], ["1", "0"])
 
         if not labels:
-            plt.axis('off')
+            plt.axis("off")
 
         if title is not None:
             plt.title(title)
@@ -399,15 +416,21 @@ class TransitiveFingerprint(object):
         self.strategy = strategy
 
         if opponents is None:
-            self.opponents = [axl.Random(p) for p in
-                              np.linspace(0, 1, number_of_opponents)]
+            self.opponents = [
+                axl.Random(p) for p in np.linspace(0, 1, number_of_opponents)
+            ]
         else:
             self.opponents = opponents
 
-    def fingerprint(self, turns: int = 50, repetitions: int = 1000,
-                    noise: float = None, processes: int = None,
-                    filename: str = None,
-                    progress_bar: bool = True) -> np.array:
+    def fingerprint(
+        self,
+        turns: int = 50,
+        repetitions: int = 1000,
+        noise: float = None,
+        processes: int = None,
+        filename: str = None,
+        progress_bar: bool = True,
+    ) -> np.array:
         """Creates a spatial tournament to run the necessary matches to obtain
         fingerprint data.
 
@@ -447,11 +470,19 @@ class TransitiveFingerprint(object):
             temp_file_descriptor, filename = mkstemp()  # type: ignore
 
         edges = [(0, k + 1) for k in range(len(self.opponents))]
-        tournament = axl.Tournament(players=players,
-                                    edges=edges, turns=turns, noise=noise,
-                                    repetitions=repetitions)
-        tournament.play(filename=filename, build_results=False,
-                        progress_bar=progress_bar, processes=processes)
+        tournament = axl.Tournament(
+            players=players,
+            edges=edges,
+            turns=turns,
+            noise=noise,
+            repetitions=repetitions,
+        )
+        tournament.play(
+            filename=filename,
+            build_results=False,
+            progress_bar=progress_bar,
+            processes=processes,
+        )
 
         self.data = self.analyse_cooperation_ratio(filename)
 
@@ -481,8 +512,7 @@ class TransitiveFingerprint(object):
             opponent in each turn. The ith row corresponds to the ith opponent
             and the jth column the jth turn.
         """
-        did_c = np.vectorize(lambda actions: [int(action == 'C')
-                                              for action in actions])
+        did_c = np.vectorize(lambda actions: [int(action == "C") for action in actions])
 
         cooperation_rates = {}
         df = dd.read_csv(filename)
@@ -500,13 +530,20 @@ class TransitiveFingerprint(object):
         for index, rates in cooperation_rates.items():
             cooperation_rates[index] = np.mean(rates, axis=0)
 
-        return np.array([cooperation_rates[index]
-                         for index in sorted(cooperation_rates)])
+        return np.array(
+            [cooperation_rates[index] for index in sorted(cooperation_rates)]
+        )
 
-    def plot(self, cmap: str = 'viridis', interpolation: str = 'none',
-             title: str = None, colorbar: bool = True, labels: bool = True,
-             display_names: bool = False,
-             ax: plt.Figure = None) -> plt.Figure:
+    def plot(
+        self,
+        cmap: str = "viridis",
+        interpolation: str = "none",
+        title: str = None,
+        colorbar: bool = True,
+        labels: bool = True,
+        display_names: bool = False,
+        ax: plt.Figure = None,
+    ) -> plt.Figure:
         """Plot the results of the spatial tournament.
         Parameters
         ----------
@@ -544,18 +581,19 @@ class TransitiveFingerprint(object):
         height = width
         fig.set_size_inches(width, height)
 
-        plt.xlabel('turns')
-        ax.tick_params(axis='both', which='both', length=0)
+        plt.xlabel("turns")
+        ax.tick_params(axis="both", which="both", length=0)
 
         if display_names:
-            plt.yticks(range(len(self.opponents)), [str(player) for player in
-                                                    self.opponents])
+            plt.yticks(
+                range(len(self.opponents)), [str(player) for player in self.opponents]
+            )
         else:
             plt.yticks([0, len(self.opponents) - 1], [0, 1])
             plt.ylabel("Probability of cooperation")
 
         if not labels:
-            plt.axis('off')
+            plt.axis("off")
 
         if title is not None:
             plt.title(title)

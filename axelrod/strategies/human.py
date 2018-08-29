@@ -1,17 +1,15 @@
 from os import linesep
-from prompt_toolkit import prompt
-from prompt_toolkit.token import Token
-from prompt_toolkit.styles import style_from_dict
-from prompt_toolkit.validation import Validator, ValidationError
 
 from axelrod.action import Action
 from axelrod.player import Player
+from prompt_toolkit import prompt
+from prompt_toolkit.styles import style_from_dict
+from prompt_toolkit.token import Token
+from prompt_toolkit.validation import ValidationError, Validator
 
 C, D = Action.C, Action.D
 
-toolbar_style = style_from_dict({
-    Token.Toolbar: '#ffffff bg:#333333',
-})
+toolbar_style = style_from_dict({Token.Toolbar: "#ffffff bg:#333333"})
 
 
 class ActionValidator(Validator):
@@ -23,10 +21,8 @@ class ActionValidator(Validator):
     def validate(self, document) -> None:
         text = document.text
 
-        if text and text.upper() not in ['C', 'D']:
-            raise ValidationError(
-                message='Action must be C or D',
-                cursor_position=0)
+        if text and text.upper() not in ["C", "D"]:
+            raise ValidationError(message="Action must be C or D", cursor_position=0)
 
 
 class Human(Player):
@@ -40,18 +36,18 @@ class Human(Player):
     research tool.
     """
 
-    name = 'Human'
+    name = "Human"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': True,
-        'makes_use_of': set(['length', 'game']),
-        'long_run_time': True,
-        'inspects_source': True,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": True,
+        "makes_use_of": set(["length", "game"]),
+        "long_run_time": True,
+        "inspects_source": True,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
-    def __init__(self, name='human', c_symbol='C', d_symbol='D'):
+    def __init__(self, name="human", c_symbol="C", d_symbol="D"):
         """
         Parameters
         ----------
@@ -66,10 +62,7 @@ class Human(Player):
         """
         super().__init__()
         self.human_name = name
-        self.symbols = {
-            C: c_symbol,
-            D: d_symbol
-        }
+        self.symbols = {C: c_symbol, D: d_symbol}
         self.opponent_history = []
 
     def _history_toolbar(self, cli):
@@ -78,13 +71,12 @@ class Human(Player):
         Described at http://python-prompt-toolkit.readthedocs.io/en/latest/pages/building_prompts.html#adding-a-bottom-toolbar
         """
         my_history = [self.symbols[action] for action in self.history]
-        opponent_history = [
-            self.symbols[action] for action in self.opponent_history]
+        opponent_history = [self.symbols[action] for action in self.opponent_history]
         history = list(zip(my_history, opponent_history))
         if self.history:
-            content = 'History ({}, opponent): {}'.format(self.human_name, history)
+            content = "History ({}, opponent): {}".format(self.human_name, history)
         else:
-            content = ''
+            content = ""
         return [(Token.Toolbar, content)]
 
     def _status_messages(self):
@@ -104,20 +96,18 @@ class Human(Player):
         """
         if self.history:
             toolbar = self._history_toolbar
-            print_statement = (
-                '{}Turn {}: {} played {}, opponent played {}'.format(
-                    linesep, len(self.history), self.human_name,
-                    self.symbols[self.history[-1]],
-                    self.symbols[self.opponent_history[-1]])
+            print_statement = "{}Turn {}: {} played {}, opponent played {}".format(
+                linesep,
+                len(self.history),
+                self.human_name,
+                self.symbols[self.history[-1]],
+                self.symbols[self.opponent_history[-1]],
             )
         else:
             toolbar = None
-            print_statement = '{}Starting new match'.format(linesep)
+            print_statement = "{}Starting new match".format(linesep)
 
-        return {
-            'toolbar': toolbar,
-            'print': print_statement
-        }
+        return {"toolbar": toolbar, "print": print_statement}
 
     def _get_human_input(self) -> Action:  # pragma: no cover
         """
@@ -130,11 +120,13 @@ class Human(Player):
             Uppercase C or D indicating the action to play
         """
         action = prompt(
-            'Turn {} action [C or D] for {}: '.format(
-                len(self.history) + 1, self.human_name),
+            "Turn {} action [C or D] for {}: ".format(
+                len(self.history) + 1, self.human_name
+            ),
             validator=ActionValidator(),
-            get_bottom_toolbar_tokens=self.status_messages['toolbar'],
-            style=toolbar_style)
+            get_bottom_toolbar_tokens=self.status_messages["toolbar"],
+            style=toolbar_style,
+        )
 
         return Action.from_char(action.upper())
 
@@ -150,7 +142,7 @@ class Human(Player):
 
         self.opponent_history = opponent.history
         self.status_messages = self._status_messages()
-        print(self.status_messages['print'])
+        print(self.status_messages["print"])
 
         if not input_function:  # pragma: no cover
             action = self._get_human_input()

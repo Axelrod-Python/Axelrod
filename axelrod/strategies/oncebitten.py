@@ -1,4 +1,5 @@
 import random
+
 from axelrod.action import Action
 from axelrod.player import Player
 
@@ -15,15 +16,15 @@ class OnceBitten(Player):
     - Once Bitten: Original name by Holly Marissa
     """
 
-    name = 'Once Bitten'
+    name = "Once Bitten"
     classifier = {
-        'memory_depth': 12,  # Long memory
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 12,  # Long memory
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
@@ -53,7 +54,6 @@ class OnceBitten(Player):
         return C
 
 
-
 class FoolMeOnce(Player):
     """
     Forgives one D then retaliates forever on a second D.
@@ -63,15 +63,15 @@ class FoolMeOnce(Player):
     - Fool me once: Original name by Marc Harper
     """
 
-    name = 'Fool Me Once'
+    name = "Fool Me Once"
     classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     @staticmethod
@@ -94,18 +94,18 @@ class ForgetfulFoolMeOnce(Player):
     - Forgetful Fool Me Once: Original name by Marc Harper
     """
 
-    name = 'Forgetful Fool Me Once'
+    name = "Forgetful Fool Me Once"
     classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
-    def __init__(self, forget_probability: float=0.05) -> None:
+    def __init__(self, forget_probability: float = 0.05) -> None:
         """
         Parameters
         ----------
@@ -144,15 +144,15 @@ class FoolMeForever(Player):
     - Fool Me Forever: Original name by Marc Harper
     """
 
-    name = 'Fool Me Forever'
+    name = "Fool Me Forever"
     classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     @staticmethod

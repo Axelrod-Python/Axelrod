@@ -1,13 +1,13 @@
-from numpy.random import choice
-
 from axelrod.action import Action
 from axelrod.player import Player
 from axelrod.random_ import random_choice
+from numpy.random import choice
 
 C, D = Action.C, Action.D
 
-#Type Hinting has not finished yet
-#Lines 9 and 10 will be deleted
+# Type Hinting has not finished yet
+# Lines 9 and 10 will be deleted
+
 
 def is_stochastic_matrix(m, ep=1e-8) -> bool:
     """Checks that the matrix m (a list of lists) is a stochastic matrix."""
@@ -30,8 +30,9 @@ class SimpleHMM(object):
     https://en.wikipedia.org/wiki/Hidden_Markov_model
     """
 
-    def __init__(self, transitions_C, transitions_D, emission_probabilities,
-                 initial_state) -> None:
+    def __init__(
+        self, transitions_C, transitions_D, emission_probabilities, initial_state
+    ) -> None:
         """
         Params
         ------
@@ -66,11 +67,14 @@ class SimpleHMM(object):
     def __eq__(self, other: Player) -> bool:
         """Equality of two HMMs"""
         check = True
-        for attr in ["transitions_C", "transitions_D",
-                     "emission_probabilities", "state"]:
+        for attr in [
+            "transitions_C",
+            "transitions_D",
+            "emission_probabilities",
+            "state",
+        ]:
             check = check and getattr(self, attr) == getattr(other, attr)
         return check
-
 
     def move(self, opponent_action: Action) -> Action:
         """Changes state and computes the response action.
@@ -102,18 +106,23 @@ class HMMPlayer(Player):
     name = "HMM Player"
 
     classifier = {
-        'memory_depth': 1,
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 1,
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
-    def __init__(self, transitions_C=None, transitions_D=None,
-                 emission_probabilities=None, initial_state=0,
-                 initial_action=C) -> None:
+    def __init__(
+        self,
+        transitions_C=None,
+        transitions_D=None,
+        emission_probabilities=None,
+        initial_state=0,
+        initial_action=C,
+    ) -> None:
         super().__init__()
         if not transitions_C:
             transitions_C = [[1]]
@@ -122,11 +131,12 @@ class HMMPlayer(Player):
             initial_state = 0
         self.initial_state = initial_state
         self.initial_action = initial_action
-        self.hmm = SimpleHMM(transitions_C, transitions_D,
-                             emission_probabilities, initial_state)
+        self.hmm = SimpleHMM(
+            transitions_C, transitions_D, emission_probabilities, initial_state
+        )
         assert self.hmm.is_well_formed()
         self.state = self.hmm.state
-        self.classifier['stochastic'] = self.is_stochastic()
+        self.classifier["stochastic"] = self.is_stochastic()
 
     def is_stochastic(self) -> bool:
         """Determines if the player is stochastic."""
@@ -160,33 +170,37 @@ class EvolvedHMM5(HMMPlayer):
 
         - Evolved HMM 5: Original name by Marc Harper
     """
+
     name = "Evolved HMM 5"
 
     classifier = {
-        'memory_depth': 5,
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 5,
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
         initial_state = 3
         initial_action = C
-        t_C = [[1, 0, 0, 0, 0],
-               [0, 1, 0, 0, 0],
-               [0, 1, 0, 0, 0],
-               [0.631, 0, 0, 0.369, 0],
-               [0.143, 0.018, 0.118, 0, 0.721]]
+        t_C = [
+            [1, 0, 0, 0, 0],
+            [0, 1, 0, 0, 0],
+            [0, 1, 0, 0, 0],
+            [0.631, 0, 0, 0.369, 0],
+            [0.143, 0.018, 0.118, 0, 0.721],
+        ]
 
-        t_D = [[0, 1, 0, 0, 0],
-               [0, 0.487, 0.513, 0, 0],
-               [0, 0, 0, 0.590, 0.410],
-               [1, 0, 0, 0, 0],
-               [0, 0.287, 0.456, 0.146, 0.111]]
+        t_D = [
+            [0, 1, 0, 0, 0],
+            [0, 0.487, 0.513, 0, 0],
+            [0, 0, 0, 0.590, 0.410],
+            [1, 0, 0, 0, 0],
+            [0, 0.287, 0.456, 0.146, 0.111],
+        ]
 
         emissions = [1, 0, 0, 1, 0.111]
-        super().__init__(t_C, t_D, emissions, initial_state,
-                           initial_action)
+        super().__init__(t_C, t_D, emissions, initial_state, initial_action)

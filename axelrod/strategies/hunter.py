@@ -1,8 +1,8 @@
+from typing import List, Optional, Tuple
+
+from axelrod._strategy_utils import detect_cycle
 from axelrod.action import Action
 from axelrod.player import Player
-from axelrod._strategy_utils import detect_cycle
-
-from typing import List, Tuple, Optional
 
 C, D = Action.C, Action.D
 
@@ -15,15 +15,15 @@ class DefectorHunter(Player):
     - Defector Hunter: Original name by Karol Langner
     """
 
-    name = 'Defector Hunter'
+    name = "Defector Hunter"
     classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def strategy(self, opponent: Player) -> Action:
@@ -40,15 +40,15 @@ class CooperatorHunter(Player):
     - Cooperator Hunter: Original name by Karol Langner
     """
 
-    name = 'Cooperator Hunter'
+    name = "Cooperator Hunter"
     classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def strategy(self, opponent: Player) -> Action:
@@ -72,15 +72,15 @@ class AlternatorHunter(Player):
     - Alternator Hunter: Original name by Karol Langner
     """
 
-    name = 'Alternator Hunter'
+    name = "Alternator Hunter"
     classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
@@ -107,15 +107,15 @@ class CycleHunter(Player):
     - Cycle Hunter: Original name by Marc Harper
     """
 
-    name = 'Cycle Hunter'
+    name = "Cycle Hunter"
     classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
@@ -141,7 +141,7 @@ class EventualCycleHunter(CycleHunter):
     - Eventual Cycle Hunter: Original name by Marc Harper
     """
 
-    name = 'Eventual Cycle Hunter'
+    name = "Eventual Cycle Hunter"
 
     def strategy(self, opponent: Player) -> None:
         if len(opponent.history) < 10:
@@ -150,8 +150,7 @@ class EventualCycleHunter(CycleHunter):
             return C
         if len(opponent.history) % 10 == 0:
             # recheck
-            self.cycle = detect_cycle(opponent.history, offset=10,
-                                      min_size=3)
+            self.cycle = detect_cycle(opponent.history, offset=10, min_size=3)
         if self.cycle:
             return D
         else:
@@ -168,13 +167,13 @@ class MathConstantHunter(Player):
 
     name = "Math Constant Hunter"
     classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def strategy(self, opponent: Player) -> Action:
@@ -190,9 +189,15 @@ class MathConstantHunter(Player):
             start1, end1 = 0, n // 2
             start2, end2 = n // 4, 3 * n // 4
             start3, end3 = n // 2, n
-            count1 = opponent.history[start1: end1].count(C) + self.history[start1: end1].count(C)
-            count2 = opponent.history[start2: end2].count(C) + self.history[start2: end2].count(C)
-            count3 = opponent.history[start3: end3].count(C) + self.history[start3: end3].count(C)
+            count1 = opponent.history[start1:end1].count(C) + self.history[
+                start1:end1
+            ].count(C)
+            count2 = opponent.history[start2:end2].count(C) + self.history[
+                start2:end2
+            ].count(C)
+            count3 = opponent.history[start3:end3].count(C) + self.history[
+                start3:end3
+            ].count(C)
             ratio1 = 0.5 * count1 / (end1 - start1)
             ratio2 = 0.5 * count2 / (end2 - start2)
             ratio3 = 0.5 * count3 / (end3 - start3)
@@ -211,13 +216,13 @@ class RandomHunter(Player):
 
     name = "Random Hunter"
     classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:

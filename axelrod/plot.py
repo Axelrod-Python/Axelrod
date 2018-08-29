@@ -1,14 +1,13 @@
 from distutils.version import LooseVersion
-
-from .result_set import ResultSet
-from numpy import arange, median, nan_to_num
-import tqdm
-
 from typing import List, Union
 
 import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.transforms as transforms
+import tqdm
+from numpy import arange, median, nan_to_num
+
+from .result_set import ResultSet
 
 titleType = List[str]
 namesType = List[str]
@@ -18,8 +17,8 @@ dataType = List[List[Union[int, float]]]
 def default_cmap(version: str = "2.0") -> str:
     """Sets a default matplotlib colormap based on the version."""
     if LooseVersion(version) >= "1.5":
-        return 'viridis'
-    return 'YlGnBu'
+        return "viridis"
+    return "YlGnBu"
 
 
 class Plot(object):
@@ -29,8 +28,11 @@ class Plot(object):
         self.players = self.result_set.players
 
     def _violinplot(
-        self, data: dataType, names: namesType, title: titleType = None,
-        ax: matplotlib.axes.SubplotBase = None
+        self,
+        data: dataType,
+        names: namesType,
+        title: titleType = None,
+        ax: matplotlib.axes.SubplotBase = None,
     ) -> matplotlib.figure.Figure:
         """For making violinplots."""
 
@@ -45,12 +47,17 @@ class Plot(object):
         spacing = 4
         positions = spacing * arange(1, self.num_players + 1, 1)
         figure.set_size_inches(width, height)
-        ax.violinplot(data, positions=positions, widths=spacing / 2,
-                      showmedians=True, showextrema=False)
+        ax.violinplot(
+            data,
+            positions=positions,
+            widths=spacing / 2,
+            showmedians=True,
+            showextrema=False,
+        )
         ax.set_xticks(positions)
         ax.set_xticklabels(names, rotation=90)
         ax.set_xlim([0, spacing * (self.num_players + 1)])
-        ax.tick_params(axis='both', which='both', labelsize=8)
+        ax.tick_params(axis="both", which="both", labelsize=8)
         if title:
             ax.set_title(title)
         plt.tight_layout()
@@ -61,8 +68,10 @@ class Plot(object):
 
     @property
     def _boxplot_dataset(self):
-        return [list(nan_to_num(self.result_set.normalised_scores[ir]))
-                for ir in self.result_set.ranking]
+        return [
+            list(nan_to_num(self.result_set.normalised_scores[ir]))
+            for ir in self.result_set.ranking
+        ]
 
     @property
     def _boxplot_xticks_locations(self):
@@ -86,8 +95,7 @@ class Plot(object):
         # Sort wins by median
         wins = self.result_set.wins
         medians = map(median, wins)
-        medians = sorted(
-            [(m, i) for (i, m) in enumerate(medians)], reverse=True)
+        medians = sorted([(m, i) for (i, m) in enumerate(medians)], reverse=True)
         # Reorder and grab names
         wins = [wins[x[-1]] for x in medians]
         ranked_names = [str(self.players[x[-1]]) for x in medians]
@@ -112,8 +120,10 @@ class Plot(object):
     @property
     def _sdv_plot_dataset(self):
         ordering = self._sd_ordering
-        diffs = [[score_diff for opponent in player for score_diff in opponent]
-                 for player in self.result_set.score_diffs]
+        diffs = [
+            [score_diff for opponent in player for score_diff in opponent]
+            for player in self.result_set.score_diffs
+        ]
         # Reorder and grab names
         diffs = [diffs[i] for i in ordering]
         ranked_names = [str(self.players[i]) for i in ordering]
@@ -131,9 +141,10 @@ class Plot(object):
     @property
     def _lengthplot_dataset(self):
         match_lengths = self.result_set.match_lengths
-        return [[length for rep in match_lengths
-                 for length in rep[playeri]] for playeri in
-                self.result_set.ranking]
+        return [
+            [length for rep in match_lengths for length in rep[playeri]]
+            for playeri in self.result_set.ranking
+        ]
 
     def lengthplot(
         self, title: titleType = None, ax: matplotlib.axes.SubplotBase = None
@@ -147,9 +158,10 @@ class Plot(object):
     @property
     def _payoff_dataset(self):
         pm = self.result_set.payoff_matrix
-        return [[pm[r1][r2]
-                 for r2 in self.result_set.ranking]
-                for r1 in self.result_set.ranking]
+        return [
+            [pm[r1][r2] for r2 in self.result_set.ranking]
+            for r1 in self.result_set.ranking
+        ]
 
     @property
     def _pdplot_dataset(self):
@@ -157,15 +169,17 @@ class Plot(object):
         ordering = self._sd_ordering
         pdm = self.result_set.payoff_diffs_means
         # Reorder and grab names
-        matrix = [[pdm[r1][r2] for r2 in ordering]
-                  for r1 in ordering]
+        matrix = [[pdm[r1][r2] for r2 in ordering] for r1 in ordering]
         players = self.result_set.players
         ranked_names = [str(players[i]) for i in ordering]
         return matrix, ranked_names
 
     def _payoff_heatmap(
-        self, data: dataType, names: namesType, title: titleType = None,
-        ax: matplotlib.axes.SubplotBase = None
+        self,
+        data: dataType,
+        names: namesType,
+        title: titleType = None,
+        ax: matplotlib.axes.SubplotBase = None,
     ) -> matplotlib.figure.Figure:
         """Generic heatmap plot"""
 
@@ -185,7 +199,7 @@ class Plot(object):
         ax.set_yticks(range(self.result_set.num_players))
         ax.set_xticklabels(names, rotation=90)
         ax.set_yticklabels(names)
-        ax.tick_params(axis='both', which='both', labelsize=16)
+        ax.tick_params(axis="both", which="both", labelsize=16)
         if title:
             ax.set_xlabel(title)
         figure.colorbar(mat, ax=ax)
@@ -212,8 +226,11 @@ class Plot(object):
     # Ecological Plot
 
     def stackplot(
-        self, eco, title: titleType = None, logscale: bool = True,
-        ax: matplotlib.axes.SubplotBase =None
+        self,
+        eco,
+        title: titleType = None,
+        logscale: bool = True,
+        ax: matplotlib.axes.SubplotBase = None,
     ) -> matplotlib.figure.Figure:
 
         populations = eco.population_sizes
@@ -236,34 +253,42 @@ class Plot(object):
         ax.yaxis.labelpad = 25.0
 
         ax.set_ylim([0.0, 1.0])
-        ax.set_ylabel('Relative population size')
-        ax.set_xlabel('Turn')
+        ax.set_ylabel("Relative population size")
+        ax.set_xlabel("Turn")
         if title is not None:
             ax.set_title(title)
 
-        trans = transforms.blended_transform_factory(
-            ax.transAxes, ax.transData)
+        trans = transforms.blended_transform_factory(ax.transAxes, ax.transData)
         ticks = []
         for i, n in enumerate(self.result_set.ranked_names):
             x = -0.01
             y = (i + 0.5) * 1 / self.result_set.num_players
             ax.annotate(
-                n, xy=(x, y), xycoords=trans, clip_on=False, va='center',
-                ha='right', fontsize=5)
+                n,
+                xy=(x, y),
+                xycoords=trans,
+                clip_on=False,
+                va="center",
+                ha="right",
+                fontsize=5,
+            )
             ticks.append(y)
         ax.set_yticks(ticks)
-        ax.tick_params(direction='out')
+        ax.tick_params(direction="out")
         ax.set_yticklabels([])
 
         if logscale:
-            ax.set_xscale('log')
+            ax.set_xscale("log")
 
         plt.tight_layout()
         return figure
 
     def save_all_plots(
-        self, prefix: str ="axelrod", title_prefix: str ="axelrod",
-        filetype: str ="svg", progress_bar: bool = True
+        self,
+        prefix: str = "axelrod",
+        title_prefix: str = "axelrod",
+        filetype: str = "svg",
+        progress_bar: bool = True,
     ) -> None:
         """
         A method to save all plots to file.
@@ -283,18 +308,21 @@ class Plot(object):
             progress_bar : bool
                 Whether or not to create a progress bar which will be updated
         """
-        plots = [("boxplot", "Payoff"), ("payoff", "Payoff"),
-                 ("winplot", "Wins"), ("sdvplot", "Payoff differences"),
-                 ("pdplot", "Payoff differences"),
-                 ("lengthplot", "Length of Matches")]
+        plots = [
+            ("boxplot", "Payoff"),
+            ("payoff", "Payoff"),
+            ("winplot", "Wins"),
+            ("sdvplot", "Payoff differences"),
+            ("pdplot", "Payoff differences"),
+            ("lengthplot", "Length of Matches"),
+        ]
 
         if progress_bar:
             total = len(plots)  # Total number of plots
             pbar = tqdm.tqdm(total=total, desc="Obtaining plots")
 
         for method, name in plots:
-            f = getattr(self, method)(title="{} - {}".format(title_prefix,
-                                                             name))
+            f = getattr(self, method)(title="{} - {}".format(title_prefix, name))
             f.savefig("{}_{}.{}".format(prefix, method, filetype))
             plt.close(f)
 

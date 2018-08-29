@@ -9,8 +9,8 @@ from axelrod.action import Action
 from axelrod.load_data_ import load_pso_tables
 from axelrod.player import Player
 from axelrod.random_ import random_choice
-from .lookerup import LookerUp, Plays
 
+from .lookerup import LookerUp, Plays
 
 C, D = Action.C, Action.D
 tables = load_pso_tables("pso_gambler.csv", directory="data")
@@ -26,15 +26,15 @@ class Gambler(LookerUp):
     - Gambler: Original name by Georgios Koutsovoulos
     """
 
-    name = 'Gambler'
+    name = "Gambler"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def strategy(self, opponent: Player) -> Action:
@@ -133,20 +133,34 @@ class ZDMem2(Gambler):
     name = "ZD-Mem2"
 
     classifier = {
-        'memory_depth': 2,
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 2,
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
-        pattern = [11 / 12, 4 / 11, 7 / 9, 1 / 10,
-                   5 / 6, 3 / 11, 7 / 9, 1 / 10,
-                   2 / 3, 1 / 11, 7 / 9, 1 / 10,
-                   3 / 4, 2 / 11, 7 / 9, 1 / 10]
+        pattern = [
+            11 / 12,
+            4 / 11,
+            7 / 9,
+            1 / 10,
+            5 / 6,
+            3 / 11,
+            7 / 9,
+            1 / 10,
+            2 / 3,
+            1 / 11,
+            7 / 9,
+            1 / 10,
+            3 / 4,
+            2 / 11,
+            7 / 9,
+            1 / 10,
+        ]
         parameters = Plays(self_plays=2, op_plays=2, op_openings=0)
 
         super().__init__(parameters=parameters, pattern=pattern)

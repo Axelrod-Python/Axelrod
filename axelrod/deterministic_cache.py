@@ -12,13 +12,12 @@ else:
     ...
 """
 
-from collections import UserDict
 import pickle
+from collections import UserDict
+from typing import List, Tuple
 
 from .action import Action
 from .player import Player
-
-from typing import List, Tuple
 
 CachePlayerKey = Tuple[Player, Player, int]
 CacheKey = Tuple[str, str, int]
@@ -53,13 +52,13 @@ def _is_valid_key(key: CachePlayerKey) -> bool:
         return False
 
     if not (
-        isinstance(key[0], Player) and
-        isinstance(key[1], Player) and
-        isinstance(key[2], int)
+        isinstance(key[0], Player)
+        and isinstance(key[1], Player)
+        and isinstance(key[2], int)
     ):
         return False
 
-    if key[0].classifier['stochastic'] or key[1].classifier['stochastic']:
+    if key[0].classifier["stochastic"] or key[1].classifier["stochastic"]:
         return False
 
     return True
@@ -106,7 +105,7 @@ class DeterministicCache(UserDict):
     methods to save/load the cache to/from a file.
     """
 
-    def __init__(self, file_name: str=None) -> None:
+    def __init__(self, file_name: str = None) -> None:
         """Initialize a new cache.
 
         Parameters
@@ -131,16 +130,18 @@ class DeterministicCache(UserDict):
     def __setitem__(self, key: CachePlayerKey, value):
         """Validate the key and value before setting them."""
         if not self.mutable:
-            raise ValueError('Cannot update cache unless mutable is True.')
+            raise ValueError("Cannot update cache unless mutable is True.")
 
         if not _is_valid_key(key):
             raise ValueError(
                 "Key must be a tuple of 2 deterministic axelrod Player classes "
-                "and an integer")
+                "and an integer"
+            )
 
         if not _is_valid_value(value):
             raise ValueError(
-                'Value must be a list with length equal to turns attribute')
+                "Value must be a list with length equal to turns attribute"
+            )
 
         super().__setitem__(_key_transform(key), value)
 
@@ -152,7 +153,7 @@ class DeterministicCache(UserDict):
         file_name : string
             File path to which the cache should be saved
         """
-        with open(file_name, 'wb') as io:
+        with open(file_name, "wb") as io:
             pickle.dump(self.data, io)
         return True
 
@@ -164,7 +165,7 @@ class DeterministicCache(UserDict):
         file_name : string
             Path to a previously saved cache file
         """
-        with open(file_name, 'rb') as io:
+        with open(file_name, "rb") as io:
             data = pickle.load(io)
 
         if isinstance(data, dict):
@@ -172,5 +173,6 @@ class DeterministicCache(UserDict):
         else:
             raise ValueError(
                 "Cache file exists but is not the correct format. "
-                "Try deleting and re-building the cache file.")
+                "Try deleting and re-building the cache file."
+            )
         return True

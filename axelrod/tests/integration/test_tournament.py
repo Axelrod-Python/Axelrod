@@ -1,11 +1,11 @@
-import unittest
-import axelrod
 import filecmp
+import unittest
 
+import axelrod
 from axelrod.strategy_transformers import FinalTransformer
 
-class TestTournament(unittest.TestCase):
 
+class TestTournament(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.game = axelrod.Game()
@@ -14,29 +14,31 @@ class TestTournament(unittest.TestCase):
             axelrod.TitForTat(),
             axelrod.Defector(),
             axelrod.Grudger(),
-            axelrod.GoByMajority()]
+            axelrod.GoByMajority(),
+        ]
         cls.player_names = [str(p) for p in cls.players]
-        cls.test_name = 'test'
+        cls.test_name = "test"
         cls.test_repetitions = 3
 
         cls.expected_outcome = [
-            ('Cooperator', [45, 45, 45]),
-            ('Defector', [52, 52, 52]),
-            ('Grudger', [49, 49, 49]),
-            ('Soft Go By Majority', [49, 49, 49]),
-            ('Tit For Tat', [49, 49, 49])]
+            ("Cooperator", [45, 45, 45]),
+            ("Defector", [52, 52, 52]),
+            ("Grudger", [49, 49, 49]),
+            ("Soft Go By Majority", [49, 49, 49]),
+            ("Tit For Tat", [49, 49, 49]),
+        ]
         cls.expected_outcome.sort()
 
     def test_full_tournament(self):
         """A test to check that tournament runs with all non cheating strategies."""
         strategies = [strategy() for strategy in axelrod.strategies]
-        tournament = axelrod.Tournament(name='test', players=strategies,
-                                        game=self.game, turns=2,
-                                        repetitions=1)
+        tournament = axelrod.Tournament(
+            name="test", players=strategies, game=self.game, turns=2, repetitions=1
+        )
         filename = "test_outputs/test_tournament.csv"
-        self.assertIsNone(tournament.play(progress_bar=False,
-                                          filename=filename,
-                                          build_results=False))
+        self.assertIsNone(
+            tournament.play(progress_bar=False, filename=filename, build_results=False)
+        )
 
     def test_serial_play(self):
         tournament = axelrod.Tournament(
@@ -44,7 +46,8 @@ class TestTournament(unittest.TestCase):
             players=self.players,
             game=self.game,
             turns=5,
-            repetitions=self.test_repetitions)
+            repetitions=self.test_repetitions,
+        )
         scores = tournament.play(progress_bar=False).scores
         actual_outcome = sorted(zip(self.player_names, scores))
         self.assertEqual(actual_outcome, self.expected_outcome)
@@ -55,24 +58,30 @@ class TestTournament(unittest.TestCase):
             players=self.players,
             game=self.game,
             turns=5,
-            repetitions=self.test_repetitions)
+            repetitions=self.test_repetitions,
+        )
         scores = tournament.play(processes=2, progress_bar=False).scores
         actual_outcome = sorted(zip(self.player_names, scores))
         self.assertEqual(actual_outcome, self.expected_outcome)
 
     def test_repeat_tournament_deterministic(self):
         """A test to check that tournament gives same results."""
-        deterministic_players = [s() for s in axelrod.short_run_time_strategies
-                                 if not s().classifier['stochastic']]
+        deterministic_players = [
+            s()
+            for s in axelrod.short_run_time_strategies
+            if not s().classifier["stochastic"]
+        ]
         files = []
         for _ in range(2):
-            tournament = axelrod.Tournament(name='test',
-                                            players=deterministic_players,
-                                            game=self.game, turns=2,
-                                            repetitions=2)
+            tournament = axelrod.Tournament(
+                name="test",
+                players=deterministic_players,
+                game=self.game,
+                turns=2,
+                repetitions=2,
+            )
             files.append("test_outputs/stochastic_tournament_{}.csv".format(_))
-            tournament.play(progress_bar=False, filename=files[-1],
-                            build_results=False)
+            tournament.play(progress_bar=False, filename=files[-1], build_results=False)
         self.assertTrue(filecmp.cmp(files[0], files[1]))
 
     def test_repeat_tournament_stochastic(self):
@@ -82,15 +91,20 @@ class TestTournament(unittest.TestCase):
         files = []
         for _ in range(2):
             axelrod.seed(0)
-            stochastic_players = [s() for s in axelrod.short_run_time_strategies
-                                  if s().classifier['stochastic']]
-            tournament = axelrod.Tournament(name='test',
-                                            players=stochastic_players,
-                                            game=self.game, turns=2,
-                                            repetitions=2)
+            stochastic_players = [
+                s()
+                for s in axelrod.short_run_time_strategies
+                if s().classifier["stochastic"]
+            ]
+            tournament = axelrod.Tournament(
+                name="test",
+                players=stochastic_players,
+                game=self.game,
+                turns=2,
+                repetitions=2,
+            )
             files.append("test_outputs/stochastic_tournament_{}.csv".format(_))
-            tournament.play(progress_bar=False, filename=files[-1],
-                            build_results=False)
+            tournament.play(progress_bar=False, filename=files[-1], build_results=False)
         self.assertTrue(filecmp.cmp(files[0], files[1]))
 
 
@@ -98,15 +112,13 @@ class TestNoisyTournament(unittest.TestCase):
     def test_noisy_tournament(self):
         # Defector should win for low noise
         players = [axelrod.Cooperator(), axelrod.Defector()]
-        tournament = axelrod.Tournament(players, turns=5, repetitions=3,
-                                        noise=0.)
+        tournament = axelrod.Tournament(players, turns=5, repetitions=3, noise=0.)
         results = tournament.play(progress_bar=False)
         self.assertEqual(results.ranked_names[0], "Defector")
 
         # If the noise is large enough, cooperator should win
         players = [axelrod.Cooperator(), axelrod.Defector()]
-        tournament = axelrod.Tournament(players, turns=5, repetitions=3,
-                                        noise=0.75)
+        tournament = axelrod.Tournament(players, turns=5, repetitions=3, noise=0.75)
         results = tournament.play(progress_bar=False)
         self.assertEqual(results.ranked_names[0], "Cooperator")
 
@@ -116,8 +128,8 @@ class TestProbEndTournament(unittest.TestCase):
         """Create two players who should cooperate on last two turns if they
         don't know when those last two turns are.
         """
-        p1 = FinalTransformer(['D', 'D'])(axelrod.Cooperator)()
-        p2 = FinalTransformer(['D', 'D'])(axelrod.Cooperator)()
+        p1 = FinalTransformer(["D", "D"])(axelrod.Cooperator)()
+        p2 = FinalTransformer(["D", "D"])(axelrod.Cooperator)()
         players = [p1, p2]
         tournament = axelrod.Tournament(players, prob_end=.5, repetitions=1)
         results = tournament.play(progress_bar=False)

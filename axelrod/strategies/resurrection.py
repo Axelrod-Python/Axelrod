@@ -18,15 +18,15 @@ class Resurrection(Player):
     """
 
     # These are various properties for the strategy
-    name = 'Resurrection'
+    name = "Resurrection"
     classifier = {
-        'memory_depth': 5,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 5,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def strategy(self, opponent: Player) -> Action:
@@ -51,15 +51,15 @@ class DoubleResurrection(Player):
     - DoubleResurrection: [Eckhart2015]_
     """
 
-    name = 'DoubleResurrection'
+    name = "DoubleResurrection"
     classifier = {
-        'memory_depth': 5,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 5,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def strategy(self, opponent: Player) -> Action:

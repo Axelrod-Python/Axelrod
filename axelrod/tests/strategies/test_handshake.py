@@ -1,6 +1,7 @@
 """Tests for the Handshake strategy."""
 
 import axelrod
+
 from .test_player import TestPlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D
@@ -11,13 +12,13 @@ class TestHandshake(TestPlayer):
     name = "Handshake"
     player = axelrod.Handshake
     expected_classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):

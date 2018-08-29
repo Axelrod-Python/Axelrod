@@ -2,8 +2,8 @@
 
 import axelrod
 from axelrod._strategy_utils import simulate_match
-from .test_player import TestPlayer
 
+from .test_player import TestPlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D
 
@@ -13,13 +13,13 @@ class TestMindReader(TestPlayer):
     name = "Mind Reader"
     player = axelrod.MindReader
     expected_classifier = {
-        'memory_depth': float("inf"),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': True,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": True,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_foil_inspection_strategy(self):
@@ -104,13 +104,13 @@ class TestProtectedMindReader(TestPlayer):
     name = "Protected Mind Reader"
     player = axelrod.ProtectedMindReader
     expected_classifier = {
-        'memory_depth': float("inf"),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': True,  # Finds out what opponent will do
-        'manipulates_source': True,  # Stops opponent's strategy
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": True,  # Finds out what opponent will do
+        "manipulates_source": True,  # Stops opponent's strategy
+        "manipulates_state": False,
     }
 
     def test_foil_inspection_strategy(self):
@@ -145,16 +145,16 @@ class TestProtectedMindReader(TestPlayer):
 
 class TestMirrorMindReader(TestPlayer):
 
-    name = 'Mirror Mind Reader'
+    name = "Mirror Mind Reader"
     player = axelrod.MirrorMindReader
     expected_classifier = {
-        'memory_depth': float("inf"),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': True, # reading and copying the source of the component
-        'manipulates_source': True, # changing own source dynamically
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": True,  # reading and copying the source of the component
+        "manipulates_source": True,  # changing own source dynamically
+        "manipulates_state": False,
     }
 
     def test_foil_inspection_strategy(self):

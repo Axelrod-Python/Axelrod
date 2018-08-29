@@ -17,15 +17,15 @@ class WorseAndWorse(Player):
         - Worse and Worse: [Prison1998]_
     """
 
-    name = 'Worse and Worse'
+    name = "Worse and Worse"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def strategy(self, opponent: Player) -> Action:
@@ -43,20 +43,20 @@ class KnowledgeableWorseAndWorse(Player):
         - Knowledgeable Worse and Worse: Original name by Adam Pohl
     """
 
-    name = 'Knowledgeable Worse and Worse'
+    name = "Knowledgeable Worse and Worse"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': True,
-        'makes_use_of': set(['length']),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": True,
+        "makes_use_of": set(["length"]),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def strategy(self, opponent: Player) -> Action:
         current_round = len(self.history) + 1
-        expected_length = self.match_attributes['length']
+        expected_length = self.match_attributes["length"]
         probability = 1 - current_round / expected_length
         return random_choice(probability)
 
@@ -71,15 +71,15 @@ class WorseAndWorse2(Player):
         - Worse and Worse 2: [Prison1998]_
     """
 
-    name = 'Worse and Worse 2'
+    name = "Worse and Worse 2"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def strategy(self, opponent: Player) -> Action:
@@ -105,15 +105,15 @@ class WorseAndWorse3(Player):
         - Worse and Worse 3: [Prison1998]_
     """
 
-    name = 'Worse and Worse 3'
+    name = "Worse and Worse 3"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def strategy(self, opponent: Player) -> Action:

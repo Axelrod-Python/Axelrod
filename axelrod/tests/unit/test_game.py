@@ -1,22 +1,25 @@
 import unittest
-from hypothesis import given, settings
 
 import axelrod
 from axelrod.tests.property import *
 
+from hypothesis import given, settings
 
 C, D = axelrod.Action.C, axelrod.Action.D
 
 
 class TestGame(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.game = axelrod.Game()
 
     def test_init(self):
-        expected_scores = {(C, D): (0, 5), (D, C): (5, 0),
-                           (D, D): (1, 1), (C, C): (3, 3)}
+        expected_scores = {
+            (C, D): (0, 5),
+            (D, C): (5, 0),
+            (D, D): (1, 1),
+            (C, C): (3, 3),
+        }
         self.assertEqual(self.game.scores, expected_scores)
 
     def test_RPST(self):
@@ -39,14 +42,18 @@ class TestGame(unittest.TestCase):
 
         self.assertEqual(Game(), Game())
 
-        self.assertNotEqual(Game(), 'wrong class')
+        self.assertNotEqual(Game(), "wrong class")
 
     @given(r=integers(), p=integers(), s=integers(), t=integers())
     @settings(max_examples=5, max_iterations=20)
     def test_property_init(self, r, p, s, t):
         """Use the hypothesis library to test init"""
-        expected_scores = {(C, D): (s, t), (D, C): (t, s),
-                           (D, D): (p, p), (C, C): (r, r)}
+        expected_scores = {
+            (C, D): (s, t),
+            (D, C): (t, s),
+            (D, D): (p, p),
+            (C, C): (r, r),
+        }
         game = axelrod.Game(r, s, t, p)
         self.assertEqual(game.scores, expected_scores)
 

@@ -5,8 +5,8 @@ import unittest
 
 import axelrod
 from axelrod.strategies.hunter import detect_cycle
-from .test_player import TestPlayer
 
+from .test_player import TestPlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D
 
@@ -36,13 +36,13 @@ class TestDefectorHunter(TestPlayer):
     name = "Defector Hunter"
     player = axelrod.DefectorHunter
     expected_classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
@@ -50,31 +50,29 @@ class TestDefectorHunter(TestPlayer):
         self.versus_test(opponent=axelrod.Defector(), expected_actions=actions)
 
         actions = [(C, C)] * 14
-        self.versus_test(opponent=axelrod.Cooperator(),
-                         expected_actions=actions)
+        self.versus_test(opponent=axelrod.Cooperator(), expected_actions=actions)
+
 
 class TestCooperatorHunter(TestPlayer):
 
     name = "Cooperator Hunter"
     player = axelrod.CooperatorHunter
     expected_classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
         actions = [(C, C)] * 4 + [(D, C)] * 10
-        self.versus_test(opponent=axelrod.Cooperator(),
-                         expected_actions=actions)
+        self.versus_test(opponent=axelrod.Cooperator(), expected_actions=actions)
 
         actions = [(C, D)] * 14
-        self.versus_test(opponent=axelrod.Defector(),
-                         expected_actions=actions)
+        self.versus_test(opponent=axelrod.Defector(), expected_actions=actions)
 
 
 class TestAlternatorHunter(TestPlayer):
@@ -82,23 +80,29 @@ class TestAlternatorHunter(TestPlayer):
     name = "Alternator Hunter"
     player = axelrod.AlternatorHunter
     expected_classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': False,
-        'inspects_source': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": False,
+        "inspects_source": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
         actions = [(C, C), (C, D)] * 3 + [(D, C), (D, D)] * 5
-        self.versus_test(opponent=axelrod.Alternator(),
-                         expected_actions=actions, attrs={'is_alt': True})
+        self.versus_test(
+            opponent=axelrod.Alternator(),
+            expected_actions=actions,
+            attrs={"is_alt": True},
+        )
 
         actions = [(C, D)] * 14
-        self.versus_test(opponent=axelrod.Defector(),
-                         expected_actions=actions, attrs={'is_alt': False})
+        self.versus_test(
+            opponent=axelrod.Defector(),
+            expected_actions=actions,
+            attrs={"is_alt": False},
+        )
 
     def test_reset_attr(self):
         p = self.player()
@@ -112,28 +116,36 @@ class TestCycleHunter(TestPlayer):
     name = "Cycle Hunter"
     player = axelrod.CycleHunter
     expected_classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
         player = self.player()
         # Test against cyclers
-        for opponent in [axelrod.CyclerCCD(), axelrod.CyclerCCCD(),
-                         axelrod.CyclerCCCCCD(), axelrod.Alternator()]:
+        for opponent in [
+            axelrod.CyclerCCD(),
+            axelrod.CyclerCCCD(),
+            axelrod.CyclerCCCCCD(),
+            axelrod.Alternator(),
+        ]:
             player.reset()
             for i in range(30):
                 player.play(opponent)
             self.assertEqual(player.history[-1], D)
         # Test against non-cyclers
         axelrod.seed(40)
-        for opponent in [axelrod.Random(), axelrod.AntiCycler(),
-                         axelrod.Cooperator(), axelrod.Defector()]:
+        for opponent in [
+            axelrod.Random(),
+            axelrod.AntiCycler(),
+            axelrod.Cooperator(),
+            axelrod.Defector(),
+        ]:
             player.reset()
             for i in range(30):
                 player.play(opponent)
@@ -151,28 +163,36 @@ class TestEventualCycleHunter(TestPlayer):
     name = "Eventual Cycle Hunter"
     player = axelrod.EventualCycleHunter
     expected_classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
         player = self.player()
         # Test against cyclers
-        for opponent in [axelrod.CyclerCCD(), axelrod.CyclerCCCD(),
-                         axelrod.CyclerCCCCCD(), axelrod.Alternator()]:
+        for opponent in [
+            axelrod.CyclerCCD(),
+            axelrod.CyclerCCCD(),
+            axelrod.CyclerCCCCCD(),
+            axelrod.Alternator(),
+        ]:
             player.reset()
             for i in range(50):
                 player.play(opponent)
             self.assertEqual(player.history[-1], D)
         # Test against non-cyclers and cooperators
         axelrod.seed(43)
-        for opponent in [axelrod.Random(), axelrod.AntiCycler(),
-                         axelrod.DoubleCrosser(), axelrod.Cooperator()]:
+        for opponent in [
+            axelrod.Random(),
+            axelrod.AntiCycler(),
+            axelrod.DoubleCrosser(),
+            axelrod.Cooperator(),
+        ]:
             player.reset()
             for i in range(50):
                 player.play(opponent)
@@ -190,13 +210,13 @@ class TestMathConstantHunter(TestPlayer):
     name = "Math Constant Hunter"
     player = axelrod.MathConstantHunter
     expected_classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
@@ -210,32 +230,37 @@ class TestRandomHunter(TestPlayer):
     name = "Random Hunter"
     player = axelrod.RandomHunter
     expected_classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
 
         # We should catch the alternator here.
         actions = [(C, C), (C, D)] * 5 + [(C, C), (D, D), (D, C)]
-        self.versus_test(opponent=axelrod.Alternator(),
-                         expected_actions=actions, attrs={"countCC": 5,
-                                                          "countDD": 0})
+        self.versus_test(
+            opponent=axelrod.Alternator(),
+            expected_actions=actions,
+            attrs={"countCC": 5, "countDD": 0},
+        )
 
         actions = [(C, D)] * 14
-        self.versus_test(opponent=axelrod.Defector(),
-                         expected_actions=actions, attrs={"countCC": 0,
-                                                          "countDD": 0})
+        self.versus_test(
+            opponent=axelrod.Defector(),
+            expected_actions=actions,
+            attrs={"countCC": 0, "countDD": 0},
+        )
 
     def test_reset(self):
         player = self.player()
         opponent = axelrod.Cooperator()
-        for _ in range(100): player.play(opponent)
+        for _ in range(100):
+            player.play(opponent)
         self.assertFalse(player.countCC == 0)
         player.reset()
         self.assertTrue(player.countCC == 0)

@@ -1,4 +1,5 @@
 import unittest
+
 import axelrod
 from axelrod import MockPlayer, update_history
 from axelrod.tests.strategies.test_player import TestOpponent
@@ -7,7 +8,6 @@ C, D = axelrod.Action.C, axelrod.Action.D
 
 
 class TestMockPlayer(unittest.TestCase):
-
     def test_strategy(self):
         for action in [C, D]:
             m = MockPlayer(actions=[action])
@@ -22,7 +22,6 @@ class TestMockPlayer(unittest.TestCase):
 
 
 class TestUpdateHistories(unittest.TestCase):
-
     def test_various(self):
         p1 = TestOpponent()
         p2 = TestOpponent()

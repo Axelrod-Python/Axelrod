@@ -31,15 +31,15 @@ class Stalker(Player):
     - Stalker: [Andre2013]_
     """
 
-    name = 'Stalker'
+    name = "Stalker"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': True,
-        'makes_use_of': set(["game", "length"]),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": True,
+        "makes_use_of": set(["game", "length"]),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def receive_match_attributes(self):
@@ -67,8 +67,9 @@ class Stalker(Player):
 
         if current_average_score > self.very_good_score:
             return D
-        if (current_average_score > self.wish_score) and \
-            (current_average_score < self.very_good_score):
+        if (current_average_score > self.wish_score) and (
+            current_average_score < self.very_good_score
+        ):
             return C
         if current_average_score > 2:
             return C

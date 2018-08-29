@@ -16,13 +16,13 @@ class CotoDeRatio(Player):
     """
 
     classifier = {
-        'stochastic': False,
-        'memory_depth': float('inf'),  # Long memory
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "stochastic": False,
+        "memory_depth": float("inf"),  # Long memory
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def strategy(self, opponent: Player) -> Action:
@@ -49,7 +49,7 @@ class Golden(CotoDeRatio):
     - Golden: Original Name by Timothy Standen
     """
 
-    name = '$\phi$'
+    name = "$\phi$"
     ratio = (1 + math.sqrt(5)) / 2
 
 
@@ -62,7 +62,7 @@ class Pi(CotoDeRatio):
     - Pi: Original Name by Timothy Standen
     """
 
-    name = '$\pi$'
+    name = "$\pi$"
     ratio = math.pi
 
 
@@ -75,5 +75,5 @@ class e(CotoDeRatio):
     - e: Original Name by Timothy Standen
     """
 
-    name = '$e$'
+    name = "$e$"
     ratio = math.e

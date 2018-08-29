@@ -1,20 +1,19 @@
 """
 A module for creating hypothesis based strategies for property based testing
 """
-from axelrod import (short_run_time_strategies,
-                     strategies,
-                     Match,
-                     Game,
-                     Tournament)
-from hypothesis.strategies import (composite, sampled_from, integers,
-                                   floats, lists)
-
 import itertools
+
+from axelrod import (Game, Match, Tournament, short_run_time_strategies,
+                     strategies)
+
+from hypothesis.strategies import (composite, floats, integers, lists,
+                                   sampled_from)
 
 
 @composite
-def strategy_lists(draw, strategies=short_run_time_strategies, min_size=1,
-                   max_size=len(strategies)):
+def strategy_lists(
+    draw, strategies=short_run_time_strategies, min_size=1, max_size=len(strategies)
+):
     """
     A hypothesis decorator to return a list of strategies
 
@@ -25,15 +24,21 @@ def strategy_lists(draw, strategies=short_run_time_strategies, min_size=1,
     max_size : integer
         The maximum number of strategies to include
     """
-    strategies = draw(lists(sampled_from(strategies), min_size=min_size,
-                            max_size=max_size))
+    strategies = draw(
+        lists(sampled_from(strategies), min_size=min_size, max_size=max_size)
+    )
     return strategies
 
 
 @composite
-def matches(draw, strategies=short_run_time_strategies,
-            min_turns=1, max_turns=200,
-            min_noise=0, max_noise=1):
+def matches(
+    draw,
+    strategies=short_run_time_strategies,
+    min_turns=1,
+    max_turns=200,
+    min_noise=0,
+    max_noise=1,
+):
     """
     A hypothesis decorator to return a random match.
 
@@ -63,11 +68,18 @@ def matches(draw, strategies=short_run_time_strategies,
 
 
 @composite
-def tournaments(draw, strategies=short_run_time_strategies,
-                min_size=1, max_size=10,
-                min_turns=1, max_turns=200,
-                min_noise=0, max_noise=1,
-                min_repetitions=1, max_repetitions=20):
+def tournaments(
+    draw,
+    strategies=short_run_time_strategies,
+    min_size=1,
+    max_size=10,
+    min_turns=1,
+    max_turns=200,
+    min_noise=0,
+    max_noise=1,
+    min_repetitions=1,
+    max_repetitions=20,
+):
     """
     A hypothesis decorator to return a tournament.
 
@@ -90,26 +102,31 @@ def tournaments(draw, strategies=short_run_time_strategies,
     max_repetitions : integer
         The maximum number of repetitions
     """
-    strategies = draw(strategy_lists(strategies=strategies,
-                                     min_size=min_size,
-                                     max_size=max_size))
+    strategies = draw(
+        strategy_lists(strategies=strategies, min_size=min_size, max_size=max_size)
+    )
     players = [s() for s in strategies]
     turns = draw(integers(min_value=min_turns, max_value=max_turns))
-    repetitions = draw(integers(min_value=min_repetitions,
-                                max_value=max_repetitions))
+    repetitions = draw(integers(min_value=min_repetitions, max_value=max_repetitions))
     noise = draw(floats(min_value=min_noise, max_value=max_noise))
 
-    tournament = Tournament(players, turns=turns, repetitions=repetitions,
-                            noise=noise)
+    tournament = Tournament(players, turns=turns, repetitions=repetitions, noise=noise)
     return tournament
 
 
 @composite
-def prob_end_tournaments(draw, strategies=short_run_time_strategies,
-                         min_size=1, max_size=10,
-                         min_prob_end=0, max_prob_end=1,
-                         min_noise=0, max_noise=1,
-                         min_repetitions=1, max_repetitions=20):
+def prob_end_tournaments(
+    draw,
+    strategies=short_run_time_strategies,
+    min_size=1,
+    max_size=10,
+    min_prob_end=0,
+    max_prob_end=1,
+    min_noise=0,
+    max_noise=1,
+    min_repetitions=1,
+    max_repetitions=20,
+):
     """
     A hypothesis decorator to return a tournament,
 
@@ -132,26 +149,33 @@ def prob_end_tournaments(draw, strategies=short_run_time_strategies,
     max_repetitions : integer
         The maximum number of repetitions
     """
-    strategies = draw(strategy_lists(strategies=strategies,
-                                     min_size=min_size,
-                                     max_size=max_size))
+    strategies = draw(
+        strategy_lists(strategies=strategies, min_size=min_size, max_size=max_size)
+    )
     players = [s() for s in strategies]
     prob_end = draw(floats(min_value=min_prob_end, max_value=max_prob_end))
-    repetitions = draw(integers(min_value=min_repetitions,
-                                max_value=max_repetitions))
+    repetitions = draw(integers(min_value=min_repetitions, max_value=max_repetitions))
     noise = draw(floats(min_value=min_noise, max_value=max_noise))
 
-    tournament = Tournament(players, prob_end=prob_end,
-                            repetitions=repetitions, noise=noise)
+    tournament = Tournament(
+        players, prob_end=prob_end, repetitions=repetitions, noise=noise
+    )
     return tournament
 
 
 @composite
-def spatial_tournaments(draw, strategies=short_run_time_strategies,
-                        min_size=1, max_size=10,
-                        min_turns=1, max_turns=200,
-                        min_noise=0, max_noise=1,
-                        min_repetitions=1, max_repetitions=20):
+def spatial_tournaments(
+    draw,
+    strategies=short_run_time_strategies,
+    min_size=1,
+    max_size=10,
+    min_turns=1,
+    max_turns=200,
+    min_noise=0,
+    max_noise=1,
+    min_repetitions=1,
+    max_repetitions=20,
+):
     """
     A hypothesis decorator to return a spatial tournament.
 
@@ -174,42 +198,52 @@ def spatial_tournaments(draw, strategies=short_run_time_strategies,
     max_repetitions : integer
         The maximum number of repetitions
     """
-    strategies = draw(strategy_lists(strategies=strategies,
-                                     min_size=min_size,
-                                     max_size=max_size))
+    strategies = draw(
+        strategy_lists(strategies=strategies, min_size=min_size, max_size=max_size)
+    )
     players = [s() for s in strategies]
     player_indices = list(range(len(players)))
 
     all_potential_edges = list(itertools.combinations(player_indices, 2))
     all_potential_edges.extend([(i, i) for i in player_indices])  # Loops
-    edges = draw(lists(sampled_from(all_potential_edges), unique=True,
-                       average_size=2 * len(players)))
+    edges = draw(
+        lists(
+            sampled_from(all_potential_edges),
+            unique=True,
+            average_size=2 * len(players),
+        )
+    )
 
     # Ensure all players/nodes are connected:
     node_indices = sorted(set([node for edge in edges for node in edge]))
-    missing_nodes = [index
-                     for index in player_indices if index not in node_indices]
+    missing_nodes = [index for index in player_indices if index not in node_indices]
     for index in missing_nodes:
         opponent = draw(sampled_from(player_indices))
         edges.append((index, opponent))
 
     turns = draw(integers(min_value=min_turns, max_value=max_turns))
-    repetitions = draw(integers(min_value=min_repetitions,
-                                max_value=max_repetitions))
+    repetitions = draw(integers(min_value=min_repetitions, max_value=max_repetitions))
     noise = draw(floats(min_value=min_noise, max_value=max_noise))
 
-    tournament = Tournament(players, turns=turns,
-                            repetitions=repetitions, noise=noise,
-                            edges=edges)
+    tournament = Tournament(
+        players, turns=turns, repetitions=repetitions, noise=noise, edges=edges
+    )
     return tournament
 
 
 @composite
-def prob_end_spatial_tournaments(draw, strategies=short_run_time_strategies,
-                                min_size=1, max_size=10,
-                                min_prob_end=0, max_prob_end=1,
-                                min_noise=0, max_noise=1,
-                                min_repetitions=1, max_repetitions=20):
+def prob_end_spatial_tournaments(
+    draw,
+    strategies=short_run_time_strategies,
+    min_size=1,
+    max_size=10,
+    min_prob_end=0,
+    max_prob_end=1,
+    min_noise=0,
+    max_noise=1,
+    min_repetitions=1,
+    max_repetitions=20,
+):
     """
     A hypothesis decorator to return a probabilistic ending spatial tournament.
 
@@ -232,33 +266,36 @@ def prob_end_spatial_tournaments(draw, strategies=short_run_time_strategies,
     max_repetitions : integer
         The maximum number of repetitions
     """
-    strategies = draw(strategy_lists(strategies=strategies,
-                                     min_size=min_size,
-                                     max_size=max_size))
+    strategies = draw(
+        strategy_lists(strategies=strategies, min_size=min_size, max_size=max_size)
+    )
     players = [s() for s in strategies]
     player_indices = list(range(len(players)))
 
     all_potential_edges = list(itertools.combinations(player_indices, 2))
     all_potential_edges.extend([(i, i) for i in player_indices])  # Loops
-    edges = draw(lists(sampled_from(all_potential_edges), unique=True,
-                       average_size=2 * len(players)))
+    edges = draw(
+        lists(
+            sampled_from(all_potential_edges),
+            unique=True,
+            average_size=2 * len(players),
+        )
+    )
 
     # Ensure all players/nodes are connected:
     node_indices = sorted(set([node for edge in edges for node in edge]))
-    missing_nodes = [index
-                     for index in player_indices if index not in node_indices]
+    missing_nodes = [index for index in player_indices if index not in node_indices]
     for index in missing_nodes:
         opponent = draw(sampled_from(player_indices))
         edges.append((index, opponent))
 
     prob_end = draw(floats(min_value=min_prob_end, max_value=max_prob_end))
-    repetitions = draw(integers(min_value=min_repetitions,
-                                max_value=max_repetitions))
+    repetitions = draw(integers(min_value=min_repetitions, max_value=max_repetitions))
     noise = draw(floats(min_value=min_noise, max_value=max_noise))
 
-    tournament = Tournament(players, prob_end=prob_end,
-                            repetitions=repetitions,
-                            noise=noise, edges=edges)
+    tournament = Tournament(
+        players, prob_end=prob_end, repetitions=repetitions, noise=noise, edges=edges
+    )
     return tournament
 
 

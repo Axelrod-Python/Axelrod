@@ -1,6 +1,7 @@
 """Tests for the Adaptive strategy."""
 
 import axelrod
+
 from .test_player import TestMatch, TestPlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D
@@ -11,13 +12,13 @@ class TestAdaptive(TestPlayer):
     name = "Adaptive"
     player = axelrod.Adaptive
     expected_classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': set(["game"]),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(["game"]),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):

@@ -47,6 +47,7 @@ documentation.
 .. [Nowak1990] Nowak, M., & Sigmund, K. (1990). The evolution of stochastic strategies in the Prisoner's Dilemma. Acta Applicandae Mathematica. https://link.springer.com/article/10.1007/BF00049570
 .. [Nowak1992] Nowak, M.., & May, R. M. (1992). Evolutionary games and spatial chaos. Nature. http://doi.org/10.1038/359826a0
 .. [Nowak1993] Nowak, M., & Sigmund, K. (1993). A strategy of win-stay, lose-shift that outperforms tit-for-tat in the Prisoner’s Dilemma game. Nature, 364(6432), 56–58. http://doi.org/10.1038/364056a0
+.. [Ohtsuki2006] Ohtsuki, Hisashi, et al. "A simple rule for the evolution of cooperation on graphs and social networks." Nature 441.7092 (2006): 502.
 .. [PD2017] http://www.prisoners-dilemma.com/competition.html (Accessed: 6 June 2017)
 .. [Press2012] Press, W. H., & Dyson, F. J. (2012). Iterated Prisoner’s Dilemma contains strategies that dominate any evolutionary opponent. Proceedings of the National Academy of Sciences, 109(26), 10409–10413.  http://doi.org/10.1073/pnas.1206569109
 .. [Prison1998] LIFL (1998) PRISON. Available at: http://www.lifl.fr/IPD/ipd.frame.html (Accessed: 19 September 2016).

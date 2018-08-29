@@ -1,11 +1,11 @@
 """Tests for the Second Axelrod strategies."""
 
 import random
-import numpy as np
 
 import axelrod
-from .test_player import TestPlayer
+import numpy as np
 
+from .test_player import TestPlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D
 
@@ -14,13 +14,13 @@ class TestChampion(TestPlayer):
     name = "Champion"
     player = axelrod.Champion
     expected_classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
@@ -35,16 +35,13 @@ class TestChampion(TestPlayer):
 
         # Cooperate unless the opponent defected, has defected at least 40% of
         actions_1 = actions + [(D, C), (C, D), (C, C), (C, D)]
-        self.versus_test(axelrod.Alternator(), expected_actions=actions_1,
-                         seed=0)
+        self.versus_test(axelrod.Alternator(), expected_actions=actions_1, seed=0)
 
         actions_2 = actions + [(D, C), (C, D), (D, C), (C, D)]
-        self.versus_test(axelrod.Alternator(), expected_actions=actions_2,
-                         seed=1)
+        self.versus_test(axelrod.Alternator(), expected_actions=actions_2, seed=1)
 
         actions_3 = actions + [(D, C), (C, D), (C, C), (C, D)]
-        self.versus_test(axelrod.Alternator(), expected_actions=actions_3,
-                         seed=2)
+        self.versus_test(axelrod.Alternator(), expected_actions=actions_3, seed=2)
 
 
 class TestEatherley(TestPlayer):
@@ -52,13 +49,13 @@ class TestEatherley(TestPlayer):
     name = "Eatherley"
     player = axelrod.Eatherley
     expected_classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
@@ -72,11 +69,9 @@ class TestEatherley(TestPlayer):
 
         # Stochastic response to defect
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
-        self.versus_test(axelrod.Alternator(), expected_actions=actions,
-                         seed=0)
+        self.versus_test(axelrod.Alternator(), expected_actions=actions, seed=0)
         actions = [(C, C), (C, D), (C, C), (C, D), (D, C)]
-        self.versus_test(axelrod.Alternator(), expected_actions=actions,
-                         seed=1)
+        self.versus_test(axelrod.Alternator(), expected_actions=actions, seed=1)
 
         opponent = axelrod.MockPlayer(actions=[D, C, C, D])
         actions = [(C, D), (D, C), (C, C), (C, D), (C, D)]
@@ -91,31 +86,32 @@ class TestTester(TestPlayer):
     name = "Tester"
     player = axelrod.Tester
     expected_classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
         # Alternate after 3rd round if opponent only cooperates
         actions = [(D, C)] + [(C, C), (C, C)] + [(D, C), (C, C)] * 4
-        self.versus_test(axelrod.Cooperator(), expected_actions=actions,
-                         attrs={"is_TFT": False})
+        self.versus_test(
+            axelrod.Cooperator(), expected_actions=actions, attrs={"is_TFT": False}
+        )
 
         # Cooperate after initial defection and become TfT
         actions = [(D, C), (C, D), (C, C)]
-        self.versus_test(axelrod.Alternator(), expected_actions=actions,
-                         attrs={"is_TFT": True})
+        self.versus_test(
+            axelrod.Alternator(), expected_actions=actions, attrs={"is_TFT": True}
+        )
 
         # Now play TfT
         opponent = axelrod.MockPlayer(actions=[C, D, C, D, D, C])
         actions = [(D, C), (C, D), (C, C), (C, D), (D, D), (D, C), (C, C)]
-        self.versus_test(opponent, expected_actions=actions,
-                         attrs={"is_TFT": True})
+        self.versus_test(opponent, expected_actions=actions, attrs={"is_TFT": True})
 
 
 class TestGladstein(TestPlayer):
@@ -123,54 +119,56 @@ class TestGladstein(TestPlayer):
     name = "Gladstein"
     player = axelrod.Gladstein
     expected_classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
         # Cooperates and begins to play TFT when Alternator defects
         actions = [(D, C), (C, D), (C, C), (C, D), (D, C)]
-        self.versus_test(axelrod.Alternator(), expected_actions=actions,
-                         attrs={'patsy': False})
+        self.versus_test(
+            axelrod.Alternator(), expected_actions=actions, attrs={"patsy": False}
+        )
 
         # Cooperation ratio will always be less than 0.5
         actions = [(D, C), (C, C), (C, C), (D, C), (C, C)]
-        self.versus_test(axelrod.Cooperator(), expected_actions=actions,
-                         attrs={'patsy': True})
+        self.versus_test(
+            axelrod.Cooperator(), expected_actions=actions, attrs={"patsy": True}
+        )
 
         # Apologizes immediately and plays TFT
         actions = [(D, D), (C, D), (D, D), (D, D), (D, D)]
-        self.versus_test(axelrod.Defector(), expected_actions=actions,
-                         attrs={'patsy': False})
+        self.versus_test(
+            axelrod.Defector(), expected_actions=actions, attrs={"patsy": False}
+        )
 
         # Ratio is 1/3 when MockPlayer defected for the first time.
         opponent = axelrod.MockPlayer(actions=[C, C, C, D, D])
         actions = [(D, C), (C, C), (C, C), (D, D), (C, D)]
-        self.versus_test(opponent, expected_actions=actions,
-                         attrs={'patsy': False})
+        self.versus_test(opponent, expected_actions=actions, attrs={"patsy": False})
 
         opponent = axelrod.AntiTitForTat()
         actions = [(D, C), (C, C), (C, D), (C, D), (D, D)]
-        self.versus_test(opponent, expected_actions=actions,
-                         attrs={'patsy': False})
+        self.versus_test(opponent, expected_actions=actions, attrs={"patsy": False})
+
 
 class TestTranquilizer(TestPlayer):
 
     name = "Tranquilizer"
     player = axelrod.Tranquilizer
     expected_classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': True,
-        'makes_use_of': {"game"},
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": True,
+        "makes_use_of": {"game"},
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     # test for initalised variables
@@ -190,143 +188,171 @@ class TestTranquilizer(TestPlayer):
 
         opponent = axelrod.Bully()
         actions = [(C, D), (D, D), (D, C), (C, C), (C, D), (D, D), (D, C), (C, C)]
-        expected_attrs={"num_turns_after_good_defection": 0,
-                        "one_turn_after_good_defection_ratio": 5,
-                        "two_turns_after_good_defection_ratio": 0,
-                        "one_turn_after_good_defection_ratio_count": 1,
-                        "two_turns_after_good_defection_ratio_count": 1}
-        self.versus_test(opponent, expected_actions=actions,
-                         attrs=expected_attrs)
+        expected_attrs = {
+            "num_turns_after_good_defection": 0,
+            "one_turn_after_good_defection_ratio": 5,
+            "two_turns_after_good_defection_ratio": 0,
+            "one_turn_after_good_defection_ratio_count": 1,
+            "two_turns_after_good_defection_ratio_count": 1,
+        }
+        self.versus_test(opponent, expected_actions=actions, attrs=expected_attrs)
 
         # Tests whether TitForTat is played given score is below 1.75
 
         opponent = axelrod.Defector()
         actions = [(C, D)] + [(D, D)] * 20
-        expected_attrs={"num_turns_after_good_defection": 0,
-                        "one_turn_after_good_defection_ratio": 5,
-                        "two_turns_after_good_defection_ratio": 0,
-                        "one_turn_after_good_defection_ratio_count": 1,
-                        "two_turns_after_good_defection_ratio_count": 1}
-        self.versus_test(opponent, expected_actions=actions,
-                         attrs=expected_attrs)
+        expected_attrs = {
+            "num_turns_after_good_defection": 0,
+            "one_turn_after_good_defection_ratio": 5,
+            "two_turns_after_good_defection_ratio": 0,
+            "one_turn_after_good_defection_ratio_count": 1,
+            "two_turns_after_good_defection_ratio_count": 1,
+        }
+        self.versus_test(opponent, expected_actions=actions, attrs=expected_attrs)
 
-        opponent = axelrod.MockPlayer([C] * 2 + [D] * 8 + [C] * 4 )
+        opponent = axelrod.MockPlayer([C] * 2 + [D] * 8 + [C] * 4)
         actions = [(C, C), (C, C)] + [(C, D)] + [(D, D)] * 7 + [(D, C)] + [(C, C)] * 3
-        expected_attrs={"num_turns_after_good_defection": 0,
-                        "one_turn_after_good_defection_ratio": 5,
-                        "two_turns_after_good_defection_ratio": 0,
-                        "one_turn_after_good_defection_ratio_count": 1,
-                        "two_turns_after_good_defection_ratio_count": 1}
-        self.versus_test(opponent, expected_actions=actions,
-                         attrs=expected_attrs)
+        expected_attrs = {
+            "num_turns_after_good_defection": 0,
+            "one_turn_after_good_defection_ratio": 5,
+            "two_turns_after_good_defection_ratio": 0,
+            "one_turn_after_good_defection_ratio_count": 1,
+            "two_turns_after_good_defection_ratio_count": 1,
+        }
+        self.versus_test(opponent, expected_actions=actions, attrs=expected_attrs)
 
         # If score is between 1.75 and 2.25, may cooperate or defect
 
         opponent = axelrod.MockPlayer(actions=[D] * 3 + [C] * 4 + [D] * 2)
         actions = [(C, D)] + [(D, D)] * 2 + [(D, C)] + [(C, C)] * 3 + [(C, D)]
-        actions += ([(C, D)]) # <-- Random
-        expected_attrs={"num_turns_after_good_defection": 0,
-               "one_turn_after_good_defection_ratio": 5,
-               "two_turns_after_good_defection_ratio": 0,
-               "one_turn_after_good_defection_ratio_count": 1,
-               "two_turns_after_good_defection_ratio_count": 1}
-        self.versus_test(opponent, expected_actions=actions, seed=0,
-                         attrs=expected_attrs)
+        actions += [(C, D)]  # <-- Random
+        expected_attrs = {
+            "num_turns_after_good_defection": 0,
+            "one_turn_after_good_defection_ratio": 5,
+            "two_turns_after_good_defection_ratio": 0,
+            "one_turn_after_good_defection_ratio_count": 1,
+            "two_turns_after_good_defection_ratio_count": 1,
+        }
+        self.versus_test(
+            opponent, expected_actions=actions, seed=0, attrs=expected_attrs
+        )
 
         opponent = axelrod.MockPlayer(actions=[D] * 3 + [C] * 4 + [D] * 2)
         actions = [(C, D)] + [(D, D)] * 2 + [(D, C)] + [(C, C)] * 3 + [(C, D)]
-        actions += ([(D, D)]) # <-- Random
-        expected_attrs={"num_turns_after_good_defection": 0,
-                  "one_turn_after_good_defection_ratio": 5,
-                  "two_turns_after_good_defection_ratio": 0,
-                  "one_turn_after_good_defection_ratio_count": 1,
-                  "two_turns_after_good_defection_ratio_count": 1}
-        self.versus_test(opponent, expected_actions=actions, seed=17,
-                         attrs=expected_attrs)
+        actions += [(D, D)]  # <-- Random
+        expected_attrs = {
+            "num_turns_after_good_defection": 0,
+            "one_turn_after_good_defection_ratio": 5,
+            "two_turns_after_good_defection_ratio": 0,
+            "one_turn_after_good_defection_ratio_count": 1,
+            "two_turns_after_good_defection_ratio_count": 1,
+        }
+        self.versus_test(
+            opponent, expected_actions=actions, seed=17, attrs=expected_attrs
+        )
 
         """If score is greater than 2.25 either cooperate or defect,
            if turn number <= 5; cooperate"""
 
         opponent = axelrod.MockPlayer(actions=[C] * 5)
         actions = [(C, C)] * 5
-        expected_attrs={"num_turns_after_good_defection": 0,
-                "one_turn_after_good_defection_ratio": 5,
-                "two_turns_after_good_defection_ratio": 0,
-                "one_turn_after_good_defection_ratio_count": 1,
-                "two_turns_after_good_defection_ratio_count": 1}
-        self.versus_test(opponent, expected_actions=actions, seed=1,
-                         attrs=expected_attrs)
+        expected_attrs = {
+            "num_turns_after_good_defection": 0,
+            "one_turn_after_good_defection_ratio": 5,
+            "two_turns_after_good_defection_ratio": 0,
+            "one_turn_after_good_defection_ratio_count": 1,
+            "two_turns_after_good_defection_ratio_count": 1,
+        }
+        self.versus_test(
+            opponent, expected_actions=actions, seed=1, attrs=expected_attrs
+        )
 
         opponent = axelrod.MockPlayer(actions=[C] * 5)
         actions = [(C, C)] * 4 + [(D, C)]
-        expected_attrs={"num_turns_after_good_defection": 1,
-                "one_turn_after_good_defection_ratio": 5,
-                "two_turns_after_good_defection_ratio": 0,
-                "one_turn_after_good_defection_ratio_count": 1,
-                "two_turns_after_good_defection_ratio_count": 1}
-        self.versus_test(opponent, expected_actions=actions, seed=89,
-                         attrs=expected_attrs)
+        expected_attrs = {
+            "num_turns_after_good_defection": 1,
+            "one_turn_after_good_defection_ratio": 5,
+            "two_turns_after_good_defection_ratio": 0,
+            "one_turn_after_good_defection_ratio_count": 1,
+            "two_turns_after_good_defection_ratio_count": 1,
+        }
+        self.versus_test(
+            opponent, expected_actions=actions, seed=89, attrs=expected_attrs
+        )
 
         """ Given score per turn is greater than 2.25,
             Tranquilizer will never defect twice in a row"""
 
-        opponent = axelrod.MockPlayer(actions = [C] * 6)
+        opponent = axelrod.MockPlayer(actions=[C] * 6)
         actions = [(C, C)] * 4 + [(D, C), (C, C)]
-        expected_attrs={"num_turns_after_good_defection": 2,
-                 "one_turn_after_good_defection_ratio": 5,
-                 "two_turns_after_good_defection_ratio": 0,
-                 "one_turn_after_good_defection_ratio_count": 2,
-                 "two_turns_after_good_defection_ratio_count": 1}
-        self.versus_test(opponent, expected_actions=actions, seed=89,
-                         attrs=expected_attrs)
+        expected_attrs = {
+            "num_turns_after_good_defection": 2,
+            "one_turn_after_good_defection_ratio": 5,
+            "two_turns_after_good_defection_ratio": 0,
+            "one_turn_after_good_defection_ratio_count": 2,
+            "two_turns_after_good_defection_ratio_count": 1,
+        }
+        self.versus_test(
+            opponent, expected_actions=actions, seed=89, attrs=expected_attrs
+        )
 
         # Tests cooperation after update_state
 
         opponent = axelrod.MockPlayer(actions=[C] * 5)
         actions = [(C, C)] * 4 + [(D, C)] + [(C, C)]
-        expected_attrs={"num_turns_after_good_defection": 2,
-                "one_turn_after_good_defection_ratio": 5,
-                "two_turns_after_good_defection_ratio": 0,
-                "one_turn_after_good_defection_ratio_count": 2,
-                "two_turns_after_good_defection_ratio_count": 1}
-        self.versus_test(opponent, expected_actions=actions, seed=89,
-                         attrs=expected_attrs)
+        expected_attrs = {
+            "num_turns_after_good_defection": 2,
+            "one_turn_after_good_defection_ratio": 5,
+            "two_turns_after_good_defection_ratio": 0,
+            "one_turn_after_good_defection_ratio_count": 2,
+            "two_turns_after_good_defection_ratio_count": 1,
+        }
+        self.versus_test(
+            opponent, expected_actions=actions, seed=89, attrs=expected_attrs
+        )
 
-       # Ensures FD1 values are calculated
+        # Ensures FD1 values are calculated
 
         opponent = axelrod.MockPlayer(actions=[C] * 6)
         actions = [(C, C)] * 4 + [(D, C), (C, C)]
-        expected_attrs={"num_turns_after_good_defection": 2,
-                "one_turn_after_good_defection_ratio": 5,
-                "two_turns_after_good_defection_ratio": 0,
-                "one_turn_after_good_defection_ratio_count": 2,
-                "two_turns_after_good_defection_ratio_count": 1}
-        self.versus_test(opponent, expected_actions=actions, seed=89,
-                         attrs=expected_attrs)
+        expected_attrs = {
+            "num_turns_after_good_defection": 2,
+            "one_turn_after_good_defection_ratio": 5,
+            "two_turns_after_good_defection_ratio": 0,
+            "one_turn_after_good_defection_ratio_count": 2,
+            "two_turns_after_good_defection_ratio_count": 1,
+        }
+        self.versus_test(
+            opponent, expected_actions=actions, seed=89, attrs=expected_attrs
+        )
 
         # Ensures FD2 values are calculated
 
         opponent = axelrod.MockPlayer(actions=[C] * 6)
         actions = [(C, C)] * 4 + [(D, C)] + [(C, C)] * 2
-        expected_attrs={"num_turns_after_good_defection": 0,
-                 "one_turn_after_good_defection_ratio": 5,
-                 "two_turns_after_good_defection_ratio": 1.5,
-                 "one_turn_after_good_defection_ratio_count": 2,
-                 "two_turns_after_good_defection_ratio_count": 2}
-        self.versus_test(opponent, expected_actions=actions, seed=89,
-                         attrs=expected_attrs)
+        expected_attrs = {
+            "num_turns_after_good_defection": 0,
+            "one_turn_after_good_defection_ratio": 5,
+            "two_turns_after_good_defection_ratio": 1.5,
+            "one_turn_after_good_defection_ratio_count": 2,
+            "two_turns_after_good_defection_ratio_count": 2,
+        }
+        self.versus_test(
+            opponent, expected_actions=actions, seed=89, attrs=expected_attrs
+        )
 
         # Ensures scores are being counted
 
         opponent = axelrod.Defector()
         actions = [(C, D)] + [(D, D)] * 19
-        expected_attrs={"num_turns_after_good_defection": 0,
-                "one_turn_after_good_defection_ratio": 5,
-                "two_turns_after_good_defection_ratio": 0,
-                "one_turn_after_good_defection_ratio_count": 1,
-                "two_turns_after_good_defection_ratio_count": 1}
-        self.versus_test(opponent, expected_actions=actions,
-                         attrs=expected_attrs)
+        expected_attrs = {
+            "num_turns_after_good_defection": 0,
+            "one_turn_after_good_defection_ratio": 5,
+            "two_turns_after_good_defection_ratio": 0,
+            "one_turn_after_good_defection_ratio_count": 1,
+            "two_turns_after_good_defection_ratio_count": 1,
+        }
+        self.versus_test(opponent, expected_actions=actions, attrs=expected_attrs)
 
 
 class TestMoreGrofman(TestPlayer):
@@ -334,13 +360,13 @@ class TestMoreGrofman(TestPlayer):
     name = "MoreGrofman"
     player = axelrod.MoreGrofman
     expected_classifier = {
-        'memory_depth': 8,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 8,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
@@ -384,28 +410,125 @@ class TestMoreGrofman(TestPlayer):
         # Test to make sure logic matches Fortran (discrepancy found 8/23/2017)
         opponent = axelrod.AntiTitForTat()
         # Actions come from a match run by Axelrod Fortran using Player('k86r')
-        actions = [(C, C), (C, D), (D, D), (D, C), (C, C), (C, D), (D, D),
-            (D, C), (D, C), (D, C), (D, C), (D, C), (D, C), (D, C), (C, C)]
+        actions = [
+            (C, C),
+            (C, D),
+            (D, D),
+            (D, C),
+            (C, C),
+            (C, D),
+            (D, D),
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, C),
+            (C, C),
+        ]
         self.versus_test(opponent, expected_actions=actions)
 
         # Test to match the Fortran implementation for 30 rounds
         opponent = axelrod.AntiTitForTat()
-        actions = [(C, C), (C, D), (D, D), (D, C), (C, C), (C, D), (D, D),
-            (D, C),  (D, C), (D, C), (D, C), (D, C), (D, C), (D, C), (C, C),
-            (C, D), (C, D), (C, D), (C, D), (D, D), (D, C), (D, C), (D, C),
-            (D, C), (D, C), (D, C), (D, C), (C, C), (C, D), (C, D)]
+        actions = [
+            (C, C),
+            (C, D),
+            (D, D),
+            (D, C),
+            (C, C),
+            (C, D),
+            (D, D),
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, C),
+            (C, C),
+            (C, D),
+            (C, D),
+            (C, D),
+            (C, D),
+            (D, D),
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, C),
+            (C, C),
+            (C, D),
+            (C, D),
+        ]
         self.versus_test(opponent, expected_actions=actions)
 
         # Test to match the Fortran implementation for 60 rounds
         opponent = axelrod.AntiTitForTat()
-        actions = [(C, C), (C, D), (D, D), (D, C), (C, C), (C, D), (D, D),
-            (D, C), (D, C), (D, C), (D, C), (D, C), (D, C), (D, C), (C, C),
-            (C, D), (C, D), (C, D), (C, D), (D, D), (D, C), (D, C), (D, C),
-            (D, C), (D, C), (D, C), (D, C), (C, C), (C, D), (C, D), (C, D),
-            (C, D), (D, D), (D, C), (D, C), (D, C), (D, C), (D, C), (D, C),
-            (D, C), (C, C), (C, D), (C, D), (C, D), (C, D), (D, D), (D, C),
-            (D, C), (D, C), (D, C), (D, C), (D, C), (D, C), (C, C), (C, D),
-            (C, D), (C, D), (C, D), (D, D), (D, C)]
+        actions = [
+            (C, C),
+            (C, D),
+            (D, D),
+            (D, C),
+            (C, C),
+            (C, D),
+            (D, D),
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, C),
+            (C, C),
+            (C, D),
+            (C, D),
+            (C, D),
+            (C, D),
+            (D, D),
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, C),
+            (C, C),
+            (C, D),
+            (C, D),
+            (C, D),
+            (C, D),
+            (D, D),
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, C),
+            (C, C),
+            (C, D),
+            (C, D),
+            (C, D),
+            (C, D),
+            (D, D),
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, C),
+            (C, C),
+            (C, D),
+            (C, D),
+            (C, D),
+            (C, D),
+            (D, D),
+            (D, C),
+        ]
         self.versus_test(opponent, expected_actions=actions)
 
 
@@ -413,13 +536,13 @@ class TestKluepfel(TestPlayer):
     name = "Kluepfel"
     player = axelrod.Kluepfel
     expected_classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
@@ -428,31 +551,78 @@ class TestKluepfel(TestPlayer):
 
         # Since never two in a row, will respond in kind with 70% if
         # coop and 60% otherwise, after first couple
-        actions = [(C, C),
-                    (C, D), # Views first three as the same.
-                    # A random gets used in each of the first two.
-                    (D, C), (D, D), (C, C), (C, D)]
+        actions = [
+            (C, C),
+            (C, D),  # Views first three as the same.
+            # A random gets used in each of the first two.
+            (D, C),
+            (D, D),
+            (C, C),
+            (C, D),
+        ]
         self.versus_test(axelrod.Alternator(), expected_actions=actions, seed=1)
 
-        actions = [(C, C), (C, D),
-                    (C, C), (D, D), (D, C), (C, D)]
+        actions = [(C, C), (C, D), (C, C), (D, D), (D, C), (C, D)]
         self.versus_test(axelrod.Alternator(), expected_actions=actions, seed=2)
 
-        actions = [(C, C), (C, D),
-                    (D, C), (C, D), (D, C), (C, D), (C, C)]
+        actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (C, D), (C, C)]
         self.versus_test(axelrod.Alternator(), expected_actions=actions, seed=3)
 
         # Now we have to test the detect-random logic, which doesn't pick up
         # until after 26 turns.  So we need a big sample.
-        actions = [(C, D), (D, D), (D, D), (D, D), (D, D), (D, C), (C, C),
-                   (C, D), (C, C), (D, D), (D, C), (C, C), (C, D), (D, D),
-                   (C, D), (D, D), (D, C), (C, C), (D, C), (C, C), (C, D),
-                   (D, D), (D, C), (C, D), (D, C), (C, C), (C, D),
-                    # Success detect random opponent for remaining turns.
-                   (D, D), (D, D), (D, D), (D, C), (D, D), (D, C), (D, D),
-                   (D, C), (D, D), (D, C), (D, C), (D, D), (D, D), (D, C),
-                   (D, C), (D, C), (D, C), (D, D), (D, C), (D, C), (D, C),
-                   (D, C), (D, D)]
+        actions = [
+            (C, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, C),
+            (C, C),
+            (C, D),
+            (C, C),
+            (D, D),
+            (D, C),
+            (C, C),
+            (C, D),
+            (D, D),
+            (C, D),
+            (D, D),
+            (D, C),
+            (C, C),
+            (D, C),
+            (C, C),
+            (C, D),
+            (D, D),
+            (D, C),
+            (C, D),
+            (D, C),
+            (C, C),
+            (C, D),
+            # Success detect random opponent for remaining turns.
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, C),
+            (D, D),
+            (D, C),
+            (D, D),
+            (D, C),
+            (D, D),
+            (D, C),
+            (D, C),
+            (D, D),
+            (D, D),
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, D),
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, D),
+        ]
         self.versus_test(axelrod.Random(0.5), expected_actions=actions, seed=10)
 
 
@@ -460,13 +630,13 @@ class TestBorufsen(TestPlayer):
     name = "Borufsen"
     player = axelrod.Borufsen
     expected_classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
@@ -474,8 +644,9 @@ class TestBorufsen(TestPlayer):
         self.versus_test(axelrod.Cooperator(), expected_actions=actions)
 
         # Tries to cooperate every third time until detecting defective
-        actions = [(C, D), (D, D), (D, D), (D, D)] * 6 + \
-                    [(C, D), (D, D)] + [(D, D)] * 100
+        actions = (
+            [(C, D), (D, D), (D, D), (D, D)] * 6 + [(C, D), (D, D)] + [(D, D)] * 100
+        )
         self.versus_test(axelrod.Defector(), expected_actions=actions)
 
         # Alternates with additional coop, every sixth turn
@@ -494,10 +665,14 @@ class TestBorufsen(TestPlayer):
         # Cs
         # Coming out of it, there will be new pattern.  Then random is detected
         # again.
-        actions = [(C, D), (D, C), (C, C)] * 8 + \
-                    [(C, D), (D, C)] + [(D, C)] * 25 + \
-                    [(D, C)] + [(C, C), (C, D), (D, C)] * 8 + \
-                    [(D, C)] * 25
+        actions = (
+            [(C, D), (D, C), (C, C)] * 8
+            + [(C, D), (D, C)]
+            + [(D, C)] * 25
+            + [(D, C)]
+            + [(C, C), (C, D), (D, C)] * 8
+            + [(D, C)] * 25
+        )
         self.versus_test(axelrod.WinShiftLoseStay(D), expected_actions=actions)
 
 
@@ -505,13 +680,13 @@ class TestCave(TestPlayer):
     name = "Cave"
     player = axelrod.Cave
     expected_classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
@@ -520,10 +695,26 @@ class TestCave(TestPlayer):
 
         # It will take until turn 18 to respond decide to repond D->D
         actions = [(C, D)]
-        actions += [(C, D), (D, D), (D, D), (C, D), (C, D), (C, D), (D, D),
-                    (D, D), (C, D), (C, D), (D, D), (C, D), (D, D), (C, D),
-                    (C, D), (D, D), (C, D)] # Randomly choose
-        actions += [(D, D)] * 30 # Defect
+        actions += [
+            (C, D),
+            (D, D),
+            (D, D),
+            (C, D),
+            (C, D),
+            (C, D),
+            (D, D),
+            (D, D),
+            (C, D),
+            (C, D),
+            (D, D),
+            (C, D),
+            (D, D),
+            (C, D),
+            (C, D),
+            (D, D),
+            (C, D),
+        ]  # Randomly choose
+        actions += [(D, D)] * 30  # Defect
         self.versus_test(axelrod.Defector(), expected_actions=actions, seed=1)
 
         # Highly-defective opponent
@@ -532,22 +723,74 @@ class TestCave(TestPlayer):
         almost_defector = axelrod.MockPlayer(actions=opponent_actions)
 
         actions = [(C, D)]
-        actions += [(C, D), (D, D), (D, D), (C, D), (C, D), (C, D), (D, D),
-                    (D, D), (C, D), (C, D), (D, D), (C, D), (D, D), (C, D),
-                    (C, D), (D, D), (C, C)] # Randomly choose
-        actions += [(C, C)] # Coop for a minute
+        actions += [
+            (C, D),
+            (D, D),
+            (D, D),
+            (C, D),
+            (C, D),
+            (C, D),
+            (D, D),
+            (D, D),
+            (C, D),
+            (C, D),
+            (D, D),
+            (C, D),
+            (D, D),
+            (C, D),
+            (C, D),
+            (D, D),
+            (C, C),
+        ]  # Randomly choose
+        actions += [(C, C)]  # Coop for a minute
         actions += [(D, C), (D, C)]
         self.versus_test(almost_defector, expected_actions=actions, seed=1)
 
-        #Here it will take until turn 40 to detect random and defect
+        # Here it will take until turn 40 to detect random and defect
         actions = [(C, C)]
-        actions += [(C, D), (D, C), (C, D), (D, C), (C, D), (C, C), (C, D),
-                    (C, C), (C, D), (D, C), (C, D), (D, C), (C, D), (D, C),
-                    (C, D), (C, C), (C, D), (D, C), (C, D), (D, C), (C, D),
-                    (D, C), (C, D), (C, C), (C, D), (C, C), (C, D), (C, C),
-                    (C, D), (D, C), (C, D), (D, C), (C, D), (D, C), (C, D)] #Randomly choose
-        actions += [(D, C), (C, D), (D, C)] # 17 D have come, so tit for tat for a while
-        actions += [(D, D), (D, C)] * 100 # Random finally detected
+        actions += [
+            (C, D),
+            (D, C),
+            (C, D),
+            (D, C),
+            (C, D),
+            (C, C),
+            (C, D),
+            (C, C),
+            (C, D),
+            (D, C),
+            (C, D),
+            (D, C),
+            (C, D),
+            (D, C),
+            (C, D),
+            (C, C),
+            (C, D),
+            (D, C),
+            (C, D),
+            (D, C),
+            (C, D),
+            (D, C),
+            (C, D),
+            (C, C),
+            (C, D),
+            (C, C),
+            (C, D),
+            (C, C),
+            (C, D),
+            (D, C),
+            (C, D),
+            (D, C),
+            (C, D),
+            (D, C),
+            (C, D),
+        ]  # Randomly choose
+        actions += [
+            (D, C),
+            (C, D),
+            (D, C),
+        ]  # 17 D have come, so tit for tat for a while
+        actions += [(D, D), (D, C)] * 100  # Random finally detected
         self.versus_test(axelrod.Alternator(), expected_actions=actions, seed=2)
 
 
@@ -555,13 +798,13 @@ class TestWmAdams(TestPlayer):
     name = "WmAdams"
     player = axelrod.WmAdams
     expected_classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
@@ -574,20 +817,62 @@ class TestWmAdams(TestPlayer):
         actions = [(C, D)] * 4 + [(C, C)] * 100
         self.versus_test(defect_four, expected_actions=actions)
 
-        actions = [(C, D), (C, D), (C, D), (C, D), (C, D), (D, D), (C, D),
-                   (C, D), (D, D), (C, D), (D, D), (C, D), (D, D), (D, D),
-                   (D, D), (D, D)]
+        actions = [
+            (C, D),
+            (C, D),
+            (C, D),
+            (C, D),
+            (C, D),
+            (D, D),
+            (C, D),
+            (C, D),
+            (D, D),
+            (C, D),
+            (D, D),
+            (C, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),
+        ]
         self.versus_test(axelrod.Defector(), expected_actions=actions, seed=1)
-        actions = [(C, D), (C, D), (C, D), (C, D), (C, D), (D, D), (C, D),
-                   (C, D), (D, D), (C, D), (D, D), (D, D), (D, D), (C, D),
-                   (D, D), (D, D)]
+        actions = [
+            (C, D),
+            (C, D),
+            (C, D),
+            (C, D),
+            (C, D),
+            (D, D),
+            (C, D),
+            (C, D),
+            (D, D),
+            (C, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (C, D),
+            (D, D),
+            (D, D),
+        ]
         self.versus_test(axelrod.Defector(), expected_actions=actions, seed=2)
 
         # After responding to the 11th D (counted as 10 D), just start cooperating
         opponent_actions = [D] * 11 + [C] * 100
         changed_man = axelrod.MockPlayer(actions=opponent_actions)
-        actions = [(C, D), (C, D), (C, D), (C, D), (C, D), (D, D), (C, D),
-                   (C, D), (D, D), (C, D), (D, D), (C, C)]
+        actions = [
+            (C, D),
+            (C, D),
+            (C, D),
+            (C, D),
+            (C, D),
+            (D, D),
+            (C, D),
+            (C, D),
+            (D, D),
+            (C, D),
+            (D, D),
+            (C, C),
+        ]
         actions += [(C, C)] * 99
         self.versus_test(changed_man, expected_actions=actions, seed=1)
 
@@ -596,13 +881,13 @@ class TestGraaskampKatzen(TestPlayer):
     name = "GraaskampKatzen"
     player = axelrod.GraaskampKatzen
     expected_classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': set(["game"]),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(["game"]),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
@@ -615,7 +900,7 @@ class TestGraaskampKatzen(TestPlayer):
         actions = [(C, C), (C, D), (D, D)]
         actions += [(D, C), (C, D), (D, D)] * 2
         actions += [(D, C)]
-        actions += [(D, D), (D, D), (D, C)] * 20 # Defect here on
+        actions += [(D, D), (D, D), (D, C)] * 20  # Defect here on
         self.versus_test(GK_Foil, expected_actions=actions)
 
         # Fail on second checkpoint
@@ -625,7 +910,7 @@ class TestGraaskampKatzen(TestPlayer):
         actions += [(C, C), (C, D), (D, D)]
         actions += [(D, C), (C, D), (D, D)] * 2
         actions += [(D, C)]
-        actions += [(D, D), (D, D), (D, C)] * 20 # Defect here on
+        actions += [(D, D), (D, D), (D, C)] * 20  # Defect here on
         self.versus_test(Delayed_GK_Foil, expected_actions=actions)
 
 
@@ -633,13 +918,13 @@ class TestWeiner(TestPlayer):
     name = "Weiner"
     player = axelrod.Weiner
     expected_classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
@@ -647,54 +932,54 @@ class TestWeiner(TestPlayer):
         self.versus_test(axelrod.Cooperator(), expected_actions=actions)
 
         actions = [(C, C)]
-        actions += [(C, D), (D, C)] # Tit-for-Tat
+        actions += [(C, D), (D, C)]  # Tit-for-Tat
         # Opponent's last move was a C with 1 D between
-        actions += [(C, D)] # Tit-for-Tat. Raise forgiveness flag.
-        actions += [(C, C)] # Tit-for-Tat. Use forgiveness flag.
+        actions += [(C, D)]  # Tit-for-Tat. Raise forgiveness flag.
+        actions += [(C, C)]  # Tit-for-Tat. Use forgiveness flag.
         # Opponent's last move was a C, but defect_padding counted as 0.
-        actions += [(C, D), (D, C)] # Tit-for-Tat
+        actions += [(C, D), (D, C)]  # Tit-for-Tat
         # Opponent's last move was a C with 1 D between
-        actions += [(C, D)] # Tit-for-Tat. Raise forgiveness flag.
-        actions += [(D, C)] # Tit-for-Tat. Try forgiveness flag.
+        actions += [(C, D)]  # Tit-for-Tat. Raise forgiveness flag.
+        actions += [(D, C)]  # Tit-for-Tat. Try forgiveness flag.
         # This time grudge=20, so the forgiveness flag doesn't work.
-        actions += [(C, D)] # Tit-for-Tat.
+        actions += [(C, D)]  # Tit-for-Tat.
         # This is the 5th opponent defect, won't be counted for 2 turns
-        actions += [(D, C)] # Tit-for-Tat.
-        actions += [(D, D), (D, C)] * 100 # Defect now on.
+        actions += [(D, C)]  # Tit-for-Tat.
+        actions += [(D, D), (D, C)] * 100  # Defect now on.
         self.versus_test(axelrod.Alternator(), expected_actions=actions)
 
         # Build an opponent that will cause a wasted flag.
         opponent_actions = [C, D, C, C, C, C, D, D]
         Flag_Waster_1 = axelrod.MockPlayer(actions=opponent_actions)
         actions = [(C, C), (C, D), (D, C)]
-        actions += [(C, C)] # Raise flag, like in Alternator
-        actions += [(C, C)] # Use flag, but don't change outcome
+        actions += [(C, C)]  # Raise flag, like in Alternator
+        actions += [(C, C)]  # Use flag, but don't change outcome
         actions += [(C, C)]
-        actions += [(C, D)] # Don't raise flag
-        actions += [(D, D)] # Don't use flag
+        actions += [(C, D)]  # Don't raise flag
+        actions += [(D, D)]  # Don't use flag
         self.versus_test(Flag_Waster_1, expected_actions=actions)
 
         # Demonstrate that grudge is not incremented on wasted flag.
         opponent_actions = [C, D, C, C, C, C, D, C, D, C]
         Flag_Waster_2 = axelrod.MockPlayer(actions=opponent_actions)
         actions = [(C, C), (C, D), (D, C)]
-        actions += [(C, C)] # Raise flag, like in Alternator
-        actions += [(C, C)] # Use flag, but don't change outcome
+        actions += [(C, C)]  # Raise flag, like in Alternator
+        actions += [(C, C)]  # Use flag, but don't change outcome
         actions += [(C, C), (C, D), (D, C)]
-        actions += [(C, D)] # Raise flag
-        actions += [(C, C)] # Use flag to change outcome
+        actions += [(C, D)]  # Raise flag
+        actions += [(C, C)]  # Use flag to change outcome
         self.versus_test(Flag_Waster_2, expected_actions=actions)
 
         # Show grudge passing over time
         opponent_actions = [C, D, C, D, C] + [C] * 11 + [C, D, C, D, C]
         Time_Passer = axelrod.MockPlayer(actions=opponent_actions)
         actions = [(C, C), (C, D), (D, C)]
-        actions += [(C, D)] # Raise flag
-        actions += [(C, C)] # Use flag to change outcome
+        actions += [(C, D)]  # Raise flag
+        actions += [(C, C)]  # Use flag to change outcome
         actions += [(C, C)] * 11
         actions += [(C, C), (C, D), (D, C)]
-        actions += [(C, D)] # Raise flag
-        actions += [(C, C)] # Use flag to change outcome
+        actions += [(C, D)]  # Raise flag
+        actions += [(C, C)]  # Use flag to change outcome
         self.versus_test(Time_Passer, expected_actions=actions)
 
 
@@ -702,13 +987,13 @@ class TestHarrington(TestPlayer):
     name = "Harrington"
     player = axelrod.Harrington
     expected_classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
@@ -718,7 +1003,9 @@ class TestHarrington(TestPlayer):
         Defect37 = axelrod.MockPlayer(actions=opponent_actions)
         # Activate the Fair-weather flag
         actions = [(C, C)] * 36 + [(D, D)] + [(C, C)] * 100
-        self.versus_test(Defect37, expected_actions=actions, attrs={"mode": "Fair-weather"})
+        self.versus_test(
+            Defect37, expected_actions=actions, attrs={"mode": "Fair-weather"}
+        )
 
         # Defect on 37th turn to activate Fair-weather, then later defect to
         # exit Fair-weather
@@ -726,14 +1013,18 @@ class TestHarrington(TestPlayer):
         Defect37_big = axelrod.MockPlayer(actions=opponent_actions)
         actions = [(C, C)] * 36 + [(D, D)] + [(C, C)] * 100
         actions += [(C, D)]
-        #Immediately exit Fair-weather
+        # Immediately exit Fair-weather
         actions += [(D, C), (C, C), (D, C), (C, C)]
-        self.versus_test(Defect37_big, expected_actions=actions, seed=2, attrs={"mode": "Normal"})
+        self.versus_test(
+            Defect37_big, expected_actions=actions, seed=2, attrs={"mode": "Normal"}
+        )
         actions = [(C, C)] * 36 + [(D, D)] + [(C, C)] * 100
         actions += [(C, D)]
-        #Immediately exit Fair-weather
+        # Immediately exit Fair-weather
         actions += [(D, C), (C, C), (C, C), (C, C)]
-        self.versus_test(Defect37_big, expected_actions=actions, seed=1, attrs={"mode": "Normal"})
+        self.versus_test(
+            Defect37_big, expected_actions=actions, seed=1, attrs={"mode": "Normal"}
+        )
 
         # Opponent defects on 1st turn
         opponent_actions = [D] + [C] * 46
@@ -768,7 +1059,9 @@ class TestHarrington(TestPlayer):
         actions += [(C, D), (C, C)]
         # TFT from then on, since burned
         actions += [(C, C)] * 8
-        self.versus_test(Defect1_38, expected_actions=actions, seed=2, attrs={"burned": True})
+        self.versus_test(
+            Defect1_38, expected_actions=actions, seed=2, attrs={"burned": True}
+        )
 
         # Use alternator to test parity flags.
         actions = [(C, C), (C, D)]
@@ -805,7 +1098,9 @@ class TestHarrington(TestPlayer):
         actions += [(C, D), (D, C), (C, D), (D, C), (C, D), (C, C)]
         # Now hit the limit sooner
         actions += [(C, D), (D, C), (C, D), (C, C)] * 5
-        self.versus_test(AsyncAlternator, expected_actions=actions, attrs={"parity_limit": 3})
+        self.versus_test(
+            AsyncAlternator, expected_actions=actions, attrs={"parity_limit": 3}
+        )
 
         # Use a Defector to test the 20-defect streak
         actions = [(C, D), (D, D), (D, D), (D, D), (D, D)]
@@ -819,14 +1114,44 @@ class TestHarrington(TestPlayer):
         # The defect streak will always be detected from here on, because it
         # doesn't reset.  This logic comes before parity streaks or the turn-
         # based logic.
-        self.versus_test(axelrod.Defector(), expected_actions=actions, attrs={"recorded_defects": 119})
+        self.versus_test(
+            axelrod.Defector(),
+            expected_actions=actions,
+            attrs={"recorded_defects": 119},
+        )
 
         # Detect random
-        expected_actions = [(C, D), (D, C), (C, D), (D, C), (C, D), (C, D), (D, D),
-                   (D, C), (C, D), (D, C), (C, C), (C, D), (D, D), (D, C),
-                   (C, D), (D, D), (D, C), (C, C), (C, D), (D, C), (C, D),
-                   (D, D), (D, C), (C, D), (D, D), (D, D), (C, D), (D, C),
-                   (C, C)]
+        expected_actions = [
+            (C, D),
+            (D, C),
+            (C, D),
+            (D, C),
+            (C, D),
+            (C, D),
+            (D, D),
+            (D, C),
+            (C, D),
+            (D, C),
+            (C, C),
+            (C, D),
+            (D, D),
+            (D, C),
+            (C, D),
+            (D, D),
+            (D, C),
+            (C, C),
+            (C, D),
+            (D, C),
+            (C, D),
+            (D, D),
+            (D, C),
+            (C, D),
+            (D, D),
+            (D, D),
+            (C, D),
+            (D, C),
+            (C, C),
+        ]
         # Enter defect mode.
         expected_actions += [(D, C)]
         random.seed(10)
@@ -835,38 +1160,100 @@ class TestHarrington(TestPlayer):
         # The history matrix will be [[0, 2], [5, 6], [3, 6], [4, 2]]
         actions = match.play()
         self.assertEqual(actions, expected_actions)
-        self.assertAlmostEqual(player.calculate_chi_squared(len(expected_actions)), 2.395, places=3)
+        self.assertAlmostEqual(
+            player.calculate_chi_squared(len(expected_actions)), 2.395, places=3
+        )
 
         # Come back out of defect mode
-        opponent_actions = [D, C, D, C, D, D, D, C, D, C, C, D, D, C, D, D, C,
-                            C, D, C, D, D, C, D, D, D, D, C, C, C]
+        opponent_actions = [
+            D,
+            C,
+            D,
+            C,
+            D,
+            D,
+            D,
+            C,
+            D,
+            C,
+            C,
+            D,
+            D,
+            C,
+            D,
+            D,
+            C,
+            C,
+            D,
+            C,
+            D,
+            D,
+            C,
+            D,
+            D,
+            D,
+            D,
+            C,
+            C,
+            C,
+        ]
         opponent_actions += [D] * 16
         Rand_Then_Def = axelrod.MockPlayer(actions=opponent_actions)
-        actions = [(C, D), (D, C), (C, D), (D, C), (C, D), (C, D), (D, D),
-                   (D, C), (C, D), (D, C), (C, C), (C, D), (D, D), (D, C),
-                   (C, D), (D, D), (D, C), (C, C), (C, D), (D, C), (C, D),
-                   (D, D), (D, C), (C, D), (D, D), (D, D), (C, D), (D, C),
-                   (C, C)]
+        actions = [
+            (C, D),
+            (D, C),
+            (C, D),
+            (D, C),
+            (C, D),
+            (C, D),
+            (D, D),
+            (D, C),
+            (C, D),
+            (D, C),
+            (C, C),
+            (C, D),
+            (D, D),
+            (D, C),
+            (C, D),
+            (D, D),
+            (D, C),
+            (C, C),
+            (C, D),
+            (D, C),
+            (C, D),
+            (D, D),
+            (D, C),
+            (C, D),
+            (D, D),
+            (D, D),
+            (C, D),
+            (D, C),
+            (C, C),
+        ]
         actions += [(D, C)]
         # Enter defect mode.
         actions += [(D, D)] * 14
         # Mutual defect for a while, then exit Defect mode with two coops
         actions += [(C, D)] * 2
-        self.versus_test(Rand_Then_Def, expected_actions=actions, seed=10,
-                        attrs={"mode": "Normal", "was_defective": True})
+        self.versus_test(
+            Rand_Then_Def,
+            expected_actions=actions,
+            seed=10,
+            attrs={"mode": "Normal", "was_defective": True},
+        )
 
 
 class TestMoreTidemanAndChieruzzi(TestPlayer):
-    name = 'More Tideman and Chieruzzi'
+    name = "More Tideman and Chieruzzi"
     player = axelrod.MoreTidemanAndChieruzzi
     expected_classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': {"game"},
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": {"game"},
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
@@ -874,50 +1261,94 @@ class TestMoreTidemanAndChieruzzi(TestPlayer):
         self.versus_test(axelrod.Cooperator(), expected_actions=actions)
 
         actions = [(C, D)] + [(D, D)] * 8
-        self.versus_test(axelrod.Defector(), expected_actions=actions, attrs={"score_to_beat_inc": 5})
+        self.versus_test(
+            axelrod.Defector(), expected_actions=actions, attrs={"score_to_beat_inc": 5}
+        )
 
         actions = [(C, D)] + [(D, D)] * 8
         # On tenth turn, try a fresh start
         actions += [(C, D), (C, D)] + [(D, D)] * 2
-        self.versus_test(axelrod.Defector(), expected_actions=actions, attrs={"last_fresh_start": 11})
+        self.versus_test(
+            axelrod.Defector(), expected_actions=actions, attrs={"last_fresh_start": 11}
+        )
 
         actions = [(C, C), (C, D)]
         # Scores and score_to_beat variables are a turn behind
-        self.versus_test(axelrod.Alternator(), expected_actions=actions,
-                         attrs={"current_score": 3, "opponent_score": 3, "score_to_beat": 0, "score_to_beat_inc": 0})
+        self.versus_test(
+            axelrod.Alternator(),
+            expected_actions=actions,
+            attrs={
+                "current_score": 3,
+                "opponent_score": 3,
+                "score_to_beat": 0,
+                "score_to_beat_inc": 0,
+            },
+        )
         actions += [(D, C), (C, D)]
-        self.versus_test(axelrod.Alternator(), expected_actions=actions,
-                         attrs={"current_score": 8, "opponent_score": 8, "score_to_beat": 0, "score_to_beat_inc": 5})
+        self.versus_test(
+            axelrod.Alternator(),
+            expected_actions=actions,
+            attrs={
+                "current_score": 8,
+                "opponent_score": 8,
+                "score_to_beat": 0,
+                "score_to_beat_inc": 5,
+            },
+        )
         actions += [(D, C), (D, D)]
-        self.versus_test(axelrod.Alternator(), expected_actions=actions,
-                         attrs={"current_score": 13, "opponent_score": 13, "score_to_beat": 5, "score_to_beat_inc": 10})
+        self.versus_test(
+            axelrod.Alternator(),
+            expected_actions=actions,
+            attrs={
+                "current_score": 13,
+                "opponent_score": 13,
+                "score_to_beat": 5,
+                "score_to_beat_inc": 10,
+            },
+        )
         actions += [(D, C), (D, D)]
-        self.versus_test(axelrod.Alternator(), expected_actions=actions,
-                         attrs={"current_score": 19, "opponent_score": 14, "score_to_beat": 15, "score_to_beat_inc": 15})
+        self.versus_test(
+            axelrod.Alternator(),
+            expected_actions=actions,
+            attrs={
+                "current_score": 19,
+                "opponent_score": 14,
+                "score_to_beat": 15,
+                "score_to_beat_inc": 15,
+            },
+        )
         actions += [(D, C), (D, D)]
-        self.versus_test(axelrod.Alternator(), expected_actions=actions,
-                         attrs={"current_score": 25, "opponent_score": 15, "score_to_beat": 30, "score_to_beat_inc": 20})
+        self.versus_test(
+            axelrod.Alternator(),
+            expected_actions=actions,
+            attrs={
+                "current_score": 25,
+                "opponent_score": 15,
+                "score_to_beat": 30,
+                "score_to_beat_inc": 20,
+            },
+        )
 
         # Build an opponent who will cause us to consider a Fresh Start, but
         # will fail the binomial test.
         opponent_actions = [C] * 5 + [D] * 5
         C5D5_Player = axelrod.MockPlayer(actions=opponent_actions)
         actions = [(C, C)] * 5 + [(C, D)] + [(D, D)] * 3
-        actions += [(D, D)] # No Defection here means no Fresh Start.
+        actions += [(D, D)]  # No Defection here means no Fresh Start.
         self.versus_test(C5D5_Player, expected_actions=actions)
 
 
 class TestGetzler(TestPlayer):
-    name = 'Getzler'
+    name = "Getzler"
     player = axelrod.Getzler
     expected_classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
@@ -925,23 +1356,33 @@ class TestGetzler(TestPlayer):
         self.versus_test(axelrod.Cooperator(), expected_actions=actions)
 
         actions = [(C, D), (C, D), (D, D), (D, D), (D, D)]
-        self.versus_test(axelrod.Defector(), expected_actions=actions, seed=1, attrs={"flack": 15./16.})
+        self.versus_test(
+            axelrod.Defector(),
+            expected_actions=actions,
+            seed=1,
+            attrs={"flack": 15. / 16.},
+        )
 
         actions = [(C, C), (C, D), (C, C), (C, D), (D, C), (C, D)]
-        self.versus_test(axelrod.Alternator(), expected_actions=actions, seed=4, attrs={"flack": 5./16.})
+        self.versus_test(
+            axelrod.Alternator(),
+            expected_actions=actions,
+            seed=4,
+            attrs={"flack": 5. / 16.},
+        )
 
 
 class TestLeyvraz(TestPlayer):
-    name = 'Leyvraz'
+    name = "Leyvraz"
     player = axelrod.Leyvraz
     expected_classifier = {
-        'memory_depth': 3,
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 3,
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
@@ -953,8 +1394,20 @@ class TestLeyvraz(TestPlayer):
         actions = [(C, D), (D, D), (D, D), (C, D)]
         self.versus_test(axelrod.Defector(), expected_actions=actions, seed=2)
 
-        actions = [(C, D), (C, C), (D, C), (C, D), (D, C), (D, D), (C, D), (D, C), (C, D)]
-        self.versus_test(axelrod.SuspiciousTitForTat(), expected_actions=actions, seed=1)
+        actions = [
+            (C, D),
+            (C, C),
+            (D, C),
+            (C, D),
+            (D, C),
+            (D, D),
+            (C, D),
+            (D, C),
+            (C, D),
+        ]
+        self.versus_test(
+            axelrod.SuspiciousTitForTat(), expected_actions=actions, seed=1
+        )
 
         actions = [(C, C), (C, D), (D, C)] + [(D, D), (C, C)] * 3
         self.versus_test(axelrod.Alternator(), expected_actions=actions, seed=2)
@@ -963,16 +1416,16 @@ class TestLeyvraz(TestPlayer):
 
 
 class TestWhite(TestPlayer):
-    name = 'White'
+    name = "White"
     player = axelrod.White
     expected_classifier = {
-        'memory_depth': float("inf"),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
@@ -982,27 +1435,65 @@ class TestWhite(TestPlayer):
         actions = [(C, D)] * 10 + [(D, D)] * 20
         self.versus_test(axelrod.Defector(), expected_actions=actions)
 
-        actions = [(C, D), (C, D), (C, C), (C, C), (C, C), (C, D), (C, C),
-                   (C, D), (C, C), (C, D), (C, C), (C, D), (C, D), (D, C),
-                   (C, D), (D, D), (D, C), (C, D), (D, D), (D, C)]
+        actions = [
+            (C, D),
+            (C, D),
+            (C, C),
+            (C, C),
+            (C, C),
+            (C, D),
+            (C, C),
+            (C, D),
+            (C, C),
+            (C, D),
+            (C, C),
+            (C, D),
+            (C, D),
+            (D, C),
+            (C, D),
+            (D, D),
+            (D, C),
+            (C, D),
+            (D, D),
+            (D, C),
+        ]
         self.versus_test(axelrod.Random(0.5), expected_actions=actions, seed=6)
-        actions = [(C, C), (C, D), (C, D), (C, C), (C, C), (C, C), (C, C),
-                   (C, D), (C, D), (C, D), (C, D), (D, D), (D, C), (C, C),
-                   (C, C), (C, D), (C, C), (C, D), (C, C), (C, D)]
+        actions = [
+            (C, C),
+            (C, D),
+            (C, D),
+            (C, C),
+            (C, C),
+            (C, C),
+            (C, C),
+            (C, D),
+            (C, D),
+            (C, D),
+            (C, D),
+            (D, D),
+            (D, C),
+            (C, C),
+            (C, C),
+            (C, D),
+            (C, C),
+            (C, D),
+            (C, C),
+            (C, D),
+        ]
         self.versus_test(axelrod.Random(0.5), expected_actions=actions, seed=12)
 
 
 class TestBlack(TestPlayer):
-    name = 'Black'
+    name = "Black"
     player = axelrod.Black
     expected_classifier = {
-        'memory_depth': 5,
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 5,
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
@@ -1010,40 +1501,70 @@ class TestBlack(TestPlayer):
         self.versus_test(axelrod.Cooperator(), expected_actions=actions)
 
         actions = [(C, D)] * 5
-        actions += [(D, D), (D, D), (D, D), (D, D), (D, D), (D, D), (D, D), (D, D), (D, D), (C, D)]
+        actions += [
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (C, D),
+        ]
         self.versus_test(axelrod.Defector(), expected_actions=actions, seed=1)
 
         actions = [(C, D)] * 5
-        actions += [(D, D), (C, D), (D, D), (D, D), (D, D), (C, D), (D, D), (D, D), (D, D), (D, D)]
+        actions += [
+            (D, D),
+            (C, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (C, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),
+        ]
         self.versus_test(axelrod.Defector(), expected_actions=actions, seed=15)
 
 
 class TestRichardHufford(TestPlayer):
-    name = 'RichardHufford'
+    name = "RichardHufford"
     player = axelrod.RichardHufford
     expected_classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
         actions = [(C, C)] * 19 + [(D, C), (C, C), (C, C)]
-        self.versus_test(axelrod.Cooperator(), expected_actions=actions, attrs={"streak_needed": 14})
+        self.versus_test(
+            axelrod.Cooperator(), expected_actions=actions, attrs={"streak_needed": 14}
+        )
 
         actions = [(C, C)] * 19 + [(D, C), (C, C)]
-        actions += [(C, C)]  # This is the first Cooperation that gets counted on the new streak
+        actions += [
+            (C, C)
+        ]  # This is the first Cooperation that gets counted on the new streak
         actions += [(C, C)] * 13 + [(D, C), (C, C), (C, C)]
-        self.versus_test(axelrod.Cooperator(), expected_actions=actions, attrs={"streak_needed": 11})
+        self.versus_test(
+            axelrod.Cooperator(), expected_actions=actions, attrs={"streak_needed": 11}
+        )
 
         opponent_actions = [C] * 20 + [D]
         BoredCooperator = axelrod.MockPlayer(actions=opponent_actions)
         actions = [(C, C)] * 19 + [(D, C), (C, D), (C, C)]
-        self.versus_test(BoredCooperator, expected_actions=actions, attrs={"streak_needed": 31})
+        self.versus_test(
+            BoredCooperator, expected_actions=actions, attrs={"streak_needed": 31}
+        )
 
         actions = [(C, D)]  # "Disagreement"
         actions += [(D, C)]  # TFT.  Disagreement
@@ -1054,29 +1575,37 @@ class TestRichardHufford(TestPlayer):
         actions += [(D, D)]  # Three of last four are disagreements.  Disagreement
         actions += [(D, D)]  # Three of last four are disagreements.
         actions += [(D, D)]  # Now there are 5/9 disagreements, so Defect.
-        self.versus_test(axelrod.WinShiftLoseStay(), expected_actions=actions, attrs={"num_agreements": 5})
+        self.versus_test(
+            axelrod.WinShiftLoseStay(),
+            expected_actions=actions,
+            attrs={"num_agreements": 5},
+        )
 
 
 class TestYamachi(TestPlayer):
-    name = 'Yamachi'
+    name = "Yamachi"
     player = axelrod.Yamachi
     expected_classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
         actions = [(C, C)] * 100
         self.versus_test(axelrod.Cooperator(), expected_actions=actions)
 
-        actions = [(C, D)] * 2  # Also Cooperate in first two moves (until we update `count_them_us_them`.)
-        actions += [(C, D)]  # them_three_ago defaults to C, so that (C, C, *) gets updated, then (D, C, *) get checked.
-                             # It's actually impossible to Defect on the third move.
+        actions = [
+            (C, D)
+        ] * 2  # Also Cooperate in first two moves (until we update `count_them_us_them`.)
+        actions += [
+            (C, D)
+        ]  # them_three_ago defaults to C, so that (C, C, *) gets updated, then (D, C, *) get checked.
+        # It's actually impossible to Defect on the third move.
         actions += [(D, D)]  # (D, C, *) gets updated, then checked.
         actions += [(C, D)]  # (D, C, *) gets updated, but (D, D, *) checked.
         actions += [(D, D)] * 30  # (D, D, *) gets updated and checked from here on.
@@ -1084,72 +1613,87 @@ class TestYamachi(TestPlayer):
 
         actions = [(C, C), (C, D)]
         actions += [(C, C)]  # Increment (C, C, C).  Check (C, C, *).  Cooperate.
-                             # Reminder that first C is default value and last C is opponent's first move.
+        # Reminder that first C is default value and last C is opponent's first move.
         actions += [(C, D)]  # Increment (C, C, D).  Check (D, C, *) = 0.  Cooperate.
         actions += [(C, C)]  # Increment (D, C, C).  Check (C, C, *) = 0.  Cooperate.
-                             # There is one Defection and one Cooperation in this scenario,
-                             # but the Cooperation was due to a default value only.  We can see where this is going.
+        # There is one Defection and one Cooperation in this scenario,
+        # but the Cooperation was due to a default value only.  We can see where this is going.
         actions += [(C, D)]  # Increment (C, C, D).  Check (D, C, *) = 1.  Cooperate.
         actions += [(D, C)]  # Increment (D, C, C).  Check (C, C, *) = -1.  Defect.
-        actions += [(C, D)]  # Increment (C, C, D).  Check (D, D, *) = 0 (New).  Cooperate.
+        actions += [
+            (C, D)
+        ]  # Increment (C, C, D).  Check (D, D, *) = 0 (New).  Cooperate.
         actions += [(D, C)]  # Increment (D, D, C).  Check (C, C, *) < 0.  Defect.
         actions += [(C, D)]  # Increment (C, C, D).  Check (D, D, *) > 0.  Cooperate.
         actions += [(D, C), (C, D)] * 15  # This pattern continues for a while.
-        actions += [(D, C), (D, D)] * 30  # Defect from turn 41 on, since near 50% Defections.
+        actions += [
+            (D, C),
+            (D, D),
+        ] * 30  # Defect from turn 41 on, since near 50% Defections.
         self.versus_test(axelrod.Alternator(), expected_actions=actions)
 
         # Rip-off is the most interesting interaction.
-        actions = [(C, D),
-                   (C, C),
-                   (C, D),
-                   (D, C),
-                   (C, C),
-                   (D, C),
-                   (C, D),
-                   (D, C),
-                   (C, D),
-                   (D, C),
-                   (C, D),
-                   (D, C),
-                   (C, D),
-                   (D, C),
-                   (C, D),
-                   (D, C),
-                   (C, D),
-                   (D, C),
-                   (C, D),
-                   (D, C),
-                   (C, D),
-                   (D, C),
-                   (C, D),
-                   (D, C),
-                   (C, D),
-                   (D, C),
-                   (C, D),
-                   (D, C),
-                   (C, D),
-                   (D, C),
-                   (C, D),
-                   (D, C),
-                   (C, D),
-                   (D, C),
-                   (C, D),
-                   (D, C),
-                   (C, D),
-                   (D, C),
-                   (C, D),
-                   (D, C)]
-        my_dict = {(C, C, C): 1,
-                   (C, C, D): 18,
-                   (C, D, C): 1,
-                   (C, D, D): 0,
-                   (D, C, C): 1,
-                   (D, C, D): 0,
-                   (D, D, C): 17,
-                   (D, D, D): 0}
+        actions = [
+            (C, D),
+            (C, C),
+            (C, D),
+            (D, C),
+            (C, C),
+            (D, C),
+            (C, D),
+            (D, C),
+            (C, D),
+            (D, C),
+            (C, D),
+            (D, C),
+            (C, D),
+            (D, C),
+            (C, D),
+            (D, C),
+            (C, D),
+            (D, C),
+            (C, D),
+            (D, C),
+            (C, D),
+            (D, C),
+            (C, D),
+            (D, C),
+            (C, D),
+            (D, C),
+            (C, D),
+            (D, C),
+            (C, D),
+            (D, C),
+            (C, D),
+            (D, C),
+            (C, D),
+            (D, C),
+            (C, D),
+            (D, C),
+            (C, D),
+            (D, C),
+            (C, D),
+            (D, C),
+        ]
+        my_dict = {
+            (C, C, C): 1,
+            (C, C, D): 18,
+            (C, D, C): 1,
+            (C, D, D): 0,
+            (D, C, C): 1,
+            (D, C, D): 0,
+            (D, D, C): 17,
+            (D, D, D): 0,
+        }
         RipoffPlayer = axelrod.Ripoff()
-        self.versus_test(RipoffPlayer, expected_actions=actions, attrs={"count_them_us_them": my_dict})
-        self.assertEqual(RipoffPlayer.defections, 19)  # Next turn, `portion_defect` = 0.4756
+        self.versus_test(
+            RipoffPlayer,
+            expected_actions=actions,
+            attrs={"count_them_us_them": my_dict},
+        )
+        self.assertEqual(
+            RipoffPlayer.defections, 19
+        )  # Next turn, `portion_defect` = 0.4756
 
         # The pattern (C, D), (D, C) will continue indefintely unless overriden.
         actions += [(D, D)]  # Next turn, `portion_defect` = 0.4881
@@ -1159,21 +1703,26 @@ class TestYamachi(TestPlayer):
         actions += [(D, D)]  # Next turn, `portion_defect` = 0.5326
         actions += [(D, D)]  # Next turn, `portion_defect` = 0.5426
         actions += [(D, D)]  # Next turn, `portion_defect` = 0.5521
-        actions += [(D, D), (C, D), (D, C), (C, D)]  # Takes a turn to fall back into the cycle.
+        actions += [
+            (D, D),
+            (C, D),
+            (D, C),
+            (C, D),
+        ]  # Takes a turn to fall back into the cycle.
         self.versus_test(axelrod.Ripoff(), expected_actions=actions)
 
 
 class TestColbert(TestPlayer):
-    name = 'Colbert'
+    name = "Colbert"
     player = axelrod.Colbert
     expected_classifier = {
-        'memory_depth': 4,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 4,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
@@ -1192,48 +1741,69 @@ class TestColbert(TestPlayer):
 
 
 class TestMikkelson(TestPlayer):
-    name = 'Mikkelson'
+    name = "Mikkelson"
     player = axelrod.Mikkelson
     expected_classifier = {
-        'memory_depth': float("inf"),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
         actions = [(C, C)] * 30
-        self.versus_test(axelrod.Cooperator(), expected_actions=actions, attrs={"credit": 8})
+        self.versus_test(
+            axelrod.Cooperator(), expected_actions=actions, attrs={"credit": 8}
+        )
 
         actions = [(C, D), (C, D), (C, D), (C, D)]
-        self.versus_test(axelrod.Defector(), expected_actions=actions, attrs={"credit": 1})
+        self.versus_test(
+            axelrod.Defector(), expected_actions=actions, attrs={"credit": 1}
+        )
         # Defect then reset to 4
         actions += [(D, D)]
-        self.versus_test(axelrod.Defector(), expected_actions=actions, attrs={"credit": 4})
+        self.versus_test(
+            axelrod.Defector(), expected_actions=actions, attrs={"credit": 4}
+        )
         # Repeat
         actions += [(C, D), (D, D)] * 2
-        self.versus_test(axelrod.Defector(), expected_actions=actions, attrs={"credit": 4})
+        self.versus_test(
+            axelrod.Defector(), expected_actions=actions, attrs={"credit": 4}
+        )
         # With ten turns passed, keep defecting now
         actions += [(C, D), (D, D)]
-        self.versus_test(axelrod.Defector(), expected_actions=actions, attrs={"credit": 0})
+        self.versus_test(
+            axelrod.Defector(), expected_actions=actions, attrs={"credit": 0}
+        )
         # With ten turns passed, keep defecting now
         actions += [(D, D)] * 30
-        self.versus_test(axelrod.Defector(), expected_actions=actions, attrs={"credit": -7})
-
+        self.versus_test(
+            axelrod.Defector(), expected_actions=actions, attrs={"credit": -7}
+        )
 
         actions = [(C, D), (C, D), (C, C)]
-        self.versus_test(axelrod.Cycler("DDC"), expected_actions=actions, attrs={"credit": 3})
+        self.versus_test(
+            axelrod.Cycler("DDC"), expected_actions=actions, attrs={"credit": 3}
+        )
         actions += [(C, D), (C, D)]
-        self.versus_test(axelrod.Cycler("DDC"), expected_actions=actions, attrs={"credit": 2})
+        self.versus_test(
+            axelrod.Cycler("DDC"), expected_actions=actions, attrs={"credit": 2}
+        )
         actions += [(D, C)]
-        self.versus_test(axelrod.Cycler("DDC"), expected_actions=actions, attrs={"credit": 4})
+        self.versus_test(
+            axelrod.Cycler("DDC"), expected_actions=actions, attrs={"credit": 4}
+        )
         actions += [(C, D)]
-        self.versus_test(axelrod.Cycler("DDC"), expected_actions=actions, attrs={"credit": 5})
+        self.versus_test(
+            axelrod.Cycler("DDC"), expected_actions=actions, attrs={"credit": 5}
+        )
         actions += [(C, D)]
-        self.versus_test(axelrod.Cycler("DDC"), expected_actions=actions, attrs={"credit": 3})
+        self.versus_test(
+            axelrod.Cycler("DDC"), expected_actions=actions, attrs={"credit": 3}
+        )
 
         opponent_actions = [C] * 100 + [D] * 10
         Change_of_Heart = axelrod.MockPlayer(actions=opponent_actions)
@@ -1241,5 +1811,7 @@ class TestMikkelson(TestPlayer):
         self.versus_test(Change_of_Heart, expected_actions=actions, attrs={"credit": 2})
         Change_of_Heart = axelrod.MockPlayer(actions=opponent_actions)
         actions += [(C, D)] * 2
-        self.versus_test(Change_of_Heart, expected_actions=actions, attrs={"credit": -2})
+        self.versus_test(
+            Change_of_Heart, expected_actions=actions, attrs={"credit": -2}
+        )
         # Still Cooperate, because Defect rate is low

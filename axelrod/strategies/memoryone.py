@@ -2,13 +2,11 @@
 files, including titfortat.py and zero_determinant.py"""
 
 import warnings
+from typing import Tuple
 
 from axelrod.action import Action
 from axelrod.player import Player
 from axelrod.random_ import random_choice
-
-from typing import Tuple
-
 
 C, D = Action.C, Action.D
 
@@ -26,19 +24,20 @@ class MemoryOnePlayer(Player):
     - Memory One: [Nowak1990]_
     """
 
-    name = 'Generic Memory One Player'
+    name = "Generic Memory One Player"
     classifier = {
-        'memory_depth': 1,  # Memory-one Four-Vector
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 1,  # Memory-one Four-Vector
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
-    def __init__(self, four_vector: Tuple[float, float, float, float] = None,
-                 initial: Action = C) -> None:
+    def __init__(
+        self, four_vector: Tuple[float, float, float, float] = None, initial: Action = C
+    ) -> None:
         """
         Parameters
         ----------
@@ -74,16 +73,18 @@ class MemoryOnePlayer(Player):
             warnings.warn("Memory one player is set to default (1, 0, 0, 1).")
 
         self.set_four_vector(four_vector)
-        if self.name == 'Generic Memory One Player':
+        if self.name == "Generic Memory One Player":
             self.name = "%s: %s" % (self.name, four_vector)
 
     def set_four_vector(self, four_vector: Tuple[float, float, float, float]):
         if not all(0 <= p <= 1 for p in four_vector):
-            raise ValueError("An element in the probability vector, {}, is not "
-                             "between 0 and 1.".format(str(four_vector)))
+            raise ValueError(
+                "An element in the probability vector, {}, is not "
+                "between 0 and 1.".format(str(four_vector))
+            )
 
         self._four_vector = dict(zip([(C, C), (C, D), (D, C), (D, D)], four_vector))
-        self.classifier['stochastic'] = any(0 < x < 1 for x in set(four_vector))
+        self.classifier["stochastic"] = any(0 < x < 1 for x in set(four_vector))
 
     def strategy(self, opponent: Player) -> Action:
         if len(opponent.history) == 0:
@@ -105,15 +106,15 @@ class WinStayLoseShift(MemoryOnePlayer):
     - Pavlov: [Kraines1989]_
     """
 
-    name = 'Win-Stay Lose-Shift'
+    name = "Win-Stay Lose-Shift"
     classifier = {
-        'memory_depth': 1,  # Memory-one Four-Vector
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 1,  # Memory-one Four-Vector
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self, initial: Action = C) -> None:
@@ -130,15 +131,15 @@ class WinShiftLoseStay(MemoryOnePlayer):
     - WSLS: [Li2011]_
     """
 
-    name = 'Win-Shift Lose-Stay'
+    name = "Win-Shift Lose-Stay"
     classifier = {
-        'memory_depth': 1,  # Memory-one Four-Vector
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 1,  # Memory-one Four-Vector
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self, initial: Action = D) -> None:
@@ -157,15 +158,15 @@ class GTFT(MemoryOnePlayer):
     - Soft Joss: [Gaudesi2016]_
     """
 
-    name = 'GTFT'
+    name = "GTFT"
     classifier = {
-        'memory_depth': 1,  # Memory-one Four-Vector
-        'stochastic': True,
-        'makes_use_of': set(["game"]),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 1,  # Memory-one Four-Vector
+        "stochastic": True,
+        "makes_use_of": set(["game"]),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self, p: float = None) -> None:
@@ -205,10 +206,10 @@ class FirmButFair(MemoryOnePlayer):
 
     - Firm But Fair: [Frean1994]_"""
 
-    name = 'Firm But Fair'
+    name = "Firm But Fair"
 
     def __init__(self) -> None:
-        four_vector = (1, 0, 1, 2/3)
+        four_vector = (1, 0, 1, 2 / 3)
         super().__init__(four_vector)
         self.set_four_vector(four_vector)
 
@@ -221,7 +222,7 @@ class StochasticCooperator(MemoryOnePlayer):
     - Stochastic Cooperator: [Adami2013]_
     """
 
-    name = 'Stochastic Cooperator'
+    name = "Stochastic Cooperator"
 
     def __init__(self) -> None:
         four_vector = (0.935, 0.229, 0.266, 0.42)
@@ -240,7 +241,7 @@ class StochasticWSLS(MemoryOnePlayer):
     - Stochastic WSLS: Original name by Marc Harper
     """
 
-    name = 'Stochastic WSLS'
+    name = "Stochastic WSLS"
 
     def __init__(self, ep: float = 0.05) -> None:
         """
@@ -309,13 +310,13 @@ class ALLCorALLD(Player):
 
     name = "ALLCorALLD"
     classifier = {
-        'memory_depth': 1,  # Memory-one Four-Vector (1, 1, 0, 0)
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 1,  # Memory-one Four-Vector (1, 1, 0, 0)
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def strategy(self, opponent: Player) -> Action:
@@ -333,6 +334,7 @@ class ReactivePlayer(MemoryOnePlayer):
 
     - Reactive: [Nowak1989]_
     """
+
     name = "Reactive Player"
 
     def __init__(self, probabilities: Tuple[float, float]) -> None:

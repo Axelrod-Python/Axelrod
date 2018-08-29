@@ -3,10 +3,9 @@ The player classes in this module do not obey standard rules of the IPD (as
 indicated by their classifier). We do not recommend putting a lot of time in to
 optimising them.
 """
+from axelrod._strategy_utils import inspect_strategy, look_ahead
 from axelrod.action import Action
 from axelrod.player import Player
-from axelrod._strategy_utils import look_ahead, inspect_strategy
-
 
 C, D = Action.C, Action.D
 
@@ -20,15 +19,15 @@ class MindReader(Player):
     - Mind reader: Original name by Jason Young
     """
 
-    name = 'Mind Reader'
+    name = "Mind Reader"
     classifier = {
-        'memory_depth': float("inf"),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': True,  # Finds out what opponent will do
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": True,  # Finds out what opponent will do
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     @staticmethod
@@ -58,21 +57,21 @@ class ProtectedMindReader(MindReader):
     - Protected Mind reader: Original name by Jason Young
     """
 
-    name = 'Protected Mind Reader'
+    name = "Protected Mind Reader"
     classifier = {
-        'memory_depth': float("inf"),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': True,  # Finds out what opponent will do
-        'manipulates_source': True,  # Stops opponent's strategy
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": True,  # Finds out what opponent will do
+        "manipulates_source": True,  # Stops opponent's strategy
+        "manipulates_state": False,
     }
 
     def __setattr__(self, name: str, val: str):
         """Stops any other strategy altering the methods of this class """
 
-        if name == 'strategy':
+        if name == "strategy":
             pass
         else:
             self.__dict__[name] = val
@@ -87,16 +86,16 @@ class MirrorMindReader(ProtectedMindReader):
     - Protected Mind reader: Original name by Brice Fernandes
     """
 
-    name = 'Mirror Mind Reader'
+    name = "Mirror Mind Reader"
 
     classifier = {
-        'memory_depth': float("inf"),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': True,  # Reads and copies the source of the opponent
-        'manipulates_source': True,  # Changes own source dynamically
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": True,  # Reads and copies the source of the opponent
+        "manipulates_source": True,  # Changes own source dynamically
+        "manipulates_state": False,
     }
 
     @staticmethod

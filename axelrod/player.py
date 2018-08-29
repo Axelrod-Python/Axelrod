@@ -1,37 +1,37 @@
-from collections import defaultdict
 import copy
 import inspect
 import itertools
 import random
+import types
+from collections import defaultdict
+from typing import Any, Dict
 
 import numpy as np
-
 from axelrod.action import Action
-from .game import DefaultGame
 
-import types
-from typing import Dict, Any
+from .game import DefaultGame
 
 C, D = Action.C, Action.D
 
 
 # Strategy classifiers
 
+
 def is_basic(s):
     """
     Defines criteria for a strategy to be considered 'basic'
     """
-    stochastic = s.classifier['stochastic']
-    depth = s.classifier['memory_depth']
-    inspects_source = s.classifier['inspects_source']
-    manipulates_source = s.classifier['manipulates_source']
-    manipulates_state = s.classifier['manipulates_state']
+    stochastic = s.classifier["stochastic"]
+    depth = s.classifier["memory_depth"]
+    inspects_source = s.classifier["inspects_source"]
+    manipulates_source = s.classifier["manipulates_source"]
+    manipulates_state = s.classifier["manipulates_state"]
     return (
-        not stochastic and
-        not inspects_source and
-        not manipulates_source and
-        not manipulates_state and
-        depth in (0, 1)
+        not stochastic
+        and not inspects_source
+        and not manipulates_source
+        and not manipulates_state
+        and depth in (0, 1)
     )
 
 
@@ -42,9 +42,10 @@ def obey_axelrod(s):
     """
     classifier = s.classifier
     return not (
-        classifier['inspects_source'] or
-        classifier['manipulates_source'] or
-        classifier['manipulates_state'])
+        classifier["inspects_source"]
+        or classifier["manipulates_source"]
+        or classifier["manipulates_state"]
+    )
 
 
 def update_history(player, move):
@@ -79,13 +80,13 @@ class Player(object):
     name = "Player"
     classifier = {}  # type: Dict[str, Any]
     default_classifier = {
-        'stochastic': False,
-        'memory_depth': float('inf'),
-        'makes_use_of': None,
-        'long_run_time': False,
-        'inspects_source': None,
-        'manipulates_source': None,
-        'manipulates_state': None
+        "stochastic": False,
+        "memory_depth": float("inf"),
+        "makes_use_of": None,
+        "long_run_time": False,
+        "inspects_source": None,
+        "manipulates_source": None,
+        "manipulates_state": None,
     }
 
     def __new__(cls, *args, **kwargs):
@@ -105,7 +106,7 @@ class Player(object):
         sig = inspect.signature(cls.__init__)
         # The 'self' parameter needs to be removed or the first *args will be
         # assigned to it
-        self_param = sig.parameters.get('self')
+        self_param = sig.parameters.get("self")
         new_params = list(sig.parameters.values())
         new_params.remove(self_param)
         sig = sig.replace(parameters=new_params)
@@ -132,8 +133,7 @@ class Player(object):
         if self.__repr__() != other.__repr__():
             return False
 
-        for attribute in set(list(self.__dict__.keys()) +
-                             list(other.__dict__.keys())):
+        for attribute in set(list(self.__dict__.keys()) + list(other.__dict__.keys())):
 
             value = getattr(self, attribute, None)
             other_value = getattr(other, attribute, None)
@@ -142,23 +142,20 @@ class Player(object):
                 if not (np.array_equal(value, other_value)):
                     return False
 
-            elif isinstance(value, types.GeneratorType) or \
-                 isinstance(value, itertools.cycle):
+            elif isinstance(value, types.GeneratorType) or isinstance(
+                value, itertools.cycle
+            ):
 
                 # Split the original generator so it is not touched
                 generator, original_value = itertools.tee(value)
                 other_generator, original_other_value = itertools.tee(other_value)
 
                 if isinstance(value, types.GeneratorType):
-                    setattr(self, attribute,
-                            (ele for ele in original_value))
-                    setattr(other, attribute,
-                            (ele for ele in original_other_value))
+                    setattr(self, attribute, (ele for ele in original_value))
+                    setattr(other, attribute, (ele for ele in original_other_value))
                 else:
-                    setattr(self, attribute,
-                            itertools.cycle(original_value))
-                    setattr(other, attribute,
-                            itertools.cycle(original_other_value))
+                    setattr(self, attribute, itertools.cycle(original_value))
+                    setattr(other, attribute, itertools.cycle(original_other_value))
 
                 for _ in range(200):
                     try:
@@ -185,18 +182,14 @@ class Player(object):
     def set_match_attributes(self, length=-1, game=None, noise=0):
         if not game:
             game = DefaultGame
-        self.match_attributes = {
-            "length": length,
-            "game": game,
-            "noise": noise
-        }
+        self.match_attributes = {"length": length, "game": game, "noise": noise}
         self.receive_match_attributes()
 
     def __repr__(self):
         """The string method for the strategy.
         Appends the `__init__` parameters to the strategy's name."""
         name = self.name
-        prefix = ': '
+        prefix = ": "
         gen = (value for value in self.init_kwargs.values() if value is not None)
         for value in gen:
             try:
@@ -204,8 +197,8 @@ class Player(object):
                     value = value.name
             except TypeError:
                 pass
-            name = ''.join([name, prefix, str(value)])
-            prefix = ', '
+            name = "".join([name, prefix, str(value)])
+            prefix = ", "
         return name
 
     @staticmethod

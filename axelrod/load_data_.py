@@ -1,23 +1,26 @@
+from typing import Dict, List, Tuple
+
 import pkg_resources
-from typing import List, Dict, Tuple
 
 
 def load_file(filename: str, directory: str) -> List[List[str]]:
     """Loads a data file stored in the Axelrod library's data subdirectory,
     likely for parameters for a strategy."""
-    path = '/'.join((directory, filename))
+    path = "/".join((directory, filename))
     data_bytes = pkg_resources.resource_string(__name__, path)
-    data = data_bytes.decode('UTF-8', 'replace')
+    data = data_bytes.decode("UTF-8", "replace")
     rows = []
-    for line in data.split('\n'):
-        if line.startswith('#') or len(line) == 0:
+    for line in data.split("\n"):
+        if line.startswith("#") or len(line) == 0:
             continue
-        s = line.split(', ')
+        s = line.split(", ")
         rows.append(s)
     return rows
 
 
-def load_weights(filename: str ="ann_weights.csv", directory: str ="data") -> Dict[str, Tuple[int, int, List[float]]]:
+def load_weights(
+    filename: str = "ann_weights.csv", directory: str = "data"
+) -> Dict[str, Tuple[int, int, List[float]]]:
     """Load Neural Network Weights."""
     rows = load_file(filename, directory)
     d = dict()
