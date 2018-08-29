@@ -21,7 +21,7 @@ class TestSequencePlayer(unittest.TestCase):
     def test_sequence_player(self):
         """Basic test for SequencePlayer."""
         def cooperate_gen():
-            yield C
+            yield 1
         player = SequencePlayer(generator_function=cooperate_gen)
         opponent = TestOpponent()
         self.assertEqual(C, player.strategy(opponent))
