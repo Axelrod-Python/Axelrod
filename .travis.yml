@@ -13,7 +13,7 @@ before_install:
   - sh -e /etc/init.d/xvfb start
 install:
   - pip install -r requirements.txt
-  - pip install sphinx==1.7.6
+  - pip install sphinx
   - pip install sphinx_rtd_theme
   - pip install docutils==0.12
   - pip install coverage
@@ -21,7 +21,7 @@ install:
   - pip install mypy
 script:
   # Build the documentation
-  - cd docs; make html
+  - cd docs; make clean; make html
   # Run the test suit with coverage
   - cd ..
   - travis_wait 60 coverage run --source=axelrod -m unittest discover
