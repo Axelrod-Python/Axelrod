@@ -1,8 +1,36 @@
+# v4.3.0, 2018-08-30
+
+Big code base cleanup, ability to pass a fitness transform to the Moran process,
+minor bug fixes.
+
+- Use black and isort on entire library:
+  https://github.com/Axelrod-Python/Axelrod/pull/1203
+- Refactor of actions modules:
+  https://github.com/Axelrod-Python/Axelrod/pull/1193
+- Refactor of deterministic cache, ecosystem and eigen:
+  https://github.com/Axelrod-Python/Axelrod/pull/1197
+  https://github.com/Axelrod-Python/Axelrod/pull/1195
+- Refactor strategy utils module:
+  https://github.com/Axelrod-Python/Axelrod/pull/1196
+- Order Actions: https://github.com/Axelrod-Python/Axelrod/pull/1199
+- Add ability to pass fitness transformation to Moran process:
+  https://github.com/Axelrod-Python/Axelrod/pull/1198
+- Add a matplotlibrc for testing purposes:
+  https://github.com/Axelrod-Python/Axelrod/pull/1194
+  https://github.com/Axelrod-Python/Axelrod/pull/1191
+- Add a page of citations: https://github.com/Axelrod-Python/Axelrod/pull/1188
+- Fix bug in lookerup players:
+  https://github.com/Axelrod-Python/Axelrod/pull/1190
+- Fix bug in graphs: https://github.com/Axelrod-Python/Axelrod/pull/1189
+- Tweak a random test seed: https://github.com/Axelrod-Python/Axelrod/pull/1201
+
+https://github.com/Axelrod-Python/Axelrod/compare/v4.3.2...v4.2.2
+
 # v4.2.2, 2018-07-30
 
 Update of training weights for neural network strategy
 
-- Add an upper bound for a dependency version
+- Update training weights
   https://github.com/Axelrod-Python/Axelrod/pull/1182
 
 https://github.com/Axelrod-Python/Axelrod/compare/v4.2.2...v4.2.1
