@@ -4,23 +4,23 @@ from collections import namedtuple
 from tempfile import mkstemp
 from typing import Any, List, Union
 
-import axelrod as axl
+import dask as da
+import dask.dataframe as dd
 import matplotlib.pyplot as plt
 import numpy as np
 import tqdm
+from mpl_toolkits.axes_grid1 import make_axes_locatable
+
+import axelrod as axl
 from axelrod import Player
 from axelrod.interaction_utils import (compute_final_score_per_turn,
                                        read_interactions_from_file)
 from axelrod.strategy_transformers import DualTransformer, JossAnnTransformer
-from mpl_toolkits.axes_grid1 import make_axes_locatable
-
-import dask as da
-import dask.dataframe as dd
 
 Point = namedtuple("Point", "x y")
 
 
-def create_points(step: float, progress_bar: bool = True) -> List[Point]:
+def _create_points(step: float, progress_bar: bool = True) -> List[Point]:
     """Creates a set of Points over the unit square.
 
     A Point has coordinates (x, y). This function constructs points that are
@@ -59,7 +59,7 @@ def create_points(step: float, progress_bar: bool = True) -> List[Point]:
     return points
 
 
-def create_jossann(point: Point, probe: Any) -> Player:
+def _create_jossann(point: Point, probe: Any) -> Player:
     """Creates a JossAnn probe player that matches the Point.
 
     If the coordinates of point sums to more than 1 the parameters are
@@ -95,7 +95,7 @@ def create_jossann(point: Point, probe: Any) -> Player:
     return joss_ann
 
 
-def create_probes(
+def _create_probes(
     probe: Union[type, Player], points: list, progress_bar: bool = True
 ) -> List[Player]:
     """Creates a set of probe strategies over the unit square.
@@ -121,11 +121,11 @@ def create_probes(
     """
     if progress_bar:
         points = tqdm.tqdm(points, desc="Generating probes")
-    probes = [create_jossann(point, probe) for point in points]
+    probes = [_create_jossann(point, probe) for point in points]
     return probes
 
 
-def create_edges(points: List[Point], progress_bar: bool = True) -> list:
+def _create_edges(points: List[Point], progress_bar: bool = True) -> list:
     """Creates a set of edges for a spatial tournament.
 
     Constructs edges that correspond to `points`. All edges begin at 0, and
@@ -152,7 +152,7 @@ def create_edges(points: List[Point], progress_bar: bool = True) -> list:
     return edges
 
 
-def generate_data(interactions: dict, points: list, edges: list) -> dict:
+def _generate_data(interactions: dict, points: list, edges: list) -> dict:
     """Generates useful data from a spatial tournament.
 
     Matches interactions from `results` to their corresponding Point in
@@ -186,7 +186,7 @@ def generate_data(interactions: dict, points: list, edges: list) -> dict:
     return point_scores
 
 
-def reshape_data(data: dict, points: list, size: int) -> np.ndarray:
+def _reshape_data(data: dict, points: list, size: int) -> np.ndarray:
     """Shape the data so that it can be plotted easily.
 
     Parameters
@@ -232,7 +232,7 @@ class AshlockFingerprint(object):
         self.strategy = strategy
         self.probe = probe
 
-    def construct_tournament_elements(
+    def _construct_tournament_elements(
         self, step: float, progress_bar: bool = True
     ) -> tuple:
         """Build the elements required for a spatial tournament
@@ -258,9 +258,9 @@ class AshlockFingerprint(object):
             original player, the rest are the probes.
 
         """
-        self.points = create_points(step, progress_bar=progress_bar)
-        edges = create_edges(self.points, progress_bar=progress_bar)
-        probe_players = create_probes(
+        self.points = _create_points(step, progress_bar=progress_bar)
+        edges = _create_edges(self.points, progress_bar=progress_bar)
+        probe_players = _create_probes(
             self.probe, self.points, progress_bar=progress_bar
         )
 
@@ -316,7 +316,7 @@ class AshlockFingerprint(object):
         if filename is None:
             temp_file_descriptor, filename = mkstemp()  # type: ignore
 
-        edges, tourn_players = self.construct_tournament_elements(
+        edges, tourn_players = self._construct_tournament_elements(
             step, progress_bar=progress_bar
         )
 
@@ -340,7 +340,7 @@ class AshlockFingerprint(object):
             os.close(temp_file_descriptor)
             os.remove(filename)
 
-        self.data = generate_data(self.interactions, self.points, edges)
+        self.data = _generate_data(self.interactions, self.points, edges)
         return self.data
 
     def plot(
@@ -374,7 +374,7 @@ class AshlockFingerprint(object):
             A heat plot of the results of the spatial tournament
         """
         size = int((1 / self.step) // 1) + 1
-        plotting_data = reshape_data(self.data, self.points, size)
+        plotting_data = _reshape_data(self.data, self.points, size)
         fig, ax = plt.subplots()
         cax = ax.imshow(plotting_data, cmap=cmap, interpolation=interpolation)
 
