@@ -30,11 +30,7 @@ class Game(object):
         p: int or float
             Score obtained by both player for mutual defection.
         """
-        self.scores = {
-                (C, C): (r, r),
-                (D, D): (p, p),
-                (C, D): (s, t),
-                (D, C): (t, s)}
+        self.scores = {(C, C): (r, r), (D, D): (p, p), (C, D): (s, t), (D, C): (t, s)}
 
     def RPST(self) -> Tuple[Score, Score, Score, Score]:
         """Returns game matrix values in Press and Dyson notation."""

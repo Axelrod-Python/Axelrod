@@ -415,9 +415,9 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(t_attrs["game"].RPST(), (3, 1, 0, 5))
 
         # Noisy
-        player.set_match_attributes(length=200, noise=.5)
+        player.set_match_attributes(length=200, noise=0.5)
         t_attrs = player.match_attributes
-        self.assertEqual(t_attrs["noise"], .5)
+        self.assertEqual(t_attrs["noise"], 0.5)
 
     def test_reset_history_and_attributes(self):
         """Make sure resetting works correctly."""

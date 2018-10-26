@@ -101,12 +101,12 @@ class TestGTFT(TestPlayer):
     def test_four_vector(self):
         (R, P, S, T) = Game().RPST()
         p = min(1 - (T - R) / (R - S), (R - P) / (T - P))
-        expected_dictionary = {(C, C): 1., (C, D): p, (D, C): 1., (D, D): p}
+        expected_dictionary = {(C, C): 1.0, (C, D): p, (D, C): 1.0, (D, D): p}
         test_four_vector(self, expected_dictionary)
 
     def test_allow_for_zero_probability(self):
         player = self.player(p=0)
-        expected = {(C, C): 1., (C, D): 0, (D, C): 1., (D, D): 0}
+        expected = {(C, C): 1.0, (C, D): 0, (D, C): 1.0, (D, D): 0}
         self.assertAlmostEqual(player._four_vector, expected)
 
 
@@ -219,7 +219,12 @@ class TestStochasticWSLS(TestPlayer):
     def test_four_vector(self):
         player = self.player()
         ep = player.ep
-        expected_dictionary = {(C, C): 1. - ep, (C, D): ep, (D, C): ep, (D, D): 1. - ep}
+        expected_dictionary = {
+            (C, C): 1.0 - ep,
+            (C, D): ep,
+            (D, C): ep,
+            (D, D): 1.0 - ep,
+        }
         test_four_vector(self, expected_dictionary)
 
 
@@ -244,7 +249,7 @@ class TestMemoryOnePlayer(unittest.TestCase):
 
     def test_exception_if_probability_vector_outside_valid_values(self):
         player = MemoryOnePlayer()
-        x = 2.
+        x = 2.0
         with self.assertRaises(ValueError):
             player.set_four_vector([0.1, x, 0.5, 0.1])
 
@@ -264,7 +269,7 @@ class TestSoftJoss(TestPlayer):
     }
 
     def test_four_vector(self):
-        expected_dictionary = {(C, C): 1, (C, D): 0.1, (D, C): 1., (D, D): 0.1}
+        expected_dictionary = {(C, C): 1, (C, D): 0.1, (D, C): 1.0, (D, D): 0.1}
         test_four_vector(self, expected_dictionary)
 
     def test_strategy(self):

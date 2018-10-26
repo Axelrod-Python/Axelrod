@@ -16,7 +16,7 @@ def is_stochastic_matrix(m, ep=1e-8) -> bool:
             if (m[i][j] < 0) or (m[i][j] > 1):
                 return False
         s = sum(m[i])
-        if abs(1. - s) > ep:
+        if abs(1.0 - s) > ep:
             return False
     return True
 

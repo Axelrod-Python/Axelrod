@@ -523,7 +523,7 @@ class TestContriteTitForTat(TestPlayer):
         self.assertEqual(ctft._recorded_history, [])
 
         random.seed(0)
-        ctft.play(opponent, noise=.9)
+        ctft.play(opponent, noise=0.9)
         self.assertEqual(ctft.history, [D])
         self.assertEqual(ctft._recorded_history, [C])
         self.assertEqual(opponent.history, [C])

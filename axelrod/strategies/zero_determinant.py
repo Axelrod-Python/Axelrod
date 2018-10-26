@@ -208,7 +208,7 @@ class ZDMischief(LRPlayer):
 
     name = "ZD-Mischief"
 
-    def __init__(self, phi: float = 0.1, s: float = 0., l: float = 1) -> None:
+    def __init__(self, phi: float = 0.1, s: float = 0.0, l: float = 1) -> None:
         super().__init__(phi, s, l)
 
 
@@ -223,5 +223,5 @@ class ZDSet2(LRPlayer):
 
     name = "ZD-SET-2"
 
-    def __init__(self, phi: float = 1 / 4, s: float = 0., l: float = 2) -> None:
+    def __init__(self, phi: float = 1 / 4, s: float = 0.0, l: float = 2) -> None:
         super().__init__(phi, s, l)

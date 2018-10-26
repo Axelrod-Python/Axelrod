@@ -37,13 +37,15 @@ class TestEcosystem(unittest.TestCase):
         self.assertEqual(list(set(pops[0])), [0.25])
 
     def test_non_default_population_sizes(self):
-        eco = axelrod.Ecosystem(self.res_cooperators, population=[.7, .25, .03, .02])
+        eco = axelrod.Ecosystem(
+            self.res_cooperators, population=[0.7, 0.25, 0.03, 0.02]
+        )
         pops = eco.population_sizes
         self.assertEqual(eco.num_players, 4)
         self.assertEqual(len(pops), 1)
         self.assertEqual(len(pops[0]), 4)
         self.assertAlmostEqual(sum(pops[0]), 1.0)
-        self.assertEqual(pops[0], [.7, .25, .03, .02])
+        self.assertEqual(pops[0], [0.7, 0.25, 0.03, 0.02])
 
     def test_population_normalization(self):
         eco = axelrod.Ecosystem(self.res_cooperators, population=[70, 25, 3, 2])
@@ -52,14 +54,14 @@ class TestEcosystem(unittest.TestCase):
         self.assertEqual(len(pops), 1)
         self.assertEqual(len(pops[0]), 4)
         self.assertAlmostEqual(sum(pops[0]), 1.0)
-        self.assertEqual(pops[0], [.7, .25, .03, .02])
+        self.assertEqual(pops[0], [0.7, 0.25, 0.03, 0.02])
 
     def test_results_and_population_of_different_sizes(self):
         self.assertRaises(
             TypeError,
             axelrod.Ecosystem,
             self.res_cooperators,
-            population=[.7, .2, .03, .1, .1],
+            population=[0.7, 0.2, 0.03, 0.1, 0.1],
         )
 
     def test_negative_populations(self):
@@ -67,7 +69,7 @@ class TestEcosystem(unittest.TestCase):
             TypeError,
             axelrod.Ecosystem,
             self.res_cooperators,
-            population=[.7, -.2, .03, .2],
+            population=[0.7, -0.2, 0.03, 0.2],
         )
 
     def test_fitness_function(self):

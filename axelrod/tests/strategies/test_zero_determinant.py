@@ -60,7 +60,7 @@ class TestZDExtort2(TestPlayer):
     }
 
     def test_four_vector(self):
-        expected_dictionary = {(C, C): 8 / 9, (C, D): 0.5, (D, C): 1 / 3, (D, D): 0.}
+        expected_dictionary = {(C, C): 8 / 9, (C, D): 0.5, (D, C): 1 / 3, (D, D): 0.0}
         test_four_vector(self, expected_dictionary)
 
     def test_receive_match_attributes(self):
@@ -101,7 +101,12 @@ class TestZDExtort2v2(TestPlayer):
     }
 
     def test_four_vector(self):
-        expected_dictionary = {(C, C): 7 / 8, (C, D): 7 / 16, (D, C): 3 / 8, (D, D): 0.}
+        expected_dictionary = {
+            (C, C): 7 / 8,
+            (C, D): 7 / 16,
+            (D, C): 3 / 8,
+            (D, D): 0.0,
+        }
         test_four_vector(self, expected_dictionary)
 
     def test_strategy(self):
@@ -163,7 +168,7 @@ class TestZDExtort4(TestPlayer):
     }
 
     def test_four_vector(self):
-        expected_dictionary = {(C, C): 11 / 17, (C, D): 0, (D, C): 8 / 17, (D, D): 0.}
+        expected_dictionary = {(C, C): 11 / 17, (C, D): 0, (D, C): 8 / 17, (D, D): 0.0}
         test_four_vector(self, expected_dictionary)
 
     def test_strategy(self):
@@ -227,7 +232,7 @@ class TestZDGTFT2(TestPlayer):
     }
 
     def test_four_vector(self):
-        expected_dictionary = {(C, C): 1., (C, D): 1 / 8, (D, C): 1., (D, D): 0.25}
+        expected_dictionary = {(C, C): 1.0, (C, D): 1 / 8, (D, C): 1.0, (D, D): 0.25}
         test_four_vector(self, expected_dictionary)
 
     def test_receive_match_attributes(self):

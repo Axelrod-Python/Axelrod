@@ -375,12 +375,12 @@ class TestTransformers(unittest.TestCase):
         self.assertFalse(p1.classifier["stochastic"])
         self.assertFalse(p1().classifier["stochastic"])
 
-        probability = (.5, .5)
+        probability = (0.5, 0.5)
         p1 = JossAnnTransformer(probability)(axelrod.TitForTat)
         self.assertTrue(p1.classifier["stochastic"])
         self.assertTrue(p1().classifier["stochastic"])
 
-        probability = (0, .5)
+        probability = (0, 0.5)
         p1 = JossAnnTransformer(probability)(axelrod.TitForTat)
         self.assertTrue(p1.classifier["stochastic"])
         self.assertTrue(p1().classifier["stochastic"])
@@ -414,7 +414,7 @@ class TestTransformers(unittest.TestCase):
         self.assertFalse(p2.classifier["stochastic"])
         self.assertFalse(p2().classifier["stochastic"])
 
-        p2 = NoisyTransformer(.3)(axelrod.Cooperator)
+        p2 = NoisyTransformer(0.3)(axelrod.Cooperator)
         self.assertTrue(p2.classifier["stochastic"])
         self.assertTrue(p2().classifier["stochastic"])
 
@@ -610,7 +610,7 @@ class TestTransformers(unittest.TestCase):
         # Decorating with list and distribution
         # Decorate a cooperator putting all weight on other strategies that are
         # 'nice'
-        probability = [.3, .2, 0]
+        probability = [0.3, 0.2, 0]
         strategies = [axelrod.TitForTat, axelrod.Grudger, axelrod.Defector]
         MD = MixedTransformer(probability, strategies)(axelrod.Cooperator)
         self.assertTrue(MD.classifier["stochastic"])

@@ -80,7 +80,7 @@ class RiskyQLearner(Player):
         Selects the action based on the epsilon-soft policy
         """
         rnd_num = random.random()
-        p = 1. - self.action_selection_parameter
+        p = 1.0 - self.action_selection_parameter
         if rnd_num < p:
             return max(self.Qs[state], key=lambda x: self.Qs[state][x])
         return random_choice()
@@ -98,7 +98,7 @@ class RiskyQLearner(Player):
         """
         Performs the qlearning algorithm
         """
-        self.Qs[prev_state][action] = (1. - self.learning_rate) * self.Qs[prev_state][
+        self.Qs[prev_state][action] = (1.0 - self.learning_rate) * self.Qs[prev_state][
             action
         ] + self.learning_rate * (reward + self.discount_rate * self.Vs[state])
         self.Vs[prev_state] = max(self.Qs[prev_state].values())

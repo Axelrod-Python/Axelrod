@@ -389,7 +389,7 @@ class Tranquilizer(Player):
         if (current_score[0] / ((len(self.history)) + 1)) >= 2.25:
             probability = (
                 (
-                    .95
+                    0.95
                     - (
                         (
                             (self.one_turn_after_good_defection_ratio)
@@ -408,8 +408,8 @@ class Tranquilizer(Player):
             return D
         if (current_score[0] / ((len(self.history)) + 1)) >= 1.75:
             probability = (
-                (.25 + ((opponent.cooperations + 1) / ((len(self.history)) + 1)))
-                - (self.opponent_consecutive_defections * .25)
+                (0.25 + ((opponent.cooperations + 1) / ((len(self.history)) + 1)))
+                - (self.opponent_consecutive_defections * 0.25)
                 + ((current_score[0] - current_score[1]) / 100)
                 + (4 / ((len(self.history)) + 1))
             )

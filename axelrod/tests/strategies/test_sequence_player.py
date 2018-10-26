@@ -23,6 +23,7 @@ class TestSequencePlayer(unittest.TestCase):
 
         def cooperate_gen():
             yield 1
+
         player = SequencePlayer(generator_function=cooperate_gen)
         opponent = TestOpponent()
         self.assertEqual(C, player.strategy(opponent))

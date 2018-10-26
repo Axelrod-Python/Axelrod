@@ -3,11 +3,9 @@ A module for creating hypothesis based strategies for property based testing
 """
 import itertools
 
-from axelrod import (Game, Match, Tournament, short_run_time_strategies,
-                     strategies)
+from axelrod import Game, Match, Tournament, short_run_time_strategies, strategies
 
-from hypothesis.strategies import (composite, floats, integers, lists,
-                                   sampled_from)
+from hypothesis.strategies import composite, floats, integers, lists, sampled_from
 
 
 @composite

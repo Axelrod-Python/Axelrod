@@ -44,7 +44,7 @@ class TestTreeSearch(unittest.TestCase):
         self.titForTat_policy = dbs.create_policy(1, 1, 0, 0)
         self.alternator_policy = dbs.create_policy(0, 1, 0, 1)
         self.grudger_policy = dbs.create_policy(1, 0, 0, 0)
-        self.random_policy = dbs.create_policy(.5, .5, .5, .5)
+        self.random_policy = dbs.create_policy(0.5, 0.5, 0.5, 0.5)
 
     def test_minimaxTreeSearch_cooperator(self):
         """
@@ -212,7 +212,7 @@ class TestDBS(TestPlayer):
 
     def test_strategy(self):
         default_init_kwargs = {
-            "discount_factor": .75,
+            "discount_factor": 0.75,
             "promotion_threshold": 3,
             "violation_threshold": 4,
             "reject_threshold": 4,
@@ -247,7 +247,7 @@ class TestDBS(TestPlayer):
 
         # Check that adaptation is faster if diminishing promotion_threshold.
         init_kwargs_2 = {
-            "discount_factor": .75,
+            "discount_factor": 0.75,
             "promotion_threshold": 2,
             "violation_threshold": 4,
             "reject_threshold": 4,
@@ -267,7 +267,7 @@ class TestDBS(TestPlayer):
         # change opponent to Defector, hence triggering ShouldDemote
         # mechanism. For this test we use violation_threshold=3
         init_kwargs_3 = {
-            "discount_factor": .75,
+            "discount_factor": 0.75,
             "promotion_threshold": 3,
             "violation_threshold": 3,
             "reject_threshold": 3,

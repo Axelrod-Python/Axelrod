@@ -1360,7 +1360,7 @@ class TestGetzler(TestPlayer):
             axelrod.Defector(),
             expected_actions=actions,
             seed=1,
-            attrs={"flack": 15. / 16.},
+            attrs={"flack": 15.0 / 16.0},
         )
 
         actions = [(C, C), (C, D), (C, C), (C, D), (D, C), (C, D)]
@@ -1368,7 +1368,7 @@ class TestGetzler(TestPlayer):
             axelrod.Alternator(),
             expected_actions=actions,
             seed=4,
-            attrs={"flack": 5. / 16.},
+            attrs={"flack": 5.0 / 16.0},
         )
 
 

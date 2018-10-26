@@ -10,7 +10,6 @@ C, D = Action.C, Action.D
 
 
 class TestGame(unittest.TestCase):
-
     def test_default_scores(self):
         expected_scores = {
             (C, D): (0, 5),
