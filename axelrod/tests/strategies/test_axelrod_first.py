@@ -385,7 +385,7 @@ class TestSteinAndRapoport(TestPlayer):
         self.assertEqual(player.alpha, 0.05)
         self.assertFalse(player.opponent_is_random)
 
-        player = self.player(alpha=.5)
+        player = self.player(alpha=0.5)
         self.assertEqual(player.alpha, 0.5)
         self.assertFalse(player.opponent_is_random)
 

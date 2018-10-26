@@ -159,7 +159,7 @@ class TestMoranProcess(unittest.TestCase):
     def test_two_prob_end(self):
         p1, p2 = axelrod.Random(), axelrod.TitForTat()
         axelrod.seed(0)
-        mp = MoranProcess((p1, p2), prob_end=.5)
+        mp = MoranProcess((p1, p2), prob_end=0.5)
         populations = mp.play()
         self.assertEqual(len(mp), 4)
         self.assertEqual(len(populations), 4)

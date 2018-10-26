@@ -4,10 +4,13 @@ import unittest
 
 import axelrod
 from axelrod.action import str_to_actions
-from axelrod.strategies.lookerup import (LookupTable, Plays,
-                                         create_lookup_table_keys,
-                                         get_last_n_plays,
-                                         make_keys_into_plays)
+from axelrod.strategies.lookerup import (
+    LookupTable,
+    Plays,
+    create_lookup_table_keys,
+    get_last_n_plays,
+    make_keys_into_plays,
+)
 
 from .test_player import TestPlayer
 

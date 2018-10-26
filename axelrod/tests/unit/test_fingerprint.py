@@ -97,27 +97,40 @@ class TestFingerprint(unittest.TestCase):
         self.assertEqual(len(af.spatial_tournament.players), 10)
         probes = af.spatial_tournament.players[1:]
         self.assertEqual(len(probes), len(af.points))
-        self.assertEqual(str(probes[0]), "Joss-Ann Tit For Tat: (0.0, 0.0)")       # x + y < 1
-        self.assertEqual(str(probes[2]), "Dual Joss-Ann Tit For Tat: (1.0, 0.0)")  # x + y = 1
-        self.assertEqual(str(probes[8]), "Dual Joss-Ann Tit For Tat: (0.0, 0.0)")  # x + y > 1
+        self.assertEqual(
+            str(probes[0]), "Joss-Ann Tit For Tat: (0.0, 0.0)"
+        )  # x + y < 1
+        self.assertEqual(
+            str(probes[2]), "Dual Joss-Ann Tit For Tat: (1.0, 0.0)"
+        )  # x + y = 1
+        self.assertEqual(
+            str(probes[8]), "Dual Joss-Ann Tit For Tat: (0.0, 0.0)"
+        )  # x + y > 1
 
     def test_fingeprint_explicit_probe(self):
         af = AshlockFingerprint(axl.TitForTat(), probe=axl.Random(p=0.1))
         af.fingerprint(turns=10, repetitions=2, step=0.5, progress_bar=False)
 
         probes = af.spatial_tournament.players[1:]
-        self.assertEqual(str(probes[0]), "Joss-Ann Random: 0.1: (0.0, 0.0)")       # x + y < 1
-        self.assertEqual(str(probes[2]), "Dual Joss-Ann Random: 0.1: (1.0, 0.0)")  # x + y = 1
-        self.assertEqual(str(probes[8]), "Dual Joss-Ann Random: 0.1: (0.0, 0.0)")  # x + y > 1
+        self.assertEqual(
+            str(probes[0]), "Joss-Ann Random: 0.1: (0.0, 0.0)"
+        )  # x + y < 1
+        self.assertEqual(
+            str(probes[2]), "Dual Joss-Ann Random: 0.1: (1.0, 0.0)"
+        )  # x + y = 1
+        self.assertEqual(
+            str(probes[8]), "Dual Joss-Ann Random: 0.1: (0.0, 0.0)"
+        )  # x + y > 1
 
     def test_fingerprint_interactions_cooperator(self):
         af = AshlockFingerprint(axl.Cooperator())
         af.fingerprint(turns=5, repetitions=3, step=0.5, progress_bar=False)
 
         # The keys are edges between players, values are repetitions.
-        self.assertCountEqual(af.interactions.keys(),
-                              [(0, 1), (0, 2), (0, 3), (0, 4), (0, 5),
-                               (0, 6), (0, 7), (0, 8), (0, 9)])
+        self.assertCountEqual(
+            af.interactions.keys(),
+            [(0, 1), (0, 2), (0, 3), (0, 4), (0, 5), (0, 6), (0, 7), (0, 8), (0, 9)],
+        )
         self.assertEqual(len(af.interactions.values()), 9)
 
         # Each edge has 3 repetitions with 5 turns each.
@@ -125,7 +138,7 @@ class TestFingerprint(unittest.TestCase):
         self.assertTrue(all(len(rep) == 3 for rep in repetitions))
         for iturn in range(3):
             self.assertTrue(all(len(rep[iturn]) == 5 for rep in repetitions))
-        
+
         # Interactions are invariant for any points where y is zero, and
         # the score should be maximum possible.
         # Player 1 is Point(0.0, 0.0).
@@ -149,7 +162,7 @@ class TestFingerprint(unittest.TestCase):
     def test_fingerprint_interactions_titfortat(self):
         af = AshlockFingerprint(axl.TitForTat())
         af.fingerprint(turns=5, repetitions=3, step=0.5, progress_bar=False)
-        
+
         # Tit-for-Tats will always cooperate if left to their own devices,
         # so interactions are invariant for any points where y is zero,
         # and the score should be maximum possible.
@@ -232,9 +245,7 @@ class TestFingerprint(unittest.TestCase):
         af = AshlockFingerprint(axl.Cooperator())
         af.fingerprint(turns=5, repetitions=3, step=0.5, progress_bar=False)
 
-        reshaped_data = np.array([[0.0, 0.0, 0.0],
-                                  [2.0, 1.0, 2.0],
-                                  [3.0, 3.0, 3.0]])
+        reshaped_data = np.array([[0.0, 0.0, 0.0], [2.0, 1.0, 2.0], [3.0, 3.0, 3.0]])
         plotted_data = af.plot().gca().images[0].get_array()
         np.testing.assert_allclose(plotted_data, reshaped_data)
 

@@ -13,8 +13,10 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 import axelrod as axl
 from axelrod import Player
-from axelrod.interaction_utils import (compute_final_score_per_turn,
-                                       read_interactions_from_file)
+from axelrod.interaction_utils import (
+    compute_final_score_per_turn,
+    read_interactions_from_file,
+)
 from axelrod.strategy_transformers import DualTransformer, JossAnnTransformer
 
 Point = namedtuple("Point", "x y")

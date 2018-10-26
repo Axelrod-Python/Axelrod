@@ -81,7 +81,7 @@ class TestMatch(unittest.TestCase):
         outcomes
         """
         p1, p2 = axelrod.Cooperator(), axelrod.Cooperator()
-        match = axelrod.Match((p1, p2), prob_end=.5)
+        match = axelrod.Match((p1, p2), prob_end=0.5)
         expected_lengths = [3, 1, 5]
         for seed, expected_length in zip(range(3), expected_lengths):
             axelrod.seed(seed)
@@ -119,7 +119,7 @@ class TestMatch(unittest.TestCase):
         Length is not defined if it is infinite.
         """
         p1, p2 = axelrod.Cooperator(), axelrod.Cooperator()
-        match = axelrod.Match((p1, p2), prob_end=.5)
+        match = axelrod.Match((p1, p2), prob_end=0.5)
         with self.assertRaises(TypeError):
             len(match)
 
@@ -326,10 +326,10 @@ class TestMatch(unittest.TestCase):
 class TestSampleLength(unittest.TestCase):
     def test_sample_length(self):
         for seed, prob_end, expected_length in [
-            (0, .5, 3),
-            (1, .5, 1),
-            (2, .6, 4),
-            (3, .4, 1),
+            (0, 0.5, 3),
+            (1, 0.5, 1),
+            (2, 0.6, 4),
+            (3, 0.4, 1),
         ]:
             axelrod.seed(seed)
             self.assertEqual(axelrod.match.sample_length(prob_end), expected_length)

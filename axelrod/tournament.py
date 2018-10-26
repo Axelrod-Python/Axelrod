@@ -21,7 +21,6 @@ from .result_set import ResultSet
 C, D = Action.C, Action.D
 
 
-
 class Tournament(object):
     def __init__(
         self,

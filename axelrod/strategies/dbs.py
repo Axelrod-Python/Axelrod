@@ -34,7 +34,7 @@ class DBS(Player):
 
     def __init__(
         self,
-        discount_factor=.75,
+        discount_factor=0.75,
         promotion_threshold=3,
         violation_threshold=4,
         reject_threshold=3,

@@ -16,7 +16,7 @@ class TestMatch(unittest.TestCase):
     final_score_per_turn = [(2.5, 2.5), (5, 0), (1.5, 4), None]
     winners = [False, 0, 1, None]
     cooperations = [(1, 1), (0, 2), (2, 1), None]
-    normalised_cooperations = [(.5, .5), (0, 1), (1, .5), None]
+    normalised_cooperations = [(0.5, 0.5), (0, 1), (1, 0.5), None]
     state_distribution = [
         Counter({(C, D): 1, (D, C): 1}),
         Counter({(D, C): 2}),

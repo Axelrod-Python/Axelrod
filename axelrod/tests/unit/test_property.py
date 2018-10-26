@@ -1,10 +1,15 @@
 import unittest
 
 import axelrod
-from axelrod.tests.property import (games, matches,
-                                    prob_end_spatial_tournaments,
-                                    prob_end_tournaments, spatial_tournaments,
-                                    strategy_lists, tournaments)
+from axelrod.tests.property import (
+    games,
+    matches,
+    prob_end_spatial_tournaments,
+    prob_end_tournaments,
+    spatial_tournaments,
+    strategy_lists,
+    tournaments,
+)
 
 from hypothesis import given, settings
 

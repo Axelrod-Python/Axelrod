@@ -14,8 +14,12 @@ from unittest.mock import MagicMock, patch
 import axelrod
 import numpy as np
 import pandas as pd
-from axelrod.tests.property import (prob_end_tournaments, spatial_tournaments,
-                                    strategy_lists, tournaments)
+from axelrod.tests.property import (
+    prob_end_tournaments,
+    spatial_tournaments,
+    strategy_lists,
+    tournaments,
+)
 from axelrod.tournament import _close_objects
 from tqdm import tqdm
 
@@ -34,7 +38,7 @@ test_strategies = [
 test_repetitions = 5
 test_turns = 100
 
-test_prob_end = .5
+test_prob_end = 0.5
 
 test_edges = [(0, 1), (1, 2), (3, 4)]
 
@@ -780,8 +784,8 @@ class TestProbEndTournament(unittest.TestCase):
         tournament=prob_end_tournaments(
             min_size=2,
             max_size=5,
-            min_prob_end=.1,
-            max_prob_end=.9,
+            min_prob_end=0.1,
+            max_prob_end=0.9,
             min_repetitions=2,
             max_repetitions=4,
         )
@@ -790,7 +794,7 @@ class TestProbEndTournament(unittest.TestCase):
     @example(
         tournament=axelrod.Tournament(
             players=[s() for s in test_strategies],
-            prob_end=.2,
+            prob_end=0.2,
             repetitions=test_repetitions,
         )
     )
@@ -801,14 +805,14 @@ class TestProbEndTournament(unittest.TestCase):
     @example(
         tournament=axelrod.Tournament(
             players=[axelrod.BackStabber(), axelrod.MindReader()],
-            prob_end=.2,
+            prob_end=0.2,
             repetitions=1,
         )
     )
     @example(
         tournament=axelrod.Tournament(
             players=[axelrod.ThueMorse(), axelrod.MindReader()],
-            prob_end=.2,
+            prob_end=0.2,
             repetitions=1,
         )
     )
@@ -925,7 +929,7 @@ class TestSpatialTournament(unittest.TestCase):
         self.assertEqual(results.ranked_names, expected_ranked_names)
 
         # Check that this tournament runs with noise
-        tournament = axelrod.Tournament(players, edges=edges, noise=.5)
+        tournament = axelrod.Tournament(players, edges=edges, noise=0.5)
         results = tournament.play(progress_bar=False)
         self.assertIsInstance(results, axelrod.ResultSet)
 
@@ -964,7 +968,7 @@ class TestProbEndingSpatialTournament(unittest.TestCase):
         strategies=strategy_lists(
             strategies=deterministic_strategies, min_size=2, max_size=2
         ),
-        prob_end=floats(min_value=.1, max_value=.9),
+        prob_end=floats(min_value=0.1, max_value=0.9),
         reps=integers(min_value=1, max_value=3),
         seed=integers(min_value=0, max_value=4294967295),
     )

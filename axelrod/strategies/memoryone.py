@@ -257,7 +257,7 @@ class StochasticWSLS(MemoryOnePlayer):
         """
 
         self.ep = ep
-        four_vector = (1. - ep, ep, ep, 1. - ep)
+        four_vector = (1.0 - ep, ep, ep, 1.0 - ep)
         super().__init__(four_vector)
         self.set_four_vector(four_vector)
 
@@ -287,7 +287,7 @@ class SoftJoss(MemoryOnePlayer):
         TitForTat  is equivalent to SoftJoss(1)
         """
         self.q = q
-        four_vector = (1., 1 - q, 1, 1 - q)
+        four_vector = (1.0, 1 - q, 1, 1 - q)
         super().__init__(four_vector)
 
     def __repr__(self) -> str:

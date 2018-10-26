@@ -475,7 +475,7 @@ class TestMetaMixer(TestMetaPlayer):
     def test_strategy(self):
 
         team = [axelrod.TitForTat, axelrod.Cooperator, axelrod.Grudger]
-        distribution = [.2, .5, .3]
+        distribution = [0.2, 0.5, 0.3]
 
         P1 = axelrod.MetaMixer(team=team, distribution=distribution)
         P2 = axelrod.Cooperator()
@@ -487,7 +487,7 @@ class TestMetaMixer(TestMetaPlayer):
         )
 
         team.append(axelrod.Defector)
-        distribution = [.2, .5, .3, 0]  # If add a defector but does not occur
+        distribution = [0.2, 0.5, 0.3, 0]  # If add a defector but does not occur
         self.versus_test(
             opponent=axelrod.Cooperator(),
             expected_actions=actions,
@@ -504,7 +504,7 @@ class TestMetaMixer(TestMetaPlayer):
 
     def test_raise_error_in_distribution(self):
         team = [axelrod.TitForTat, axelrod.Cooperator, axelrod.Grudger]
-        distribution = [.2, .5, .5]  # Not a valid probability distribution
+        distribution = [0.2, 0.5, 0.5]  # Not a valid probability distribution
 
         player = axelrod.MetaMixer(team=team, distribution=distribution)
         opponent = axelrod.Cooperator()

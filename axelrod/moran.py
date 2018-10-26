@@ -51,7 +51,7 @@ class MoranProcess(object):
         noise: float = 0,
         game: Game = None,
         deterministic_cache: DeterministicCache = None,
-        mutation_rate: float = 0.,
+        mutation_rate: float = 0.0,
         mode: str = "bd",
         interaction_graph: Graph = None,
         reproduction_graph: Graph = None,

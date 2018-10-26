@@ -109,7 +109,7 @@ class JossAnn(axl.Cooperator):
 
 
 strategies = [axl.Grudger, axl.TitForTat]
-probability = [.2, .3]
+probability = [0.2, 0.3]
 
 
 @st.MixedTransformer(probability, strategies, name_prefix=None)

@@ -56,7 +56,7 @@ class TestMatchGenerator(unittest.TestCase):
         self.assertIsInstance(match_params, dict)
         self.assertEqual(match_params["turns"], test_turns)
         self.assertEqual(match_params["game"], test_game)
-        self.assertEqual(match_params["noise"], .5)
+        self.assertEqual(match_params["noise"], 0.5)
         self.assertIsNone(match_params["prob_end"])
 
         # Check that can build a match
@@ -100,8 +100,8 @@ class TestMatchGenerator(unittest.TestCase):
         self.assertIsInstance(match_params, dict)
         self.assertIsNone(match_params["turns"])
         self.assertEqual(match_params["game"], rr.game)
-        self.assertEqual(match_params["prob_end"], .5)
-        self.assertEqual(match_params["noise"], .5)
+        self.assertEqual(match_params["prob_end"], 0.5)
+        self.assertEqual(match_params["noise"], 0.5)
 
         # Check that can build a match
         players = [axelrod.Cooperator(), axelrod.Defector()]
@@ -123,7 +123,7 @@ class TestMatchGenerator(unittest.TestCase):
         self.assertIsInstance(match_params, dict)
         self.assertEqual(match_params["turns"], 5)
         self.assertEqual(match_params["game"], test_game)
-        self.assertEqual(match_params["prob_end"], .5)
+        self.assertEqual(match_params["prob_end"], 0.5)
         self.assertEqual(match_params["noise"], 0)
 
         # Check that can build a match
