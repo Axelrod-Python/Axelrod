@@ -71,7 +71,8 @@ class TestWinShiftLoseStayTestPlayer(TestPlayer):
     def test_strategy(self):
         # Check that switches if does not get best payoff.
         actions = [(D, C), (C, D), (C, C), (D, D), (D, C)]
-        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions)
 
 
 class TestGTFT(TestPlayer):
