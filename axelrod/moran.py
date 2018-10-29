@@ -144,20 +144,20 @@ class MoranProcess(object):
             interaction_graph = complete_graph(len(players), loops=False)
         if reproduction_graph is None:
             reproduction_graph = Graph(
-                interaction_graph.edges(), directed=interaction_graph.directed
+                interaction_graph.edges, directed=interaction_graph.directed
             )
             reproduction_graph.add_loops()
         # Check equal vertices
-        v1 = interaction_graph.vertices()
-        v2 = reproduction_graph.vertices()
+        v1 = interaction_graph.vertices
+        v2 = reproduction_graph.vertices
         assert list(v1) == list(v2)
         self.interaction_graph = interaction_graph
         self.reproduction_graph = reproduction_graph
         self.fitness_transformation = fitness_transformation
         # Map players to graph vertices
-        self.locations = sorted(interaction_graph.vertices())
+        self.locations = sorted(interaction_graph.vertices)
         self.index = dict(
-            zip(sorted(interaction_graph.vertices()), range(len(players)))
+            zip(sorted(interaction_graph.vertices), range(len(players)))
         )
 
     def set_players(self) -> None:
