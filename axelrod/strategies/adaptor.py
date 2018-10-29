@@ -32,14 +32,15 @@ class AbstractAdaptor(Player):
         "manipulates_state": False,
     }
 
-    def __init__(self, d: Dict[Tuple[Action], float], perr: float = 0.01) -> None:
+    def __init__(self, d: Dict[Tuple[Action, Action], float],
+                 perr: float = 0.01) -> None:
         super().__init__()
         self.perr = perr
         if not d:
-            d = {(C, C): 1., # R
-                 (C, D): 1., # S
-                 (D, C): 1., # T
-                 (D, D): 1.  # P
+            d = {(C, C): 1.,  # R
+                 (C, D): 1.,  # S
+                 (D, C): 1.,  # T
+                 (D, D): 1.   # P
                  }
         self.d = d
         self.s = 0.
@@ -48,7 +49,7 @@ class AbstractAdaptor(Player):
         if self.history:
             # Update internal state from the last play
             last_round = (self.history[-1], opponent.history[-1])
-            self.s += d[last_round]
+            self.s += self.d[last_round]
 
         # Compute probability of Cooperation
         p = self.perr + (1.0 - 2 * self.perr) * (
@@ -58,7 +59,7 @@ class AbstractAdaptor(Player):
         return action
 
 
-class AdaptorBrief(Player):
+class AdaptorBrief(AbstractAdaptor):
     """
     An Adaptor trained on short interactions.
 
@@ -71,15 +72,15 @@ class AdaptorBrief(Player):
     name = "AdaptorBrief"
 
     def __init__(self) -> None:
-        d = {(C, C): 0.,        # R
-             (C, D): 1.001505,  # S
-             (D, C): 0.992107,  # T
-             (D, D): 0.638734   # P
+        d = {(C, C): 0.,         # R
+             (C, D): -1.001505,  # S
+             (D, C): 0.992107,   # T
+             (D, D): -0.638734   # P
              }
         super().__init__(d=d)
 
 
-class AdaptorLong(Player):
+class AdaptorLong(AbstractAdaptor):
     """
     An Adaptor trained on long interactions.
 
@@ -95,6 +96,6 @@ class AdaptorLong(Player):
         d = {(C, C): 0.,        # R
              (C, D): 1.888159,  # S
              (D, C): 1.858883,  # T
-             (D, D): 0.995703   # P
+             (D, D): -0.995703  # P
              }
         super().__init__(d=d)

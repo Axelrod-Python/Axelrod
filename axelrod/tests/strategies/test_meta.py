@@ -548,7 +548,7 @@ class TestNMWEStochastic(TestMetaPlayer):
     }
 
     def test_strategy(self):
-        actions = [(C, C), (C, D), (D, C), (D, D), (D, C)]
+        actions = [(C, C), (C, D), (C, C), (D, D), (D, C)]
         self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
 
 
