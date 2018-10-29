@@ -8,9 +8,12 @@ import pathlib
 default_index_path = pathlib.Path("./docs/reference/all_strategies.rst")
 excluded_modules = ("_strategies", "__init__", "_filters", "human")
 
-def check_module(module_path: pathlib.Path,
-                 index_path: pathlib.Path=default_index_path,
-                 excluded: tuple=excluded_modules) -> bool:
+
+def check_module(
+    module_path: pathlib.Path,
+    index_path: pathlib.Path = default_index_path,
+    excluded: tuple = excluded_modules,
+) -> bool:
     """
     Check if a module name is written in the index of strategies.
 
@@ -39,7 +42,7 @@ def check_module(module_path: pathlib.Path,
 
 if __name__ == "__main__":
 
-    p = pathlib.Path('.')
+    p = pathlib.Path(".")
     modules = p.glob("./axelrod/strategies/*.py")
     exit_codes = []
 

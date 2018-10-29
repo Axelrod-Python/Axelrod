@@ -30,18 +30,20 @@ from subprocess import check_output
 # e.g. for a branch named 'issue-123', the commit message will start with
 # '[#123]'
 # If you wish to use a diferent prefix on branch names, change it here.
-issue_prefix = 'issue-'
+issue_prefix = "issue-"
 
 commit_msg_filepath = sys.argv[1]
-branch = check_output(
-    ['git', 'symbolic-ref', '--short', 'HEAD']
-).strip().decode(encoding='UTF-8')
+branch = (
+    check_output(["git", "symbolic-ref", "--short", "HEAD"])
+    .strip()
+    .decode(encoding="UTF-8")
+)
 
 if branch.startswith(issue_prefix):
-    issue_number = re.match('%s(.*)' % issue_prefix, branch).group(1)
+    issue_number = re.match("%s(.*)" % issue_prefix, branch).group(1)
     print("prepare-commit-msg: Prepending [#%s] to commit message" % issue_number)
 
-    with open(commit_msg_filepath, 'r+') as f:
+    with open(commit_msg_filepath, "r+") as f:
         content = f.read()
         f.seek(0, 0)
         f.write("[#%s] %s" % (issue_number, content))

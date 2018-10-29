@@ -22,8 +22,7 @@ class ActionValidator(Validator):
         text = document.text
 
         if text and text.upper() not in ["C", "D"]:
-            raise ValidationError(message="Action must be C or D",
-                                  cursor_position=0)
+            raise ValidationError(message="Action must be C or D", cursor_position=0)
 
 
 class Human(Player):

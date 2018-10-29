@@ -5,7 +5,6 @@ from axelrod import graph
 
 
 class TestGraph(unittest.TestCase):
-
     def assert_out_mapping(self, g, expected_out_mapping):
         self.assertDictEqual(g.out_mapping, expected_out_mapping)
         for node, out_dict in expected_out_mapping.items():
@@ -97,7 +96,6 @@ class TestGraph(unittest.TestCase):
 
 
 class TestCycle(unittest.TestCase):
-
     def test_length_1_directed(self):
         g = graph.cycle(1, directed=True)
         self.assertEqual(g.vertices, [0])
@@ -124,7 +122,7 @@ class TestCycle(unittest.TestCase):
         g = graph.cycle(3, directed=True)
         self.assertEqual(g.vertices, [0, 1, 2])
         self.assertEqual(g.edges, [(0, 1), (1, 2), (2, 0)])
-        
+
     def test_length_3_undirected(self):
         g = graph.cycle(3, directed=False)
         edges = [(0, 1), (1, 0), (1, 2), (2, 1), (2, 0), (0, 2)]
@@ -156,7 +154,6 @@ class TestCycle(unittest.TestCase):
 
 
 class TestComplete(unittest.TestCase):
-
     def test_size_2(self):
         g = graph.complete_graph(2, loops=False)
         self.assertEqual(g.vertices, [0, 1])
@@ -209,7 +206,7 @@ class TestComplete(unittest.TestCase):
         self.assertEqual(g.vertices, [0, 1])
         self.assertEqual(g.edges, [(0, 1), (1, 0), (0, 0), (1, 1)])
         self.assertEqual(g.directed, False)
-        
+
     def test_size_3_with_loops(self):
         g = graph.complete_graph(3, loops=True)
         self.assertEqual(g.vertices, [0, 1, 2])
