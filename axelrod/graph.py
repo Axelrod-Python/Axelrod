@@ -1,5 +1,4 @@
-"""
-Weighted undirected sparse graphs.
+"""Weighted undirected sparse graphs.
 
 Original source:
 https://github.com/marcharper/stationary/blob/master/stationary/utils/graph.py
@@ -9,18 +8,34 @@ from collections import defaultdict
 
 
 class Graph(object):
-    """Weighted and directed graph object intended for the graph associated to a
-    Markov process. Gives easy access to the neighbors of a particular state
-    needed for various calculations.
+    """Weighted and directed graph class.
+    
+    This class is intended for the graph associated to a Markov process,
+    since it gives easy access to the neighbors of a particular state.
 
-    Vertices can be any hashable / immutable python object. Initialize with a
-    list of edges:
+    Vertices can be any hashable Python object.
+    
+    Initialize with a list of edges:
         [[node1, node2, weights], ...]
     Weights can be omitted for an undirected graph.
 
-    For efficiency, neighbors are cached in dictionaries. Undirected graphs
-    are implemented as directed graphs in which every edge (s, t) has the
-    opposite edge (t, s).
+    For efficiency, neighbors are cached in dictionaries. Undirected
+    graphs are implemented as directed graphs in which every edge (s, t)
+    has the opposite edge (t, s).
+    
+    Attributes
+    ----------
+    directed: Boolean indicating whether the graph is directed
+    original_edges: the edges passed into the initializer
+    out_mapping: a dictionary mapping all heads to dictionaries that map
+        all tails to their edge weights (None means no weight)
+    in_mapping: a dictionary mapping all tails to dictionaries that map
+        all heads to their edge weights (none means to weight)
+    
+    Properties
+    ----------
+    vertices: the set of vertices in the graph
+    edges: the set of current edges in the graph
     """
 
     def __init__(self, edges=None, directed=False):
@@ -30,9 +45,9 @@ class Graph(object):
         self.in_mapping = defaultdict(lambda: defaultdict(float))
         self._edges = []
         if edges:
-            self.add_edges(edges)
+            self._add_edges(edges)
 
-    def add_edge(self, source, target, weight=None):
+    def _add_edge(self, source, target, weight=None):
         if (source, target) not in self._edges:
             self._edges.append((source, target))
             self.out_mapping[source][target] = weight
@@ -46,21 +61,20 @@ class Graph(object):
             self.out_mapping[target][source] = weight
             self.in_mapping[source][target] = weight
 
-    def add_edges(self, edges):
+    def _add_edges(self, edges):
         for edge in edges:
-            self.add_edge(*edge)
+            self._add_edge(*edge)
 
     def add_loops(self):
-        """
-        Add all loops to edges.
-        """
-        self.add_edges((x, x) for x in self.vertices())
+        """Add all loops to edges."""
+        self._add_edges((x, x) for x in self.vertices)
 
+    @property
     def edges(self):
         return self._edges
 
+    @property
     def vertices(self):
-        """Returns the set of vertices of the graph."""
         return list(self.out_mapping.keys())
 
     def out_dict(self, source):
@@ -84,53 +98,46 @@ class Graph(object):
         return s
 
 
-# Example Graphs
+# Example graph factories.
 
 
 def cycle(length, directed=False):
-    """
-    Produces a cycle of length `length`.
+    """Produces a cycle of a specified length.
+
     Parameters
     ----------
     length: int
         Number of vertices in the cycle
     directed: bool, False
         Is the cycle directed?
+
     Returns
     -------
-    a Graph object
+    a Graph object for the cycle
     """
-
-    graph = Graph(directed=directed)
-    edges = []
-    for i in range(length - 1):
-        edges.append((i, i + 1))
+    edges = [(i, i+1) for i in range(length-1)]
     edges.append((length - 1, 0))
-    graph.add_edges(edges)
-    return graph
+    return Graph(edges=edges, directed=directed)
 
 
-def complete_graph(length, loops=True):
-    """
-    Produces a complete graph of size `length`, with loops.
-    https://en.wikipedia.org/wiki/Complete_graph
+def complete_graph(size, loops=True):
+    """ Produces a complete graph of specificies size.
+
+    See https://en.wikipedia.org/wiki/Complete_graph for details.
 
     Parameters
     ----------
-    length: int
+    size: int
         Number of vertices in the cycle
     directed: bool, False
         Is the graph directed?
+
     Returns
     -------
-    a Graph object
+    a Graph object for the complete graph
     """
-    graph = Graph(directed=False)
-    edges = []
-    for i in range(length):
-        for j in range(i + 1, length):
-            edges.append((i, j))
-    graph.add_edges(edges)
+    edges = [(i, j) for i in range(size) for j in range(i+1, size)]
+    graph = Graph(edges=edges, directed=False)
 
     if loops:
         graph.add_loops()
