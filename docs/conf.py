@@ -18,14 +18,12 @@ import os
 import mock
 
 MOCK_MODULES = [
-    'cloudpickle', 'dask', 'dask.dataframe', 'dill', 'matplotlib',
-    'matplotlib.pyplot', 'matplotlib.transforms', 'mpl_toolkits.axes_grid1',
-    'multiprocess', 'numpy', 'numpy.linalg', 'numpy.random', 'pandas',
-    'pandas.util', 'pandas.util.decorators', 'prompt_toolkit',
-    'prompt_toolkit.styles', 'prompt_toolkit.token',
-    'prompt_toolkit.validation', 'scipy', 'scipy.stats', 'toolz',
-    'toolz.curried', 'toolz.functoolz', 'tqdm']
-
+    'scipy', 'scipy.stats','numpy', 'numpy.linalg', 'numpy.random',
+    'matplotlib.pyplot', 'matplotlib','matplotlib.transforms', 'tqdm',
+    'mpl_toolkits.axes_grid1', 'dill', 'multiprocess','prompt_toolkit',
+    'prompt_toolkit.token', 'prompt_toolkit.styles','prompt_toolkit.validation',
+    'pandas', 'pandas.util', 'pandas.util.decorators', 'toolz', 'toolz.curried',
+    'toolz.functoolz', 'cloudpickle', 'dask', 'dask.dataframe']
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = mock.Mock()
 

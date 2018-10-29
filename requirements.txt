@@ -4,8 +4,7 @@ hypothesis==3.2
 matplotlib>=2.0.0,<3.0.0
 numpy>=1.9.2
 pandas>=0.18.1
-prompt-toolkit>=2.0.0
-pygments>=2.0.0
+prompt-toolkit>=1.0.7,<2.0.0
 scipy>=0.19.0
 toolz>=0.8.0
 tqdm>=3.4.0
