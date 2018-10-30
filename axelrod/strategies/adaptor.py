@@ -15,6 +15,13 @@ class AbstractAdaptor(Player):
     round of play. Using this state the player Cooperates with a probability
     derived from the state.
 
+    s, float:
+        the internal state, initially 0
+    perr, float:
+        an error threshold for misinterpreted moves
+    delta, a dictionary of floats:
+        additive update values for s depending on the last round's outcome
+
     Names:
 
     - Adaptor: [Hauert2002]_
@@ -32,18 +39,18 @@ class AbstractAdaptor(Player):
         "manipulates_state": False,
     }
 
-    def __init__(self, d: Dict[Tuple[Action, Action], float],
+    def __init__(self, delta: Dict[Tuple[Action, Action], float],
                  perr: float = 0.01) -> None:
         super().__init__()
         self.perr = perr
-        self.d = d
+        self.delta = delta
         self.s = 0.
 
     def strategy(self, opponent: Player) -> Action:
         if self.history:
             # Update internal state from the last play
             last_round = (self.history[-1], opponent.history[-1])
-            self.s += self.d[last_round]
+            self.s += self.delta[last_round]
 
         # Compute probability of Cooperation
         p = self.perr + (1.0 - 2 * self.perr) * (
@@ -66,12 +73,13 @@ class AdaptorBrief(AbstractAdaptor):
     name = "AdaptorBrief"
 
     def __init__(self) -> None:
-        d = {(C, C): 0.,         # R
-             (C, D): -1.001505,  # S
-             (D, C): 0.992107,   # T
-             (D, D): -0.638734   # P
-             }
-        super().__init__(d=d)
+        delta = {
+            (C, C): 0.,         # R
+            (C, D): -1.001505,  # S
+            (D, C): 0.992107,   # T
+            (D, D): -0.638734   # P
+        }
+        super().__init__(delta=delta)
 
 
 class AdaptorLong(AbstractAdaptor):
@@ -87,9 +95,10 @@ class AdaptorLong(AbstractAdaptor):
     name = "AdaptorLong"
 
     def __init__(self) -> None:
-        d = {(C, C): 0.,        # R
-             (C, D): 1.888159,  # S
-             (D, C): 1.858883,  # T
-             (D, D): -0.995703  # P
-             }
-        super().__init__(d=d)
+        delta = {
+            (C, C): 0.,        # R
+            (C, D): 1.888159,  # S
+            (D, C): 1.858883,  # T
+            (D, D): -0.995703  # P
+        }
+        super().__init__(delta=delta)
