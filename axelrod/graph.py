@@ -115,7 +115,7 @@ def cycle(length, directed=False):
     -------
     a Graph object for the cycle
     """
-    edges = [(i, i+1) for i in range(length-1)]
+    edges = [(i, i + 1) for i in range(length - 1)]
     edges.append((length - 1, 0))
     return Graph(edges=edges, directed=directed)
 
@@ -136,7 +136,7 @@ def complete_graph(size, loops=True):
     -------
     a Graph object for the complete graph
     """
-    edges = [(i, j) for i in range(size) for j in range(i+1, size)]
+    edges = [(i, j) for i in range(size) for j in range(i + 1, size)]
     graph = Graph(edges=edges, directed=False)
 
     if loops:
