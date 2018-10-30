@@ -12,7 +12,7 @@
 ## By the maintainers
 
 
-* Knight, Vincent, et al. "Evolution Reinforces Cooperation with the Emergence of Self-Recognition Mechanisms: an empirical study of the Moran process for the iterated Prisoner's dilemma." arXiv preprint arXiv:1707.06920 (2017). [ArXiv](https://arxiv.org/abs/1802.06036)
+* Knight, Vincent, et al. "Evolution Reinforces Cooperation with the Emergence of Self-Recognition Mechanisms: an empirical study of the Moran process for the iterated Prisoner's dilemma."  PLoS ONE 13(10) (2018): e0204981. [PLOS](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0204981)
 * Harper, Marc, et al. "Reinforcement learning produces dominant strategies for the Iterated Prisoner’s Dilemma." PloS one 12.12 (2017): e0188046.  [PLOS](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0188046)
 * Knight, Vincent Anthony, et al. "An open framework for the reproducible study of the iterated prisoner's dilemma." Journal of Open Research Software 4.1 (2016). [ArXiv](https://arxiv.org/abs/1604.00896)
 
