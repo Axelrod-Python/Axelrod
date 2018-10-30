@@ -36,12 +36,6 @@ class AbstractAdaptor(Player):
                  perr: float = 0.01) -> None:
         super().__init__()
         self.perr = perr
-        if not d:
-            d = {(C, C): 1.,  # R
-                 (C, D): 1.,  # S
-                 (D, C): 1.,  # T
-                 (D, D): 1.   # P
-                 }
         self.d = d
         self.s = 0.
 
