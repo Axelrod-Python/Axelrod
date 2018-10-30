@@ -156,9 +156,7 @@ class MoranProcess(object):
         self.fitness_transformation = fitness_transformation
         # Map players to graph vertices
         self.locations = sorted(interaction_graph.vertices)
-        self.index = dict(
-            zip(sorted(interaction_graph.vertices), range(len(players)))
-        )
+        self.index = dict(zip(sorted(interaction_graph.vertices), range(len(players))))
 
     def set_players(self) -> None:
         """Copy the initial players into the first population."""

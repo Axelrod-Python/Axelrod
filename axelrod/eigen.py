@@ -13,24 +13,24 @@ import numpy
 def _normalise(nvec: numpy.ndarray) -> numpy.ndarray:
     """Normalises the given numpy array."""
     with numpy.errstate(invalid="ignore"):
-        result = nvec / numpy.sqrt(numpy.dot(nvec, nvec))
+        result = nvec / numpy.sqrt((nvec @ nvec))
     return result
 
 
 def _squared_error(vector_1: numpy.ndarray, vector_2: numpy.ndarray) -> float:
     """Computes the squared error between two numpy arrays."""
     diff = vector_1 - vector_2
-    s = numpy.dot(diff, diff)
+    s = diff @ diff
     return numpy.sqrt(s)
 
 
-def _power_iteration(mat: numpy.matrix, initial: numpy.ndarray) -> numpy.ndarray:
+def _power_iteration(mat: numpy.array, initial: numpy.ndarray) -> numpy.ndarray:
     """
     Generator of successive approximations.
 
     Params
     ------
-    mat: numpy.matrix
+    mat: numpy.array
         The matrix to use for multiplication iteration
     initial: numpy.array, None
         The initial state. Will be set to numpy.array([1, 1, ...]) if None
@@ -47,14 +47,14 @@ def _power_iteration(mat: numpy.matrix, initial: numpy.ndarray) -> numpy.ndarray
 
 
 def principal_eigenvector(
-    mat: numpy.matrix, maximum_iterations=1000, max_error=1e-3
+    mat: numpy.array, maximum_iterations=1000, max_error=1e-3
 ) -> Tuple[numpy.ndarray, float]:
     """
     Computes the (normalised) principal eigenvector of the given matrix.
 
     Params
     ------
-    mat: numpy.matrix
+    mat: numpy.array
         The matrix to use for multiplication iteration
     initial: numpy.array, None
         The initial state. Will be set to numpy.array([1, 1, ...]) if None
@@ -71,7 +71,7 @@ def principal_eigenvector(
         Eigenvalue corresonding to the returned eigenvector
     """
 
-    mat_ = numpy.matrix(mat)
+    mat_ = numpy.array(mat)
     size = mat_.shape[0]
     initial = numpy.ones(size)
 
@@ -86,7 +86,7 @@ def principal_eigenvector(
             break
         last = vector
     # Compute the eigenvalue (Rayleigh quotient)
-    eigenvalue = numpy.dot(numpy.dot(mat_, vector), vector) / numpy.dot(vector, vector)
+    eigenvalue = ((mat_ @ vector) @ vector) / (vector @ vector)
     # Liberate the eigenvalue from numpy
     eigenvalue = float(eigenvalue)
     return vector, eigenvalue
