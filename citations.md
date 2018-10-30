@@ -3,8 +3,11 @@
 * Skiba, Grażyna, et al. "Flexible asynchronous simulation of iterated prisoner’s dilemma based on actor model." Simulation Modelling Practice and Theory 83 (2018): 75-92.
 * Goodman, Aaron. "Learning Implicit Communication Strategies for the Purpose of Illicit Collusion." arXiv preprint arXiv:1802.06036 (2018). [ArXiv](https://arxiv.org/abs/1802.06036)
 * Wang, Shiheng, and Fangzhen Lin. "Invincible Strategies of Iterated Prisoner's Dilemma." arXiv preprint arXiv:1712.06488 (2017). [ArXiv](https://arxiv.org/abs/1712.06488)
-* Hayes, Victoria. The Evolution of Cooperation: A Recreation of Axelrod's Computer Tournament. The University of North Carolina at Greensboro, 2017. [PDF](http://libres.uncg.edu/ir/uncg/f/Hayes_uncg_0154M_12243.pdf)
+* Hayes, Victoria. The Evolution of Cooperation: A Recreation of Axelrod's Computer Tournament. The University of North Carolina at Greensboro, (2017). [PDF](http://libres.uncg.edu/ir/uncg/f/Hayes_uncg_0154M_12243.pdf)
 * Moura, Jose, and David Hutchison. "Game Theory for Multi-Access Edge Computing: Survey, Use Cases, and Future Trends." arXiv preprint arXiv:1704.00323 (2017). [ArXiv](https://arxiv.org/abs/1704.00323)
+* Nicolas, Anastassacos and Mirco, Musolesi. "Learning through Probing: a decentralized reinforcement learning architecture for social dilemmas."arXiv preprint arXiv:1809.10007 (2018). [ArXiv](https://arxiv.org/abs/1809.10007)
+* Latorre, Julian F. and Ospina, Juan Pablo and Ortiz, Jorge E.. "A Coalitional Game for Achieving Emergent Cooperation in Ad Hoc Networks Through Sympathy and Commitment." Springer (2018). [Springer](https://link.springer.com/chapter/10.1007/978-3-030-00350-0_30)
+* Neumann, Shai and Sood, Suraj and Hollander, Markus et al. "Using Bots in Strategizing Group Compositions to Improve Decision--Making Processes" Springer (2018). [Springer](https://link.springer.com/chapter/10.1007/978-3-319-91467-1_24)
 
 ## By the maintainers
 

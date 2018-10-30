@@ -123,9 +123,8 @@ http://axelrod.readthedocs.org/en/latest/tutorials/contributing/index.html
 Publications
 ------------
 
-* Marc Harper, Vincent Knight, Martin Jones, Georgios Koutsovoulos, Nikoleta E. Glynatsi, Owen Campbell. `Reinforcement learning produces dominant strategies for the Iterated Prisoner’s Dilemma. <http://journals.plos.org/plosone/article/metrics?id=10.1371/journal.pone.0188046>`_ Plos One (2017). (`ArXiv Preprint <https://arxiv.org/abs/1707.06307>`_)
-* Vincent Knight, Owen Campbell, Marc Harper, Karol Langner et al. `An Open Framework for the Reproducible Study of the Iterated Prisoner’s Dilemma. <https://openresearchsoftware.metajnl.com/articles/10.5334/jors.125/>`_ Journal of Open Research Software 4, no. 1 (2016). (`ArXiv Preprint <https://arxiv.org/abs/1604.00896>`_)
-
+You can find a list of publications that make use of or cite the library
+in [citations](https://github.com/Axelrod-Python/Axelrod/blob/master/citations.md).
 
 Contributors
 ------------
