@@ -1,4 +1,5 @@
 from .adaptive import Adaptive
+from .adaptor import AdaptorBrief, AdaptorLong
 from .alternator import Alternator
 from .ann import EvolvedANN, EvolvedANN5, EvolvedANNNoise05
 from .apavlov import APavlov2006, APavlov2011
@@ -230,6 +231,8 @@ from .zero_determinant import (
 all_strategies = [
     Adaptive,
     AdaptiveTitForTat,
+    AdaptorBrief,
+    AdaptorLong,
     Aggravater,
     Alexei,
     ALLCorALLD,

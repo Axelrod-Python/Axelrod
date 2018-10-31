@@ -51,15 +51,15 @@ class BushMosteller(Player):
         aspiration_level_divider: float, 3.0
             Value that regulates the aspiration level,
             isn't modified during match
-		learning rate [0 , 1]
-			Percentage of learning speed
+        learning rate [0 , 1]
+            Percentage of learning speed
         Variables / Constants
-		_stimulus (Var: [-1 , 1]): float
+        stimulus (Var: [-1 , 1]): float
             Value that impacts the changes of action probability
         _aspiration_level: float
             Value that impacts the stimulus changes, isn't modified during match
         _init_c_prob , _init_d_prob : float
-        	Values used to properly set up reset(),
+            Values used to properly set up reset(),
             set to original probabilities
         """
         super().__init__()

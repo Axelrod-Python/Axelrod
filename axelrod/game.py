@@ -38,7 +38,7 @@ class Game(object):
         P = self.scores[(D, D)][0]
         S = self.scores[(C, D)][0]
         T = self.scores[(D, C)][0]
-        return (R, P, S, T)
+        return R, P, S, T
 
     def score(self, pair: Tuple[Action, Action]) -> Tuple[Score, Score]:
         """Returns the appropriate score for a decision pair.
