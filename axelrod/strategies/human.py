@@ -3,13 +3,13 @@ from os import linesep
 from axelrod.action import Action
 from axelrod.player import Player
 from prompt_toolkit import prompt
-from prompt_toolkit.styles import Style
+from prompt_toolkit.styles import style_from_dict
+from prompt_toolkit.token import Token
 from prompt_toolkit.validation import ValidationError, Validator
-from pygments.token import Token
 
 C, D = Action.C, Action.D
 
-toolbar_style = Style.from_dict({"pygments.toolbar": "#ffffff bg:#333333"})
+toolbar_style = style_from_dict({Token.Toolbar: "#ffffff bg:#333333"})
 
 
 class ActionValidator(Validator):
