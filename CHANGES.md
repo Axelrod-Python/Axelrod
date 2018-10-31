@@ -1,3 +1,26 @@
+# v4.4.0, 2018-10-30
+
+2 new strategies and internal refactoring.
+
+- Clean citations of library
+  https://github.com/Axelrod-Python/Axelrod/pull/1221
+  https://github.com/Axelrod-Python/Axelrod/pull/1220
+- Fix numpy depreciation warnings
+  https://github.com/Axelrod-Python/Axelrod/pull/1218
+- Code refactoring
+  https://github.com/Axelrod-Python/Axelrod/pull/1204
+  https://github.com/Axelrod-Python/Axelrod/pull/1205
+  https://github.com/Axelrod-Python/Axelrod/pull/1206
+  https://github.com/Axelrod-Python/Axelrod/pull/1208
+  https://github.com/Axelrod-Python/Axelrod/pull/1210
+  https://github.com/Axelrod-Python/Axelrod/pull/1212
+  https://github.com/Axelrod-Python/Axelrod/pull/1216
+  https://github.com/Axelrod-Python/Axelrod/pull/1219
+- Two new strategies
+  https://github.com/Axelrod-Python/Axelrod/pull/1215
+
+https://github.com/Axelrod-Python/Axelrod/compare/v4.4.0...v4.3.0
+
 # v4.3.0, 2018-08-30
 
 Big code base cleanup, ability to pass a fitness transform to the Moran process,
@@ -24,7 +47,7 @@ minor bug fixes.
 - Fix bug in graphs: https://github.com/Axelrod-Python/Axelrod/pull/1189
 - Tweak a random test seed: https://github.com/Axelrod-Python/Axelrod/pull/1201
 
-https://github.com/Axelrod-Python/Axelrod/compare/v4.3.2...v4.2.2
+https://github.com/Axelrod-Python/Axelrod/compare/v4.3.0...v4.2.2
 
 # v4.2.2, 2018-07-30
 
