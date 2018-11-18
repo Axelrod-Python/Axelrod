@@ -1,14 +1,14 @@
 DEFAULT_TURNS = 200
 
 # The order of imports matters!
-from .version import __version__
-from .load_data_ import load_pso_tables, load_weights
-from . import graph
-from .action import Action
-from .random_ import random_choice, seed, Pdf
-from .plot import Plot
-from .game import DefaultGame, Game
-from .player import (
+from axelrod.version import __version__
+from axelrod.load_data_ import load_pso_tables, load_weights
+from axelrod import graph
+from axelrod.action import Action
+from axelrod.random_ import random_choice, seed, Pdf
+from axelrod.plot import Plot
+from axelrod.game import DefaultGame, Game
+from axelrod.player import (
     get_state_distribution_from_history,
     is_basic,
     obey_axelrod,
@@ -16,13 +16,13 @@ from .player import (
     update_state_distribution,
     Player,
 )
-from .mock_player import MockPlayer
-from .match import Match
-from .moran import MoranProcess, ApproximateMoranProcess
-from .strategies import *
-from .deterministic_cache import DeterministicCache
-from .match_generator import *
-from .tournament import Tournament
-from .result_set import ResultSet
-from .ecosystem import Ecosystem
-from .fingerprint import AshlockFingerprint, TransitiveFingerprint
+from axelrod.mock_player import MockPlayer
+from axelrod.match import Match
+from axelrod.moran import MoranProcess, ApproximateMoranProcess
+from axelrod.strategies import *
+from axelrod.deterministic_cache import DeterministicCache
+from axelrod.match_generator import *
+from axelrod.tournament import Tournament
+from axelrod.result_set import ResultSet
+from axelrod.ecosystem import Ecosystem
+from axelrod.fingerprint import AshlockFingerprint, TransitiveFingerprint
