@@ -5,7 +5,7 @@ from axelrod.player import Player
 from prompt_toolkit import prompt
 from prompt_toolkit.validation import ValidationError, Validator
 
-try:  # prompt_toolkit v1
+try:  # pragma: no cover
     from prompt_toolkit.styles import style_from_dict
     from prompt_toolkit.token import Token
 
