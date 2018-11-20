@@ -52,13 +52,13 @@ class TestHumanClass(TestPlayer):
     def test_history_toolbar(self):
         human = Human()
         expected_content = ""
-        actual_content = human._history_toolbar(None)[0][1]
+        actual_content = human._history_toolbar()
         self.assertEqual(actual_content, expected_content)
 
         human.history = [C]
         human.opponent_history = [C]
         expected_content = "History (human, opponent): [('C', 'C')]"
-        actual_content = human._history_toolbar(None)[0][1]
+        actual_content = human._history_toolbar()
         self.assertIn(actual_content, expected_content)
 
     def test_status_messages(self):

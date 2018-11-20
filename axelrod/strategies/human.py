@@ -3,13 +3,27 @@ from os import linesep
 from axelrod.action import Action
 from axelrod.player import Player
 from prompt_toolkit import prompt
-from prompt_toolkit.styles import style_from_dict
-from prompt_toolkit.token import Token
 from prompt_toolkit.validation import ValidationError, Validator
+
+try:  # prompt_toolkit v1
+    from prompt_toolkit.styles import style_from_dict
+    from prompt_toolkit.token import Token
+
+    token_toolbar = Token.Toolbar
+    bottom_toolbar_name = "get_bottom_toolbar_tokens"
+    PROMPT2 = False
+
+except ImportError:  # prompt_toolkit v2
+    from prompt_toolkit.styles import Style
+
+    style_from_dict = Style.from_dict
+    token_toolbar = "pygments.toolbar"
+    bottom_toolbar_name = "bottom_toolbar"
+    PROMPT2 = True
 
 C, D = Action.C, Action.D
 
-toolbar_style = style_from_dict({Token.Toolbar: "#ffffff bg:#333333"})
+toolbar_style = style_from_dict({token_toolbar: "#ffffff bg:#333333"})
 
 
 class ActionValidator(Validator):
@@ -65,7 +79,7 @@ class Human(Player):
         self.symbols = {C: c_symbol, D: d_symbol}
         self.opponent_history = []
 
-    def _history_toolbar(self, cli):
+    def _history_toolbar(self):
         """
         A prompt-toolkit function to define the bottom toolbar.
         Described at http://python-prompt-toolkit.readthedocs.io/en/latest/pages/building_prompts.html#adding-a-bottom-toolbar
@@ -77,7 +91,7 @@ class Human(Player):
             content = "History ({}, opponent): {}".format(self.human_name, history)
         else:
             content = ""
-        return [(Token.Toolbar, content)]
+        return content
 
     def _status_messages(self):
         """
@@ -95,7 +109,11 @@ class Human(Player):
             mapping print or toolbar to the relevant string
         """
         if self.history:
-            toolbar = self._history_toolbar
+            toolbar = (
+                self._history_toolbar
+                if PROMPT2
+                else lambda cli: [(token_toolbar, self._history_toolbar())]
+            )
             print_statement = "{}Turn {}: {} played {}, opponent played {}".format(
                 linesep,
                 len(self.history),
@@ -124,8 +142,8 @@ class Human(Player):
                 len(self.history) + 1, self.human_name
             ),
             validator=ActionValidator(),
-            get_bottom_toolbar_tokens=self.status_messages["toolbar"],
             style=toolbar_style,
+            **{bottom_toolbar_name: self.status_messages["toolbar"]},
         )
 
         return Action.from_char(action.upper())
