@@ -1,11 +1,11 @@
+platform:
+    - x64
 environment:
   matrix:
     - PYTHON_VERSION: "3.5"
       MINICONDA: "C:\\Miniconda35"
-      platform: x64
     - PYTHON_VERSION: "3.6"
       MINICONDA: "C:\\Miniconda36"
-      platform: x64
 install:
   - "set PATH=%MINICONDA%;%MINICONDA%\\Scripts;%PATH%"
   - "conda config --set always_yes yes --set changeps1 no"
