@@ -2,13 +2,14 @@ environment:
   matrix:
     - PYTHON_VERSION: "3.5"
       MINICONDA: "C:\\Miniconda35"
+      platform: x64
     - PYTHON_VERSION: "3.6"
       MINICONDA: "C:\\Miniconda36"
+      platform: x64
 install:
   - "set PATH=%MINICONDA%;%MINICONDA%\\Scripts;%PATH%"
   - "conda config --set always_yes yes --set changeps1 no"
   - "conda update -q conda"
-  - "set CONDA_FORCE_32BIT=1"
   - "conda create -q -n test-environment python=%PYTHON_VERSION% scipy>=0.19.0 numpy>=1.9.2"
   - "activate test-environment"
   - "python -m pip install -r requirements.txt"
