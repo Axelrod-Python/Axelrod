@@ -4,6 +4,7 @@ environment:
     - PYTHON: "C:\\Python36"
 install:
   - "python -m pip install -r requirements.txt"
+build: off
 test_script:
   - "python -m unittest discover"
   - "python doctests.py"
