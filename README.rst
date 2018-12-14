@@ -124,7 +124,7 @@ Publications
 ------------
 
 You can find a list of publications that make use of or cite the library
-in [citations](https://github.com/Axelrod-Python/Axelrod/blob/master/citations.md).
+on the `citations <https://github.com/Axelrod-Python/Axelrod/blob/master/citations.md>`_ page.
 
 Contributors
 ------------
