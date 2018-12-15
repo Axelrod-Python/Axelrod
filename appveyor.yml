@@ -1,18 +1,12 @@
 environment:
   matrix:
-    - PYTHON_VERSION: "3.5"
-      MINICONDA: "C:\\Miniconda35"
-    - PYTHON_VERSION: "3.6"
-      MINICONDA: "C:\\Miniconda36"
+    - PYTHON: "C:\\Python35"
+    - PYTHON: "C:\\Python36"
 install:
-  - "set PATH=%MINICONDA%;%MINICONDA%\\Scripts;%PATH%"
-  - "conda config --set always_yes yes --set changeps1 no"
-  - "conda update -q conda"
-  - "conda create -q -n test-environment python=%PYTHON_VERSION% scipy>=0.19.0 numpy>=1.9.2"
-  - "activate test-environment"
-  - "python -m pip install -r requirements.txt"
+  - "%PYTHON%\\python.exe --version"
+  - "%PYTHON%\\python.exe -m pip install -r requirements.txt"
 build: off
 test_script:
-  - "python -m unittest discover"
-  - "python doctests.py"
-  - "python setup.py install"
+  - "%PYTHON%\\python.exe -m unittest discover"
+  - "%PYTHON%\\python.exe doctests.py"
+  - "%PYTHON%\\python.exe setup.py install"
