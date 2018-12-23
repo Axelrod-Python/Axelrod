@@ -1953,3 +1953,109 @@ class Mikkelson(FSMPlayer):
         if opponent.defections / turn >= 0.15:
             return D
         return C
+
+
+class Rowsam(Player):
+    """
+    Strategy submitted to Axelrod's second tournament by Glen Rowsam (K58R)
+    and came in 21st in that tournament.
+
+    The strategy starts in Normal mode, where it cooperates every turn.  Every
+    six turns it checks the score per turn.  [Rather the score of all previous
+    turns divided by the turn number, which will be one more than the number of
+    turns scored.]  If this measure is less than 2.5 (the strategy is doing
+    badly) and it increases `distrust_points`.  `distrust_points` is a variable
+    that starts at 0; if it ever exceeds 6 points, the strategy will enter
+    Defect mode and defect from then on.  It will increase `distrust_points`
+    depending on the precise score per turn according to:
+
+    - 5 points if score per turn is less than 1.0
+    - 3 points if score per turn is less than 1.5, but at least 1.0
+    - 2 points if score per turn is less than 2.0, but at least 1.5
+    - 1 points if score per turn is less than 2.5, but at least 2.0
+
+    If `distrust_points` are increased, then the strategy defects on that turn,
+    then cooperates and defects on the next two turns.  [Unless
+    `distrust_points` exceeds 6 points, then it will enter Defect mode
+    immediately.]
+
+    Every 18 turns in Normal mode, the strategy will decrement `distrust_score`
+    if it's more than 3.  This represents a wearing off effect of distrust.
+
+
+    Names:
+
+    - Rowsam: [Axelrod1980b]_
+    """
+
+    name = "Rowsam"
+    classifier = {
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set("game"),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.mode = "Normal"
+        self.distrust_points = 0
+        self.current_score = 0
+        self.opponent_score = 0
+
+    def _score_last_round(self, opponent: Player):
+        """Updates the scores for each player."""
+        game = self.match_attributes["game"]
+        last_round = (self.history[-1], opponent.history[-1])
+        scores = game.score(last_round)
+        self.current_score += scores[0]
+        self.opponent_score += scores[1]
+
+    def strategy(self, opponent: Player) -> Action:
+        turn = len(self.history) + 1
+        if turn > 1:
+            self._score_last_round(opponent)
+
+        if self.mode == "Defect":
+            return D
+
+        if self.mode == "Coop Def Cycle 1":
+            self.mode = "Coop Def Cycle 2"
+            return C
+
+        if self.mode == "Coop Def Cycle 2":
+            self.mode = "Normal"
+            return D
+
+        # Opportunity for distrust to cool off.
+        if turn % 18 == 0:
+            if self.distrust_points >= 3:
+                self.distrust_points -= 1
+
+        # In normal mode, only check for strategy updates every sixth turn.
+        if turn % 6 != 0:
+            return C
+
+        points_per_turn = self.current_score / turn  # Off by one
+        if points_per_turn < 1.0:
+            self.distrust_points += 5
+        elif points_per_turn < 1.5:
+            self.distrust_points += 3
+        elif points_per_turn < 2.0:
+            self.distrust_points += 2
+        elif points_per_turn < 2.5:
+            self.distrust_points += 1
+        else:
+            # Continue Cooperating
+            return C
+
+        if self.distrust_points >= 7:
+            self.mode = "Defect"
+        else:
+            # Def this time, then coop, then def.
+            self.mode = "Coop Def Cycle 1"
+        return D
+
