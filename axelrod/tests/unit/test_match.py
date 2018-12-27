@@ -172,7 +172,32 @@ class TestMatch(unittest.TestCase):
         match = axelrod.Match(players, 3, deterministic_cache=cache)
         self.assertEqual(match.play(), expected_result[:3])
 
-    def test_long_cache(self):
+    def test_cache_grows(self):
+        """
+        We want to make sure that if we try to use the cache for more turns than
+        what is stored, then it will instead regenerate the result and overwrite
+        the cache.
+        """
+        cache = DeterministicCache()
+        players = (axelrod.Cooperator(), axelrod.Defector())
+        match = axelrod.Match(players, 3, deterministic_cache=cache)
+        expected_result_5_turn = [(C, D), (C, D), (C, D), (C, D), (C, D)]
+        expected_result_3_turn = [(C, D), (C, D), (C, D)]
+        self.assertEqual(match.play(), expected_result_3_turn)
+        match.turns = 5
+        self.assertEqual(match.play(), expected_result_5_turn)
+        # The cache should now hold the 5-turn result..
+        self.assertEqual(
+            cache[(axelrod.Cooperator(), axelrod.Defector())],
+            expected_result_5_turn
+        )
+
+    def test_cache_doesnt_shrink(self):
+        """
+        We want to make sure that when we access the cache looking for fewer
+        turns than what is stored, then it will not overwrite the cache with the
+        shorter result.
+        """
         cache = DeterministicCache()
         players = (axelrod.Cooperator(), axelrod.Defector())
         match = axelrod.Match(players, 5, deterministic_cache=cache)
