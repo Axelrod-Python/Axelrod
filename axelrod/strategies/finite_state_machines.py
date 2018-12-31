@@ -322,7 +322,7 @@ class Ripoff(FSMPlayer):
             (3, D, 3, D),
         )
 
-        super().__init__(transitions=transitions, initial_state=1, initial_action=C)
+        super().__init__(transitions=transitions, initial_state=1, initial_action=D)
 
 
 class UsuallyCooperates(FSMPlayer):
@@ -353,7 +353,7 @@ class UsuallyCooperates(FSMPlayer):
             (2, D, 1, C),
         )
 
-        super().__init__(transitions=transitions, initial_state=1, initial_action=D)
+        super().__init__(transitions=transitions, initial_state=1, initial_action=C)
 
 
 class UsuallyDefects(FSMPlayer):
