@@ -92,6 +92,8 @@ class MoranProcess(object):
         noise:
             The background noise, if any. Randomly flips plays with probability
             `noise`.
+        game:
+            A game.  Used to score matches.
         deterministic_cache:
             A optional prebuilt deterministic cache
         mutation_rate:
