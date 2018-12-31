@@ -331,7 +331,7 @@ class UsuallyCooperates(FSMPlayer):
 
     Names:
 
-    - Usually Cooperates (UC): [ashlock2009]_
+    - Usually Cooperates (UC): [Ashlock2009]_
     """
 
     name = "UsuallyCooperates"
@@ -362,7 +362,7 @@ class UsuallyDefects(FSMPlayer):
 
     Names:
 
-    - Usually Defects (UD): [ashlock2009]_
+    - Usually Defects (UD): [Ashlock2009]_
     """
 
     name = "UsuallyDefects"
