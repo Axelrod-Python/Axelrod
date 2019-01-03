@@ -19,8 +19,8 @@ from typing import List, Tuple
 from .action import Action
 from .player import Player
 
-CachePlayerKey = Tuple[Player, Player, int]
-CacheKey = Tuple[str, str, int]
+CachePlayerKey = Tuple[Player, Player]
+CacheKey = Tuple[str, str]
 
 
 def _key_transform(key: CachePlayerKey) -> CacheKey:
@@ -29,15 +29,15 @@ def _key_transform(key: CachePlayerKey) -> CacheKey:
     Parameters
     ----------
     key: tuple
-        A 3-tuple: (player instance, player instance, match length)
+        A 3-tuple: (player instance, player instance)
     """
-    return key[0].name, key[1].name, key[2]
+    return key[0].name, key[1].name
 
 
 def _is_valid_key(key: CachePlayerKey) -> bool:
     """Validate a deterministic cache player key.
 
-    The key should always be a 3-tuple, with a pair of axelrod.Player
+    The key should always be a 2-tuple, with a pair of axelrod.Player
     instances and one integer. Both players should be deterministic.
 
     Parameters
@@ -48,13 +48,12 @@ def _is_valid_key(key: CachePlayerKey) -> bool:
     -------
     Boolean indicating if the key is valid
     """
-    if not isinstance(key, tuple) or len(key) != 3:
+    if not isinstance(key, tuple) or len(key) != 2:
         return False
 
     if not (
         isinstance(key[0], Player)
         and isinstance(key[1], Player)
-        and isinstance(key[2], int)
     ):
         return False
 
@@ -83,10 +82,11 @@ def _is_valid_value(value: List) -> bool:
 class DeterministicCache(UserDict):
     """A class to cache the results of deterministic matches.
 
-    For fixed length matches with no noise between pairs of deterministic
-    players, the results will always be the same. We can hold those results
-    in this class so as to avoid repeatedly generating them in tournaments
-    of multiple repetitions.
+    For matches with no noise between pairs of deterministic players, the
+    results will always be the same.  We can hold the results for the longest
+    run in this class, so as to avoid repeatedly generating them in tournaments
+    of multiple repetitions.  If a shorter or equal-length match is run, we can
+    use the stored results.
 
     By also storing those cached results in a file, we can re-use the cache
     between multiple tournaments if necessary.
@@ -134,8 +134,7 @@ class DeterministicCache(UserDict):
 
         if not _is_valid_key(key):
             raise ValueError(
-                "Key must be a tuple of 2 deterministic axelrod Player classes "
-                "and an integer"
+                "Key must be a tuple of 2 deterministic axelrod Player classes"
             )
 
         if not _is_valid_value(value):

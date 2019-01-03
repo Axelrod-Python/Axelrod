@@ -116,6 +116,15 @@ class Match(object):
             and not (any(p.classifier["stochastic"] for p in self.players))
         )
 
+    def _cached_enough_turns(self, cache_key, turns):
+      """
+      Returns true iff there are is a entry in self._cache for the given key and
+      it's at least turns long.
+      """
+      if cache_key not in self._cache:
+        return False
+      return len(self._cache[cache_key]) >= turns
+
     def play(self):
         """
         The resulting list of actions from a match between two players.
@@ -135,9 +144,9 @@ class Match(object):
         i.e. One entry per turn containing a pair of actions.
         """
         turns = min(sample_length(self.prob_end), self.turns)
-        cache_key = (self.players[0], self.players[1], turns)
+        cache_key = (self.players[0], self.players[1])
 
-        if self._stochastic or (cache_key not in self._cache):
+        if self._stochastic or not self._cached_enough_turns(cache_key, turns):
             for p in self.players:
                 p.reset()
                 p.set_match_attributes(**self.match_attributes)
@@ -148,7 +157,7 @@ class Match(object):
             if self._cache_update_required:
                 self._cache[cache_key] = result
         else:
-            result = self._cache[cache_key]
+          result = self._cache[cache_key][:turns]
 
         self.result = result
         return result

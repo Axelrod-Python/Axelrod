@@ -40,9 +40,11 @@ Let us rerun the above match but using the cache::
 We can take a look at the cache::
 
     >>> cache  # doctest: +ELLIPSIS
-    {('Soft Go By Majority', 'Alternator', 200): [(C, C), ..., (C, D)]}
+    {('Soft Go By Majority', 'Alternator'): [(C, C), ..., (C, D)]}
     >>> len(cache)
     1
+    >>> len(cache[(axl.GoByMajority(), axl.Alternator())])
+    200
 
 This maps a triplet of 2 player names and the match length to the resulting
 interactions.  We can rerun the code and compare the timing::
