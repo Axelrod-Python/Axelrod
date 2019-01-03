@@ -538,9 +538,9 @@ class TestUsuallyCooperates(TestFSMPlayer):
         state_and_actions = [(1, C)] * 10
         self.transitions_test(state_and_actions)
         # Visits state 2, but then comes back
+        # Defaults if DC streak is complete.  Starts streak over either way.
         state_and_actions = [(1, D), (2, D)]
         self.transitions_test(state_and_actions)
-        # Visits state 2, but then comes back
         state_and_actions = [(1, D), (2, C)]
         self.transitions_test(state_and_actions)
 
@@ -567,13 +567,13 @@ class TestUsuallyDefects(TestFSMPlayer):
     """
 
     def test_strategy(self):
-        # Never leaves state 1 if C
+        # Never leaves state 1 if D
         state_and_actions = [(1, D)] * 10
         self.transitions_test(state_and_actions)
         # Visits state 2, but then comes back
+        # Cooperates if CD streak is complete.  Starts streak over either way.
         state_and_actions = [(1, C), (2, D)]
         self.transitions_test(state_and_actions)
-        # Visits state 2, but then comes back
         state_and_actions = [(1, C), (2, C)]
         self.transitions_test(state_and_actions)
 
