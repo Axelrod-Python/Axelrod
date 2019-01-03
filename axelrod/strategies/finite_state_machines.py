@@ -325,6 +325,68 @@ class Ripoff(FSMPlayer):
         super().__init__(transitions=transitions, initial_state=1, initial_action=D)
 
 
+class UsuallyCooperates(FSMPlayer):
+    """
+    This strategy cooperates except after a C following a D.
+
+    Names:
+
+    - Usually Cooperates (UC): [Ashlock2009]_
+    """
+
+    name = "UsuallyCooperates"
+    classifier = {
+        "memory_depth": 2,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+    def __init__(self) -> None:
+        transitions = (
+            (1, C, 1, C),
+            (1, D, 2, C),
+            (2, C, 1, D),
+            (2, D, 1, C),
+        )
+
+        super().__init__(transitions=transitions, initial_state=1, initial_action=C)
+
+
+class UsuallyDefects(FSMPlayer):
+    """
+    This strategy defects except after a D following a C.
+
+    Names:
+
+    - Usually Defects (UD): [Ashlock2009]_
+    """
+
+    name = "UsuallyDefects"
+    classifier = {
+        "memory_depth": 2,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+    def __init__(self) -> None:
+        transitions = (
+            (1, C, 2, D),
+            (1, D, 1, D),
+            (2, C, 1, D),
+            (2, D, 1, C),
+        )
+
+        super().__init__(transitions=transitions, initial_state=1, initial_action=D)
+
+
 class SolutionB1(FSMPlayer):
     """
     FSM player described in http://DOI.org/10.1109/TCIAIG.2014.2326012.
