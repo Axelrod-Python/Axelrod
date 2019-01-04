@@ -10,11 +10,11 @@ C, D = Action.C, Action.D
 class TestDeterministicCache(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.test_key = (TitForTat(), Defector(), 3)
+        cls.test_key = (TitForTat(), Defector())
         cls.test_value = [(C, D), (D, D), (D, D)]
         cls.test_save_file = "test_cache_save.txt"
         cls.test_load_file = "test_cache_load.txt"
-        test_data_to_pickle = {("Tit For Tat", "Defector", 3): [(C, D), (D, D), (D, D)]}
+        test_data_to_pickle = {("Tit For Tat", "Defector"): [(C, D), (D, D), (D, D)]}
         cls.test_pickle = pickle.dumps(test_data_to_pickle)
 
         with open(cls.test_load_file, "wb") as f:
@@ -44,40 +44,30 @@ class TestDeterministicCache(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.cache[invalid_key] = self.test_value
 
-    def test_setitem_invalid_key_too_short(self):
-        invalid_key = self.test_key + (4,)
-        with self.assertRaises(ValueError):
-            self.cache[invalid_key] = self.test_value
-
-    def test_setitem_invalid_key_too_long(self):
-        invalid_key = self.test_key[:2]
-        with self.assertRaises(ValueError):
-            self.cache[invalid_key] = self.test_value
-
     def test_setitem_invalid_key_first_two_elements_not_player(self):
-        invalid_key = ("test", "test", 2)
+        invalid_key = ("test", "test")
         with self.assertRaises(ValueError):
             self.cache[invalid_key] = self.test_value
 
-        invalid_key = (TitForTat(), "test", 2)
+        invalid_key = (TitForTat(), "test")
         with self.assertRaises(ValueError):
             self.cache[invalid_key] = self.test_value
 
-        invalid_key = ("test", TitForTat(), 2)
+        invalid_key = ("test", TitForTat())
         with self.assertRaises(ValueError):
             self.cache[invalid_key] = self.test_value
 
-    def test_setitem_invalid_key_last_element_not_integer(self):
+    def test_setitem_invalid_key_too_many_players(self):
         invalid_key = (TitForTat(), TitForTat(), TitForTat())
         with self.assertRaises(ValueError):
             self.cache[invalid_key] = self.test_value
 
     def test_setitem_invalid_key_stochastic_player(self):
-        invalid_key = (Random(), TitForTat(), 2)
+        invalid_key = (Random(), TitForTat())
         with self.assertRaises(ValueError):
             self.cache[invalid_key] = self.test_value
 
-        invalid_key = (TitForTat(), Random(), 2)
+        invalid_key = (TitForTat(), Random())
         with self.assertRaises(ValueError):
             self.cache[invalid_key] = self.test_value
 

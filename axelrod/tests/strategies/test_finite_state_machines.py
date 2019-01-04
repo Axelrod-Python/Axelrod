@@ -512,6 +512,72 @@ class TestRipoff(TestFSMPlayer):
         self.transitions_test(state_and_actions)
 
 
+class TestUsuallyCooperates(TestFSMPlayer):
+    name = "UsuallyCooperates"
+    player = axelrod.UsuallyCooperates
+    expected_classifier = {
+        "memory_depth": 2,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+    """
+    transitions = (
+            (1, C, 1, C),
+            (1, D, 2, C),
+            (2, C, 1, D),
+            (2, D, 1, C)
+        )
+    """
+
+    def test_strategy(self):
+        # Never leaves state 1 if C
+        state_and_actions = [(1, C)] * 10
+        self.transitions_test(state_and_actions)
+        # Visits state 2, but then comes back
+        # Defaults if DC streak is complete.  Starts streak over either way.
+        state_and_actions = [(1, D), (2, D)]
+        self.transitions_test(state_and_actions)
+        state_and_actions = [(1, D), (2, C)]
+        self.transitions_test(state_and_actions)
+
+
+class TestUsuallyDefects(TestFSMPlayer):
+    name = "UsuallyDefects"
+    player = axelrod.UsuallyDefects
+    expected_classifier = {
+        "memory_depth": 2,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+    """
+    transitions = (
+            (1, C, 2, D),
+            (1, D, 1, D),
+            (2, C, 1, D),
+            (2, D, 1, C)
+        )
+    """
+
+    def test_strategy(self):
+        # Never leaves state 1 if D
+        state_and_actions = [(1, D)] * 10
+        self.transitions_test(state_and_actions)
+        # Visits state 2, but then comes back
+        # Cooperates if CD streak is complete.  Starts streak over either way.
+        state_and_actions = [(1, C), (2, D)]
+        self.transitions_test(state_and_actions)
+        state_and_actions = [(1, C), (2, C)]
+        self.transitions_test(state_and_actions)
+
+
 class TestSolutionB1(TestFSMPlayer):
 
     name = "SolutionB1"

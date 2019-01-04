@@ -225,6 +225,7 @@ class AntiTitForTat(Player):
     Names:
 
     - Anti Tit For Tat: [Hilbe2013]_
+    - Psycho (PSYC): [Ashlock2009]_
     """
 
     name = "Anti Tit For Tat"
