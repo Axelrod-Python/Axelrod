@@ -115,7 +115,7 @@ class Tournament(object):
         Parameters
         ----------
         build_results : bool
-            whether or not to build a results st
+            whether or not to build a results set
         filename : string
             name of output file
         processes : integer
@@ -295,7 +295,8 @@ class Tournament(object):
 
         Parameters
         ----------
-
+        build_results : bool
+            whether or not to build a results set
         processes : int
             How many processes to use.
         """
@@ -346,6 +347,8 @@ class Tournament(object):
             A queue containing an entry for each round robin to be processed
         done_queue : multiprocessing.Queue
             A queue containing the output dictionaries from each round robin
+        build_results : bool
+            whether or not to build a results set
         """
         for worker in range(workers):
             process = Process(
@@ -367,6 +370,8 @@ class Tournament(object):
             The number of sub-processes in existence
         done_queue : multiprocessing.Queue
             A queue containing the output dictionaries from each round robin
+        build_results : bool
+            whether or not to build a results set
         """
         out_file, writer = self._get_file_objects(build_results)
         progress_bar = self._get_progress_bar()
@@ -395,6 +400,8 @@ class Tournament(object):
             A queue containing an entry for each round robin to be processed
         done_queue : multiprocessing.Queue
             A queue containing the output dictionaries from each round robin
+        build_results : bool
+            whether or not to build a results set
         """
         for chunk in iter(work_queue.get, "STOP"):
             interactions = self._play_matches(chunk, build_results)
@@ -410,6 +417,8 @@ class Tournament(object):
         ----------
         chunk : tuple (index pair, match_parameters, repetitions)
             match_parameters are also a tuple: (turns, game, noise)
+        build_results : bool
+            whether or not to build a results set
 
         Returns
         -------

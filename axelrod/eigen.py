@@ -56,8 +56,6 @@ def principal_eigenvector(
     ------
     mat: numpy.array
         The matrix to use for multiplication iteration
-    initial: numpy.array, None
-        The initial state. Will be set to numpy.array([1, 1, ...]) if None
     maximum_iterations: int, None
         The maximum number of iterations of the approximation
     max_error: float, 1e-8

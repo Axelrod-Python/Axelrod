@@ -36,10 +36,6 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None, reclassifier=
         A function of the form `strategy_wrapper(player, opponent, proposed_action, *args, **kwargs)`
         Can also use a class that implements
             def __call__(self, player, opponent, action)
-    wrapper_args: tuple
-        Any arguments to pass to the wrapper
-    wrapper_kwargs: dict
-        Any keyword arguments to pass to the wrapper
     name_prefix: string, "Transformed "
         A string to prepend to the strategy and class name
     reclassifier: function,
