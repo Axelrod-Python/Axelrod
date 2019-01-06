@@ -35,7 +35,7 @@ def get_accessible_transitions(transitions, initial_state):
 
 
 def get_memory_from_transitions(transitions, initial_state=None,
-                                print_trace=True):
+                                print_trace=False):
     """
     This function calculates the memory of an FSM from the transitions.
 
