@@ -35,9 +35,8 @@ def get_accessible_transitions(transitions, initial_state):
 
 
 def get_memory_from_transitions(transitions, initial_state=None,
-                                print_trace=False):
-    """
-    This function calculates the memory of an FSM from the transitions.
+                                print_trace=False, print_output=False):
+    """This function calculates the memory of an FSM from the transitions.
 
     Assume that transitions are a list with entries like
      ((state, last_opponent_action, next_state, next_action), ...)
@@ -72,12 +71,12 @@ def get_memory_from_transitions(transitions, initial_state=None,
 
     Fortress3 is given by the transitions:
     transitions = (
-        (1, C, 1, D),
-        (1, D, 2, D),
-        (2, C, 1, D),
-        (2, D, 3, C),
-        (3, C, 3, C),
-        (3, D, 1, D),
+    (1, C, 1, D),
+    (1, D, 2, D),
+    (2, C, 1, D),
+    (2, D, 3, C),
+    (3, C, 3, C),
+    (3, D, 1, D),
     )
 
     In the first step, we just check transitions' next-actions.
@@ -337,8 +336,9 @@ def get_memory_from_transitions(transitions, initial_state=None,
         waiting.clear()
         # And remove decided branches.
         decided_branches = processed.remove_decided_branches()
-        for k, v in decided_branches.items():
-            print("If {}, then {}".format(k, v))
+        if print_output:
+            for k, v in decided_branches.items():
+                print("If {}, then {}".format(k, v))
     return steps
 
 
