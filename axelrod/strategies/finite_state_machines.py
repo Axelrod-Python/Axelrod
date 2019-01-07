@@ -11,9 +11,9 @@ def get_accessible_transitions(transitions, initial_state):
   """
   edge_dict = defaultdict(list)
   visited = dict()
-  for trans in transitions:
-      visited[trans[0]] = False
-      edge_dict[trans[0]].append(trans[2])
+  for k, v in transitions.items():
+      visited[k[0]] = False
+      edge_dict[k[0]].append(v[0])
   accessible_edges = [initial_state]
 
   edge_queue = [initial_state]
@@ -26,10 +26,10 @@ def get_accessible_transitions(transitions, initial_state):
               edge_queue.append(next_edge)
               accessible_edges.append(next_edge)
 
-  accessible_transitions = list()
-  for trans in transitions:
-      if trans[0] in accessible_edges:
-          accessible_transitions.append(trans)
+  accessible_transitions = dict()
+  for k, v in transitions.items():
+      if k[0] in accessible_edges:
+          accessible_transitions[k] = v
 
   return accessible_transitions
 
@@ -38,8 +38,8 @@ def get_memory_from_transitions(transitions, initial_state=None,
                                 print_trace=False, print_output=False):
     """This function calculates the memory of an FSM from the transitions.
 
-    Assume that transitions are a list with entries like
-     ((state, last_opponent_action, next_state, next_action), ...)
+    Assume that transitions are a dict with entries like
+    (state, last_opponent_action): (next_state, next_action)
 
     We look at all the next_actions for all the transitions.  If these aren't
     all the same, then we attach 1 turn worth of memory (this strategy's
@@ -142,11 +142,11 @@ def get_memory_from_transitions(transitions, initial_state=None,
     # A "BackTrans" has the previous state and previous action/reaction pair.
     BackTrans = namedtuple("BackTrans", ["prev_state", "prev_reaction",
                                          "prev_opp_action"])
-    for trans in transitions:
-        state = trans[0]
-        last_opponent_action = trans[1]
-        next_state = trans[2]
-        next_action = trans[3]
+    for k, v in transitions.items():
+        state = k[0]
+        last_opponent_action = k[1]
+        next_state = v[0]
+        next_action = v[1]
 
         back_transitions[next_state].append(BackTrans(state,
                                                       next_action,
@@ -307,8 +307,8 @@ def get_memory_from_transitions(transitions, initial_state=None,
     if print_trace:
         print("STEP 0")
         print("===============")
-    for trans in transitions:
-        trans_branch = Branch(trans)
+    for k, v in transitions.items():
+        trans_branch = Branch((k[0], k[1], v[0], v[1]))
         processed.push(trans_branch)
         if print_trace:
             print(trans_branch.debug_str())
