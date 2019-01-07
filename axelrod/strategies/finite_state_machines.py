@@ -5,7 +5,7 @@ from collections import defaultdict, namedtuple
 C, D = Action.C, Action.D
 
 
-def get_accessible_transitions(transitions, initial_state):
+def get_accessible_transitions(transitions: dict, initial_state: int) -> dict:
   """Gets all transitions from the list that can be reached from the
   initial_state.
   """
@@ -34,8 +34,9 @@ def get_accessible_transitions(transitions, initial_state):
   return accessible_transitions
 
 
-def get_memory_from_transitions(transitions, initial_state=None,
-                                print_trace=False, print_output=False):
+def get_memory_from_transitions(transitions: dict, initial_state: int = None,
+                                print_trace: bool = False,
+                                print_output: bool = False) -> int:
     """This function calculates the memory of an FSM from the transitions.
 
     Assume that transitions are a dict with entries like
@@ -154,15 +155,15 @@ def get_memory_from_transitions(transitions, initial_state=None,
 
     class ActionChain(object):
         """A list of actions.  Made a class so that we can hash."""
-        def __init__(self, initial_list=None):
+        def __init__(self, initial_list: dict = None) -> None:
             if initial_list is None:
                 initial_list = list()
             self.actions = initial_list[:]
 
-        def __eq__(self, other):
+        def __eq__(self, other) -> bool:
             return self.actions == other.actions
 
-        def __repr__(self):
+        def __repr__(self) -> None:
             """
             This is a way to represent a memory of a certain length.  We
             represent history as a opponent_action/this_player_reaction
@@ -192,17 +193,17 @@ def get_memory_from_transitions(transitions, initial_state=None,
 
             return action_str
 
-        def __hash__(self):
+        def __hash__(self) -> None:
             return hash(repr(self))
 
-        def append(self, action):
+        def append(self, action: Action) -> None:
             self.actions.append(action)
 
     class Branch(object):
         """A chain of previous actions.  With other information captured, like
         state, so that we can continue to walk backwards.
         """
-        def __init__(self, trans=None):
+        def __init__(self, trans: tuple = None) -> None:
             if trans is None:
                 return
 
@@ -222,7 +223,7 @@ def get_memory_from_transitions(transitions, initial_state=None,
             # For debugging
             self.initial_trans = "{}:{}".format(state, last_opponent_action)
 
-        def step(self, backtrans):
+        def step(self, backtrans: BackTrans):
             """Continues to walk (or branch) backwards from where the branch
             leaves off, given a path (backtrans) to walk backwards along.  This
             will return a Branch instance.
@@ -241,7 +242,7 @@ def get_memory_from_transitions(transitions, initial_state=None,
 
             return new_branch
 
-        def debug_str(self):
+        def debug_str(self) -> str:
             return "{};{} | Back-trace: {} | On-state: {}".format(
                     self.initial_trans, self.next_action,
                     repr(self.action_chain), self.on_state)
@@ -262,16 +263,16 @@ def get_memory_from_transitions(transitions, initial_state=None,
         action; we call the branches with that chain of actions "decided" at
         this point.
         """
-        def __init__(self):
+        def __init__(self) -> None:
             self.clear()
 
-        def push(self, branch):
+        def push(self, branch: Branch) -> None:
             """Just adds a branch to the branch_pool."""
             common_branches = self.branch_pool[branch.action_chain]
             common_branches.next_actions.add(branch.next_action)
             common_branches.branch_list.append(branch)
 
-        def branches(self):
+        def branches(self) -> Branch:
             """An iterator that loops through all the branches in the
             branch_pool.
             """
@@ -279,11 +280,11 @@ def get_memory_from_transitions(transitions, initial_state=None,
                 for branch in v.branch_list:
                     yield branch
 
-        def clear(self):
+        def clear(self) -> None:
             """Empty the branch_pool."""
             self.branch_pool = defaultdict(lambda: BranchList(list(), set()))
 
-        def remove_decided_branches(self):
+        def remove_decided_branches(self) -> dict:
             """We call a branch "decided" if all branches with that common-end
             (end of ActionChain) give the same next_action.  This function
             removes those from the branch_pool, and returns these as a dict
