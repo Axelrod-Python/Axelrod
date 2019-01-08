@@ -155,15 +155,21 @@ def get_memory_from_transitions(transitions: dict, initial_state: int = None,
 
     class ActionChain(object):
         """A list of actions.  Made a class so that we can hash."""
-        def __init__(self, initial_list: dict = None) -> None:
-            if initial_list is None:
-                initial_list = list()
-            self.actions = initial_list[:]
+        def __init__(self, copy=None) -> None:
+            if copy is None:
+                self.repr = "_"
+                self.num_actions = 0
+            else:
+                self.repr = copy.repr
+                self.num_actions = copy.num_actions
 
         def __eq__(self, other) -> bool:
-            return self.actions == other.actions
+            return self.repr == other.repr
 
-        def __repr__(self) -> None:
+        def __repr__ (self)-> None:
+            return "_/" + self.repr
+
+        def append(self, action: Action) -> None:
             """
             This is a way to represent a memory of a certain length.  We
             represent history as a opponent_action/this_player_reaction
@@ -173,31 +179,14 @@ def get_memory_from_transitions(transitions: dict, initial_state: int = None,
             more memory than knowing the right half, we will have a blank on the
             oldest pair.
             """
-            if len(self.actions) == 0:
-                return "_"
-
-            # The first action on the list will be the opponent's previous
-            # action.  We don't know yet how we will respond, so we leave a
-            # blank (_).
-            action_str = "{}/_".format(self.actions[0])
-            # Then we go backwards.  The next actions on the list are the
-            # opponent's previous actions, our previous actions, alternatively.
-            i = 1
-            while i < len(self.actions)-2:
-                action_str = "{}/{}, {}".format(self.actions[i+1],
-                                                self.actions[i], action_str)
-                i += 2
-            # The oldest action we'll have will be our response to an unknown
-            # opponent action.
-            action_str = "_/{}, {}".format(self.actions[-1], action_str)
-
-            return action_str
+            if self.num_actions % 2 == 0:
+                self.repr = "{}/{}".format(action, self.repr)
+            else:
+                self.repr = "{}, {}".format(action, self.repr)
+            self.num_actions += 1
 
         def __hash__(self) -> None:
             return hash(repr(self))
-
-        def append(self, action: Action) -> None:
-            self.actions.append(action)
 
     class Branch(object):
         """A chain of previous actions.  With other information captured, like
@@ -213,7 +202,7 @@ def get_memory_from_transitions(transitions: dict, initial_state: int = None,
             next_action = trans[3]
 
             self.num_moves_recorded = 0
-            self.action_chain = ActionChain([])
+            self.action_chain = ActionChain()
             self.next_action = next_action
             self.on_state = state
             # The information that we have available at any step will be half of
@@ -230,7 +219,7 @@ def get_memory_from_transitions(transitions: dict, initial_state: int = None,
             """
             new_branch = Branch()
             new_branch.num_moves_recorded = self.num_moves_recorded + 1
-            new_branch.action_chain = ActionChain(self.action_chain.actions)
+            new_branch.action_chain = ActionChain(copy=self.action_chain)
             new_branch.action_chain.append(self.buffer)
             new_branch.action_chain.append(backtrans.prev_reaction)
             new_branch.next_action = self.next_action
