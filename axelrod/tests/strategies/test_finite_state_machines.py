@@ -127,6 +127,25 @@ class TestGetMemoryFromTransitions(unittest.TestCase):
                       for current_state, input_action, next_state, output_action in transitions}
         self.assertEqual(get_memory_from_transitions(trans_dict), 2)
 
+    def test_fortress_4(self):
+        """Tests Fortress-4.  Should have memory=3 for same logic that
+        Fortress-3 should have memory=2.
+        """
+        transitions = (
+            (1, C, 1, D),
+            (1, D, 2, D),
+            (2, C, 1, D),
+            (2, D, 3, D),
+            (3, C, 1, D),
+            (3, D, 4, C),
+            (4, C, 3, C),
+            (4, D, 1, D),
+        )
+
+        trans_dict = {(current_state, input_action): (next_state, output_action)
+                      for current_state, input_action, next_state, output_action in transitions}
+        self.assertEqual(get_memory_from_transitions(trans_dict), 3)
+
     def test_complex_cooperator(self):
         """Tests a cooperator with lots of states and transitions.
         """
@@ -231,6 +250,26 @@ class TestGetMemoryFromTransitions(unittest.TestCase):
 
         self.assertEqual(get_memory_from_transitions(trans_dict,
                                                      initial_state=2), 1)
+
+    def test_evolved_fsm_4(self):
+        """This should be infinite memory because the C/D self-loop at state 2
+        and state 3.
+        """
+        transitions = (
+            (0, C, 0, C),
+            (0, D, 2, D),
+            (1, C, 3, D),
+            (1, D, 0, C),
+            (2, C, 2, D),
+            (2, D, 1, C),
+            (3, C, 3, D),
+            (3, D, 1, D),
+        )
+
+        trans_dict = {(current_state, input_action): (next_state, output_action)
+                      for current_state, input_action, next_state, output_action in transitions}
+
+        self.assertEqual(get_memory_from_transitions(trans_dict), float("inf"))
 
 
 class TestSimpleFSM(unittest.TestCase):

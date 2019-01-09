@@ -3,7 +3,32 @@ from axelrod.player import Player
 from collections import defaultdict, namedtuple
 
 C, D = Action.C, Action.D
+ALL_ACTIONS = [C, D]
 
+
+"""
+Memit = unit of memory.
+
+This represents the amount of memory that we gain with each new piece of
+history.  It includes a state, our_response that we make on our way into that
+state (in_act), and the opponent's action that makes us move out of that state
+(out_act).
+
+For example for this FSM:
+(0, C, 0, C),
+(0, D, 1, C),
+(1, C, 0, D),
+(1, D, 0, D)
+
+Has the memits:
+(C, 0, C),
+(C, 0, D),
+(D, 0, C),
+(D, 0, D),
+(C, 1, C),
+(C, 1, D)
+"""
+Memit = namedtuple("Memit", ["in_act", "state", "out_act"])
 
 def get_accessible_transitions(transitions: dict, initial_state: int) -> dict:
   """Gets all transitions from the list that can be reached from the
@@ -20,11 +45,11 @@ def get_accessible_transitions(transitions: dict, initial_state: int) -> dict:
   visited[initial_state] = True
   while len(edge_queue) > 0:
       edge = edge_queue.pop()
-      for next_edge in edge_dict[edge]:
-          if not visited[next_edge]:
-              visited[next_edge] = True
-              edge_queue.append(next_edge)
-              accessible_edges.append(next_edge)
+      for successor in edge_dict[edge]:
+          if not visited[successor]:
+              visited[successor] = True
+              edge_queue.append(successor)
+              accessible_edges.append(successor)
 
   accessible_transitions = dict()
   for k, v in transitions.items():
@@ -33,303 +58,156 @@ def get_accessible_transitions(transitions: dict, initial_state: int) -> dict:
 
   return accessible_transitions
 
+def longest_path(edges: dict, starting_at: Memit) -> int:
+    """Returns the number of nodes in the longest path that starts at the given
+    node.  Returns infinity if a loop is encountered.
+    """
+    visited = dict()
+    for k, v in edges.items():
+        visited[k] = False
+        for vi in v:
+            visited[vi] = False
 
-def get_memory_from_transitions(transitions: dict, initial_state: int = None,
-                                print_trace: bool = False,
-                                print_output: bool = False) -> int:
+    # This is what we'll recurse on.  visited dict is shared between calls.
+    def recurse(at_node):
+        visited[at_node] = True
+        record = 1  # Count the nodes, not the edges.
+        for successor in edges[at_node]:
+            if visited[successor]:
+                return float("inf")
+            successor_length = recurse(successor)
+            if successor_length == float("inf"):
+                return float("inf")
+            if record < successor_length + 1:
+                record = successor_length + 1
+        return record
+
+    return recurse(starting_at)
+
+Transition = namedtuple("Transition", ["state", "last_opponent_action",
+                                       "next_state", "next_action"])
+def transition_iterator(transitions: dict) -> Transition:
+    """Changes the transition dictionary into a iterator on namedtuples, because
+    we use repeatedly.
+    """
+    for k, v in transitions.items():
+        yield Transition(k[0], k[1], v[0], v[1])
+
+def get_memory_from_transitions(transitions: dict,
+                                initial_state: int = None) -> int:
     """This function calculates the memory of an FSM from the transitions.
 
     Assume that transitions are a dict with entries like
     (state, last_opponent_action): (next_state, next_action)
 
-    We look at all the next_actions for all the transitions.  If these aren't
-    all the same, then we attach 1 turn worth of memory (this strategy's
-    previous action and the opponent's previous action).  We can get the
-    opponent's previous strategy from the transition, but to get this strategy's
-    previous action, we need to consider all incoming transitions into the
-    current state.  [We call this walking backwards through the graph along the
-    path given by the incoming transition.]  There may be zero or one or
-    multiple incoming transitions into each state, creating multiple paths we
-    could walk along.  We call these branches, and keep track of all branches.
+    We first break down the transitions into memits (see above).  We also create
+    a graph of memits, where the successor to a given memit are all possible
+    memits that could occur in the memory immediately before the given memit.
 
-    Along each branch there is a chain of actions.  After 1 step, it may be CC,
-    CD, DC, or DD.  [However we write "CC" like "_/C, C/_" though to establish
-    that letters to the left of the "/" are the opponent's moves, while the
-    letters to the right are this strategy's moves.]  For each chain of actions,
-    we gather the branches that match that chain.  If all these branches have
-    the same next_action, then we know what to do following that chain of
-    actions.  In that case we call these branches decided.  With undecided
-    branches, we continue to walk back.  We repeat until all branches are
-    decided.  The number of steps that this takes is the memory of the FSM.
+    Then we pair up memits with different states, but same in and out actions.
+    These represent points in time that we can't determine which state we're in.
+    We also create a graph of memit-pairs, where memit-pair, Y, succedes a
+    memit-pair, X, if the two memits in X are succeded by the two memits in Y.
+    These edges reperesent consecutive points in time that we can't determine
+    which state we're in.
 
-    If however, there are still undecided branches after E*(E-1) steps (where E
-    is the number of transitions), then the memory must be infinite.  This is
-    shown elsewhere.
-
-
-    As an example, we show how the Fortress3 (defined below) strategy would
-    work.
-
-    Fortress3 is given by the transitions:
-    transitions = (
-    (1, C, 1, D),
-    (1, D, 2, D),
-    (2, C, 1, D),
-    (2, D, 3, C),
-    (3, C, 3, C),
-    (3, D, 1, D),
-    )
-
-    In the first step, we just check transitions' next-actions.
-    We list transtions as state:prev_opponent_action;next_action:
-    1:C;D | Back-trace: _ | On-state: 1
-    1:D;D | Back-trace: _ | On-state: 1
-    2:C;D | Back-trace: _ | On-state: 2
-    2:D;C | Back-trace: _ | On-state: 2
-    3:C;C | Back-trace: _ | On-state: 3
-    3:D;D | Back-trace: _ | On-state: 3
-
-    In the second step, we walk backwards along incoming transitions.
-    We continue to label each branch by its ending
-    state:previous_opponent_action;next_action, but we list the state that
-    we're on at this point in time:
-    1:C;D | Back-trace: _/D, C/_ | On-state: 1
-    1:C;D | Back-trace: _/D, C/_ | On-state: 2
-    1:C;D | Back-trace: _/D, C/_ | On-state: 3
-    2:C;D | Back-trace: _/D, C/_ | On-state: 1
-    1:D;D | Back-trace: _/D, D/_ | On-state: 1
-    1:D;D | Back-trace: _/D, D/_ | On-state: 2
-    1:D;D | Back-trace: _/D, D/_ | On-state: 3
-    2:D;C | Back-trace: _/D, D/_ | On-state: 1
-    3:C;C | Back-trace: _/C, C/_ | On-state: 2
-    3:C;C | Back-trace: _/C, C/_ | On-state: 3
-    3:D;D | Back-trace: _/C, D/_ | On-state: 2
-    3:D;D | Back-trace: _/C, D/_ | On-state: 3
-
-    From here we can conclude that:
-    If _/D, C/_, then D
-    If _/C, C/_, then C
-    If _/C, D/_, then D
-
-    We remove the branches that correspond to those action chains.  But we
-    continue to walk back the _/D, D/_ branches:
-    1:D;D | Back-trace: _/D, C/D, D/_ | On-state: 1
-    1:D;D | Back-trace: _/D, C/D, D/_ | On-state: 2
-    1:D;D | Back-trace: _/D, C/D, D/_ | On-state: 3
-    1:D;D | Back-trace: _/D, C/D, D/_ | On-state: 1
-    1:D;D | Back-trace: _/C, D/D, D/_ | On-state: 2
-    1:D;D | Back-trace: _/C, D/D, D/_ | On-state: 3
-    2:D;C | Back-trace: _/D, D/D, D/_ | On-state: 1
-    2:D;C | Back-trace: _/D, D/D, D/_ | On-state: 2
-    2:D;C | Back-trace: _/D, D/D, D/_ | On-state: 3
-
-    From here we conclude that:
-    If _/D, C/D, D/_, then D
-    If _/C, D/D, D/_, then D
-    If _/D, D/D, D/_, then C
-
-    There are no more undecided branches, so we stop and say that the memory
-    is 2.
+    Then for all memit-pairs that disagree, in the sense that they imply
+    different next_action, we find the longest chain starting at that
+    memit-pair.  [If a loop is encountered then this will be infinite.]  We take
+    the maximum over all sugh memit-pairs.  This represents the longest possible
+    chain of memory for which we wouldn't know what to do next.  We return this.
     """
     # If initial_state is set, use this to determine which transitions are
     # reachable from the initial_state and restrict to those.
     if initial_state is not None:
         transitions = get_accessible_transitions(transitions, initial_state)
 
-    # First make a back_transitions dict from transitions.  This is keyed on
-    # states, and a list of "BackTrans" (one for each transition incoming to
-    # that state) as values.
-    back_transitions = defaultdict(list)
-    # A "BackTrans" has the previous state and previous action/reaction pair.
-    BackTrans = namedtuple("BackTrans", ["prev_state", "prev_reaction",
-                                         "prev_opp_action"])
-    for k, v in transitions.items():
-        state = k[0]
-        last_opponent_action = k[1]
-        next_state = v[0]
-        next_action = v[1]
+    # Get the incoming actions for each state.
+    incoming_action_by_state = defaultdict(set)
+    for trans in transition_iterator(transitions):
+        incoming_action_by_state[trans.next_state].add(trans.next_action)
 
-        back_transitions[next_state].append(BackTrans(state,
-                                                      next_action,
-                                                      last_opponent_action))
+    # Get next_action for each memit.  Used to decide if they are in conflict.
+    next_action_by_memit = dict()
+    for trans in transition_iterator(transitions):
+        for in_action in incoming_action_by_state[trans.state]:
+            memit_key = Memit(in_action, trans.state,
+                              trans.last_opponent_action)
+            next_action_by_memit[memit_key] = trans.next_action
 
-    class ActionChain(object):
-        """A list of actions.  Made a class so that we can hash."""
-        def __init__(self, copy=None) -> None:
-            if copy is None:
-                self.repr = "_"
-                self.num_actions = 0
-            else:
-                self.repr = copy.repr
-                self.num_actions = copy.num_actions
+    # Keys are starting memit, and values are all possible terminal memit.
+    # Will walk backwards through the graph.
+    memit_edges = defaultdict(set)
+    for trans in transition_iterator(transitions):
+        # Since all actions are out-paths for each state, add all of these.
+        # That is to say that your opponent could do anything
+        for out_action in ALL_ACTIONS:
+            # More recent in action history
+            starting_node = Memit(trans.next_action, trans.next_state,
+                                  out_action)
+            # All incoming paths to current state
+            for in_action in incoming_action_by_state[trans.state]:
+                # Less recent in action history
+                ending_node = Memit(in_action, trans.state,
+                                    trans.last_opponent_action)
+                memit_edges[starting_node].add(ending_node)
 
-        def __eq__(self, other) -> bool:
-            return self.repr == other.repr
+    all_memits = memit_edges.keys()
 
-        def __repr__ (self)-> None:
-            return "_/" + self.repr
-
-        def append(self, action: Action) -> None:
-            """
-            This is a way to represent a memory of a certain length.  We
-            represent history as a opponent_action/this_player_reaction
-            seperated by commas, with the most recent pair listed last.
-
-            Because knowing the left half of the _/_ action-reaction requires
-            more memory than knowing the right half, we will have a blank on the
-            oldest pair.
-            """
-            if self.num_actions % 2 == 0:
-                self.repr = "{}/{}".format(action, self.repr)
-            else:
-                self.repr = "{}, {}".format(action, self.repr)
-            self.num_actions += 1
-
-        def __hash__(self) -> None:
-            return hash(repr(self))
-
-    class Branch(object):
-        """A chain of previous actions.  With other information captured, like
-        state, so that we can continue to walk backwards.
+    def memits_match(x, y):
+        """In action and out actions are the same."""
+        return x.in_act == y.in_act and x.out_act == y.out_act
+    def memit_sort(x, y):
+        """Returns a tuple of x in y, sorted so that (x, y) are viewed as the
+        same as (y, x).
         """
-        def __init__(self, trans: tuple = None) -> None:
-            if trans is None:
-                return
+        if repr(x) <= repr(y):
+            return (x, y)
+        else:
+            return (y, x)
 
-            state = trans[0]
-            last_opponent_action = trans[1]
-            next_state = trans[2]
-            next_action = trans[3]
+    pair_nodes = set()
+    pair_edges = defaultdict(set)
+    # Loop through all pairs of memits.
+    for x, y in [(x, y) for x in all_memits for y in all_memits]:
+        if x == y:
+            continue
+        if not memits_match(x, y):
+            continue
 
-            self.num_moves_recorded = 0
-            self.action_chain = ActionChain()
-            self.next_action = next_action
-            self.on_state = state
-            # The information that we have available at any step will be half of
-            # next step's history.  So we keep this in a buffer.
-            self.buffer = last_opponent_action
+        # If the memits match, then the strategy can't tell the difference
+        # between the states.  We call this a pair of matched memits (or just a
+        # pair).
+        pair_nodes.add(memit_sort(x, y))
+        # When two memits in matched pair have successors that are also matched,
+        # then we draw an edge.  This represents consecutive historical times
+        # that we can't tell which state we're in.
+        for x_successor in memit_edges[x]:
+            for y_successor in memit_edges[y]:
+                if memits_match(x_successor, y_successor):
+                    pair_edges[memit_sort(x, y)].add(memit_sort(x_successor,
+                                                                y_successor))
 
-            # For debugging
-            self.initial_trans = "{}:{}".format(state, last_opponent_action)
+    if len(pair_nodes) == 0:
+        # If there are no pair of tied memits, then either no memits are needed
+        # to break a tie (i.e. all next_actions are the same) or the first memit
+        # breaks a tie (i.e. memory 1)
+        next_action_set = set()
+        for trans in transition_iterator(transitions):
+            next_action_set.add(trans.next_action)
+        if len(next_action_set) == 1:
+            return 0
+        return 1
 
-        def step(self, backtrans: BackTrans):
-            """Continues to walk (or branch) backwards from where the branch
-            leaves off, given a path (backtrans) to walk backwards along.  This
-            will return a Branch instance.
-            """
-            new_branch = Branch()
-            new_branch.num_moves_recorded = self.num_moves_recorded + 1
-            new_branch.action_chain = ActionChain(copy=self.action_chain)
-            new_branch.action_chain.append(self.buffer)
-            new_branch.action_chain.append(backtrans.prev_reaction)
-            new_branch.next_action = self.next_action
-            new_branch.on_state = backtrans.prev_state
-            # This needs one more memory to know.
-            new_branch.buffer = backtrans.prev_opp_action
-
-            new_branch.initial_trans = self.initial_trans
-
-            return new_branch
-
-        def debug_str(self) -> str:
-            return "{};{} | Back-trace: {} | On-state: {}".format(
-                    self.initial_trans, self.next_action,
-                    repr(self.action_chain), self.on_state)
-
-    BranchList = namedtuple("BranchList", ("branch_list", "next_actions"))
-
-    class BranchPool(object):
-        """We keep branches in the branch_pool, grouped by common-end
-        ActionChains.  A common-end ActionChain is a chain of N actions
-        occurring most-recently that is common to all branches in the group.
-        Specifically branch_pool is a dict with keys given by common-end
-        ActionChains, and with dict-values given by a list of branches and the
-        set of possible next_actions for these branches.
-
-        The set of possible next_actions is the set of actions that this FSM may
-        choose to do following the chain of actions given in the key.  When
-        there is a single action, we know that the strategy will make that
-        action; we call the branches with that chain of actions "decided" at
-        this point.
-        """
-        def __init__(self) -> None:
-            self.clear()
-
-        def push(self, branch: Branch) -> None:
-            """Just adds a branch to the branch_pool."""
-            common_branches = self.branch_pool[branch.action_chain]
-            common_branches.next_actions.add(branch.next_action)
-            common_branches.branch_list.append(branch)
-
-        def branches(self) -> Branch:
-            """An iterator that loops through all the branches in the
-            branch_pool.
-            """
-            for k, v in self.branch_pool.items():
-                for branch in v.branch_list:
-                    yield branch
-
-        def clear(self) -> None:
-            """Empty the branch_pool."""
-            self.branch_pool = defaultdict(lambda: BranchList(list(), set()))
-
-        def remove_decided_branches(self) -> dict:
-            """We call a branch "decided" if all branches with that common-end
-            (end of ActionChain) give the same next_action.  This function
-            removes those from the branch_pool, and returns these as a dict
-            keyed by common-end ActionChain, and with dict-values given by the
-            common next_action.
-            """
-            decided_branches = dict()
-            for k, v in self.branch_pool.items():
-                if len(v.next_actions) == 1:
-                  decided_branches[k] = list(v.next_actions)[0]
-            for k in decided_branches.keys():
-                del self.branch_pool[k]
-            return decided_branches
-
-        def __bool__(self):
-            return len(self.branch_pool) > 0
-
-    # Set up variables
-    num_edges = len(transitions)
-    waiting, processed = BranchPool(), BranchPool()
-    if print_trace:
-        print("STEP 0")
-        print("===============")
-    for k, v in transitions.items():
-        trans_branch = Branch((k[0], k[1], v[0], v[1]))
-        processed.push(trans_branch)
-        if print_trace:
-            print(trans_branch.debug_str())
-    processed.remove_decided_branches()
-
-    steps = 0
-    while processed:
-        steps += 1
-        if print_trace:
-            print("STEP {}".format(steps))
-            print("===============")
-        if steps > num_edges*(num_edges-1):
-            return float("inf")
-        # Move processed to waiting
-        for branch in processed.branches():
-            waiting.push(branch)
-        processed.clear()
-        # Now process the waiting list.
-        for branch in waiting.branches():
-            for backtrans in back_transitions[branch.on_state]:
-                processed.push(branch.step(backtrans))
-        if print_trace:
-          for branch in processed.branches():
-                print(branch.debug_str())
-        waiting.clear()
-        # And remove decided branches.
-        decided_branches = processed.remove_decided_branches()
-        if print_output:
-            for k, v in decided_branches.items():
-                print("If {}, then {}".format(k, v))
-    return steps
+    record = 0
+    for pair in pair_nodes:
+        if next_action_by_memit[pair[0]] != next_action_by_memit[pair[1]]:
+            # longest_path is the longest chain of tied states.  We add one to
+            # get the memory length needed to break all ties.
+            path_length = longest_path(pair_edges, pair) + 1
+            if record < path_length:
+                record = path_length
+    return record
 
 
 class SimpleFSM(object):
@@ -452,7 +330,7 @@ class Fortress3(FSMPlayer):
 
     name = "Fortress3"
     classifier = {
-        "memory_depth": 3,
+        "memory_depth": 2,
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -489,7 +367,7 @@ class Fortress4(FSMPlayer):
 
     name = "Fortress4"
     classifier = {
-        "memory_depth": 4,
+        "memory_depth": 3,
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -525,7 +403,7 @@ class Predator(FSMPlayer):
 
     name = "Predator"
     classifier = {
-        "memory_depth": 9,
+        "memory_depth": float("inf"),
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -569,7 +447,7 @@ class Pun1(FSMPlayer):
 
     name = "Pun1"
     classifier = {
-        "memory_depth": 2,
+        "memory_depth": float("inf"),
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -596,7 +474,7 @@ class Raider(FSMPlayer):
 
     name = "Raider"
     classifier = {
-        "memory_depth": 3,
+        "memory_depth": float("inf"),
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -631,7 +509,7 @@ class Ripoff(FSMPlayer):
 
     name = "Ripoff"
     classifier = {
-        "memory_depth": 2,
+        "memory_depth": 3,
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -664,7 +542,7 @@ class UsuallyCooperates(FSMPlayer):
 
     name = "UsuallyCooperates"
     classifier = {
-        "memory_depth": 2,
+        "memory_depth": float("inf"),
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -695,7 +573,7 @@ class UsuallyDefects(FSMPlayer):
 
     name = "UsuallyDefects"
     classifier = {
-        "memory_depth": 2,
+        "memory_depth": float("inf"),
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -726,7 +604,7 @@ class SolutionB1(FSMPlayer):
 
     name = "SolutionB1"
     classifier = {
-        "memory_depth": 3,
+        "memory_depth": 2,
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -760,7 +638,7 @@ class SolutionB5(FSMPlayer):
 
     name = "SolutionB5"
     classifier = {
-        "memory_depth": 5,
+        "memory_depth": float("inf"),
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -799,7 +677,7 @@ class Thumper(FSMPlayer):
 
     name = "Thumper"
     classifier = {
-        "memory_depth": 2,
+        "memory_depth": float("inf"),
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -825,7 +703,7 @@ class EvolvedFSM4(FSMPlayer):
 
     name = "Evolved FSM 4"
     classifier = {
-        "memory_depth": 4,
+        "memory_depth": float("inf"),
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -861,7 +739,7 @@ class EvolvedFSM16(FSMPlayer):
 
     name = "Evolved FSM 16"
     classifier = {
-        "memory_depth": 16,  # At most
+        "memory_depth": float("inf"),  # At most
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -917,7 +795,7 @@ class EvolvedFSM16Noise05(FSMPlayer):
 
     name = "Evolved FSM 16 Noise 05"
     classifier = {
-        "memory_depth": 16,  # At most
+        "memory_depth": float("inf"),  # At most
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
