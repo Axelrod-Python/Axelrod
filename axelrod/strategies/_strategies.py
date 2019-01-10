@@ -105,6 +105,7 @@ from .gobymajority import (
     HardGoByMajority40,
 )
 from .gradualkiller import GradualKiller
+from .graaskamp import Graaskamp
 from .grudger import (
     Aggravater,
     EasyGo,
@@ -317,6 +318,7 @@ all_strategies = [
     GoByMajority40,
     GoByMajority5,
     Golden,
+    Graaskamp,
     GraaskampKatzen,
     Gradual,
     GradualKiller,
