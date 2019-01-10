@@ -56,6 +56,8 @@ Here are the docstrings of all the strategies in the library.
    :members:
 .. automodule:: axelrod.strategies.gradualkiller
    :members:
+.. automodule:: axelrod.strategies.graaskamp
+   :members:
 .. automodule:: axelrod.strategies.grudger
    :members:
 .. automodule:: axelrod.strategies.grumpy
