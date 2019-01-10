@@ -8,6 +8,7 @@ from .averagecopier import AverageCopier, NiceAverageCopier
 from .axelrod_first import (
     Davis,
     Feld,
+    Graaskamp,
     Grofman,
     Joss,
     Nydegger,
@@ -105,7 +106,6 @@ from .gobymajority import (
     HardGoByMajority40,
 )
 from .gradualkiller import GradualKiller
-from .graaskamp import Graaskamp
 from .grudger import (
     Aggravater,
     EasyGo,
