@@ -56,6 +56,8 @@ class ResultSet:
                 efficiently read from file.
             processes : integer
                 The number of processes to be used for parallel processing
+            progress_bar: boolean
+                If a progress bar will be shown.
         """
         self.filename = filename
         self.players, self.repetitions = players, repetitions
@@ -186,8 +188,7 @@ class ResultSet:
         """
         Parameters
         ----------
-
-            payoffs_series : pandas.Series
+            series : pandas.Series
             first_dimension : iterable
             second_dimension : iterable
             third_dimension : iterable
@@ -223,7 +224,6 @@ class ResultSet:
         """
         Parameters
         ----------
-
             series : pandas.Series
 
         Returns:
@@ -446,7 +446,6 @@ class ResultSet:
         """
         Returns:
         --------
-
         The eigenmoses rating as defined in:
         http://www.scottaaronson.com/morality.pdf
         """
@@ -459,7 +458,6 @@ class ResultSet:
         """
         Returns:
         --------
-
         The eigenjesus rating as defined in:
         http://www.scottaaronson.com/morality.pdf
         """
@@ -474,7 +472,6 @@ class ResultSet:
         """
         Returns:
         --------
-
             The list of cooperation ratings
             List of the form:
 
@@ -514,7 +511,6 @@ class ResultSet:
         """
         Returns:
         --------
-
             The vengeful cooperation matrix derived from the
             normalised cooperation matrix:
 
@@ -608,7 +604,6 @@ class ResultSet:
 
         Parameters
         ----------
-
             other : axelrod.ResultSet
                 Another results set against which to check equality
         """
@@ -642,7 +637,6 @@ class ResultSet:
 
         Parameters
         ----------
-
             other : axelrod.ResultSet
                 Another results set against which to check inequality
         """
@@ -656,7 +650,6 @@ class ResultSet:
 
         Output
         ------
-
             A list of the form:
 
             [[player name, median score, cooperation_rating],...]

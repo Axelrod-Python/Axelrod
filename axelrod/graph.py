@@ -129,8 +129,8 @@ def complete_graph(size, loops=True):
     ----------
     size: int
         Number of vertices in the cycle
-    directed: bool, False
-        Is the graph directed?
+    loops: bool, True
+        Should the graph contain cycles?
 
     Returns
     -------

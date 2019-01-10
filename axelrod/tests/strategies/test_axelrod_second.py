@@ -1815,3 +1815,96 @@ class TestMikkelson(TestPlayer):
             Change_of_Heart, expected_actions=actions, attrs={"credit": -2}
         )
         # Still Cooperate, because Defect rate is low
+
+class TestRowsam(TestPlayer):
+    name = "Rowsam"
+    player = axelrod.Rowsam
+    expected_classifier = {
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set("game"),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+    def test_strategy(self):
+        # Should always cooperate with Cooperator
+        actions = [(C, C)] * 100
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+
+        # Against a Defector should eventually enter Defect mode
+        actions = [(C, D)] * 5
+        actions += [(D, D), (C, D), (D, D)]  # Do a Coop-Def cycle
+        self.versus_test(axelrod.Defector(), expected_actions=actions, attrs={
+            "distrust_points": 5})
+        actions += [(C, D)] * 3  # Continue for now
+        actions += [(D, D)] * 100  # Now Defect mode
+        self.versus_test(axelrod.Defector(), expected_actions=actions, attrs={
+            "distrust_points": 10, "mode": "Defect"})
+
+        # Test specific score scenarios
+        # 5 Defects
+        opponent_actions = [D] * 5 + [C] * 100
+        custom_opponent = axelrod.MockPlayer(actions=opponent_actions)
+        actions = [(C, D)] * 5
+        actions += [(D, C)]
+        self.versus_test(custom_opponent, expected_actions=actions, attrs={
+            "distrust_points": 5, "current_score": 0})
+
+        # 3 Defects
+        opponent_actions = [D] * 3 + [C] * 100
+        custom_opponent = axelrod.MockPlayer(actions=opponent_actions)
+        actions = [(C, D)] * 3
+        actions += [(C, C)] * 2
+        actions += [(D, C)]
+        self.versus_test(custom_opponent, expected_actions=actions, attrs={
+            "distrust_points": 3, "current_score": 6})
+
+        # 2 Defects
+        opponent_actions = [D] * 2 + [C] * 100
+        custom_opponent = axelrod.MockPlayer(actions=opponent_actions)
+        actions = [(C, D)] * 2
+        actions += [(C, C)] * 3
+        actions += [(D, C)]
+        self.versus_test(custom_opponent, expected_actions=actions, attrs={
+            "distrust_points": 2, "current_score": 9})
+
+        # 1 Defect
+        opponent_actions = [D] * 1 + [C] * 100
+        custom_opponent = axelrod.MockPlayer(actions=opponent_actions)
+        actions = [(C, D)] * 1
+        actions += [(C, C)] * 4
+        actions += [(D, C)]
+        self.versus_test(custom_opponent, expected_actions=actions, attrs={
+            "distrust_points": 1, "current_score": 12})
+
+        # Test that some distrust_points wear off.
+        opponent_actions = [D] * 3 + [C] * 100
+        custom_opponent = axelrod.MockPlayer(actions=opponent_actions)
+        actions = [(C, D)] * 3
+        actions += [(C, C)] * 2
+        actions += [(D, C)]
+        self.versus_test(custom_opponent, expected_actions=actions, attrs={
+            "distrust_points": 3, "current_score": 6})
+        custom_opponent = axelrod.MockPlayer(actions=opponent_actions)
+        actions += [(C, C), (D, C)]  # Complete Coop-Def cycle
+        actions += [(C, C)] * 3
+        actions += [(D, C)]
+        self.versus_test(custom_opponent, expected_actions=actions, attrs={
+            "distrust_points": 4, "current_score": 28})
+        custom_opponent = axelrod.MockPlayer(actions=opponent_actions)
+        actions += [(C, C), (D, C)]  # Complete Coop-Def cycle
+        actions += [(C, C)] * 4  # No defect or cycle this time.
+        self.versus_test(custom_opponent, expected_actions=actions, attrs={
+            "distrust_points": 3, "current_score": 50})  # One point wears off.
+        custom_opponent = axelrod.MockPlayer(actions=opponent_actions)
+        actions += [(C, C)] * 18
+        self.versus_test(custom_opponent, expected_actions=actions, attrs={
+            "distrust_points": 2})  # Second point wears off
+        custom_opponent = axelrod.MockPlayer(actions=opponent_actions)
+        actions += [(C, C)] * 18
+        self.versus_test(custom_opponent, expected_actions=actions, attrs={
+            "distrust_points": 2})  # But no more
+

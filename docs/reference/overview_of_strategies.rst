@@ -126,7 +126,7 @@ repository.
    "K55R_", "Steve Newman", "Not Implemented"
    "K56R_", "Stanley F Quayle", "Not Implemented"
    "K57R_", "Rudy Nydegger", "Not Implemented"
-   "K58R_", "Glen Rowsam", "Not Implemented"
+   "K58R_", "Glen Rowsam", ":class:`Rowsam <axelrod.strategies.axelrod_second.Rowsam>`"
    "K59R_", "Leslie Downing", "Not Implemented"
    "K60R_", "Jim Graaskamp and Ken Katzen", ":class:`GraaskampKatzen <axelrod.strategies.axelrod_second.GraaskampKatzen>`"
    "K61R_", "Danny C Champion", ":class:`Champion <axelrod.strategies.axelrod_second.Champion>`"
