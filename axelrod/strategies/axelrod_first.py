@@ -217,10 +217,15 @@ class Graaskamp(Player):
        it defects for the rest of the game;
     5. The strategy also checks to see if the opponent is playing Tit For Tat
        or another strategy from a preliminary
-       tournament called ‘Analogy’. If so it plays Tit For Tat. If not it cooperates
+       tournament called ‘Analogy’ (There is no information about 'Analogy' tournament. Step 5 is not implemented fully.)
+       If so it plays Tit For Tat. If not it cooperates
        and randomly defects every 5 to 15 moves.
 
     This strategy came 9th in Axelrod’s original tournament.
+
+    Names:
+
+    - Graaskamp: [Axelrod1980]_
     """
 
     name = "Graaskamp"
@@ -253,7 +258,7 @@ class Graaskamp(Player):
         if not self.history:
             return C
         # Copy opponent's last move as in Tit for Tat strategy
-        if 52 <= len(self.history) <= 56:
+        if 52 <= len(self.history) <= 56 or len(self.history) == 51:
             if opponent.history[-1] == D:
                 return D
             return C
