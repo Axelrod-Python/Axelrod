@@ -250,6 +250,7 @@ class Graaskamp(Player):
         super().__init__()
         self.alpha = alpha
         self.opponent_is_random = False
+        self.next_defection_turn = None
 
     def strategy(self, opponent: Player) -> Action:
         """This is the actual strategy"""
@@ -275,21 +276,11 @@ class Graaskamp(Player):
                     if opponent.history[-1] == D:
                         return D
                     return C
-            else:
-                # Generating integer from 0 to 14 for defecting every 5 to 15 moves
-                numlist = []
-                while len(numlist < 5):
-                    for i in range(1, 5):
-                        numlist += [i]
-                while len(numlist) < 15:
-                    rnd = random.randint(6, 14)
-                    if rnd in numlist:
-                        continue
-                    else:
-                        if rnd == 14:
-                            del numlist[:]
-                            return D
-                        numlist += [rnd]
+
+            if len(self.history) == self.next_random_defection_turn:
+                self.next_defection_turn = random.randint(5, 15) + len(self.history)  # resample the next defection turn
+                return D
+            return C
 
 
 class Grofman(Player):
