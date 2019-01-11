@@ -250,7 +250,7 @@ class Graaskamp(Player):
         super().__init__()
         self.alpha = alpha
         self.opponent_is_random = False
-        self.next_defection_turn = None
+        self.next_random_defection_turn = None
 
     def strategy(self, opponent: Player) -> Action:
         """This is the actual strategy"""
@@ -278,7 +278,7 @@ class Graaskamp(Player):
                     return C
 
             if len(self.history) == self.next_random_defection_turn:
-                self.next_defection_turn = random.randint(5, 15) + len(self.history)  # resample the next defection turn
+                self.next_random_defection_turn = random.randint(5, 15) + len(self.history)  # resample the next defection turn
                 return D
             return C
 
