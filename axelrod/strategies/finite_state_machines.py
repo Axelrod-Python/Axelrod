@@ -31,6 +31,19 @@ Has the memits:
 """
 Memit = namedtuple("Memit", ["in_act", "state", "out_act"])
 
+def memits_match(x, y):
+    """In action and out actions are the same."""
+    return x.in_act == y.in_act and x.out_act == y.out_act
+def memit_sort(x, y):
+    """Returns a tuple of x in y, sorted so that (x, y) are viewed as the
+    same as (y, x).
+    """
+    if repr(x) <= repr(y):
+        return (x, y)
+    else:
+        return (y, x)
+
+
 def get_accessible_transitions(transitions: dict, initial_state: int) -> dict:
   """Gets all transitions from the list that can be reached from the
   initial_state.
@@ -59,6 +72,7 @@ def get_accessible_transitions(transitions: dict, initial_state: int) -> dict:
 
   return accessible_transitions
 
+
 def longest_path(edges: dict, starting_at: Memit) -> int:
     """Returns the number of nodes in the longest path that starts at the given
     node.  Returns infinity if a loop is encountered.
@@ -85,6 +99,7 @@ def longest_path(edges: dict, starting_at: Memit) -> int:
 
     return recurse(starting_at)
 
+
 Transition = namedtuple("Transition", ["state", "last_opponent_action",
                                        "next_state", "next_action"])
 def transition_iterator(transitions: dict) -> Iterator[Transition]:
@@ -93,6 +108,7 @@ def transition_iterator(transitions: dict) -> Iterator[Transition]:
     """
     for k, v in transitions.items():
         yield Transition(k[0], k[1], v[0], v[1])
+
 
 def get_memory_from_transitions(transitions: dict,
                                 initial_state: int = None) -> int:
@@ -128,14 +144,6 @@ def get_memory_from_transitions(transitions: dict,
     for trans in transition_iterator(transitions):
         incoming_action_by_state[trans.next_state].add(trans.next_action)
 
-    # Get next_action for each memit.  Used to decide if they are in conflict.
-    next_action_by_memit = dict()
-    for trans in transition_iterator(transitions):
-        for in_action in incoming_action_by_state[trans.state]:
-            memit_key = Memit(in_action, trans.state,
-                              trans.last_opponent_action)
-            next_action_by_memit[memit_key] = trans.next_action
-
     # Keys are starting memit, and values are all possible terminal memit.
     # Will walk backwards through the graph.
     memit_edges: DefaultDict[Memit, set] = defaultdict(set)
@@ -154,18 +162,6 @@ def get_memory_from_transitions(transitions: dict,
                 memit_edges[starting_node].add(ending_node)
 
     all_memits = memit_edges.keys()
-
-    def memits_match(x, y):
-        """In action and out actions are the same."""
-        return x.in_act == y.in_act and x.out_act == y.out_act
-    def memit_sort(x, y):
-        """Returns a tuple of x in y, sorted so that (x, y) are viewed as the
-        same as (y, x).
-        """
-        if repr(x) <= repr(y):
-            return (x, y)
-        else:
-            return (y, x)
 
     pair_nodes = set()
     pair_edges: DefaultDict[tuple, set] = defaultdict(set)
@@ -200,6 +196,16 @@ def get_memory_from_transitions(transitions: dict,
             return 0
         return 1
 
+    # Get next_action for each memit.  Used to decide if they are in conflict,
+    # because we only have undecidability if next_action doesn't match.
+    next_action_by_memit = dict()
+    for trans in transition_iterator(transitions):
+        for in_action in incoming_action_by_state[trans.state]:
+            memit_key = Memit(in_action, trans.state,
+                              trans.last_opponent_action)
+            next_action_by_memit[memit_key] = trans.next_action
+
+    # Calculate the longest path.
     record = 0
     for pair in pair_nodes:
         if next_action_by_memit[pair[0]] != next_action_by_memit[pair[1]]:
