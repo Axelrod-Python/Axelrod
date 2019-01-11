@@ -253,7 +253,7 @@ class Graaskamp(Player):
         if not self.history:
             return C
         # Copy opponent's last move as in Tit for Tat strategy
-        if len(self.history) <= 50 or 52 <= len(self.history) <= 56 or len(self.history) >= 57:
+        if 52 <= len(self.history) <= 56:
             if opponent.history[-1] == D:
                 return D
             return C
@@ -265,7 +265,7 @@ class Graaskamp(Player):
         if len(self.history) >= 57:
             # Check if opponent plays randomly, if so, defect
             p_value = chisquare([opponent.cooperations, opponent.defections]).pvalue
-            self.opponent_is_random = p_value >= self.alpha
+            self.opponent_is_random = (p_value >= self.alpha) or self.opponent_is_random
 
             if self.opponent_is_random:
                 return D
