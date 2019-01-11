@@ -230,7 +230,7 @@ class Graaskamp(Player):
 
     name = "Graaskamp"
     classifier = {
-        "memory_depth": 57,  # long_memory
+        "memory_depth": 1,
         "stochastic": True,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -263,10 +263,6 @@ class Graaskamp(Player):
                 return D
             return C
 
-        # Defect on round 51
-        if len(self.history) == 51:
-            return D
-
         if len(self.history) >= 57:
             # Check if opponent plays randomly, if so, defect
             p_value = chisquare([opponent.cooperations, opponent.defections]).pvalue
@@ -274,7 +270,7 @@ class Graaskamp(Player):
 
             if self.opponent_is_random:
                 return D
-            elif all(opponent.history[-i] == self.history[-i - 1] for i in range(1, 57)):
+            elif all(opponent.history[i] == self.history[i - 1] for i in range(1, len(self.history + 1))):
                 # Check if opponent plays Tit for Tat
                     if opponent.history[-1] == D:
                         return D
