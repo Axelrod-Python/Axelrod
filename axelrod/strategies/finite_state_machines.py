@@ -1,5 +1,6 @@
 from axelrod.action import Action
 from axelrod.player import Player
+from typing import DefaultDict, Iterator
 from collections import defaultdict, namedtuple
 
 C, D = Action.C, Action.D
@@ -34,7 +35,7 @@ def get_accessible_transitions(transitions: dict, initial_state: int) -> dict:
   """Gets all transitions from the list that can be reached from the
   initial_state.
   """
-  edge_dict = defaultdict(list)
+  edge_dict: DefaultDict[int, list] = defaultdict(list)
   visited = dict()
   for k, v in transitions.items():
       visited[k[0]] = False
@@ -86,7 +87,7 @@ def longest_path(edges: dict, starting_at: Memit) -> int:
 
 Transition = namedtuple("Transition", ["state", "last_opponent_action",
                                        "next_state", "next_action"])
-def transition_iterator(transitions: dict) -> Transition:
+def transition_iterator(transitions: dict) -> Iterator[Transition]:
     """Changes the transition dictionary into a iterator on namedtuples, because
     we use repeatedly.
     """
@@ -123,7 +124,7 @@ def get_memory_from_transitions(transitions: dict,
         transitions = get_accessible_transitions(transitions, initial_state)
 
     # Get the incoming actions for each state.
-    incoming_action_by_state = defaultdict(set)
+    incoming_action_by_state: DefaultDict[int, set] = defaultdict(set)
     for trans in transition_iterator(transitions):
         incoming_action_by_state[trans.next_state].add(trans.next_action)
 
@@ -137,7 +138,7 @@ def get_memory_from_transitions(transitions: dict,
 
     # Keys are starting memit, and values are all possible terminal memit.
     # Will walk backwards through the graph.
-    memit_edges = defaultdict(set)
+    memit_edges: DefaultDict[Memit, set] = defaultdict(set)
     for trans in transition_iterator(transitions):
         # Since all actions are out-paths for each state, add all of these.
         # That is to say that your opponent could do anything
@@ -167,7 +168,7 @@ def get_memory_from_transitions(transitions: dict,
             return (y, x)
 
     pair_nodes = set()
-    pair_edges = defaultdict(set)
+    pair_edges: DefaultDict[tuple, set] = defaultdict(set)
     # Loop through all pairs of memits.
     for x, y in [(x, y) for x in all_memits for y in all_memits]:
         if x == y:
