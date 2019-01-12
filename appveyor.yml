@@ -2,6 +2,7 @@ environment:
   matrix:
     - PYTHON: "C:\\Python35"
     - PYTHON: "C:\\Python36"
+    - PYTHON: "C:\\Python37"
 install:
   - "%PYTHON%\\python.exe --version"
   - "%PYTHON%\\python.exe -m pip install -r requirements.txt"

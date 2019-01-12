@@ -23,7 +23,7 @@ setup(
     packages=["axelrod", "axelrod.strategies", "axelrod.data"],
     url="http://axelrod.readthedocs.org/",
     license="The MIT License (MIT)",
-    description="Reproduce the Axelrod iterated prisoners dilemma tournament",
+    description="Axelrod game theory library for the iterated prisoners dilemma",
     long_description=long_description,
     long_description_content_type="text/x-rst",
     include_package_data=True,
@@ -31,6 +31,7 @@ setup(
     classifiers=[
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3 :: Only",
     ],
     python_requires=">=3.5",
