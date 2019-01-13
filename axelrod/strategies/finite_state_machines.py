@@ -1,6 +1,6 @@
 from axelrod.action import Action
 from axelrod.player import Player
-from typing import DefaultDict, Iterator
+from typing import DefaultDict, Iterator, Dict, Tuple, Set
 from collections import defaultdict, namedtuple
 
 C, D = Action.C, Action.D
@@ -31,10 +31,10 @@ Has the memits:
 """
 Memit = namedtuple("Memit", ["in_act", "state", "out_act"])
 
-def memits_match(x, y):
+def memits_match(x: Memit, y: Memit):
     """In action and out actions are the same."""
     return x.in_act == y.in_act and x.out_act == y.out_act
-def memit_sort(x, y):
+def memit_sort(x: Memit, y: Memit):
     """Returns a tuple of x in y, sorted so that (x, y) are viewed as the
     same as (y, x).
     """
@@ -44,7 +44,10 @@ def memit_sort(x, y):
         return (y, x)
 
 
-def get_accessible_transitions(transitions: dict, initial_state: int) -> dict:
+TransitionDict = Dict[Tuple[int, Action], Tuple[int, Action]]
+
+def get_accessible_transitions(transitions: TransitionDict,
+                               initial_state: int) -> TransitionDict:
   """Gets all transitions from the list that can be reached from the
   initial_state.
   """
@@ -73,7 +76,10 @@ def get_accessible_transitions(transitions: dict, initial_state: int) -> dict:
   return accessible_transitions
 
 
-def longest_path(edges: dict, starting_at: Memit) -> int:
+MemitPair = Tuple[Memit, Memit]
+
+def longest_path(edges: Dict[MemitPair, Set[MemitPair]],
+                 starting_at: MemitPair) -> int:
     """Returns the number of nodes in the longest path that starts at the given
     node.  Returns infinity if a loop is encountered.
     """
@@ -102,7 +108,7 @@ def longest_path(edges: dict, starting_at: Memit) -> int:
 
 Transition = namedtuple("Transition", ["state", "last_opponent_action",
                                        "next_state", "next_action"])
-def transition_iterator(transitions: dict) -> Iterator[Transition]:
+def transition_iterator(transitions: TransitionDict) -> Iterator[Transition]:
     """Changes the transition dictionary into a iterator on namedtuples, because
     we use repeatedly.
     """
@@ -110,7 +116,7 @@ def transition_iterator(transitions: dict) -> Iterator[Transition]:
         yield Transition(k[0], k[1], v[0], v[1])
 
 
-def get_memory_from_transitions(transitions: dict,
+def get_memory_from_transitions(transitions: TransitionDict,
                                 initial_state: int = None) -> int:
     """This function calculates the memory of an FSM from the transitions.
 
@@ -140,13 +146,13 @@ def get_memory_from_transitions(transitions: dict,
         transitions = get_accessible_transitions(transitions, initial_state)
 
     # Get the incoming actions for each state.
-    incoming_action_by_state: DefaultDict[int, set] = defaultdict(set)
+    incoming_action_by_state: DefaultDict[int, Set[Action]] = defaultdict(set)
     for trans in transition_iterator(transitions):
         incoming_action_by_state[trans.next_state].add(trans.next_action)
 
     # Keys are starting memit, and values are all possible terminal memit.
     # Will walk backwards through the graph.
-    memit_edges: DefaultDict[Memit, set] = defaultdict(set)
+    memit_edges: DefaultDict[Memit, Set[Memit]] = defaultdict(set)
     for trans in transition_iterator(transitions):
         # Since all actions are out-paths for each state, add all of these.
         # That is to say that your opponent could do anything
@@ -161,10 +167,10 @@ def get_memory_from_transitions(transitions: dict,
                                     trans.last_opponent_action)
                 memit_edges[starting_node].add(ending_node)
 
-    all_memits = memit_edges.keys()
+    all_memits: List[Memit] = memit_edges.keys()
 
-    pair_nodes = set()
-    pair_edges: DefaultDict[tuple, set] = defaultdict(set)
+    pair_nodes: Set[MemitPair] = set()
+    pair_edges: DefaultDict[MemitPair, Set[MemitPair]] = defaultdict(set)
     # Loop through all pairs of memits.
     for x, y in [(x, y) for x in all_memits for y in all_memits]:
         if x == y:
@@ -198,7 +204,7 @@ def get_memory_from_transitions(transitions: dict,
 
     # Get next_action for each memit.  Used to decide if they are in conflict,
     # because we only have undecidability if next_action doesn't match.
-    next_action_by_memit = dict()
+    next_action_by_memit: Dict[Memit, Action] = dict()
     for trans in transition_iterator(transitions):
         for in_action in incoming_action_by_state[trans.state]:
             memit_key = Memit(in_action, trans.state,
