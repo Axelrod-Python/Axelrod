@@ -34,6 +34,7 @@ Memit = namedtuple("Memit", ["in_act", "state", "out_act"])
 def memits_match(x: Memit, y: Memit):
     """In action and out actions are the same."""
     return x.in_act == y.in_act and x.out_act == y.out_act
+
 def memit_sort(x: Memit, y: Memit):
     """Returns a tuple of x in y, sorted so that (x, y) are viewed as the
     same as (y, x).
@@ -44,36 +45,57 @@ def memit_sort(x: Memit, y: Memit):
         return (y, x)
 
 
+Transition = namedtuple("Transition", ["state", "last_opponent_action",
+                                       "next_state", "next_action"])
 TransitionDict = Dict[Tuple[int, Action], Tuple[int, Action]]
+
+def transition_iterator(transitions: TransitionDict) -> Iterator[Transition]:
+    """Changes the transition dictionary into a iterator on namedtuples, because
+    we use repeatedly.
+    """
+    for k, v in transitions.items():
+        yield Transition(k[0], k[1], v[0], v[1])
+
 
 def get_accessible_transitions(transitions: TransitionDict,
                                initial_state: int) -> TransitionDict:
-  """Gets all transitions from the list that can be reached from the
-  initial_state.
-  """
-  edge_dict: DefaultDict[int, list] = defaultdict(list)
-  visited = dict()
-  for k, v in transitions.items():
-      visited[k[0]] = False
-      edge_dict[k[0]].append(v[0])
-  accessible_edges = [initial_state]
+    """Gets all transitions from the list that can be reached from the
+    initial_state.
+    """
+    # Initial dict of edges between states and a dict of visited status for each
+    # of the states.
+    edge_dict: DefaultDict[int, List[int]] = defaultdict(list)
+    visited = dict()
+    for trans in transition_iterator(transitions):
+        visited[trans.state] = False
+        edge_dict[trans.state].append(trans.next_state)
+    # Keep track of states that can be accessed.
+    accessible_states = [initial_state]
 
-  edge_queue = [initial_state]
-  visited[initial_state] = True
-  while len(edge_queue) > 0:
-      edge = edge_queue.pop()
-      for successor in edge_dict[edge]:
-          if not visited[successor]:
-              visited[successor] = True
-              edge_queue.append(successor)
-              accessible_edges.append(successor)
+    state_queue = [initial_state]
+    visited[initial_state] = True
+    # While there are states in the queue, visit all its children, adding each
+    # to the accesible_states.  [A basic BFS.]
+    while len(state_queue) > 0:
+        state = state_queue.pop()
+        for successor in edge_dict[state]:
+            # Don't process the same state twice.
+            if not visited[successor]:
+                visited[successor] = True
+                state_queue.append(successor)
+                accessible_states.append(successor)
 
-  accessible_transitions = dict()
-  for k, v in transitions.items():
-      if k[0] in accessible_edges:
-          accessible_transitions[k] = v
+    # Now for each transition in the passed TransitionDict, copy the transition
+    # to accessible_transitions if and only if the starting state is accessible,
+    # as determined above.
+    accessible_transitions = dict()
+    for trans in transition_iterator(transitions):
+        if trans.state in accessible_states:
+            accessible_transitions[(
+                trans.state, trans.last_opponent_action)] = (trans.next_state,
+                                                             trans.next_action)
 
-  return accessible_transitions
+    return accessible_transitions
 
 
 MemitPair = Tuple[Memit, Memit]
@@ -84,10 +106,10 @@ def longest_path(edges: Dict[MemitPair, Set[MemitPair]],
     node.  Returns infinity if a loop is encountered.
     """
     visited = dict()
-    for k, v in edges.items():
-        visited[k] = False
-        for vi in v:
-            visited[vi] = False
+    for source, destinations in edges.items():
+        visited[source] = False
+        for destination in destinations:
+            visited[destination] = False
 
     # This is what we'll recurse on.  visited dict is shared between calls.
     def recurse(at_node):
@@ -104,16 +126,6 @@ def longest_path(edges: Dict[MemitPair, Set[MemitPair]],
         return record
 
     return recurse(starting_at)
-
-
-Transition = namedtuple("Transition", ["state", "last_opponent_action",
-                                       "next_state", "next_action"])
-def transition_iterator(transitions: TransitionDict) -> Iterator[Transition]:
-    """Changes the transition dictionary into a iterator on namedtuples, because
-    we use repeatedly.
-    """
-    for k, v in transitions.items():
-        yield Transition(k[0], k[1], v[0], v[1])
 
 
 def get_memory_from_transitions(transitions: TransitionDict,
@@ -137,7 +149,7 @@ def get_memory_from_transitions(transitions: TransitionDict,
     Then for all memit-pairs that disagree, in the sense that they imply
     different next_action, we find the longest chain starting at that
     memit-pair.  [If a loop is encountered then this will be infinite.]  We take
-    the maximum over all sugh memit-pairs.  This represents the longest possible
+    the maximum over all such memit-pairs.  This represents the longest possible
     chain of memory for which we wouldn't know what to do next.  We return this.
     """
     # If initial_state is set, use this to determine which transitions are
@@ -752,7 +764,7 @@ class EvolvedFSM16(FSMPlayer):
 
     name = "Evolved FSM 16"
     classifier = {
-        "memory_depth": float("inf"),  # At most
+        "memory_depth": float("inf"),
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -808,7 +820,7 @@ class EvolvedFSM16Noise05(FSMPlayer):
 
     name = "Evolved FSM 16 Noise 05"
     classifier = {
-        "memory_depth": float("inf"),  # At most
+        "memory_depth": float("inf"),
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,

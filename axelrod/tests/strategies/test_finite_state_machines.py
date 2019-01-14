@@ -103,6 +103,32 @@ class TestGetMemoryFromTransitions(unittest.TestCase):
                       for current_state, input_action, next_state, output_action in transitions}
         self.assertEqual(get_memory_from_transitions(trans_dict), 2)
 
+    def test_tit_for_two_tat(self):
+        """This strategy does the same thing until the opponent does the same
+        action twice; then it responds in kind.  In the FSM implementation, we
+        let states 1 and 2 be the cooperating states, with state 2 being the
+        state after one opponent defection.  And states 3 and 4 are the
+        defecting states, with state 4 after 1 opponent cooperation.
+
+        The memory should be two, because if the last two moves don't match,
+        then we can look to see what we did in the last move.  If the do match,
+        then we can respond in kind.
+        """
+        transitions = (
+            (1, C, 1, C),
+            (1, D, 2, C),
+            (2, C, 1, C),
+            (2, D, 3, D),
+            (3, C, 4, D),
+            (3, D, 3, D),
+            (4, C, 1, C),
+            (4, D, 3, D),
+        )
+
+        trans_dict = {(current_state, input_action): (next_state, output_action)
+                      for current_state, input_action, next_state, output_action in transitions}
+        self.assertEqual(get_memory_from_transitions(trans_dict), 2)
+
     def test_fortress_3(self):
         """Tests Fortress-3, which Defects unless the opponent D twice in a row.
         In that case C, and continue to C for as long as the opponent does.
