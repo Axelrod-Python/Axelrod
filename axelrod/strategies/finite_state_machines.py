@@ -64,7 +64,7 @@ def get_accessible_transitions(transitions: TransitionDict,
     """
     # Initial dict of edges between states and a dict of visited status for each
     # of the states.
-    edge_dict: DefaultDict[int, List[int]] = defaultdict(list)
+    edge_dict = defaultdict(list)  # type: DefaultDict[int, List[int]]
     visited = dict()
     for trans in transition_iterator(transitions):
         visited[trans.state] = False
@@ -158,13 +158,13 @@ def get_memory_from_transitions(transitions: TransitionDict,
         transitions = get_accessible_transitions(transitions, initial_state)
 
     # Get the incoming actions for each state.
-    incoming_action_by_state: DefaultDict[int, Set[Action]] = defaultdict(set)
+    incoming_action_by_state = defaultdict(set)  # type: DefaultDict[int, Set[Action]]
     for trans in transition_iterator(transitions):
         incoming_action_by_state[trans.next_state].add(trans.next_action)
 
     # Keys are starting memit, and values are all possible terminal memit.
     # Will walk backwards through the graph.
-    memit_edges: DefaultDict[Memit, Set[Memit]] = defaultdict(set)
+    memit_edges = defaultdict(set)  # type: DefaultDict[Memit, Set[Memit]]
     for trans in transition_iterator(transitions):
         # Since all actions are out-paths for each state, add all of these.
         # That is to say that your opponent could do anything
@@ -182,7 +182,7 @@ def get_memory_from_transitions(transitions: TransitionDict,
     all_memits: List[Memit] = [x for x in memit_edges.keys()]
 
     pair_nodes: Set[MemitPair] = set()
-    pair_edges: DefaultDict[MemitPair, Set[MemitPair]] = defaultdict(set)
+    pair_edges = defaultdict(set)  # type: DefaultDict[Memit, Set[MemitPair]]
     # Loop through all pairs of memits.
     for x, y in [(x, y) for x in all_memits for y in all_memits]:
         if x == y:

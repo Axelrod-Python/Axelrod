@@ -129,6 +129,36 @@ class TestGetMemoryFromTransitions(unittest.TestCase):
                       for current_state, input_action, next_state, output_action in transitions}
         self.assertEqual(get_memory_from_transitions(trans_dict), 2)
 
+    def test_tit_for_five_tat(self):
+        """Analogous to tit for two tat above.
+        """
+        transitions = (
+            (1, C, 1, C),
+            (1, D, 2, C),
+            (2, C, 1, C),
+            (2, D, 3, C),
+            (3, C, 1, C),
+            (3, D, 4, C),
+            (4, C, 1, C),
+            (4, D, 5, C),
+            (5, C, 1, C),
+            (5, D, 6, D),
+            (6, C, 6, D),
+            (6, D, 7, D),
+            (7, C, 6, D),
+            (7, D, 8, D),
+            (8, C, 6, D),
+            (8, D, 9, D),
+            (9, C, 6, D),
+            (9, D, 10, D),
+            (10, C, 6, D),
+            (10, D, 1, C),
+        )
+
+        trans_dict = {(current_state, input_action): (next_state, output_action)
+                      for current_state, input_action, next_state, output_action in transitions}
+        self.assertEqual(get_memory_from_transitions(trans_dict), 5)
+
     def test_fortress_3(self):
         """Tests Fortress-3, which Defects unless the opponent D twice in a row.
         In that case C, and continue to C for as long as the opponent does.
