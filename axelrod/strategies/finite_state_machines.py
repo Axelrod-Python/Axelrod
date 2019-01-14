@@ -1,6 +1,6 @@
 from axelrod.action import Action
 from axelrod.player import Player
-from typing import DefaultDict, Iterator, Dict, Tuple, Set
+from typing import DefaultDict, Iterator, Dict, Tuple, Set, List
 from collections import defaultdict, namedtuple
 
 C, D = Action.C, Action.D
@@ -179,7 +179,7 @@ def get_memory_from_transitions(transitions: TransitionDict,
                                     trans.last_opponent_action)
                 memit_edges[starting_node].add(ending_node)
 
-    all_memits: List[Memit] = memit_edges.keys()
+    all_memits: List[Memit] = [x for x in memit_edges.keys()]
 
     pair_nodes: Set[MemitPair] = set()
     pair_edges: DefaultDict[MemitPair, Set[MemitPair]] = defaultdict(set)
