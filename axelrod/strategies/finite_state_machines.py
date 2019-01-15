@@ -179,7 +179,7 @@ def get_memory_from_transitions(transitions: TransitionDict,
                                     trans.last_opponent_action)
                 memit_edges[starting_node].add(ending_node)
 
-    all_memits: List[Memit] = [x for x in memit_edges.keys()]
+    all_memits = [x for x in memit_edges.keys()]
 
     pair_nodes: Set[MemitPair] = set()
     pair_edges = defaultdict(set)  # type: DefaultDict[Memit, Set[MemitPair]]
