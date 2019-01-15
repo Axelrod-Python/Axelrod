@@ -181,7 +181,7 @@ def get_memory_from_transitions(transitions: TransitionDict,
 
     all_memits = [x for x in memit_edges.keys()]
 
-    pair_nodes: Set[MemitPair] = set()
+    pair_nodes = set()
     pair_edges = defaultdict(set)  # type: DefaultDict[Memit, Set[MemitPair]]
     # Loop through all pairs of memits.
     for x, y in [(x, y) for x in all_memits for y in all_memits]:
@@ -216,7 +216,7 @@ def get_memory_from_transitions(transitions: TransitionDict,
 
     # Get next_action for each memit.  Used to decide if they are in conflict,
     # because we only have undecidability if next_action doesn't match.
-    next_action_by_memit: Dict[Memit, Action] = dict()
+    next_action_by_memit = dict()
     for trans in transition_iterator(transitions):
         for in_action in incoming_action_by_state[trans.state]:
             memit_key = Memit(in_action, trans.state,
