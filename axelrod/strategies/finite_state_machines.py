@@ -100,7 +100,7 @@ def get_accessible_transitions(transitions: TransitionDict,
 
 MemitPair = Tuple[Memit, Memit]
 
-def longest_path(edges: Dict[MemitPair, Set[MemitPair]],
+def longest_path(edges: DefaultDict[MemitPair, Set[MemitPair]],
                  starting_at: MemitPair) -> int:
     """Returns the number of nodes in the longest path that starts at the given
     node.  Returns infinity if a loop is encountered.
@@ -182,7 +182,7 @@ def get_memory_from_transitions(transitions: TransitionDict,
     all_memits = [x for x in memit_edges.keys()]
 
     pair_nodes = set()
-    pair_edges = defaultdict(set)  # type: DefaultDict[Memit, Set[MemitPair]]
+    pair_edges = defaultdict(set)  # type: DefaultDict[MemitPair, Set[MemitPair]]
     # Loop through all pairs of memits.
     for x, y in [(x, y) for x in all_memits for y in all_memits]:
         if x == y:
