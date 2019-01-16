@@ -128,7 +128,8 @@ def longest_path(edges: DefaultDict[MemitPair, Set[MemitPair]],
 
 def get_memory_from_transitions(transitions: TransitionDict,
                                 initial_state: int = None,
-                                all_actions: Tuple[Action] = (C, D)) -> int:
+                                all_actions: Tuple[Action, Action] = (C, D)
+                               ) -> int:
     """This function calculates the memory of an FSM from the transitions.
 
     Assume that transitions are a dict with entries like
