@@ -586,6 +586,13 @@ class TestFSMPlayer(TestPlayer):
             opponent, expected_actions=actions, init_kwargs={"transitions": transitions}
         )
 
+    def test_memory(self):
+        """
+        Test the memory depth using implemented algorithm
+        """
+        transitions = self.player().fsm._state_transitions
+        self.assertEqual(get_memory_from_transitions(transitions), self.expected_classifier["memory_depth"])
+
 
 class TestFortress3(TestFSMPlayer):
 
