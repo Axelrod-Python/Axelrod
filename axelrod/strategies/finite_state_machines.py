@@ -1,10 +1,9 @@
 from axelrod.action import Action
 from axelrod.player import Player
-from typing import DefaultDict, Iterator, Dict, Tuple, Set, List
 from collections import defaultdict, namedtuple
+from typing import DefaultDict, Iterator, Dict, Tuple, Set, List
 
 C, D = Action.C, Action.D
-ALL_ACTIONS = [C, D]
 
 
 """
@@ -15,7 +14,7 @@ history.  It includes a state, our_response that we make on our way into that
 state (in_act), and the opponent's action that makes us move out of that state
 (out_act).
 
-For example for this FSM:
+For example, for this finite state machine:
 (0, C, 0, C),
 (0, D, 1, C),
 (1, C, 0, D),
@@ -29,6 +28,7 @@ Has the memits:
 (C, 1, C),
 (C, 1, D)
 """
+
 Memit = namedtuple("Memit", ["in_act", "state", "out_act"])
 
 def memits_match(x: Memit, y: Memit):
@@ -50,9 +50,7 @@ Transition = namedtuple("Transition", ["state", "last_opponent_action",
 TransitionDict = Dict[Tuple[int, Action], Tuple[int, Action]]
 
 def transition_iterator(transitions: TransitionDict) -> Iterator[Transition]:
-    """Changes the transition dictionary into a iterator on namedtuples, because
-    we use repeatedly.
-    """
+    """Changes the transition dictionary into a iterator on namedtuples."""
     for k, v in transitions.items():
         yield Transition(k[0], k[1], v[0], v[1])
 
@@ -75,7 +73,7 @@ def get_accessible_transitions(transitions: TransitionDict,
     state_queue = [initial_state]
     visited[initial_state] = True
     # While there are states in the queue, visit all its children, adding each
-    # to the accesible_states.  [A basic BFS.]
+    # to the accesible_states.  [A basic breadth-first search.]
     while len(state_queue) > 0:
         state = state_queue.pop()
         for successor in edge_dict[state]:
@@ -129,7 +127,8 @@ def longest_path(edges: DefaultDict[MemitPair, Set[MemitPair]],
 
 
 def get_memory_from_transitions(transitions: TransitionDict,
-                                initial_state: int = None) -> int:
+                                initial_state: int = None,
+                                all_actions: Tuple[Action] = (C, D)) -> int:
     """This function calculates the memory of an FSM from the transitions.
 
     Assume that transitions are a dict with entries like
@@ -141,8 +140,8 @@ def get_memory_from_transitions(transitions: TransitionDict,
 
     Then we pair up memits with different states, but same in and out actions.
     These represent points in time that we can't determine which state we're in.
-    We also create a graph of memit-pairs, where memit-pair, Y, succedes a
-    memit-pair, X, if the two memits in X are succeded by the two memits in Y.
+    We also create a graph of memit-pairs, where memit-pair, Y, succeeds a
+    memit-pair, X, if the two memits in X are succeeded by the two memits in Y.
     These edges reperesent consecutive points in time that we can't determine
     which state we're in.
 
@@ -167,8 +166,8 @@ def get_memory_from_transitions(transitions: TransitionDict,
     memit_edges = defaultdict(set)  # type: DefaultDict[Memit, Set[Memit]]
     for trans in transition_iterator(transitions):
         # Since all actions are out-paths for each state, add all of these.
-        # That is to say that your opponent could do anything
-        for out_action in ALL_ACTIONS:
+        # That is to say that the opponent could do anything
+        for out_action in all_actions:
             # More recent in action history
             starting_node = Memit(trans.next_action, trans.next_state,
                                   out_action)
