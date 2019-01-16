@@ -228,7 +228,7 @@ class Graaskamp(Player):
 
     name = "Graaskamp"
     classifier = {
-        "memory_depth": 1,
+        "memory_depth": float("inf"),
         "stochastic": True,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -269,7 +269,7 @@ class Graaskamp(Player):
 
             if self.opponent_is_random:
                 return D
-            elif all(opponent.history[i] == self.history[i - 1] for i in range(1, len(self.history + 1))):
+            elif all(opponent.history[i] == self.history[i - 1] for i in range(1, len(self.history))):
                 # Check if opponent plays Tit for Tat
                     if opponent.history[-1] == D:
                         return D
@@ -278,7 +278,7 @@ class Graaskamp(Player):
             if len(self.history) == self.next_random_defection_turn:
                 self.next_random_defection_turn = random.randint(5, 15) + len(self.history)  # resample the next defection turn
                 return D
-            return C
+        return C
 
 
 class Grofman(Player):
