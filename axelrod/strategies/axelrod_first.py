@@ -253,10 +253,9 @@ class Graaskamp(Player):
     def strategy(self, opponent: Player) -> Action:
         """This is the actual strategy"""
         # First move
-        # Cooperate in first round as in Tit for Tat strategy
         if not self.history:
             return C
-        # Copy opponent's last move as in Tit for Tat strategy
+        # React to the opponent's last move
         if len(self.history) <= 56:
             if opponent.history[-1] == D or len(self.history) == 51:
                 return D
