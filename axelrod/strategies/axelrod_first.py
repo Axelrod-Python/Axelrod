@@ -211,10 +211,6 @@ class Graaskamp(Player):
 
     This is one of the strategies from Robert Axelrod's first tournament and is described in the literature as:
 
-    This strategy came 9th in Axelrod’s original tournament.
-
-    This strategy follows the following rules:
-
     1. Plays Tit For Tat for the first 50 rounds;
     2. Defects on round 51;
     3. Plays 5 further rounds of Tit For Tat;
@@ -223,6 +219,8 @@ class Graaskamp(Player):
     5. The strategy also checks to see if the opponent is playing Tit For Tat or another strategy from a preliminary
        tournament called ‘Analogy’ (There is no information about 'Analogy' tournament. Step 5 is not implemented fully.)
        If so it plays Tit For Tat. If not it cooperates and randomly defects every 5 to 15 moves.
+
+    This strategy came 9th in Axelrod’s original tournament.
 
     Names:
 
