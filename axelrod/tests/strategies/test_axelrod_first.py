@@ -149,7 +149,7 @@ class TestGraaskamp(TestPlayer):
     name = "Graaskamp"
     player = axelrod.Graaskamp
     expected_classifier = {
-        'memory_depth': 57,
+        'memory_depth': float("inf"),
         'stochastic': True,
         'makes_use_of': set(),
         'inspects_source': False,
@@ -159,6 +159,12 @@ class TestGraaskamp(TestPlayer):
 
     def test_strategy(self):
         # Play against opponents
+        actions = [(C, D), (D, C), (C, C), (C, C), (C, D), (D, D)]
+        self.versus_test(axelrod.Random(), expected_actions=actions, seed=0)
+
+        actions = [(C, C), (C, C), (C, D), (D, C), (C, D), (D, D)]
+        self.versus_test(axelrod.Random(), expected_actions=actions, seed=1)
+
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
         self.versus_test(axelrod.Alternator(), expected_actions=actions)
 
