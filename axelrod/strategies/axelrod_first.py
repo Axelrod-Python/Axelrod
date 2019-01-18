@@ -268,7 +268,7 @@ class Graaskamp(Player):
 
             if self.opponent_is_random:
                 return D
-            elif all(opponent.history[i] == self.history[i - 1] for i in range(1, len(self.history))):
+            if all(opponent.history[i] == self.history[i - 1] for i in range(1, len(self.history))):
                 # Check if opponent plays Tit for Tat
                     if opponent.history[-1] == D:
                         return D
