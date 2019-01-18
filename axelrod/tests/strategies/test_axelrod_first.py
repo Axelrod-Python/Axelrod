@@ -168,6 +168,12 @@ class TestGraaskamp(TestPlayer):
         actions = [(C, D), (D, D) * 49, (D, D) * 6]
         self.versus_test(axelrod.Defector(), expected_actions=actions)
 
+        actions = [(C, C) * 50, (D, C), (C, C) * 5]
+        self.versus_test(axelrod.Grumpy(), expected_actions=actions)
+
+        actions = [(C, C) * 50, (D, C), (C, D) * 5]
+        self.versus_test(axelrod.Grudger(), expected_actions=actions)
+
 
 class TestGrofman(TestPlayer):
 
