@@ -262,22 +262,24 @@ class Graaskamp(Player):
                 return D
             return C
 
-        if len(self.history) >= 57:
-            # Check if opponent plays randomly, if so, defect
-            p_value = chisquare([opponent.cooperations, opponent.defections]).pvalue
-            self.opponent_is_random = (p_value >= self.alpha) or self.opponent_is_random
+        # Check if opponent plays randomly, if so, defect
+        p_value = chisquare([opponent.cooperations, opponent.defections]).pvalue
+        self.opponent_is_random = (p_value >= self.alpha) or self.opponent_is_random
 
-            if self.opponent_is_random:
-                return D
-            if all(opponent.history[i] == self.history[i - 1] for i in range(1, len(self.history))):
-                # Check if opponent plays Tit for Tat
-                    if opponent.history[-1] == D:
-                        return D
-                    return C
+        if self.opponent_is_random:
+            return D
+        if all(opponent.history[i] == self.history[i - 1] for i in range(1, len(self.history))):
+            # Check if opponent plays Tit for Tat
+                if opponent.history[-1] == D:
+                    return D
+                return C
 
-            if len(self.history) == self.next_random_defection_turn:
-                self.next_random_defection_turn = random.randint(5, 15) + len(self.history)  # resample the next defection turn
-                return D
+        if self.next_random_defection_turn is None:
+            self.next_random_defection_turn = random.randint(5, 15) + len(self.history)
+
+        if len(self.history) == self.next_random_defection_turn:
+            self.next_random_defection_turn = random.randint(5, 15) + len(self.history)  # resample the next defection turn
+            return D
         return C
 
 
