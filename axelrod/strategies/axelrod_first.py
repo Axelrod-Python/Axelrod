@@ -262,7 +262,7 @@ class Graaskamp(Player):
                 return D
             return C
 
-        # Check if opponent plays randomly, if so, defect
+        # Check if opponent plays randomly, if so, defect for the rest of the game
         p_value = chisquare([opponent.cooperations, opponent.defections]).pvalue
         self.opponent_is_random = (p_value >= self.alpha) or self.opponent_is_random
 
