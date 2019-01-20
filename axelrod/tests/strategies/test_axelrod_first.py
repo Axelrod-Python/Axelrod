@@ -140,7 +140,7 @@ class TestFeld(TestPlayer):
 
 class TestGraaskamp(TestPlayer):
 
-    name = "Graaskamp"
+    name = "Graaskamp: 0.05"
     player = axelrod.Graaskamp
     expected_classifier = {
         'memory_depth': float("inf"),
