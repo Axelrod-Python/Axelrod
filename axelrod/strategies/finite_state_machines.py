@@ -5,49 +5,65 @@ from typing import DefaultDict, Iterator, Dict, Tuple, Set, List
 
 C, D = Action.C, Action.D
 
+MemitPair = Tuple[Memit, Memit]
+Transition = namedtuple(
+    "Transition", ["state", "last_opponent_action", "next_state", "next_action"]
+)
+TransitionDict = Dict[Tuple[int, Action], Tuple[int, Action]]
 
-"""
-Memit = unit of memory.
 
-This represents the amount of memory that we gain with each new piece of
-history.  It includes a state, our_response that we make on our way into that
-state (in_act), and the opponent's action that makes us move out of that state
-(out_act).
+class Memit(object):
+    """
+    Memit = unit of memory.
 
-For example, for this finite state machine:
-(0, C, 0, C),
-(0, D, 1, C),
-(1, C, 0, D),
-(1, D, 0, D)
+    This represents the amount of memory that we gain with each new piece of
+    history.  It includes a state, our_response that we make on our way into that
+    state (in_act), and the opponent's action that makes us move out of that state
+    (out_act).
 
-Has the memits:
-(C, 0, C),
-(C, 0, D),
-(D, 0, C),
-(D, 0, D),
-(C, 1, C),
-(C, 1, D)
-"""
+    For example, for this finite state machine:
+    (0, C, 0, C),
+    (0, D, 1, C),
+    (1, C, 0, D),
+    (1, D, 0, D)
 
-Memit = namedtuple("Memit", ["in_act", "state", "out_act"])
+    Has the memits:
+    (C, 0, C),
+    (C, 0, D),
+    (D, 0, C),
+    (D, 0, D),
+    (C, 1, C),
+    (C, 1, D)
+    """
 
-def memits_match(x: Memit, y: Memit):
-    """In action and out actions are the same."""
-    return x.in_act == y.in_act and x.out_act == y.out_act
+    def __init__(self, in_act: Action, state: int, out_act: Action):
+        self.in_act = in_act
+        self.state = state
+        self.out_act = out_act
 
-def memit_sort(x: Memit, y: Memit):
+    def __repr__(self):
+        return "{}, {}, {}".format(self.in_act, self.state, self.out)
+
+    def __eq__(self, other_memit: Memit):
+        """In action and out actions are the same."""
+        return (
+            self.in_act == other_memit.in_act
+            and self.out_act == other_memit.out_act
+        )
+
+    def __leq__(self, other_memit: Memit):
+        return repr(self) <= repr(other_memit)
+
+
+def OrderedMemitPair(x: Memit, y: Memit):
     """Returns a tuple of x in y, sorted so that (x, y) are viewed as the
     same as (y, x).
     """
-    if repr(x) <= repr(y):
+    if x <= y:
         return (x, y)
     else:
         return (y, x)
 
-
-Transition = namedtuple("Transition", ["state", "last_opponent_action",
-                                       "next_state", "next_action"])
-TransitionDict = Dict[Tuple[int, Action], Tuple[int, Action]]
 
 def transition_iterator(transitions: TransitionDict) -> Iterator[Transition]:
     """Changes the transition dictionary into a iterator on namedtuples."""
@@ -55,8 +71,9 @@ def transition_iterator(transitions: TransitionDict) -> Iterator[Transition]:
         yield Transition(k[0], k[1], v[0], v[1])
 
 
-def get_accessible_transitions(transitions: TransitionDict,
-                               initial_state: int) -> TransitionDict:
+def get_accessible_transitions(
+    transitions: TransitionDict, initial_state: int
+) -> TransitionDict:
     """Gets all transitions from the list that can be reached from the
     initial_state.
     """
@@ -89,17 +106,16 @@ def get_accessible_transitions(transitions: TransitionDict,
     accessible_transitions = dict()
     for trans in transition_iterator(transitions):
         if trans.state in accessible_states:
-            accessible_transitions[(
-                trans.state, trans.last_opponent_action)] = (trans.next_state,
-                                                             trans.next_action)
+            accessible_transitions[
+                (trans.state, trans.last_opponent_action)
+            ] = (trans.next_state, trans.next_action)
 
     return accessible_transitions
 
 
-MemitPair = Tuple[Memit, Memit]
-
-def longest_path(edges: DefaultDict[MemitPair, Set[MemitPair]],
-                 starting_at: MemitPair) -> int:
+def longest_path(
+    edges: DefaultDict[MemitPair, Set[MemitPair]], starting_at: MemitPair
+) -> int:
     """Returns the number of nodes in the longest path that starts at the given
     node.  Returns infinity if a loop is encountered.
     """
@@ -126,10 +142,11 @@ def longest_path(edges: DefaultDict[MemitPair, Set[MemitPair]],
     return recurse(starting_at)
 
 
-def get_memory_from_transitions(transitions: TransitionDict,
-                                initial_state: int = None,
-                                all_actions: Tuple[Action, Action] = (C, D)
-                               ) -> int:
+def get_memory_from_transitions(
+    transitions: TransitionDict,
+    initial_state: int = None,
+    all_actions: Tuple[Action, Action] = (C, D),
+) -> int:
     """This function calculates the memory of an FSM from the transitions.
 
     Assume that transitions are a dict with entries like
@@ -158,7 +175,9 @@ def get_memory_from_transitions(transitions: TransitionDict,
         transitions = get_accessible_transitions(transitions, initial_state)
 
     # Get the incoming actions for each state.
-    incoming_action_by_state = defaultdict(set)  # type: DefaultDict[int, Set[Action]]
+    incoming_action_by_state = defaultdict(
+        set
+    )  # type: DefaultDict[int, Set[Action]]
     for trans in transition_iterator(transitions):
         incoming_action_by_state[trans.next_state].add(trans.next_action)
 
@@ -170,24 +189,28 @@ def get_memory_from_transitions(transitions: TransitionDict,
         # That is to say that the opponent could do anything
         for out_action in all_actions:
             # More recent in action history
-            starting_node = Memit(trans.next_action, trans.next_state,
-                                  out_action)
+            starting_node = Memit(
+                trans.next_action, trans.next_state, out_action
+            )
             # All incoming paths to current state
             for in_action in incoming_action_by_state[trans.state]:
                 # Less recent in action history
-                ending_node = Memit(in_action, trans.state,
-                                    trans.last_opponent_action)
+                ending_node = Memit(
+                    in_action, trans.state, trans.last_opponent_action
+                )
                 memit_edges[starting_node].add(ending_node)
 
-    all_memits = [x for x in memit_edges.keys()]
+    all_memits = list(memit_edges.keys())
 
     pair_nodes = set()
-    pair_edges = defaultdict(set)  # type: DefaultDict[MemitPair, Set[MemitPair]]
+    pair_edges = defaultdict(
+        set
+    )  # type: DefaultDict[MemitPair, Set[MemitPair]]
     # Loop through all pairs of memits.
     for x, y in [(x, y) for x in all_memits for y in all_memits]:
-        if x == y:
+        if x == y and x.state == y.state:
             continue
-        if not memits_match(x, y):
+        if x != y:
             continue
 
         # If the memits match, then the strategy can't tell the difference
@@ -199,9 +222,10 @@ def get_memory_from_transitions(transitions: TransitionDict,
         # that we can't tell which state we're in.
         for x_successor in memit_edges[x]:
             for y_successor in memit_edges[y]:
-                if memits_match(x_successor, y_successor):
-                    pair_edges[memit_sort(x, y)].add(memit_sort(x_successor,
-                                                                y_successor))
+                if x_successor == y_successor:
+                    pair_edges[OrderedMemitPair(x, y)].add(
+                        OrderedMemitPair(x_successor, y_successor)
+                    )
 
     if len(pair_nodes) == 0:
         # If there are no pair of tied memits, then either no memits are needed
@@ -219,8 +243,9 @@ def get_memory_from_transitions(transitions: TransitionDict,
     next_action_by_memit = dict()
     for trans in transition_iterator(transitions):
         for in_action in incoming_action_by_state[trans.state]:
-            memit_key = Memit(in_action, trans.state,
-                              trans.last_opponent_action)
+            memit_key = Memit(
+                in_action, trans.state, trans.last_opponent_action
+            )
             next_action_by_memit[memit_key] = trans.next_action
 
     # Calculate the longest path.
@@ -261,7 +286,9 @@ class SimpleFSM(object):
         self._raise_error_for_bad_input()
 
     def _raise_error_for_bad_input(self):
-        callable_states = set(pair[0] for pair in self._state_transitions.values())
+        callable_states = set(
+            pair[0] for pair in self._state_transitions.values()
+        )
         callable_states.add(self._state)
         for state in callable_states:
             self._raise_error_for_bad_state(state)
@@ -374,7 +401,9 @@ class Fortress3(FSMPlayer):
             (3, D, 1, D),
         )
 
-        super().__init__(transitions=transitions, initial_state=1, initial_action=D)
+        super().__init__(
+            transitions=transitions, initial_state=1, initial_action=D
+        )
 
 
 class Fortress4(FSMPlayer):
@@ -413,7 +442,9 @@ class Fortress4(FSMPlayer):
             (4, D, 1, D),
         )
 
-        super().__init__(transitions=transitions, initial_state=1, initial_action=D)
+        super().__init__(
+            transitions=transitions, initial_state=1, initial_action=D
+        )
 
 
 class Predator(FSMPlayer):
@@ -459,7 +490,9 @@ class Predator(FSMPlayer):
             (8, D, 6, D),
         )
 
-        super().__init__(transitions=transitions, initial_state=0, initial_action=C)
+        super().__init__(
+            transitions=transitions, initial_state=0, initial_action=C
+        )
 
 
 class Pun1(FSMPlayer):
@@ -484,7 +517,9 @@ class Pun1(FSMPlayer):
     def __init__(self) -> None:
         transitions = ((1, C, 2, C), (1, D, 2, C), (2, C, 1, C), (2, D, 1, D))
 
-        super().__init__(transitions=transitions, initial_state=1, initial_action=D)
+        super().__init__(
+            transitions=transitions, initial_state=1, initial_action=D
+        )
 
 
 class Raider(FSMPlayer):
@@ -520,7 +555,9 @@ class Raider(FSMPlayer):
             (3, D, 1, C),
         )
 
-        super().__init__(transitions=transitions, initial_state=0, initial_action=D)
+        super().__init__(
+            transitions=transitions, initial_state=0, initial_action=D
+        )
 
 
 class Ripoff(FSMPlayer):
@@ -553,7 +590,9 @@ class Ripoff(FSMPlayer):
             (3, D, 3, D),
         )
 
-        super().__init__(transitions=transitions, initial_state=1, initial_action=D)
+        super().__init__(
+            transitions=transitions, initial_state=1, initial_action=D
+        )
 
 
 class UsuallyCooperates(FSMPlayer):
@@ -577,14 +616,11 @@ class UsuallyCooperates(FSMPlayer):
     }
 
     def __init__(self) -> None:
-        transitions = (
-            (1, C, 1, C),
-            (1, D, 2, C),
-            (2, C, 1, D),
-            (2, D, 1, C),
-        )
+        transitions = ((1, C, 1, C), (1, D, 2, C), (2, C, 1, D), (2, D, 1, C))
 
-        super().__init__(transitions=transitions, initial_state=1, initial_action=C)
+        super().__init__(
+            transitions=transitions, initial_state=1, initial_action=C
+        )
 
 
 class UsuallyDefects(FSMPlayer):
@@ -608,14 +644,11 @@ class UsuallyDefects(FSMPlayer):
     }
 
     def __init__(self) -> None:
-        transitions = (
-            (1, C, 2, D),
-            (1, D, 1, D),
-            (2, C, 1, D),
-            (2, D, 1, C),
-        )
+        transitions = ((1, C, 2, D), (1, D, 1, D), (2, C, 1, D), (2, D, 1, C))
 
-        super().__init__(transitions=transitions, initial_state=1, initial_action=D)
+        super().__init__(
+            transitions=transitions, initial_state=1, initial_action=D
+        )
 
 
 class SolutionB1(FSMPlayer):
@@ -648,7 +681,9 @@ class SolutionB1(FSMPlayer):
             (3, D, 3, C),
         )
 
-        super().__init__(transitions=transitions, initial_state=1, initial_action=D)
+        super().__init__(
+            transitions=transitions, initial_state=1, initial_action=D
+        )
 
 
 class SolutionB5(FSMPlayer):
@@ -688,7 +723,9 @@ class SolutionB5(FSMPlayer):
             (6, D, 5, D),
         )
 
-        super().__init__(transitions=transitions, initial_state=1, initial_action=D)
+        super().__init__(
+            transitions=transitions, initial_state=1, initial_action=D
+        )
 
 
 class Thumper(FSMPlayer):
@@ -714,7 +751,9 @@ class Thumper(FSMPlayer):
     def __init__(self) -> None:
         transitions = ((1, C, 1, C), (1, D, 2, D), (2, C, 1, D), (2, D, 1, D))
 
-        super().__init__(transitions=transitions, initial_state=1, initial_action=C)
+        super().__init__(
+            transitions=transitions, initial_state=1, initial_action=C
+        )
 
 
 class EvolvedFSM4(FSMPlayer):
@@ -749,7 +788,9 @@ class EvolvedFSM4(FSMPlayer):
             (3, D, 1, D),
         )
 
-        super().__init__(transitions=transitions, initial_state=0, initial_action=C)
+        super().__init__(
+            transitions=transitions, initial_state=0, initial_action=C
+        )
 
 
 class EvolvedFSM16(FSMPlayer):
@@ -805,7 +846,9 @@ class EvolvedFSM16(FSMPlayer):
             (15, D, 2, C),
         )
 
-        super().__init__(transitions=transitions, initial_state=0, initial_action=C)
+        super().__init__(
+            transitions=transitions, initial_state=0, initial_action=C
+        )
 
 
 class EvolvedFSM16Noise05(FSMPlayer):
@@ -861,7 +904,9 @@ class EvolvedFSM16Noise05(FSMPlayer):
             (15, D, 11, C),
         )
 
-        super().__init__(transitions=transitions, initial_state=0, initial_action=C)
+        super().__init__(
+            transitions=transitions, initial_state=0, initial_action=C
+        )
 
 
 # Strategies trained with Moran process objectives
@@ -923,7 +968,9 @@ class TF1(FSMPlayer):
             (15, D, 5, C),
         )
 
-        super().__init__(transitions=transitions, initial_state=0, initial_action=C)
+        super().__init__(
+            transitions=transitions, initial_state=0, initial_action=C
+        )
 
 
 class TF2(FSMPlayer):
@@ -978,7 +1025,9 @@ class TF2(FSMPlayer):
             (15, D, 11, D),
         )
 
-        super().__init__(transitions=transitions, initial_state=0, initial_action=C)
+        super().__init__(
+            transitions=transitions, initial_state=0, initial_action=C
+        )
 
 
 class TF3(FSMPlayer):
@@ -1021,4 +1070,6 @@ class TF3(FSMPlayer):
             (7, D, 5, C),
         )
 
-        super().__init__(transitions=transitions, initial_state=0, initial_action=C)
+        super().__init__(
+            transitions=transitions, initial_state=0, initial_action=C
+        )
