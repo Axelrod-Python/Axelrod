@@ -149,36 +149,86 @@ class TestGraaskamp(TestPlayer):
     name = "Graaskamp: 0.05"
     player = axelrod.Graaskamp
     expected_classifier = {
-        'memory_depth': float("inf"),
-        'stochastic': True,
-        'makes_use_of': set(),
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": True,
+        "makes_use_of": set(),
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
-        # Play against opponents
-        actions = [(C, D), (D, C), (C, C), (C, C), (C, D), (D, D)]
-        self.versus_test(axelrod.Random(), expected_actions=actions, seed=0)
+        # Test TfT in first 50 rounds followed by defection followed by 5 rounds
+        # of TfT
+        expected_attrs = {
+            "opponent_is_random": False,
+            "next_random_defection_turn": None,
+        }
 
-        actions = [(C, C), (C, C), (C, D), (D, C), (C, D), (D, D)]
-        self.versus_test(axelrod.Random(), expected_actions=actions, seed=1)
+        # Against alternator
+        actions = [(C, C)] + [(C, D), (D, C)] * 24 + [(C, D)]  # 50 turns
+        actions += [(D, C)]  # 51 turns
+        actions += [(C, D), (D, C)] * 2 + [(C, D)]  # 56 turns
+        self.versus_test(
+            axelrod.Alternator(), expected_actions=actions, attrs=expected_attrs
+        )
 
-        actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
-        self.versus_test(axelrod.Alternator(), expected_actions=actions)
+        # Against defector
+        actions = [(C, D)] + [(D, D)] * 55  # 56 turns
+        self.versus_test(
+            axelrod.Defector(), expected_actions=actions, attrs=expected_attrs
+        )
 
-        actions = [(C, C) * 50, (D, C), (C, C) * 5]
-        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+        # Against cooperator
+        actions = [(C, C)] * 50 + [(D, C)] + [(C, C)] * 5
+        self.versus_test(
+            axelrod.Cooperator(), expected_actions=actions, attrs=expected_attrs
+        )
 
-        actions = [(C, D), (D, D) * 49, (D, D) * 6]
-        self.versus_test(axelrod.Defector(), expected_actions=actions)
+        # Test recognition of random player
 
-        actions = [(C, C) * 50, (D, C), (C, C) * 5]
-        self.versus_test(axelrod.Grumpy(), expected_actions=actions)
+        expected_attrs = {
+            "opponent_is_random": False,
+            "next_random_defection_turn": None,
+        }
+        actions = [(C, C)] * 50 + [(D, C)] + [(C, C)] * 5  # 56 turns
+        self.versus_test(
+            axelrod.Cooperator(), expected_actions=actions, attrs=expected_attrs
+        )
+        expected_attrs = {"opponent_is_random": False, "next_random_defection_turn": 68}
+        actions += [(C, C)]  # 57 turns
+        self.versus_test(
+            axelrod.Cooperator(), expected_actions=actions, attrs=expected_attrs
+        )
 
-        actions = [(C, C) * 50, (D, C), (C, D) * 5]
-        self.versus_test(axelrod.Grudger(), expected_actions=actions)
+        expected_attrs = {
+            "opponent_is_random": True,
+            "next_random_defection_turn": None,
+        }
+        actions = [(C, C)] + [(C, D), (D, C)] * 24 + [(C, D)]  # 50 turns
+        actions += [(D, C)]  #  51 turns
+        actions += [(C, D), (D, C)] * 3  # 57 turns
+        actions += [(D, D)]
+        self.versus_test(
+            axelrod.Alternator(), expected_actions=actions, attrs=expected_attrs
+        )
+        actions += [(D, C), (D, D)] * 5
+        self.versus_test(
+            axelrod.Alternator(), expected_actions=actions, attrs=expected_attrs
+        )
+
+        # Test random defections
+        expected_attrs = {"opponent_is_random": False, "next_random_defection_turn": 78}
+        actions = [(C, C)] * 50 + [(D, C)] + [(C, C)] * 16 + [(D, C)] + [(C, C)]
+        self.versus_test(
+            axelrod.Cooperator(), expected_actions=actions, seed=0, attrs=expected_attrs
+        )
+
+        expected_attrs = {"opponent_is_random": False, "next_random_defection_turn": 77}
+        actions = [(C, C)] * 50 + [(D, C)] + [(C, C)] * 12 + [(D, C)] + [(C, C)]
+        self.versus_test(
+            axelrod.Cooperator(), expected_actions=actions, seed=1, attrs=expected_attrs
+        )
 
 
 class TestGrofman(TestPlayer):
