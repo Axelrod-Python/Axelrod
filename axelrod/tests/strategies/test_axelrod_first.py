@@ -217,9 +217,12 @@ class TestGraaskamp(TestPlayer):
         )
 
         # Test versus TfT
-        expected_attrs = {"opponent_is_random": False, "next_random_defection_turn": None}
+        expected_attrs = {
+            "opponent_is_random": False,
+            "next_random_defection_turn": None,
+        }
         actions = [(C, C)] * 50 + [(D, C)]  # 51 turns
-        actions += [(C, D), (D, C)] * 3 # 56 turns
+        actions += [(C, D), (D, C)] * 3  # 56 turns
         actions += [(C, D), (D, C)] * 50
         self.versus_test(
             axelrod.TitForTat(), expected_actions=actions, seed=0, attrs=expected_attrs

@@ -268,7 +268,10 @@ class Graaskamp(Player):
 
         if self.opponent_is_random:
             return D
-        if all(opponent.history[i] == self.history[i - 1] for i in range(1, len(self.history))):
+        if all(
+            opponent.history[i] == self.history[i - 1]
+            for i in range(1, len(self.history))
+        ):
             # Check if opponent plays Tit for Tat
             if opponent.history[-1] == D:
                 return D
@@ -278,7 +281,8 @@ class Graaskamp(Player):
             self.next_random_defection_turn = random.randint(5, 15) + len(self.history)
 
         if len(self.history) == self.next_random_defection_turn:
-            self.next_random_defection_turn = random.randint(5, 15) + len(self.history)  # resample the next defection turn
+            # resample the next defection turn
+            self.next_random_defection_turn = random.randint(5, 15) + len(self.history)
             return D
         return C
 
