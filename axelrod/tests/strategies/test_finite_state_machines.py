@@ -10,7 +10,7 @@ C, D = axelrod.Action.C, axelrod.Action.D
 
 
 class TestGetMemoryFromTransitions(unittest.TestCase):
-    def transitions_to_dict(transitions):
+    def transitions_to_dict(self, transitions):
         return {(current_state, input_action): (next_state, output_action)
                 for current_state, input_action, next_state, output_action in transitions}
 
@@ -20,7 +20,7 @@ class TestGetMemoryFromTransitions(unittest.TestCase):
             (0, D, 0, C)
         )
 
-        trans_dict = transition_to_dict(transitions)
+        trans_dict = self.transitions_to_dict(transitions)
         self.assertEqual(get_memory_from_transitions(trans_dict), 0)
 
     def test_tit_for_tat(self):
@@ -29,7 +29,7 @@ class TestGetMemoryFromTransitions(unittest.TestCase):
             (0, D, 0, D)
         )
 
-        trans_dict = transition_to_dict(transitions)
+        trans_dict = self.transitions_to_dict(transitions)
         self.assertEqual(get_memory_from_transitions(trans_dict), 1)
 
     def test_two_state_memory_two(self):
@@ -48,7 +48,7 @@ class TestGetMemoryFromTransitions(unittest.TestCase):
             (1, D, 1, D)
         )
 
-        trans_dict = transition_to_dict(transitions)
+        trans_dict = self.transitions_to_dict(transitions)
         self.assertEqual(get_memory_from_transitions(trans_dict), 2)
 
     def test_two_state_tft(self):
@@ -62,7 +62,7 @@ class TestGetMemoryFromTransitions(unittest.TestCase):
             (1, D, 1, D)
         )
 
-        trans_dict = transition_to_dict(transitions)
+        trans_dict = self.transitions_to_dict(transitions)
         self.assertEqual(get_memory_from_transitions(trans_dict), 1)
 
     def test_two_state_inf_memory(self):
@@ -80,7 +80,7 @@ class TestGetMemoryFromTransitions(unittest.TestCase):
             (1, D, 0, D)
         )
 
-        trans_dict = transition_to_dict(transitions)
+        trans_dict = self.transitions_to_dict(transitions)
         self.assertEqual(get_memory_from_transitions(trans_dict), float("inf"))
 
     def test_four_state_memory_two(self):
@@ -98,7 +98,7 @@ class TestGetMemoryFromTransitions(unittest.TestCase):
             (3, D, 3, D)
         )
 
-        trans_dict = transition_to_dict(transitions)
+        trans_dict = self.transitions_to_dict(transitions)
         self.assertEqual(get_memory_from_transitions(trans_dict), 2)
 
     def test_tit_for_two_tat(self):
@@ -123,7 +123,7 @@ class TestGetMemoryFromTransitions(unittest.TestCase):
             (4, D, 3, D),
         )
 
-        trans_dict = transition_to_dict(transitions)
+        trans_dict = self.transitions_to_dict(transitions)
         self.assertEqual(get_memory_from_transitions(trans_dict), 2)
 
     def test_tit_for_five_tat(self):
@@ -152,7 +152,7 @@ class TestGetMemoryFromTransitions(unittest.TestCase):
             (10, D, 1, C),
         )
 
-        trans_dict = transition_to_dict(transitions)
+        trans_dict = self.transitions_to_dict(transitions)
         self.assertEqual(get_memory_from_transitions(trans_dict), 5)
 
     def test_fortress_3(self):
@@ -175,7 +175,7 @@ class TestGetMemoryFromTransitions(unittest.TestCase):
             (3, D, 1, D),
         )
 
-        trans_dict = transition_to_dict(transitions)
+        trans_dict = self.transitions_to_dict(transitions)
         self.assertEqual(get_memory_from_transitions(trans_dict), 2)
 
     def test_fortress_4(self):
@@ -193,7 +193,7 @@ class TestGetMemoryFromTransitions(unittest.TestCase):
             (4, D, 1, D),
         )
 
-        trans_dict = transition_to_dict(transitions)
+        trans_dict = self.transitions_to_dict(transitions)
         self.assertEqual(get_memory_from_transitions(trans_dict), 3)
 
     def test_complex_cooperator(self):
@@ -220,7 +220,7 @@ class TestGetMemoryFromTransitions(unittest.TestCase):
             (8, D, 6, C)
         )
 
-        trans_dict = transition_to_dict(transitions)
+        trans_dict = self.transitions_to_dict(transitions)
         self.assertEqual(get_memory_from_transitions(trans_dict), 0)
 
     def test_disconnected_graph(self):
@@ -240,7 +240,7 @@ class TestGetMemoryFromTransitions(unittest.TestCase):
             (6, D, 4, D)
         )
 
-        trans_dict = transition_to_dict(transitions)
+        trans_dict = self.transitions_to_dict(transitions)
         self.assertEqual(get_memory_from_transitions(trans_dict,
                                                      initial_state=1), 2)
 
@@ -265,7 +265,7 @@ class TestGetMemoryFromTransitions(unittest.TestCase):
             (4, D, 4, C)
         )
 
-        trans_dict = transition_to_dict(transitions)
+        trans_dict = self.transitions_to_dict(transitions)
         # If starting in state 4, then treat like Cooperator
         self.assertEqual(get_memory_from_transitions(trans_dict,
                                                      initial_state=4), 0)
@@ -288,7 +288,7 @@ class TestGetMemoryFromTransitions(unittest.TestCase):
             (2, D, 2, D)
         )
 
-        trans_dict = transition_to_dict(transitions)
+        trans_dict = self.transitions_to_dict(transitions)
         self.assertEqual(get_memory_from_transitions(
                 trans_dict, initial_state=0), float("inf"))
 
@@ -310,7 +310,7 @@ class TestGetMemoryFromTransitions(unittest.TestCase):
             (3, D, 1, D),
         )
 
-        trans_dict = transition_to_dict(transitions)
+        trans_dict = self.transitions_to_dict(transitions)
         self.assertEqual(get_memory_from_transitions(trans_dict), float("inf"))
 
 

@@ -5,7 +5,6 @@ from typing import DefaultDict, Iterator, Dict, Tuple, Set, List
 
 C, D = Action.C, Action.D
 
-MemitPair = Tuple[Memit, Memit]
 Transition = namedtuple(
     "Transition", ["state", "last_opponent_action", "next_state", "next_action"]
 )
@@ -41,25 +40,31 @@ class Memit(object):
         self.state = state
         self.out_act = out_act
 
-    def __repr__(self):
-        return "{}, {}, {}".format(self.in_act, self.state, self.out)
+    def __repr__(self) -> str:
+        return "{}, {}, {}".format(self.in_act, self.state, self.out_act)
 
-    def __eq__(self, other_memit: Memit):
+    def __hash__(self):
+        return hash(repr(self))
+
+    def __eq__(self, other_memit) -> bool:
         """In action and out actions are the same."""
         return (
             self.in_act == other_memit.in_act
             and self.out_act == other_memit.out_act
         )
 
-    def __leq__(self, other_memit: Memit):
-        return repr(self) <= repr(other_memit)
+    def __lt__(self, other_memit) -> bool:
+        return repr(self) < repr(other_memit)
 
 
-def OrderedMemitPair(x: Memit, y: Memit):
+MemitPair = Tuple[Memit, Memit]
+
+
+def OrderedMemitTuple(x: Memit, y: Memit) -> tuple:
     """Returns a tuple of x in y, sorted so that (x, y) are viewed as the
     same as (y, x).
     """
-    if x <= y:
+    if x < y:
         return (x, y)
     else:
         return (y, x)
@@ -216,15 +221,15 @@ def get_memory_from_transitions(
         # If the memits match, then the strategy can't tell the difference
         # between the states.  We call this a pair of matched memits (or just a
         # pair).
-        pair_nodes.add(memit_sort(x, y))
+        pair_nodes.add(OrderedMemitTuple(x, y))
         # When two memits in matched pair have successors that are also matched,
         # then we draw an edge.  This represents consecutive historical times
         # that we can't tell which state we're in.
         for x_successor in memit_edges[x]:
             for y_successor in memit_edges[y]:
                 if x_successor == y_successor:
-                    pair_edges[OrderedMemitPair(x, y)].add(
-                        OrderedMemitPair(x_successor, y_successor)
+                    pair_edges[OrderedMemitTuple(x, y)].add(
+                        OrderedMemitTuple(x_successor, y_successor)
                     )
 
     if len(pair_nodes) == 0:
