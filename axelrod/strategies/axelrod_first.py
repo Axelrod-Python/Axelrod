@@ -3,7 +3,7 @@ Additional strategies from Axelrod's first tournament.
 """
 
 import random
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Optional
 
 from axelrod.action import Action
 from axelrod.player import Player
@@ -249,7 +249,7 @@ class Graaskamp(Player):
         super().__init__()
         self.alpha = alpha
         self.opponent_is_random = False
-        self.next_random_defection_turn = None
+        self.next_random_defection_turn = None  # type: Optional[int]
 
     def strategy(self, opponent: Player) -> Action:
         """This is the actual strategy"""
