@@ -257,8 +257,8 @@ class Graaskamp(Player):
         if not self.history:
             return C
         # React to the opponent's last move
-        if len(self.history) <= 56:
-            if opponent.history[-1] == D or len(self.history) == 51:
+        if len(self.history) < 56:
+            if opponent.history[-1] == D or len(self.history) == 50:
                 return D
             return C
 
@@ -270,9 +270,9 @@ class Graaskamp(Player):
             return D
         if all(opponent.history[i] == self.history[i - 1] for i in range(1, len(self.history))):
             # Check if opponent plays Tit for Tat
-                if opponent.history[-1] == D:
-                    return D
-                return C
+            if opponent.history[-1] == D:
+                return D
+            return C
 
         if self.next_random_defection_turn is None:
             self.next_random_defection_turn = random.randint(5, 15) + len(self.history)
