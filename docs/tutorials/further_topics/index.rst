@@ -17,3 +17,4 @@ Contents:
    morality_metrics.rst
    ecological_variant.rst
    fingerprinting.rst
+   meta_strategies.rst
