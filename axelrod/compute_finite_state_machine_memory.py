@@ -59,7 +59,7 @@ class Memit(object):
 MemitPair = Tuple[Memit, Memit]
 
 
-def OrderedMemitTuple(x: Memit, y: Memit) -> tuple:
+def ordered_memit_tuple(x: Memit, y: Memit) -> tuple:
     """Returns a tuple of x in y, sorted so that (x, y) are viewed as the
     same as (y, x).
     """
@@ -220,15 +220,15 @@ def get_memory_from_transitions(
         # If the memits match, then the strategy can't tell the difference
         # between the states.  We call this a pair of matched memits (or just a
         # pair).
-        pair_nodes.add(OrderedMemitTuple(x, y))
+        pair_nodes.add(ordered_memit_tuple(x, y))
         # When two memits in matched pair have successors that are also matched,
         # then we draw an edge.  This represents consecutive historical times
         # that we can't tell which state we're in.
         for x_successor in memit_edges[x]:
             for y_successor in memit_edges[y]:
                 if x_successor == y_successor:
-                    pair_edges[OrderedMemitTuple(x, y)].add(
-                        OrderedMemitTuple(x_successor, y_successor)
+                    pair_edges[ordered_memit_tuple(x, y)].add(
+                        ordered_memit_tuple(x_successor, y_successor)
                     )
 
     if len(pair_nodes) == 0:
