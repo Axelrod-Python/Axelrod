@@ -360,7 +360,6 @@ class UsuallyCooperates(FSMPlayer):
     }
 
     def __init__(self) -> None:
-        """State 2 means that opponent D in the previous turn."""
         transitions = ((1, C, 1, C), (1, D, 2, C), (2, C, 1, D), (2, D, 1, C))
 
         super().__init__(
@@ -389,7 +388,6 @@ class UsuallyDefects(FSMPlayer):
     }
 
     def __init__(self) -> None:
-        """State 2 means that the opponent C in the previous turn."""
         transitions = ((1, C, 2, D), (1, D, 1, D), (2, C, 1, D), (2, D, 1, C))
 
         super().__init__(
