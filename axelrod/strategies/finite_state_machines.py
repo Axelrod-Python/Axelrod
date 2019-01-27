@@ -350,7 +350,7 @@ class UsuallyCooperates(FSMPlayer):
 
     name = "UsuallyCooperates"
     classifier = {
-        "memory_depth": 2,
+        "memory_depth": float("inf"),
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -361,7 +361,7 @@ class UsuallyCooperates(FSMPlayer):
 
     def __init__(self) -> None:
         """State 2 means that opponent D in the previous turn."""
-        transitions = ((1, C, 1, C), (1, D, 2, C), (2, C, 1, D), (2, D, 2, C))
+        transitions = ((1, C, 1, C), (1, D, 2, C), (2, C, 1, D), (2, D, 1, C))
 
         super().__init__(
             transitions=transitions, initial_state=1, initial_action=C
@@ -379,7 +379,7 @@ class UsuallyDefects(FSMPlayer):
 
     name = "UsuallyDefects"
     classifier = {
-        "memory_depth": 2,
+        "memory_depth": float("inf"),
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -390,7 +390,7 @@ class UsuallyDefects(FSMPlayer):
 
     def __init__(self) -> None:
         """State 2 means that the opponent C in the previous turn."""
-        transitions = ((1, C, 2, D), (1, D, 1, D), (2, C, 2, D), (2, D, 1, C))
+        transitions = ((1, C, 2, D), (1, D, 1, D), (2, C, 1, D), (2, D, 1, C))
 
         super().__init__(
             transitions=transitions, initial_state=1, initial_action=D
