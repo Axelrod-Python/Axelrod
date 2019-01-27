@@ -2,6 +2,7 @@
 import unittest
 
 import axelrod
+from axelrod.compute_finite_state_machine_memory import get_memory_from_transitions
 from axelrod.strategies.finite_state_machines import SimpleFSM
 
 from .test_player import TestPlayer
