@@ -1,51 +1,49 @@
 """Tests for Compute FSM Memory."""
+import axelrod
 import unittest
 
-from axelrod.compute_finite_state_machine_memory import (
-    get_memory_from_transitions,
-    ordered_memit_pair,
-)
+from axelrod.compute_finite_state_machine_memory import *
 
 C, D = axelrod.Action.C, axelrod.Action.D
 
 
-class TestOrderedMemitPair(unittest.TestCase):
+class TestOrderedMemitTuple(unittest.TestCase):
     def memits_completely_equal(self, x, y):
         """If the state and the actions are equal."""
         return x.state == y.state and x == y
 
-    def memit_pair_equal(self, x_pair, y_pair):
+    def memit_tuple_equal(self, x_tuple, y_tuple):
         """If the memits are the same in the same order."""
         return self.memits_completely_equal(
-            x_pair[0], y_pair[0]
-        ) and self.memit_completely_equal(x_pair[1], y_pair[1])
+            x_tuple[0], y_tuple[0]
+        ) and self.memits_completely_equal(x_tuple[1], y_tuple[1])
 
     def test_provided_ascending_order(self):
         memit_c1c = Memit(C, 1, C)
         memit_c2c = Memit(C, 2, C)
 
-        actual_pair = ordered_memit_pair(memit_c1c, memit_c2c)
-        expected_pair = (memit_c1c, memit_c2c)
+        actual_tuple = ordered_memit_tuple(memit_c1c, memit_c2c)
+        expected_tuple = (memit_c1c, memit_c2c)
 
-        return self.memit_pair_equal(actual_pair, expected_pair)
+        return self.memit_tuple_equal(actual_tuple, expected_tuple)
 
     def test_provided_descending_order(self):
         memit_c1c = Memit(C, 1, C)
         memit_c2c = Memit(C, 2, C)
 
-        actual_pair = ordered_memit_pair(memit_c2c, memit_c1c)
-        expected_pair = (memit_c1c, memit_c2c)
+        actual_tuple = ordered_memit_tuple(memit_c2c, memit_c1c)
+        expected_tuple = (memit_c1c, memit_c2c)
 
-        return self.memit_pair_equal(actual_pair, expected_pair)
+        return self.memit_tuple_equal(actual_tuple, expected_tuple)
 
     def test_order_on_actions(self):
         memit_c9c = Memit(C, 9, C)
         memit_c9d = Memit(C, 9, D)
 
-        actual_pair = ordered_memit_pair(memit_c9d, memit_c9c)
-        expected_pair = (memit_c9c, memit_c9d)
+        actual_tuple = ordered_memit_tuple(memit_c9d, memit_c9c)
+        expected_tuple = (memit_c9c, memit_c9d)
 
-        return self.memit_pair_equal(actual_pair, expected_pair)
+        return self.memit_tuple_equal(actual_tuple, expected_tuple)
 
 
 class TestGetMemoryFromTransitions(unittest.TestCase):
