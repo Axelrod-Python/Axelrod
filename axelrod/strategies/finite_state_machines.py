@@ -30,7 +30,9 @@ class SimpleFSM(object):
         self._raise_error_for_bad_input()
 
     def _raise_error_for_bad_input(self):
-        callable_states = set(pair[0] for pair in self._state_transitions.values())
+        callable_states = set(
+            pair[0] for pair in self._state_transitions.values()
+        )
         callable_states.add(self._state)
         for state in callable_states:
             self._raise_error_for_bad_state(state)
@@ -124,7 +126,7 @@ class Fortress3(FSMPlayer):
 
     name = "Fortress3"
     classifier = {
-        "memory_depth": 3,
+        "memory_depth": 2,
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -143,7 +145,9 @@ class Fortress3(FSMPlayer):
             (3, D, 1, D),
         )
 
-        super().__init__(transitions=transitions, initial_state=1, initial_action=D)
+        super().__init__(
+            transitions=transitions, initial_state=1, initial_action=D
+        )
 
 
 class Fortress4(FSMPlayer):
@@ -161,7 +165,7 @@ class Fortress4(FSMPlayer):
 
     name = "Fortress4"
     classifier = {
-        "memory_depth": 4,
+        "memory_depth": 3,
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -182,7 +186,9 @@ class Fortress4(FSMPlayer):
             (4, D, 1, D),
         )
 
-        super().__init__(transitions=transitions, initial_state=1, initial_action=D)
+        super().__init__(
+            transitions=transitions, initial_state=1, initial_action=D
+        )
 
 
 class Predator(FSMPlayer):
@@ -197,7 +203,7 @@ class Predator(FSMPlayer):
 
     name = "Predator"
     classifier = {
-        "memory_depth": 9,
+        "memory_depth": float("inf"),
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -228,7 +234,9 @@ class Predator(FSMPlayer):
             (8, D, 6, D),
         )
 
-        super().__init__(transitions=transitions, initial_state=0, initial_action=C)
+        super().__init__(
+            transitions=transitions, initial_state=0, initial_action=C
+        )
 
 
 class Pun1(FSMPlayer):
@@ -241,7 +249,7 @@ class Pun1(FSMPlayer):
 
     name = "Pun1"
     classifier = {
-        "memory_depth": 2,
+        "memory_depth": float("inf"),
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -253,7 +261,9 @@ class Pun1(FSMPlayer):
     def __init__(self) -> None:
         transitions = ((1, C, 2, C), (1, D, 2, C), (2, C, 1, C), (2, D, 1, D))
 
-        super().__init__(transitions=transitions, initial_state=1, initial_action=D)
+        super().__init__(
+            transitions=transitions, initial_state=1, initial_action=D
+        )
 
 
 class Raider(FSMPlayer):
@@ -268,7 +278,7 @@ class Raider(FSMPlayer):
 
     name = "Raider"
     classifier = {
-        "memory_depth": 3,
+        "memory_depth": float("inf"),
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -289,7 +299,9 @@ class Raider(FSMPlayer):
             (3, D, 1, C),
         )
 
-        super().__init__(transitions=transitions, initial_state=0, initial_action=D)
+        super().__init__(
+            transitions=transitions, initial_state=0, initial_action=D
+        )
 
 
 class Ripoff(FSMPlayer):
@@ -303,7 +315,7 @@ class Ripoff(FSMPlayer):
 
     name = "Ripoff"
     classifier = {
-        "memory_depth": 2,
+        "memory_depth": 3,
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -322,7 +334,9 @@ class Ripoff(FSMPlayer):
             (3, D, 3, D),
         )
 
-        super().__init__(transitions=transitions, initial_state=1, initial_action=D)
+        super().__init__(
+            transitions=transitions, initial_state=1, initial_action=D
+        )
 
 
 class UsuallyCooperates(FSMPlayer):
@@ -336,7 +350,7 @@ class UsuallyCooperates(FSMPlayer):
 
     name = "UsuallyCooperates"
     classifier = {
-        "memory_depth": 2,
+        "memory_depth": float("inf"),
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -346,14 +360,11 @@ class UsuallyCooperates(FSMPlayer):
     }
 
     def __init__(self) -> None:
-        transitions = (
-            (1, C, 1, C),
-            (1, D, 2, C),
-            (2, C, 1, D),
-            (2, D, 1, C),
-        )
+        transitions = ((1, C, 1, C), (1, D, 2, C), (2, C, 1, D), (2, D, 1, C))
 
-        super().__init__(transitions=transitions, initial_state=1, initial_action=C)
+        super().__init__(
+            transitions=transitions, initial_state=1, initial_action=C
+        )
 
 
 class UsuallyDefects(FSMPlayer):
@@ -367,7 +378,7 @@ class UsuallyDefects(FSMPlayer):
 
     name = "UsuallyDefects"
     classifier = {
-        "memory_depth": 2,
+        "memory_depth": float("inf"),
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -377,14 +388,11 @@ class UsuallyDefects(FSMPlayer):
     }
 
     def __init__(self) -> None:
-        transitions = (
-            (1, C, 2, D),
-            (1, D, 1, D),
-            (2, C, 1, D),
-            (2, D, 1, C),
-        )
+        transitions = ((1, C, 2, D), (1, D, 1, D), (2, C, 1, D), (2, D, 1, C))
 
-        super().__init__(transitions=transitions, initial_state=1, initial_action=D)
+        super().__init__(
+            transitions=transitions, initial_state=1, initial_action=D
+        )
 
 
 class SolutionB1(FSMPlayer):
@@ -398,7 +406,7 @@ class SolutionB1(FSMPlayer):
 
     name = "SolutionB1"
     classifier = {
-        "memory_depth": 3,
+        "memory_depth": 2,
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -417,7 +425,9 @@ class SolutionB1(FSMPlayer):
             (3, D, 3, C),
         )
 
-        super().__init__(transitions=transitions, initial_state=1, initial_action=D)
+        super().__init__(
+            transitions=transitions, initial_state=1, initial_action=D
+        )
 
 
 class SolutionB5(FSMPlayer):
@@ -432,7 +442,7 @@ class SolutionB5(FSMPlayer):
 
     name = "SolutionB5"
     classifier = {
-        "memory_depth": 5,
+        "memory_depth": float("inf"),
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -457,7 +467,9 @@ class SolutionB5(FSMPlayer):
             (6, D, 5, D),
         )
 
-        super().__init__(transitions=transitions, initial_state=1, initial_action=D)
+        super().__init__(
+            transitions=transitions, initial_state=1, initial_action=D
+        )
 
 
 class Thumper(FSMPlayer):
@@ -471,7 +483,7 @@ class Thumper(FSMPlayer):
 
     name = "Thumper"
     classifier = {
-        "memory_depth": 2,
+        "memory_depth": float("inf"),
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -483,7 +495,9 @@ class Thumper(FSMPlayer):
     def __init__(self) -> None:
         transitions = ((1, C, 1, C), (1, D, 2, D), (2, C, 1, D), (2, D, 1, D))
 
-        super().__init__(transitions=transitions, initial_state=1, initial_action=C)
+        super().__init__(
+            transitions=transitions, initial_state=1, initial_action=C
+        )
 
 
 class EvolvedFSM4(FSMPlayer):
@@ -497,7 +511,7 @@ class EvolvedFSM4(FSMPlayer):
 
     name = "Evolved FSM 4"
     classifier = {
-        "memory_depth": 4,
+        "memory_depth": float("inf"),
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -518,7 +532,9 @@ class EvolvedFSM4(FSMPlayer):
             (3, D, 1, D),
         )
 
-        super().__init__(transitions=transitions, initial_state=0, initial_action=C)
+        super().__init__(
+            transitions=transitions, initial_state=0, initial_action=C
+        )
 
 
 class EvolvedFSM16(FSMPlayer):
@@ -533,7 +549,7 @@ class EvolvedFSM16(FSMPlayer):
 
     name = "Evolved FSM 16"
     classifier = {
-        "memory_depth": 16,  # At most
+        "memory_depth": float("inf"),
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -574,7 +590,9 @@ class EvolvedFSM16(FSMPlayer):
             (15, D, 2, C),
         )
 
-        super().__init__(transitions=transitions, initial_state=0, initial_action=C)
+        super().__init__(
+            transitions=transitions, initial_state=0, initial_action=C
+        )
 
 
 class EvolvedFSM16Noise05(FSMPlayer):
@@ -589,7 +607,7 @@ class EvolvedFSM16Noise05(FSMPlayer):
 
     name = "Evolved FSM 16 Noise 05"
     classifier = {
-        "memory_depth": 16,  # At most
+        "memory_depth": float("inf"),
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -630,7 +648,9 @@ class EvolvedFSM16Noise05(FSMPlayer):
             (15, D, 11, C),
         )
 
-        super().__init__(transitions=transitions, initial_state=0, initial_action=C)
+        super().__init__(
+            transitions=transitions, initial_state=0, initial_action=C
+        )
 
 
 # Strategies trained with Moran process objectives
@@ -692,7 +712,9 @@ class TF1(FSMPlayer):
             (15, D, 5, C),
         )
 
-        super().__init__(transitions=transitions, initial_state=0, initial_action=C)
+        super().__init__(
+            transitions=transitions, initial_state=0, initial_action=C
+        )
 
 
 class TF2(FSMPlayer):
@@ -747,7 +769,9 @@ class TF2(FSMPlayer):
             (15, D, 11, D),
         )
 
-        super().__init__(transitions=transitions, initial_state=0, initial_action=C)
+        super().__init__(
+            transitions=transitions, initial_state=0, initial_action=C
+        )
 
 
 class TF3(FSMPlayer):
@@ -790,4 +814,6 @@ class TF3(FSMPlayer):
             (7, D, 5, C),
         )
 
-        super().__init__(transitions=transitions, initial_state=0, initial_action=C)
+        super().__init__(
+            transitions=transitions, initial_state=0, initial_action=C
+        )

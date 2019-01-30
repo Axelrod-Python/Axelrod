@@ -2,6 +2,7 @@
 import unittest
 
 import axelrod
+from axelrod.compute_finite_state_machine_memory import get_memory_from_transitions
 from axelrod.strategies.finite_state_machines import SimpleFSM
 
 from .test_player import TestPlayer
@@ -267,13 +268,20 @@ class TestFSMPlayer(TestPlayer):
             opponent, expected_actions=actions, init_kwargs={"transitions": transitions}
         )
 
+    def test_memory(self):
+        """
+        Test the memory depth using implemented algorithm
+        """
+        transitions = self.player().fsm._state_transitions
+        self.assertEqual(get_memory_from_transitions(transitions), self.expected_classifier["memory_depth"])
+
 
 class TestFortress3(TestFSMPlayer):
 
     name = "Fortress3"
     player = axelrod.Fortress3
     expected_classifier = {
-        "memory_depth": 3,
+        "memory_depth": 2,
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -310,7 +318,7 @@ class TestFortress4(TestFSMPlayer):
     name = "Fortress4"
     player = axelrod.Fortress4
     expected_classifier = {
-        "memory_depth": 4,
+        "memory_depth": 3,
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -356,7 +364,7 @@ class TestPredator(TestFSMPlayer):
     name = "Predator"
     player = axelrod.Predator
     expected_classifier = {
-        "memory_depth": 9,
+        "memory_depth": float("inf"),
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -418,7 +426,7 @@ class TestPun1(TestFSMPlayer):
     name = "Pun1"
     player = axelrod.Pun1
     expected_classifier = {
-        "memory_depth": 2,
+        "memory_depth": float("inf"),
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -446,7 +454,7 @@ class TestRaider(TestFSMPlayer):
     name = "Raider"
     player = axelrod.Raider
     expected_classifier = {
-        "memory_depth": 3,
+        "memory_depth": float("inf"),
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -484,7 +492,7 @@ class TestRipoff(TestFSMPlayer):
     name = "Ripoff"
     player = axelrod.Ripoff
     expected_classifier = {
-        "memory_depth": 2,
+        "memory_depth": 3,
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -516,7 +524,7 @@ class TestUsuallyCooperates(TestFSMPlayer):
     name = "UsuallyCooperates"
     player = axelrod.UsuallyCooperates
     expected_classifier = {
-        "memory_depth": 2,
+        "memory_depth": float("inf"),
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -549,7 +557,7 @@ class TestUsuallyDefects(TestFSMPlayer):
     name = "UsuallyDefects"
     player = axelrod.UsuallyDefects
     expected_classifier = {
-        "memory_depth": 2,
+        "memory_depth": float("inf"),
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -583,7 +591,7 @@ class TestSolutionB1(TestFSMPlayer):
     name = "SolutionB1"
     player = axelrod.SolutionB1
     expected_classifier = {
-        "memory_depth": 3,
+        "memory_depth": 2,
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -616,7 +624,7 @@ class TestSolutionB5(TestFSMPlayer):
     name = "SolutionB5"
     player = axelrod.SolutionB5
     expected_classifier = {
-        "memory_depth": 5,
+        "memory_depth": float("inf"),
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -666,7 +674,7 @@ class TestThumper(TestFSMPlayer):
     name = "Thumper"
     player = axelrod.Thumper
     expected_classifier = {
-        "memory_depth": 2,
+        "memory_depth": float("inf"),
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -695,7 +703,7 @@ class TestEvolvedFSM4(TestFSMPlayer):
     name = "Evolved FSM 4"
     player = axelrod.EvolvedFSM4
     expected_classifier = {
-        "memory_depth": 4,
+        "memory_depth": float("inf"),
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -740,7 +748,7 @@ class TestEvolvedFSM16(TestFSMPlayer):
     name = "Evolved FSM 16"
     player = axelrod.EvolvedFSM16
     expected_classifier = {
-        "memory_depth": 16,
+        "memory_depth": float("inf"),
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -854,7 +862,7 @@ class TestEvolvedFSM16Noise05(TestFSMPlayer):
     name = "Evolved FSM 16 Noise 05"
     player = axelrod.EvolvedFSM16Noise05
     expected_classifier = {
-        "memory_depth": 16,
+        "memory_depth": float("inf"),
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
