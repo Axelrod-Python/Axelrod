@@ -75,6 +75,7 @@ class SimpleThresholdPlayer(UltimatumPlayer):
     name = "Simple Threshold Player"
 
     def __init__(self, offer_proportion=0.5, lower_threshold=0.5):
+        super().__init__()
         self.offer_proportion = offer_proportion
         self.lower_threshold = lower_threshold
 
@@ -122,13 +123,19 @@ class DoubleThresholdsPlayer(UltimatumPlayer):
 
     classifier = dict(stochastic=True)
 
-    def __init__(self, lower_offer, upper_offer, lower_accept, upper_accept):
+    def __init__(self, lower_offer=0.4, upper_offer=0.6, lower_accept=0.4,
+                 upper_accept=0.6):
         self.lower_offer = lower_offer
         self.upper_offer = upper_offer
         self.lower_accept = lower_accept
         self.upper_accept = upper_accept
         self.offer_distribution = stats.uniform(
             loc=lower_offer, scale=upper_offer - lower_offer)
+        self.init_kwargs = dict(
+            lower_offer=lower_offer,
+            upper_offer=upper_offer,
+            lower_accept=lower_accept,
+            upper_accept=upper_accept)
 
     def __repr__(self) -> str:
         return "DoubleThresholdsPlayer ({}, {} | [{}, {}])".format(
@@ -139,6 +146,7 @@ class DoubleThresholdsPlayer(UltimatumPlayer):
         )
 
     def offer(self) -> float:
+        # print(self.lower_offer, self.upper_offer)
         return self.offer_distribution.rvs()
 
     def consider(self, offer: float) -> bool:
