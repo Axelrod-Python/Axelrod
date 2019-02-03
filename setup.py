@@ -20,7 +20,7 @@ setup(
     install_requires=requirements,
     author="Vince Knight, Owen Campbell, Karol Langner, Marc Harper",
     author_email=("axelrod-python@googlegroups.com"),
-    packages=["axelrod", "axelrod.strategies", "axelrod.data"],
+    packages=["axelrod", "axelrod.strategies", "axelrod.data", "axelrod.ultimatum"],
     url="http://axelrod.readthedocs.org/",
     license="The MIT License (MIT)",
     description="Reproduce the Axelrod iterated prisoners dilemma tournament",
