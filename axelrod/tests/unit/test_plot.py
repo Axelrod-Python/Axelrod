@@ -212,6 +212,7 @@ class TestPlot(unittest.TestCase):
         plot.payoff(title="dummy title", ax=axarr[1, 0])
         self.assertNotEqual(axarr[1, 0].get_xlim(), (0, 1))
         self.assertEqual(axarr[1, 0].get_xlabel(), "dummy title")
+        plt.close(fig)
 
     def test_stackplot(self):
         eco = axelrod.Ecosystem(self.test_result_set)
@@ -244,6 +245,7 @@ class TestPlot(unittest.TestCase):
         plot.stackplot(eco, title="dummy title", ax=axarr[1, 0])
         self.assertNotEqual(axarr[1, 0].get_xlim(), (0, 1))
         self.assertEqual(axarr[1, 0].get_title(), "dummy title")
+        plt.close(fig)
 
     def test_all_plots(self):
         plot = axelrod.Plot(self.test_result_set)

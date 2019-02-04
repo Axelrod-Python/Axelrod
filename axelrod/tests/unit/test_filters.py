@@ -39,7 +39,7 @@ class TestFilters(unittest.TestCase):
         larger=integers(min_value=11, max_value=100),
     )
     @example(smaller=0, larger=float("inf"))
-    @settings(max_examples=5, max_iterations=20)
+    @settings(max_examples=5)
     def test_inequality_filter(self, smaller, larger):
         self.assertTrue(
             passes_operator_filter(
@@ -81,7 +81,7 @@ class TestFilters(unittest.TestCase):
         larger=integers(min_value=11, max_value=100),
     )
     @example(smaller=0, larger=float("inf"))
-    @settings(max_examples=5, max_iterations=20)
+    @settings(max_examples=5)
     def test_passes_filterset(self, smaller, larger):
 
         full_passing_filterset_1 = {

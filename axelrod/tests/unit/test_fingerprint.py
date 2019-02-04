@@ -373,7 +373,7 @@ class TestFingerprint(unittest.TestCase):
             self.assertAlmostEqual(value, test_data[key], places=2)
 
     @given(strategy_pair=strategy_lists(min_size=2, max_size=2))
-    @settings(max_examples=5, max_iterations=20)
+    @settings(max_examples=5)
     def test_pair_fingerprints(self, strategy_pair):
         """
         A test to check that we can fingerprint

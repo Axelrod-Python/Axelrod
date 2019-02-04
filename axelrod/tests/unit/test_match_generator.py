@@ -160,7 +160,7 @@ class TestMatchGenerator(unittest.TestCase):
         self.assertEqual(match.match_attributes, {"length": float("inf")})
 
     @given(repetitions=integers(min_value=1, max_value=test_repetitions))
-    @settings(max_examples=5, max_iterations=20)
+    @settings(max_examples=5)
     @example(repetitions=test_repetitions)
     def test_build_match_chunks(self, repetitions):
         rr = axelrod.MatchGenerator(
@@ -181,7 +181,7 @@ class TestMatchGenerator(unittest.TestCase):
         self.assertEqual(sorted(match_definitions), sorted(expected_match_definitions))
 
     @given(repetitions=integers(min_value=1, max_value=test_repetitions))
-    @settings(max_examples=5, max_iterations=20)
+    @settings(max_examples=5)
     @example(repetitions=test_repetitions)
     def test_spatial_build_match_chunks(self, repetitions):
         cycle = [(0, 1), (1, 2), (2, 3), (3, 4), (4, 1)]

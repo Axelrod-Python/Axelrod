@@ -481,7 +481,7 @@ class TestPlayer(unittest.TestCase):
         seed=integers(min_value=1, max_value=200),
         turns=integers(min_value=1, max_value=200),
     )
-    @settings(max_examples=1, max_iterations=1)
+    @settings(max_examples=1)
     def test_memory_depth_upper_bound(self, strategies, seed, turns):
         """
         Test that the memory depth is indeed an upper bound.

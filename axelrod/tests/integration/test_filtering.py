@@ -38,7 +38,7 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
         max_memory_depth=float("inf"),
         memory_depth=float("inf"),
     )
-    @settings(max_examples=5, max_iterations=20)
+    @settings(max_examples=5)
     def test_memory_depth_filtering(
         self, min_memory_depth, max_memory_depth, memory_depth
     ):
@@ -77,7 +77,7 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
         self.assertEqual(comprehension, filtered)
 
     @given(seed_=integers(min_value=0, max_value=4294967295))
-    @settings(max_examples=5, max_iterations=20)
+    @settings(max_examples=5)
     def test_makes_use_of_filtering(self, seed_):
         """
         Test equivalent filtering using two approaches.
