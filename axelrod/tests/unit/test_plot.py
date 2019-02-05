@@ -192,6 +192,8 @@ class TestPlot(unittest.TestCase):
         self.assertIsInstance(fig, matplotlib.pyplot.Figure)
         plt.close(fig)
 
+    @unittest.skipIf(matplotlib.__version__.startswith('3'),
+                     "Colorbar position differs in matplotlib versions")
     def test_payoff_with_passed_axes(self):
         plot = axelrod.Plot(self.test_result_set)
         fig, axarr = plt.subplots(2, 2)

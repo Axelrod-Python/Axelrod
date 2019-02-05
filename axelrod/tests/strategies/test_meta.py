@@ -1,4 +1,5 @@
 """Tests for the various Meta strategies."""
+import random
 import axelrod
 
 from .test_player import TestPlayer
@@ -58,6 +59,36 @@ class TestMetaPlayer(TestPlayer):
                 self.name, team_size, "s" if team_size > 1 else ""
             ),
         )
+
+    def test_clone(self):
+        # Test that the cloned player produces identical play
+        player1 = self.player()
+        if player1.name in ["Darwin", "Human"]:
+            # Known exceptions
+            return
+        player2 = player1.clone()
+        self.assertEqual(len(player2.history), 0)
+        self.assertEqual(player2.cooperations, 0)
+        self.assertEqual(player2.defections, 0)
+        self.assertEqual(player2.state_distribution, {})
+        self.assertEqual(player2.classifier, player1.classifier)
+        self.assertEqual(player2.match_attributes, player1.match_attributes)
+
+        turns = 10
+        for op in [
+            axelrod.Cooperator(),
+            axelrod.Defector(),
+            axelrod.TitForTat(),
+        ]:
+            player1.reset()
+            player2.reset()
+            seed = random.randint(0, 10 ** 6)
+            for p in [player1, player2]:
+                axelrod.seed(seed)
+                m = axelrod.Match((p, op), turns=turns)
+                m.play()
+            self.assertEqual(len(player1.history), turns)
+            self.assertEqual(player1.history, player2.history)
 
 
 class TestMetaMajority(TestMetaPlayer):
@@ -692,7 +723,7 @@ class TestMemoryDecay(TestPlayer):
         )
 
         opponent = axelrod.Defector()
-        actions = [(C, D)] * 7 + [((D, D))]
+        actions = [(C, D)] * 7 + [(D, D)]
         self.versus_test(
             opponent,
             expected_actions=actions,

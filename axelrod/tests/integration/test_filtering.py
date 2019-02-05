@@ -1,9 +1,12 @@
+import random
 import unittest
 
-from axelrod import all_strategies, filtered_strategies, seed
+from axelrod import short_run_time_strategies, filtered_strategies, seed
 
 from hypothesis import example, given, settings
 from hypothesis.strategies import integers
+
+strategies = random.sample(short_run_time_strategies, 20)
 
 
 class TestFiltersAgainstComprehensions(unittest.TestCase):
@@ -23,9 +26,9 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
         ]
 
         for classifier in classifiers:
-            comprehension = set([s for s in all_strategies if s.classifier[classifier]])
+            comprehension = set([s for s in strategies if s.classifier[classifier]])
             filterset = {classifier: True}
-        filtered = set(filtered_strategies(filterset))
+        filtered = set(filtered_strategies(filterset, strategies=strategies))
         self.assertEqual(comprehension, filtered)
 
     @given(
@@ -46,34 +49,36 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
         min_comprehension = set(
             [
                 s
-                for s in all_strategies
+                for s in strategies
                 if s().classifier["memory_depth"] >= min_memory_depth
             ]
         )
         min_filterset = {"min_memory_depth": min_memory_depth}
-        min_filtered = set(filtered_strategies(min_filterset))
+        min_filtered = set(filtered_strategies(min_filterset,
+                                               strategies=strategies))
         self.assertEqual(min_comprehension, min_filtered)
 
         max_comprehension = set(
             [
                 s
-                for s in all_strategies
+                for s in strategies
                 if s().classifier["memory_depth"] <= max_memory_depth
             ]
         )
         max_filterset = {"max_memory_depth": max_memory_depth}
-        max_filtered = set(filtered_strategies(max_filterset))
+        max_filtered = set(filtered_strategies(max_filterset,
+                                               strategies=strategies))
         self.assertEqual(max_comprehension, max_filtered)
 
         comprehension = set(
             [
                 s
-                for s in all_strategies
+                for s in strategies
                 if s().classifier["memory_depth"] == memory_depth
             ]
         )
         filterset = {"memory_depth": memory_depth}
-        filtered = set(filtered_strategies(filterset))
+        filtered = set(filtered_strategies(filterset, strategies=strategies))
         self.assertEqual(comprehension, filtered)
 
     @given(seed_=integers(min_value=0, max_value=4294967295))
@@ -91,14 +96,14 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
             comprehension = set(
                 [
                     s
-                    for s in all_strategies
+                    for s in strategies
                     if set(classifier).issubset(set(s().classifier["makes_use_of"]))
                 ]
             )
 
             seed(seed_)
             filterset = {"makes_use_of": classifier}
-            filtered = set(filtered_strategies(filterset))
+            filtered = set(filtered_strategies(filterset, strategies=strategies))
 
             self.assertEqual(
                 comprehension, filtered, msg="classifier: {}".format(classifier)

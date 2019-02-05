@@ -1,4 +1,5 @@
 import filecmp
+import random
 import unittest
 
 import axelrod
@@ -30,8 +31,10 @@ class TestTournament(unittest.TestCase):
         cls.expected_outcome.sort()
 
     def test_full_tournament(self):
-        """A test to check that tournament runs with all non cheating strategies."""
-        strategies = [strategy() for strategy in axelrod.strategies]
+        """A test to check that tournament runs with a sample of non-cheating
+        strategies."""
+        strategies = random.sample(axelrod.strategies, 20)
+        strategies = [strategy() for strategy in strategies]
         tournament = axelrod.Tournament(
             name="test", players=strategies, game=self.game, turns=2, repetitions=1
         )

@@ -1,7 +1,7 @@
 cloudpickle>=0.2.1
 dask>=0.18.1
-hypothesis>=3.2
-matplotlib>=3.0.0
+hypothesis>=3.2, <= 3.68
+matplotlib>=2.0.0
 numpy>=1.9.2
 pandas>=0.18.1
 prompt-toolkit>=1.0.7
