@@ -1,9 +1,11 @@
 import filecmp
-import random
 import unittest
+
+from hypothesis import given, settings
 
 import axelrod
 from axelrod.strategy_transformers import FinalTransformer
+from axelrod.tests.property import tournaments
 
 
 class TestTournament(unittest.TestCase):
@@ -30,14 +32,19 @@ class TestTournament(unittest.TestCase):
         ]
         cls.expected_outcome.sort()
 
-    def test_full_tournament(self):
+    @given(tournaments(
+        strategies=axelrod.short_run_time_strategies,
+        min_size=10,
+        max_size=30,
+        min_turns=2,
+        max_turns=40,
+        min_repetitions=1,
+        max_repetitions=4,
+    ))
+    @settings(max_examples=1)
+    def test_big_tournaments(self, tournament):
         """A test to check that tournament runs with a sample of non-cheating
         strategies."""
-        strategies = random.sample(axelrod.strategies, 20)
-        strategies = [strategy() for strategy in strategies]
-        tournament = axelrod.Tournament(
-            name="test", players=strategies, game=self.game, turns=2, repetitions=1
-        )
         filename = "test_outputs/test_tournament.csv"
         self.assertIsNone(
             tournament.play(progress_bar=False, filename=filename, build_results=False)

@@ -1,6 +1,8 @@
 """Tests for the various Meta strategies."""
-import axelrod
+from hypothesis import given, settings
+from hypothesis.strategies import integers
 
+import axelrod
 from .test_player import TestPlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D
@@ -60,12 +62,10 @@ class TestMetaPlayer(TestPlayer):
         )
 
     @given(seed=integers(min_value=1, max_value=20000000))
+    @settings(max_examples=1)
     def test_clone(self, seed):
         # Test that the cloned player produces identical play
         player1 = self.player()
-        if player1.name in ["Darwin", "Human"]:
-            # Known exceptions
-            return
         player2 = player1.clone()
         self.assertEqual(len(player2.history), 0)
         self.assertEqual(player2.cooperations, 0)

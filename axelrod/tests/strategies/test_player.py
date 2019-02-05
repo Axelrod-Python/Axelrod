@@ -445,6 +445,7 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(player, clone)
 
     @given(seed=integers(min_value=1, max_value=20000000))
+    @settings(max_examples=1)
     def test_clone(self, seed):
         # Test that the cloned player produces identical play
         player1 = self.player()
@@ -508,7 +509,6 @@ class TestPlayer(unittest.TestCase):
         expected_actions,
         noise=None,
         seed=None,
-        turns=10,
         match_attributes=None,
         attrs=None,
         init_kwargs=None,
