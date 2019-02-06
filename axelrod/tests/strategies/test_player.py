@@ -491,6 +491,7 @@ class TestPlayer(unittest.TestCase):
         memory = player.classifier["memory_depth"]
         if memory < float("inf"):
             for strategy in strategies:
+                player.reset()
                 opponent = strategy()
                 self.assertTrue(
                     test_memory(

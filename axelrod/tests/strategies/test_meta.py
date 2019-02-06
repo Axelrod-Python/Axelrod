@@ -369,7 +369,7 @@ class TestMetaMajorityFiniteMemory(TestMetaPlayer):
     }
 
     def test_strategy(self):
-        actions = [(C, C), (C, D), (D, C), (C, D), (C, C)]
+        actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
         self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
 
 

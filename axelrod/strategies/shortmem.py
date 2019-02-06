@@ -22,7 +22,7 @@ class ShortMem(Player):
 
     name = "ShortMem"
     classifier = {
-        "memory_depth": 10,
+        "memory_depth": float('inf'),
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,

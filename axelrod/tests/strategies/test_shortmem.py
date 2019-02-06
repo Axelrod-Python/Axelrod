@@ -7,12 +7,12 @@ from .test_player import TestPlayer
 C, D = axelrod.Action.C, axelrod.Action.D
 
 
-class TestCooperator(TestPlayer):
+class TestShortMem(TestPlayer):
 
     name = "ShortMem"
     player = axelrod.ShortMem
     expected_classifier = {
-        "memory_depth": 10,
+        "memory_depth": float('inf'),
         "stochastic": False,
         "makes_use_of": set(),
         "inspects_source": False,
