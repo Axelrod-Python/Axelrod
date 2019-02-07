@@ -1,12 +1,9 @@
-import random
 import unittest
 
-from axelrod import short_run_time_strategies, filtered_strategies, seed
-
+from axelrod import filtered_strategies, seed
+from axelrod.tests.property import strategy_lists
 from hypothesis import example, given, settings
 from hypothesis.strategies import integers
-
-strategies = random.sample(short_run_time_strategies, 20)
 
 
 class TestFiltersAgainstComprehensions(unittest.TestCase):
@@ -15,7 +12,8 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
     match the results from using a list comprehension.
     """
 
-    def test_boolean_filtering(self):
+    @given(strategies=strategy_lists(min_size=20, max_size=20))
+    def test_boolean_filtering(self, strategies):
 
         classifiers = [
             "stochastic",
@@ -35,15 +33,18 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
         min_memory_depth=integers(min_value=1, max_value=10),
         max_memory_depth=integers(min_value=1, max_value=10),
         memory_depth=integers(min_value=1, max_value=10),
+        strategies=strategy_lists(min_size=20, max_size=20),
     )
     @example(
         min_memory_depth=float("inf"),
         max_memory_depth=float("inf"),
         memory_depth=float("inf"),
+        strategies=strategy_lists(min_size=20, max_size=20),
     )
     @settings(max_examples=5)
     def test_memory_depth_filtering(
-        self, min_memory_depth, max_memory_depth, memory_depth
+        self, min_memory_depth, max_memory_depth, memory_depth,
+        strategies
     ):
 
         min_comprehension = set(
@@ -81,9 +82,11 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
         filtered = set(filtered_strategies(filterset, strategies=strategies))
         self.assertEqual(comprehension, filtered)
 
-    @given(seed_=integers(min_value=0, max_value=4294967295))
+    @given(seed_=integers(min_value=0, max_value=4294967295),
+           strategies=strategy_lists(min_size=20, max_size=20),
+           )
     @settings(max_examples=5)
-    def test_makes_use_of_filtering(self, seed_):
+    def test_makes_use_of_filtering(self, seed_, strategies):
         """
         Test equivalent filtering using two approaches.
 

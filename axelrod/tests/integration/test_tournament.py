@@ -37,7 +37,7 @@ class TestTournament(unittest.TestCase):
         min_size=10,
         max_size=30,
         min_turns=2,
-        max_turns=40,
+        max_turns=210,
         min_repetitions=1,
         max_repetitions=4,
     ))
