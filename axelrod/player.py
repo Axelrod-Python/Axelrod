@@ -84,7 +84,7 @@ class Player(object):
         "manipulates_state": None,
     }
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, history=None, **kwargs):
         """Caches arguments for Player cloning."""
         obj = super().__new__(cls)
         obj.init_kwargs = cls.init_params(*args, **kwargs)
@@ -110,15 +110,16 @@ class Player(object):
         return boundargs.arguments
 
     def __init__(self):
-        """Initiates an empty history and 0 score for a player."""
+        """Initiates an empty history."""
         self._history = History()
         self.classifier = copy.deepcopy(self.classifier)
         for dimension in self.default_classifier:
             if dimension not in self.classifier:
                 self.classifier[dimension] = self.default_classifier[dimension]
-        self.init_args = ()
-        self.init_kwargs = dict()
         self.set_match_attributes()
+
+    def set_shared_history(self, history):
+        self._history = history
 
     def __eq__(self, other):
         """

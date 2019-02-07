@@ -347,12 +347,14 @@ def flip_play_attributes(player: Player) -> None:
 
 def flip_history(player: Player) -> None:
     """Flips all the actions in `player.history`."""
+    return
     new_history = [action.flip() for action in player.history]
     player.history = new_history
 
 
 def switch_cooperations_and_defections(player: Player) -> None:
     """Exchanges `player.cooperations` and `player.defections`."""
+    return
     temp = player.cooperations
     player.cooperations = player.defections
     player.defections = temp
@@ -360,6 +362,7 @@ def switch_cooperations_and_defections(player: Player) -> None:
 
 def flip_state_distribution(player: Player) -> None:
     """Flips all the player's actions in `player.state_distribution`."""
+    return
     new_distribution = defaultdict(int)
     for key, val in player.state_distribution.items():
         new_key = (key[0].flip(), key[1])

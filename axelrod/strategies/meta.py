@@ -1,6 +1,7 @@
 import random
 
 from axelrod.action import Action
+from axelrod.history import History
 from axelrod.player import Player, obey_axelrod
 from axelrod.strategies import TitForTat
 from axelrod.strategy_transformers import NiceTransformer
@@ -44,6 +45,7 @@ class MetaPlayer(Player):
 
     def __init__(self, team=None):
         super().__init__()
+        # self.history = History(shared=True)
         # The default is to use all strategies available, but we need to import
         # the list at runtime, since _strategies import also _this_ module
         # before defining the list.
@@ -59,6 +61,8 @@ class MetaPlayer(Player):
 
         # Initiate all the player in our team.
         self.team = [t() for t in self.team]
+        # for t in self.team:
+        #     t.set_shared_history(self.history)
 
         # This player inherits the classifiers of its team.
         # Note that memory_depth is not simply the max memory_depth of the team.

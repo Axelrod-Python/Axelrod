@@ -6,27 +6,37 @@ C, D = Action.C, Action.D
 
 
 class HistoryList(object):
+    # def __init__(self, history=None, shared=False):
+    #     self.shared = shared
     def __init__(self, history=None):
-        self._len = 0
-        self._history = []
-        self._counter = Counter()
-        self.state_distribution = defaultdict(int)
         if isinstance(history, History):
             history = history._history
         if history:
+            # if shared:
+            #     self._history = history
+            # else:
             self.extend(history)
+        else:
+            self._history = []
+        self._len = len(self._history)
+        # broken if history is non-empty
+        self._counter = Counter()
+        self.state_distribution = defaultdict(int)
 
-    def append(self, play):
+    def append(self, play, opp_play=None):
         self._len += 1
         self._history.append(play)
         self._counter[play] += 1
+        if opp_play:
+            self.state_distribution[(play, opp_play)]
 
     @property
     def cooperations(self):
         return self._counter[C]
 
     def copy(self):
-        new_history = History(self._history)
+        # new_history = History(history=self._history, shared=self.shared)
+        new_history = History(history=self._history)
         return new_history
 
     @property
