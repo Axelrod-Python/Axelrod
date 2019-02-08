@@ -1,6 +1,6 @@
 import unittest
 
-from axelrod import filtered_strategies, seed
+from axelrod import filtered_strategies, seed, short_run_time_strategies
 from axelrod.tests.property import strategy_lists
 from hypothesis import example, given, settings
 from hypothesis.strategies import integers
@@ -39,7 +39,7 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
         min_memory_depth=float("inf"),
         max_memory_depth=float("inf"),
         memory_depth=float("inf"),
-        strategies=strategy_lists(min_size=20, max_size=20),
+        strategies=short_run_time_strategies,
     )
     @settings(max_examples=5)
     def test_memory_depth_filtering(
