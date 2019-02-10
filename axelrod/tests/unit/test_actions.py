@@ -7,14 +7,6 @@ C, D = Action.C, Action.D
 
 
 class TestAction(unittest.TestCase):
-    def test_eq(self):
-        self.assertEqual(C, C)
-        self.assertEqual(D, D)
-
-    def test_hash(self):
-        self.assertEqual(hash(C), 1)
-        self.assertEqual(hash(D), 0)
-
     def test_lt(self):
         self.assertLess(D, C)
 
@@ -26,15 +18,16 @@ class TestAction(unittest.TestCase):
         self.assertEqual(str(C), "C")
         self.assertEqual(str(D), "D")
 
-    def test_bool(self):
-        self.assertTrue(C)
-        self.assertFalse(D)
-
     def test__eq__(self):
         self.assertTrue(C == C)
         self.assertTrue(D == D)
         self.assertFalse(C == D)
         self.assertFalse(D == C)
+
+    def test_total_order(self):
+        actions = [C, D, D, C, C, C, D]
+        actions.sort()
+        self.assertEqual(actions, [C, C, C, C, D, D, D])
 
     def test_flip(self):
         self.assertEqual(C.flip(), D)
