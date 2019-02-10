@@ -20,7 +20,7 @@ class UnknownActionError(ValueError):
 
 @total_ordering
 class Action(Enum):
-    """Core actions in the Prisoner's Dilemna.
+    """Core actions in the Prisoner's Dilemma.
     
     There are only two possible actions, namely Cooperate or Defect,
     which are called C and D for convenience.
@@ -29,23 +29,14 @@ class Action(Enum):
     C = 1  # Cooperate
     D = 0  # Defect
 
-    def __bool__(self):
-        return bool(self.value)
-
-    def __eq__(self, other):
-        return self.value == other.value
-
-    def __hash__(self):
-        return hash(self.value)
-
     def __lt__(self, other):
         return self.value < other.value
 
     def __repr__(self):
-        return "{}".format(self.name)
+        return self.name
 
     def __str__(self):
-        return "{}".format(self.name)
+        return repr(self)
 
     def flip(self):
         """Returns the opposite Action."""
