@@ -1,6 +1,6 @@
 from collections import Counter, defaultdict
 
-from axelrod.action import Action
+from axelrod.action import Action, actions_to_str
 
 C, D = Action.C, Action.D
 
@@ -9,6 +9,10 @@ class HistoryList(object):
     # def __init__(self, history=None, shared=False):
     #     self.shared = shared
     def __init__(self, history=None):
+        self._history = []
+        self._counter = Counter()
+        # Broken, needs to be on Joint History
+        self.state_distribution = defaultdict(int)
         if isinstance(history, History):
             history = history._history
         if history:
@@ -16,15 +20,10 @@ class HistoryList(object):
             #     self._history = history
             # else:
             self.extend(history)
-        else:
-            self._history = []
         self._len = len(self._history)
-        # broken if history is non-empty
-        self._counter = Counter()
-        self.state_distribution = defaultdict(int)
 
     def append(self, play, opp_play=None):
-        self._len += 1
+        # self._len += 1
         self._history.append(play)
         self._counter[play] += 1
         if opp_play:
@@ -50,14 +49,13 @@ class HistoryList(object):
     def pop(self, index):
         play = self._history.pop(index)
         self._counter[play] -= 1
-        self._len -= 1
+        # self._len -= 1
         return play
 
     def reset(self):
-        del self._history
         self._history = []
         self.state_distribution = defaultdict(int)
-        self._len = 0
+        # self._len = 0
         self._counter = Counter()
 
     def __eq__(self, other):
@@ -65,14 +63,15 @@ class HistoryList(object):
         if isinstance(other, list):
             # other_history = "".join(other)
             other_history = other
-        elif isinstance(other, str):
-            # other_history = other
-            other_history = list(other)
+        # elif isinstance(other, str):
+        #     # other_history = other
+        #     other_history = list(other)
         elif isinstance(other, HistoryList):
             other_history = other._history
         else:
             print(other)
             raise ValueError("Cannot compare types.")
+        ## Need to also check state distribution?
         return self._history == other_history
 
     def __add__(self, other):
@@ -90,17 +89,17 @@ class HistoryList(object):
         return self._history[key]
 
     def __str__(self):
-        return "".join(self._history)
+        return actions_to_str(self._history)
 
     def __list__(self):
         return self._history
 
     def __len__(self):
-        return self._len
-        # return len(self._history)
+        # return self._len
+        return len(self._history)
 
     def __repr__(self):
-        return "History: " + ''.join(self._history)
+        return "History: {}".format(actions_to_str(self._history))
 
 
 class HistoryString(object):
@@ -114,7 +113,7 @@ class HistoryString(object):
             self.extend(history)
 
     def append(self, play):
-        self._history += play
+        self._history += actions_to_str(play)
         self._counter[play] += 1
         self._len += 1
 
@@ -185,7 +184,7 @@ class HistoryString(object):
         # return len(self._history)
 
     def __repr__(self):
-        return "History: " + ''.join(self._history)
+        return "History: {}".format(actions_to_str(self._history))
 
 
 History = HistoryList

@@ -6,6 +6,7 @@ See the various Meta strategies for another type of transformation.
 """
 
 import collections
+from collections import defaultdict
 import copy
 import inspect
 import random
@@ -15,7 +16,7 @@ from typing import Any
 from numpy.random import choice
 
 from .action import Action
-from .player import Player, defaultdict
+from .player import Player
 from .random_ import random_choice
 
 C, D = Action.C, Action.D

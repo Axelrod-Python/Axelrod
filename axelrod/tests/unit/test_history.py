@@ -1,9 +1,9 @@
 import unittest
 
-from axelrod import Actions
+from axelrod import Action
 from axelrod.history import HistoryString, HistoryList
 
-C, D = Actions.C, Actions.D
+C, D = Action.C, Action.D
 
 
 class TestHistoryList(unittest.TestCase):

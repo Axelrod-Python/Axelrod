@@ -1,4 +1,3 @@
-from collections import defaultdict
 import copy
 import inspect
 import itertools
@@ -118,8 +117,8 @@ class Player(object):
                 self.classifier[dimension] = self.default_classifier[dimension]
         self.set_match_attributes()
 
-    def set_shared_history(self, history):
-        self._history = history
+    # def set_shared_history(self, history):
+    #     self._history = history
 
     def __eq__(self, other):
         """
@@ -240,7 +239,8 @@ class Player(object):
         of players) to reset a player's state to its initial starting point.
         It ensures that no 'memory' of previous matches is carried forward.
         """
-        self._history.reset()
+        if not len(self._history):
+            self._history.reset()
         self.__init__(**self.init_kwargs)
 
     @property
@@ -253,12 +253,12 @@ class Player(object):
 
     @property
     def cooperations(self):
-        return self.history.cooperations
+        return self._history.cooperations
 
     @property
     def defections(self):
-        return self.history.defections
+        return self._history.defections
 
     @property
     def state_distribution(self):
-        return self.history.state_distribution
+        return self._history.state_distribution
