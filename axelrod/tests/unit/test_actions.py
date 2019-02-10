@@ -8,7 +8,7 @@ C, D = Action.C, Action.D
 
 class TestAction(unittest.TestCase):
     def test_lt(self):
-        self.assertLess(D, C)
+        self.assertLess(C, D)
 
     def test_repr(self):
         self.assertEqual(repr(C), "C")
