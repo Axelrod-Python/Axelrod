@@ -42,7 +42,7 @@ class TestGame(unittest.TestCase):
         self.assertNotEqual(Game(), "wrong class")
 
     @given(r=integers(), p=integers(), s=integers(), t=integers())
-    @settings(max_examples=5, max_iterations=20)
+    @settings(max_examples=5)
     def test_random_init(self, r, p, s, t):
         """Test init with random scores using the hypothesis library."""
         expected_scores = {
@@ -55,14 +55,14 @@ class TestGame(unittest.TestCase):
         self.assertEqual(game.scores, expected_scores)
 
     @given(r=integers(), p=integers(), s=integers(), t=integers())
-    @settings(max_examples=5, max_iterations=20)
+    @settings(max_examples=5)
     def test_random_RPST(self, r, p, s, t):
         """Test RPST method with random scores using the hypothesis library."""
         game = Game(r, s, t, p)
         self.assertEqual(game.RPST(), (r, p, s, t))
 
     @given(r=integers(), p=integers(), s=integers(), t=integers())
-    @settings(max_examples=5, max_iterations=20)
+    @settings(max_examples=5)
     def test_random_score(self, r, p, s, t):
         """Test score method with random scores using the hypothesis library."""
         game = Game(r, s, t, p)
@@ -72,7 +72,7 @@ class TestGame(unittest.TestCase):
         self.assertEqual(game.score((D, C)), (t, s))
 
     @given(game=games())
-    @settings(max_examples=5, max_iterations=20)
+    @settings(max_examples=5)
     def test_random_repr(self, game):
         """Test repr with random scores using the hypothesis library."""
         expected_repr = "Axelrod game: (R,P,S,T) = {}".format(game.RPST())

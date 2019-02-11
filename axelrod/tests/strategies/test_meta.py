@@ -1,6 +1,8 @@
 """Tests for the various Meta strategies."""
-import axelrod
+from hypothesis import given, settings
+from hypothesis.strategies import integers
 
+import axelrod
 from .test_player import TestPlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D
@@ -58,6 +60,34 @@ class TestMetaPlayer(TestPlayer):
                 self.name, team_size, "s" if team_size > 1 else ""
             ),
         )
+
+    @given(seed=integers(min_value=1, max_value=20000000))
+    @settings(max_examples=1)
+    def test_clone(self, seed):
+        # Test that the cloned player produces identical play
+        player1 = self.player()
+        player2 = player1.clone()
+        self.assertEqual(len(player2.history), 0)
+        self.assertEqual(player2.cooperations, 0)
+        self.assertEqual(player2.defections, 0)
+        self.assertEqual(player2.state_distribution, {})
+        self.assertEqual(player2.classifier, player1.classifier)
+        self.assertEqual(player2.match_attributes, player1.match_attributes)
+
+        turns = 10
+        for op in [
+            axelrod.Cooperator(),
+            axelrod.Defector(),
+            axelrod.TitForTat(),
+        ]:
+            player1.reset()
+            player2.reset()
+            for p in [player1, player2]:
+                axelrod.seed(seed)
+                m = axelrod.Match((p, op), turns=turns)
+                m.play()
+            self.assertEqual(len(player1.history), turns)
+            self.assertEqual(player1.history, player2.history)
 
 
 class TestMetaMajority(TestMetaPlayer):
@@ -339,7 +369,7 @@ class TestMetaMajorityFiniteMemory(TestMetaPlayer):
     }
 
     def test_strategy(self):
-        actions = [(C, C), (C, D), (D, C), (C, D), (C, C)]
+        actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
         self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
 
 
@@ -692,7 +722,7 @@ class TestMemoryDecay(TestPlayer):
         )
 
         opponent = axelrod.Defector()
-        actions = [(C, D)] * 7 + [((D, D))]
+        actions = [(C, D)] * 7 + [(D, D)]
         self.versus_test(
             opponent,
             expected_actions=actions,

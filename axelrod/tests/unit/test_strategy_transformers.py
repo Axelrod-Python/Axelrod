@@ -265,7 +265,7 @@ class TestTransformers(unittest.TestCase):
         """Tests that DualTransformer produces the opposite results when faced
         with the same opponent history.
         """
-        for s in axelrod.strategies:
+        for s in axelrod.short_run_time_strategies:
             self.assert_dual_wrapper_correct(s)
 
     def test_dual_jossann_regression_test(self):
