@@ -1,5 +1,7 @@
+from collections import Counter
 import unittest
 
+import axelrod
 from axelrod import Action
 from axelrod.history import History
 
@@ -35,13 +37,6 @@ class TestHistory(unittest.TestCase):
         h2 = h.copy()
         self.assertEqual(h, h2)
 
-    def test_add(self):
-        h1 = History([C, C])
-        h2 = History([D, D])
-        h = h1 + h2
-        h3 = History([C, C, D, D])
-        self.assertEqual(h, h3)
-
     def test_counts(self):
         h1 = History([C, C])
         self.assertEqual(h1.cooperations, 2)
@@ -49,16 +44,28 @@ class TestHistory(unittest.TestCase):
         h2 = History([D, D])
         self.assertEqual(h2.cooperations, 0)
         self.assertEqual(h2.defections, 2)
+        self.assertNotEqual(h1, h2)
         h3 = History([C, C, D, D])
         self.assertEqual(h3.cooperations, 2)
         self.assertEqual(h3.defections, 2)
 
-    def test_pop(self):
-        h1 = History([C, D])
-        self.assertEqual(len(h1), 2)
-        play = h1.pop(-1)
-        self.assertEqual(play, D)
-        self.assertEqual(len(h1), 1)
+    def test_dual_history(self):
+        player = axelrod.Alternator()
+        opponent = axelrod.Cooperator()
+        for _ in range(5):
+            player.play(opponent)
 
+        self.assertEqual(player.history, [C, D, C, D, C])
+        self.assertEqual(player.cooperations, 3)
+        self.assertEqual(player.defections, 2)
 
+        new_distribution = Counter()
+        for key, val in player.state_distribution.items():
+            new_key = (key[0].flip(), key[1])
+            new_distribution[new_key] = val
 
+        player.history = player.history.dual()
+        self.assertEqual(player.history, [D, C, D, C, D])
+        self.assertEqual(player.cooperations, 2)
+        self.assertEqual(player.defections, 3)
+        self.assertEqual(player.state_distribution, new_distribution)

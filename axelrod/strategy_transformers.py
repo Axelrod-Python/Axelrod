@@ -5,12 +5,11 @@ strategy.
 See the various Meta strategies for another type of transformation.
 """
 
-import collections
-from collections import defaultdict
+from collections import Iterable
 import copy
 import inspect
-import random
 from importlib import import_module
+import random
 from typing import Any
 
 from numpy.random import choice
@@ -99,7 +98,7 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None, reclassifier=
                 if strategy_wrapper == dual_wrapper:
                     # dual_wrapper figures out strategy as if the Player had
                     # played the opposite actions of its current history.
-                    flip_play_attributes(self)
+                    self.history = self.history.dual()
 
                 if is_strategy_static(PlayerClass):
                     proposed_action = PlayerClass.strategy(opponent)
@@ -109,7 +108,7 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None, reclassifier=
                 if strategy_wrapper == dual_wrapper:
                     # After dual_wrapper calls the strategy, it returns
                     # the Player to its original state.
-                    flip_play_attributes(self)
+                    self.history = self.history.dual()
 
                 # Apply the wrapper
                 return strategy_wrapper(
@@ -333,44 +332,6 @@ def dual_wrapper(player, opponent: Player, proposed_action: Action) -> Action:
     return proposed_action.flip()
 
 
-def flip_play_attributes(player: Player) -> None:
-    """
-    Flips all the attributes created by `player.play`:
-        - `player.history`,
-        - `player.cooperations`,
-        - `player.defections`,
-        - `player.state_distribution`,
-    """
-    flip_history(player)
-    switch_cooperations_and_defections(player)
-    flip_state_distribution(player)
-
-
-def flip_history(player: Player) -> None:
-    """Flips all the actions in `player.history`."""
-    return
-    new_history = [action.flip() for action in player.history]
-    player.history = new_history
-
-
-def switch_cooperations_and_defections(player: Player) -> None:
-    """Exchanges `player.cooperations` and `player.defections`."""
-    return
-    temp = player.cooperations
-    player.cooperations = player.defections
-    player.defections = temp
-
-
-def flip_state_distribution(player: Player) -> None:
-    """Flips all the player's actions in `player.state_distribution`."""
-    return
-    new_distribution = defaultdict(int)
-    for key, val in player.state_distribution.items():
-        new_key = (key[0].flip(), key[1])
-        new_distribution[new_key] = val
-    player.state_distribution = new_distribution
-
-
 DualTransformer = StrategyTransformerFactory(dual_wrapper, name_prefix="Dual")
 
 
@@ -568,8 +529,8 @@ def mixed_wrapper(player, opponent, action, probability, m_player):
         probability = [probability]
 
     # If a probability distribution, players is passed
-    if isinstance(probability, collections.Iterable) and isinstance(
-        m_player, collections.Iterable
+    if isinstance(probability, Iterable) and isinstance(
+        m_player, Iterable
     ):
         mutate_prob = sum(probability)  # Prob of mutation
         if mutate_prob > 0:

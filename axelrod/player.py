@@ -111,7 +111,7 @@ class Player(object):
         self.set_match_attributes()
 
     # def set_shared_history(self, history):
-    #     self._history = history
+    #     self._plays = history
 
     def __eq__(self, other):
         """
@@ -236,7 +236,10 @@ class Player(object):
 
     @history.setter
     def history(self, obj):
-        self._history = History(history=obj)
+        if isinstance(obj, list):
+            self._history = History(plays=obj)
+        else:
+            self._history = obj
 
     @property
     def cooperations(self):
