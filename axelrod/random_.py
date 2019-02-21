@@ -31,6 +31,12 @@ def random_choice(p: float = 0.5) -> Action:
     return Action.D
 
 
+def random_flip(action, threshold):
+    if random.random() < threshold:
+        return action.flip()
+    return action
+
+
 def randrange(a: int, b: int) -> int:
     """Python 2 / 3 compatible randrange. Returns a random integer uniformly
     between a and b (inclusive)"""

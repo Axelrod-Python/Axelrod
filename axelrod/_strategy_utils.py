@@ -4,7 +4,6 @@ import itertools
 from functools import lru_cache
 
 from axelrod.action import Action
-from axelrod.player import update_history
 from axelrod.strategies.cooperator import Cooperator
 from axelrod.strategies.defector import Defector
 
@@ -91,8 +90,8 @@ def _limited_simulate_play(player_1, player_2, h1):
         The next action for first player.
     """
     h2 = inspect_strategy(player_1, player_2)
-    update_history(player_1, h1)
-    update_history(player_2, h2)
+    player_1.history.append(h1, h2)
+    player_2.history.append(h2, h1)
 
 
 def simulate_match(player_1, player_2, strategy, rounds=10):

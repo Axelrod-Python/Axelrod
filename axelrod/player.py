@@ -1,7 +1,6 @@
 import copy
 import inspect
 import itertools
-import random
 import types
 from typing import Any, Dict
 
@@ -10,6 +9,7 @@ import numpy as np
 from axelrod.action import Action
 from axelrod.game import DefaultGame
 from axelrod.history import History
+from axelrod.random_ import random_flip
 
 C, D = Action.C, Action.D
 
@@ -48,21 +48,14 @@ def obey_axelrod(s):
     )
 
 
-def update_history(player, move):
-    """Updates histories and cooperation / defections counts following play."""
-    player.history.append(move)
-
-
-def get_state_distribution_from_history(player, history_1, history_2):
-    """Gets state_distribution from player's and opponent's histories."""
-    for action, reply in zip(history_1, history_2):
-        update_state_distribution(player, action, reply)
-
-
-def update_state_distribution(player, action, reply):
-    """Updates state_distribution following play. """
-    last_turn = (action, reply)
-    player.history.state_distribution[last_turn] += 1
+def simultaneous_play(player, coplayer, noise=0):
+    """This pits two players against each other."""
+    s1, s2 = player.strategy(coplayer), coplayer.strategy(player)
+    if noise:
+        s1 = random_flip(s1, noise)
+        s2 = random_flip(s2, noise)
+    player.history.append(s1, s2)
+    coplayer.history.append(s2, s1)
 
 
 class Player(object):
@@ -195,15 +188,15 @@ class Player(object):
             prefix = ", "
         return name
 
-    @staticmethod
-    def _add_noise(noise, s1, s2):
-        r = random.random()
-        if r < noise:
-            s1 = s1.flip()
-        r = random.random()
-        if r < noise:
-            s2 = s2.flip()
-        return s1, s2
+    # @staticmethod
+    # def _add_noise(noise, s1, s2):
+    #     r = random.random()
+    #     if r < noise:
+    #         s1 = s1.flip()
+    #     r = random.random()
+    #     if r < noise:
+    #         s2 = s2.flip()
+    #     return s1, s2
 
     def strategy(self, opponent):
         """This is a placeholder strategy."""
@@ -211,13 +204,7 @@ class Player(object):
 
     def play(self, opponent, noise=0):
         """This pits two players against each other."""
-        s1, s2 = self.strategy(opponent), opponent.strategy(self)
-        if noise:
-            s1, s2 = self._add_noise(noise, s1, s2)
-        update_history(self, s1)
-        update_history(opponent, s2)
-        update_state_distribution(self, s1, s2)
-        update_state_distribution(opponent, s2, s1)
+        simultaneous_play(self, opponent, noise)
 
     def clone(self):
         """Clones the player without history, reapplying configuration

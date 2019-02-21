@@ -6,7 +6,6 @@ import unittest
 import axelrod
 import numpy as np
 from axelrod import DefaultGame, Player
-from axelrod.player import get_state_distribution_from_history, update_history
 from axelrod.tests.property import strategy_lists
 
 from hypothesis import given, settings
@@ -57,19 +56,6 @@ class TestPlayerClass(unittest.TestCase):
     player = Player
     classifier = {"stochastic": False}
 
-    def test_add_noise(self):
-        axelrod.seed(1)
-        noise = 0.2
-        s1, s2 = C, C
-        noisy_s1, noisy_s2 = self.player()._add_noise(noise, s1, s2)
-        self.assertEqual(noisy_s1, D)
-        self.assertEqual(noisy_s2, C)
-
-        noise = 0.9
-        noisy_s1, noisy_s2 = self.player()._add_noise(noise, s1, s2)
-        self.assertEqual(noisy_s1, D)
-        self.assertEqual(noisy_s2, D)
-
     def test_play(self):
         player1, player2 = self.player(), self.player()
         player1.strategy = cooperate
@@ -111,15 +97,6 @@ class TestPlayerClass(unittest.TestCase):
             player2.state_distribution, {(C, C): 1, (C, D): 1, (D, C): 2, (D, D): 1}
         )
 
-    def test_get_state_distribution_from_history(self):
-        player = self.player()
-        history_1 = [C, C, D, D, C]
-        history_2 = [C, D, C, D, D]
-        get_state_distribution_from_history(player, history_1, history_2)
-        self.assertEqual(
-            player.state_distribution, {(C, C): 1, (C, D): 2, (D, C): 1, (D, D): 1}
-        )
-
     def test_noisy_play(self):
         axelrod.seed(1)
         noise = 0.2
@@ -135,11 +112,11 @@ class TestPlayerClass(unittest.TestCase):
         self.assertEqual(player.history, [])
         self.assertEqual(player.cooperations, 0)
         self.assertEqual(player.defections, 0)
-        update_history(player, D)
+        player.history.append(D)
         self.assertEqual(player.history, [D])
         self.assertEqual(player.defections, 1)
         self.assertEqual(player.cooperations, 0)
-        update_history(player, C)
+        player.history.append(C)
         self.assertEqual(player.history, [D, C])
         self.assertEqual(player.defections, 1)
         self.assertEqual(player.cooperations, 1)
