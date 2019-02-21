@@ -110,9 +110,6 @@ class Player(object):
                 self.classifier[dimension] = self.default_classifier[dimension]
         self.set_match_attributes()
 
-    # def set_shared_history(self, history):
-    #     self._plays = history
-
     def __eq__(self, other):
         """
         Test if two players are equal.
@@ -188,16 +185,6 @@ class Player(object):
             prefix = ", "
         return name
 
-    # @staticmethod
-    # def _add_noise(noise, s1, s2):
-    #     r = random.random()
-    #     if r < noise:
-    #         s1 = s1.flip()
-    #     r = random.random()
-    #     if r < noise:
-    #         s2 = s2.flip()
-    #     return s1, s2
-
     def strategy(self, opponent):
         """This is a placeholder strategy."""
         raise NotImplementedError()
@@ -226,8 +213,7 @@ class Player(object):
         of players) to reset a player's state to its initial starting point.
         It ensures that no 'memory' of previous matches is carried forward.
         """
-        if not len(self._history):
-            self._history.reset()
+        # This also resets the history.
         self.__init__(**self.init_kwargs)
 
     @property
@@ -238,9 +224,15 @@ class Player(object):
     def history(self, obj):
         if isinstance(obj, list):
             self._history = History(plays=obj)
-        else:
+        elif isinstance(obj, History):
             self._history = obj
+        else:
+            raise TypeError("Cannot assign history with type {}".format(
+                type(obj)
+            ))
 
+    # Properties maintained for legacy API, can refactor to self.history.X
+    # in 5.0.0 to reduce function call overhead.
     @property
     def cooperations(self):
         return self._history.cooperations

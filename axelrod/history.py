@@ -35,8 +35,8 @@ class History(object):
 
     def dual(self):
         """Creates a dual history for use with DualTransformer."""
-        new_history = [action.flip() for action in self._plays]
-        return History(plays=new_history, coplays=self._coplays)
+        flipped_plays = [action.flip() for action in self._plays]
+        return History(plays=flipped_plays, coplays=self._coplays)
 
     def extend(self, plays, coplays=None):
         # We could repeatedly call self.append but this is more efficient.
