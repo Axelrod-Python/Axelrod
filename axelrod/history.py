@@ -68,7 +68,7 @@ class History(object):
             return self._plays == other
         elif isinstance(other, History):
             return self._plays == other._plays and self._coplays == other._coplays
-        raise ValueError("Cannot compare types.")
+        raise TypeError("Cannot compare types.")
 
     def __getitem__(self, key):
         # Passthrough keys and slice objects

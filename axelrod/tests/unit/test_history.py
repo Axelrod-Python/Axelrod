@@ -15,6 +15,17 @@ class TestHistory(unittest.TestCase):
         h1.extend([C, C])
         self.assertEqual(list(h1), [C, C, D, C, C])
 
+    def test_str_list_repr(self):
+        h = History()
+        h.append(C, D)
+        h.append(D, C)
+        h.append(C, D)
+        self.assertEqual(str(h), "CDC")
+        self.assertEqual(list(h), [C, D, C])
+        self.assertEqual(repr(h), [C, D, C])
+        h2 = h.dual()
+        self.assertEqual(str(h2), "DCD")
+
     def test_reset(self):
         h = History()
         h.append(C, D)
@@ -36,6 +47,11 @@ class TestHistory(unittest.TestCase):
         h = History([C, D, C])
         h2 = h.copy()
         self.assertEqual(h, h2)
+
+    def test_eq(self):
+        h = History([C, D, C])
+        with self.assertRaises(TypeError):
+            h == 2
 
     def test_counts(self):
         h1 = History([C, C])

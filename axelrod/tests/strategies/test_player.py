@@ -121,6 +121,11 @@ class TestPlayerClass(unittest.TestCase):
         self.assertEqual(player.defections, 1)
         self.assertEqual(player.cooperations, 1)
 
+    def test_update_history(self):
+        player = Player()
+        with self.assertRaises(TypeError):
+            player.history = 1
+
     def test_strategy(self):
         self.assertRaises(NotImplementedError, self.player().strategy, self.player())
 
