@@ -220,7 +220,14 @@ class TestPickle(unittest.TestCase):
 
     def test_sequence_player(self):
         player = axl.ThueMorse()
-        self.assert_original_equals_pickled(player)
+        opponents = (axl.Defector, axl.Cooperator, axl.Random, axl.CyclerCCCDCD)
+        for opponent_class in opponents:
+            axl.seed(10)
+            player.reset()
+            opponent = opponent_class()
+            match_1 = axl.Match((player, opponent), turns=20)
+            _ = match_1.play()
+            self.assert_original_equals_pickled(player)
 
     def test_final_transformer_called(self):
         player = axl.Alexei()
