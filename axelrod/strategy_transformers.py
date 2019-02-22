@@ -94,7 +94,6 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None, reclassifier=
             # Define the new strategy method, wrapping the existing method
             # with `strategy_wrapper`
             def strategy(self, opponent):
-
                 if strategy_wrapper == dual_wrapper:
                     # dual_wrapper figures out strategy as if the Player had
                     # played the opposite actions of its current history.

@@ -4,6 +4,8 @@ from axelrod.action import Action
 from axelrod.player import Player, obey_axelrod
 from axelrod.strategies import TitForTat
 from axelrod.strategy_transformers import NiceTransformer
+
+import numpy as np
 from numpy.random import choice
 
 from ._strategies import all_strategies
@@ -56,9 +58,8 @@ class MetaPlayer(Player):
 
         # Make sure we don't use any meta players to avoid infinite recursion.
         self.team = [t for t in self.team if not issubclass(t, MetaPlayer)]
-        self.nteam = len(self.team)
 
-        # Initiate all the player in our team.
+        # Initiate all the players in our team.
         self.team = [t() for t in self.team]
 
         # This player inherits the classifiers of its team.
@@ -86,7 +87,7 @@ class MetaPlayer(Player):
             player.history.append(play, coplay)
 
     def strategy(self, opponent):
-        if len(self.history) > 0:
+        if len(self.history):
             self.update_histories(opponent.history[-1])
         # Get the results of all our players.
         results = []
@@ -114,9 +115,6 @@ class MetaMajority(MetaPlayer):
 
     name = "Meta Majority"
 
-    def __init__(self, team=None):
-        super().__init__(team=team)
-
     @staticmethod
     def meta_strategy(results, opponent):
         if results.count(D) > results.count(C):
@@ -133,9 +131,6 @@ class MetaMinority(MetaPlayer):
     """
 
     name = "Meta Minority"
-
-    def __init__(self, team=None):
-        super().__init__(team=team)
 
     @staticmethod
     def meta_strategy(results, opponent):
@@ -158,21 +153,24 @@ class MetaWinner(MetaPlayer):
         super().__init__(team=team)
         # For each player, we will keep the history of proposed moves and
         # a running score since the beginning of the game.
-        self.scores = [0] * len(self.team)
+        self.scores = np.zeros(len(self.team))
         self.classifier["long_run_time"] = True
 
-    def _update_scores(self, opponent):
+    def _update_scores(self, coplay):
         # Update the running score for each player, before determining the
         # next move.
         game = self.match_attributes["game"]
-        if len(self.history):
-            for i, player in enumerate(self.team):
-                last_round = (player.history[-1], opponent.history[-1])
-                s = game.scores[last_round][0]
-                self.scores[i] += s
+        scores = []
+        for player in self.team:
+            player.history[-1]
+            last_round = (player.history[-1], coplay)
+            s = game.scores[last_round][0]
+            scores.append(s)
+        self.scores += np.array(scores)
 
     def meta_strategy(self, results, opponent):
-        self._update_scores(opponent)
+        if len(self.history):
+            self._update_scores(opponent.history[-1])
         # Choice an action based on the collection of scores
         bestscore = max(self.scores)
         beststrategies = [
@@ -199,7 +197,8 @@ class MetaWinnerEnsemble(MetaWinner):
     name = "Meta Winner Ensemble"
 
     def meta_strategy(self, results, opponent):
-        self._update_scores(opponent)
+        if len(self.history):
+            self._update_scores(opponent.history[-1])
         # Sort by score
         scores = [(score, i) for (i, score) in enumerate(self.scores)]
         # Choose one of the best scorers at random
@@ -627,8 +626,9 @@ class MemoryDecay(MetaPlayer):
         self.p_memory_alter = p_memory_alter
         self.loss_value = loss_value
         self.gain_value = gain_value
-        self.memory = [] if memory == None else memory
+        self.memory = [] if not memory else memory
         self.start_strategy_duration = start_strategy_duration
+        self.gloss_values = None
 
     def __repr__(self):
         return Player.__repr__(self)

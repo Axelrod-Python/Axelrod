@@ -26,7 +26,7 @@ class SequencePlayer(Player):
         self.generator_args = generator_args
         self.sequence_generator = self.generator_function(*self.generator_args)
 
-    def meta_strategy(self, value: int) -> None:
+    def meta_strategy(self, value: int) -> Action:
         """Determines how to map the sequence value to cooperate or defect.
         By default, treat values like python truth values. Override in child
         classes for alternate behaviors."""
@@ -50,7 +50,7 @@ class SequencePlayer(Player):
         self.__dict__["sequence_generator"] = self.generator_function(
             *self.generator_args
         )
-        for turn in self.history:
+        for _ in self.history:
             next(self.sequence_generator)
 
 

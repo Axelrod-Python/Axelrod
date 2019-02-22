@@ -22,7 +22,7 @@ class TestHistory(unittest.TestCase):
         h.append(C, D)
         self.assertEqual(str(h), "CDC")
         self.assertEqual(list(h), [C, D, C])
-        self.assertEqual(repr(h), [C, D, C])
+        self.assertEqual(repr(h), "[C, D, C]")
         h2 = h.dual()
         self.assertEqual(str(h2), "DCD")
 
@@ -85,3 +85,9 @@ class TestHistory(unittest.TestCase):
         self.assertEqual(player.cooperations, 2)
         self.assertEqual(player.defections, 3)
         self.assertEqual(player.state_distribution, new_distribution)
+
+        # Dual operation is idempotent
+        player.history = player.history.dual()
+        self.assertEqual(player.history, [C, D, C, D, C])
+        self.assertEqual(player.cooperations, 3)
+        self.assertEqual(player.defections, 2)
