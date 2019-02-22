@@ -19,11 +19,10 @@ class History(object):
         self._coplays = []
         self._actions = Counter()
         self._state_distribution = Counter()
-
         if plays:
             self.extend(plays, coplays)
 
-    def append(self, play, coplay=None):
+    def append(self, play, coplay):
         self._plays.append(play)
         self._actions[play] += 1
         if coplay:

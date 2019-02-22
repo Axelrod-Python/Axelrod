@@ -17,7 +17,7 @@ class TestHistory(unittest.TestCase):
 
     def test_reset(self):
         h = History()
-        h.append(C)
+        h.append(C, D)
         self.assertEqual(len(h), 1)
         self.assertEqual(h.cooperations, 1)
         h.reset()

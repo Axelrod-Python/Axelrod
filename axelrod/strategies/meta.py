@@ -47,6 +47,7 @@ class MetaPlayer(Player):
         # The default is to use all strategies available, but we need to import
         # the list at runtime, since _strategies import also _this_ module
         # before defining the list.
+        self._last_results = None
         if team:
             self.team = team
         else:
@@ -79,14 +80,20 @@ class MetaPlayer(Player):
             self.name, team_size, "s" if team_size > 1 else ""
         )
 
+    def update_histories(self, coplay):
+        # Update team histories.
+        for player, play in zip(self.team, self._last_results):
+            player.history.append(play, coplay)
+
     def strategy(self, opponent):
+        if len(self.history) > 0:
+            self.update_histories(opponent.history[-1])
         # Get the results of all our players.
         results = []
         for player in self.team:
             play = player.strategy(opponent)
-            player.history.append(play)
             results.append(play)
-
+        self._last_results = results
         # A subclass should just define a way to choose the result based on
         # team results.
         return self.meta_strategy(results, opponent)
@@ -587,7 +594,7 @@ class MemoryDecay(MetaPlayer):
     altered (i.e., a C decision becomes D or vice versa; default probability
     is 0.03) or deleted (default probability is 0.1).
 
-    It is possible to pass a different axelrod player class to change the inital
+    It is possible to pass a different axelrod player class to change the initial
     player behavior.
 
     Name: Memory Decay
@@ -649,12 +656,12 @@ class MemoryDecay(MetaPlayer):
 
     def strategy(self, opponent):
         try:
+            self.team[0].history.append(self.history[-1], opponent.history[-1])
             self.memory.append(opponent.history[-1])
         except IndexError:
             pass
         if len(self.history) < self.start_strategy_duration:
             play = self.team[0].strategy(opponent)
-            self.team[0].history.append(play)
             return play
         else:
             if random.random() <= self.p_memory_alter:
