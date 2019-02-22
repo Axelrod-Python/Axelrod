@@ -12,7 +12,7 @@ class TestGrudger(TestPlayer):
     name = "Grudger"
     player = axl.Grudger
     expected_classifier = {
-        "memory_depth": 1,
+        "memory_depth": float('inf'),
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
