@@ -34,6 +34,7 @@ from .meta import (
 )
 
 all_strategies += [
+    MemoryDecay,
     MetaHunter,
     MetaHunterAggressive,
     MetaMajority,

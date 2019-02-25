@@ -87,7 +87,7 @@ class TestGetMemoryFromTransitions(unittest.TestCase):
 
         trans_dict = self.transitions_to_dict(transitions)
         self.assertEqual(get_memory_from_transitions(trans_dict), 1)
-        
+
     def test_three_state_tft(self):
         """Tit-for-tat again, but using three states, and a complex web of
         transitions between them.

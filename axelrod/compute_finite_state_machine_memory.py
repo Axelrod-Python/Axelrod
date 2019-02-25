@@ -178,7 +178,7 @@ def get_memory_from_transitions(
     if initial_state is not None:
         transitions = get_accessible_transitions(transitions, initial_state)
 
-        # Get the incoming actions for each state.
+    # Get the incoming actions for each state.
     incoming_action_by_state = defaultdict(
         set
     )  # type: DefaultDict[int, Set[Action]]

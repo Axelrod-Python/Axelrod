@@ -189,7 +189,7 @@ class ANN(Player):
     ) -> None:
         super().__init__()
         (i2h, h2o, bias) = split_weights(weights, num_features, num_hidden)
-        self.input_to_hidden_layer_weights = np.matrix(i2h)
+        self.input_to_hidden_layer_weights = np.array(i2h)
         self.hidden_to_output_layer_weights = np.array(h2o)
         self.bias_weights = np.array(bias)
 
