@@ -87,6 +87,22 @@ class TestGetMemoryFromTransitions(unittest.TestCase):
 
         trans_dict = self.transitions_to_dict(transitions)
         self.assertEqual(get_memory_from_transitions(trans_dict), 1)
+        
+    def test_three_state_tft(self):
+        """Tit-for-tat again, but using three states, and a complex web of
+        transitions between them.
+        """
+        transitions = (
+            (0, C, 1, C),
+            (0, D, 1, D),
+            (1, C, 2, C),
+            (1, D, 0, D),
+            (2, C, 0, C),
+            (2, D, 2, D)
+        )
+
+        trans_dict = self.transitions_to_dict(transitions)
+        self.assertEqual(get_memory_from_transitions(trans_dict), 1)
 
     def test_two_state_inf_memory(self):
         """A C will cause the FSM to stay in the same state, and D causes to
