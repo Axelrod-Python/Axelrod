@@ -1,3 +1,23 @@
+# v4.5.0, 2019-01-31
+
+Implemented algorithm for memory depth of Finite State Machines, some new
+strategies  and some minor internal improvements.
+
+- Algorithm for memory depth of Finite State machines
+  https://github.com/Axelrod-Python/Axelrod/pull/1233
+- Minor refactoring
+  https://github.com/Axelrod-Python/Axelrod/pull/1223
+  https://github.com/Axelrod-Python/Axelrod/pull/1227
+  https://github.com/Axelrod-Python/Axelrod/pull/1225
+  https://github.com/Axelrod-Python/Axelrod/pull/1222
+- Speed up of cache
+  https://github.com/Axelrod-Python/Axelrod/pull/1229
+- New strategies
+  https://github.com/Axelrod-Python/Axelrod/pull/1228
+  https://github.com/Axelrod-Python/Axelrod/pull/1231
+
+https://github.com/Axelrod-Python/Axelrod/compare/v4.5.0...v4.4.0
+
 # v4.4.0, 2018-10-30
 
 2 new strategies and internal refactoring.

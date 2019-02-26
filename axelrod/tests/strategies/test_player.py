@@ -444,7 +444,9 @@ class TestPlayer(unittest.TestCase):
         clone = player.clone()
         self.assertEqual(player, clone)
 
-    def test_clone(self):
+    @given(seed=integers(min_value=1, max_value=20000000))
+    @settings(max_examples=1)
+    def test_clone(self, seed):
         # Test that the cloned player produces identical play
         player1 = self.player()
         if player1.name in ["Darwin", "Human"]:
@@ -468,7 +470,6 @@ class TestPlayer(unittest.TestCase):
         ]:
             player1.reset()
             player2.reset()
-            seed = random.randint(0, 10 ** 6)
             for p in [player1, player2]:
                 axelrod.seed(seed)
                 m = axelrod.Match((p, op), turns=turns)
@@ -481,7 +482,7 @@ class TestPlayer(unittest.TestCase):
         seed=integers(min_value=1, max_value=200),
         turns=integers(min_value=1, max_value=200),
     )
-    @settings(max_examples=1, max_iterations=1)
+    @settings(max_examples=1)
     def test_memory_depth_upper_bound(self, strategies, seed, turns):
         """
         Test that the memory depth is indeed an upper bound.
@@ -490,6 +491,7 @@ class TestPlayer(unittest.TestCase):
         memory = player.classifier["memory_depth"]
         if memory < float("inf"):
             for strategy in strategies:
+                player.reset()
                 opponent = strategy()
                 self.assertTrue(
                     test_memory(
@@ -508,7 +510,6 @@ class TestPlayer(unittest.TestCase):
         expected_actions,
         noise=None,
         seed=None,
-        turns=10,
         match_attributes=None,
         attrs=None,
         init_kwargs=None,
