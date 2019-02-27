@@ -13,18 +13,15 @@ TransitionDict = Dict[Tuple[int, Action], Tuple[int, Action]]
 class Memit(object):
     """
     Memit = unit of memory.
-
     This represents the amount of memory that we gain with each new piece of
     history.  It includes a state, our_response that we make on our way into that
     state (in_act), and the opponent's action that makes us move out of that state
     (out_act).
-
     For example, for this finite state machine:
     (0, C, 0, C),
     (0, D, 1, C),
     (1, C, 0, D),
     (1, D, 0, D)
-
     Has the memits:
     (C, 0, C),
     (C, 0, D),
@@ -152,21 +149,17 @@ def get_memory_from_transitions(
     all_actions: Tuple[Action, Action] = (C, D),
 ) -> int:
     """This function calculates the memory of an FSM from the transitions.
-
     Assume that transitions are a dict with entries like
     (state, last_opponent_action): (next_state, next_action)
-
     We first break down the transitions into memits (see above).  We also create
     a graph of memits, where the successor to a given memit are all possible
     memits that could occur in the memory immediately before the given memit.
-
     Then we pair up memits with different states, but same in and out actions.
     These represent points in time that we can't determine which state we're in.
     We also create a graph of memit-pairs, where memit-pair, Y, succeeds a
     memit-pair, X, if the two memits in X are succeeded by the two memits in Y.
     These edges reperesent consecutive points in time that we can't determine
     which state we're in.
-
     Then for all memit-pairs that disagree, in the sense that they imply
     different next_action, we find the longest chain starting at that
     memit-pair.  [If a loop is encountered then this will be infinite.]  We take

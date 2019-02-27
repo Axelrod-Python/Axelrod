@@ -1,354 +1,266 @@
-"""Tests for Compute FSM Memory."""
-import axelrod
-import unittest
+from axelrod.action import Action
+from collections import defaultdict, namedtuple
+from typing import DefaultDict, Iterator, Dict, Tuple, Set, List
 
-from axelrod.compute_finite_state_machine_memory import *
+C, D = Action.C, Action.D
 
-C, D = axelrod.Action.C, axelrod.Action.D
-
-
-class TestOrderedMemitTuple(unittest.TestCase):
-    def memits_completely_equal(self, x, y):
-        """If the state and the actions are equal."""
-        return x.state == y.state and x == y
-
-    def memit_tuple_equal(self, x_tuple, y_tuple):
-        """If the memits are the same in the same order."""
-        return self.memits_completely_equal(
-            x_tuple[0], y_tuple[0]
-        ) and self.memits_completely_equal(x_tuple[1], y_tuple[1])
-
-    def test_provided_ascending_order(self):
-        memit_c1c = Memit(C, 1, C)
-        memit_c2c = Memit(C, 2, C)
-
-        actual_tuple = ordered_memit_tuple(memit_c1c, memit_c2c)
-        expected_tuple = (memit_c1c, memit_c2c)
-
-        return self.memit_tuple_equal(actual_tuple, expected_tuple)
-
-    def test_provided_descending_order(self):
-        memit_c1c = Memit(C, 1, C)
-        memit_c2c = Memit(C, 2, C)
-
-        actual_tuple = ordered_memit_tuple(memit_c2c, memit_c1c)
-        expected_tuple = (memit_c1c, memit_c2c)
-
-        return self.memit_tuple_equal(actual_tuple, expected_tuple)
-
-    def test_order_on_actions(self):
-        memit_c9c = Memit(C, 9, C)
-        memit_c9d = Memit(C, 9, D)
-
-        actual_tuple = ordered_memit_tuple(memit_c9d, memit_c9c)
-        expected_tuple = (memit_c9c, memit_c9d)
-
-        return self.memit_tuple_equal(actual_tuple, expected_tuple)
+Transition = namedtuple(
+    "Transition", ["state", "last_opponent_action", "next_state", "next_action"]
+)
+TransitionDict = Dict[Tuple[int, Action], Tuple[int, Action]]
 
 
-class TestGetMemoryFromTransitions(unittest.TestCase):
-    def transitions_to_dict(self, transitions):
-        return {
-            (current_state, input_action): (next_state, output_action)
-            for current_state, input_action, next_state, output_action in transitions
-        }
+class Memit(object):
+    """
+    Memit = unit of memory.
 
-    def test_cooperator(self):
-        transitions = ((0, C, 0, C), (0, D, 0, C))
+    This represents the amount of memory that we gain with each new piece of
+    history.  It includes a state, our_response that we make on our way into that
+    state (in_act), and the opponent's action that makes us move out of that state
+    (out_act).
 
-        trans_dict = self.transitions_to_dict(transitions)
-        self.assertEqual(get_memory_from_transitions(trans_dict), 0)
+    For example, for this finite state machine:
+    (0, C, 0, C),
+    (0, D, 1, C),
+    (1, C, 0, D),
+    (1, D, 0, D)
 
-    def test_tit_for_tat(self):
-        transitions = ((0, C, 0, C), (0, D, 0, D))
+    Has the memits:
+    (C, 0, C),
+    (C, 0, D),
+    (D, 0, C),
+    (D, 0, D),
+    (C, 1, C),
+    (C, 1, D)
+    """
 
-        trans_dict = self.transitions_to_dict(transitions)
-        self.assertEqual(get_memory_from_transitions(trans_dict), 1)
+    def __init__(self, in_act: Action, state: int, out_act: Action):
+        self.in_act = in_act
+        self.state = state
+        self.out_act = out_act
 
-    def test_two_state_memory_two(self):
-        """If all D lead to state 0 and all C lead to state 1.  We make it so
-        that all paths out of state 0 plays Cooperator and state 1 plays
-        Defector.
+    def __repr__(self) -> str:
+        return "{}, {}, {}".format(self.in_act, self.state, self.out_act)
 
-        In this case, we must know what state we're in to know how to respond to
-        the opponent's previou action, but we cannot determine from our own
-        previous action; we must look at opponent's action from two turns ago.
-        """
-        transitions = ((0, C, 0, C), (0, D, 1, C), (1, C, 0, D), (1, D, 1, D))
+    def __hash__(self):
+        return hash(repr(self))
 
-        trans_dict = self.transitions_to_dict(transitions)
-        self.assertEqual(get_memory_from_transitions(trans_dict), 2)
-
-    def test_two_state_tft(self):
-        """Same case as above, but this time our own last action tells us which
-        state we're in.  In fact, this strategy is exactly TFT.
-        """
-        transitions = ((0, C, 0, C), (0, D, 1, D), (1, C, 0, C), (1, D, 1, D))
-
-        trans_dict = self.transitions_to_dict(transitions)
-        self.assertEqual(get_memory_from_transitions(trans_dict), 1)
-
-    def test_three_state_tft(self):
-        """Tit-for-tat again, but using three states, and a complex web of
-        transitions between them.
-        """
-        transitions = (
-            (0, C, 1, C),
-            (0, D, 1, D),
-            (1, C, 2, C),
-            (1, D, 0, D),
-            (2, C, 0, C),
-            (2, D, 2, D)
+    def __eq__(self, other_memit) -> bool:
+        """In action and out actions are the same."""
+        return (
+            self.in_act == other_memit.in_act
+            and self.out_act == other_memit.out_act
         )
 
-        trans_dict = self.transitions_to_dict(transitions)
-        self.assertEqual(get_memory_from_transitions(trans_dict), 1)
+    def __lt__(self, other_memit) -> bool:
+        return repr(self) < repr(other_memit)
 
-    def test_two_state_inf_memory(self):
-        """A C will cause the FSM to stay in the same state, and D causes to
-        change states.  Will always respond to a C with a C.   Will respond to a
-        D with a C in state 0, but with a D in state 1.
 
-        So we need to know the state to know how to respond to a D.  But since
-        an arbitarily long sequence of C/C may occur, we need infinite memory.
-        """
-        transitions = ((0, C, 0, C), (0, D, 1, C), (1, C, 1, C), (1, D, 0, D))
+MemitPair = Tuple[Memit, Memit]
 
-        trans_dict = self.transitions_to_dict(transitions)
-        self.assertEqual(get_memory_from_transitions(trans_dict), float("inf"))
 
-    def test_four_state_memory_two(self):
-        """Same as the two_state_memory_two test above, but we use two copies,
-        stitched together.
-        """
-        transitions = (
-            (0, C, 0, C),
-            (0, D, 1, C),
-            (1, C, 2, D),
-            (1, D, 1, D),
-            (2, C, 2, C),
-            (2, D, 3, C),
-            (3, C, 0, D),
-            (3, D, 3, D),
-        )
+def ordered_memit_tuple(x: Memit, y: Memit) -> tuple:
+    """Returns a tuple of x in y, sorted so that (x, y) are viewed as the
+    same as (y, x).
+    """
+    if x < y:
+        return (x, y)
+    else:
+        return (y, x)
 
-        trans_dict = self.transitions_to_dict(transitions)
-        self.assertEqual(get_memory_from_transitions(trans_dict), 2)
 
-    def test_tit_for_two_tat(self):
-        """This strategy does the same thing until the opponent does the same
-        action twice; then it responds in kind.  In the FSM implementation, we
-        let states 1 and 2 be the cooperating states, with state 2 being the
-        state after one opponent defection.  And states 3 and 4 are the
-        defecting states, with state 4 after 1 opponent cooperation.
+def transition_iterator(transitions: TransitionDict) -> Iterator[Transition]:
+    """Changes the transition dictionary into a iterator on namedtuples."""
+    for k, v in transitions.items():
+        yield Transition(k[0], k[1], v[0], v[1])
 
-        The memory should be two, because if the last two moves don't match,
-        then we can look to see what we did in the last move.  If the do match,
-        then we can respond in kind.
-        """
-        transitions = (
-            (1, C, 1, C),
-            (1, D, 2, C),
-            (2, C, 1, C),
-            (2, D, 3, D),
-            (3, C, 4, D),
-            (3, D, 3, D),
-            (4, C, 1, C),
-            (4, D, 3, D),
-        )
 
-        trans_dict = self.transitions_to_dict(transitions)
-        self.assertEqual(get_memory_from_transitions(trans_dict), 2)
+def get_accessible_transitions(
+    transitions: TransitionDict, initial_state: int
+) -> TransitionDict:
+    """Gets all transitions from the list that can be reached from the
+    initial_state.
+    """
+    # Initial dict of edges between states and a dict of visited status for each
+    # of the states.
+    edge_dict = defaultdict(list)  # type: DefaultDict[int, List[int]]
+    visited = dict()
+    for trans in transition_iterator(transitions):
+        visited[trans.state] = False
+        edge_dict[trans.state].append(trans.next_state)
+    # Keep track of states that can be accessed.
+    accessible_states = [initial_state]
 
-    def test_tit_for_five_tat(self):
-        """Analogous to tit for two tat above.
-        """
-        transitions = (
-            (1, C, 1, C),
-            (1, D, 2, C),
-            (2, C, 1, C),
-            (2, D, 3, C),
-            (3, C, 1, C),
-            (3, D, 4, C),
-            (4, C, 1, C),
-            (4, D, 5, C),
-            (5, C, 1, C),
-            (5, D, 6, D),
-            (6, C, 6, D),
-            (6, D, 7, D),
-            (7, C, 6, D),
-            (7, D, 8, D),
-            (8, C, 6, D),
-            (8, D, 9, D),
-            (9, C, 6, D),
-            (9, D, 10, D),
-            (10, C, 6, D),
-            (10, D, 1, C),
-        )
+    state_queue = [initial_state]
+    visited[initial_state] = True
+    # While there are states in the queue, visit all its children, adding each
+    # to the accesible_states.  [A basic breadth-first search.]
+    while len(state_queue) > 0:
+        state = state_queue.pop()
+        for successor in edge_dict[state]:
+            # Don't process the same state twice.
+            if not visited[successor]:
+                visited[successor] = True
+                state_queue.append(successor)
+                accessible_states.append(successor)
 
-        trans_dict = self.transitions_to_dict(transitions)
-        self.assertEqual(get_memory_from_transitions(trans_dict), 5)
+    # Now for each transition in the passed TransitionDict, copy the transition
+    # to accessible_transitions if and only if the starting state is accessible,
+    # as determined above.
+    accessible_transitions = dict()
+    for trans in transition_iterator(transitions):
+        if trans.state in accessible_states:
+            accessible_transitions[
+                (trans.state, trans.last_opponent_action)
+            ] = (trans.next_state, trans.next_action)
 
-    def test_fortress_3(self):
-        """Tests Fortress-3, which Defects unless the opponent D twice in a row.
-        In that case C, and continue to C for as long as the opponent does.
+    return accessible_transitions
 
-        We know we're in state 3 if our own previous move was a C.  Otherwise, C
-        if and only if the opponent's previous two moves were D.  [Unless we
-        were in state 3 last turn, in which case we would have C'd two turns
-        ago.]
 
-        So the memory should be 2.
-        """
-        transitions = (
-            (1, C, 1, D),
-            (1, D, 2, D),
-            (2, C, 1, D),
-            (2, D, 3, C),
-            (3, C, 3, C),
-            (3, D, 1, D),
-        )
+def longest_path(
+    edges: DefaultDict[MemitPair, Set[MemitPair]], starting_at: MemitPair
+) -> int:
+    """Returns the number of nodes in the longest path that starts at the given
+    node.  Returns infinity if a loop is encountered.
+    """
+    visited = dict()
+    for source, destinations in edges.items():
+        visited[source] = False
+        for destination in destinations:
+            visited[destination] = False
 
-        trans_dict = self.transitions_to_dict(transitions)
-        self.assertEqual(get_memory_from_transitions(trans_dict), 2)
+    # This is what we'll recurse on.  visited dict is shared between calls.
+    def recurse(at_node):
+        visited[at_node] = True
+        record = 1  # Count the nodes, not the edges.
+        for successor in edges[at_node]:
+            if visited[successor]:
+                return float("inf")
+            successor_length = recurse(successor)
+            if successor_length == float("inf"):
+                return float("inf")
+            if record < successor_length + 1:
+                record = successor_length + 1
+        return record
 
-    def test_fortress_4(self):
-        """Tests Fortress-4.  Should have memory=3 for same logic that
-        Fortress-3 should have memory=2.
-        """
-        transitions = (
-            (1, C, 1, D),
-            (1, D, 2, D),
-            (2, C, 1, D),
-            (2, D, 3, D),
-            (3, C, 1, D),
-            (3, D, 4, C),
-            (4, C, 3, C),
-            (4, D, 1, D),
-        )
+    return recurse(starting_at)
 
-        trans_dict = self.transitions_to_dict(transitions)
-        self.assertEqual(get_memory_from_transitions(trans_dict), 3)
 
-    def test_complex_cooperator(self):
-        """Tests a cooperator with lots of states and transitions.
-        """
-        transitions = (
-            (0, C, 0, C),
-            (0, D, 1, C),
-            (1, C, 2, C),
-            (1, D, 3, C),
-            (2, C, 4, C),
-            (2, D, 3, C),
-            (3, C, 5, C),
-            (3, D, 4, C),
-            (4, C, 2, C),
-            (4, D, 6, C),
-            (5, C, 7, C),
-            (5, D, 3, C),
-            (6, C, 7, C),
-            (6, D, 7, C),
-            (7, C, 8, C),
-            (7, D, 7, C),
-            (8, C, 8, C),
-            (8, D, 6, C),
-        )
+def get_memory_from_transitions(
+    transitions: TransitionDict,
+    initial_state: int = None,
+    all_actions: Tuple[Action, Action] = (C, D),
+) -> int:
+    """This function calculates the memory of an FSM from the transitions.
 
-        trans_dict = self.transitions_to_dict(transitions)
-        self.assertEqual(get_memory_from_transitions(trans_dict), 0)
+    Assume that transitions are a dict with entries like
+    (state, last_opponent_action): (next_state, next_action)
 
-    def test_disconnected_graph(self):
-        """Test two disjoint versions of Fortress3, with initial_state."""
-        transitions = (
-            (1, C, 1, D),
-            (1, D, 2, D),
-            (2, C, 1, D),
-            (2, D, 3, C),
-            (3, C, 3, C),
-            (3, D, 1, D),
-            (4, C, 4, D),
-            (4, D, 5, D),
-            (5, C, 4, D),
-            (5, D, 6, C),
-            (6, C, 6, C),
-            (6, D, 4, D),
-        )
+    We first break down the transitions into memits (see above).  We also create
+    a graph of memits, where the successor to a given memit are all possible
+    memits that could occur in the memory immediately before the given memit.
 
-        trans_dict = self.transitions_to_dict(transitions)
-        self.assertEqual(
-            get_memory_from_transitions(trans_dict, initial_state=1), 2
-        )
+    Then we pair up memits with different states, but same in and out actions.
+    These represent points in time that we can't determine which state we're in.
+    We also create a graph of memit-pairs, where memit-pair, Y, succeeds a
+    memit-pair, X, if the two memits in X are succeeded by the two memits in Y.
+    These edges reperesent consecutive points in time that we can't determine
+    which state we're in.
 
-    def test_transient_state(self):
-        """Test a setup where we a transient state (no incoming transitions)
-        goes into a Fortress3 (and D) if the opponent D, and goes into a
-        Cooperator if the opponent C.
+    Then for all memit-pairs that disagree, in the sense that they imply
+    different next_action, we find the longest chain starting at that
+    memit-pair.  [If a loop is encountered then this will be infinite.]  We take
+    the maximum over all such memit-pairs.  This represents the longest possible
+    chain of memory for which we wouldn't know what to do next.  We return this.
+    """
+    # If initial_state is set, use this to determine which transitions are
+    # reachable from the initial_state and restrict to those.
+    if initial_state is not None:
+        transitions = get_accessible_transitions(transitions, initial_state)
 
-        The transient state is state 0.  Fortress3 starts at state 1.  And
-        the Cooperator is state 4.
-        """
-        transitions = (
-            (0, C, 4, C),
-            (0, D, 1, D),
-            (1, C, 1, D),
-            (1, D, 2, D),
-            (2, C, 1, D),
-            (2, D, 3, C),
-            (3, C, 3, C),
-            (3, D, 1, D),
-            (4, C, 4, C),
-            (4, D, 4, C),
-        )
+    # Get the incoming actions for each state.
+    incoming_action_by_state = defaultdict(
+        set
+    )  # type: DefaultDict[int, Set[Action]]
+    for trans in transition_iterator(transitions):
+        incoming_action_by_state[trans.next_state].add(trans.next_action)
 
-        trans_dict = self.transitions_to_dict(transitions)
-        # If starting in state 4, then treat like Cooperator
-        self.assertEqual(
-            get_memory_from_transitions(trans_dict, initial_state=4), 0
-        )
-        # Start in state 1, then a Fortress3.
-        self.assertEqual(
-            get_memory_from_transitions(trans_dict, initial_state=1), 2
-        )
+    # Keys are starting memit, and values are all possible terminal memit.
+    # Will walk backwards through the graph.
+    memit_edges = defaultdict(set)  # type: DefaultDict[Memit, Set[Memit]]
+    for trans in transition_iterator(transitions):
+        # Since all actions are out-paths for each state, add all of these.
+        # That is to say that the opponent could do anything
+        for out_action in all_actions:
+            # More recent in action history
+            starting_node = Memit(
+                trans.next_action, trans.next_state, out_action
+            )
+            # All incoming paths to current state
+            for in_action in incoming_action_by_state[trans.state]:
+                # Less recent in action history
+                ending_node = Memit(
+                    in_action, trans.state, trans.last_opponent_action
+                )
+                memit_edges[starting_node].add(ending_node)
 
-    def test_infinite_memory_transient_state(self):
-        """A transient state at 0, which goes into either a Cooperator or a TFT.
-        Because an arbitrarily-long chain of C/C may exist, we would need a
-        infinite memory to determine which state we're in, so that we know how
-        to respond to a D.
-        """
-        transitions = (
-            (0, C, 1, C),
-            (0, D, 2, D),
-            (1, C, 1, C),
-            (1, D, 1, C),
-            (2, C, 2, C),
-            (2, D, 2, D),
-        )
+    all_memits = list(memit_edges.keys())
 
-        trans_dict = self.transitions_to_dict(transitions)
-        self.assertEqual(
-            get_memory_from_transitions(trans_dict, initial_state=0),
-            float("inf"),
-        )
+    pair_nodes = set()
+    pair_edges = defaultdict(
+        set
+    )  # type: DefaultDict[MemitPair, Set[MemitPair]]
+    # Loop through all pairs of memits.
+    for x, y in [(x, y) for x in all_memits for y in all_memits]:
+        if x == y and x.state == y.state:
+            continue
+        if x != y:
+            continue
 
-        self.assertEqual(
-            get_memory_from_transitions(trans_dict, initial_state=2), 1
-        )
+        # If the memits match, then the strategy can't tell the difference
+        # between the states.  We call this a pair of matched memits (or just a
+        # pair).
+        pair_nodes.add(ordered_memit_tuple(x, y))
+        # When two memits in matched pair have successors that are also matched,
+        # then we draw an edge.  This represents consecutive historical times
+        # that we can't tell which state we're in.
+        for x_successor in memit_edges[x]:
+            for y_successor in memit_edges[y]:
+                if x_successor == y_successor:
+                    pair_edges[ordered_memit_tuple(x, y)].add(
+                        ordered_memit_tuple(x_successor, y_successor)
+                    )
 
-    def test_evolved_fsm_4(self):
-        """This should be infinite memory because the C/D self-loop at state 2
-        and state 3.
-        """
-        transitions = (
-            (0, C, 0, C),
-            (0, D, 2, D),
-            (1, C, 3, D),
-            (1, D, 0, C),
-            (2, C, 2, D),
-            (2, D, 1, C),
-            (3, C, 3, D),
-            (3, D, 1, D),
-        )
+    # Get next_action for each memit.  Used to decide if they are in conflict,
+    # because we only have undecidability if next_action doesn't match.
+    next_action_by_memit = dict()
+    for trans in transition_iterator(transitions):
+        for in_action in incoming_action_by_state[trans.state]:
+            memit_key = Memit(
+                in_action, trans.state, trans.last_opponent_action
+            )
+            next_action_by_memit[memit_key] = trans.next_action
 
-        trans_dict = self.transitions_to_dict(transitions)
-        self.assertEqual(get_memory_from_transitions(trans_dict), float("inf"))
+    # Calculate the longest path.
+    record = 0
+    for pair in pair_nodes:
+        if next_action_by_memit[pair[0]] != next_action_by_memit[pair[1]]:
+            # longest_path is the longest chain of tied states.  We add one to
+            # get the memory length needed to break all ties.
+            path_length = longest_path(pair_edges, pair) + 1
+            if record < path_length:
+                record = path_length
+
+    if record > 0:
+        return record
+
+    # If there are no pair of tied memits (for which the next action are
+    # distinct), then either no memits are needed to break a tie (i.e. all
+    # next_actions are the same) or the first memit breaks a tie (i.e. memory 1)
+    next_action_set = set()
+    for trans in transition_iterator(transitions):
+        next_action_set.add(trans.next_action)
+    if len(next_action_set) == 1:
+        return 0
+    return 1
+
