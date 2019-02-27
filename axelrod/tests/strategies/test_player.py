@@ -14,7 +14,7 @@ from hypothesis.strategies import integers
 C, D = axelrod.Action.C, axelrod.Action.D
 
 short_run_time_short_mem = [
-    s for s in axelrod.short_run_time_strategies if s().classifier["memory_depth"] <= 1
+    s for s in axelrod.short_run_time_strategies if s().classifier["memory_depth"] <= 10
 ]
 
 
@@ -475,13 +475,14 @@ class TestPlayer(unittest.TestCase):
             for strategy in strategies:
                 player.reset()
                 opponent = strategy()
+                max_memory = max(memory, opponent.classifier["memory_depth"])
                 self.assertTrue(
                     test_memory(
                         player=player,
                         opponent=opponent,
                         seed=seed,
                         turns=turns,
-                        memory_length=memory,
+                        memory_length=max_memory,
                     ),
                     msg="{} failed for seed={} and opponent={}".format(
                         player.name, seed, opponent),
@@ -639,11 +640,11 @@ def test_memory(player, opponent, memory_length, seed=0, turns=10):
     plays = [p[0] for p in match.play()]
 
     # Play with limited history.
-    axelrod.seed(seed)
     player.reset()
     opponent.reset()
     player._history = LimitedHistory(memory_length)
     opponent._history = LimitedHistory(memory_length)
+    axelrod.seed(seed)
     match = axelrod.Match((player, opponent), turns=turns, reset=False)
     limited_plays = [p[0] for p in match.play()]
 
