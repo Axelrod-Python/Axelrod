@@ -69,7 +69,6 @@ class TestGetMemoryFromTransitions(unittest.TestCase):
         """If all D lead to state 0 and all C lead to state 1.  We make it so
         that all paths out of state 0 plays Cooperator and state 1 plays
         Defector.
-
         In this case, we must know what state we're in to know how to respond to
         the opponent's previou action, but we cannot determine from our own
         previous action; we must look at opponent's action from two turns ago.
@@ -88,11 +87,26 @@ class TestGetMemoryFromTransitions(unittest.TestCase):
         trans_dict = self.transitions_to_dict(transitions)
         self.assertEqual(get_memory_from_transitions(trans_dict), 1)
 
+    def test_three_state_tft(self):
+        """Tit-for-tat again, but using three states, and a complex web of
+        transitions between them.
+        """
+        transitions = (
+            (0, C, 1, C),
+            (0, D, 1, D),
+            (1, C, 2, C),
+            (1, D, 0, D),
+            (2, C, 0, C),
+            (2, D, 2, D)
+        )
+
+        trans_dict = self.transitions_to_dict(transitions)
+        self.assertEqual(get_memory_from_transitions(trans_dict), 1)
+
     def test_two_state_inf_memory(self):
         """A C will cause the FSM to stay in the same state, and D causes to
         change states.  Will always respond to a C with a C.   Will respond to a
         D with a C in state 0, but with a D in state 1.
-
         So we need to know the state to know how to respond to a D.  But since
         an arbitarily long sequence of C/C may occur, we need infinite memory.
         """
@@ -125,7 +139,6 @@ class TestGetMemoryFromTransitions(unittest.TestCase):
         let states 1 and 2 be the cooperating states, with state 2 being the
         state after one opponent defection.  And states 3 and 4 are the
         defecting states, with state 4 after 1 opponent cooperation.
-
         The memory should be two, because if the last two moves don't match,
         then we can look to see what we did in the last move.  If the do match,
         then we can respond in kind.
@@ -176,12 +189,10 @@ class TestGetMemoryFromTransitions(unittest.TestCase):
     def test_fortress_3(self):
         """Tests Fortress-3, which Defects unless the opponent D twice in a row.
         In that case C, and continue to C for as long as the opponent does.
-
         We know we're in state 3 if our own previous move was a C.  Otherwise, C
         if and only if the opponent's previous two moves were D.  [Unless we
         were in state 3 last turn, in which case we would have C'd two turns
         ago.]
-
         So the memory should be 2.
         """
         transitions = (
@@ -267,7 +278,6 @@ class TestGetMemoryFromTransitions(unittest.TestCase):
         """Test a setup where we a transient state (no incoming transitions)
         goes into a Fortress3 (and D) if the opponent D, and goes into a
         Cooperator if the opponent C.
-
         The transient state is state 0.  Fortress3 starts at state 1.  And
         the Cooperator is state 4.
         """
@@ -336,3 +346,4 @@ class TestGetMemoryFromTransitions(unittest.TestCase):
 
         trans_dict = self.transitions_to_dict(transitions)
         self.assertEqual(get_memory_from_transitions(trans_dict), float("inf"))
+

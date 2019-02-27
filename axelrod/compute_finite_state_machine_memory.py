@@ -231,17 +231,6 @@ def get_memory_from_transitions(
                         ordered_memit_tuple(x_successor, y_successor)
                     )
 
-    if len(pair_nodes) == 0:
-        # If there are no pair of tied memits, then either no memits are needed
-        # to break a tie (i.e. all next_actions are the same) or the first memit
-        # breaks a tie (i.e. memory 1)
-        next_action_set = set()
-        for trans in transition_iterator(transitions):
-            next_action_set.add(trans.next_action)
-        if len(next_action_set) == 1:
-            return 0
-        return 1
-
     # Get next_action for each memit.  Used to decide if they are in conflict,
     # because we only have undecidability if next_action doesn't match.
     next_action_by_memit = dict()
@@ -261,5 +250,17 @@ def get_memory_from_transitions(
             path_length = longest_path(pair_edges, pair) + 1
             if record < path_length:
                 record = path_length
-    return record
+
+    if record > 0:
+        return record
+
+    # If there are no pair of tied memits (for which the next action are
+    # distinct), then either no memits are needed to break a tie (i.e. all
+    # next_actions are the same) or the first memit breaks a tie (i.e. memory 1)
+    next_action_set = set()
+    for trans in transition_iterator(transitions):
+        next_action_set.add(trans.next_action)
+    if len(next_action_set) == 1:
+        return 0
+    return 1
 
