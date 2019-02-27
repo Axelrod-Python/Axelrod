@@ -97,7 +97,7 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None, reclassifier=
                 if strategy_wrapper == dual_wrapper:
                     # dual_wrapper figures out strategy as if the Player had
                     # played the opposite actions of its current history.
-                    self.history = self.history.dual()
+                    self.history = self.history.flip_plays()
 
                 if is_strategy_static(PlayerClass):
                     proposed_action = PlayerClass.strategy(opponent)
@@ -107,7 +107,7 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None, reclassifier=
                 if strategy_wrapper == dual_wrapper:
                     # After dual_wrapper calls the strategy, it returns
                     # the Player to its original state.
-                    self.history = self.history.dual()
+                    self.history = self.history.flip_plays()
 
                 # Apply the wrapper
                 return strategy_wrapper(

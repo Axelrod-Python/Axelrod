@@ -162,7 +162,6 @@ class MetaWinner(MetaPlayer):
         game = self.match_attributes["game"]
         scores = []
         for player in self.team:
-            player.history[-1]
             last_round = (player.history[-1], coplay)
             s = game.scores[last_round][0]
             scores.append(s)

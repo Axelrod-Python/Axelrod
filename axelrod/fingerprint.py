@@ -285,10 +285,10 @@ class AshlockFingerprint(object):
         """Build and play the spatial tournament.
 
         Creates the probes and their edges then builds a spatial tournament.
-        When the coordinates of the probe sum to more than 1, the dual of the
+        When the coordinates of the probe sum to more than 1, the flip_plays of the
         probe is taken instead and then the Joss-Ann Transformer is applied. If
         the coordinates sum to less than 1 (or equal), then only the Joss-Ann is
-        applied, a dual is not required.
+        applied, a flip_plays is not required.
 
         Parameters
         ----------

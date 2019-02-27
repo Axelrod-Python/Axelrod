@@ -23,7 +23,7 @@ class TestHistory(unittest.TestCase):
         self.assertEqual(str(h), "CDC")
         self.assertEqual(list(h), [C, D, C])
         self.assertEqual(repr(h), "[C, D, C]")
-        h2 = h.dual()
+        h2 = h.flip_plays()
         self.assertEqual(str(h2), "DCD")
 
     def test_reset(self):
@@ -80,14 +80,14 @@ class TestHistory(unittest.TestCase):
             new_key = (key[0].flip(), key[1])
             new_distribution[new_key] = val
 
-        player.history = player.history.dual()
+        player.history = player.history.flip_plays()
         self.assertEqual(player.history, [D, C, D, C, D])
         self.assertEqual(player.cooperations, 2)
         self.assertEqual(player.defections, 3)
         self.assertEqual(player.state_distribution, new_distribution)
 
         # Dual operation is idempotent
-        player.history = player.history.dual()
+        player.history = player.history.flip_plays()
         self.assertEqual(player.history, [C, D, C, D, C])
         self.assertEqual(player.cooperations, 3)
         self.assertEqual(player.defections, 2)

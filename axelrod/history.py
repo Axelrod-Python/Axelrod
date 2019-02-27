@@ -13,6 +13,14 @@ class History(object):
     """
 
     def __init__(self, plays=None, coplays=None):
+        """
+        Parameters
+        ----------
+        plays:
+            An ordered iterable of the actions of the player.
+        coplays:
+            An ordered iterable of the actions of the coplayer (aka opponent).
+        """
         self._plays = []
         # Coplays is tracked mainly for computation of the state distribution
         # when cloning or dualing.
@@ -23,6 +31,8 @@ class History(object):
             self.extend(plays, coplays)
 
     def append(self, play, coplay):
+        """Appends a new (play, coplay) pair an updates metadata for
+        number of cooperations and defections, and the state distribution."""
         self._plays.append(play)
         self._actions[play] += 1
         if coplay:
@@ -30,14 +40,16 @@ class History(object):
             self._state_distribution[(play, coplay)] += 1
 
     def copy(self):
+        """Returns a new object with the same data."""
         return History(plays=self._plays, coplays=self._coplays)
 
-    def dual(self):
-        """Creates a dual history for use with DualTransformer."""
+    def flip_plays(self):
+        """Creates a flip_plays history for use with DualTransformer."""
         flipped_plays = [action.flip() for action in self._plays]
         return History(plays=flipped_plays, coplays=self._coplays)
 
     def extend(self, plays, coplays=None):
+        """A function that emulates list.extend."""
         # We could repeatedly call self.append but this is more efficient.
         self._plays.extend(plays)
         self._actions.update(plays)
@@ -46,6 +58,7 @@ class History(object):
             self._state_distribution.update(zip(plays, coplays))
 
     def reset(self):
+        """Clears all data in the History object."""
         self._plays.clear()
         self._coplays.clear()
         self._actions.clear()
