@@ -56,6 +56,7 @@ def simultaneous_play(player, coplayer, noise=0):
         s2 = random_flip(s2, noise)
     player.history.append(s1, s2)
     coplayer.history.append(s2, s1)
+    return s1, s2
 
 
 class Player(object):
@@ -191,7 +192,7 @@ class Player(object):
 
     def play(self, opponent, noise=0):
         """This pits two players against each other."""
-        simultaneous_play(self, opponent, noise)
+        return simultaneous_play(self, opponent, noise)
 
     def clone(self):
         """Clones the player without history, reapplying configuration
@@ -219,17 +220,6 @@ class Player(object):
     @property
     def history(self):
         return self._history
-
-    @history.setter
-    def history(self, obj):
-        if isinstance(obj, list):
-            self._history = History(plays=obj)
-        elif isinstance(obj, History):
-            self._history = obj
-        else:
-            raise TypeError("Cannot assign history with type {}".format(
-                type(obj)
-            ))
 
     # Properties maintained for legacy API, can refactor to self.history.X
     # in 5.0.0 to reduce function call overhead.

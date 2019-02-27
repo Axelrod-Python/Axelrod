@@ -3,7 +3,7 @@ import unittest
 
 import axelrod
 from axelrod import Action
-from axelrod.history import History
+from axelrod.history import History, LimitedHistory
 
 C, D = Action.C, Action.D
 
@@ -65,7 +65,7 @@ class TestHistory(unittest.TestCase):
         self.assertEqual(h3.cooperations, 2)
         self.assertEqual(h3.defections, 2)
 
-    def test_dual_history(self):
+    def test_flip_plays(self):
         player = axelrod.Alternator()
         opponent = axelrod.Cooperator()
         for _ in range(5):
@@ -80,14 +80,40 @@ class TestHistory(unittest.TestCase):
             new_key = (key[0].flip(), key[1])
             new_distribution[new_key] = val
 
-        player.history = player.history.flip_plays()
-        self.assertEqual(player.history, [D, C, D, C, D])
-        self.assertEqual(player.cooperations, 2)
-        self.assertEqual(player.defections, 3)
-        self.assertEqual(player.state_distribution, new_distribution)
+        flipped_history = player.history.flip_plays()
+        self.assertEqual(flipped_history, [D, C, D, C, D])
+        self.assertEqual(flipped_history.cooperations, 2)
+        self.assertEqual(flipped_history.defections, 3)
+        self.assertEqual(flipped_history.state_distribution,
+                         new_distribution)
 
-        # Dual operation is idempotent
-        player.history = player.history.flip_plays()
-        self.assertEqual(player.history, [C, D, C, D, C])
-        self.assertEqual(player.cooperations, 3)
-        self.assertEqual(player.defections, 2)
+        # Flip operation is idempotent
+        flipped_flipped_history = flipped_history.flip_plays()
+        self.assertEqual(flipped_flipped_history, [C, D, C, D, C])
+        self.assertEqual(flipped_flipped_history.cooperations, 3)
+        self.assertEqual(flipped_flipped_history.defections, 2)
+
+
+class TestLimitedHistory(unittest.TestCase):
+
+    def test_memory_depth(self):
+        h = LimitedHistory(memory_depth=3)
+        h.append(C, C)
+        self.assertEqual(len(h), 1)
+        h.append(D, D)
+        self.assertEqual(len(h), 2)
+        h.append(C, D)
+        self.assertEqual(len(h), 3)
+        self.assertEqual(h.cooperations, 2)
+        self.assertEqual(h.defections, 1)
+        self.assertEqual(h.state_distribution,
+                         Counter({(C, C): 1, (D, D): 1, (C, D): 1}))
+        h.append(D, C)
+        self.assertEqual(len(h), 3)
+        self.assertEqual(h._plays, [D, C, D])
+        self.assertEqual(h._coplays, [D, D, C])
+        self.assertEqual(h.cooperations, 1)
+        self.assertEqual(h.defections, 2)
+        self.assertEqual(
+            h.state_distribution,
+            Counter({(D, D): 1, (C, D): 1, (D, C): 1, (C, C): 0}))

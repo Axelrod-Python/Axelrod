@@ -86,7 +86,6 @@ class InversePunisher(Player):
 
     def __init__(self) -> None:
         super().__init__()
-        self.history = []  # type: List[Action]
         self.mem_length = 1
         self.grudged = False
         self.grudge_memory = 1

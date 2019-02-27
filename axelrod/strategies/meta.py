@@ -167,9 +167,12 @@ class MetaWinner(MetaPlayer):
             scores.append(s)
         self.scores += np.array(scores)
 
-    def meta_strategy(self, results, opponent):
+    def update_histories(self, coplay):
+        super().update_histories(coplay)
         if len(self.history):
-            self._update_scores(opponent.history[-1])
+            self._update_scores(coplay)
+
+    def meta_strategy(self, results, opponent):
         # Choice an action based on the collection of scores
         bestscore = max(self.scores)
         beststrategies = [
@@ -196,8 +199,6 @@ class MetaWinnerEnsemble(MetaWinner):
     name = "Meta Winner Ensemble"
 
     def meta_strategy(self, results, opponent):
-        if len(self.history):
-            self._update_scores(opponent.history[-1])
         # Sort by score
         scores = [(score, i) for (i, score) in enumerate(self.scores)]
         # Choose one of the best scorers at random

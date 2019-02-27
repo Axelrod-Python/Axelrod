@@ -81,7 +81,7 @@ class TestDarwin(TestPlayer):
         p1 = self.player()
         self.assertEqual(p1.genome, [D, C, C, C, D])
         p1.reset()
-        self.assertEqual(p1.history, [])
+        self.assertEqual(len(p1.history), 0)
         self.assertEqual(p1.genome, [C, C, C, C, D])
 
     def test_all_darwin_instances_share_one_genome(self):

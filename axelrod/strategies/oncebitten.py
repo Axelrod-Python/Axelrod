@@ -129,10 +129,6 @@ class ForgetfulFoolMeOnce(Player):
             return D
         return C
 
-    def reset(self):
-        super().reset()
-        self.D_count = 0
-
 
 class FoolMeForever(Player):
     """

@@ -9,6 +9,7 @@ C, D = Action.C, Action.D
 
 
 Plays = namedtuple("Plays", "self_plays, op_plays, op_openings")
+Reaction = TypeVar("Reaction", Action, float)
 
 
 class LookupTable(object):
@@ -213,9 +214,6 @@ def create_lookup_table_keys(
 
     iterator = product(self_plays, op_plays, op_openings)
     return [Plays(*plays_tuple) for plays_tuple in iterator]
-
-
-Reaction = TypeVar("Reaction", Action, float)
 
 
 class LookerUp(Player):

@@ -5,7 +5,7 @@ import unittest
 
 import axelrod
 import numpy as np
-from axelrod import DefaultGame, Player
+from axelrod import DefaultGame, Player, LimitedHistory
 from axelrod.tests.property import strategy_lists
 
 from hypothesis import given, settings
@@ -123,8 +123,8 @@ class TestPlayerClass(unittest.TestCase):
 
     def test_history_assignment(self):
         player = Player()
-        with self.assertRaises(TypeError):
-            player.history = 1
+        with self.assertRaises(AttributeError):
+            player.history = []
 
     def test_strategy(self):
         self.assertRaises(NotImplementedError, self.player().strategy, self.player())
@@ -349,7 +349,7 @@ class TestPlayerClass(unittest.TestCase):
 class TestOpponent(Player):
     """A player who only exists so we have something to test against"""
 
-    name = "TestPlayer"
+    name = "TestOpponent"
     classifier = _test_classifier
 
     @staticmethod
@@ -483,7 +483,8 @@ class TestPlayer(unittest.TestCase):
                         turns=turns,
                         memory_length=memory,
                     ),
-                    msg="Failed for seed={} and opponent={}".format(seed, opponent),
+                    msg="{} failed for seed={} and opponent={}".format(
+                        player.name, seed, opponent),
                 )
 
     def versus_test(
@@ -632,21 +633,21 @@ def test_memory(player, opponent, memory_length, seed=0, turns=10):
     Checks if a player reacts to the plays of an opponent in the same way if
     only the given amount of memory is used.
     """
+    # Play the match normally.
     axelrod.seed(seed)
     match = axelrod.Match((player, opponent), turns=turns)
-    expected_results = [turn[0] for turn in match.play()]
+    plays = [p[0] for p in match.play()]
 
+    # Play with limited history.
     axelrod.seed(seed)
     player.reset()
     opponent.reset()
+    player._history = LimitedHistory(memory_length)
+    opponent._history = LimitedHistory(memory_length)
+    match = axelrod.Match((player, opponent), turns=turns, reset=False)
+    limited_plays = [p[0] for p in match.play()]
 
-    results = []
-    for _ in range(turns):
-        player.history = player.history[-memory_length:]
-        opponent.history = opponent.history[-memory_length:]
-        player.play(opponent)
-        results.append(player.history[-1])
-    return results == expected_results
+    return plays == limited_plays
 
 
 class TestMemoryTest(unittest.TestCase):

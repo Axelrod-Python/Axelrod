@@ -35,18 +35,17 @@ class History(object):
         number of cooperations and defections, and the state distribution."""
         self._plays.append(play)
         self._actions[play] += 1
-        if coplay:
-            self._coplays.append(coplay)
-            self._state_distribution[(play, coplay)] += 1
+        self._coplays.append(coplay)
+        self._state_distribution[(play, coplay)] += 1
 
     def copy(self):
         """Returns a new object with the same data."""
-        return History(plays=self._plays, coplays=self._coplays)
+        return self.__class__(plays=self._plays, coplays=self._coplays)
 
     def flip_plays(self):
         """Creates a flip_plays history for use with DualTransformer."""
         flipped_plays = [action.flip() for action in self._plays]
-        return History(plays=flipped_plays, coplays=self._coplays)
+        return self.__class__(plays=flipped_plays, coplays=self._coplays)
 
     def extend(self, plays, coplays=None):
         """A function that emulates list.extend."""
@@ -63,6 +62,10 @@ class History(object):
         self._coplays.clear()
         self._actions.clear()
         self._state_distribution.clear()
+
+    @property
+    def coplays(self):
+        return self._coplays
 
     @property
     def cooperations(self):
@@ -99,3 +102,33 @@ class History(object):
     def __repr__(self):
         return repr(self.__list__())
 
+
+class LimitedHistory(History):
+    """
+    History class that only tracks the last N rounds. Used for testing memory
+    depth.
+    """
+
+    def __init__(self, memory_depth):
+        """
+        Parameters
+        ----------
+        memory_depth, int:
+            length of history to retain
+        """
+        super().__init__()
+        self.memory_depth = memory_depth
+
+    def append(self, play, coplay):
+        """Appends a new (play, coplay) pair an updates metadata for
+        number of cooperations and defections, and the state distribution."""
+
+        self._plays.append(play)
+        self._actions[play] += 1
+        if coplay:
+            self._coplays.append(coplay)
+            self._state_distribution[(play, coplay)] += 1
+        if len(self._plays) > self.memory_depth:
+            first_play, first_coplay = self._plays.pop(0), self._coplays.pop(0)
+            self._actions[first_play] -= 1
+            self._state_distribution[(first_play, first_coplay)] -= 1

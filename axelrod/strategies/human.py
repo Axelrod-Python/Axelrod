@@ -77,7 +77,6 @@ class Human(Player):
         super().__init__()
         self.human_name = name
         self.symbols = {C: c_symbol, D: d_symbol}
-        self.opponent_history = []
 
     def _history_toolbar(self):
         """
@@ -85,7 +84,7 @@ class Human(Player):
         Described at http://python-prompt-toolkit.readthedocs.io/en/latest/pages/building_prompts.html#adding-a-bottom-toolbar
         """
         my_history = [self.symbols[action] for action in self.history]
-        opponent_history = [self.symbols[action] for action in self.opponent_history]
+        opponent_history = [self.symbols[action] for action in self.history.coplays]
         history = list(zip(my_history, opponent_history))
         if self.history:
             content = "History ({}, opponent): {}".format(self.human_name, history)
@@ -119,7 +118,7 @@ class Human(Player):
                 len(self.history),
                 self.human_name,
                 self.symbols[self.history[-1]],
-                self.symbols[self.opponent_history[-1]],
+                self.symbols[self.history.coplays[-1]],
             )
         else:
             toolbar = None
@@ -158,7 +157,7 @@ class Human(Player):
         the need for human interaction.
         """
 
-        self.opponent_history = opponent.history
+        self.status_messages = self._status_messages()
         self.status_messages = self._status_messages()
         print(self.status_messages["print"])
 
