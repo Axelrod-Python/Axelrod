@@ -578,8 +578,9 @@ class TestNMWEStochastic(TestMetaPlayer):
     }
 
     def test_strategy(self):
-        actions = [(C, C), (C, D), (C, C), (C, D), (C, C)]
-        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
+        actions = [(C, C), (C, D), (C, C), (D, D), (D, C)]
+        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions,
+                         seed=20)
 
 
 class TestNMWEFiniteMemory(TestMetaPlayer):

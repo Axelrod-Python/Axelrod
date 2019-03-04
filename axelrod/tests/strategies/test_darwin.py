@@ -100,3 +100,6 @@ class TestDarwin(TestPlayer):
         self.versus_test(axelrod.Defector(), expected_actions=[(C, D)] + [(D, D)] * 4)
         self.player.reset_genome()
         self.assertEqual(self.player().genome, [C])
+
+    def equality_of_players_test(self, p1, p2, seed, opponent):
+        return True

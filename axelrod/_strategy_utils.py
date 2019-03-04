@@ -55,7 +55,7 @@ def inspect_strategy(inspector, opponent):
     ----------
     inspector: Player
         The player doing the inspecting
-    oponnent: Player
+    opponent: Player
         The player being inspected
 
     Returns
@@ -189,6 +189,5 @@ def recursive_thue_morse(n):
 
 def thue_morse_generator(start=0):
     """A generator for the Thue-Morse sequence."""
-
     for n in itertools.count(start):
         yield recursive_thue_morse(n)

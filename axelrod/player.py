@@ -130,7 +130,6 @@ class Player(object):
             elif isinstance(value, types.GeneratorType) or isinstance(
                 value, itertools.cycle
             ):
-
                 # Split the original generator so it is not touched
                 generator, original_value = itertools.tee(value)
                 other_generator, original_other_value = itertools.tee(other_value)

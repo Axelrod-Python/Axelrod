@@ -21,6 +21,7 @@ from .hunter import (
 
 # Needs to be computed manually to prevent circular dependency
 ordinary_strategies = [s for s in all_strategies if obey_axelrod(s)]
+
 C, D = Action.C, Action.D
 
 
@@ -37,7 +38,7 @@ class MetaPlayer(Player):
     classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": True,
-        "makes_use_of": {"game", "length"},
+        "makes_use_of": set(),
         "long_run_time": True,
         "inspects_source": False,
         "manipulates_source": False,
@@ -45,22 +46,20 @@ class MetaPlayer(Player):
     }
 
     def __init__(self, team=None):
-        super().__init__()
         # The default is to use all strategies available, but we need to import
         # the list at runtime, since _strategies import also _this_ module
         # before defining the list.
-        self._last_results = None
         if team:
             self.team = team
         else:
             # Needs to be computed manually to prevent circular dependency
             self.team = ordinary_strategies
-
         # Make sure we don't use any meta players to avoid infinite recursion.
         self.team = [t for t in self.team if not issubclass(t, MetaPlayer)]
-
         # Initiate all the players in our team.
         self.team = [t() for t in self.team]
+
+        super().__init__()
 
         # This player inherits the classifiers of its team.
         # Note that memory_depth is not simply the max memory_depth of the team.
@@ -74,6 +73,12 @@ class MetaPlayer(Player):
 
         for t in self.team:
             self.classifier["makes_use_of"].update(t.classifier["makes_use_of"])
+
+        self._last_results = None
+
+    def receive_match_attributes(self):
+        for t in self.team:
+            t.set_match_attributes(**self.match_attributes)
 
     def __repr__(self):
         team_size = len(self.team)

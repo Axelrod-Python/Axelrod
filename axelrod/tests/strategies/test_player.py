@@ -1,4 +1,5 @@
 import itertools
+import pickle
 import random
 import types
 import unittest
@@ -6,10 +7,11 @@ import unittest
 import axelrod
 import numpy as np
 from axelrod import DefaultGame, Player, LimitedHistory
+from axelrod.player import simultaneous_play
 from axelrod.tests.property import strategy_lists
 
 from hypothesis import given, settings
-from hypothesis.strategies import integers
+from hypothesis.strategies import integers, sampled_from
 
 C, D = axelrod.Action.C, axelrod.Action.D
 
@@ -400,6 +402,39 @@ class TestPlayer(unittest.TestCase):
         player.set_match_attributes(length=200, noise=0.5)
         t_attrs = player.match_attributes
         self.assertEqual(t_attrs["noise"], 0.5)
+
+    def equality_of_players_test(self, p1, p2, seed, opponent):
+        a1 = opponent()
+        a2 = opponent()
+        self.assertEqual(p1, p2)
+        for player, op in [(p1, a1), (p2, a2)]:
+            axelrod.seed(seed)
+            for _ in range(10):
+                simultaneous_play(player, op)
+        self.assertEqual(p1, p2)
+        p1 = pickle.loads(pickle.dumps(p1))
+        p2 = pickle.loads(pickle.dumps(p2))
+        self.assertEqual(p1, p2)
+
+    @given(
+        opponent=sampled_from(short_run_time_short_mem),
+        seed=integers(min_value=1, max_value=200),
+    )
+    @settings(max_examples=1)
+    def test_equality_of_clone(self, seed, opponent):
+        p1 = self.player()
+        p2 = p1.clone()
+        self.equality_of_players_test(p1, p2, seed, opponent)
+
+    @given(
+        opponent=sampled_from(axelrod.short_run_time_strategies),
+        seed=integers(min_value=1, max_value=200),
+    )
+    @settings(max_examples=1)
+    def test_equality_of_pickle_clone(self, seed, opponent):
+        p1 = self.player()
+        p2 = pickle.loads(pickle.dumps(p1))
+        self.equality_of_players_test(p1, p2, seed, opponent)
 
     def test_reset_history_and_attributes(self):
         """Make sure resetting works correctly."""

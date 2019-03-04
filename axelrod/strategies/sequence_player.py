@@ -21,12 +21,10 @@ class SequencePlayer(Player):
         self, generator_function: FunctionType, generator_args: Tuple = ()
     ) -> None:
         super().__init__()
-        # Initialize the sequence generator
-        self.generator_function = generator_function
-        self.generator_args = generator_args
-        self.sequence_generator = self.generator_function(*self.generator_args)
+        self.sequence_generator = generator_function(*generator_args)
 
-    def meta_strategy(self, value: int) -> Action:
+    @staticmethod
+    def meta_strategy(value: int) -> Action:
         """Determines how to map the sequence value to cooperate or defect.
         By default, treat values like python truth values. Override in child
         classes for alternate behaviors."""
@@ -46,10 +44,9 @@ class SequencePlayer(Player):
         return return_dict
 
     def __setstate__(self, state):
-        self.__dict__.update(state)
-        self.__dict__["sequence_generator"] = self.generator_function(
-            *self.generator_args
-        )
+        self.reset()
+        self._history = state["_history"]
+        self.match_attributes = state["match_attributes"]
         for _ in self.history:
             next(self.sequence_generator)
 
@@ -104,7 +101,8 @@ class ThueMorseInverse(ThueMorse):
     def __init__(self) -> None:
         super(ThueMorse, self).__init__(thue_morse_generator, (0,))
 
-    def meta_strategy(self, value: int) -> Action:
+    @staticmethod
+    def meta_strategy(value: int) -> Action:
         # Switch the default cooperate and defect action on 0 or 1
         if value == 0:
             return C

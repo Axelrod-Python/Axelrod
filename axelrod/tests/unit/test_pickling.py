@@ -147,6 +147,10 @@ class TrackHistory(axl.Cooperator):
 class Identity(axl.Cooperator):
     pass
 
+@st.NiceTransformer(name_prefix=None)
+class NiceThue(axl.ThueMorse):
+    pass
+
 
 transformed_no_prefix = [
     Apology,
@@ -189,15 +193,17 @@ transformer_instances = [
 
 class TestPickle(unittest.TestCase):
     def assert_equals_instance_from_pickling(self, original_instance):
-        copy = pickle.loads(pickle.dumps(original_instance))
-        self.assertEqual(copy, original_instance)
+        clone = pickle.loads(pickle.dumps(original_instance))
+        self.assertEqual(clone, original_instance)
 
-    def assert_original_equals_pickled(self, player, turns=10):
+    def assert_original_equals_pickled(self, player_, turns=10):
         opponents = (axl.Defector, axl.Cooperator, axl.Random, axl.CyclerCCCDCD)
         for opponent_class in opponents:
             # Check that player and copy play the same way.
-            player.reset()
-            copy = pickle.loads(pickle.dumps(player))
+            player = player_.clone()
+            clone = pickle.loads(pickle.dumps(player))
+            clone = clone.clone()
+
             opponent_1 = opponent_class()
             opponent_2 = opponent_class()
 
@@ -206,7 +212,7 @@ class TestPickle(unittest.TestCase):
             result_1 = match_1.play()
 
             axl.seed(0)
-            match_2 = axl.Match((copy, opponent_2), turns=turns)
+            match_2 = axl.Match((clone, opponent_2), turns=turns)
             result_2 = match_2.play()
 
             self.assertEqual(result_1, result_2)
@@ -219,15 +225,18 @@ class TestPickle(unittest.TestCase):
         self.assert_original_equals_pickled(player)
 
     def test_sequence_player(self):
-        player = axl.ThueMorse()
-        opponents = (axl.Defector, axl.Cooperator, axl.Random, axl.CyclerCCCDCD)
-        for opponent_class in opponents:
-            axl.seed(10)
-            player.reset()
-            opponent = opponent_class()
-            match_1 = axl.Match((player, opponent), turns=20)
-            _ = match_1.play()
-            self.assert_original_equals_pickled(player)
+        meta_thue = axl.MetaPlayer(team=[axl.ThueMorse])
+        for player in [axl.ThueMorse(), axl.ThueMorseInverse(), meta_thue,
+                       NiceThue()]:
+            self.assert_equals_instance_from_pickling(player)
+            opponents = (axl.Defector, axl.Cooperator, axl.Random, axl.CyclerCCCDCD)
+            for opponent_class in opponents:
+                axl.seed(10)
+                player.reset()
+                opponent = opponent_class()
+                match_1 = axl.Match((player, opponent), turns=20)
+                _ = match_1.play()
+                self.assert_equals_instance_from_pickling(player)
 
     def test_final_transformer_called(self):
         player = axl.Alexei()

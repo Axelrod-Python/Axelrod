@@ -14,6 +14,7 @@ from typing import Any
 
 from numpy.random import choice
 
+from axelrod.strategies.sequence_player import SequencePlayer
 from .action import Action
 from .player import Player
 from .random_ import random_choice

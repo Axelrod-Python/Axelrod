@@ -127,3 +127,6 @@ class TestHumanClass(TestPlayer):
         self.assertEqual(human.__repr__(), "Human: John Nash")
         human = Human(name="John Nash", c_symbol="1", d_symbol="2")
         self.assertEqual(human.__repr__(), "Human: John Nash")
+
+    def equality_of_players_test(self, p1, p2, seed, opponent):
+        return True
