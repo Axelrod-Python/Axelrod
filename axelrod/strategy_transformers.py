@@ -160,17 +160,20 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None, reclassifier=
                     return self_.__class__, (), self_.__dict__
 
                 decorators = []
+                state = self_.__dict__
                 for class_ in self_.__class__.mro():
                     import_name = class_.__name__
                     if hasattr(class_, "decorator"):
                         decorators.insert(0, class_.decorator)
                     if hasattr(class_module, import_name):
+                        # Sequence players are not directly pickleable so we need to call __getstate__
+                        state = class_.__getstate__(self_)
                         break
 
                 return (
                     StrategyReBuilder(),
                     (decorators, import_name, self_.__module__),
-                    self_.__dict__,
+                    state,
                 )
 
             # Define a new class and wrap the strategy method
@@ -204,6 +207,7 @@ def player_can_be_pickled(player: Player) -> bool:
     import_name = player.__class__.__name__
     if not hasattr(class_module, import_name):
         return False
+    # Sequence players are pickleable but not directly so (particularly if decorated).
     if issubclass(player.__class__, SequencePlayer):
         return False
 

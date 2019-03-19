@@ -39,6 +39,7 @@ class SequencePlayer(Player):
             return self.meta_strategy(s)
 
     def __getstate__(self):
+        """Generator attributes are not pickleable so we remove and rebuild."""
         return_dict = self.__dict__.copy()
         del return_dict["sequence_generator"]
         return return_dict

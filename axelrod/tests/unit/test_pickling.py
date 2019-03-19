@@ -238,8 +238,8 @@ class TestPickle(unittest.TestCase):
 
     def test_sequence_player(self):
         inline_transformed_thue = st.IdentityTransformer(name_prefix="Transformed")(axl.ThueMorse)()
-        for player in [axl.ThueMorse(), axl.ThueMorseInverse(), MetaThue(),
-                       TransformedMetaThue(), inline_transformed_thue, TransformedThue()
+        for player in [axl.ThueMorse(), axl.ThueMorseInverse(), MetaThue(), TransformedMetaThue(),
+                       inline_transformed_thue, TransformedThue(),
                        ]:
             self.assert_equals_instance_from_pickling(player)
             opponents = (axl.Defector, axl.Cooperator, axl.Random, axl.CyclerCCCDCD)

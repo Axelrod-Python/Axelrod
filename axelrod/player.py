@@ -185,6 +185,10 @@ class Player(object):
             prefix = ", "
         return name
 
+    def __getstate__(self):
+        """Used for pickling. Override if Player contains unpickleable attributes."""
+        return self.__dict__
+
     def strategy(self, opponent):
         """This is a placeholder strategy."""
         raise NotImplementedError()
