@@ -176,8 +176,7 @@ class MetaWinner(MetaPlayer):
 
     def update_histories(self, coplay):
         super().update_histories(coplay)
-        if len(self.history):
-            self._update_scores(coplay)
+        self._update_scores(coplay)
 
     def meta_strategy(self, results, opponent):
         # Choice an action based on the collection of scores

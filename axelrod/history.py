@@ -43,18 +43,17 @@ class History(object):
         return self.__class__(plays=self._plays, coplays=self._coplays)
 
     def flip_plays(self):
-        """Creates a flip_plays history for use with DualTransformer."""
+        """Creates a flipped plays history for use with DualTransformer."""
         flipped_plays = [action.flip() for action in self._plays]
         return self.__class__(plays=flipped_plays, coplays=self._coplays)
 
-    def extend(self, plays, coplays=None):
+    def extend(self, plays, coplays):
         """A function that emulates list.extend."""
         # We could repeatedly call self.append but this is more efficient.
         self._plays.extend(plays)
         self._actions.update(plays)
-        if coplays:
-            self._coplays.extend(coplays)
-            self._state_distribution.update(zip(plays, coplays))
+        self._coplays.extend(coplays)
+        self._state_distribution.update(zip(plays, coplays))
 
     def reset(self):
         """Clears all data in the History object."""

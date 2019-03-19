@@ -10,9 +10,9 @@ C, D = Action.C, Action.D
 
 class TestHistory(unittest.TestCase):
     def test_init(self):
-        h1 = History([C, C, D])
+        h1 = History([C, C, D], [C, C, C])
         self.assertEqual(list(h1), [C, C, D])
-        h1.extend([C, C])
+        h1.extend([C, C], [D, D])
         self.assertEqual(list(h1), [C, C, D, C, C])
 
     def test_str_list_repr(self):
@@ -36,32 +36,32 @@ class TestHistory(unittest.TestCase):
         self.assertEqual(h.cooperations, 0)
 
     def test_compare(self):
-        h = History([C, D, C])
+        h = History([C, D, C], [C, C, C])
         self.assertEqual(h, [C, D, C])
-        h2 = History([C, D, C])
+        h2 = History([C, D, C], [C, C, C])
         self.assertEqual(h, h2)
         h2.reset()
         self.assertNotEqual(h, h2)
 
     def test_copy(self):
-        h = History([C, D, C])
+        h = History([C, D, C], [C, C, C])
         h2 = h.copy()
         self.assertEqual(h, h2)
 
     def test_eq(self):
-        h = History([C, D, C])
+        h = History([C, D, C], [C, C, C])
         with self.assertRaises(TypeError):
             h == 2
 
     def test_counts(self):
-        h1 = History([C, C])
+        h1 = History([C, C], [C, C])
         self.assertEqual(h1.cooperations, 2)
         self.assertEqual(h1.defections, 0)
-        h2 = History([D, D])
+        h2 = History([D, D], [C, C])
         self.assertEqual(h2.cooperations, 0)
         self.assertEqual(h2.defections, 2)
         self.assertNotEqual(h1, h2)
-        h3 = History([C, C, D, D])
+        h3 = History([C, C, D, D], [C, C, C, C])
         self.assertEqual(h3.cooperations, 2)
         self.assertEqual(h3.defections, 2)
 

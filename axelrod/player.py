@@ -77,7 +77,8 @@ class Player(object):
         "manipulates_state": None,
     }
 
-    def __new__(cls, *args, history=None, **kwargs):
+    # def __new__(cls, *args, history=None, **kwargs):
+    def __new__(cls, *args, **kwargs):
         """Caches arguments for Player cloning."""
         obj = super().__new__(cls)
         obj.init_kwargs = cls.init_params(*args, **kwargs)
