@@ -91,9 +91,11 @@ class MetaPlayer(Player):
         for player, play in zip(self.team, self._last_results):
             player.history.append(play, coplay)
 
+    def update_history(self, play, coplay):
+        super().update_history(play, coplay)
+        self.update_histories(coplay)
+
     def strategy(self, opponent):
-        if len(self.history):
-            self.update_histories(opponent.history[-1])
         # Get the results of all our players.
         results = []
         for player in self.team:
@@ -659,15 +661,13 @@ class MemoryDecay(MetaPlayer):
         """
         self.memory.pop(choice(range(0, len(self.memory))))
 
-    def strategy(self, opponent):
+    def meta_strategy(self, results, opponent):
         try:
-            self.team[0].history.append(self.history[-1], opponent.history[-1])
             self.memory.append(opponent.history[-1])
         except IndexError:
             pass
         if len(self.history) < self.start_strategy_duration:
-            play = self.team[0].strategy(opponent)
-            return play
+            return results[0]
         else:
             if random.random() <= self.p_memory_alter:
                 self.memory_alter()

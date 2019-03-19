@@ -204,6 +204,8 @@ def player_can_be_pickled(player: Player) -> bool:
     import_name = player.__class__.__name__
     if not hasattr(class_module, import_name):
         return False
+    if issubclass(player.__class__, SequencePlayer):
+        return False
 
     to_test = getattr(class_module, import_name)
     return to_test == player.__class__

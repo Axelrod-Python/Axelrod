@@ -54,8 +54,8 @@ def simultaneous_play(player, coplayer, noise=0):
     if noise:
         s1 = random_flip(s1, noise)
         s2 = random_flip(s2, noise)
-    player.history.append(s1, s2)
-    coplayer.history.append(s2, s1)
+    player.update_history(s1, s2)
+    coplayer.update_history(s2, s1)
     return s1, s2
 
 
@@ -215,6 +215,9 @@ class Player(object):
         """
         # This also resets the history.
         self.__init__(**self.init_kwargs)
+
+    def update_history(self, play, coplay):
+        self.history.append(play, coplay)
 
     @property
     def history(self):

@@ -147,9 +147,21 @@ class TrackHistory(axl.Cooperator):
 class Identity(axl.Cooperator):
     pass
 
-@st.NiceTransformer(name_prefix=None)
-class NiceThue(axl.ThueMorse):
+
+@st.IdentityTransformer(name_prefix=None)
+class TransformedThue(axl.ThueMorse):
     pass
+
+
+class MetaThue(axl.MetaPlayer):
+    name = "MetaThue"
+
+    def __init__(self):
+        team = [axl.ThueMorse]
+        super().__init__(team=team)
+
+
+TransformedMetaThue = st.IdentityTransformer(name_prefix=None)(MetaThue)
 
 
 transformed_no_prefix = [
@@ -225,9 +237,10 @@ class TestPickle(unittest.TestCase):
         self.assert_original_equals_pickled(player)
 
     def test_sequence_player(self):
-        meta_thue = axl.MetaPlayer(team=[axl.ThueMorse])
-        for player in [axl.ThueMorse(), axl.ThueMorseInverse(), meta_thue,
-                       NiceThue()]:
+        inline_transformed_thue = st.IdentityTransformer(name_prefix="Transformed")(axl.ThueMorse)()
+        for player in [axl.ThueMorse(), axl.ThueMorseInverse(), MetaThue(),
+                       TransformedMetaThue(), inline_transformed_thue, TransformedThue()
+                       ]:
             self.assert_equals_instance_from_pickling(player)
             opponents = (axl.Defector, axl.Cooperator, axl.Random, axl.CyclerCCCDCD)
             for opponent_class in opponents:
