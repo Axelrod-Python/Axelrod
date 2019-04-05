@@ -5,17 +5,11 @@ from axelrod.version import __version__
 from axelrod.load_data_ import load_pso_tables, load_weights
 from axelrod import graph
 from axelrod.action import Action
-from axelrod.random_ import random_choice, seed, Pdf
+from axelrod.random_ import random_choice, random_flip, seed, Pdf
 from axelrod.plot import Plot
 from axelrod.game import DefaultGame, Game
-from axelrod.player import (
-    get_state_distribution_from_history,
-    is_basic,
-    obey_axelrod,
-    update_history,
-    update_state_distribution,
-    Player,
-)
+from axelrod.history import History, LimitedHistory
+from axelrod.player import is_basic, obey_axelrod, Player
 from axelrod.mock_player import MockPlayer
 from axelrod.match import Match
 from axelrod.moran import MoranProcess, ApproximateMoranProcess

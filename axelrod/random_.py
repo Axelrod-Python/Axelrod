@@ -3,6 +3,8 @@ import random
 import numpy
 from axelrod.action import Action
 
+C, D = Action.C, Action.D
+
 
 def random_choice(p: float = 0.5) -> Action:
     """
@@ -20,15 +22,37 @@ def random_choice(p: float = 0.5) -> Action:
     axelrod.Action
     """
     if p == 0:
-        return Action.D
+        return D
 
     if p == 1:
-        return Action.C
+        return C
 
     r = random.random()
     if r < p:
-        return Action.C
-    return Action.D
+        return C
+    return D
+
+
+def random_flip(action: Action, threshold: float) -> Action:
+    """
+    Return flipped action with probability `threshold`
+
+    No random sample is carried out if threshold is 0 or 1.
+
+    Parameters
+    ----------
+    action:
+        The action to flip or not
+    threshold : float
+        The probability of flipping action
+
+    Returns
+    -------
+    axelrod.Action
+    """
+    if random_choice(threshold) == C:
+        return action.flip()
+    return action
 
 
 def randrange(a: int, b: int) -> int:

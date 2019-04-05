@@ -243,7 +243,7 @@ class MEM2(Player):
         # Rather that they examine the actual history of play
         if len(self.history) > 0:
             for v in self.players.values():
-                v.history.append(self.history[-1])
+                v.history.append(self.history[-1], opponent.history[-1])
         self.shift_counter -= 1
         if (self.shift_counter == 0) and (self.alld_counter < 2):
             self.shift_counter = 2

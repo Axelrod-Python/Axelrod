@@ -7,7 +7,6 @@ form:
 This is used by both the Match class and the ResultSet class which analyse
 interactions.
 """
-import csv
 from collections import Counter, defaultdict
 
 import pandas as pd

@@ -180,12 +180,6 @@ class TestLookupTableHelperFunctions(unittest.TestCase):
         self.assertEqual(actual, expected)
         self.assertIsInstance(actual[0], Plays)
 
-    def test_get_last_n_plays(self):
-        player = axelrod.Player()
-        player.history = [C, D, C]
-        self.assertEqual(get_last_n_plays(player=player, depth=0), ())
-        self.assertEqual(get_last_n_plays(player=player, depth=2), (D, C))
-
 
 class TestLookerUp(TestPlayer):
 
@@ -297,9 +291,9 @@ class TestLookerUp(TestPlayer):
         self.assertEqual(table_depth_one.initial_actions, (D,))
 
     def test_initial_actions_makes_up_missing_actions_with_c(self):
-        initial_acitons = (D,)
+        initial_actions = (D,)
         table_depth_three = axelrod.LookerUp(
-            initial_actions=initial_acitons,
+            initial_actions=initial_actions,
             pattern="CCCCCCCC",
             parameters=Plays(3, 0, 0),
         )

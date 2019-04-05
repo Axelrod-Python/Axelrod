@@ -57,7 +57,7 @@ class TestMoranProcess(unittest.TestCase):
         """Test that set players resets all players"""
         players = axelrod.Cooperator(), axelrod.Defector()
         mp = MoranProcess(players)
-        players[0].cooperations += 1
+        players[0].history.append(C, D)
         mp.set_players()
         self.assertEqual(players[0].cooperations, 0)
 

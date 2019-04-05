@@ -141,18 +141,6 @@ class TestForgetfulFoolMeOnce(TestPlayer):
             attrs={"D_count": 0},
         )
 
-    def test_reset(self):
-        """Check that count gets reset properly"""
-        P1 = self.player()
-        P1.history = [C, D]
-        P2 = axelrod.Player()
-        P2.history = [D]
-        random.seed(1)
-        self.assertEqual(P1.strategy(P2), C)
-        self.assertEqual(P1.D_count, 1)
-        P1.reset()
-        self.assertEqual(P1.D_count, 0)
-
 
 class TestFoolMeForever(TestPlayer):
 

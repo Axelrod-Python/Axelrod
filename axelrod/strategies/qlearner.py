@@ -49,7 +49,6 @@ class RiskyQLearner(Player):
 
         self.prev_action = None  # type: Action
         self.original_prev_action = None  # type: Action
-        self.history = []  # type: List[Action]
         self.score = 0
         self.Qs = OrderedDict({"": OrderedDict(zip([C, D], [0, 0]))})
         self.Vs = OrderedDict({"": 0})

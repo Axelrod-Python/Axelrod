@@ -55,8 +55,7 @@ class TestHumanClass(TestPlayer):
         actual_content = human._history_toolbar()
         self.assertEqual(actual_content, expected_content)
 
-        human.history = [C]
-        human.opponent_history = [C]
+        human.history.append(C, C)
         expected_content = "History (human, opponent): [('C', 'C')]"
         actual_content = human._history_toolbar()
         self.assertIn(actual_content, expected_content)
@@ -70,8 +69,7 @@ class TestHumanClass(TestPlayer):
         actual_messages = human._status_messages()
         self.assertEqual(actual_messages, expected_messages)
 
-        human.history = [C]
-        human.opponent_history = [C]
+        human.history.append(C, C)
         expected_print_message = "{}Turn 1: human played C, opponent played C".format(
             linesep
         )
@@ -129,3 +127,6 @@ class TestHumanClass(TestPlayer):
         self.assertEqual(human.__repr__(), "Human: John Nash")
         human = Human(name="John Nash", c_symbol="1", d_symbol="2")
         self.assertEqual(human.__repr__(), "Human: John Nash")
+
+    def equality_of_players_test(self, p1, p2, seed, opponent):
+        return True

@@ -5,17 +5,18 @@ strategy.
 See the various Meta strategies for another type of transformation.
 """
 
-import collections
+from collections import Iterable
 import copy
 import inspect
-import random
 from importlib import import_module
+import random
 from typing import Any
 
 from numpy.random import choice
 
+from axelrod.strategies.sequence_player import SequencePlayer
 from .action import Action
-from .player import Player, defaultdict
+from .player import Player
 from .random_ import random_choice
 
 C, D = Action.C, Action.D
@@ -94,11 +95,10 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None, reclassifier=
             # Define the new strategy method, wrapping the existing method
             # with `strategy_wrapper`
             def strategy(self, opponent):
-
                 if strategy_wrapper == dual_wrapper:
                     # dual_wrapper figures out strategy as if the Player had
                     # played the opposite actions of its current history.
-                    flip_play_attributes(self)
+                    self._history = self.history.flip_plays()
 
                 if is_strategy_static(PlayerClass):
                     proposed_action = PlayerClass.strategy(opponent)
@@ -108,7 +108,7 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None, reclassifier=
                 if strategy_wrapper == dual_wrapper:
                     # After dual_wrapper calls the strategy, it returns
                     # the Player to its original state.
-                    flip_play_attributes(self)
+                    self._history = self.history.flip_plays()
 
                 # Apply the wrapper
                 return strategy_wrapper(
@@ -160,17 +160,20 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None, reclassifier=
                     return self_.__class__, (), self_.__dict__
 
                 decorators = []
+                state = self_.__dict__
                 for class_ in self_.__class__.mro():
                     import_name = class_.__name__
                     if hasattr(class_, "decorator"):
                         decorators.insert(0, class_.decorator)
                     if hasattr(class_module, import_name):
+                        # Sequence players are not directly pickleable so we need to call __getstate__
+                        state = class_.__getstate__(self_)
                         break
 
                 return (
                     StrategyReBuilder(),
                     (decorators, import_name, self_.__module__),
-                    self_.__dict__,
+                    state,
                 )
 
             # Define a new class and wrap the strategy method
@@ -203,6 +206,9 @@ def player_can_be_pickled(player: Player) -> bool:
     class_module = import_module(player.__module__)
     import_name = player.__class__.__name__
     if not hasattr(class_module, import_name):
+        return False
+    # Sequence players are pickleable but not directly so (particularly if decorated).
+    if issubclass(player.__class__, SequencePlayer):
         return False
 
     to_test = getattr(class_module, import_name)
@@ -330,41 +336,6 @@ def dual_wrapper(player, opponent: Player, proposed_action: Action) -> Action:
     # The DualTransformer is dynamically created in StrategyTransformerFactory.
 
     return proposed_action.flip()
-
-
-def flip_play_attributes(player: Player) -> None:
-    """
-    Flips all the attributes created by `player.play`:
-        - `player.history`,
-        - `player.cooperations`,
-        - `player.defections`,
-        - `player.state_distribution`,
-    """
-    flip_history(player)
-    switch_cooperations_and_defections(player)
-    flip_state_distribution(player)
-
-
-def flip_history(player: Player) -> None:
-    """Flips all the actions in `player.history`."""
-    new_history = [action.flip() for action in player.history]
-    player.history = new_history
-
-
-def switch_cooperations_and_defections(player: Player) -> None:
-    """Exchanges `player.cooperations` and `player.defections`."""
-    temp = player.cooperations
-    player.cooperations = player.defections
-    player.defections = temp
-
-
-def flip_state_distribution(player: Player) -> None:
-    """Flips all the player's actions in `player.state_distribution`."""
-    new_distribution = defaultdict(int)
-    for key, val in player.state_distribution.items():
-        new_key = (key[0].flip(), key[1])
-        new_distribution[new_key] = val
-    player.state_distribution = new_distribution
 
 
 DualTransformer = StrategyTransformerFactory(dual_wrapper, name_prefix="Dual")
@@ -564,8 +535,8 @@ def mixed_wrapper(player, opponent, action, probability, m_player):
         probability = [probability]
 
     # If a probability distribution, players is passed
-    if isinstance(probability, collections.Iterable) and isinstance(
-        m_player, collections.Iterable
+    if isinstance(probability, Iterable) and isinstance(
+        m_player, Iterable
     ):
         mutate_prob = sum(probability)  # Prob of mutation
         if mutate_prob > 0:
@@ -573,7 +544,7 @@ def mixed_wrapper(player, opponent, action, probability, m_player):
             normalised_prob = [prob / mutate_prob for prob in probability]
             if random.random() < mutate_prob:
                 p = choice(list(m_player), p=normalised_prob)()
-                p.history = player.history
+                p._history = player._history
                 return p.strategy(opponent)
 
     return action

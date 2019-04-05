@@ -12,7 +12,7 @@ class TestGrudger(TestPlayer):
     name = "Grudger"
     player = axl.Grudger
     expected_classifier = {
-        "memory_depth": 1,
+        "memory_depth": float('inf'),
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -71,16 +71,6 @@ class TestForgetfulGrudger(TestPlayer):
         actions = ([(C, C)] * 2 + [(C, D)] + [(D, C)] * 10) * 3 + [(C, C)]
         attrs = {"grudged": False, "mem_length": 10, "grudge_memory": 0}
         self.versus_test(opponent, expected_actions=actions, attrs=attrs)
-
-    def test_reset_method(self):
-        """Tests the reset method."""
-        player = axl.ForgetfulGrudger()
-        player.history = [C, D, D, D]
-        player.grudged = True
-        player.grudge_memory = 4
-        player.reset()
-        self.assertEqual(player.grudged, False)
-        self.assertEqual(player.grudge_memory, 0)
 
 
 class TestOppositeGrudger(TestPlayer):

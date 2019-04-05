@@ -1,21 +1,22 @@
 import itertools
+import pickle
 import random
 import types
 import unittest
 
 import axelrod
 import numpy as np
-from axelrod import DefaultGame, Player
-from axelrod.player import get_state_distribution_from_history, update_history
+from axelrod import DefaultGame, Player, LimitedHistory
+from axelrod.player import simultaneous_play
 from axelrod.tests.property import strategy_lists
 
 from hypothesis import given, settings
-from hypothesis.strategies import integers
+from hypothesis.strategies import integers, sampled_from
 
 C, D = axelrod.Action.C, axelrod.Action.D
 
 short_run_time_short_mem = [
-    s for s in axelrod.short_run_time_strategies if s().classifier["memory_depth"] <= 1
+    s for s in axelrod.short_run_time_strategies if s().classifier["memory_depth"] <= 10
 ]
 
 
@@ -56,19 +57,6 @@ class TestPlayerClass(unittest.TestCase):
     name = "Player"
     player = Player
     classifier = {"stochastic": False}
-
-    def test_add_noise(self):
-        axelrod.seed(1)
-        noise = 0.2
-        s1, s2 = C, C
-        noisy_s1, noisy_s2 = self.player()._add_noise(noise, s1, s2)
-        self.assertEqual(noisy_s1, D)
-        self.assertEqual(noisy_s2, C)
-
-        noise = 0.9
-        noisy_s1, noisy_s2 = self.player()._add_noise(noise, s1, s2)
-        self.assertEqual(noisy_s1, D)
-        self.assertEqual(noisy_s2, D)
 
     def test_play(self):
         player1, player2 = self.player(), self.player()
@@ -111,15 +99,6 @@ class TestPlayerClass(unittest.TestCase):
             player2.state_distribution, {(C, C): 1, (C, D): 1, (D, C): 2, (D, D): 1}
         )
 
-    def test_get_state_distribution_from_history(self):
-        player = self.player()
-        history_1 = [C, C, D, D, C]
-        history_2 = [C, D, C, D, D]
-        get_state_distribution_from_history(player, history_1, history_2)
-        self.assertEqual(
-            player.state_distribution, {(C, C): 1, (C, D): 2, (D, C): 1, (D, D): 1}
-        )
-
     def test_noisy_play(self):
         axelrod.seed(1)
         noise = 0.2
@@ -135,14 +114,19 @@ class TestPlayerClass(unittest.TestCase):
         self.assertEqual(player.history, [])
         self.assertEqual(player.cooperations, 0)
         self.assertEqual(player.defections, 0)
-        update_history(player, D)
+        player.history.append(D, C)
         self.assertEqual(player.history, [D])
         self.assertEqual(player.defections, 1)
         self.assertEqual(player.cooperations, 0)
-        update_history(player, C)
+        player.history.append(C, C)
         self.assertEqual(player.history, [D, C])
         self.assertEqual(player.defections, 1)
         self.assertEqual(player.cooperations, 1)
+
+    def test_history_assignment(self):
+        player = Player()
+        with self.assertRaises(AttributeError):
+            player.history = []
 
     def test_strategy(self):
         self.assertRaises(NotImplementedError, self.player().strategy, self.player())
@@ -367,7 +351,7 @@ class TestPlayerClass(unittest.TestCase):
 class TestOpponent(Player):
     """A player who only exists so we have something to test against"""
 
-    name = "TestPlayer"
+    name = "TestOpponent"
     classifier = _test_classifier
 
     @staticmethod
@@ -418,6 +402,39 @@ class TestPlayer(unittest.TestCase):
         player.set_match_attributes(length=200, noise=0.5)
         t_attrs = player.match_attributes
         self.assertEqual(t_attrs["noise"], 0.5)
+
+    def equality_of_players_test(self, p1, p2, seed, opponent):
+        a1 = opponent()
+        a2 = opponent()
+        self.assertEqual(p1, p2)
+        for player, op in [(p1, a1), (p2, a2)]:
+            axelrod.seed(seed)
+            for _ in range(10):
+                simultaneous_play(player, op)
+        self.assertEqual(p1, p2)
+        p1 = pickle.loads(pickle.dumps(p1))
+        p2 = pickle.loads(pickle.dumps(p2))
+        self.assertEqual(p1, p2)
+
+    @given(
+        opponent=sampled_from(short_run_time_short_mem),
+        seed=integers(min_value=1, max_value=200),
+    )
+    @settings(max_examples=1)
+    def test_equality_of_clone(self, seed, opponent):
+        p1 = self.player()
+        p2 = p1.clone()
+        self.equality_of_players_test(p1, p2, seed, opponent)
+
+    @given(
+        opponent=sampled_from(axelrod.short_run_time_strategies),
+        seed=integers(min_value=1, max_value=200),
+    )
+    @settings(max_examples=1)
+    def test_equality_of_pickle_clone(self, seed, opponent):
+        p1 = self.player()
+        p2 = pickle.loads(pickle.dumps(p1))
+        self.equality_of_players_test(p1, p2, seed, opponent)
 
     def test_reset_history_and_attributes(self):
         """Make sure resetting works correctly."""
@@ -493,15 +510,17 @@ class TestPlayer(unittest.TestCase):
             for strategy in strategies:
                 player.reset()
                 opponent = strategy()
+                max_memory = max(memory, opponent.classifier["memory_depth"])
                 self.assertTrue(
                     test_memory(
                         player=player,
                         opponent=opponent,
                         seed=seed,
                         turns=turns,
-                        memory_length=memory,
+                        memory_length=max_memory,
                     ),
-                    msg="Failed for seed={} and opponent={}".format(seed, opponent),
+                    msg="{} failed for seed={} and opponent={}".format(
+                        player.name, seed, opponent),
                 )
 
     def versus_test(
@@ -650,21 +669,21 @@ def test_memory(player, opponent, memory_length, seed=0, turns=10):
     Checks if a player reacts to the plays of an opponent in the same way if
     only the given amount of memory is used.
     """
+    # Play the match normally.
     axelrod.seed(seed)
     match = axelrod.Match((player, opponent), turns=turns)
-    expected_results = [turn[0] for turn in match.play()]
+    plays = [p[0] for p in match.play()]
 
-    axelrod.seed(seed)
+    # Play with limited history.
     player.reset()
     opponent.reset()
+    player._history = LimitedHistory(memory_length)
+    opponent._history = LimitedHistory(memory_length)
+    axelrod.seed(seed)
+    match = axelrod.Match((player, opponent), turns=turns, reset=False)
+    limited_plays = [p[0] for p in match.play()]
 
-    results = []
-    for _ in range(turns):
-        player.history = player.history[-memory_length:]
-        opponent.history = opponent.history[-memory_length:]
-        player.play(opponent)
-        results.append(player.history[-1])
-    return results == expected_results
+    return plays == limited_plays
 
 
 class TestMemoryTest(unittest.TestCase):
