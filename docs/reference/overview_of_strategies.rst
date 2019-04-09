@@ -17,62 +17,20 @@ An indication is given as to whether or not this strategy is implemented in the
   :header: "Name", "Author", "Axelrod Library Name"
 
   "Tit For Tat", "Anatol Rapoport", ":class:`TitForTat <axelrod.strategies.titfortat.TitForTat>`"
-  "`Tideman and Chieruzzi`_", "T Nicolaus Tideman and Paula Chieruzz", ":class:`TidemanAndChieruzzi <axelrod.strategies.axelrod_first.TidemanAndChieruzzi>`"
+  "Tideman and Chieruzzi", "T Nicolaus Tideman and Paula Chieruzz", ":class:`TidemanAndChieruzzi <axelrod.strategies.axelrod_first.TidemanAndChieruzzi>`"
   "Nydegger", "Rudy Nydegger", ":class:`Nydegger <axelrod.strategies.axelrod_first.Nydegger>`"
   "Grofman", "Bernard Grofman", ":class:`Grofman <axelrod.strategies.axelrod_first.Grofman>`"
   "Shubik", "Martin Shubik", ":class:`Shubik <axelrod.strategies.axelrod_first.Shubik>`"
   "Stein and Rapoport", "Stein and Anatol Rapoport", ":class:`SteinAndRapoport <axelrod.strategies.axelrod_first.SteinAndRapoport>`"
   "Grudger", "James W Friedman", ":class:`Grudger <axelrod.strategies.grudger.Grudger>`"
   "Davis", "Morton Davis", ":class:`Davis <axelrod.strategies.axelrod_first.Davis>`"
-  "`Graaskamp`_", "Jim Graaskamp", "Not Implemented"
+  "Graaskamp", "Jim Graaskamp", ":class:`Graaskamp <axelrod.strategies.axelrod_first.Graaskamp>`"
   "Downing", "Leslie Downing", ":class:`RevisedDowning <axelrod.strategies.axelrod_first.RevisedDowning>`"
   "Feld", "Scott Feld", ":class:`Feld <axelrod.strategies.axelrod_first.Feld>`"
   "Joss", "Johann Joss", ":class:`Joss <axelrod.strategies.axelrod_first.Joss>`"
   "Tullock",  "Gordon Tullock", ":class:`Tullock <axelrod.strategies.axelrod_first.Tullock>`"
   "Unnamed Strategy", "Unknown", ":class:`UnnamedStrategy <axelrod.strategies.axelrod_first.UnnamedStrategy>`"
   "Random", "Unknownd", ":class:`Random <axelrod.strategies.rand.Random>`"
-
-
-Tideman and Chieruzzi
-^^^^^^^^^^^^^^^^^^^^^
-
-This strategy begins by playing Tit For Tat and then things get slightly
-complicated:
-
-1. Every run of defections played by the opponent increases the number of
-   defections that this strategy retaliates with by 1.
-2. The opponent is given a 'fresh start' if:
-
-   * it is 10 points behind this strategy
-   * **and** it has not just started a run of defections
-   * **and** it has been at least 20 rounds since the last 'fresh start'
-   * **and** there are more than 10 rounds remaining in the tournament
-   * **and** the total number of defections differs from a 50-50 random sample by at
-     least 3.0 standard deviations.
-
-A 'fresh start' is a sequence of two cooperations followed by an assumption that
-the game has just started (everything is forgotten).
-
-*This strategy came 2nd in Axelrod's original tournament.*
-
-Graaskamp
-^^^^^^^^^
-
-**Not implemented yet**
-
-This strategy follows the following rules:
-
-1. Play Tit For Tat for the first 50 rounds;
-2. Defects on round 51;
-3. Plays 5 further rounds of Tit For Tat;
-4. A check is then made to see if the opponent is playing randomly in which case
-   it defects for the rest of the game;
-5. The strategy also checks to see if the opponent is playing Tit For Tat or
-   another strategy from a preliminary tournament called 'Analogy'. If so it
-   plays Tit For Tat. If not it cooperates and randomly defects every 5 to 15
-   moves.
-
-*This strategy came 9th in Axelrod's original tournament.*
 
 Axelrod's second tournament
 ---------------------------
