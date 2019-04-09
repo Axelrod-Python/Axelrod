@@ -209,16 +209,22 @@ class Feld(Player):
 class Graaskamp(Player):
     """
 
-    This is one of the strategies from Robert Axelrod's first tournament and is described in the literature as:
+    This is one of the strategies from Robert Axelrod's first tournament and is
+    described in the literature as:
 
     1. Plays Tit For Tat for the first 50 rounds;
     2. Defects on round 51;
     3. Plays 5 further rounds of Tit For Tat;
-    4. A check is then made to see if the opponent is playing randomly in which case
-       it defects for the rest of the game;
-    5. The strategy also checks to see if the opponent is playing Tit For Tat or another strategy from a preliminary
-       tournament called ‘Analogy’ (There is no information about 'Analogy' tournament. Step 5 is not implemented fully.)
-       If so it plays Tit For Tat. If not it cooperates and randomly defects every 5 to 15 moves.
+    4. A check is then made to see if the opponent is playing randomly in which
+       case it defects for the rest of the game;
+    5. The strategy also checks to see if the opponent is playing Tit For Tat or
+       another strategy from a preliminary tournament called ‘Analogy’  If
+       so it plays Tit For Tat. If not it cooperates and randomly defects every 5
+       to 15 moves.
+
+
+    Note that there is no information about 'Analogy' available thus Step 5 is
+    not implemented fully.
 
     This strategy came 9th in Axelrod’s original tournament.
 
