@@ -1,7 +1,7 @@
 from .adaptive import Adaptive
 from .adaptor import AdaptorBrief, AdaptorLong
 from .alternator import Alternator
-from .ann import EvolvedANN, EvolvedANN5, EvolvedANNNoise05
+from .ann import ANN, EvolvedANN, EvolvedANN5, EvolvedANNNoise05
 from .apavlov import APavlov2006, APavlov2011
 from .appeaser import Appeaser
 from .averagecopier import AverageCopier, NiceAverageCopier

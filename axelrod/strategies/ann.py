@@ -1,3 +1,4 @@
+import random
 from typing import List, Tuple
 
 import numpy as np
@@ -8,9 +9,13 @@ from axelrod.player import Player
 C, D = Action.C, Action.D
 nn_weights = load_weights()
 
-
 # Neural Network and Activation functions
 relu = np.vectorize(lambda x: max(x, 0))
+
+
+def num_weights(num_features, num_hidden):
+    size = num_features * num_hidden + 2 * num_hidden
+    return size
 
 
 def compute_features(player: Player, opponent: Player) -> List[int]:
@@ -139,7 +144,7 @@ def split_weights(
 
     hidden2output = weights[start:end]
     bias = weights[end:]
-    return (input2hidden, hidden2output, bias)
+    return input2hidden, hidden2output, bias
 
 
 class ANN(Player):
@@ -185,9 +190,27 @@ class ANN(Player):
     }
 
     def __init__(
-        self, weights: List[float], num_features: int, num_hidden: int
+        self, num_features: int, num_hidden: int,
+        weights: List[float] = None,
+        mutation_probability: float = 0.1,
+        mutation_distance: int = 5,
     ) -> None:
         super().__init__()
+        self.mutation_distance = mutation_distance
+        self.num_features = num_features
+        self.num_hidden = num_hidden
+        if mutation_probability is None:
+            size = num_weights(num_features, num_hidden)
+            self.mutation_probability = 10 / size
+        else:
+            self.mutation_probability = mutation_probability
+        if weights is None:
+            self.randomize()
+        else:
+            self._process_weights(weights, num_features, num_hidden)
+
+    def _process_weights(self, weights, num_features, num_hidden):
+        self.weights = list(weights)
         (i2h, h2o, bias) = split_weights(weights, num_features, num_hidden)
         self.input_to_hidden_layer_weights = np.array(i2h)
         self.hidden_to_output_layer_weights = np.array(h2o)
@@ -205,6 +228,59 @@ class ANN(Player):
             return C
         else:
             return D
+
+    def randomize(self):
+        size = num_weights(self.num_features, self.num_hidden)
+        self.weights = [random.uniform(-1, 1) for _ in range(size)]
+        self._process_weights(self.weights, self.num_features, self.num_hidden)
+
+    @staticmethod
+    def mutate_weights(weights, num_features, num_hidden, mutation_probability,
+                       mutation_distance):
+        size = num_weights(num_features, num_hidden)
+        randoms = np.random.random(size)
+        for i, r in enumerate(randoms):
+            if r < mutation_probability:
+                p = 1 + random.uniform(-1, 1) * mutation_distance
+                weights[i] *= p
+        return weights
+
+    def mutate(self):
+        self.weights = self.mutate_weights(
+            self.weights, self.num_features, self.num_hidden,
+            self.mutation_probability, self.mutation_distance)
+        # Add in layer sizes?
+
+    @staticmethod
+    def crossover_weights(w1, w2):
+        crosspoint = random.randrange(len(w1))
+        new_weights = list(w1[:crosspoint]) + list(w2[crosspoint:])
+        return new_weights
+
+    def crossover(self, other):
+        # Assuming that the number of states is the same
+        new_weights = self.crossover_weights(self.weights, other.weights)
+        return ANN(
+            num_features=self.num_features,
+            num_hidden=self.num_hidden,
+            mutation_probability=self.mutation_probability,
+            mutation_distance=self.mutation_distance,
+            weights=new_weights)
+
+    # def __repr__(self):
+    #     return "{}:{}:{}".format(
+    #         self.num_features,
+    #         self.num_hidden,
+    #         ':'.join(map(str, self.weights))
+    #     )
+    #
+    # @classmethod
+    # def parse_repr(cls, s):
+    #     elements = list(map(float, s.split(':')))
+    #     num_features = int(elements[0])
+    #     num_hidden = int(elements[1])
+    #     weights = elements[2:]
+    #     return cls(num_features, num_hidden, weights)
 
 
 class EvolvedANN(ANN):
@@ -224,7 +300,10 @@ class EvolvedANN(ANN):
 
     def __init__(self) -> None:
         num_features, num_hidden, weights = nn_weights["Evolved ANN"]
-        super().__init__(weights, num_features, num_hidden)
+        super().__init__(
+            num_features=num_features,
+            num_hidden=num_hidden,
+            weights=weights)
 
 
 class EvolvedANN5(ANN):
@@ -244,7 +323,10 @@ class EvolvedANN5(ANN):
 
     def __init__(self) -> None:
         num_features, num_hidden, weights = nn_weights["Evolved ANN 5"]
-        super().__init__(weights, num_features, num_hidden)
+        super().__init__(
+            num_features=num_features,
+            num_hidden=num_hidden,
+            weights=weights)
 
 
 class EvolvedANNNoise05(ANN):
@@ -264,4 +346,8 @@ class EvolvedANNNoise05(ANN):
 
     def __init__(self) -> None:
         num_features, num_hidden, weights = nn_weights["Evolved ANN 5 Noise 05"]
-        super().__init__(weights, num_features, num_hidden)
+        super().__init__(
+            num_features=num_features,
+            num_hidden=num_hidden,
+            weights=weights)
+
