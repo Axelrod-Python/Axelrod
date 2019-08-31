@@ -242,7 +242,7 @@ class Player(object):
     def state_distribution(self):
         return self._history.state_distribution
 
-    ## Properties for evolutionary algorithms and Moran processes.
+    ## Optional methods for evolutionary algorithms and Moran processes.
 
     def mutate(self):
         """Optional method to allow Player to produce variants in place."""
@@ -257,3 +257,12 @@ class Player(object):
         """Optional method to randomly initialize the players parameters."""
         raise NotImplementedError()
 
+    ## Optional methods for particle swarm algorithm
+
+    def receive_vector(self, vector):
+        """Receive a vector of params and overwrite the Player."""
+        raise NotImplementedError()
+
+    def create_vector_bounds(self):
+        """Creates the bounds for the decision variables for Particle Swarm Algorithm."""
+        raise NotImplementedError()
