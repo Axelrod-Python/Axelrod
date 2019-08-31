@@ -224,8 +224,7 @@ class FSMPlayer(Player):
         self.initial_state = 1
 
         transitions = []
-        for i, (initial_state, action) in enumerate(
-            itertools.product(range(self.num_states), [C, D])):
+        for i, (initial_state, action) in enumerate(itertools.product(range(self.num_states), [C, D])):
             next_action = C if round(actions[i]) == 0 else D
             transitions.append([initial_state, action, next_states[i], next_action])
         self.fsm = SimpleFSM(transitions, self.initial_state)

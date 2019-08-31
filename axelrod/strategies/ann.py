@@ -249,7 +249,6 @@ class ANN(Player):
         self.weights = self.mutate_weights(
             self.weights, self.num_features, self.num_hidden,
             self.mutation_probability, self.mutation_distance)
-        # Add in layer sizes?
 
     @staticmethod
     def crossover_weights(w1, w2):

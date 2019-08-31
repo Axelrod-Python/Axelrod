@@ -1,6 +1,9 @@
 from collections import namedtuple
 from itertools import product
+import random
 from typing import Any, TypeVar
+
+import numpy as np
 
 from axelrod.action import Action, actions_to_str, str_to_actions
 from axelrod.player import Player
@@ -309,15 +312,29 @@ class LookerUp(Player):
         initial_actions: tuple = None,
         pattern: Any = None,  # pattern is str or tuple of Action's.
         parameters: Plays = None,
+        mutation_probability: float = None
     ) -> None:
 
         super().__init__()
-        self._lookup = self._get_lookup_table(lookup_dict, pattern, parameters)
+        self.parameters = parameters
+        if lookup_dict or (pattern and parameters):
+            self._lookup = self._get_lookup_table(lookup_dict, pattern, parameters)
+        else:
+            # plays, op_plays, op_start_plays = parameters
+            # self.randomize(plays, op_plays, op_start_plays)
+            self.randomize()
 
         self._set_memory_depth()
 
         self.initial_actions = self._get_initial_actions(initial_actions)
         self._initial_actions_pool = list(self.initial_actions)
+
+        if mutation_probability is None:
+            plays, op_plays, op_start_plays = parameters
+            keys = create_lookup_table_keys(plays, op_plays, op_start_plays)
+            self.mutation_probability = 2 / len(keys)
+        else:
+            self.mutation_probability = mutation_probability
 
     def _get_lookup_table(
         self, lookup_dict: dict, pattern: Any, parameters: tuple
@@ -381,6 +398,53 @@ class LookerUp(Player):
         :param sort_by: only_elements='self_plays', 'op_plays', 'op_openings'
         """
         return self._lookup.display(sort_by=sort_by)
+
+    @staticmethod
+    def random_params(plays, op_plays, op_start_plays):
+        keys = create_lookup_table_keys(plays, op_plays, op_start_plays)
+        # To get a pattern, we just randomly pick between C and D for each key
+        pattern = [random.choice([C, D]) for _ in keys]
+        table = dict(zip(keys, pattern))
+        return LookupTable(table)
+
+    def randomize(self):
+        plays, op_plays, op_start_plays = self.parameters
+        self._lookup = self.random_params(plays, op_plays, op_start_plays)
+
+    @staticmethod
+    def mutate_table(table, mutation_probability):
+        randoms = np.random.random(len(table.keys()))
+        # Flip each value with a probability proportional to the mutation rate
+        for i, (history, move) in enumerate(table.items()):
+            if randoms[i] < mutation_probability:
+                table[history] = move.flip()
+        return LookupTable(table)
+
+    def mutate(self):
+        self._lookup = self.mutate_table(self._lookup._dict, self.mutation_probability)
+        # Add in starting moves
+        for i in range(len(self.initial_actions)):
+            r = random.random()
+            if r < 0.05:
+                self.initial_actions[i] = self.initial_actions[i].flip()
+
+    @staticmethod
+    def crossover_tables(table1, table2):
+        keys = list(table1.keys())
+        crosspoint = random.randrange(len(keys))
+        new_items = [(k, table1[k]) for k in keys[:crosspoint]]
+        new_items += [(k, table2[k]) for k in keys[crosspoint:]]
+        new_table = dict(new_items)
+        return new_table
+
+    def crossover(self, other):
+        # Assuming that the number of states is the same
+        new_table = self.crossover_tables(self._lookup._dict, other._lookup._dict)
+        return LookerUp(
+            parameters=self.parameters,
+            initial_actions=list(self.initial_actions),
+            mutation_probability=self.mutation_probability,
+            lookup_dict=new_table)
 
 
 class EvolvedLookerUp1_1_1(LookerUp):
