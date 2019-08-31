@@ -241,3 +241,19 @@ class Player(object):
     @property
     def state_distribution(self):
         return self._history.state_distribution
+
+    ## Properties for evolutionary algorithms and Moran processes.
+
+    def mutate(self):
+        """Optional method to allow Player to produce variants in place."""
+        raise NotImplementedError()
+
+    def crossover(self, other):
+        """Optional method to allow Player to produce variants in combination with another player. Returns a new
+        Player."""
+        raise NotImplementedError()
+
+    def randomize(self):
+        """Optional method to randomly initialize the players parameters."""
+        raise NotImplementedError()
+

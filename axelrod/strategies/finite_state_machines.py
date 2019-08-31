@@ -1,7 +1,18 @@
+import random
+from random import randrange, choice
+
+import numpy as np
+
 from axelrod.action import Action
 from axelrod.player import Player
 
 C, D = Action.C, Action.D
+actions = (C, D)
+
+
+def copy_lists(rows):
+    new_rows = list(map(list, rows))
+    return new_rows
 
 
 class SimpleFSM(object):
@@ -59,6 +70,10 @@ class SimpleFSM(object):
     def state_transitions(self) -> dict:
         return self._state_transitions.copy()
 
+    @property
+    def transitions(self) -> dict:
+        return [[x[0], x[1], y[0], y[1]] for x, y in self._state_transitions.items()]
+
     def move(self, opponent_action: Action) -> Action:
         """Computes the response move and changes state."""
         next_state, next_action = self._state_transitions[
@@ -75,6 +90,10 @@ class SimpleFSM(object):
             other.state,
             other.state_transitions,
         )
+
+    def num_states(self):
+        """Return the number of states of the machine."""
+        return len(set(state for state, action in self._state_transitions))
 
 
 class FSMPlayer(Player):
@@ -97,19 +116,91 @@ class FSMPlayer(Player):
         transitions: tuple = ((1, C, 1, C), (1, D, 1, D)),
         initial_state: int = 1,
         initial_action: Action = C,
+        mutation_probability: float = 0,
+        num_states: int = None,
     ) -> None:
-
         super().__init__()
-        self.initial_state = initial_state
-        self.initial_action = initial_action
-        self.fsm = SimpleFSM(transitions, initial_state)
+        if num_states:
+            self.randomize(num_states=num_states)
+        else:
+            self.initial_state = initial_state
+            self.initial_action = initial_action
+            self.fsm = SimpleFSM(transitions, initial_state)
+        self.mutation_probability = mutation_probability
 
     def strategy(self, opponent: Player) -> Action:
         if len(self.history) == 0:
             return self.initial_action
         else:
-            action = self.fsm.move(opponent.history[-1])
-            return action
+            return self.fsm.move(opponent.history[-1])
+
+    @staticmethod
+    def random_params(num_states):
+        rows = []
+        for j in range(num_states):
+            for action in actions:
+                next_state = randrange(num_states)
+                next_action = choice(actions)
+                row = [j, action, next_state, next_action]
+                rows.append(row)
+        initial_state = randrange(num_states)
+        initial_action = choice(actions)
+        return tuple(rows), initial_state, initial_action
+
+    def randomize(self, num_states=None):
+        if not num_states:
+            num_states = self.fsm.num_states
+        transitions, initial_state, initial_action = self.random_params(num_states)
+        self.initial_state = initial_state
+        self.initial_action = initial_action
+        self.fsm = SimpleFSM(transitions, initial_state)
+
+    @staticmethod
+    def mutate_rows(rows, mutation_probability):
+        rows = list(rows)
+        randoms = np.random.random(len(rows))
+        # Flip each value with a probability proportional to the mutation rate
+        for i, row in enumerate(rows):
+            if randoms[i] < mutation_probability:
+                row[3] = row[3].flip()
+        # Swap Two Nodes?
+        if random.random() < 0.5:
+            nodes = len(rows) // 2
+            n1 = randrange(nodes)
+            n2 = randrange(nodes)
+            for j, row in enumerate(rows):
+                if row[0] == n1:
+                    row[0] = n2
+                elif row[0] == n2:
+                    row[0] = n1
+            rows.sort(key=lambda x: (x[0], 0 if x[1] == C else 1))
+        return rows
+
+    def mutate(self):
+        if random.random() < self.mutation_probability / 10:
+            self.initial_action = self.initial_action.flip()
+        if random.random() < self.mutation_probability / (10 * self.fsm.num_states()):
+            self.initial_state = randrange(self.fsm.num_states())
+        transitions = self.mutate_rows(self.fsm.transitions, self.mutation_probability)
+        self.fsm = SimpleFSM(transitions, self.initial_state)
+
+    @staticmethod
+    def crossover_rows(rows1, rows2):
+        num_states = len(rows1) // 2
+        crosspoint = 2 * randrange(num_states)
+        new_rows = copy_lists(rows1[:crosspoint])
+        new_rows += copy_lists(rows2[crosspoint:])
+        return new_rows
+
+    def crossover(self, other):
+        # Assuming that the number of states is the same
+        transitions = self.crossover_rows(self.fsm.transitions, other.fsm.transitions)
+        return FSMPlayer(
+            transitions=transitions,
+            initial_state=self.initial_state,
+            initial_action=self.initial_action,
+            mutation_probability=self.mutation_probability
+        )
 
 
 class Fortress3(FSMPlayer):
