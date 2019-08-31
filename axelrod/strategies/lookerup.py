@@ -317,6 +317,7 @@ class LookerUp(Player):
 
         super().__init__()
         self.parameters = parameters
+        self.pattern = pattern
         if lookup_dict or (pattern and parameters):
             self._lookup = self._get_lookup_table(lookup_dict, pattern, parameters)
         else:

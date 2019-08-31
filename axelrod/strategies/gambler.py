@@ -4,13 +4,15 @@ swarm algorithms.
 For the original see:
  https://gist.github.com/GDKO/60c3d0fd423598f3c4e4
 """
+import random
+import numpy as np
 
 from axelrod.action import Action
 from axelrod.load_data_ import load_pso_tables
 from axelrod.player import Player
 from axelrod.random_ import random_choice
 
-from .lookerup import LookerUp, Plays
+from .lookerup import LookupTable, LookerUp, Plays, create_lookup_table_keys
 
 C, D = Action.C, Action.D
 tables = load_pso_tables("pso_gambler.csv", directory="data")
@@ -42,6 +44,62 @@ class Gambler(LookerUp):
         if isinstance(actions_or_float, Action):
             return actions_or_float
         return random_choice(actions_or_float)
+
+    def receive_vector(self, vector):
+        """Receives a vector and updates the player's pattern. Ignores extra parameters."""
+        self.pattern = vector
+        self_depth, op_depth, op_openings_depth = self.parameters
+        self._lookup = LookupTable.from_pattern(self.pattern, self_depth, op_depth, op_openings_depth)
+
+    def create_vector_bounds(self):
+        """Creates the bounds for the decision variables. Ignores extra parameters."""
+        size = len(self.pattern)
+        lb = [0.0] * size
+        ub = [1.0] * size
+        return lb, ub
+
+    @staticmethod
+    def mutate_pattern(pattern, mutation_probability):
+        randoms = np.random.random(len(pattern))
+
+        for i, _ in enumerate(pattern):
+            if randoms[i] < mutation_probability:
+                ep = random.uniform(-1, 1) / 4
+                pattern[i] += ep
+                if pattern[i] < 0:
+                    pattern[i] = 0
+                if pattern[i] > 1:
+                    pattern[i] = 1
+        return pattern
+
+    def mutate(self):
+        self.pattern = self.mutate_pattern(self.pattern, self.mutation_probability)
+        self_depth, op_depth, op_openings_depth = self.parameters
+        self._lookup = LookupTable.from_pattern(self.pattern, self_depth, op_depth, op_openings_depth)
+
+    def crossover(self, other):
+        pattern1 = self.pattern
+        pattern2 = other.pattern
+
+        cross_point = int(random.randint(0, len(pattern1)))
+        offspring_pattern = pattern1[:cross_point] + pattern2[cross_point:]
+
+        return Gambler(
+            parameters=self.parameters,
+            pattern=offspring_pattern,
+            mutation_probability=self.mutation_probability)
+
+    @staticmethod
+    def random_params(plays, op_plays, op_start_plays):
+        keys = create_lookup_table_keys(plays, op_plays, op_start_plays)
+        pattern = [random.random() for _ in keys]
+        return pattern
+
+    def randomize(self):
+        pattern = self.random_params(*self.parameters)
+        self.pattern = pattern
+        self_depth, op_depth, op_openings_depth = self.parameters
+        self._lookup = LookupTable.from_pattern(self.pattern, self_depth, op_depth, op_openings_depth)
 
 
 class PSOGamblerMem1(Gambler):
