@@ -283,10 +283,20 @@ class TestEvolvableFSMPlayer(TestEvolvablePlayer):
     init_parameters = {"num_states": 4}
 
 
-class TestEvolvableFSMPlayer(TestEvolvablePlayer):
+class TestEvolvableFSMPlayer2(TestEvolvablePlayer):
     name = "EvolvableFSMPlayer"
     player_class = axelrod.EvolvableFSMPlayer
     init_parameters = {"num_states": 12}
+
+
+class TestEvolvableFSMPlayer3(TestEvolvablePlayer):
+    name = "EvolvableFSMPlayer"
+    player_class = axelrod.EvolvableFSMPlayer
+    init_parameters = {
+        "transitions": ((1, C, 1, C), (1, D, 2, D), (2, C, 2, D), (2, D, 1, C)),
+        "initial_state": 1,
+        "initial_action": C
+    }
 
 
 class TestFortress3(TestFSMPlayer):

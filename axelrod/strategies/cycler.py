@@ -114,12 +114,11 @@ class EvolvableCycler(Cycler, EvolvablePlayer):
         self.mutation_probability = mutation_probability
         self.mutation_potency = mutation_potency
         # Normalize parameters
-        if cycle:
-            self.cycle_length = len(cycle)
-        else:
+        if not cycle:
             if not cycle_length:
                 raise Exception("Insufficient Parameters to instantiate EvolvableCycler")
             cycle = self.generate_random_cycle(cycle_length)
+        self.cycle_length = len(cycle)
         # Init order matters
         Cycler.__init__(self, cycle=cycle)
         EvolvablePlayer.__init__(self)

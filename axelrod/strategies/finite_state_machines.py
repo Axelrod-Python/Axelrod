@@ -16,6 +16,14 @@ def copy_lists(rows):
     return new_rows
 
 
+def normalize_transitions(transitions):
+    """Translate List[List] to Tuple[Tuple]"""
+    normalized = []
+    for t in transitions:
+        normalized.append(tuple(t))
+    return tuple(normalized)
+
+
 class SimpleFSM(object):
     """Simple implementation of a finite state machine that transitions
     between states based on the last round of play.
@@ -169,7 +177,7 @@ class EvolvableFSMPlayer(FSMPlayer, EvolvablePlayer):
             transitions=transitions,
             initial_state=initial_state,
             initial_action=initial_action,
-            num_states=num_states)
+            num_states=self.num_states)
 
     @property
     def num_states(self):
@@ -183,7 +191,7 @@ class EvolvableFSMPlayer(FSMPlayer, EvolvablePlayer):
                 next_state = randrange(num_states)
                 next_action = choice(actions)
                 row = [j, action, next_state, next_action]
-                rows.append(row)
+                rows.append(tuple(row))
         initial_state = randrange(num_states)
         initial_action = choice(actions)
         return tuple(rows), initial_state, initial_action
@@ -233,10 +241,6 @@ class EvolvableFSMPlayer(FSMPlayer, EvolvablePlayer):
             transitions=transitions,
             initial_state=self.initial_state,
             initial_action=self.initial_action)
-        #
-        # self.init_kwargs["transitions"] = transitions
-        # self.init_kwargs["initial_state"] = self.initial_state
-        # self.init_kwargs["initial_action"] = self.initial_action
 
     @staticmethod
     def crossover_rows(rows1, rows2):
@@ -244,7 +248,7 @@ class EvolvableFSMPlayer(FSMPlayer, EvolvablePlayer):
         crosspoint = 2 * randrange(num_states)
         new_rows = copy_lists(rows1[:crosspoint])
         new_rows += copy_lists(rows2[crosspoint:])
-        return new_rows
+        return normalize_transitions(new_rows)
 
     def crossover(self, other):
         # Assuming that the number of states is the same
@@ -320,7 +324,7 @@ class EvolvableFSMPlayer(FSMPlayer, EvolvablePlayer):
                     row.append(Action.from_char(element))
                 except UnknownActionError:
                     row.append(int(element))
-            rows.append(row)
+            rows.append(tuple(row))
         return cls(
             transitions=tuple(rows),
             initial_state=initial_state,

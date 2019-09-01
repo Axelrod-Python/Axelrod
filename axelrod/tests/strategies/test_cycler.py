@@ -109,10 +109,9 @@ class TestEvolvableCycler(TestEvolvablePlayer):
     init_parameters = {"cycle_length": 100}
 
 
-class TestEvolvableCycler(TestEvolvablePlayer):
+class TestEvolvableCycler2(TestEvolvablePlayer):
     name = "EvolvableCycler"
     player_class = axelrod.EvolvableCycler
-    randomized = False
     init_parameters = {"cycle": "".join(random.choice(("C", "D")) for _ in range(50))}
 
 

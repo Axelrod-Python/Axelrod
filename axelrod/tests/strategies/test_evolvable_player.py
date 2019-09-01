@@ -117,7 +117,7 @@ class TestEvolvablePlayer(TestPlayer):
         player = self.player()
         serialized = player.serialize_parameters()
         deserialized_player = player.__class__.deserialize_parameters(serialized)
-        # compare_dicts(player.__dict__, deserialized_player.__dict__)
+        compare_dicts(player.__dict__, deserialized_player.__dict__)
 
         self.assertEqual(player, deserialized_player)
         self.assertEqual(deserialized_player, deserialized_player.clone())
