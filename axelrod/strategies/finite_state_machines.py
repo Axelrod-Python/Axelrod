@@ -235,12 +235,17 @@ class EvolvableFSMPlayer(FSMPlayer, EvolvablePlayer):
             self.initial_action = self.initial_action.flip()
         if random.random() < self.mutation_probability / (10 * self.num_states):
             self.initial_state = randrange(self.num_states)
-        transitions = self.mutate_rows(self.fsm.transitions(), self.mutation_probability)
-        self.fsm = SimpleFSM(transitions, self.initial_state)
-        self.overwrite_init_kwargs(
-            transitions=transitions,
-            initial_state=self.initial_state,
-            initial_action=self.initial_action)
+        try:
+            transitions = self.mutate_rows(self.fsm.transitions(), self.mutation_probability)
+            self.fsm = SimpleFSM(transitions, self.initial_state)
+            self.overwrite_init_kwargs(
+                transitions=transitions,
+                initial_state=self.initial_state,
+                initial_action=self.initial_action)
+        except ValueError:
+            # If the FSM is malformed, try again.
+            self.mutate()
+            return
 
     @staticmethod
     def crossover_rows(rows1, rows2):
