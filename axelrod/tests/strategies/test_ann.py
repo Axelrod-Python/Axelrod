@@ -3,8 +3,8 @@ import unittest
 
 import axelrod
 from axelrod.strategies.ann import split_weights
-
 from .test_player import TestPlayer
+from .test_evolvable_player import TestEvolvablePlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D
 
@@ -17,6 +17,12 @@ class TestSplitWeights(unittest.TestCase):
     # Doesn't Raise
     split_weights([0] * 70, 5, 10)
     split_weights([0] * 12, 10, 1)
+
+
+class TestEvolvableANNPlayer(TestEvolvablePlayer):
+    name = "EvolvableANN"
+    player_class = axelrod.EvolvableANN
+    init_parameters = {"num_features": 17, "num_hidden": 8}
 
 
 class TestEvolvedANN(TestPlayer):

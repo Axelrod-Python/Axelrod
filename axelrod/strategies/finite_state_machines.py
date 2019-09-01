@@ -4,8 +4,8 @@ from random import randrange, choice
 
 import numpy as np
 
-from axelrod.action import Action
-from axelrod.player import Player
+from axelrod.action import Action, UnknownActionError
+from axelrod.player import EvolvablePlayer, Player
 
 C, D = Action.C, Action.D
 actions = (C, D)
@@ -71,8 +71,7 @@ class SimpleFSM(object):
     def state_transitions(self) -> dict:
         return self._state_transitions.copy()
 
-    @property
-    def transitions(self) -> dict:
+    def transitions(self) -> list:
         return [[x[0], x[1], y[0], y[1]] for x, y in self._state_transitions.items()]
 
     def move(self, opponent_action: Action) -> Action:
@@ -116,24 +115,60 @@ class FSMPlayer(Player):
         self,
         transitions: tuple = ((1, C, 1, C), (1, D, 1, D)),
         initial_state: int = 1,
-        initial_action: Action = C,
-        mutation_probability: float = 0,
-        num_states: int = None,
+        initial_action: Action = C
     ) -> None:
         super().__init__()
-        if num_states:
-            self.randomize(num_states=num_states)
-        else:
-            self.initial_state = initial_state
-            self.initial_action = initial_action
-            self.fsm = SimpleFSM(transitions, initial_state)
-        self.mutation_probability = mutation_probability
+        self.initial_state = initial_state
+        self.initial_action = initial_action
+        self.fsm = SimpleFSM(transitions, initial_state)
 
     def strategy(self, opponent: Player) -> Action:
         if len(self.history) == 0:
             return self.initial_action
         else:
             return self.fsm.move(opponent.history[-1])
+
+
+class EvolvableFSMPlayer(FSMPlayer, EvolvablePlayer):
+    """Abstract base class for evolvable finite state machine players."""
+
+    name = "Evolvable FSM Player"
+
+    classifier = {
+        "memory_depth": 1,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+    def __init__(
+        self,
+        transitions: tuple = None,
+        initial_state: int = None,
+        initial_action: Action = None,
+        num_states: int = None,
+        mutation_probability: float = 0.1,
+    ) -> None:
+        """If transitions, initial_state, and initial_action are None
+        then generate random parameters using num_states."""
+        if not ((transitions is not None) and (initial_state is not None) and (initial_action is not None)):
+            if not num_states:
+                raise Exception("Insufficient Parameters to instantiate EvolvableFSMPlayer")
+            self.randomize(num_states)
+        FSMPlayer.__init__(
+            self,
+            transitions=self.init_kwargs["transitions"],
+            initial_state=self.init_kwargs["initial_state"],
+            initial_action=self.init_kwargs["initial_action"])
+        EvolvablePlayer.__init__(self)
+        self.mutation_probability = mutation_probability
+
+    @property
+    def num_states(self):
+        return self.fsm.num_states()
 
     @staticmethod
     def random_params(num_states):
@@ -150,11 +185,15 @@ class FSMPlayer(Player):
 
     def randomize(self, num_states=None):
         if not num_states:
-            num_states = self.fsm.num_states
+            num_states = self.num_states
         transitions, initial_state, initial_action = self.random_params(num_states)
         self.initial_state = initial_state
         self.initial_action = initial_action
         self.fsm = SimpleFSM(transitions, initial_state)
+        self.init_kwargs["transitions"] = transitions
+        self.init_kwargs["initial_state"] = initial_state
+        self.init_kwargs["initial_action"] = initial_action
+        self.init_kwargs["num_states"] = self.num_states
 
     @staticmethod
     def mutate_rows(rows, mutation_probability):
@@ -180,10 +219,13 @@ class FSMPlayer(Player):
     def mutate(self):
         if random.random() < self.mutation_probability / 10:
             self.initial_action = self.initial_action.flip()
-        if random.random() < self.mutation_probability / (10 * self.fsm.num_states()):
-            self.initial_state = randrange(self.fsm.num_states())
-        transitions = self.mutate_rows(self.fsm.transitions, self.mutation_probability)
+        if random.random() < self.mutation_probability / (10 * self.num_states):
+            self.initial_state = randrange(self.num_states)
+        transitions = self.mutate_rows(self.fsm.transitions(), self.mutation_probability)
         self.fsm = SimpleFSM(transitions, self.initial_state)
+        self.init_kwargs["transitions"] = transitions
+        self.init_kwargs["initial_state"] = self.initial_state
+        self.init_kwargs["initial_action"] = self.initial_action
 
     @staticmethod
     def crossover_rows(rows1, rows2):
@@ -195,8 +237,8 @@ class FSMPlayer(Player):
 
     def crossover(self, other):
         # Assuming that the number of states is the same
-        transitions = self.crossover_rows(self.fsm.transitions, other.fsm.transitions)
-        return FSMPlayer(
+        transitions = self.crossover_rows(self.fsm.transitions(), other.fsm.transitions())
+        return EvolvableFSMPlayer(
             transitions=transitions,
             initial_state=self.initial_state,
             initial_action=self.initial_action,
@@ -216,27 +258,64 @@ class FSMPlayer(Player):
 
         Finally, a probability to determine the player's first move.
         """
-        state_scale = vector[:self.num_states * 2]
-        next_states = [int(s * (self.num_states - 1)) for s in state_scale]
-        actions = vector[self.num_states * 2: -1]
+        num_states = self.fsm.num_states()
+        state_scale = vector[:num_states * 2]
+        next_states = [int(s * (num_states - 1)) for s in state_scale]
+        actions = vector[num_states * 2: -1]
 
         self.initial_action = C if round(vector[-1]) == 0 else D
         self.initial_state = 1
 
         transitions = []
-        for i, (initial_state, action) in enumerate(itertools.product(range(self.num_states), [C, D])):
+        for i, (initial_state, action) in enumerate(itertools.product(range(num_states), [C, D])):
             next_action = C if round(actions[i]) == 0 else D
             transitions.append([initial_state, action, next_states[i], next_action])
         self.fsm = SimpleFSM(transitions, self.initial_state)
 
     def create_vector_bounds(self):
         """Creates the bounds for the decision variables."""
-        size = len(self.fsm.transitions) * 2 + 1
-
+        size = len(self.fsm.transitions()) * 2 + 1
         lb = [0] * size
         ub = [1] * size
-
         return lb, ub
+
+    @staticmethod
+    def repr_rows(rows):
+        ss = []
+        for row in rows:
+            ss.append("_".join(list(map(str, row))))
+        return ":".join(ss)
+
+    def serialize_parameters(self):
+        return "{}:{}:{}:{}".format(
+            self.num_states,
+            self.initial_state,
+            self.initial_action,
+            self.repr_rows(self.fsm.transitions())
+        )
+
+    @classmethod
+    def deserialize_parameters(cls, serialized):
+        rows = []
+        lines = serialized.split(':')
+        num_states = int(lines[0])
+        initial_state = int(lines[1])
+        initial_action = Action.from_char(lines[2])
+
+        for line in lines[3:]:
+            row = []
+            for element in line.split('_'):
+                try:
+                    row.append(Action.from_char(element))
+                except UnknownActionError:
+                    row.append(int(element))
+            rows.append(row)
+        return cls(
+            transitions=tuple(rows),
+            initial_state=initial_state,
+            initial_action=initial_action,
+            num_states=num_states
+        )
 
 
 class Fortress3(FSMPlayer):

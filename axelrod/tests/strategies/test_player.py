@@ -379,7 +379,7 @@ class TestPlayer(unittest.TestCase):
 
     def test_repr(self):
         """Test that the representation is correct."""
-        if self.__class__ != TestPlayer:
+        if not issubclass(self.__class__, TestPlayer):
             self.assertEqual(str(self.player()), self.name)
 
     def test_match_attributes(self):
@@ -592,7 +592,7 @@ class TestPlayer(unittest.TestCase):
         dictionary."""
         player = self.player()
 
-        # Test that player has same classifier as it's class unless otherwise
+        # Test that player has same classifier as its class unless otherwise
         # specified
         if expected_class_classifier is None:
             expected_class_classifier = player.classifier

@@ -4,7 +4,7 @@ from typing import List, Tuple
 import numpy as np
 from axelrod.action import Action
 from axelrod.load_data_ import load_weights
-from axelrod.player import Player
+from axelrod.player import EvolvablePlayer, Player
 
 C, D = Action.C, Action.D
 nn_weights = load_weights()
@@ -191,19 +191,11 @@ class ANN(Player):
 
     def __init__(
         self, num_features: int, num_hidden: int,
-        weights: List[float] = None,
-        mutation_probability: float = 0.1,
-        mutation_distance: int = 5,
+        weights: List[float] = None
     ) -> None:
         super().__init__()
-        self.mutation_distance = mutation_distance
         self.num_features = num_features
         self.num_hidden = num_hidden
-        if mutation_probability is None:
-            size = num_weights(num_features, num_hidden)
-            self.mutation_probability = 10 / size
-        else:
-            self.mutation_probability = mutation_probability
         if weights is None:
             self.randomize()
         else:
@@ -229,9 +221,38 @@ class ANN(Player):
         else:
             return D
 
+
+class EvolvableANN(ANN, EvolvablePlayer):
+    """Evolvable version of ANN."""
+
+    def __init__(
+        self, num_features: int, num_hidden: int,
+        weights: List[float] = None,
+        mutation_probability: float = 0.1,
+        mutation_distance: int = 5,
+    ) -> None:
+        self.num_features = num_features
+        self.num_hidden = num_hidden
+        self.mutation_distance = mutation_distance
+        if mutation_probability is None:
+            size = num_weights(num_features, num_hidden)
+            self.mutation_probability = 10 / size
+        else:
+            self.mutation_probability = mutation_probability
+        if weights is None:
+            if not (num_features and num_hidden):
+                raise Exception("Insufficient Parameters to instantiate EvolvableANN")
+            self.randomize()
+        ANN.__init__(self,
+                     self.init_kwargs["num_features"],
+                     self.init_kwargs["num_hidden"],
+                     self.init_kwargs["weights"])
+        EvolvablePlayer.__init__(self)
+
     def randomize(self):
         size = num_weights(self.num_features, self.num_hidden)
         self.weights = [random.uniform(-1, 1) for _ in range(size)]
+        self.init_kwargs["weights"] = self.weights
         self._process_weights(self.weights, self.num_features, self.num_hidden)
 
     @staticmethod
@@ -249,6 +270,8 @@ class ANN(Player):
         self.weights = self.mutate_weights(
             self.weights, self.num_features, self.num_hidden,
             self.mutation_probability, self.mutation_distance)
+        self.init_kwargs["weights"] = self.weights
+        self._process_weights(self.weights, self.num_features, self.num_hidden)
 
     @staticmethod
     def crossover_weights(w1, w2):
@@ -259,27 +282,27 @@ class ANN(Player):
     def crossover(self, other):
         # Assuming that the number of states is the same
         new_weights = self.crossover_weights(self.weights, other.weights)
-        return ANN(
+        return EvolvableANN(
             num_features=self.num_features,
             num_hidden=self.num_hidden,
             mutation_probability=self.mutation_probability,
             mutation_distance=self.mutation_distance,
             weights=new_weights)
 
-    # def __repr__(self):
-    #     return "{}:{}:{}".format(
-    #         self.num_features,
-    #         self.num_hidden,
-    #         ':'.join(map(str, self.weights))
-    #     )
-    #
-    # @classmethod
-    # def parse_repr(cls, s):
-    #     elements = list(map(float, s.split(':')))
-    #     num_features = int(elements[0])
-    #     num_hidden = int(elements[1])
-    #     weights = elements[2:]
-    #     return cls(num_features, num_hidden, weights)
+    def serialize_parameters(self):
+        return "{}:{}:{}".format(
+                self.num_features,
+                self.num_hidden,
+                ':'.join(map(str, self.weights))
+            )
+
+    @classmethod
+    def deserialize_parameters(cls, serialized):
+        elements = list(map(float, serialized.split(':')))
+        num_features = int(elements[0])
+        num_hidden = int(elements[1])
+        weights = elements[2:]
+        return cls(num_features, num_hidden, weights)
 
 
 class EvolvedANN(ANN):

@@ -1,15 +1,25 @@
-"""Test for the Gambler strategy.
-Most tests come form the LookerUp test suite.
+"""Test for the Gambler strategy. Most tests come from the LookerUp test suite.
 """
 
 import copy
-
 import axelrod
-
 from .test_lookerup import convert_original_to_current
 from .test_player import TestPlayer
+from .test_evolvable_player import TestEvolvablePlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D
+
+
+class TestEvolvableGambler(TestEvolvablePlayer):
+    name = "EvolvableGambler"
+    player_class = axelrod.EvolvableGambler
+    init_parameters = {"parameters": (1, 1, 1)}
+
+
+class TestEvolvableGambler(TestEvolvablePlayer):
+    name = "EvolvableGambler"
+    player_class = axelrod.EvolvableGambler
+    init_parameters = {"parameters": (3, 2, 1)}
 
 
 class TestGambler(TestPlayer):

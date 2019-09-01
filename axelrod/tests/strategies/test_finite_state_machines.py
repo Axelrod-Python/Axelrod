@@ -6,6 +6,7 @@ from axelrod.compute_finite_state_machine_memory import get_memory_from_transiti
 from axelrod.strategies.finite_state_machines import SimpleFSM
 
 from .test_player import TestPlayer
+from .test_evolvable_player import TestEvolvablePlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D
 
@@ -274,6 +275,18 @@ class TestFSMPlayer(TestPlayer):
         """
         transitions = self.player().fsm._state_transitions
         self.assertEqual(get_memory_from_transitions(transitions), self.expected_classifier["memory_depth"])
+
+
+class TestEvolvableFSMPlayer(TestEvolvablePlayer):
+    name = "EvolvableFSMPlayer"
+    player_class = axelrod.EvolvableFSMPlayer
+    init_parameters = {"num_states": 4}
+
+
+class TestEvolvableFSMPlayer(TestEvolvablePlayer):
+    name = "EvolvableFSMPlayer"
+    player_class = axelrod.EvolvableFSMPlayer
+    init_parameters = {"num_states": 12}
 
 
 class TestFortress3(TestFSMPlayer):

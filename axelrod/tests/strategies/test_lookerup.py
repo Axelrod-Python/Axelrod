@@ -8,13 +8,25 @@ from axelrod.strategies.lookerup import (
     LookupTable,
     Plays,
     create_lookup_table_keys,
-    get_last_n_plays,
     make_keys_into_plays,
 )
 
 from .test_player import TestPlayer
+from .test_evolvable_player import TestEvolvablePlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D
+
+
+class TestEvolvableLookerUp(TestEvolvablePlayer):
+    name = "EvolvableLookerUp"
+    player_class = axelrod.EvolvableLookerUp
+    init_parameters = {"parameters": (1, 1, 1)}
+
+
+class TestEvolvableLookerUp(TestEvolvablePlayer):
+    name = "EvolvableLookerUp"
+    player_class = axelrod.EvolvableLookerUp
+    init_parameters = {"parameters": (2, 1, 3)}
 
 
 class TestLookupTable(unittest.TestCase):

@@ -1,7 +1,7 @@
 from .adaptive import Adaptive
 from .adaptor import AdaptorBrief, AdaptorLong
 from .alternator import Alternator
-from .ann import ANN, EvolvedANN, EvolvedANN5, EvolvedANNNoise05
+from .ann import ANN, EvolvableANN, EvolvedANN, EvolvedANN5, EvolvedANNNoise05
 from .apavlov import APavlov2006, APavlov2011
 from .appeaser import Appeaser
 from .averagecopier import AverageCopier, NiceAverageCopier
@@ -67,6 +67,7 @@ from .finite_state_machines import (
     TF1,
     TF2,
     TF3,
+    EvolvableFSMPlayer,
     EvolvedFSM4,
     EvolvedFSM16,
     EvolvedFSM16Noise05,
@@ -85,6 +86,7 @@ from .finite_state_machines import (
 )
 from .forgiver import Forgiver, ForgivingTitForTat
 from .gambler import (
+    EvolvableGambler,
     Gambler,
     PSOGambler1_1_1,
     PSOGambler2_2_2,
@@ -118,7 +120,7 @@ from .grudger import (
 )
 from .grumpy import Grumpy
 from .handshake import Handshake
-from .hmm import EvolvedHMM5, HMMPlayer
+from .hmm import EvolvedHMM5, EvolvableHMMPlayer, HMMPlayer
 from .human import Human
 from .hunter import (
     AlternatorHunter,
@@ -131,6 +133,7 @@ from .hunter import (
 )
 from .inverse import Inverse
 from .lookerup import (
+    EvolvableLookerUp,
     EvolvedLookerUp1_1_1,
     EvolvedLookerUp2_2_2,
     LookerUp,

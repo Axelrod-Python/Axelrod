@@ -77,7 +77,6 @@ class Player(object):
         "manipulates_state": None,
     }
 
-    # def __new__(cls, *args, history=None, **kwargs):
     def __new__(cls, *args, **kwargs):
         """Caches arguments for Player cloning."""
         obj = super().__new__(cls)
@@ -242,27 +241,47 @@ class Player(object):
     def state_distribution(self):
         return self._history.state_distribution
 
-    ## Optional methods for evolutionary algorithms and Moran processes.
+
+class EvolvablePlayer(Player):
+    """A class for a player that can evolve, for use in the Moran process or with reinforcement learning algorithms.
+
+    This is an abstract base class, not intended to be used directly.
+    """
+
+    name = "EvolvablePlayer"
+
+    def randomize(self):
+        """Optional method to randomly initialize the players parameters."""
+        pass
+
+    # Serialization and Deserialization to strings.
+
+    def serialize_parameters(self):
+        """Serialize parameters to a string for reinforcement learning."""
+        pass
+
+    @classmethod
+    def deserialize_parameters(cls, serialized):
+        """Deserialize parameters to a Player instance."""
+        pass
+
+    # Optional methods for evolutionary algorithms and Moran processes.
 
     def mutate(self):
         """Optional method to allow Player to produce variants in place."""
-        raise NotImplementedError()
+        pass
 
     def crossover(self, other):
         """Optional method to allow Player to produce variants in combination with another player. Returns a new
         Player."""
-        raise NotImplementedError()
+        pass
 
-    def randomize(self):
-        """Optional method to randomly initialize the players parameters."""
-        raise NotImplementedError()
-
-    ## Optional methods for particle swarm algorithm
+    # Optional methods for particle swarm algorithm.
 
     def receive_vector(self, vector):
         """Receive a vector of params and overwrite the Player."""
-        raise NotImplementedError()
+        pass
 
     def create_vector_bounds(self):
         """Creates the bounds for the decision variables for Particle Swarm Algorithm."""
-        raise NotImplementedError()
+        pass

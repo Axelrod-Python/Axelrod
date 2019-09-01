@@ -3,10 +3,22 @@ import unittest
 
 import axelrod
 from axelrod.strategies.hmm import SimpleHMM, is_stochastic_matrix
-
 from .test_player import TestMatch, TestPlayer
+from .test_evolvable_player import TestEvolvablePlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D
+
+
+class TestEvolvableHMMPlayer(TestEvolvablePlayer):
+    name = "EvolvableHMMPlayer"
+    player_class = axelrod.EvolvableHMMPlayer
+    init_parameters = {"num_states": 4}
+
+
+class TestEvolvableHMMPlayer(TestEvolvablePlayer):
+    name = "EvolvableHMMPlayer"
+    player_class = axelrod.EvolvableHMMPlayer
+    init_parameters = {"num_states": 8}
 
 
 class TestHMMPlayers(unittest.TestCase):

@@ -4,7 +4,7 @@ import numpy as np
 from numpy.random import choice
 
 from axelrod.action import Action
-from axelrod.player import Player
+from axelrod.player import EvolvablePlayer, Player
 from axelrod.random_ import random_choice
 
 C, D = Action.C, Action.D
@@ -170,34 +170,22 @@ class HMMPlayer(Player):
         transitions_D=None,
         emission_probabilities=None,
         initial_state=0,
-        initial_action=C,
-        num_states=None,
-        mutation_probability=None
+        initial_action=C
     ) -> None:
         super().__init__()
+        if not transitions_C:
+            transitions_C = [[1]]
+            transitions_D = [[1]]
+            emission_probabilities = [0.5]  # Not stochastic
+            initial_state = 0
         self.initial_state = initial_state
         self.initial_action = initial_action
-        if not num_states:
-            num_states = len(emission_probabilities)
-        self.num_states = num_states
-
-        if not transitions_C:
-            self.randomize()
-        else:
-            self.initial_state = initial_state
-            self.initial_action = initial_action
-            self.hmm = SimpleHMM(
-                copy_lists(transitions_C), copy_lists(transitions_D), list(emission_probabilities), initial_state
-            )
-            assert self.hmm.is_well_formed()
-
+        self.hmm = SimpleHMM(
+            copy_lists(transitions_C), copy_lists(transitions_D), list(emission_probabilities), initial_state
+        )
+        assert self.hmm.is_well_formed()
         self.state = self.hmm.state
         self.classifier["stochastic"] = self.is_stochastic()
-
-        if mutation_probability is None:
-            self.mutation_probability = 10 / (num_states ** 2)
-        else:
-            self.mutation_probability = mutation_probability
 
     def is_stochastic(self) -> bool:
         """Determines if the player is stochastic."""
@@ -221,6 +209,40 @@ class HMMPlayer(Player):
             self.state = self.hmm.state
             return action
 
+
+class EvolvableHMMPlayer(HMMPlayer, EvolvablePlayer):
+    """Evolvable version of HMMPlayer."""
+    def __init__(
+        self,
+        transitions_C=None,
+        transitions_D=None,
+        emission_probabilities=None,
+        initial_state=0,
+        initial_action=C,
+        num_states=None,
+        mutation_probability=None
+    ) -> None:
+        if not (emission_probabilities and transitions_C and transitions_D and (initial_state is not None) and (initial_action is not None)):
+            if not num_states:
+                raise Exception("Insufficient Parameters to instantiate EvolvableHMMPlayer")
+            self.randomize(num_states)
+        HMMPlayer.__init__(self,
+                           transitions_C=self.init_kwargs["transitions_C"],
+                           transitions_D=self.init_kwargs["transitions_D"],
+                           emission_probabilities=self.init_kwargs["emission_probabilities"],
+                           initial_state=self.init_kwargs["initial_state"],
+                           initial_action=self.init_kwargs["initial_action"])
+        EvolvablePlayer.__init__(self)
+
+        if mutation_probability is None:
+            self.mutation_probability = 10 / (num_states ** 2)
+        else:
+            self.mutation_probability = mutation_probability
+
+    @property
+    def num_states(self):
+        return len(self.hmm.emission_probabilities)
+
     @staticmethod
     def random_params(num_states):
         t_C = []
@@ -234,13 +256,17 @@ class HMMPlayer(Player):
         initial_action = C
         return p, t_C, t_D, initial_state, initial_action
 
-    def randomize(self):
-        emission_probabilities, transitions_C, transitions_D, initial_state, initial_action = self.random_params(self.num_states)
+    def randomize(self, num_states=None):
+        if not num_states:
+            num_states = self.num_states
+        emission_probabilities, transitions_C, transitions_D, initial_state, initial_action = self.random_params(num_states)
         self.initial_state = initial_state
         self.initial_action = initial_action
-        self.hmm = SimpleHMM(
-            transitions_C, transitions_D, emission_probabilities, initial_state
-        )
+        self.init_kwargs["transitions_C"] = transitions_C
+        self.init_kwargs["transitions_D"] = transitions_D
+        self.init_kwargs["emission_probabilities"] = emission_probabilities
+        self.init_kwargs["initial_state"] = initial_state
+        self.init_kwargs["initial_action"] = initial_action
 
     @staticmethod
     def mutate_rows(rows, mutation_probability):
@@ -260,6 +286,11 @@ class HMMPlayer(Player):
             self.initial_action = self.initial_action.flip()
         if random.random() < self.mutation_probability / (10 * self.num_states):
             self.initial_state = randrange(self.num_states)
+        self.init_kwargs["transitions_C"] = self.hmm.transitions_C
+        self.init_kwargs["transitions_D"] = self.hmm.transitions_D
+        self.init_kwargs["emission_probabilities"] = self.hmm.emission_probabilities
+        self.init_kwargs["initial_state"] = self.initial_state
+        self.init_kwargs["initial_action"] = self.initial_action
 
     @staticmethod
     def crossover_rows(rows1, rows2):
@@ -281,15 +312,14 @@ class HMMPlayer(Player):
         t_D = self.crossover_rows(self.hmm.transitions_D, other.hmm.transitions_D)
         emissions = self.crossover_weights(
             self.hmm.emission_probabilities, other.hmm.emission_probabilities)
-        return HMMPlayer(t_C, t_D, emissions,
-                         self.initial_state, self.initial_action,
-                         self.num_states, self.mutation_probability)
-    # @staticmethod
-    # def repr_rows(rows):
-    #     ss = []
-    #     for row in rows:
-    #         ss.append("_".join(list(map(str, row))))
-    #     return "|".join(ss)
+        return EvolvableHMMPlayer(
+            transitions_C=t_C,
+            transitions_D=t_D,
+            emission_probabilities=emissions,
+            initial_state=self.initial_state,
+            initial_action=self.initial_action,
+            num_states=self.num_states,
+            mutation_probability=self.mutation_probability)
 
     def receive_vector(self, vector):
         """
@@ -330,13 +360,57 @@ class HMMPlayer(Player):
 
     def create_vector_bounds(self):
         """Creates the bounds for the decision variables."""
-
         vec_len = 2 * self.num_states ** 2 + self.num_states + 1
-
         lb = [0.0] * vec_len
         ub = [1.0] * vec_len
-
         return lb, ub
+
+    @classmethod
+    def repr_rows(cls, rows):
+        ss = []
+        for row in rows:
+            ss.append("_".join(list(map(str, row))))
+        return "|".join(ss)
+
+    def serialize_parameters(self):
+        return "{}:{}:{}:{}:{}".format(
+            self.initial_state,
+            self.initial_action,
+            self.repr_rows(self.hmm.transitions_C),
+            self.repr_rows(self.hmm.transitions_D),
+            self.repr_rows([self.hmm.emission_probabilities])
+        )
+
+    @classmethod
+    def parse_vector(cls, line):
+        row = line.split('_')
+        row = list(map(float, row))
+        return row
+
+    @classmethod
+    def parse_matrix(cls, sm):
+        rows = []
+        lines = sm.split('|')
+        for line in lines:
+            rows.append(cls.parse_vector(line))
+        return rows
+
+    @classmethod
+    def deserialize_parameters(cls, serialized):
+        lines = serialized.split(':')
+        initial_state = int(lines[0])
+        initial_action = Action.from_char(lines[1])
+        t_C = cls.parse_matrix(lines[2])
+        t_D = cls.parse_matrix(lines[3])
+        p = cls.parse_vector(lines[4])
+        num_states = len(t_C)
+
+        return cls(num_states=num_states,
+                   transitions_C=t_C,
+                   transitions_D=t_D,
+                   emission_probabilities=p,
+                   initial_state=initial_state,
+                   initial_action=initial_action)
 
 
 class EvolvedHMM5(HMMPlayer):
