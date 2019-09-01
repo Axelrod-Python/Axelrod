@@ -1,5 +1,5 @@
 """Tests for the Cycler strategies."""
-
+import random
 import itertools
 
 import axelrod
@@ -8,6 +8,7 @@ from axelrod._strategy_utils import detect_cycle
 from axelrod.action import Action, str_to_actions
 
 from .test_player import TestPlayer
+from .test_evolvable_player import TestEvolvablePlayer
 
 C, D = Action.C, Action.D
 
@@ -100,6 +101,19 @@ class TestBasicCycler(TestPlayer):
 
     def test_cycle_raises_value_error_on_bad_cycle_str(self):
         self.assertRaises(ValueError, Cycler, cycle="CdDC")
+
+
+class TestEvolvableCycler(TestEvolvablePlayer):
+    name = "EvolvableCycler"
+    player_class = axelrod.EvolvableCycler
+    init_parameters = {"cycle_length": 100}
+
+
+class TestEvolvableCycler(TestEvolvablePlayer):
+    name = "EvolvableCycler"
+    player_class = axelrod.EvolvableCycler
+    randomized = False
+    init_parameters = {"cycle": "".join(random.choice(("C", "D")) for _ in range(50))}
 
 
 def test_cycler_factory(cycle_str):

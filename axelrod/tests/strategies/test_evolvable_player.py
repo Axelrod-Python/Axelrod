@@ -44,6 +44,7 @@ class TestEvolvablePlayer(TestPlayer):
 
     player_class = EvolvableTestOpponent
     init_parameters = dict()
+    randomized = False
 
     def player(self):
         return self.player_class(**self.init_parameters)
@@ -58,6 +59,8 @@ class TestEvolvablePlayer(TestPlayer):
 
     def test_randomization(self):
         """Test that randomization on initialization produces different strategies."""
+        if not self.randomized:
+            return True
         seed(0)
         player1 = self.player()
         seed(0)
@@ -89,16 +92,20 @@ class TestEvolvablePlayer(TestPlayer):
         mutant = player.clone()
         mutant.mutate()
         clone = mutant.clone()
-#        compare_dicts(mutant.__dict__, clone.__dict__)
+        # compare_dicts(mutant.__dict__, clone.__dict__)
 
         self.assertEqual(clone, mutant)
 
     def test_crossover(self):
         """Test that crossover produces different strategies."""
-        seed(0)
-        player1 = self.player()
-        seed(1)
-        player2 = self.player()
+        players = []
+        for seed_ in (0, 1):
+            seed(seed_)
+            player = self.player()
+            # Mutate to ensure randomization
+            player.mutate()
+            players.append(player)
+        player1, player2 = players
         crossed = player1.crossover(player2)
         self.assertNotEqual(player1, crossed)
         self.assertNotEqual(player2, crossed)
@@ -116,8 +123,8 @@ class TestEvolvablePlayer(TestPlayer):
         self.assertEqual(deserialized_player, deserialized_player.clone())
 
 
-# def compare_dicts(d1, d2):
-#     for k, v in d1.items():
-#         if d2[k] != v:
-#             print(k, d1[k])
-#             print(k, d2[k])
+def compare_dicts(d1, d2):
+    for k, v in d1.items():
+        if d2[k] != v:
+            print(k, d1[k])
+            print(k, d2[k])

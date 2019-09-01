@@ -250,6 +250,11 @@ class EvolvablePlayer(Player):
 
     name = "EvolvablePlayer"
 
+    def overwrite_init_kwargs(self, **kwargs):
+        """Use to overwrite parameters for proper cloning and testing."""
+        for k, v in kwargs.items():
+            self.init_kwargs[k] = v
+
     def randomize(self):
         """Optional method to randomly initialize the players parameters."""
         pass

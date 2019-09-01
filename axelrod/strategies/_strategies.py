@@ -58,6 +58,7 @@ from .cycler import (
     CyclerCCD,
     CyclerDC,
     CyclerDDC,
+    EvolvableCycler,
 )
 from .darwin import Darwin
 from .dbs import DBS
