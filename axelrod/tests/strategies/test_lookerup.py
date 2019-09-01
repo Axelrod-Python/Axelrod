@@ -23,10 +23,28 @@ class TestEvolvableLookerUp(TestEvolvablePlayer):
     init_parameters = {"parameters": (1, 1, 1)}
 
 
-class TestEvolvableLookerUp(TestEvolvablePlayer):
+class TestEvolvableLookerUp2(TestEvolvablePlayer):
     name = "EvolvableLookerUp"
     player_class = axelrod.EvolvableLookerUp
     init_parameters = {"parameters": (2, 1, 3)}
+
+
+class TestEvolvableLookerUp3(TestEvolvablePlayer):
+    name = "EvolvableLookerUp"
+    player_class = axelrod.EvolvableLookerUp
+    init_parameters = {
+        "initial_actions": (C, C,),
+        "lookup_dict":  {
+            ((C, C), (C,), ()): C,
+            ((C, C), (D,), ()): D,
+            ((C, D), (C,), ()): D,
+            ((C, D), (D,), ()): C,
+            ((D, C), (C,), ()): C,
+            ((D, C), (D,), ()): D,
+            ((D, D), (C,), ()): D,
+            ((D, D), (D,), ()): C,
+        }
+    }
 
 
 class TestLookupTable(unittest.TestCase):
