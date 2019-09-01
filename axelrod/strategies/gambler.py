@@ -48,48 +48,85 @@ class Gambler(LookerUp):
         return random_choice(actions_or_float)
 
 
-class EvolvableGambler(Gambler, EvolvablePlayer):
+# class EvolvableGambler(Gambler, EvolvablePlayer):
+#     name = "EvolvableGambler"
+#
+#     def __init__(
+#         self,
+#         lookup_dict: dict = None,
+#         initial_actions: tuple = None,
+#         pattern: Any = None,  # pattern is str or tuple of Actions.
+#         parameters: Plays = None,
+#         mutation_probability: float = None
+#     ) -> None:
+#         if not (lookup_dict or parameters):
+#             raise Exception("Insufficient Parameters to instantiate EvolvableGambler")
+#         if not initial_actions:
+#             num_actions = max(self.parameters)
+#             initial_actions = tuple([choice((C, D)) for _ in range(num_actions)])
+#         self.initial_actions = initial_actions
+#         if lookup_dict or (pattern and parameters):
+#             self._lookup = self._get_lookup_table(lookup_dict, pattern, parameters)
+#         else:
+#             # Generate a random pattern and (maybe) initial actions
+#             pattern = self.random_params(*parameters)
+#         if mutation_probability is None:
+#             plays, op_plays, op_start_plays = parameters
+#             keys = create_lookup_table_keys(plays, op_plays, op_start_plays)
+#             self.mutation_probability = 2 / len(keys)
+#         else:
+#             self.mutation_probability = mutation_probability
+#         self.parameters = parameters
+#         self.pattern = pattern
+#         Gambler.__init__(
+#             self,
+#             lookup_dict=self.init_kwargs["lookup_dict"],
+#             initial_actions=self.init_kwargs["initial_actions"],
+#             pattern=self.init_kwargs["pattern"],
+#             parameters=self.init_kwargs["parameters"]
+#         )
+#         EvolvablePlayer.__init__(self)
+#         self.overwrite_init_kwargs(
+#             lookup_dict=self._lookup.dictionary,
+#             initial_actions=initial_actions,
+#             pattern=pattern
+#             # pattern=self.pattern
+#         )
+
+class EvolvableGambler(Gambler, EvolvableLookerUp):
+    name = "EvolvableGambler"
 
     def __init__(
         self,
         lookup_dict: dict = None,
         initial_actions: tuple = None,
-        pattern: Any = None,  # pattern is str or tuple of Action's.
+        pattern: Any = None,  # pattern is str or tuple of Actions.
         parameters: Plays = None,
         mutation_probability: float = None
     ) -> None:
-        if not (lookup_dict or parameters):
-            raise Exception("Insufficient Parameters to instantiate EvolvableGambler")
-        super().__init__()
-        self.parameters = parameters
-        self.pattern = pattern
-        if self.initial_actions:
-            self.initial_actions = initial_actions
-        else:
-            num_actions = max(self.parameters)
-            self.initial_actions = tuple([choice((C, D)) for _ in range(num_actions)])
-            self.init_kwargs["initial_actions"] = self.initial_actions
-        if lookup_dict or (pattern and parameters):
-            self._lookup = self._get_lookup_table(lookup_dict, pattern, parameters)
-            self.init_kwargs["lookup_dict"] = self._lookup._dict
-        else:
-            # Generate a random pattern and (maybe) initial actions
-            self.randomize()
+        EvolvableLookerUp.__init__(
+            self,
+            lookup_dict=lookup_dict,
+            initial_actions=initial_actions,
+            pattern=pattern,
+            parameters=parameters,
+            mutation_probability=mutation_probability
+        )
+        self.pattern = list(self.pattern)
         Gambler.__init__(
             self,
-            lookup_dict=self.init_kwargs["lookup_dict"],
-            initial_actions=self.init_kwargs["initial_actions"],
-            pattern=self.init_kwargs["pattern"],
-            parameters=self.init_kwargs["parameters"]
+            lookup_dict=self.lookup_dict,
+            initial_actions=self.initial_actions,
+            pattern=self.pattern,
+            parameters=self.parameters
         )
-        EvolvablePlayer.__init__(self)
-
-        if mutation_probability is None:
-            plays, op_plays, op_start_plays = parameters
-            keys = create_lookup_table_keys(plays, op_plays, op_start_plays)
-            self.mutation_probability = 2 / len(keys)
-        else:
-            self.mutation_probability = mutation_probability
+        self.overwrite_init_kwargs(
+            lookup_dict=self.lookup_dict,
+            initial_actions=self.initial_actions,
+            pattern=self.pattern,
+            parameters=self.parameters,
+            mutation_probability=self.mutation_probability,
+        )
 
     def receive_vector(self, vector):
         """Receives a vector and updates the player's pattern. Ignores extra parameters."""
@@ -121,25 +158,27 @@ class EvolvableGambler(Gambler, EvolvablePlayer):
         self.pattern = self.mutate_pattern(self.pattern, self.mutation_probability)
         self_depth, op_depth, op_openings_depth = self.parameters
         self._lookup = LookupTable.from_pattern(self.pattern, self_depth, op_depth, op_openings_depth)
-        self.init_kwargs["lookup_dict"] = self._lookup._dict
+        self.overwrite_init_kwargs(lookup_dict=self._lookup.dictionary)
 
     def crossover(self, other):
         pattern1 = self.pattern
         pattern2 = other.pattern
-
         cross_point = int(random.randint(0, len(pattern1)))
         offspring_pattern = pattern1[:cross_point] + pattern2[cross_point:]
 
         return EvolvableGambler(
             parameters=self.parameters,
             pattern=offspring_pattern,
-            mutation_probability=self.mutation_probability)
+            mutation_probability=self.mutation_probability,
+            initial_actions=self.initial_actions
+        )
 
     @staticmethod
     def random_params(plays, op_plays, op_start_plays):
         keys = create_lookup_table_keys(plays, op_plays, op_start_plays)
         pattern = [random.random() for _ in keys]
-        return pattern
+        table = dict(zip(keys, pattern))
+        return pattern, LookupTable(table)
 
     def randomize(self):
         pattern = self.random_params(*self.parameters)
@@ -148,10 +187,11 @@ class EvolvableGambler(Gambler, EvolvablePlayer):
         if not self.initial_actions:
             num_actions = max([plays, op_plays, op_start_plays])
             self.initial_actions = tuple([choice((C, D)) for _ in range(num_actions)])
-        self._lookup = LookupTable.from_pattern(self.pattern, plays, op_plays, op_start_plays)
-        self.init_kwargs["lookup_dict"] = self._lookup._dict
-        self.init_kwargs["pattern"] = pattern
-        self.init_kwargs["initial_actions"] = self.initial_actions
+        self._lookup = LookupTable.from_pattern(pattern, plays, op_plays, op_start_plays)
+        self.overwrite_init_kwargs(
+            lookup_dict=self._lookup.dictionary,
+            pattern=pattern,
+            initial_actions=self.initial_actions)
 
     def serialize_parameters(self):
         self_depth, op_depth, op_openings_depth = self.parameters

@@ -400,7 +400,6 @@ class EvolvableLookerUp(LookerUp, EvolvablePlayer):
     ) -> None:
         if not ((lookup_dict and initial_actions) or parameters):
             raise Exception("Insufficient Parameters to instantiate EvolvableLookerUp")
-        super().__init__()
         if not((lookup_dict and initial_actions) or (pattern and parameters)):
             # Generate a random pattern and (maybe) initial actions
             plays, op_plays, op_start_plays = parameters

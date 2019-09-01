@@ -196,10 +196,7 @@ class ANN(Player):
         super().__init__()
         self.num_features = num_features
         self.num_hidden = num_hidden
-        if weights is None:
-            self.randomize()
-        else:
-            self._process_weights(weights, num_features, num_hidden)
+        self._process_weights(weights, num_features, num_hidden)
 
     def _process_weights(self, weights, num_features, num_hidden):
         self.weights = list(weights)
@@ -236,24 +233,29 @@ class EvolvableANN(ANN, EvolvablePlayer):
         self.mutation_distance = mutation_distance
         if mutation_probability is None:
             size = num_weights(num_features, num_hidden)
-            self.mutation_probability = 10 / size
+            self.mutation_probability = 10. / size
         else:
             self.mutation_probability = mutation_probability
         if weights is None:
             if not (num_features and num_hidden):
                 raise Exception("Insufficient Parameters to instantiate EvolvableANN")
-            self.randomize()
+            size = num_weights(self.num_features, self.num_hidden)
+            weights = [random.uniform(-1, 1) for _ in range(size)]
         ANN.__init__(self,
-                     self.init_kwargs["num_features"],
-                     self.init_kwargs["num_hidden"],
-                     self.init_kwargs["weights"])
+                     num_features=num_features,
+                     num_hidden=num_hidden,
+                     weights=weights)
         EvolvablePlayer.__init__(self)
+        self.overwrite_init_kwargs(
+            num_features=num_features,
+            num_hidden=num_hidden,
+            weights=weights)
 
     def randomize(self):
         size = num_weights(self.num_features, self.num_hidden)
-        self.weights = [random.uniform(-1, 1) for _ in range(size)]
-        self.init_kwargs["weights"] = self.weights
+        weights = [random.uniform(-1, 1) for _ in range(size)]
         self._process_weights(self.weights, self.num_features, self.num_hidden)
+        self.overwrite_init_kwargs(weights=weights)
 
     @staticmethod
     def mutate_weights(weights, num_features, num_hidden, mutation_probability,
@@ -267,11 +269,11 @@ class EvolvableANN(ANN, EvolvablePlayer):
         return weights
 
     def mutate(self):
-        self.weights = self.mutate_weights(
+        weights = self.mutate_weights(
             self.weights, self.num_features, self.num_hidden,
             self.mutation_probability, self.mutation_distance)
-        self.init_kwargs["weights"] = self.weights
-        self._process_weights(self.weights, self.num_features, self.num_hidden)
+        self.init_kwargs["weights"] = weights
+        self._process_weights(weights, self.num_features, self.num_hidden)
 
     @staticmethod
     def crossover_weights(w1, w2):

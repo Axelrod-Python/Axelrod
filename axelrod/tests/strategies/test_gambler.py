@@ -13,13 +13,15 @@ C, D = axelrod.Action.C, axelrod.Action.D
 class TestEvolvableGambler(TestEvolvablePlayer):
     name = "EvolvableGambler"
     player_class = axelrod.EvolvableGambler
-    init_parameters = {"parameters": (1, 1, 1)}
+    init_parameters = {"parameters": (1, 1, 1),
+                       "initial_actions": (C,)}
 
 
 class TestEvolvableGambler(TestEvolvablePlayer):
     name = "EvolvableGambler"
     player_class = axelrod.EvolvableGambler
-    init_parameters = {"parameters": (3, 2, 1)}
+    init_parameters = {"parameters": (3, 2, 1),
+                       "initial_actions": (C, C, C,)}
 
 
 class TestGambler(TestPlayer):
