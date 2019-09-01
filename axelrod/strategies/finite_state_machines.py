@@ -154,17 +154,22 @@ class EvolvableFSMPlayer(FSMPlayer, EvolvablePlayer):
     ) -> None:
         """If transitions, initial_state, and initial_action are None
         then generate random parameters using num_states."""
+        self.mutation_probability = mutation_probability
         if not ((transitions is not None) and (initial_state is not None) and (initial_action is not None)):
             if not num_states:
                 raise Exception("Insufficient Parameters to instantiate EvolvableFSMPlayer")
-            self.randomize(num_states)
+            transitions, initial_state, initial_action = self.random_params(num_states)
         FSMPlayer.__init__(
             self,
-            transitions=self.init_kwargs["transitions"],
-            initial_state=self.init_kwargs["initial_state"],
-            initial_action=self.init_kwargs["initial_action"])
+            transitions=transitions,
+            initial_state=initial_state,
+            initial_action=initial_action)
         EvolvablePlayer.__init__(self)
-        self.mutation_probability = mutation_probability
+        self.overwrite_init_kwargs(
+            transitions=transitions,
+            initial_state=initial_state,
+            initial_action=initial_action,
+            num_states=num_states)
 
     @property
     def num_states(self):
@@ -190,10 +195,11 @@ class EvolvableFSMPlayer(FSMPlayer, EvolvablePlayer):
         self.initial_state = initial_state
         self.initial_action = initial_action
         self.fsm = SimpleFSM(transitions, initial_state)
-        self.init_kwargs["transitions"] = transitions
-        self.init_kwargs["initial_state"] = initial_state
-        self.init_kwargs["initial_action"] = initial_action
-        self.init_kwargs["num_states"] = self.num_states
+        self.overwrite_init_kwargs(
+            transitions=transitions,
+            initial_state=initial_state,
+            initial_action=initial_action,
+            num_states=num_states)
 
     @staticmethod
     def mutate_rows(rows, mutation_probability):
@@ -223,9 +229,14 @@ class EvolvableFSMPlayer(FSMPlayer, EvolvablePlayer):
             self.initial_state = randrange(self.num_states)
         transitions = self.mutate_rows(self.fsm.transitions(), self.mutation_probability)
         self.fsm = SimpleFSM(transitions, self.initial_state)
-        self.init_kwargs["transitions"] = transitions
-        self.init_kwargs["initial_state"] = self.initial_state
-        self.init_kwargs["initial_action"] = self.initial_action
+        self.overwrite_init_kwargs(
+            transitions=transitions,
+            initial_state=self.initial_state,
+            initial_action=self.initial_action)
+        #
+        # self.init_kwargs["transitions"] = transitions
+        # self.init_kwargs["initial_state"] = self.initial_state
+        # self.init_kwargs["initial_action"] = self.initial_action
 
     @staticmethod
     def crossover_rows(rows1, rows2):
