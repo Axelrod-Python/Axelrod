@@ -290,7 +290,11 @@ class EvolvableFSMPlayer(FSMPlayer, EvolvablePlayer):
         for i, (initial_state, action) in enumerate(itertools.product(range(num_states), [C, D])):
             next_action = C if round(actions[i]) == 0 else D
             transitions.append([initial_state, action, next_states[i], next_action])
+        transitions = normalize_transitions(transitions)
         self.fsm = SimpleFSM(transitions, self.initial_state)
+        self.overwrite_init_kwargs(transitions=transitions,
+                                   initial_state=self.initial_state,
+                                   initial_action=self.initial_action)
 
     def create_vector_bounds(self):
         """Creates the bounds for the decision variables."""

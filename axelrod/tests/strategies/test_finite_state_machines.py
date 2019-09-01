@@ -1,4 +1,5 @@
 """Tests for Finite State Machine Strategies."""
+import random
 import unittest
 
 import axelrod
@@ -275,28 +276,6 @@ class TestFSMPlayer(TestPlayer):
         """
         transitions = self.player().fsm._state_transitions
         self.assertEqual(get_memory_from_transitions(transitions), self.expected_classifier["memory_depth"])
-
-
-class TestEvolvableFSMPlayer(TestEvolvablePlayer):
-    name = "EvolvableFSMPlayer"
-    player_class = axelrod.EvolvableFSMPlayer
-    init_parameters = {"num_states": 4}
-
-
-class TestEvolvableFSMPlayer2(TestEvolvablePlayer):
-    name = "EvolvableFSMPlayer"
-    player_class = axelrod.EvolvableFSMPlayer
-    init_parameters = {"num_states": 12}
-
-
-class TestEvolvableFSMPlayer3(TestEvolvablePlayer):
-    name = "EvolvableFSMPlayer"
-    player_class = axelrod.EvolvableFSMPlayer
-    init_parameters = {
-        "transitions": ((1, C, 1, C), (1, D, 2, D), (2, C, 2, D), (2, D, 1, C)),
-        "initial_state": 1,
-        "initial_action": C
-    }
 
 
 class TestFortress3(TestFSMPlayer):
@@ -1059,3 +1038,48 @@ class TestTF3(TestFSMPlayer):
     def test_strategy(self):
         actions = [(C, C), (C, D), (C, C), (D, D), (D, C)]
         self.versus_test(axelrod.Alternator(), expected_actions=actions)
+
+
+class TestEvolvableFSMPlayer(unittest.TestCase):
+
+    def test_vector_to_instance(self):
+        num_states = 4
+        vector = [random.random() for _ in range(num_states * 4 + 1)]
+        player = axelrod.EvolvableFSMPlayer(num_states=num_states)
+        player.receive_vector(vector)
+        self.assertIsInstance(player, axelrod.EvolvableFSMPlayer)
+
+        serialized = player.serialize_parameters()
+        deserialized_player = player.__class__.deserialize_parameters(serialized)
+        self.assertEqual(player, deserialized_player)
+        self.assertEqual(deserialized_player, deserialized_player.clone())
+
+    def test_create_vector_bounds(self):
+        num_states = 4
+        player = axelrod.EvolvableFSMPlayer(num_states=num_states)
+        lb, ub = player.create_vector_bounds()
+
+        self.assertEqual(lb, [0] * (4 * num_states + 1))
+        self.assertEqual(ub, [1] * (4 * num_states + 1))
+
+
+class TestEvolvableFSMPlayer2(TestEvolvablePlayer):
+    name = "EvolvableFSMPlayer"
+    player_class = axelrod.EvolvableFSMPlayer
+    init_parameters = {"num_states": 4}
+
+
+class TestEvolvableFSMPlayer3(TestEvolvablePlayer):
+    name = "EvolvableFSMPlayer"
+    player_class = axelrod.EvolvableFSMPlayer
+    init_parameters = {"num_states": 12}
+
+
+class TestEvolvableFSMPlayer4(TestEvolvablePlayer):
+    name = "EvolvableFSMPlayer"
+    player_class = axelrod.EvolvableFSMPlayer
+    init_parameters = {
+        "transitions": ((1, C, 1, C), (1, D, 2, D), (2, C, 2, D), (2, D, 1, C)),
+        "initial_state": 1,
+        "initial_action": C
+    }

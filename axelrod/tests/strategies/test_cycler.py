@@ -1,9 +1,10 @@
 """Tests for the Cycler strategies."""
-import random
 import itertools
+import random
+import unittest
 
 import axelrod
-from axelrod import AntiCycler, Cycler
+from axelrod import AntiCycler, Cycler, EvolvableCycler
 from axelrod._strategy_utils import detect_cycle
 from axelrod.action import Action, str_to_actions
 
@@ -103,18 +104,6 @@ class TestBasicCycler(TestPlayer):
         self.assertRaises(ValueError, Cycler, cycle="CdDC")
 
 
-class TestEvolvableCycler(TestEvolvablePlayer):
-    name = "EvolvableCycler"
-    player_class = axelrod.EvolvableCycler
-    init_parameters = {"cycle_length": 100}
-
-
-class TestEvolvableCycler2(TestEvolvablePlayer):
-    name = "EvolvableCycler"
-    player_class = axelrod.EvolvableCycler
-    init_parameters = {"cycle": "".join(random.choice(("C", "D")) for _ in range(50))}
-
-
 def test_cycler_factory(cycle_str):
     class TestCyclerChild(TestPlayer):
 
@@ -155,3 +144,39 @@ TestCyclerDDC = test_cycler_factory("DDC")
 TestCyclerCCCD = test_cycler_factory("CCCD")
 TestCyclerCCCCCD = test_cycler_factory("CCCCCD")
 TestCyclerCCCDCD = test_cycler_factory("CCCDCD")
+
+
+class TestEvolvableCycler(unittest.TestCase):
+    def test_crossover_even_length(self):
+        cycle1 = "C" * 6
+        cycle2 = "D" * 6
+        cross_cycle = "CCCDDD"
+
+        player1 = EvolvableCycler(cycle=cycle1)
+        player2 = EvolvableCycler(cycle=cycle2)
+        crossed = player1.crossover(player2, in_seed=2)
+        self.assertEqual(cross_cycle, crossed.cycle)
+
+    def test_crossover_odd_length(self):
+        cycle1 = "C" * 7
+        cycle2 = "D" * 7
+        cross_cycle = "CDDDDDD"
+
+        player1 = EvolvableCycler(cycle=cycle1)
+        player2 = EvolvableCycler(cycle=cycle2)
+        crossed = player1.crossover(player2, in_seed=3)
+        self.assertEqual(cross_cycle, crossed.cycle)
+
+
+class TestEvolvableCycler2(TestEvolvablePlayer):
+    name = "EvolvableCycler"
+    player_class = axelrod.EvolvableCycler
+    init_parameters = {"cycle_length": 100}
+
+
+class TestEvolvableCycler3(TestEvolvablePlayer):
+    name = "EvolvableCycler"
+    player_class = axelrod.EvolvableCycler
+    init_parameters = {"cycle": "".join(random.choice(("C", "D")) for _ in range(50))}
+
+

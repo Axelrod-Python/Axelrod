@@ -1,24 +1,13 @@
 """Tests for Hidden Markov Model Strategies."""
+import random
 import unittest
 
 import axelrod
-from axelrod.strategies.hmm import SimpleHMM, is_stochastic_matrix
+from axelrod.strategies.hmm import SimpleHMM, is_stochastic_matrix, random_vector
 from .test_player import TestMatch, TestPlayer
 from .test_evolvable_player import TestEvolvablePlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D
-
-
-class TestEvolvableHMMPlayer(TestEvolvablePlayer):
-    name = "EvolvableHMMPlayer"
-    player_class = axelrod.EvolvableHMMPlayer
-    init_parameters = {"num_states": 4}
-
-
-class TestEvolvableHMMPlayer(TestEvolvablePlayer):
-    name = "EvolvableHMMPlayer"
-    player_class = axelrod.EvolvableHMMPlayer
-    init_parameters = {"num_states": 8}
 
 
 class TestHMMPlayers(unittest.TestCase):
@@ -207,3 +196,43 @@ class TestEvolvedHMM5vsDefector(TestMatch):
         self.versus_test(
             axelrod.EvolvedHMM5(), axelrod.Defector(), [C, C, D], [D, D, D]
         )
+
+
+class TestEvolvableHMMPlayer(unittest.TestCase):
+
+    def test_vector_to_instance(self):
+        num_states = 4
+
+        vector = []
+        for _ in range(2 * num_states):
+            vector += random_vector(num_states)
+        for _ in range(num_states + 1):
+            vector.append(random.random())
+
+        player = axelrod.EvolvableHMMPlayer(num_states=num_states)
+        player.receive_vector(vector=vector)
+        self.assertIsInstance(player, axelrod.EvolvableHMMPlayer)
+
+    def test_create_vector_bounds(self):
+        num_states = 4
+        size = 2 * num_states ** 2 + num_states + 1
+
+        player = axelrod.EvolvableHMMPlayer(num_states=num_states)
+        lb, ub = player.create_vector_bounds()
+
+        self.assertIsInstance(lb, list)
+        self.assertEqual(len(lb), size)
+        self.assertIsInstance(ub, list)
+        self.assertEqual(len(ub), size)
+
+
+class TestEvolvableHMMPlayer2(TestEvolvablePlayer):
+    name = "EvolvableHMMPlayer"
+    player_class = axelrod.EvolvableHMMPlayer
+    init_parameters = {"num_states": 4}
+
+
+class TestEvolvableHMMPlayer3(TestEvolvablePlayer):
+    name = "EvolvableHMMPlayer"
+    player_class = axelrod.EvolvableHMMPlayer
+    init_parameters = {"num_states": 8}

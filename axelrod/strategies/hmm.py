@@ -9,9 +9,6 @@ from axelrod.random_ import random_choice
 
 C, D = Action.C, Action.D
 
-# Type Hinting has not finished yet
-# Lines 9 and 10 will be deleted
-
 
 def is_stochastic_matrix(m, ep=1e-8) -> bool:
     """Checks that the matrix m (a list of lists) is a stochastic matrix."""

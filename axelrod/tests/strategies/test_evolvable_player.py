@@ -1,5 +1,4 @@
 import random
-import unittest
 
 from axelrod import EvolvablePlayer, seed
 from axelrod.action import Action
@@ -117,13 +116,12 @@ class TestEvolvablePlayer(TestPlayer):
         player = self.player()
         serialized = player.serialize_parameters()
         deserialized_player = player.__class__.deserialize_parameters(serialized)
-        compare_dicts(player.__dict__, deserialized_player.__dict__)
-
         self.assertEqual(player, deserialized_player)
         self.assertEqual(deserialized_player, deserialized_player.clone())
 
 
 def compare_dicts(d1, d2):
+    """For investigating issues above."""
     for k, v in d1.items():
         if d2[k] != v:
             print()
