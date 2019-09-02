@@ -1,5 +1,6 @@
 """Test for the Looker Up strategy."""
 import copy
+import random
 import unittest
 
 import axelrod
@@ -17,19 +18,30 @@ from .test_evolvable_player import TestEvolvablePlayer
 C, D = axelrod.Action.C, axelrod.Action.D
 
 
-class TestEvolvableLookerUp(TestEvolvablePlayer):
-    name = "EvolvableLookerUp"
-    player_class = axelrod.EvolvableLookerUp
-    init_parameters = {"parameters": (1, 1, 1)}
+# class TestEvolvableLookerUp(TestEvolvablePlayer):
 
 
 class TestEvolvableLookerUp2(TestEvolvablePlayer):
     name = "EvolvableLookerUp"
     player_class = axelrod.EvolvableLookerUp
-    init_parameters = {"parameters": (2, 1, 3)}
+    init_parameters = {"parameters": (1, 1, 1)}
 
 
 class TestEvolvableLookerUp3(TestEvolvablePlayer):
+    name = "EvolvableLookerUp"
+    player_class = axelrod.EvolvableLookerUp
+    init_parameters = {"parameters": (2, 1, 3)}
+
+
+class TestEvolvableLookerUp4(TestEvolvablePlayer):
+    name = "EvolvableLookerUp"
+    player_class = axelrod.EvolvableLookerUp
+    init_parameters = {"parameters": (2, 2, 2),
+                       "pattern": "".join([random.choice(('C', 'D')) for _ in range(64)]),
+                       "initial_actions": (C, C,)}
+
+
+class TestEvolvableLookerUp5(TestEvolvablePlayer):
     name = "EvolvableLookerUp"
     player_class = axelrod.EvolvableLookerUp
     init_parameters = {

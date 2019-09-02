@@ -111,18 +111,20 @@ class EvolvableCycler(Cycler, EvolvablePlayer):
         mutation_probability: float = 0.5,
         mutation_potency: int = 1
     ) -> None:
-        self.mutation_probability = mutation_probability
-        self.mutation_potency = mutation_potency
         # Normalize parameters
         if not cycle:
             if not cycle_length:
                 raise Exception("Insufficient Parameters to instantiate EvolvableCycler")
             cycle = self.generate_random_cycle(cycle_length)
         self.cycle_length = len(cycle)
-        # Init order matters
+        self.mutation_probability = mutation_probability
+        self.mutation_potency = mutation_potency
+
         Cycler.__init__(self, cycle=cycle)
         EvolvablePlayer.__init__(self)
-        self.overwrite_init_kwargs(cycle_length=len(self.cycle), cycle=self.cycle)
+        self.overwrite_init_kwargs(
+            cycle=cycle,
+            cycle_length=len(cycle))
 
     @staticmethod
     def generate_random_cycle(cycle_length):
@@ -137,37 +139,20 @@ class EvolvableCycler(Cycler, EvolvablePlayer):
         -------
         list - a list of C & D actions: list[Action]
         """
-        # D = axl.Action(0) | C = axl.Action(1)
         return actions_to_str(random.choice(actions) for _ in range(cycle_length))
 
-    def randomize(self):
-        cycle = self.generate_random_cycle(self.cycle_length)
-        self.set_cycle(cycle)
-        self.overwrite_init_kwargs(cycle=cycle)
-
-    def crossover(self, other_cycler, in_seed=0):
+    def crossover(self, other_cycler):
         """
-        Creates and returns a new Player instance with a single crossover point in the middle
-
-        Parameters
-        ----------
-        other_cycler - the other cycler where we get the other half of the sequence
-
-        Returns
-        -------
-        CyclerParams
-
+        Creates and returns a new Player instance with a single crossover point.
         """
         seq1 = self.cycle
         seq2 = other_cycler.cycle
-
-        if not in_seed == 0:
-            # only seed for when we explicitly give it a seed
-            random.seed(in_seed)
-
-        midpoint = int(random.randint(0, len(seq1)) / 2)
-        new_cycle = seq1[:midpoint] + seq2[midpoint:]
-        return EvolvableCycler(cycle=new_cycle)
+        crosspoint = random.randint(0, len(seq1))
+        new_cycle = seq1[:crosspoint] + seq2[crosspoint:]
+        return self.__class__(
+            cycle=new_cycle,
+            mutation_probability=self.mutation_probability,
+            mutation_potency=self.mutation_potency)
 
     def mutate(self):
         """
@@ -176,22 +161,32 @@ class EvolvableCycler(Cycler, EvolvablePlayer):
         if random.random() <= self.mutation_probability:
             mutated_sequence = list(str_to_actions(self.cycle))
             for _ in range(self.mutation_potency):
-                index_to_change = random.randint(0, len(mutated_sequence))
+                index_to_change = random.randint(0, len(mutated_sequence) - 1)
                 mutated_sequence[index_to_change] = mutated_sequence[index_to_change].flip()
-            self.set_cycle(cycle=actions_to_str(mutated_sequence))
+            cycle = actions_to_str(mutated_sequence)
+        else:
+            cycle = self.cycle
+        return self.__class__(
+            cycle=cycle,
+            mutation_probability=self.mutation_probability,
+            mutation_potency=self.mutation_potency
+        )
 
     def serialize_parameters(self):
-        return "{}:{}".format(
+        return "{}:{}:{}".format(
                 actions_to_str(self.cycle),
-                self.cycle_length
+                str(self.mutation_probability),
+                str(self.mutation_potency)
         )
 
     @classmethod
     def deserialize_parameters(cls, serialized):
-        cycle, cycle_length = list(serialized.split(':'))
+        cycle, mutation_probability, mutation_potency = list(serialized.split(':'))
         return cls(
             cycle=cycle,
-            cycle_length=int(cycle_length))
+            mutation_probability=float(mutation_probability),
+            mutation_potency=int(mutation_potency)
+        )
 
 
 class CyclerDC(Cycler):

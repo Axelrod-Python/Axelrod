@@ -150,21 +150,23 @@ class TestEvolvableCycler(unittest.TestCase):
     def test_crossover_even_length(self):
         cycle1 = "C" * 6
         cycle2 = "D" * 6
-        cross_cycle = "CCCDDD"
+        cross_cycle = "CDDDDD"
 
         player1 = EvolvableCycler(cycle=cycle1)
         player2 = EvolvableCycler(cycle=cycle2)
-        crossed = player1.crossover(player2, in_seed=2)
+        axelrod.seed(3)
+        crossed = player1.crossover(player2)
         self.assertEqual(cross_cycle, crossed.cycle)
 
     def test_crossover_odd_length(self):
         cycle1 = "C" * 7
         cycle2 = "D" * 7
-        cross_cycle = "CDDDDDD"
+        cross_cycle = "CCCDDDD"
 
         player1 = EvolvableCycler(cycle=cycle1)
         player2 = EvolvableCycler(cycle=cycle2)
-        crossed = player1.crossover(player2, in_seed=3)
+        axelrod.seed(3)
+        crossed = player1.crossover(player2)
         self.assertEqual(cross_cycle, crossed.cycle)
 
 
@@ -177,6 +179,7 @@ class TestEvolvableCycler2(TestEvolvablePlayer):
 class TestEvolvableCycler3(TestEvolvablePlayer):
     name = "EvolvableCycler"
     player_class = axelrod.EvolvableCycler
-    init_parameters = {"cycle": "".join(random.choice(("C", "D")) for _ in range(50))}
+    init_parameters = {"cycle": "".join(random.choice(("C", "D")) for _ in range(50)),
+                       "mutation_potency": 10}
 
 

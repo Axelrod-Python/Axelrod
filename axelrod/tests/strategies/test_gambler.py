@@ -2,7 +2,10 @@
 """
 
 import copy
+import random
+import unittest
 import axelrod
+from axelrod.strategies.lookerup import create_lookup_table_keys
 from .test_lookerup import convert_original_to_current
 from .test_player import TestPlayer
 from .test_evolvable_player import TestEvolvablePlayer
@@ -10,18 +13,63 @@ from .test_evolvable_player import TestEvolvablePlayer
 C, D = axelrod.Action.C, axelrod.Action.D
 
 
-class TestEvolvableGambler(TestEvolvablePlayer):
+class TestEvolvableGambler(unittest.TestCase):
+
+    def test_receive_vector(self):
+        plays, op_plays, op_start_plays = 1, 1, 1
+        player = axelrod.EvolvableGambler(
+            parameters=(plays, op_plays, op_start_plays))
+
+        self.assertRaises(AttributeError, axelrod.EvolvableGambler.__getattribute__,
+                          *[player, 'vector'])
+
+        vector = [random.random() for _ in range(8)]
+        player.receive_vector(vector)
+        self.assertEqual(player.pattern, vector)
+
+    def test_vector_to_instance(self):
+        plays, op_plays, op_start_plays = 1, 1, 1
+        player = axelrod.EvolvableGambler(
+            parameters=(plays, op_plays, op_start_plays))
+
+        vector = [random.random() for _ in range(8)]
+        player.receive_vector(vector)
+        keys = create_lookup_table_keys(player_depth=plays, op_depth=op_plays,
+                                        op_openings_depth=op_start_plays)
+        action_dict = dict(zip(keys, vector))
+        self.assertEqual(player._lookup.dictionary, action_dict)
+
+    def test_create_vector_bounds(self):
+        plays, op_plays, op_start_plays = 1, 1, 1
+        player = axelrod.EvolvableGambler(
+            parameters=(plays, op_plays, op_start_plays))
+        lb, ub = player.create_vector_bounds()
+        self.assertIsInstance(lb, list)
+        self.assertIsInstance(ub, list)
+        self.assertEqual(len(lb), 8)
+        self.assertEqual(len(ub), 8)
+
+
+class TestEvolvableGambler2(TestEvolvablePlayer):
     name = "EvolvableGambler"
     player_class = axelrod.EvolvableGambler
     init_parameters = {"parameters": (1, 1, 1),
                        "initial_actions": (C,)}
 
 
-class TestEvolvableGambler(TestEvolvablePlayer):
+class TestEvolvableGambler3(TestEvolvablePlayer):
     name = "EvolvableGambler"
     player_class = axelrod.EvolvableGambler
     init_parameters = {"parameters": (3, 2, 1),
                        "initial_actions": (C, C, C,)}
+
+
+class TestEvolvableGambler4(TestEvolvablePlayer):
+    name = "EvolvableGambler"
+    player_class = axelrod.EvolvableGambler
+    init_parameters = {"parameters": (2, 2, 2),
+                       "pattern": [random.random() for _ in range(64)],
+                       "initial_actions": (C, C,)}
 
 
 class TestGambler(TestPlayer):

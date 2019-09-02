@@ -398,27 +398,33 @@ class EvolvableLookerUp(LookerUp, EvolvablePlayer):
         parameters: Plays = None,
         mutation_probability: float = None
     ) -> None:
-        if not ((lookup_dict and initial_actions) or parameters):
-            raise Exception("Insufficient Parameters to instantiate EvolvableLookerUp")
-        if not((lookup_dict and initial_actions) or (pattern and parameters)):
+        if lookup_dict and initial_actions:
+            # Compute the associated pattern and parameters
+            # Map the table keys to namedTuple Plays
+            lookup_table = self._get_lookup_table(lookup_dict, pattern, parameters)
+            lookup_dict = lookup_table.dictionary
+            parameters = (lookup_table.player_depth, lookup_table.op_depth, lookup_table.op_openings_depth)
+            pattern = tuple(v for k, v in sorted(lookup_dict.items()))
+        elif pattern and parameters and initial_actions:
+            # Compute the associated lookup table
+            plays, op_plays, op_start_plays = parameters
+            lookup_table = self._get_lookup_table(lookup_dict, pattern, parameters)
+            lookup_dict = lookup_table.dictionary
+        elif parameters:
             # Generate a random pattern and (maybe) initial actions
             plays, op_plays, op_start_plays = parameters
             pattern, lookup_table = self.random_params(plays, op_plays, op_start_plays)
-            pattern = tuple(pattern)
+            lookup_dict = lookup_table.dictionary
             if not initial_actions:
                 num_actions = max([plays, op_plays, op_start_plays])
                 initial_actions = tuple([choice((C, D)) for _ in range(num_actions)])
-        self.initial_actions = tuple(initial_actions)
-        self.parameters = parameters
-        # Map the table keys to namedTuple Plays
-        lookup_table = self._get_lookup_table(lookup_dict, pattern, parameters)
-        lookup_dict = lookup_table.dictionary
-        if not parameters:
-            # Compute parameters from table.
-            parameters = (lookup_table.player_depth, lookup_table.op_depth, lookup_table.op_openings_depth)
-        # Compute the pattern if only a lookup_dict was supplied.
-        if not pattern:
-            pattern = tuple(v for k, v in sorted(lookup_dict.items()))
+        else:
+            raise Exception("Insufficient Parameters to instantiate EvolvableLookerUp")
+        # Normalize pattern
+        if isinstance(pattern, str):
+            pattern = str_to_actions(pattern)
+        pattern = tuple(pattern)
+
         if mutation_probability is None:
             plays, op_plays, op_start_plays = parameters
             keys = create_lookup_table_keys(plays, op_plays, op_start_plays)
@@ -449,19 +455,6 @@ class EvolvableLookerUp(LookerUp, EvolvablePlayer):
         table = dict(zip(keys, pattern))
         return pattern, LookupTable(table)
 
-    def randomize(self):
-        plays, op_plays, op_start_plays = self.parameters
-        self.pattern, self._lookup = self.random_params(plays, op_plays, op_start_plays)
-        if not self.initial_actions:
-            num_actions = max([plays, op_plays, op_start_plays])
-            self.initial_actions = tuple([choice((C, D)) for _ in range(num_actions)])
-        self.initial_actions = tuple(self.initial_actions)
-        self.overwrite_init_kwargs(
-            lookup_dict=self.lookup_dict,
-            initial_actions=tuple(self.initial_actions),
-            pattern=tuple(self.pattern),
-        )
-
     @staticmethod
     def mutate_table(table, mutation_probability):
         randoms = np.random.random(len(table.keys()))
@@ -469,20 +462,19 @@ class EvolvableLookerUp(LookerUp, EvolvablePlayer):
         for i, (history, move) in enumerate(table.items()):
             if randoms[i] < mutation_probability:
                 table[history] = move.flip()
-        return LookupTable(table)
+        return table
 
     def mutate(self):
-        self._lookup = self.mutate_table(self._lookup._dict, self.mutation_probability)
+        lookup_dict = self.mutate_table(self._lookup.dictionary, self.mutation_probability)
         # Add in starting moves
-        self.initial_actions = list(self.initial_actions)
-        for i in range(len(self.initial_actions)):
+        initial_actions = list(self.initial_actions)
+        for i in range(len(initial_actions)):
             r = random.random()
             if r < 0.05:
-                self.initial_actions[i] = self.initial_actions[i].flip()
-        self.initial_actions = tuple(self.initial_actions)
-        self.overwrite_init_kwargs(
-            lookup_dict=self.lookup_dict,
-            initial_actions=tuple(self.initial_actions),
+                initial_actions[i] = initial_actions[i].flip()
+        return self.__class__(
+            lookup_dict=lookup_dict,
+            initial_actions=tuple(initial_actions),
         )
 
     @staticmethod
@@ -496,7 +488,7 @@ class EvolvableLookerUp(LookerUp, EvolvablePlayer):
 
     def crossover(self, other):
         # Assuming that the number of states is the same
-        new_table = self.crossover_tables(self._lookup._dict, other._lookup._dict)
+        new_table = self.crossover_tables(self._lookup.dictionary, other._lookup.dictionary)
         return self.__class__(
             parameters=self.parameters,
             initial_actions=list(self.initial_actions),
@@ -510,7 +502,7 @@ class EvolvableLookerUp(LookerUp, EvolvablePlayer):
             op_plays,
             op_start_plays,
             actions_to_str(self.initial_actions),
-            actions_to_str([v for k, v in sorted(self._lookup._dict.items())])
+            actions_to_str([v for k, v in sorted(self._lookup.dictionary.items())])
         )
 
     @classmethod
@@ -518,9 +510,8 @@ class EvolvableLookerUp(LookerUp, EvolvablePlayer):
         elements = serialized.split(':')
         plays, op_plays, op_start_plays = list(map(int, elements[:3]))
         parameters = (plays, op_plays, op_start_plays)
-        initial_actions, pattern = map(str_to_actions, elements[-2:])
-        # initial_actions = str_to_actions(elements[3])
-        # pattern = str_to_actions(elements[4])
+        initial_actions = str_to_actions(elements[3])
+        pattern = str_to_actions(elements[4])
         keys = create_lookup_table_keys(plays, op_plays, op_start_plays)
         lookup_dict = dict(zip(keys, pattern))
         return cls(parameters=parameters,

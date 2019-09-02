@@ -272,8 +272,11 @@ class EvolvableANN(ANN, EvolvablePlayer):
         weights = self.mutate_weights(
             self.weights, self.num_features, self.num_hidden,
             self.mutation_probability, self.mutation_distance)
-        self.init_kwargs["weights"] = weights
-        self._process_weights(weights, self.num_features, self.num_hidden)
+        return self.__class__(
+            num_features=self.num_features,
+            num_hidden=self.num_hidden,
+            weights=weights
+        )
 
     @staticmethod
     def crossover_weights(w1, w2):
@@ -284,7 +287,7 @@ class EvolvableANN(ANN, EvolvablePlayer):
     def crossover(self, other):
         # Assuming that the number of states is the same
         new_weights = self.crossover_weights(self.weights, other.weights)
-        return EvolvableANN(
+        return self.__class__(
             num_features=self.num_features,
             num_hidden=self.num_hidden,
             mutation_probability=self.mutation_probability,

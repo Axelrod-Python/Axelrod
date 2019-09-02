@@ -202,13 +202,11 @@ class TestEvolvableHMMPlayer(unittest.TestCase):
 
     def test_vector_to_instance(self):
         num_states = 4
-
         vector = []
         for _ in range(2 * num_states):
             vector += random_vector(num_states)
         for _ in range(num_states + 1):
             vector.append(random.random())
-
         player = axelrod.EvolvableHMMPlayer(num_states=num_states)
         player.receive_vector(vector=vector)
         self.assertIsInstance(player, axelrod.EvolvableHMMPlayer)
@@ -236,3 +234,17 @@ class TestEvolvableHMMPlayer3(TestEvolvablePlayer):
     name = "EvolvableHMMPlayer"
     player_class = axelrod.EvolvableHMMPlayer
     init_parameters = {"num_states": 8}
+
+
+class TestEvolvableHMMPlayer4(TestEvolvablePlayer):
+    name = "EvolvableHMMPlayer"
+    player_class = axelrod.EvolvableHMMPlayer
+    init_parameters = {
+        "transitions_C": [[1, 0], [1, 0]],
+        "transitions_D": [[0, 1], [0, 1]],
+        "emission_probabilities": [1, 0],
+        "initial_state": 0,
+        "initial_action": C,
+    }
+
+

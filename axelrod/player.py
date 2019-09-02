@@ -255,10 +255,6 @@ class EvolvablePlayer(Player):
         for k, v in kwargs.items():
             self.init_kwargs[k] = v
 
-    def randomize(self):
-        """Optional method to randomly initialize the players parameters."""
-        pass
-
     # Serialization and Deserialization to strings.
 
     def serialize_parameters(self):
@@ -273,7 +269,7 @@ class EvolvablePlayer(Player):
     # Optional methods for evolutionary algorithms and Moran processes.
 
     def mutate(self):
-        """Optional method to allow Player to produce variants in place."""
+        """Optional method to allow Player to produce a variant (not in place)."""
         pass
 
     def crossover(self, other):

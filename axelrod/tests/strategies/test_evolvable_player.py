@@ -13,19 +13,17 @@ class EvolvableTestOpponent(EvolvablePlayer):
         if value:
             self.value = value
         else:
-            self.randomize()
+            value = random.randint(2, 100)
+            self.value = value
+            self.overwrite_init_kwargs(value=value)
 
     @staticmethod
     def strategy(opponent):
         return Action.C
 
-    def randomize(self):
-        self.value = random.randint(2, 100)
-        self.init_kwargs["value"] = self.value
-
     def mutate(self):
-        self.value = random.randint(2, 100)
-        self.init_kwargs["value"] = self.value
+        value = random.randint(2, 100)
+        return EvolvableTestOpponent(value)
 
     def crossover(self, other):
         value = self.value + other.value
@@ -78,8 +76,7 @@ class TestEvolvablePlayer(TestPlayer):
         player = self.player()
         for seed_ in range(2, 20):
             seed(seed_)
-            mutant = player.clone()
-            mutant.mutate()
+            mutant = player.clone().mutate()
             if player != mutant:
                 return
         self.assertFalse(True)
@@ -88,27 +85,26 @@ class TestEvolvablePlayer(TestPlayer):
         """Test that mutated players clone properly."""
         seed(0)
         player = self.player()
-        mutant = player.clone()
-        mutant.mutate()
+        mutant = player.clone().mutate()
         clone = mutant.clone()
         # compare_dicts(mutant.__dict__, clone.__dict__)
-
         self.assertEqual(clone, mutant)
 
     def test_crossover(self):
         """Test that crossover produces different strategies."""
-        players = []
-        for seed_ in (0, 1):
+        for seed_ in range(200):
             seed(seed_)
-            player = self.player()
-            # Mutate to ensure randomization
-            player.mutate()
-            players.append(player)
-        player1, player2 = players
-        crossed = player1.crossover(player2)
-        self.assertNotEqual(player1, crossed)
-        self.assertNotEqual(player2, crossed)
-        self.assertEqual(crossed, crossed.clone())
+            players = []
+            for _ in range(2):
+                player = self.player()
+                # Mutate to randomize
+                player = player.mutate()
+                players.append(player)
+            player1, player2 = players
+            crossed = player1.crossover(player2)
+            if player1 != crossed and player2 != crossed and crossed == crossed.clone():
+                return
+        self.assertFalse(True)
 
     def test_serialization(self):
         """Serializing and deserializing should return the original player."""
@@ -116,6 +112,7 @@ class TestEvolvablePlayer(TestPlayer):
         player = self.player()
         serialized = player.serialize_parameters()
         deserialized_player = player.__class__.deserialize_parameters(serialized)
+        # compare_dicts(player.__dict__, deserialized_player.__dict__)
         self.assertEqual(player, deserialized_player)
         self.assertEqual(deserialized_player, deserialized_player.clone())
 

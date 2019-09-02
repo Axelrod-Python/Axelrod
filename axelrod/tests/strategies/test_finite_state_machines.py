@@ -1042,6 +1042,18 @@ class TestTF3(TestFSMPlayer):
 
 class TestEvolvableFSMPlayer(unittest.TestCase):
 
+    def test_init(self):
+        transitions = [[0, C, 1, D], [0, D, 0, D], [1, C, 1, C], [1, D, 1, D]]
+        player = axelrod.EvolvableFSMPlayer(
+            transitions=transitions,
+            initial_action=D,
+            initial_state=1
+        )
+        self.assertEqual(player.num_states, 2)
+        self.assertEqual(player.fsm.transitions(), transitions)
+        self.assertEqual(player.initial_action, D)
+        self.assertEqual(player.initial_state, 1)
+
     def test_vector_to_instance(self):
         num_states = 4
         vector = [random.random() for _ in range(num_states * 4 + 1)]
@@ -1058,7 +1070,6 @@ class TestEvolvableFSMPlayer(unittest.TestCase):
         num_states = 4
         player = axelrod.EvolvableFSMPlayer(num_states=num_states)
         lb, ub = player.create_vector_bounds()
-
         self.assertEqual(lb, [0] * (4 * num_states + 1))
         self.assertEqual(ub, [1] * (4 * num_states + 1))
 
