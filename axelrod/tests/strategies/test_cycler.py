@@ -7,6 +7,7 @@ import axelrod
 from axelrod import AntiCycler, Cycler, EvolvableCycler
 from axelrod._strategy_utils import detect_cycle
 from axelrod.action import Action, str_to_actions
+from axelrod.evolvable_player import InsufficientParametersError
 
 from .test_player import TestPlayer
 from .test_evolvable_player import TestEvolvablePlayer
@@ -147,6 +148,12 @@ TestCyclerCCCDCD = test_cycler_factory("CCCDCD")
 
 
 class TestEvolvableCycler(unittest.TestCase):
+
+    def test_normalized_parameters(self):
+        self.assertRaises(
+            EvolvableCycler(),
+            InsufficientParametersError("Insufficient Parameters to instantiate EvolvableCycler"))
+
     def test_crossover_even_length(self):
         cycle1 = "C" * 6
         cycle2 = "D" * 6

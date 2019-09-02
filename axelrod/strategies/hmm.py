@@ -4,7 +4,9 @@ import numpy as np
 from numpy.random import choice
 
 from axelrod.action import Action
-from axelrod.player import EvolvablePlayer, Player
+from axelrod.evolvable_player import EvolvablePlayer, InsufficientParametersError
+from axelrod.player import Player
+
 from axelrod.random_ import random_choice
 
 C, D = Action.C, Action.D

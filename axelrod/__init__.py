@@ -9,7 +9,8 @@ from axelrod.random_ import random_choice, random_flip, seed, Pdf
 from axelrod.plot import Plot
 from axelrod.game import DefaultGame, Game
 from axelrod.history import History, LimitedHistory
-from axelrod.player import EvolvablePlayer, is_basic, obey_axelrod, Player
+from axelrod.player import is_basic, obey_axelrod, Player
+from axelrod.evolvable_player import EvolvablePlayer
 from axelrod.mock_player import MockPlayer
 from axelrod.match import Match
 from axelrod.moran import MoranProcess, ApproximateMoranProcess

@@ -7,7 +7,9 @@ from typing import Any, TypeVar
 import numpy as np
 
 from axelrod.action import Action, actions_to_str, str_to_actions
-from axelrod.player import EvolvablePlayer, Player
+from axelrod.evolvable_player import EvolvablePlayer, InsufficientParametersError
+from axelrod.player import Player
+
 
 C, D = Action.C, Action.D
 

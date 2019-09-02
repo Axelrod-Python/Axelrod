@@ -3,7 +3,8 @@ import itertools
 import random
 
 from axelrod.action import Action, actions_to_str, str_to_actions
-from axelrod.player import EvolvablePlayer, Player
+from axelrod.evolvable_player import EvolvablePlayer, InsufficientParametersError
+from axelrod.player import Player
 
 C, D = Action.C, Action.D
 actions = (C, D)
@@ -108,25 +109,31 @@ class EvolvableCycler(Cycler, EvolvablePlayer):
         self,
         cycle: str = None,
         cycle_length: int = None,
-        mutation_probability: float = 0.5,
+        mutation_probability: float = 0.2,
         mutation_potency: int = 1
     ) -> None:
-        # Normalize parameters
-        if not cycle:
-            if not cycle_length:
-                raise Exception("Insufficient Parameters to instantiate EvolvableCycler")
-            cycle = self.generate_random_cycle(cycle_length)
-        self.cycle_length = len(cycle)
+        cycle, cycle_length = self._normalize_parameters(cycle, cycle_length)
+        # The following __init__ sets self.cycle = cycle
+        Cycler.__init__(self, cycle=cycle)
+        EvolvablePlayer.__init__(self)
+        # Overwite init_kwargs in the case that we generated a new cycle from cycle_length
+        self.overwrite_init_kwargs(
+            cycle=cycle,
+            cycle_length=cycle_length)
         self.mutation_probability = mutation_probability
         self.mutation_potency = mutation_potency
 
-        Cycler.__init__(self, cycle=cycle)
-        EvolvablePlayer.__init__(self)
-        self.overwrite_init_kwargs(
-            cycle=cycle,
-            cycle_length=len(cycle))
+    @classmethod
+    def _normalize_parameters(cls, cycle=None, cycle_length=None):
+        """Compute other parameters from those that may be missing, to ensure proper cloning."""
+        if not cycle:
+            if not cycle_length:
+                raise InsufficientParametersError("Insufficient Parameters to instantiate EvolvableCycler")
+            cycle = cls.generate_random_cycle(cycle_length)
+        cycle_length = len(cycle)
+        return cycle, cycle_length
 
-    @staticmethod
+    @classmethod
     def generate_random_cycle(cycle_length):
         """
         Generate a sequence of random moves
@@ -141,19 +148,6 @@ class EvolvableCycler(Cycler, EvolvablePlayer):
         """
         return actions_to_str(random.choice(actions) for _ in range(cycle_length))
 
-    def crossover(self, other_cycler):
-        """
-        Creates and returns a new Player instance with a single crossover point.
-        """
-        seq1 = self.cycle
-        seq2 = other_cycler.cycle
-        crosspoint = random.randint(0, len(seq1))
-        new_cycle = seq1[:crosspoint] + seq2[crosspoint:]
-        return self.__class__(
-            cycle=new_cycle,
-            mutation_probability=self.mutation_probability,
-            mutation_potency=self.mutation_potency)
-
     def mutate(self):
         """
         Basic mutation which may change any random gene(s) in the sequence.
@@ -166,11 +160,26 @@ class EvolvableCycler(Cycler, EvolvablePlayer):
             cycle = actions_to_str(mutated_sequence)
         else:
             cycle = self.cycle
+        cycle, _ = self._normalize_parameters(cycle)
         return self.__class__(
             cycle=cycle,
             mutation_probability=self.mutation_probability,
             mutation_potency=self.mutation_potency
         )
+
+    def crossover(self, other_cycler):
+        """
+        Creates and returns a new Player instance with a single crossover point.
+        """
+        cycle1 = self.cycle
+        cycle2 = other_cycler.cycle
+        cross_point = random.randint(0, len(cycle1))
+        cycle = cycle1[:cross_point] + cycle2[cross_point:]
+        cycle, _ = self._normalize_parameters(cycle)
+        return self.__class__(
+            cycle=cycle,
+            mutation_probability=self.mutation_probability,
+            mutation_potency=self.mutation_potency)
 
     def serialize_parameters(self):
         return "{}:{}:{}".format(

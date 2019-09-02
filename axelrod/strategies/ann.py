@@ -4,7 +4,9 @@ from typing import List, Tuple
 import numpy as np
 from axelrod.action import Action
 from axelrod.load_data_ import load_weights
-from axelrod.player import EvolvablePlayer, Player
+from axelrod.evolvable_player import EvolvablePlayer, InsufficientParametersError
+from axelrod.player import Player
+
 
 C, D = Action.C, Action.D
 nn_weights = load_weights()

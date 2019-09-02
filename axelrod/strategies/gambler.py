@@ -11,7 +11,9 @@ import numpy as np
 
 from axelrod.action import Action, str_to_actions, actions_to_str
 from axelrod.load_data_ import load_pso_tables
-from axelrod.player import EvolvablePlayer, Player
+from axelrod.evolvable_player import EvolvablePlayer, InsufficientParametersError
+from axelrod.player import Player
+
 from axelrod.random_ import random_choice
 
 from .lookerup import EvolvableLookerUp, LookupTable, LookerUp, Plays, create_lookup_table_keys
