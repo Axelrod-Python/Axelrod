@@ -3,7 +3,7 @@ services:
   - xvfb
 language: python
 python:
-  - 3.5
+  - 3.7
   - 3.6
 cache:
   directories:
