@@ -92,7 +92,7 @@ class TestEvolvablePlayer(TestPlayer):
 
     def test_crossover(self):
         """Test that crossover produces different strategies."""
-        for seed_ in range(200):
+        for seed_ in range(20):
             seed(seed_)
             players = []
             for _ in range(2):

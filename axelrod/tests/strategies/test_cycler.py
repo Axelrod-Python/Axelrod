@@ -149,18 +149,40 @@ TestCyclerCCCDCD = test_cycler_factory("CCCDCD")
 
 class TestEvolvableCycler(unittest.TestCase):
 
+    player_class = EvolvableCycler
+
     def test_normalized_parameters(self):
+        # Must specify at least one of cycle or cycle_length
         self.assertRaises(
-            EvolvableCycler(),
-            InsufficientParametersError("Insufficient Parameters to instantiate EvolvableCycler"))
+            InsufficientParametersError,
+            self.player_class._normalize_parameters
+        )
+        self.assertRaises(
+            InsufficientParametersError,
+            self.player_class._normalize_parameters,
+            cycle=""
+        )
+        self.assertRaises(
+            InsufficientParametersError,
+            self.player_class._normalize_parameters,
+            cycle_length=0
+        )
+
+        cycle = "C" * random.randint(0, 20) + "D" * random.randint(0, 20)
+        self.assertEqual(self.player_class._normalize_parameters(cycle=cycle), (cycle, len(cycle)))
+
+        cycle_length = random.randint(1, 20)
+        random_cycle, cycle_length2 = self.player_class._normalize_parameters(cycle_length=cycle_length)
+        self.assertEqual(len(random_cycle), cycle_length)
+        self.assertEqual(cycle_length, cycle_length2)
 
     def test_crossover_even_length(self):
         cycle1 = "C" * 6
         cycle2 = "D" * 6
         cross_cycle = "CDDDDD"
 
-        player1 = EvolvableCycler(cycle=cycle1)
-        player2 = EvolvableCycler(cycle=cycle2)
+        player1 = self.player_class(cycle=cycle1)
+        player2 = self.player_class(cycle=cycle2)
         axelrod.seed(3)
         crossed = player1.crossover(player2)
         self.assertEqual(cross_cycle, crossed.cycle)
@@ -168,10 +190,10 @@ class TestEvolvableCycler(unittest.TestCase):
     def test_crossover_odd_length(self):
         cycle1 = "C" * 7
         cycle2 = "D" * 7
-        cross_cycle = "CCCDDDD"
+        cross_cycle = "CDDDDDD"
 
-        player1 = EvolvableCycler(cycle=cycle1)
-        player2 = EvolvableCycler(cycle=cycle2)
+        player1 = self.player_class(cycle=cycle1)
+        player2 = self.player_class(cycle=cycle2)
         axelrod.seed(3)
         crossed = player1.crossover(player2)
         self.assertEqual(cross_cycle, crossed.cycle)
@@ -179,13 +201,13 @@ class TestEvolvableCycler(unittest.TestCase):
 
 class TestEvolvableCycler2(TestEvolvablePlayer):
     name = "EvolvableCycler"
-    player_class = axelrod.EvolvableCycler
+    player_class = EvolvableCycler
     init_parameters = {"cycle_length": 100}
 
 
 class TestEvolvableCycler3(TestEvolvablePlayer):
     name = "EvolvableCycler"
-    player_class = axelrod.EvolvableCycler
+    player_class = EvolvableCycler
     init_parameters = {"cycle": "".join(random.choice(("C", "D")) for _ in range(50)),
                        "mutation_potency": 10}
 

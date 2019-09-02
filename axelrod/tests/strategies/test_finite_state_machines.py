@@ -4,7 +4,8 @@ import unittest
 
 import axelrod
 from axelrod.compute_finite_state_machine_memory import get_memory_from_transitions
-from axelrod.strategies.finite_state_machines import SimpleFSM
+from axelrod.evolvable_player import InsufficientParametersError
+from axelrod.strategies.finite_state_machines import EvolvableFSMPlayer, SimpleFSM
 
 from .test_player import TestPlayer
 from .test_evolvable_player import TestEvolvablePlayer
@@ -1041,6 +1042,19 @@ class TestTF3(TestFSMPlayer):
 
 
 class TestEvolvableFSMPlayer(unittest.TestCase):
+
+    player_class = EvolvableFSMPlayer
+
+    def test_normalized_parameters(self):
+        self.assertRaises(
+            InsufficientParametersError,
+            self.player_class._normalize_parameters
+        )
+        self.assertRaises(
+            InsufficientParametersError,
+            self.player_class._normalize_parameters,
+            transitions=[[0, C, 1, D], [0, D, 0, D], [1, C, 1, C], [1, D, 1, D]]
+        )
 
     def test_init(self):
         transitions = [[0, C, 1, D], [0, D, 0, D], [1, C, 1, C], [1, D, 1, D]]

@@ -6,12 +6,11 @@ For the original see:
 """
 import random
 from random import choice
-from typing import Any, TypeVar
+from typing import Any
 import numpy as np
 
 from axelrod.action import Action, str_to_actions, actions_to_str
 from axelrod.load_data_ import load_pso_tables
-from axelrod.evolvable_player import EvolvablePlayer, InsufficientParametersError
 from axelrod.player import Player
 
 from axelrod.random_ import random_choice
@@ -85,63 +84,22 @@ class EvolvableGambler(Gambler, EvolvableLookerUp):
             mutation_probability=self.mutation_probability,
         )
 
-    def receive_vector(self, vector):
-        """Receives a vector and updates the player's pattern. Ignores extra parameters."""
-        self.pattern = vector
-        self_depth, op_depth, op_openings_depth = self.parameters
-        self._lookup = LookupTable.from_pattern(self.pattern, self_depth, op_depth, op_openings_depth)
+    # The mutate and crossover methods are mostly inherited from EvolvableLookerUp, except for the following
+    # modifications.
 
-    def create_vector_bounds(self):
-        """Creates the bounds for the decision variables. Ignores extra parameters."""
-        size = len(self.pattern)
-        lb = [0.0] * size
-        ub = [1.0] * size
-        return lb, ub
+    @classmethod
+    def random_value(cls):
+        return random.random()
 
-    @staticmethod
-    def mutate_pattern(pattern, mutation_probability):
-        randoms = np.random.random(len(pattern))
-        for i, _ in enumerate(pattern):
-            if randoms[i] < mutation_probability:
-                ep = random.uniform(-1, 1) / 4
-                pattern[i] += ep
-                if pattern[i] < 0:
-                    pattern[i] = 0
-                if pattern[i] > 1:
-                    pattern[i] = 1
-        return pattern
-
-    def mutate(self):
-        pattern = self.mutate_pattern(self.pattern, self.mutation_probability)
-        plays, op_plays, op_start_plays = self.parameters
-        num_actions = max([plays, op_plays, op_start_plays])
-        initial_actions = tuple([choice((C, D)) for _ in range(num_actions)])
-        return self.__class__(
-            pattern=pattern,
-            parameters=self.parameters,
-            initial_actions=initial_actions,
-            mutation_probability=self.mutation_probability,
-        )
-
-    def crossover(self, other):
-        pattern1 = self.pattern
-        pattern2 = other.pattern
-        cross_point = int(random.randint(0, len(pattern1)))
-        offspring_pattern = pattern1[:cross_point] + pattern2[cross_point:]
-
-        return self.__class__(
-            parameters=self.parameters,
-            pattern=offspring_pattern,
-            initial_actions=self.initial_actions,
-            mutation_probability = self.mutation_probability,
-        )
-
-    @staticmethod
-    def random_params(plays, op_plays, op_start_plays):
-        keys = create_lookup_table_keys(plays, op_plays, op_start_plays)
-        pattern = [random.random() for _ in keys]
-        table = dict(zip(keys, pattern))
-        return pattern, LookupTable(table)
+    @classmethod
+    def mutate_value(cls, value):
+        ep = random.uniform(-1, 1) / 4
+        value += ep
+        if value < 0:
+            value = 0
+        elif value > 1:
+            value = 1
+        return value
 
     def serialize_parameters(self):
         self_depth, op_depth, op_openings_depth = self.parameters
@@ -160,6 +118,19 @@ class EvolvableGambler(Gambler, EvolvableLookerUp):
         pattern = list(map(float, s[3].split('|')))
         initial_actions = str_to_actions(s[4])
         return cls(parameters=parameters, pattern=pattern, initial_actions=initial_actions)
+
+    def receive_vector(self, vector):
+        """Receives a vector and updates the player's pattern. Ignores extra parameters."""
+        self.pattern = vector
+        self_depth, op_depth, op_openings_depth = self.parameters
+        self._lookup = LookupTable.from_pattern(self.pattern, self_depth, op_depth, op_openings_depth)
+
+    def create_vector_bounds(self):
+        """Creates the bounds for the decision variables. Ignores extra parameters."""
+        size = len(self.pattern)
+        lb = [0.0] * size
+        ub = [1.0] * size
+        return lb, ub
 
 
 class PSOGamblerMem1(Gambler):

@@ -5,7 +5,9 @@ import unittest
 
 import axelrod
 from axelrod.action import str_to_actions
+from axelrod.evolvable_player import InsufficientParametersError
 from axelrod.strategies.lookerup import (
+    EvolvableLookerUp,
     LookupTable,
     Plays,
     create_lookup_table_keys,
@@ -18,7 +20,38 @@ from .test_evolvable_player import TestEvolvablePlayer
 C, D = axelrod.Action.C, axelrod.Action.D
 
 
-# class TestEvolvableLookerUp(TestEvolvablePlayer):
+class TestEvolvableLookerUp(unittest.TestCase):
+    player_class = EvolvableLookerUp
+
+    def test_normalized_parameters(self):
+        initial_actions = (C, C,)
+        lookup_dict = {
+            ((C, C), (C,), ()): C,
+            ((C, C), (D,), ()): D,
+            ((C, D), (C,), ()): D,
+            ((C, D), (D,), ()): C,
+            ((D, C), (C,), ()): C,
+            ((D, C), (D,), ()): D,
+            ((D, D), (C,), ()): D,
+            ((D, D), (D,), ()): C,
+        }
+        pattern = "".join([random.choice(('C', 'D')) for _ in range(8)]),
+
+        self.assertRaises(
+            InsufficientParametersError,
+            self.player_class._normalize_parameters
+        )
+        self.assertRaises(
+            InsufficientParametersError,
+            self.player_class._normalize_parameters,
+            pattern=pattern,
+            initial_actions=initial_actions
+        )
+        self.assertRaises(
+            InsufficientParametersError,
+            self.player_class._normalize_parameters,
+            lookup_dict=lookup_dict,
+        )
 
 
 class TestEvolvableLookerUp2(TestEvolvablePlayer):

@@ -2,6 +2,7 @@
 import unittest
 
 import axelrod
+from axelrod.evolvable_player import InsufficientParametersError
 from axelrod.load_data_ import load_weights
 from axelrod.strategies.ann import split_weights
 from .test_player import TestPlayer
@@ -22,13 +23,30 @@ class TestSplitWeights(unittest.TestCase):
     split_weights([0] * 12, 10, 1)
 
 
-class TestEvolvableANN(TestEvolvablePlayer):
+class TestEvolvableANN(unittest.TestCase):
+
+    player_class = axelrod.EvolvableANN
+
+    def test_normalized_parameters(self):
+        # Must specify at least one of cycle or cycle_length
+        self.assertRaises(
+            InsufficientParametersError,
+            self.player_class._normalize_parameters
+        )
+        self.assertRaises(
+            InsufficientParametersError,
+            self.player_class._normalize_parameters,
+            weights=nn_weights["Evolved ANN 5"][2]
+        )
+
+
+class TestEvolvableANN2(TestEvolvablePlayer):
     name = "EvolvableANN"
     player_class = axelrod.EvolvableANN
     init_parameters = {"num_features": 17, "num_hidden": 8}
 
 
-class TestEvolvableANN2(TestEvolvablePlayer):
+class TestEvolvableANN3(TestEvolvablePlayer):
     name = "EvolvableANN"
     player_class = axelrod.EvolvableANN
     init_parameters = {

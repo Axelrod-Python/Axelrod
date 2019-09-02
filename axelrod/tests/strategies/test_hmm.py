@@ -3,7 +3,8 @@ import random
 import unittest
 
 import axelrod
-from axelrod.strategies.hmm import SimpleHMM, is_stochastic_matrix, random_vector
+from axelrod.evolvable_player import InsufficientParametersError
+from axelrod.strategies.hmm import EvolvableHMMPlayer, SimpleHMM, is_stochastic_matrix, random_vector
 from .test_player import TestMatch, TestPlayer
 from .test_evolvable_player import TestEvolvablePlayer
 
@@ -200,6 +201,33 @@ class TestEvolvedHMM5vsDefector(TestMatch):
 
 class TestEvolvableHMMPlayer(unittest.TestCase):
 
+    player_class = EvolvableHMMPlayer
+
+    def test_normalized_parameters(self):
+        transitions_C = [[1, 0], [1, 0]]
+        transitions_D = [[0, 1], [0, 1]]
+        emission_probabilities = [1, 0]
+        initial_state = 0
+        initial_action = C
+
+        self.assertRaises(
+            InsufficientParametersError,
+            self.player_class._normalize_parameters
+        )
+        self.assertRaises(
+            InsufficientParametersError,
+            self.player_class._normalize_parameters,
+            transitions_C=transitions_C,
+            transitions_D=transitions_D,
+            emission_probabilities=emission_probabilities
+        )
+        self.assertRaises(
+            InsufficientParametersError,
+            self.player_class._normalize_parameters,
+            initial_state=initial_state,
+            initial_action=initial_action
+        )
+
     def test_vector_to_instance(self):
         num_states = 4
         vector = []
@@ -207,15 +235,15 @@ class TestEvolvableHMMPlayer(unittest.TestCase):
             vector += random_vector(num_states)
         for _ in range(num_states + 1):
             vector.append(random.random())
-        player = axelrod.EvolvableHMMPlayer(num_states=num_states)
+        player = self.player_class(num_states=num_states)
         player.receive_vector(vector=vector)
-        self.assertIsInstance(player, axelrod.EvolvableHMMPlayer)
+        self.assertIsInstance(player, self.player_class)
 
     def test_create_vector_bounds(self):
         num_states = 4
         size = 2 * num_states ** 2 + num_states + 1
 
-        player = axelrod.EvolvableHMMPlayer(num_states=num_states)
+        player = self.player_class(num_states=num_states)
         lb, ub = player.create_vector_bounds()
 
         self.assertIsInstance(lb, list)
@@ -226,19 +254,19 @@ class TestEvolvableHMMPlayer(unittest.TestCase):
 
 class TestEvolvableHMMPlayer2(TestEvolvablePlayer):
     name = "EvolvableHMMPlayer"
-    player_class = axelrod.EvolvableHMMPlayer
+    player_class = EvolvableHMMPlayer
     init_parameters = {"num_states": 4}
 
 
 class TestEvolvableHMMPlayer3(TestEvolvablePlayer):
     name = "EvolvableHMMPlayer"
-    player_class = axelrod.EvolvableHMMPlayer
+    player_class = EvolvableHMMPlayer
     init_parameters = {"num_states": 8}
 
 
 class TestEvolvableHMMPlayer4(TestEvolvablePlayer):
     name = "EvolvableHMMPlayer"
-    player_class = axelrod.EvolvableHMMPlayer
+    player_class = EvolvableHMMPlayer
     init_parameters = {
         "transitions_C": [[1, 0], [1, 0]],
         "transitions_D": [[0, 1], [0, 1]],

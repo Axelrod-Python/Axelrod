@@ -4,7 +4,7 @@ from typing import List, Tuple
 import numpy as np
 from axelrod.action import Action
 from axelrod.load_data_ import load_weights
-from axelrod.evolvable_player import EvolvablePlayer, InsufficientParametersError
+from axelrod.evolvable_player import EvolvablePlayer, InsufficientParametersError, crossover_lists
 from axelrod.player import Player
 
 
@@ -230,34 +230,31 @@ class EvolvableANN(ANN, EvolvablePlayer):
         mutation_probability: float = 0.1,
         mutation_distance: int = 5,
     ) -> None:
-        self.num_features = num_features
-        self.num_hidden = num_hidden
-        self.mutation_distance = mutation_distance
-        if mutation_probability is None:
-            size = num_weights(num_features, num_hidden)
-            self.mutation_probability = 10. / size
-        else:
-            self.mutation_probability = mutation_probability
-        if weights is None:
-            if not (num_features and num_hidden):
-                raise Exception("Insufficient Parameters to instantiate EvolvableANN")
-            size = num_weights(self.num_features, self.num_hidden)
-            weights = [random.uniform(-1, 1) for _ in range(size)]
+        num_features, num_hidden, weights, mutation_probability = self._normalize_parameters(
+            num_features, num_hidden, weights, mutation_probability)
         ANN.__init__(self,
                      num_features=num_features,
                      num_hidden=num_hidden,
                      weights=weights)
         EvolvablePlayer.__init__(self)
+        self.mutation_probability = mutation_probability
+        self.mutation_distance = mutation_distance
         self.overwrite_init_kwargs(
             num_features=num_features,
             num_hidden=num_hidden,
-            weights=weights)
+            weights=weights,
+            mutation_probability=mutation_probability)
 
-    def randomize(self):
-        size = num_weights(self.num_features, self.num_hidden)
-        weights = [random.uniform(-1, 1) for _ in range(size)]
-        self._process_weights(self.weights, self.num_features, self.num_hidden)
-        self.overwrite_init_kwargs(weights=weights)
+    @classmethod
+    def _normalize_parameters(cls, num_features=None, num_hidden=None, weights=None, mutation_probability=None):
+        if not (num_features and num_hidden):
+            raise InsufficientParametersError("Insufficient Parameters to instantiate EvolvableANN")
+        size = num_weights(num_features, num_hidden)
+        if not weights:
+            weights = [random.uniform(-1, 1) for _ in range(size)]
+        if mutation_probability is None:
+            mutation_probability = 10. / size
+        return num_features, num_hidden, weights, mutation_probability
 
     @staticmethod
     def mutate_weights(weights, num_features, num_hidden, mutation_probability,
@@ -274,27 +271,12 @@ class EvolvableANN(ANN, EvolvablePlayer):
         weights = self.mutate_weights(
             self.weights, self.num_features, self.num_hidden,
             self.mutation_probability, self.mutation_distance)
-        return self.__class__(
-            num_features=self.num_features,
-            num_hidden=self.num_hidden,
-            weights=weights
-        )
-
-    @staticmethod
-    def crossover_weights(w1, w2):
-        crosspoint = random.randrange(len(w1))
-        new_weights = list(w1[:crosspoint]) + list(w2[crosspoint:])
-        return new_weights
+        return self.create_new(weights=weights)
 
     def crossover(self, other):
         # Assuming that the number of states is the same
-        new_weights = self.crossover_weights(self.weights, other.weights)
-        return self.__class__(
-            num_features=self.num_features,
-            num_hidden=self.num_hidden,
-            mutation_probability=self.mutation_probability,
-            mutation_distance=self.mutation_distance,
-            weights=new_weights)
+        weights = crossover_lists(self.weights, other.weights)
+        return self.create_new(weights=weights)
 
     def serialize_parameters(self):
         return "{}:{}:{}".format(
