@@ -1,18 +1,16 @@
+from collections import Counter, namedtuple
 import csv
 import itertools
-from collections import Counter, namedtuple
 from multiprocessing import cpu_count
 
-import axelrod.interaction_utils as iu
 import numpy as np
 import tqdm
-from axelrod.action import Action, str_to_actions
+from axelrod.action import Action
 
 import dask as da
 import dask.dataframe as dd
 
 from . import eigen
-from .game import Game
 
 C, D = Action.C, Action.D
 
@@ -416,7 +414,6 @@ class ResultSet:
 
     @update_progress_bar
     def _build_initial_cooperation_rate(self, interactions_series):
-        interactions_dict = interactions_series.to_dict()
         interactions_array = np.array(
             [
                 interactions_series.get(player_index, 0)
