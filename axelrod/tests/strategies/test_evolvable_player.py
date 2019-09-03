@@ -83,10 +83,10 @@ class TestEvolvablePlayer(TestPlayer):
         if self.init_parameters:
             return
         seed(0)
-        player = self.player()
         variants_produced = False
         for seed_ in range(2, 200):
             seed(seed_)
+            player = self.player()
             mutant = player.clone().mutate()
             if player != mutant:
                 variants_produced = True
@@ -117,7 +117,7 @@ class TestEvolvablePlayer(TestPlayer):
         self.assertFalse(True)
 
     def test_crossover_mismatch(self):
-        other = EvolvableTestOpponent()
+        other = axl.Cooperator()
         self.assertRaises(TypeError, self.player_class.crossover, other=other)
 
     def test_serialization(self):
