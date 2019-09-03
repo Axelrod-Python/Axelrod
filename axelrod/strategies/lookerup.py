@@ -501,6 +501,8 @@ class EvolvableLookerUp(LookerUp, EvolvablePlayer):
         )
 
     def crossover(self, other):
+        if not isinstance(other, self.__class__):
+            raise TypeError("Crossover must be between the same player classes.")
         lookup_dict = crossover_dictionaries(self.lookup_dict, other.lookup_dict)
         return self.create_new(lookup_dict=lookup_dict)
 

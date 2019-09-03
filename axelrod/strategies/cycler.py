@@ -152,13 +152,13 @@ class EvolvableCycler(Cycler, EvolvablePlayer):
         cycle, _ = self._normalize_parameters(cycle)
         return self.create_new(cycle=cycle)
 
-    def crossover(self, other_cycler):
+    def crossover(self, other):
         """
         Creates and returns a new Player instance with a single crossover point.
         """
-        if not isinstance(other_cycler, self.__class__):
-            raise TypeError
-        cycle_list = crossover_lists(self.cycle, other_cycler.cycle)
+        if not isinstance(other, self.__class__):
+            raise TypeError("Crossover must be between the same player classes.")
+        cycle_list = crossover_lists(self.cycle, other.cycle)
         cycle = "".join(cycle_list)
         cycle, _ = self._normalize_parameters(cycle)
         return self.create_new(cycle=cycle)

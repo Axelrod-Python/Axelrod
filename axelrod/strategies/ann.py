@@ -227,7 +227,7 @@ class EvolvableANN(ANN, EvolvablePlayer):
     def __init__(
         self, num_features: int, num_hidden: int,
         weights: List[float] = None,
-        mutation_probability: float = 0.1,
+        mutation_probability: float = None,
         mutation_distance: int = 5,
     ) -> None:
         num_features, num_hidden, weights, mutation_probability = self._normalize_parameters(
@@ -274,7 +274,8 @@ class EvolvableANN(ANN, EvolvablePlayer):
         return self.create_new(weights=weights)
 
     def crossover(self, other):
-        # Assuming that the number of states is the same
+        if not isinstance(other, self.__class__):
+            raise TypeError("Crossover must be between the same player classes.")
         weights = crossover_lists(self.weights, other.weights)
         return self.create_new(weights=weights)
 

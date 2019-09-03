@@ -29,7 +29,7 @@ class EvolvablePlayer(Player):
         init_kwargs.update(kwargs)
         return self.__class__(**init_kwargs)
 
-    # Serialization and Deserialization to strings. You may overwrite to obtain more human readable serializations
+    # Serialization and deserialization. You may overwrite to obtain more human readable serializations
     # but you must overwrite both.
 
     def serialize_parameters(self):

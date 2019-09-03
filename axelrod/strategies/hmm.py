@@ -45,7 +45,7 @@ def normalize_vector(vec):
     s = sum(vec)
     if s == 0.0:
         n = len(vec)
-        return [1 / n for v in vec]
+        return [1. / n for v in vec]
     vec = [v / s for v in vec]
     return vec
 
@@ -307,7 +307,8 @@ class EvolvableHMMPlayer(HMMPlayer, EvolvablePlayer):
         )
 
     def crossover(self, other):
-        # Assuming that the number of states is the same
+        if not isinstance(other, self.__class__):
+            raise TypeError("Crossover must be between the same player classes.")
         transitions_C = crossover_lists_of_lists(self.hmm.transitions_C, other.hmm.transitions_C)
         transitions_D = crossover_lists_of_lists(self.hmm.transitions_D, other.hmm.transitions_D)
         emission_probabilities = crossover_lists(

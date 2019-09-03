@@ -29,19 +29,11 @@ class EvolvableTestOpponent(EvolvablePlayer):
         value = self.value + other.value
         return EvolvableTestOpponent(value)
 
-    def serialize_parameters(self):
-        return str(self.value)
-
-    @classmethod
-    def deserialize_parameters(cls, value):
-        return EvolvableTestOpponent(int(value))
-
 
 class TestEvolvablePlayer(TestPlayer):
 
     player_class = EvolvableTestOpponent
     init_parameters = dict()
-    randomized = False
 
     def player(self):
         return self.player_class(**self.init_parameters)
@@ -56,8 +48,8 @@ class TestEvolvablePlayer(TestPlayer):
 
     def test_randomization(self):
         """Test that randomization on initialization produces different strategies."""
-        if not self.randomized:
-            return True
+        if self.init_parameters:
+            return
         seed(0)
         player1 = self.player()
         seed(0)
@@ -70,16 +62,17 @@ class TestEvolvablePlayer(TestPlayer):
                 return
         self.assertFalse(True)
 
-    def test_mutate(self):
+    def test_mutate_variations(self):
         """Test that mutate produces different strategies."""
         seed(0)
         player = self.player()
-        for seed_ in range(2, 20):
+        variants_produced = False
+        for seed_ in range(2, 200):
             seed(seed_)
             mutant = player.clone().mutate()
             if player != mutant:
-                return
-        self.assertFalse(True)
+                variants_produced = True
+        self.assertFalse(variants_produced)
 
     def test_mutate_and_clone(self):
         """Test that mutated players clone properly."""
@@ -87,7 +80,6 @@ class TestEvolvablePlayer(TestPlayer):
         player = self.player()
         mutant = player.clone().mutate()
         clone = mutant.clone()
-        # compare_dicts(mutant.__dict__, clone.__dict__)
         self.assertEqual(clone, mutant)
 
     def test_crossover(self):
@@ -106,13 +98,17 @@ class TestEvolvablePlayer(TestPlayer):
                 return
         self.assertFalse(True)
 
+    def test_crossover_mismatch(self):
+        player = self.player()
+        other = EvolvableTestOpponent()
+        self.assertRaises(TypeError, self.player_class.crossover, other=other)
+
     def test_serialization(self):
         """Serializing and deserializing should return the original player."""
         seed(0)
         player = self.player()
         serialized = player.serialize_parameters()
         deserialized_player = player.__class__.deserialize_parameters(serialized)
-        # compare_dicts(player.__dict__, deserialized_player.__dict__)
         self.assertEqual(player, deserialized_player)
         self.assertEqual(deserialized_player, deserialized_player.clone())
 
