@@ -346,53 +346,6 @@ class EvolvableHMMPlayer(HMMPlayer, EvolvablePlayer):
         ub = [1.0] * vec_len
         return lb, ub
 
-    @classmethod
-    def repr_rows(cls, rows):
-        ss = []
-        for row in rows:
-            ss.append("_".join(list(map(str, row))))
-        return "|".join(ss)
-
-    def serialize_parameters(self):
-        return "{}:{}:{}:{}:{}".format(
-            self.initial_state,
-            self.initial_action,
-            self.repr_rows(self.hmm.transitions_C),
-            self.repr_rows(self.hmm.transitions_D),
-            self.repr_rows([self.hmm.emission_probabilities])
-        )
-
-    @classmethod
-    def parse_vector(cls, line):
-        row = line.split('_')
-        row = list(map(float, row))
-        return row
-
-    @classmethod
-    def parse_matrix(cls, sm):
-        rows = []
-        lines = sm.split('|')
-        for line in lines:
-            rows.append(cls.parse_vector(line))
-        return rows
-
-    @classmethod
-    def deserialize_parameters(cls, serialized):
-        lines = serialized.split(':')
-        initial_state = int(lines[0])
-        initial_action = Action.from_char(lines[1])
-        t_C = cls.parse_matrix(lines[2])
-        t_D = cls.parse_matrix(lines[3])
-        p = cls.parse_vector(lines[4])
-        num_states = len(t_C)
-
-        return cls(num_states=num_states,
-                   transitions_C=t_C,
-                   transitions_D=t_D,
-                   emission_probabilities=p,
-                   initial_state=initial_state,
-                   initial_action=initial_action)
-
 
 class EvolvedHMM5(HMMPlayer):
     """

@@ -278,21 +278,6 @@ class EvolvableANN(ANN, EvolvablePlayer):
         weights = crossover_lists(self.weights, other.weights)
         return self.create_new(weights=weights)
 
-    def serialize_parameters(self):
-        return "{}:{}:{}".format(
-                self.num_features,
-                self.num_hidden,
-                ':'.join(map(str, self.weights))
-            )
-
-    @classmethod
-    def deserialize_parameters(cls, serialized):
-        elements = list(map(float, serialized.split(':')))
-        num_features = int(elements[0])
-        num_hidden = int(elements[1])
-        weights = elements[2:]
-        return cls(num_features, num_hidden, weights)
-
 
 class EvolvedANN(ANN):
     """

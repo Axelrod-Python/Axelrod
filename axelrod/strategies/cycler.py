@@ -165,22 +165,6 @@ class EvolvableCycler(Cycler, EvolvablePlayer):
         cycle, _ = self._normalize_parameters(cycle)
         return self.create_new(cycle=cycle)
 
-    def serialize_parameters(self):
-        return "{}:{}:{}".format(
-                actions_to_str(self.cycle),
-                str(self.mutation_probability),
-                str(self.mutation_potency)
-        )
-
-    @classmethod
-    def deserialize_parameters(cls, serialized):
-        cycle, mutation_probability, mutation_potency = list(serialized.split(':'))
-        return cls(
-            cycle=cycle,
-            mutation_probability=float(mutation_probability),
-            mutation_potency=int(mutation_potency)
-        )
-
 
 class CyclerDC(Cycler):
     """

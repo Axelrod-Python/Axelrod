@@ -290,44 +290,6 @@ class EvolvableFSMPlayer(FSMPlayer, EvolvablePlayer):
         ub = [1] * size
         return lb, ub
 
-    @staticmethod
-    def repr_rows(rows):
-        ss = []
-        for row in rows:
-            ss.append("_".join(list(map(str, row))))
-        return "|".join(ss)
-
-    def serialize_parameters(self):
-        return "{}:{}:{}:{}".format(
-            self.num_states,
-            self.initial_state,
-            self.initial_action,
-            self.repr_rows(self.fsm.transitions())
-        )
-
-    @classmethod
-    def deserialize_parameters(cls, serialized):
-        rows = []
-        lines = serialized.split(':')
-        num_states = int(lines[0])
-        initial_state = int(lines[1])
-        initial_action = Action.from_char(lines[2])
-
-        for line in lines[3].split('|'):
-            row = []
-            for element in line.split('_'):
-                try:
-                    row.append(Action.from_char(element))
-                except UnknownActionError:
-                    row.append(int(element))
-            rows.append(tuple(row))
-        return cls(
-            transitions=tuple(rows),
-            initial_state=initial_state,
-            initial_action=initial_action,
-            num_states=num_states
-        )
-
 
 class Fortress3(FSMPlayer):
     """Finite state machine player specified in http://DOI.org/10.1109/CEC.2006.1688322.

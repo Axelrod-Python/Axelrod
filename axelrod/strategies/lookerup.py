@@ -505,30 +505,6 @@ class EvolvableLookerUp(LookerUp, EvolvablePlayer):
         lookup_dict = crossover_dictionaries(self.lookup_dict, other.lookup_dict)
         return self.create_new(lookup_dict=lookup_dict)
 
-    def serialize_parameters(self):
-        plays, op_plays, op_start_plays = self.parameters
-        return "{}:{}:{}:{}:{}".format(
-            plays,
-            op_plays,
-            op_start_plays,
-            actions_to_str(self.initial_actions),
-            actions_to_str([v for k, v in sorted(self.lookup_dict.items())])
-        )
-
-    @classmethod
-    def deserialize_parameters(cls, serialized):
-        elements = serialized.split(':')
-        plays, op_plays, op_start_plays = list(map(int, elements[:3]))
-        parameters = (plays, op_plays, op_start_plays)
-        initial_actions = str_to_actions(elements[3])
-        pattern = str_to_actions(elements[4])
-        keys = create_lookup_table_keys(plays, op_plays, op_start_plays)
-        lookup_dict = dict(zip(keys, pattern))
-        return cls(parameters=parameters,
-                   pattern=pattern,
-                   initial_actions=initial_actions,
-                   lookup_dict=lookup_dict)
-
 
 class EvolvedLookerUp1_1_1(LookerUp):
     """

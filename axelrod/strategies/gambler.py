@@ -99,24 +99,6 @@ class EvolvableGambler(Gambler, EvolvableLookerUp):
             value = 1
         return value
 
-    def serialize_parameters(self):
-        self_depth, op_depth, op_openings_depth = self.parameters
-        return "{}:{}:{}:{}:{}".format(
-            self_depth,
-            op_depth,
-            op_openings_depth,
-            '|'.join(str(v) for v in self.pattern),
-            actions_to_str(self.initial_actions)
-        )
-
-    @classmethod
-    def deserialize_parameters(cls, serialized):
-        s = serialized.split(':')
-        parameters = tuple(map(int, s[0:3]))
-        pattern = list(map(float, s[3].split('|')))
-        initial_actions = str_to_actions(s[4])
-        return cls(parameters=parameters, pattern=pattern, initial_actions=initial_actions)
-
     def receive_vector(self, vector):
         """Receives a vector and updates the player's pattern. Ignores extra parameters."""
         self.pattern = vector
