@@ -8,7 +8,7 @@ from axelrod.evolvable_player import InsufficientParametersError
 from axelrod.strategies.finite_state_machines import EvolvableFSMPlayer, FSMPlayer, SimpleFSM
 
 from .test_player import TestPlayer
-from .test_evolvable_player import TestEvolvablePlayer
+from .test_evolvable_player import PartialClass, TestEvolvablePlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D
 
@@ -1114,3 +1114,21 @@ class TestEvolvableFSMPlayer4(TestEvolvablePlayer):
         "initial_state": 1,
         "initial_action": C
     }
+
+
+# Substitute EvolvedFSMPlayer as a regular FSMPlayer.
+EvolvableFSMPlayerWithDefault = PartialClass(
+    EvolvableFSMPlayer,
+    transitions=((1, C, 1, C), (1, D, 1, D)),
+    initial_state=1,
+    initial_action=C)
+
+
+class EvolvableFSMAsFSM(TestFSMPlayer):
+    player = EvolvableFSMPlayerWithDefault
+
+    def test_equality_of_clone(self):
+        pass
+
+    def test_equality_of_pickle_clone(self):
+        pass

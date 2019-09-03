@@ -6,7 +6,7 @@ import axelrod
 from axelrod.evolvable_player import InsufficientParametersError
 from axelrod.strategies.hmm import EvolvableHMMPlayer, HMMPlayer, SimpleHMM, is_stochastic_matrix, random_vector
 from .test_player import TestMatch, TestPlayer
-from .test_evolvable_player import TestEvolvablePlayer
+from .test_evolvable_player import PartialClass, TestEvolvablePlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D
 
@@ -285,3 +285,21 @@ class TestEvolvableHMMPlayer4(TestEvolvablePlayer):
     }
 
 
+# Substitute EvolvableHMMPlayer as a regular HMMPlayer.
+EvolvableHMMPlayerWithDefault = PartialClass(
+    EvolvableHMMPlayer,
+    transitions_C=[[1]],
+    transitions_D=[[1]],
+    emission_probabilities=[0.5],
+    initial_state=0
+)
+
+
+class EvolvableHMMPlayerAsHMMPlayer(TestHMMPlayer):
+    player = EvolvableHMMPlayerWithDefault
+
+    def test_equality_of_clone(self):
+        pass
+
+    def test_equality_of_pickle_clone(self):
+        pass

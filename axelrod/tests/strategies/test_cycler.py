@@ -10,7 +10,7 @@ from axelrod.action import Action, str_to_actions
 from axelrod.evolvable_player import InsufficientParametersError
 
 from .test_player import TestPlayer
-from .test_evolvable_player import TestEvolvablePlayer
+from .test_evolvable_player import PartialClass, TestEvolvablePlayer
 
 C, D = Action.C, Action.D
 
@@ -216,3 +216,15 @@ class TestEvolvableCycler3(TestEvolvablePlayer):
                        "mutation_potency": 10}
 
 
+# Substitute EvolvedCycler as a regular Cycler.
+EvolvableCyclerWithDefault = PartialClass(EvolvableCycler, cycle="CCD")
+
+
+class EvolvableCyclerAsCycler(TestBasicCycler):
+    player = EvolvableCyclerWithDefault
+
+    def test_equality_of_clone(self):
+        pass
+
+    def test_equality_of_pickle_clone(self):
+        pass

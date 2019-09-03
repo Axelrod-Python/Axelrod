@@ -5,77 +5,15 @@ import copy
 import random
 import unittest
 import axelrod
+from axelrod.load_data_ import load_pso_tables
 from axelrod.strategies.lookerup import create_lookup_table_keys
 from .test_lookerup import convert_original_to_current
 from .test_player import TestPlayer
-from .test_evolvable_player import TestEvolvablePlayer
+from .test_evolvable_player import PartialClass, TestEvolvablePlayer
 
+
+tables = load_pso_tables("pso_gambler.csv", directory="data")
 C, D = axelrod.Action.C, axelrod.Action.D
-
-
-class TestEvolvableGambler(unittest.TestCase):
-
-    def test_receive_vector(self):
-        plays, op_plays, op_start_plays = 1, 1, 1
-        player = axelrod.EvolvableGambler(
-            parameters=(plays, op_plays, op_start_plays))
-
-        self.assertRaises(AttributeError, axelrod.EvolvableGambler.__getattribute__,
-                          *[player, 'vector'])
-
-        vector = [random.random() for _ in range(8)]
-        player.receive_vector(vector)
-        self.assertEqual(player.pattern, vector)
-
-    def test_vector_to_instance(self):
-        plays, op_plays, op_start_plays = 1, 1, 1
-        player = axelrod.EvolvableGambler(
-            parameters=(plays, op_plays, op_start_plays))
-
-        vector = [random.random() for _ in range(8)]
-        player.receive_vector(vector)
-        keys = create_lookup_table_keys(player_depth=plays, op_depth=op_plays,
-                                        op_openings_depth=op_start_plays)
-        action_dict = dict(zip(keys, vector))
-        self.assertEqual(player._lookup.dictionary, action_dict)
-
-    def test_create_vector_bounds(self):
-        plays, op_plays, op_start_plays = 1, 1, 1
-        player = axelrod.EvolvableGambler(
-            parameters=(plays, op_plays, op_start_plays))
-        lb, ub = player.create_vector_bounds()
-        self.assertIsInstance(lb, list)
-        self.assertIsInstance(ub, list)
-        self.assertEqual(len(lb), 8)
-        self.assertEqual(len(ub), 8)
-
-
-class TestEvolvableGambler2(TestEvolvablePlayer):
-    name = "EvolvableGambler"
-    player_class = axelrod.EvolvableGambler
-    parent_class = axelrod.Gambler
-    parent_kwargs = ["lookup_dict"]
-    init_parameters = {"parameters": (1, 1, 1),
-                       "initial_actions": (C,)}
-
-
-class TestEvolvableGambler3(TestEvolvablePlayer):
-    name = "EvolvableGambler"
-    player_class = axelrod.EvolvableGambler
-    parent_class = axelrod.Gambler
-    parent_kwargs = ["lookup_dict"]
-    init_parameters = {"parameters": (3, 2, 1),
-                       "initial_actions": (C, C, C,)}
-
-
-class TestEvolvableGambler4(TestEvolvablePlayer):
-    name = "EvolvableGambler"
-    player_class = axelrod.EvolvableGambler
-    parent_class = axelrod.Gambler
-    parent_kwargs = ["lookup_dict"]
-    init_parameters = {"parameters": (2, 2, 2),
-                       "pattern": [random.random() for _ in range(64)],
-                       "initial_actions": (C, C,)}
 
 
 class TestGambler(TestPlayer):
@@ -553,3 +491,87 @@ class TestZDMem2(TestPlayer):
         new_seed = 1
         expected = [(C, C), (C, D), (C, C), (D, D), (D, C), (C, D), (D, C)]
         self.versus_test(axelrod.Alternator(), expected_actions=expected, seed=new_seed)
+
+
+class TestEvolvableGambler(unittest.TestCase):
+
+    def test_receive_vector(self):
+        plays, op_plays, op_start_plays = 1, 1, 1
+        player = axelrod.EvolvableGambler(
+            parameters=(plays, op_plays, op_start_plays))
+
+        self.assertRaises(AttributeError, axelrod.EvolvableGambler.__getattribute__,
+                          *[player, 'vector'])
+
+        vector = [random.random() for _ in range(8)]
+        player.receive_vector(vector)
+        self.assertEqual(player.pattern, vector)
+
+    def test_vector_to_instance(self):
+        plays, op_plays, op_start_plays = 1, 1, 1
+        player = axelrod.EvolvableGambler(
+            parameters=(plays, op_plays, op_start_plays))
+
+        vector = [random.random() for _ in range(8)]
+        player.receive_vector(vector)
+        keys = create_lookup_table_keys(player_depth=plays, op_depth=op_plays,
+                                        op_openings_depth=op_start_plays)
+        action_dict = dict(zip(keys, vector))
+        self.assertEqual(player._lookup.dictionary, action_dict)
+
+    def test_create_vector_bounds(self):
+        plays, op_plays, op_start_plays = 1, 1, 1
+        player = axelrod.EvolvableGambler(
+            parameters=(plays, op_plays, op_start_plays))
+        lb, ub = player.create_vector_bounds()
+        self.assertIsInstance(lb, list)
+        self.assertIsInstance(ub, list)
+        self.assertEqual(len(lb), 8)
+        self.assertEqual(len(ub), 8)
+
+
+class TestEvolvableGambler2(TestEvolvablePlayer):
+    name = "EvolvableGambler"
+    player_class = axelrod.EvolvableGambler
+    parent_class = axelrod.Gambler
+    parent_kwargs = ["lookup_dict"]
+    init_parameters = {"parameters": (1, 1, 1),
+                       "initial_actions": (C,)}
+
+
+class TestEvolvableGambler3(TestEvolvablePlayer):
+    name = "EvolvableGambler"
+    player_class = axelrod.EvolvableGambler
+    parent_class = axelrod.Gambler
+    parent_kwargs = ["lookup_dict"]
+    init_parameters = {"parameters": (3, 2, 1),
+                       "initial_actions": (C, C, C,)}
+
+
+class TestEvolvableGambler4(TestEvolvablePlayer):
+    name = "EvolvableGambler"
+    player_class = axelrod.EvolvableGambler
+    parent_class = axelrod.Gambler
+    parent_kwargs = ["lookup_dict"]
+    init_parameters = {"parameters": (2, 2, 2),
+                       "pattern": [random.random() for _ in range(64)],
+                       "initial_actions": (C, C,)}
+
+
+# Substitute EvolvableHMMPlayer as a regular HMMPlayer.
+EvolvableGamblerWithDefault = PartialClass(
+    axelrod.EvolvableGambler,
+    pattern=tables[("PSO Gambler 2_2_2", 2, 2, 2)],
+    parameters=(2, 2, 2),
+    initial_actions=(C,C,)
+)
+
+
+class EvolvableGamblerAsGambler(TestPSOGambler2_2_2):
+    player = EvolvableGamblerWithDefault
+
+    def test_equality_of_clone(self):
+        pass
+
+    def test_equality_of_pickle_clone(self):
+        pass

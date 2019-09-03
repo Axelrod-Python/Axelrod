@@ -1,3 +1,4 @@
+import functools
 import random
 import unittest
 
@@ -8,6 +9,15 @@ from axelrod.evolvable_player import copy_lists, crossover_lists, crossover_dict
 from .test_player import TestPlayer
 
 C, D = Action.C, Action.D
+
+
+def PartialClass(cls, **kwargs):
+
+    class PartialedClass(cls):
+        __init__ = functools.partialmethod(
+            cls.__init__, **kwargs)
+
+    return PartialedClass
 
 
 class EvolvableTestOpponent(EvolvablePlayer):

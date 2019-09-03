@@ -12,92 +12,13 @@ from axelrod.strategies.lookerup import (
     Plays,
     create_lookup_table_keys,
     make_keys_into_plays,
+    default_tft_lookup_table
 )
 
 from .test_player import TestPlayer
-from .test_evolvable_player import TestEvolvablePlayer
+from .test_evolvable_player import PartialClass, TestEvolvablePlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D
-
-
-class TestEvolvableLookerUp(unittest.TestCase):
-    player_class = EvolvableLookerUp
-
-    def test_normalized_parameters(self):
-        initial_actions = (C, C,)
-        lookup_dict = {
-            ((C, C), (C,), ()): C,
-            ((C, C), (D,), ()): D,
-            ((C, D), (C,), ()): D,
-            ((C, D), (D,), ()): C,
-            ((D, C), (C,), ()): C,
-            ((D, C), (D,), ()): D,
-            ((D, D), (C,), ()): D,
-            ((D, D), (D,), ()): C,
-        }
-        pattern = "".join([random.choice(('C', 'D')) for _ in range(8)]),
-
-        self.assertRaises(
-            InsufficientParametersError,
-            self.player_class._normalize_parameters
-        )
-        self.assertRaises(
-            InsufficientParametersError,
-            self.player_class._normalize_parameters,
-            pattern=pattern,
-            initial_actions=initial_actions
-        )
-        self.assertRaises(
-            InsufficientParametersError,
-            self.player_class._normalize_parameters,
-            lookup_dict=lookup_dict,
-        )
-
-
-class TestEvolvableLookerUp2(TestEvolvablePlayer):
-    name = "EvolvableLookerUp"
-    player_class = axelrod.EvolvableLookerUp
-    parent_class = axelrod.LookerUp
-    parent_kwargs = ["lookup_dict", "initial_actions"]
-    init_parameters = {"parameters": (1, 1, 1)}
-
-
-class TestEvolvableLookerUp3(TestEvolvablePlayer):
-    name = "EvolvableLookerUp"
-    player_class = axelrod.EvolvableLookerUp
-    parent_class = axelrod.LookerUp
-    parent_kwargs = ["lookup_dict", "initial_actions"]
-    init_parameters = {"parameters": (2, 1, 3)}
-
-
-class TestEvolvableLookerUp4(TestEvolvablePlayer):
-    name = "EvolvableLookerUp"
-    player_class = axelrod.EvolvableLookerUp
-    parent_class = axelrod.LookerUp
-    parent_kwargs = ["lookup_dict", "initial_actions"]
-    init_parameters = {"parameters": (2, 2, 2),
-                       "pattern": "".join([random.choice(('C', 'D')) for _ in range(64)]),
-                       "initial_actions": (C, C,)}
-
-
-class TestEvolvableLookerUp5(TestEvolvablePlayer):
-    name = "EvolvableLookerUp"
-    player_class = axelrod.EvolvableLookerUp
-    parent_class = axelrod.LookerUp
-    parent_kwargs = ["lookup_dict", "initial_actions"]
-    init_parameters = {
-        "initial_actions": (C, C,),
-        "lookup_dict":  {
-            ((C, C), (C,), ()): C,
-            ((C, C), (D,), ()): D,
-            ((C, D), (C,), ()): D,
-            ((C, D), (D,), ()): C,
-            ((D, C), (C,), ()): C,
-            ((D, C), (D,), ()): D,
-            ((D, D), (C,), ()): D,
-            ((D, D), (D,), ()): C,
-        }
-    }
 
 
 class TestLookupTable(unittest.TestCase):
@@ -735,3 +656,109 @@ def convert_key(old_key: tuple) -> Plays:
         op_plays=str_to_actions(opponent),
         op_openings=str_to_actions(opponent_start),
     )
+
+
+class TestEvolvableLookerUp(unittest.TestCase):
+    player_class = EvolvableLookerUp
+
+    def test_normalized_parameters(self):
+        initial_actions = (C, C,)
+        lookup_dict = {
+            ((C, C), (C,), ()): C,
+            ((C, C), (D,), ()): D,
+            ((C, D), (C,), ()): D,
+            ((C, D), (D,), ()): C,
+            ((D, C), (C,), ()): C,
+            ((D, C), (D,), ()): D,
+            ((D, D), (C,), ()): D,
+            ((D, D), (D,), ()): C,
+        }
+        pattern = "".join([random.choice(('C', 'D')) for _ in range(8)]),
+
+        self.assertRaises(
+            InsufficientParametersError,
+            self.player_class._normalize_parameters
+        )
+        self.assertRaises(
+            InsufficientParametersError,
+            self.player_class._normalize_parameters,
+            pattern=pattern,
+            initial_actions=initial_actions
+        )
+        self.assertRaises(
+            InsufficientParametersError,
+            self.player_class._normalize_parameters,
+            lookup_dict=lookup_dict,
+        )
+
+
+class TestEvolvableLookerUp2(TestEvolvablePlayer):
+    name = "EvolvableLookerUp"
+    player_class = axelrod.EvolvableLookerUp
+    parent_class = axelrod.LookerUp
+    parent_kwargs = ["lookup_dict", "initial_actions"]
+    init_parameters = {"parameters": (1, 1, 1)}
+
+
+class TestEvolvableLookerUp3(TestEvolvablePlayer):
+    name = "EvolvableLookerUp"
+    player_class = axelrod.EvolvableLookerUp
+    parent_class = axelrod.LookerUp
+    parent_kwargs = ["lookup_dict", "initial_actions"]
+    init_parameters = {"parameters": (2, 1, 3)}
+
+
+class TestEvolvableLookerUp4(TestEvolvablePlayer):
+    name = "EvolvableLookerUp"
+    player_class = axelrod.EvolvableLookerUp
+    parent_class = axelrod.LookerUp
+    parent_kwargs = ["lookup_dict", "initial_actions"]
+    init_parameters = {"parameters": (2, 2, 2),
+                       "pattern": "".join([random.choice(('C', 'D')) for _ in range(64)]),
+                       "initial_actions": (C, C,)}
+
+
+class TestEvolvableLookerUp5(TestEvolvablePlayer):
+    name = "EvolvableLookerUp"
+    player_class = axelrod.EvolvableLookerUp
+    parent_class = axelrod.LookerUp
+    parent_kwargs = ["lookup_dict", "initial_actions"]
+    init_parameters = {
+        "initial_actions": (C, C,),
+        "lookup_dict":  {
+            ((C, C), (C,), ()): C,
+            ((C, C), (D,), ()): D,
+            ((C, D), (C,), ()): D,
+            ((C, D), (D,), ()): C,
+            ((D, C), (C,), ()): C,
+            ((D, C), (D,), ()): D,
+            ((D, D), (C,), ()): D,
+            ((D, D), (D,), ()): C,
+        }
+    }
+
+
+# Substitute EvolvedLookerUp as a regular LookerUp.
+EvolvableLookerUpWithDefault = PartialClass(
+    EvolvableLookerUp,
+    parameters=(0, 1, 0),
+    lookup_dict={
+            ((), (D,), ()): D,
+            ((), (D,), ()): D,
+            ((), (C,), ()): C,
+            ((), (C,), ()): C,
+        },
+    initial_actions=(C,))
+
+
+class EvolvableLookerUpAsLookerUp(TestLookerUp):
+    player = EvolvableLookerUpWithDefault
+
+    def test_equality_of_clone(self):
+        pass
+
+    def test_equality_of_pickle_clone(self):
+        pass
+
+    def test_zero_tables(self):
+        pass

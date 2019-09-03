@@ -63,12 +63,12 @@ def random_flip(action: Action, threshold: float) -> Action:
     return action
 
 
-# def randrange(a: int, b: int) -> int:
-#     """Python 2 / 3 compatible randrange. Returns a random integer uniformly
-#     between a and b (inclusive)"""
-#     c = b - a
-#     r = c * random.random()
-#     return a + int(r)
+def randrange(a: int, b: int) -> int:
+    """Python 2 / 3 compatible randrange. Returns a random integer uniformly
+    between a and b (inclusive)"""
+    c = b - a
+    r = c * random.random()
+    return a + int(r)
 
 
 def random_vector(size):

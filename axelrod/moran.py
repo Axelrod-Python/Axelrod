@@ -1,8 +1,7 @@
 """Implementation of the Moran process on Graphs."""
 
-from collections import Counter
 import random
-from random import randrange
+from collections import Counter
 from typing import Callable, List, Optional, Set, Tuple
 
 import matplotlib.pyplot as plt
@@ -12,6 +11,7 @@ from axelrod import DEFAULT_TURNS, Game, Player
 from .deterministic_cache import DeterministicCache
 from .graph import Graph, complete_graph
 from .match import Match
+from .random_ import randrange
 
 
 def fitness_proportionate_selection(
