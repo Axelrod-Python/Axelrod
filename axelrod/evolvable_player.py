@@ -1,11 +1,10 @@
 from pickle import dumps, loads
-import random
+from random import randrange
 from .player import Player
 
 
 class InsufficientParametersError(Exception):
     """Error indicating that insufficient parameters were specified to initialize an Evolvable Player."""
-
     def __init__(self, *args):
         super().__init__(*args)
 
@@ -17,6 +16,8 @@ class EvolvablePlayer(Player):
     """
 
     name = "EvolvablePlayer"
+    parent_class = Player
+    parent_kwargs = []
 
     def overwrite_init_kwargs(self, **kwargs):
         """Use to overwrite parameters for proper cloning and testing."""
@@ -69,20 +70,14 @@ def copy_lists(lists):
 
 
 def crossover_lists(list1, list2):
-    cross_point = random.randrange(len(list1))
+    cross_point = randrange(len(list1))
     new_list = list(list1[:cross_point]) + list(list2[cross_point:])
     return new_list
 
 
-def crossover_lists_of_lists(lists1, lists2):
-    cross_point = random.randrange(len(lists1))
-    new_lists = copy_lists(lists1[:cross_point]) + copy_lists(lists2[cross_point:])
-    return new_lists
-
-
 def crossover_dictionaries(table1, table2):
     keys = list(table1.keys())
-    cross_point = random.randrange(len(keys))
+    cross_point = randrange(len(keys))
     new_items = [(k, table1[k]) for k in keys[:cross_point]]
     new_items += [(k, table2[k]) for k in keys[cross_point:]]
     new_table = dict(new_items)

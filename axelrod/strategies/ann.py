@@ -1,7 +1,6 @@
-import random
 from typing import List, Tuple
-
 import numpy as np
+import numpy.random as random
 from axelrod.action import Action
 from axelrod.load_data_ import load_weights
 from axelrod.evolvable_player import EvolvablePlayer, InsufficientParametersError, crossover_lists
@@ -260,7 +259,7 @@ class EvolvableANN(ANN, EvolvablePlayer):
     def mutate_weights(weights, num_features, num_hidden, mutation_probability,
                        mutation_distance):
         size = num_weights(num_features, num_hidden)
-        randoms = np.random.random(size)
+        randoms = random.random(size)
         for i, r in enumerate(randoms):
             if r < mutation_probability:
                 p = 1 + random.uniform(-1, 1) * mutation_distance

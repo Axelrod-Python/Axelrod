@@ -5,7 +5,7 @@ import unittest
 import axelrod
 from axelrod.compute_finite_state_machine_memory import get_memory_from_transitions
 from axelrod.evolvable_player import InsufficientParametersError
-from axelrod.strategies.finite_state_machines import EvolvableFSMPlayer, SimpleFSM
+from axelrod.strategies.finite_state_machines import EvolvableFSMPlayer, FSMPlayer, SimpleFSM
 
 from .test_player import TestPlayer
 from .test_evolvable_player import TestEvolvablePlayer
@@ -1091,18 +1091,24 @@ class TestEvolvableFSMPlayer(unittest.TestCase):
 class TestEvolvableFSMPlayer2(TestEvolvablePlayer):
     name = "EvolvableFSMPlayer"
     player_class = axelrod.EvolvableFSMPlayer
+    parent_class = FSMPlayer
+    parent_kwargs = ["transitions", "initial_action", "initial_state"]
     init_parameters = {"num_states": 4}
 
 
 class TestEvolvableFSMPlayer3(TestEvolvablePlayer):
     name = "EvolvableFSMPlayer"
     player_class = axelrod.EvolvableFSMPlayer
+    parent_class = FSMPlayer
+    parent_kwargs = ["transitions", "initial_action", "initial_state"]
     init_parameters = {"num_states": 12}
 
 
 class TestEvolvableFSMPlayer4(TestEvolvablePlayer):
     name = "EvolvableFSMPlayer"
     player_class = axelrod.EvolvableFSMPlayer
+    parent_class = FSMPlayer
+    parent_kwargs = ["transitions", "initial_action", "initial_state"]
     init_parameters = {
         "transitions": ((1, C, 1, C), (1, D, 2, D), (2, C, 2, D), (2, D, 1, C)),
         "initial_state": 1,

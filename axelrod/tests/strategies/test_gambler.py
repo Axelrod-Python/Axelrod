@@ -53,6 +53,8 @@ class TestEvolvableGambler(unittest.TestCase):
 class TestEvolvableGambler2(TestEvolvablePlayer):
     name = "EvolvableGambler"
     player_class = axelrod.EvolvableGambler
+    parent_class = axelrod.Gambler
+    parent_kwargs = ["lookup_dict"]
     init_parameters = {"parameters": (1, 1, 1),
                        "initial_actions": (C,)}
 
@@ -60,6 +62,8 @@ class TestEvolvableGambler2(TestEvolvablePlayer):
 class TestEvolvableGambler3(TestEvolvablePlayer):
     name = "EvolvableGambler"
     player_class = axelrod.EvolvableGambler
+    parent_class = axelrod.Gambler
+    parent_kwargs = ["lookup_dict"]
     init_parameters = {"parameters": (3, 2, 1),
                        "initial_actions": (C, C, C,)}
 
@@ -67,6 +71,8 @@ class TestEvolvableGambler3(TestEvolvablePlayer):
 class TestEvolvableGambler4(TestEvolvablePlayer):
     name = "EvolvableGambler"
     player_class = axelrod.EvolvableGambler
+    parent_class = axelrod.Gambler
+    parent_kwargs = ["lookup_dict"]
     init_parameters = {"parameters": (2, 2, 2),
                        "pattern": [random.random() for _ in range(64)],
                        "initial_actions": (C, C,)}

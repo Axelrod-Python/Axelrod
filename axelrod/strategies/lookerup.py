@@ -1,10 +1,9 @@
 from collections import namedtuple
 from itertools import product
-import random
-from random import choice
 from typing import Any, TypeVar
 
-import numpy as np
+import numpy.random as random
+from numpy.random import choice
 
 from axelrod.action import Action, actions_to_str, str_to_actions
 from axelrod.evolvable_player import EvolvablePlayer, InsufficientParametersError, crossover_dictionaries
@@ -464,7 +463,7 @@ class EvolvableLookerUp(LookerUp, EvolvablePlayer):
 
     @classmethod
     def random_value(cls):
-        return random.choice(actions)
+        return choice(actions)
 
     @classmethod
     def random_params(cls, plays, op_plays, op_start_plays):
@@ -480,7 +479,7 @@ class EvolvableLookerUp(LookerUp, EvolvablePlayer):
 
     @classmethod
     def mutate_table(cls, table, mutation_probability):
-        randoms = np.random.random(len(table.keys()))
+        randoms = random.random(len(table.keys()))
         # Flip each value with a probability proportional to the mutation rate
         for i, (history, move) in enumerate(table.items()):
             if randoms[i] < mutation_probability:

@@ -43,12 +43,16 @@ class TestEvolvableANN(unittest.TestCase):
 class TestEvolvableANN2(TestEvolvablePlayer):
     name = "EvolvableANN"
     player_class = axelrod.EvolvableANN
+    parent_class = axelrod.ANN
+    parent_kwargs = ["num_features", "num_hidden", "weights"]
     init_parameters = {"num_features": 17, "num_hidden": 8}
 
 
 class TestEvolvableANN3(TestEvolvablePlayer):
     name = "EvolvableANN"
     player_class = axelrod.EvolvableANN
+    parent_class = axelrod.ANN
+    parent_kwargs = ["num_features", "num_hidden", "weights"]
     init_parameters = {
         "num_features": nn_weights["Evolved ANN 5"][0],
         "num_hidden": nn_weights["Evolved ANN 5"][1],

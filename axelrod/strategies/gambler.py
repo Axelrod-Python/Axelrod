@@ -5,9 +5,7 @@ For the original see:
  https://gist.github.com/GDKO/60c3d0fd423598f3c4e4
 """
 import random
-from random import choice
 from typing import Any
-import numpy as np
 
 from axelrod.action import Action, str_to_actions, actions_to_str
 from axelrod.load_data_ import load_pso_tables

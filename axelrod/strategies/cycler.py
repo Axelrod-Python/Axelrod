@@ -102,6 +102,8 @@ class Cycler(Player):
 class EvolvableCycler(Cycler, EvolvablePlayer):
     """Evolvable version of Cycler."""
 
+    name = "EvolvableCycler"
+
     def __init__(
         self,
         cycle: str = None,

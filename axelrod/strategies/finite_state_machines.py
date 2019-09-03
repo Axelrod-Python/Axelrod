@@ -1,13 +1,10 @@
 import itertools
-import random
-from random import randrange, choice
-
-import numpy as np
-
+from random import randrange
+import numpy.random as random
+from numpy.random import choice
 from axelrod.action import Action, UnknownActionError
 from axelrod.evolvable_player import EvolvablePlayer, InsufficientParametersError, copy_lists
 from axelrod.player import Player
-
 
 C, D = Action.C, Action.D
 actions = (C, D)
@@ -203,7 +200,7 @@ class EvolvableFSMPlayer(FSMPlayer, EvolvablePlayer):
     @staticmethod
     def mutate_rows(rows, mutation_probability):
         rows = list(rows)
-        randoms = np.random.random(len(rows))
+        randoms = random.random(len(rows))
         # Flip each value with a probability proportional to the mutation rate
         for i, row in enumerate(rows):
             if randoms[i] < mutation_probability:
@@ -298,7 +295,7 @@ class EvolvableFSMPlayer(FSMPlayer, EvolvablePlayer):
         ss = []
         for row in rows:
             ss.append("_".join(list(map(str, row))))
-        return ":".join(ss)
+        return "|".join(ss)
 
     def serialize_parameters(self):
         return "{}:{}:{}:{}".format(
@@ -316,7 +313,7 @@ class EvolvableFSMPlayer(FSMPlayer, EvolvablePlayer):
         initial_state = int(lines[1])
         initial_action = Action.from_char(lines[2])
 
-        for line in lines[3:]:
+        for line in lines[3].split('|'):
             row = []
             for element in line.split('_'):
                 try:

@@ -4,7 +4,7 @@ import unittest
 
 import axelrod
 from axelrod.evolvable_player import InsufficientParametersError
-from axelrod.strategies.hmm import EvolvableHMMPlayer, SimpleHMM, is_stochastic_matrix, random_vector
+from axelrod.strategies.hmm import EvolvableHMMPlayer, HMMPlayer, SimpleHMM, is_stochastic_matrix, random_vector
 from .test_player import TestMatch, TestPlayer
 from .test_evolvable_player import TestEvolvablePlayer
 
@@ -255,18 +255,27 @@ class TestEvolvableHMMPlayer(unittest.TestCase):
 class TestEvolvableHMMPlayer2(TestEvolvablePlayer):
     name = "EvolvableHMMPlayer"
     player_class = EvolvableHMMPlayer
+    parent_class = HMMPlayer
+    parent_kwargs = ["transitions_C", "transitions_D", "emission_probabilities",
+                     "initial_state", "initial_action"]
     init_parameters = {"num_states": 4}
 
 
 class TestEvolvableHMMPlayer3(TestEvolvablePlayer):
     name = "EvolvableHMMPlayer"
     player_class = EvolvableHMMPlayer
+    parent_class = HMMPlayer
+    parent_kwargs = ["transitions_C", "transitions_D", "emission_probabilities",
+                     "initial_state", "initial_action"]
     init_parameters = {"num_states": 8}
 
 
 class TestEvolvableHMMPlayer4(TestEvolvablePlayer):
     name = "EvolvableHMMPlayer"
     player_class = EvolvableHMMPlayer
+    parent_class = HMMPlayer
+    parent_kwargs = ["transitions_C", "transitions_D", "emission_probabilities",
+                     "initial_state", "initial_action"]
     init_parameters = {
         "transitions_C": [[1, 0], [1, 0]],
         "transitions_D": [[0, 1], [0, 1]],

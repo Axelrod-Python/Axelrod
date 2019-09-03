@@ -1,13 +1,11 @@
-import random
 from random import randrange
-import numpy as np
+import numpy.random as random
 from numpy.random import choice
 
 from axelrod.action import Action
-from axelrod.evolvable_player import EvolvablePlayer, InsufficientParametersError, crossover_lists, crossover_lists_of_lists
+from axelrod.evolvable_player import EvolvablePlayer, InsufficientParametersError, copy_lists, crossover_lists
 from axelrod.player import Player
-
-from axelrod.random_ import random_choice
+from axelrod.random_ import random_choice, random_vector
 
 C, D = Action.C, Action.D
 
@@ -24,23 +22,6 @@ def is_stochastic_matrix(m, ep=1e-8) -> bool:
     return True
 
 
-def copy_lists(rows):
-    new_rows = list(map(list, rows))
-    return new_rows
-
-
-def random_vector(size):
-    """Create a random vector of values in [0, 1] that sums to 1."""
-    vector = []
-    s = 1
-    for _ in range(size - 1):
-        r = s * random.random()
-        vector.append(r)
-        s -= r
-    vector.append(s)
-    return vector
-
-
 def normalize_vector(vec):
     s = sum(vec)
     if s == 0.0:
@@ -51,13 +32,13 @@ def normalize_vector(vec):
 
 
 def mutate_row(row, mutation_probability):
-    """
+    """, crossover_lists_of_lists
     Given a row of probabilities, randomly change each entry with probability
     `mutation_probability` (a value between 0 and 1).  If changing, then change
     by a value randomly (uniformly) chosen from [-0.25, 0.25] bounded by 0 and
     100%.
     """
-    randoms = np.random.random(len(row))
+    randoms = random.random(len(row))
     for i in range(len(row)):
         if randoms[i] < mutation_probability:
             ep = random.uniform(-1, 1) / 4
@@ -211,6 +192,8 @@ class HMMPlayer(Player):
 
 class EvolvableHMMPlayer(HMMPlayer, EvolvablePlayer):
     """Evolvable version of HMMPlayer."""
+    name = "EvolvableHMMPlayer"
+
     def __init__(
         self,
         transitions_C=None,
@@ -309,8 +292,8 @@ class EvolvableHMMPlayer(HMMPlayer, EvolvablePlayer):
     def crossover(self, other):
         if not isinstance(other, self.__class__):
             raise TypeError("Crossover must be between the same player classes.")
-        transitions_C = crossover_lists_of_lists(self.hmm.transitions_C, other.hmm.transitions_C)
-        transitions_D = crossover_lists_of_lists(self.hmm.transitions_D, other.hmm.transitions_D)
+        transitions_C = crossover_lists(self.hmm.transitions_C, other.hmm.transitions_C)
+        transitions_D = crossover_lists(self.hmm.transitions_D, other.hmm.transitions_D)
         emission_probabilities = crossover_lists(
             self.hmm.emission_probabilities, other.hmm.emission_probabilities)
         return self.create_new(

@@ -57,18 +57,24 @@ class TestEvolvableLookerUp(unittest.TestCase):
 class TestEvolvableLookerUp2(TestEvolvablePlayer):
     name = "EvolvableLookerUp"
     player_class = axelrod.EvolvableLookerUp
+    parent_class = axelrod.LookerUp
+    parent_kwargs = ["lookup_dict", "initial_actions"]
     init_parameters = {"parameters": (1, 1, 1)}
 
 
 class TestEvolvableLookerUp3(TestEvolvablePlayer):
     name = "EvolvableLookerUp"
     player_class = axelrod.EvolvableLookerUp
+    parent_class = axelrod.LookerUp
+    parent_kwargs = ["lookup_dict", "initial_actions"]
     init_parameters = {"parameters": (2, 1, 3)}
 
 
 class TestEvolvableLookerUp4(TestEvolvablePlayer):
     name = "EvolvableLookerUp"
     player_class = axelrod.EvolvableLookerUp
+    parent_class = axelrod.LookerUp
+    parent_kwargs = ["lookup_dict", "initial_actions"]
     init_parameters = {"parameters": (2, 2, 2),
                        "pattern": "".join([random.choice(('C', 'D')) for _ in range(64)]),
                        "initial_actions": (C, C,)}
@@ -77,6 +83,8 @@ class TestEvolvableLookerUp4(TestEvolvablePlayer):
 class TestEvolvableLookerUp5(TestEvolvablePlayer):
     name = "EvolvableLookerUp"
     player_class = axelrod.EvolvableLookerUp
+    parent_class = axelrod.LookerUp
+    parent_kwargs = ["lookup_dict", "initial_actions"]
     init_parameters = {
         "initial_actions": (C, C,),
         "lookup_dict":  {

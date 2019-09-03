@@ -202,12 +202,16 @@ class TestEvolvableCycler(unittest.TestCase):
 class TestEvolvableCycler2(TestEvolvablePlayer):
     name = "EvolvableCycler"
     player_class = EvolvableCycler
+    parent_class = Cycler
+    parent_kwargs = ["cycle"]
     init_parameters = {"cycle_length": 100}
 
 
 class TestEvolvableCycler3(TestEvolvablePlayer):
     name = "EvolvableCycler"
     player_class = EvolvableCycler
+    parent_class = Cycler
+    parent_kwargs = ["cycle"]
     init_parameters = {"cycle": "".join(random.choice(("C", "D")) for _ in range(50)),
                        "mutation_potency": 10}
 

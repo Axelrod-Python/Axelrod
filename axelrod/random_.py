@@ -1,9 +1,17 @@
 import random
 
-import numpy
+import numpy as np
+from numpy.random import choice
+
 from axelrod.action import Action
 
 C, D = Action.C, Action.D
+
+
+def seed(seed_):
+    """Sets a seed"""
+    random.seed(seed_)
+    np.random.seed(seed_)
 
 
 def random_choice(p: float = 0.5) -> Action:
@@ -55,18 +63,24 @@ def random_flip(action: Action, threshold: float) -> Action:
     return action
 
 
-def randrange(a: int, b: int) -> int:
-    """Python 2 / 3 compatible randrange. Returns a random integer uniformly
-    between a and b (inclusive)"""
-    c = b - a
-    r = c * random.random()
-    return a + int(r)
+# def randrange(a: int, b: int) -> int:
+#     """Python 2 / 3 compatible randrange. Returns a random integer uniformly
+#     between a and b (inclusive)"""
+#     c = b - a
+#     r = c * random.random()
+#     return a + int(r)
 
 
-def seed(seed_):
-    """Sets a seed"""
-    random.seed(seed_)
-    numpy.random.seed(seed_)
+def random_vector(size):
+    """Create a random vector of values in [0, 1] that sums to 1."""
+    vector = []
+    s = 1
+    for _ in range(size - 1):
+        r = s * random.random()
+        vector.append(r)
+        s -= r
+    vector.append(s)
+    return vector
 
 
 class Pdf(object):
@@ -81,7 +95,7 @@ class Pdf(object):
 
     def sample(self):
         """Sample from the pdf"""
-        index = numpy.random.choice(a=range(self.size), p=self.probability)
+        index = choice(a=range(self.size), p=self.probability)
         # Numpy cannot sample from a list of n dimensional objects for n > 1,
         # need to sample an index.
         return self.sample_space[index]
