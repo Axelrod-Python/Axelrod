@@ -182,8 +182,10 @@ class TestMoranProcess(unittest.TestCase):
         for seed in seeds:
             axelrod.seed(seed)
             mp = MoranProcess((p1, p2), mode="db")
-            next(mp)
-            self.assertIsNotNone(mp.winning_strategy_name)
+            mp.play()
+        self.assertIsNotNone(mp.winning_strategy_name)
+        # Number of populations is 2: the original and the one after the first round.
+        self.assertEqual(len(mp.populations), 2)
 
     def test_death_birth_outcomes(self):
         """Show that birth-death and death-birth can produce different
@@ -218,7 +220,7 @@ class TestMoranProcess(unittest.TestCase):
     def test_two_players_with_mutation(self):
         p1, p2 = axelrod.Cooperator(), axelrod.Defector()
         axelrod.seed(5)
-        mp = MoranProcess((p1, p2), mutation_rate=0.2)
+        mp = MoranProcess((p1, p2), mutation_rate=0.2, stop_on_fixation=False)
         self.assertDictEqual(mp.mutation_targets, {str(p1): [p2], str(p2): [p1]})
         # Test that mutation causes the population to alternate between
         # fixations
@@ -256,7 +258,7 @@ class TestMoranProcess(unittest.TestCase):
         p2 = axelrod.Random()
         p3 = axelrod.Defector()
         players = [p1, p2, p3]
-        mp = MoranProcess(players, mutation_rate=0.2)
+        mp = MoranProcess(players, mutation_rate=0.2, stop_on_fixation=False)
         self.assertDictEqual(
             mp.mutation_targets,
             {str(p1): [p3, p2], str(p2): [p1, p3], str(p3): [p1, p2]},
@@ -377,6 +379,28 @@ class TestMoranProcess(unittest.TestCase):
         populations = mp.play()
         self.assertEqual(mp.winning_strategy_name, "Cooperator")
 
+    def test_atomic_mutation_fsm(self):
+        axelrod.seed(12)
+        players = [axelrod.EvolvableFSMPlayer(num_states=2, initial_state=1, initial_action=C)
+                   for _ in range(5)]
+        mp = MoranProcess(players, turns=10, mutation_method="atomic")
+        population = mp.play()
+        self.assertEqual(
+            mp.winning_strategy_name,
+            'Evolvable FSM Player: ((0, C, 1, D), (0, D, 1, C), (1, C, 0, D), (1, D, 1, C)), 1, C, 2, 0.1')
+        self.assertEqual(len(mp.populations), 31)
+        self.assertTrue(mp.fixated)
+
+    def test_atomic_mutation_cycler(self):
+        axelrod.seed(10)
+        cycle_length = 5
+        players = [axelrod.EvolvableCycler(cycle_length=cycle_length)
+                   for _ in range(5)]
+        mp = MoranProcess(players, turns=10, mutation_method="atomic")
+        population = mp.play()
+        self.assertEqual(mp.winning_strategy_name, 'EvolvableCycler: CDCDD, 5, 0.2, 1')
+        self.assertEqual(len(mp.populations), 19)
+        self.assertTrue(mp.fixated)
 
 class GraphMoranProcess(unittest.TestCase):
     def test_complete(self):
@@ -496,13 +520,7 @@ class TestApproximateMoranProcess(unittest.TestCase):
         """Test the initialisation process"""
         self.assertEqual(
             set(self.amp.cached_outcomes.keys()),
-            set(
-                [
-                    ("Cooperator", "Defector"),
-                    ("Cooperator", "Cooperator"),
-                    ("Defector", "Defector"),
-                ]
-            ),
+            {("Cooperator", "Defector"), ("Cooperator", "Cooperator"), ("Defector", "Defector")},
         )
         self.assertEqual(self.amp.players, self.players)
         self.assertEqual(self.amp.turns, 0)
