@@ -25,7 +25,7 @@ class EvolvablePlayer(Player):
         for k, v in kwargs.items():
             self.init_kwargs[k] = v
 
-    def create_new(self, **kwargs) -> EvolvablePlayer:
+    def create_new(self, **kwargs):
         """Creates a new variant with parameters overwritten by kwargs."""
         init_kwargs = self.init_kwargs.copy()
         init_kwargs.update(kwargs)
@@ -39,18 +39,18 @@ class EvolvablePlayer(Player):
         return dumps(self.init_kwargs)
 
     @classmethod
-    def deserialize_parameters(cls, serialized) -> EvolvablePlayer:
+    def deserialize_parameters(cls, serialized):
         """Deserialize parameters to a Player instance."""
         init_kwargs = loads(serialized)
         return cls(**init_kwargs)
 
     # Optional methods for evolutionary algorithms and Moran processes.
 
-    def mutate(self) -> EvolvablePlayer:
+    def mutate(self):
         """Optional method to allow Player to produce a variant (not in place)."""
         pass
 
-    def crossover(self, other) -> EvolvablePlayer:
+    def crossover(self, other):
         """Optional method to allow Player to produce variants in combination with another player. Returns a new
         Player."""
         pass
