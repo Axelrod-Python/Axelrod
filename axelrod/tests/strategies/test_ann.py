@@ -146,3 +146,6 @@ class EvolvableANNAsANN(TestEvolvedANN5):
 
     def test_equality_of_pickle_clone(self):
         pass
+
+    def test_repr(self):
+        pass

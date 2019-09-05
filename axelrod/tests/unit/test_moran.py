@@ -402,6 +402,14 @@ class TestMoranProcess(unittest.TestCase):
         self.assertEqual(len(mp.populations), 19)
         self.assertTrue(mp.fixated)
 
+    def test_mutation_method_exception(self):
+        axelrod.seed(10)
+        cycle_length = 5
+        players = [axelrod.EvolvableCycler(cycle_length=cycle_length)
+                   for _ in range(5)]
+        self.assertRaises(ValueError, MoranProcess(players, turns=10, mutation_method="random"))
+
+
 class GraphMoranProcess(unittest.TestCase):
     def test_complete(self):
         """A complete graph should produce the same results as the default

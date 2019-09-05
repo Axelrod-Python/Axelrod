@@ -250,7 +250,7 @@ class EvolvableFSMPlayer(FSMPlayer, EvolvablePlayer):
         return new_rows
 
     def crossover(self, other):
-        if not isinstance(other, self.__class__):
+        if other.__class__ != self.__class__:
             raise TypeError("Crossover must be between the same player classes.")
         transitions = self.crossover_rows(self.fsm.transitions(), other.fsm.transitions())
         transitions = self.normalize_transitions(transitions)

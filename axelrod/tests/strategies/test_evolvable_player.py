@@ -54,9 +54,14 @@ class TestEvolvablePlayer(TestPlayer):
     def player(self):
         return self.player_class(**self.init_parameters)
 
+    def test_repr(self):
+        """Test that the representation is correct."""
+        if not self.__class__ != EvolvablePlayer:
+            self.assertEqual(str(self.player()), self.name)
+
     def test_initialisation(self):
         """Test that the player initiates correctly."""
-        if not issubclass(self.__class__, TestPlayer):
+        if self.__class__ != TestEvolvablePlayer:
             player = self.player()
             self.assertEqual(len(player.history), 0)
             self.assertEqual(player.cooperations, 0)
@@ -157,15 +162,6 @@ class TestEvolvablePlayer(TestPlayer):
         serialized = player.serialize_parameters()
         deserialized_player = player.__class__.deserialize_parameters(serialized)
         self.behavior_test(deserialized_player, parent_player)
-
-
-def compare_dicts(d1, d2):
-    """For investigating issues above."""
-    for k, v in d1.items():
-        if d2[k] != v:
-            print()
-            print(k, d1[k])
-            print(k, d2[k])
 
 
 class TestUtilityFunctions(unittest.TestCase):

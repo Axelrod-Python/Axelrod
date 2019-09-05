@@ -762,3 +762,6 @@ class EvolvableLookerUpAsLookerUp(TestLookerUp):
 
     def test_zero_tables(self):
         pass
+
+    def test_repr(self):
+        pass

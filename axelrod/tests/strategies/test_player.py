@@ -379,7 +379,7 @@ class TestPlayer(unittest.TestCase):
 
     def test_repr(self):
         """Test that the representation is correct."""
-        if not issubclass(self.__class__, TestPlayer):
+        if self.__class__ != TestPlayer:
             self.assertEqual(str(self.player()), self.name)
 
     def test_match_attributes(self):

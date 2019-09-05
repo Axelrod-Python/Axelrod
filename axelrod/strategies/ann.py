@@ -222,6 +222,7 @@ class ANN(Player):
 
 class EvolvableANN(ANN, EvolvablePlayer):
     """Evolvable version of ANN."""
+    name = "EvolvableANN"
 
     def __init__(
         self, num_features: int, num_hidden: int,
@@ -273,7 +274,7 @@ class EvolvableANN(ANN, EvolvablePlayer):
         return self.create_new(weights=weights)
 
     def crossover(self, other):
-        if not isinstance(other, self.__class__):
+        if other.__class__ != self.__class__:
             raise TypeError("Crossover must be between the same player classes.")
         weights = crossover_lists(self.weights, other.weights)
         return self.create_new(weights=weights)
