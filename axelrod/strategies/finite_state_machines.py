@@ -1,13 +1,15 @@
 import itertools
 from random import randrange
+from typing import Any, List, Sequence, Tuple, Union
 import numpy.random as random
 from numpy.random import choice
-from axelrod.action import Action, UnknownActionError
+from axelrod.action import Action
 from axelrod.evolvable_player import EvolvablePlayer, InsufficientParametersError, copy_lists
 from axelrod.player import Player
 
 C, D = Action.C, Action.D
 actions = (C, D)
+Transition = Tuple[int, Action, int, Action]
 
 
 class SimpleFSM(object):
@@ -107,7 +109,7 @@ class FSMPlayer(Player):
 
     def __init__(
         self,
-        transitions: tuple = ((1, C, 1, C), (1, D, 1, D)),
+        transitions: Tuple[Transition, ...] = ((1, C, 1, C), (1, D, 1, D)),
         initial_state: int = 1,
         initial_action: Action = C
     ) -> None:
@@ -164,38 +166,40 @@ class EvolvableFSMPlayer(FSMPlayer, EvolvablePlayer):
             num_states=self.num_states)
 
     @classmethod
-    def normalize_transitions(cls, transitions):
-        """Translate List[List] to Tuple[Tuple]"""
+    def normalize_transitions(cls, transitions: Sequence[Sequence]) -> Tuple[Tuple[Any, ...], ...]:
+        """Translate a list of lists to a tuple of tuples."""
         normalized = []
         for t in transitions:
             normalized.append(tuple(t))
         return tuple(normalized)
 
     @classmethod
-    def _normalize_parameters(cls, transitions=None, initial_state=None, initial_action=None, num_states=None):
+    def _normalize_parameters(cls, transitions: Tuple = None, initial_state: int = None, initial_action: Action = None,
+                              num_states: int = None) -> Tuple[Tuple, int, Action, int]:
         if not ((transitions is not None) and (initial_state is not None) and (initial_action is not None)):
             if not num_states:
                 raise InsufficientParametersError("Insufficient Parameters to instantiate EvolvableFSMPlayer")
             transitions, initial_state, initial_action = cls.random_params(num_states)
         transitions = cls.normalize_transitions(transitions)
+        num_states = len(transitions) // 2
         return transitions, initial_state, initial_action, num_states
 
     @property
-    def num_states(self):
+    def num_states(self) -> int:
         return self.fsm.num_states()
 
     @classmethod
-    def random_params(cls, num_states):
+    def random_params(cls, num_states: int) -> Tuple[Tuple[Transition, ...], int, Action]:
         rows = []
         for j in range(num_states):
             for action in actions:
                 next_state = randrange(num_states)
                 next_action = choice(actions)
-                row = [j, action, next_state, next_action]
-                rows.append(tuple(row))
+                row = (j, action, next_state, next_action)
+                rows.append(row)
         initial_state = randrange(num_states)
         initial_action = choice(actions)
-        return rows, initial_state, initial_action
+        return tuple(rows), initial_state, initial_action
 
     @staticmethod
     def mutate_rows(rows, mutation_probability):

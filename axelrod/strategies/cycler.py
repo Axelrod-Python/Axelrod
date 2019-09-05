@@ -1,6 +1,7 @@
 import copy
 import itertools
 import random
+from typing import List, Tuple
 
 from axelrod.action import Action, actions_to_str, str_to_actions
 from axelrod.evolvable_player import EvolvablePlayer, InsufficientParametersError, crossover_lists
@@ -38,7 +39,7 @@ class AntiCycler(Player):
         self.first_three = self._get_first_three()
 
     @staticmethod
-    def _get_first_three():
+    def _get_first_three() -> List[Action]:
         return [C, D, D]
 
     def strategy(self, opponent: Player) -> Action:
@@ -86,13 +87,12 @@ class Cycler(Player):
         """
         super().__init__()
         self.cycle = cycle
-        self.cycle_iter = None
         self.set_cycle(cycle=cycle)
 
     def strategy(self, opponent: Player) -> Action:
         return next(self.cycle_iter)
 
-    def set_cycle(self, cycle):
+    def set_cycle(self, cycle: str):
         """Set or change the cycle."""
         self.cycle = cycle
         self.cycle_iter = itertools.cycle(str_to_actions(self.cycle))
@@ -123,7 +123,7 @@ class EvolvableCycler(Cycler, EvolvablePlayer):
         self.mutation_potency = mutation_potency
 
     @classmethod
-    def _normalize_parameters(cls, cycle=None, cycle_length=None):
+    def _normalize_parameters(cls, cycle=None, cycle_length=None) -> Tuple[str, int]:
         """Compute other parameters from those that may be missing, to ensure proper cloning."""
         if not cycle:
             if not cycle_length:
@@ -133,13 +133,13 @@ class EvolvableCycler(Cycler, EvolvablePlayer):
         return cycle, cycle_length
 
     @classmethod
-    def _generate_random_cycle(cls, cycle_length):
+    def _generate_random_cycle(cls, cycle_length: int) -> str:
         """
         Generate a sequence of random moves
         """
         return actions_to_str(random.choice(actions) for _ in range(cycle_length))
 
-    def mutate(self):
+    def mutate(self) -> EvolvablePlayer:
         """
         Basic mutation which may change any random actions in the sequence.
         """
@@ -154,7 +154,7 @@ class EvolvableCycler(Cycler, EvolvablePlayer):
         cycle, _ = self._normalize_parameters(cycle)
         return self.create_new(cycle=cycle)
 
-    def crossover(self, other):
+    def crossover(self, other) -> EvolvablePlayer:
         """
         Creates and returns a new Player instance with a single crossover point.
         """
