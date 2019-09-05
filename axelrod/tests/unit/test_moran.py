@@ -407,7 +407,8 @@ class TestMoranProcess(unittest.TestCase):
         cycle_length = 5
         players = [axelrod.EvolvableCycler(cycle_length=cycle_length)
                    for _ in range(5)]
-        self.assertRaises(ValueError, MoranProcess(players, turns=10, mutation_method="random"))
+        with self.assertRaises(ValueError):
+            MoranProcess(players, turns=10, mutation_method="random")
 
 
 class GraphMoranProcess(unittest.TestCase):
