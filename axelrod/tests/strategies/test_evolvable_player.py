@@ -41,6 +41,8 @@ class EvolvableTestOpponent(EvolvablePlayer):
         return EvolvableTestOpponent(value)
 
     def crossover(self, other):
+        if other.__class__ != self.__class__:
+            raise TypeError("Crossover must be between the same player classes.")
         value = self.value + other.value
         return EvolvableTestOpponent(value)
 
@@ -56,8 +58,9 @@ class TestEvolvablePlayer(TestPlayer):
 
     def test_repr(self):
         """Test that the representation is correct."""
-        if not self.__class__ != EvolvablePlayer:
-            self.assertEqual(str(self.player()), self.name)
+        if self.__class__ != TestEvolvablePlayer:
+            self.assertIn(self.name, str(self.player()))
+        pass
 
     def test_initialisation(self):
         """Test that the player initiates correctly."""
@@ -123,7 +126,9 @@ class TestEvolvablePlayer(TestPlayer):
 
     def test_crossover_mismatch(self):
         other = axl.Cooperator()
-        self.assertRaises(TypeError, self.player_class.crossover, other=other)
+        player = self.player()
+        with self.assertRaises(TypeError):
+            player.crossover(other)
 
     def test_serialization(self):
         """Serializing and deserializing should return the original player."""

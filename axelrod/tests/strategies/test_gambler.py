@@ -529,6 +529,10 @@ class TestEvolvableGambler(unittest.TestCase):
         self.assertEqual(len(lb), 8)
         self.assertEqual(len(ub), 8)
 
+    def test_mutate_value_bounds(self):
+        self.assertEqual(axelrod.EvolvableGambler.mutate_value(2), 1)
+        self.assertEqual(axelrod.EvolvableGambler.mutate_value(-2), 0)
+
 
 class TestEvolvableGambler2(TestEvolvablePlayer):
     name = "EvolvableGambler"
@@ -563,7 +567,7 @@ EvolvableGamblerWithDefault = PartialClass(
     axelrod.EvolvableGambler,
     pattern=tables[("PSO Gambler 2_2_2", 2, 2, 2)],
     parameters=(2, 2, 2),
-    initial_actions=(C,C,)
+    initial_actions=(C, C,)
 )
 
 

@@ -402,13 +402,22 @@ class TestMoranProcess(unittest.TestCase):
         self.assertEqual(len(mp.populations), 19)
         self.assertTrue(mp.fixated)
 
-    def test_mutation_method_exception(self):
+    def test_mutation_method_exceptions(self):
         axelrod.seed(10)
         cycle_length = 5
         players = [axelrod.EvolvableCycler(cycle_length=cycle_length)
                    for _ in range(5)]
         with self.assertRaises(ValueError):
             MoranProcess(players, turns=10, mutation_method="random")
+
+        axelrod.seed(0)
+        players = [axelrod.Cycler(cycle="CD" * random.randint(2, 10))
+                   for _ in range(10)]
+
+        mp = MoranProcess(players, turns=10, mutation_method="atomic")
+        with self.assertRaises(TypeError):
+            for _ in range(10):
+                next(mp)
 
 
 class GraphMoranProcess(unittest.TestCase):
