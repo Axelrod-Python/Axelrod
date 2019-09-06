@@ -73,14 +73,8 @@ def randrange(a: int, b: int) -> int:
 
 def random_vector(size):
     """Create a random vector of values in [0, 1] that sums to 1."""
-    vector = []
-    s = 1
-    for _ in range(size - 1):
-        r = s * random.random()
-        vector.append(r)
-        s -= r
-    vector.append(s)
-    return vector
+    vector = np.random.random(size)
+    return vector / np.sum(vector)
 
 
 class Pdf(object):

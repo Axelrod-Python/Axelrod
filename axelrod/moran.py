@@ -110,8 +110,11 @@ class MoranProcess(object):
             given
         fitness_transformation:
             A function mapping a score to a (non-negative) float
+        mutation_method:
+            A string indicating if the mutation method should be between original types ("transition")
+            or based on the player's mutation method, if present ("atomic").
         stop_on_fixation:
-            A bool indicating if the process should stop on fixation.
+            A bool indicating if the process should stop on fixation
         """
         self.turns = turns
         self.prob_end = prob_end

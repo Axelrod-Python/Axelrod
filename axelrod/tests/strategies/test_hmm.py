@@ -232,7 +232,7 @@ class TestEvolvableHMMPlayer(unittest.TestCase):
         num_states = 4
         vector = []
         for _ in range(2 * num_states):
-            vector += random_vector(num_states)
+            vector.extend(list(random_vector(num_states)))
         for _ in range(num_states + 1):
             vector.append(random.random())
         player = self.player_class(num_states=num_states)
