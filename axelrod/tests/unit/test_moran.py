@@ -387,7 +387,7 @@ class TestMoranProcess(unittest.TestCase):
         population = mp.play()
         self.assertEqual(
             mp.winning_strategy_name,
-            'Evolvable FSM Player: ((0, C, 1, D), (0, D, 1, C), (1, C, 0, D), (1, D, 1, C)), 1, C, 2, 0.1')
+            'EvolvableFSMPlayer: ((0, C, 1, D), (0, D, 1, C), (1, C, 0, D), (1, D, 1, C)), 1, C, 2, 0.1')
         self.assertEqual(len(mp.populations), 31)
         self.assertTrue(mp.fixated)
 
