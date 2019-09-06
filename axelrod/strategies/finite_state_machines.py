@@ -128,7 +128,7 @@ class FSMPlayer(Player):
 class EvolvableFSMPlayer(FSMPlayer, EvolvablePlayer):
     """Abstract base class for evolvable finite state machine players."""
 
-    name = "Evolvable FSM Player"
+    name = "EvolvableFSMPlayer"
 
     classifier = {
         "memory_depth": 1,
