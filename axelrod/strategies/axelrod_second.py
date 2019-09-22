@@ -536,11 +536,11 @@ class Kluepfel(Player):
                     self.dd_counts += 1
             else:
                 if opponent.history[-1] == C:
-                    self.dc_counts += 1
-                else:
                     self.cc_counts += 1
+                else:
+                    self.dc_counts += 1
 
-        # Check for randomness
+        # Check for "randomness"
         if len(self.history) > 26:
             if self.cd_counts >= (self.cd_counts + self.dd_counts) / 2 - 0.75 * np.sqrt(
                 self.cd_counts + self.dd_counts
