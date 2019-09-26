@@ -540,11 +540,11 @@ class Kluepfel(Player):
                 else:
                     self.dc_counts += 1
 
-        # Check for "randomness"
+        # Check for randomness
         if len(self.history) > 26:
             if self.cd_counts >= (self.cd_counts + self.dd_counts) / 2 - 0.75 * np.sqrt(
                 self.cd_counts + self.dd_counts
-            ) and self.cc_counts >= (
+            ) and self.dc_counts >= (
                 self.dc_counts + self.cc_counts
             ) / 2 - 0.75 * np.sqrt(
                 self.dc_counts + self.cc_counts

@@ -546,12 +546,7 @@ class TestKluepfel(TestPlayer):
     }
 
     def test_strategy(self):
-        actions = [(C, C)] * 27  # Cooperate at first
-        # After this point, the strategy will always detect false, becasue the
-        # two checks become:
-        # 0 >= 0, and
-        # cc_counts >= (cc_counts)/2 - 0.75*sqrt(cc_counts)
-        actions += [(D, C)] * 100
+        actions = [(C, C)] * 100  # Cooperate forever
         self.versus_test(axelrod.Cooperator(), expected_actions=actions)
 
         # Since never two in a row, will respond in kind with 70% if
@@ -603,12 +598,16 @@ class TestKluepfel(TestPlayer):
             (D, C),
             (C, C),
             (C, D),
-            (C, D),
+            # Success detect random opponent for remaining turns.
+            (D, D),
+            (D, D),
+            (D, D),
             (D, C),
-            (C, C),
-            (C, C),
-            (D, D),  # At this point cc_counts=10, cd_counts=10, dc_counts=10,
-                     # and dd_counts=5.  Detect random and defect hereafter.
+            (D, D),
+            (D, C),
+            (D, D),
+            (D, C),
+            (D, D),
             (D, C),
             (D, C),
             (D, D),
@@ -618,7 +617,11 @@ class TestKluepfel(TestPlayer):
             (D, C),
             (D, C),
             (D, D),
-            (D, C)
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, D),
         ]
         self.versus_test(axelrod.Random(0.5), expected_actions=actions, seed=10)
 
