@@ -301,7 +301,7 @@ HARD_TFT
 ^^^^^^^^
 
 Hard TFT is not defined in [Stewart2012]_ but is
-[elsewhere](http://www.prisoners-dilemma.com/strategies.html)
+`[elsewhere] <http://www.prisoners-dilemma.com/strategies.html>`_
 defined as follows. The strategy cooperates on the
 first move, defects if the opponent has defected on any of the previous three
 rounds, and otherwise cooperates.
