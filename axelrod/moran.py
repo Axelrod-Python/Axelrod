@@ -45,7 +45,7 @@ def fitness_proportionate_selection(
 class MoranProcess(object):
     def __init__(
         self,
-        players: List[Player],
+        players: {Player: int},
         turns: int = DEFAULT_TURNS,
         prob_end: float = None,
         noise: float = 0,
@@ -115,7 +115,7 @@ class MoranProcess(object):
         self.noise = noise
         self.initial_players = players  # save initial population
         self.players = []  # type: List
-        self.populations = []  # type: List
+        self.populations = {}  # type: dict
         self.set_players()
         self.score_history = []  # type: List
         self.winning_strategy_name = None  # type: Optional[str]
@@ -157,8 +157,8 @@ class MoranProcess(object):
         self.reproduction_graph = reproduction_graph
         self.fitness_transformation = fitness_transformation
         # Map players to graph vertices
-        self.locations = sorted(interaction_graph.vertices)
-        self.index = dict(zip(sorted(interaction_graph.vertices), range(len(players))))
+        self.locations = interaction_graph.vertices
+        self.index = dict(zip(interaction_graph.vertices, range(len(players))))
 
     def set_players(self) -> None:
         """Copy the initial players into the first population."""
@@ -166,7 +166,7 @@ class MoranProcess(object):
         for player in self.initial_players:
             player.reset()
             self.players.append(player)
-        self.populations = [self.population_distribution()]
+            self.populations[player] = self.initial_players.get(player)
 
     def mutate(self, index: int) -> Player:
         """Mutate the player at index.
@@ -210,7 +210,7 @@ class MoranProcess(object):
             # Select locally
             # index is not None in this case
             vertex = random.choice(
-                sorted(self.reproduction_graph.out_vertices(self.locations[index]))
+                self.reproduction_graph.out_vertices(self.locations[index])
             )
             i = self.index[vertex]
         return i
@@ -292,8 +292,9 @@ class MoranProcess(object):
         else:
             new_player = self.players[j].clone()
         # Replace player i with clone of player j
+        temp = self.players[i]
         self.players[i] = new_player
-        self.populations.append(self.population_distribution())
+        self.populations[(self.population_distribution())] = self.populations.get(temp)
         # Check again for fixation
         self.fixation_check()
         return self
@@ -314,12 +315,12 @@ class MoranProcess(object):
         if self.mode == "db":
             source = self.index[self.dead]
             self.dead = None
-            sources = sorted(self.interaction_graph.out_vertices(source))
+            sources = self.interaction_graph.out_vertices(source)
         else:
             # birth-death is global
             sources = sorted(self.locations)
         for i, source in enumerate(sources):
-            for target in sorted(self.interaction_graph.out_vertices(source)):
+            for target in self.interaction_graph.out_vertices(source):
                 j = self.index[target]
                 if (self.players[i] is None) or (self.players[j] is None):
                     continue
@@ -385,7 +386,7 @@ class MoranProcess(object):
         # Reset all the players
         self.set_players()
 
-    def play(self) -> List[Counter]:
+    def play(self) -> dict:
         """
         Play the process out to completion. If played with mutation this will
         not terminate.
