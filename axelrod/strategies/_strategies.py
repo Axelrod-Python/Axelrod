@@ -20,6 +20,7 @@ from .axelrod_first import (
     UnnamedStrategy,
 )
 from .axelrod_second import (
+    Appold,
     Black,
     Borufsen,
     Cave,
@@ -248,6 +249,7 @@ all_strategies = [
     APavlov2006,
     APavlov2011,
     Appeaser,
+    Appold,
     ArrogantQLearner,
     AverageCopier,
     BackStabber,

@@ -1908,3 +1908,125 @@ class TestRowsam(TestPlayer):
         self.versus_test(custom_opponent, expected_actions=actions, attrs={
             "distrust_points": 2})  # But no more
 
+
+class TestAppold(TestPlayer):
+    name = "Appold"
+    player = axelrod.Appold
+    expected_classifier = {
+        "memory_depth": float("inf"),
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+    def test_strategy(self):
+        # Should cooperate 100% of the time with the cooperator
+        actions = [(C, C)] * 100
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+
+        opponent = axelrod.Defector()
+        # Cooperate always the first 4 turns
+        actions = [(C, D)] * 4
+        # Should cooperate because we forgive the first_opp_def after the fourth
+        # turn.
+        actions += [(C, D)]
+        # Own move two turns ago is C, so D.
+        actions += [(D, D)]
+        # Then defect most of the time, depending on the random number.  We
+        # don't defect 100% of the time, because of the way that initialize
+        # opp_c_after_x.
+        actions += [(D, D),
+                    (C, D),
+                    (D, D),
+                    (D, D),  # C can never be two moves after a C.
+                    (D, D),
+                    (D, D),
+                    (D, D),
+                    (D, D),
+                    (D, D),
+                    (D, D),
+                    (C, D),
+                    (C, D),
+                    (D, D),
+                    (D, D),
+                    (D, D),
+                    (D, D),
+                    (D, D),
+                    (C, D),
+                    (D, D),
+                    (D, D),
+                    (D, D),
+                    (D, D),
+                    (D, D),
+                    (D, D),
+                    (C, D),
+                    (C, D),
+                    (D, D),
+                    (D, D)]
+        self.versus_test(opponent, expected_actions=actions, seed=1,
+                         attrs={"first_opp_def": True})
+
+        # An opponent who defects for a long time, then tries cooperating
+        opponent_actions = [C] * 30 + [D] + [C] * 10
+        MostlyCooperates = axelrod.MockPlayer(actions=opponent_actions)
+        # Cooperate always at first
+        actions = [(C, C)] * 30
+        # The opponent defects once
+        actions += [(C, D)]
+        # But we forgive it.
+        actions += [(C, C)] * 10
+        self.versus_test(MostlyCooperates, expected_actions=actions)
+
+        opponent = axelrod.CyclerDC()
+        # First three opponent actions get counted as reactions to C.  Fourth
+        # action will get counted on next turn.
+        actions = [(C, D), (C, C), (C, D), (C, C)]
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={"opp_c_after_x": {C: 1, D: 1},
+                                "total_num_of_x": {C: 3, D: 1}})
+        # Will cooperate 50% of the time
+        actions += [(C, D)]
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={"opp_c_after_x": {C: 2, D: 1},
+                                "total_num_of_x": {C: 4, D: 1},
+                                "first_opp_def": False}, seed=100)
+        # Always cooperate, because we forgive the first defect
+        actions += [(C, C)]
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={"first_opp_def": True}, seed=100)
+
+        # Against a random opponent, will respond mostly randomly too.
+        actions = [(C, C),
+                   (C, C),
+                   (C, D),
+                   (C, C),
+                   (C, C),
+                   (C, D),
+                   (C, C),
+                   (C, C),
+                   (C, C),
+                   (D, C),
+                   (C, D),
+                   (D, D),
+                   (C, D),
+                   (C, D),
+                   (C, C),
+                   (C, C),
+                   (D, C),
+                   (C, D),
+                   (D, D),
+                   (C, C),
+                   (C, D),
+                   (C, C),
+                   (C, C),
+                   (C, D),
+                   (D, C),
+                   (C, D),
+                   (D, D),
+                   (C, D),
+                   (C, C),
+                   (D, C)]
+        self.versus_test(axelrod.Random(0.5), expected_actions=actions, seed=7)

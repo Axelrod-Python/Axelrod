@@ -115,7 +115,7 @@ repository.
    "K85R_", "Robert B Falk and James M Langsted", "Not Implemented"
    "K86R_", "Bernard Grofman", "Not Implemented"
    "K87R_", "E E H Schurmann",  "Not Implemented"
-   "K88R_", "Scott Appold", "Not Implemented"
+   "K88R_", "Scott Appold", ":class:`Appold <axelrod.strategies.axelrod_second.Appold>`"
    "K89R_", "Gene Snodgrass", "Not Implemented"
    "K90R_", "John Maynard Smith", "Not Implemented"
    "K91R_", "Jonathan Pinkley", "Not Implemented"
