@@ -24,9 +24,9 @@ def is_stochastic_matrix(m, ep=1e-8) -> bool:
 
 def normalize_vector(vec):
     s = sum(vec)
-    if s == 0.0:
-        n = len(vec)
-        return [1. / n for v in vec]
+    # if s == 0.0:
+    #     n = len(vec)
+    #     return [1. / n for v in vec]
     vec = [v / s for v in vec]
     return vec
 

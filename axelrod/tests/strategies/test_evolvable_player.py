@@ -88,13 +88,12 @@ class TestEvolvablePlayer(TestPlayer):
         self.assertFalse(True)  # pragma: no cover
 
     def test_mutate_variations(self):
-        """Test that mutate produces different strategies."""
+        """Generate many variations to test that mutate produces different strategies."""
         if self.init_parameters:
             return
-        seed(0)
+        seed(100)
         variants_produced = False
-        for seed_ in range(2, 200):
-            seed(seed_)
+        for _ in range(2, 2000):
             player = self.player()
             mutant = player.clone().mutate()
             if player != mutant:

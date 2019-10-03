@@ -1101,7 +1101,7 @@ class TestEvolvableFSMPlayer3(TestEvolvablePlayer):
     player_class = axelrod.EvolvableFSMPlayer
     parent_class = FSMPlayer
     parent_kwargs = ["transitions", "initial_action", "initial_state"]
-    init_parameters = {"num_states": 12}
+    init_parameters = {"num_states": 16}
 
 
 class TestEvolvableFSMPlayer4(TestEvolvablePlayer):
