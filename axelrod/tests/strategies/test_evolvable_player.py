@@ -84,7 +84,8 @@ class TestEvolvablePlayer(TestPlayer):
             player2 = self.player()
             if player1 != player2:
                 return
-        self.assertFalse(True)
+        # Should never get here unless a change breaks the test, so don't include in coverage.
+        self.assertFalse(True)  # pragma: no cover
 
     def test_mutate_variations(self):
         """Test that mutate produces different strategies."""
@@ -122,7 +123,8 @@ class TestEvolvablePlayer(TestPlayer):
             crossed = player1.crossover(player2)
             if player1 != crossed and player2 != crossed and crossed == crossed.clone():
                 return
-        self.assertFalse(True)
+        # Should never get here unless a change breaks the test, so don't include in coverage.
+        self.assertFalse(True)  # pragma: no cover
 
     def test_crossover_mismatch(self):
         other = axl.Cooperator()

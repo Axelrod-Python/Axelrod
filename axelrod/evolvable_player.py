@@ -48,22 +48,22 @@ class EvolvablePlayer(Player):
 
     def mutate(self):
         """Optional method to allow Player to produce a variant (not in place)."""
-        pass
+        pass  # pragma: no cover
 
     def crossover(self, other):
         """Optional method to allow Player to produce variants in combination with another player. Returns a new
         Player."""
-        pass
+        pass  # pragma: no cover
 
     # Optional methods for particle swarm algorithm.
 
     def receive_vector(self, vector):
         """Receive a vector of params and overwrite the Player."""
-        pass
+        pass  # pragma: no cover
 
     def create_vector_bounds(self):
         """Creates the bounds for the decision variables for Particle Swarm Algorithm."""
-        pass
+        pass  # pragma: no cover
 
 
 def copy_lists(lists: List[List]) -> List[List]:
