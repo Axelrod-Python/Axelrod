@@ -94,7 +94,11 @@ class TestEvolvablePlayer(TestPlayer):
         seed(100)
         variants_produced = False
         for _ in range(2, 400):
-            player = self.player(mutation_probability=1)
+            try:
+                player = self.player(mutation_probability=1)
+            except TypeError:
+                # Not every subclass accepts a mutation_probability.
+                player = self.player()
             mutant = player.clone().mutate()
             if player != mutant:
                 variants_produced = True
