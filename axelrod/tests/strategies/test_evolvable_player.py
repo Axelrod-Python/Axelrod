@@ -93,9 +93,10 @@ class TestEvolvablePlayer(TestPlayer):
             return
         seed(100)
         variants_produced = False
-        for _ in range(2, 400):
+        for _ in range(2, 200):
             try:
-                player = self.player(mutation_probability=1)
+                # Note we've set the mutation_probability artificially high to trigger low probability lines quicker.
+                player = self.player(mutation_probability=100)
             except TypeError:
                 # Not every subclass accepts a mutation_probability.
                 player = self.player()
