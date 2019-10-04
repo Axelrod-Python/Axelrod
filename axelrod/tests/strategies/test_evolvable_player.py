@@ -89,18 +89,13 @@ class TestEvolvablePlayer(TestPlayer):
 
     def test_mutate_variations(self):
         """Generate many variations to test that mutate produces different strategies."""
-        if self.init_parameters:
+        if not self.init_parameters:
             return
         seed(100)
         variants_produced = False
-        for _ in range(2, 200):
-            try:
-                # Note we've set the mutation_probability artificially high to trigger low probability lines quicker.
-                player = self.player(mutation_probability=100)
-            except TypeError:
-                # Not every subclass accepts a mutation_probability.
-                player = self.player()
-            mutant = player.clone().mutate()
+        for _ in range(2, 400):
+            player = self.player()
+            mutant = player.mutate()
             if player != mutant:
                 variants_produced = True
         self.assertTrue(variants_produced)
