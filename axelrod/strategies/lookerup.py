@@ -492,7 +492,7 @@ class EvolvableLookerUp(LookerUp, EvolvablePlayer):
         initial_actions = list(self.initial_actions)
         for i in range(len(initial_actions)):
             r = random.random()
-            if r < 0.05:
+            if r < self.mutation_probability:
                 initial_actions[i] = initial_actions[i].flip()
         return self.create_new(
             lookup_dict=lookup_dict,

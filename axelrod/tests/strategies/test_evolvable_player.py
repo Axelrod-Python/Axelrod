@@ -93,8 +93,8 @@ class TestEvolvablePlayer(TestPlayer):
             return
         seed(100)
         variants_produced = False
-        for _ in range(2, 2000):
-            player = self.player()
+        for _ in range(2, 400):
+            player = self.player(mutation_probability=1)
             mutant = player.clone().mutate()
             if player != mutant:
                 variants_produced = True
