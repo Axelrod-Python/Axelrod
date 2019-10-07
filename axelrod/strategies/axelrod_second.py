@@ -2059,3 +2059,72 @@ class Rowsam(Player):
             self.mode = "Coop Def Cycle 1"
         return D
 
+
+class Appold(Player):
+    """
+    Strategy submitted to Axelrod's second tournament by Scott Appold (K88R) and
+    came in 22nd in that tournament.
+
+    Cooperates for first four turns.
+
+    After four turns, will cooperate immediately following the first time the
+    opponent cooperates (starting with the opponent's fourth move).  Otherwise
+    will cooperate with probability equal to:
+
+    - If this strategy defected two turns ago, the portion of the time
+      (historically) that the opponent followed a defection with a cooperation.
+    - If this strategy cooperated two turns ago, the portion of the time
+      (historically) that the opponent followed a cooperation with a cooperation.
+      The opponent's first move is counted as a response to a cooperation.
+
+
+    Names:
+
+    - Appold: [Axelrod1980b]_
+    """
+
+    name = "Appold"
+    classifier = {
+        "memory_depth": float("inf"),
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+    def __init__(self) -> None:
+        super().__init__()
+
+        # Probability of a cooperation after an x is:
+        # opp_c_after_x / total_num_of_x.
+        self.opp_c_after_x = {C: 0, D: 1}
+        # This is the total counted, so it doesn't include the most recent.
+        self.total_num_of_x = {C: 0, D: 1}
+
+        self.first_opp_def = False
+
+    def strategy(self, opponent: Player) -> Action:
+        turn = len(self.history) + 1
+
+        us_two_turns_ago = C if turn <= 2 else self.history[-2]
+
+        # Update trackers
+        if turn > 1:
+            self.total_num_of_x[us_two_turns_ago] += 1
+        if turn > 1 and opponent.history[-1] == C:
+            self.opp_c_after_x[us_two_turns_ago] += 1
+
+        if turn <= 4:
+            return C
+
+        if opponent.history[-1] == D and not self.first_opp_def:
+            self.first_opp_def = True
+            return C
+
+        # Calculate the probability that the opponent cooperated last turn given
+        # what we know two turns ago.
+        prob_coop = self.opp_c_after_x[us_two_turns_ago] / self.total_num_of_x[
+            us_two_turns_ago]
+        return random_choice(prob_coop)
