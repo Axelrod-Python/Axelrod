@@ -99,6 +99,9 @@ use a larger population to get a bit more data::
    :width: 50%
    :align: center
 
+Moran Process with Mutation
+---------------------------
+
 The :code:`MoranProcess` class also accepts an argument for a mutation rate.
 Nonzero mutation changes the Markov process so that it no longer has absorbing
 states, and will iterate forever. To prevent this, iterate with a loop (or
@@ -132,18 +135,3 @@ Other types of implemented Moran processes:
 
 - :ref:`moran-process-on-graphs`
 - :ref:`approximate-moran-process`
-
-Atomic Mutation for Evolvable Players
--------------------------------------
-
-Additionally, the Moran process implementation supports a second style of mutation suitable for
-evolving new strategies. The :code:`EvolvablePlayer` class supplies a method that typically produces
-a similar but mutated strategy. This is in contrast to the above method of mutation that selects
-one of the other player types rather than generating a new player type. To use this mutation style
-set `mutation_method=atomic`
-
-    >>> C = axl.Action.C
-    >>> players = [axl.EvolvableFSMPlayer(num_states=2, initial_state=1, initial_action=C) for _ in range(5)]
-    >>> mp = axl.MoranProcess(players, turns=10, mutation_method="atomic")
-    >>> population = mp.play()  # doctest: +SKIP
-
