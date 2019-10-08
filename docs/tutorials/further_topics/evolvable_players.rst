@@ -23,6 +23,7 @@ This is in contrast to the transitional mutation that selects one of the other p
 generating a new player variant. To use this mutation style set `mutation_method=atomic` in the initialisation
 of the Moran process:
 
+    >>> import axelrod as axl
     >>> C = axl.Action.C
     >>> players = [axl.EvolvableFSMPlayer(num_states=2, initial_state=1, initial_action=C) for _ in range(5)]
     >>> mp = axl.MoranProcess(players, turns=10, mutation_method="atomic")
