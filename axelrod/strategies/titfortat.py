@@ -51,10 +51,14 @@ class TitFor2Tats(Player):
     """A player starts by cooperating and then defects only after two defects by
     opponent.
 
+    Submitted to Axelrod's second tournament by John Maynard Smith; it came in
+    24th in that tournament.
+
     Names:
 
     - Tit for two Tats: [Axelrod1984]_
     - Slow tit for two tats: Original name by Ranjini Das
+    - JMaynardSmith: [Axelrod1980b]_
     """
 
     name = "Tit For 2 Tats"

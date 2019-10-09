@@ -117,7 +117,7 @@ repository.
    "K87R_", "E E H Schurmann",  "Not Implemented"
    "K88R_", "Scott Appold", ":class:`Appold <axelrod.strategies.axelrod_second.Appold>`"
    "K89R_", "Gene Snodgrass", "Not Implemented"
-   "K90R_", "John Maynard Smith", "Not Implemented"
+   "K90R_", "John Maynard Smith", ":class:`Appold <axelrod.strategies.titfortat.TitFor2Tats>`"
    "K91R_", "Jonathan Pinkley", "Not Implemented"
    "K92R_", "Anatol Rapoport", ":class:`TitForTat <axelrod.strategies.titfortat.TitForTat>`"
    "K93R_", "Unknown", "Not Implemented"
