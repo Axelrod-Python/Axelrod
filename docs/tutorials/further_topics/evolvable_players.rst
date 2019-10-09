@@ -30,4 +30,4 @@ of the Moran process:
     >>> population = mp.play()  # doctest: +SKIP
 
 Note that this may cause the Moran process to fail to converge, if the mutation rates are very high or the
-population size very large.  See :ref:`moran` for more information.
+population size very large.  See :ref:`moran-process` for more information.
