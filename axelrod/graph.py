@@ -148,6 +148,8 @@ def complete_graph(size, loops=True, directed=False):
 
 
 def attached_complete_graphs(length, loops=True, directed=False):
+    """Creates two complete undirected graphs of size `length`
+    attached by a single edge."""
     edges = []
     # Two complete graphs
     for cluster in range(2):
