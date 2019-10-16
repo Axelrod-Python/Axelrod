@@ -253,14 +253,8 @@ class Tournament(object):
                     ) = results
                 for index, player_index in enumerate(index_pair):
                     opponent_index = index_pair[index - 1]
-                    row = [
-                        self.num_interactions,
-                        player_index,
-                        opponent_index,
-                        repetition,
-                    ]
-                    row.append(str(self.players[player_index]))
-                    row.append(str(self.players[opponent_index]))
+                    row = [self.num_interactions, player_index, opponent_index, repetition,
+                           str(self.players[player_index]), str(self.players[opponent_index])]
                     history = actions_to_str([i[index] for i in interaction])
                     row.append(history)
 

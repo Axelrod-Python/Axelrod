@@ -1,13 +1,16 @@
 """Tests for the Cycler strategies."""
-
 import itertools
+import random
+import unittest
 
 import axelrod
-from axelrod import AntiCycler, Cycler
+from axelrod import AntiCycler, Cycler, EvolvableCycler
 from axelrod._strategy_utils import detect_cycle
 from axelrod.action import Action, str_to_actions
+from axelrod.evolvable_player import InsufficientParametersError
 
 from .test_player import TestPlayer
+from .test_evolvable_player import PartialClass, TestEvolvablePlayer
 
 C, D = Action.C, Action.D
 
@@ -142,3 +145,89 @@ TestCyclerDDC = test_cycler_factory("DDC")
 TestCyclerCCCD = test_cycler_factory("CCCD")
 TestCyclerCCCCCD = test_cycler_factory("CCCCCD")
 TestCyclerCCCDCD = test_cycler_factory("CCCDCD")
+
+
+class TestEvolvableCycler(unittest.TestCase):
+
+    player_class = EvolvableCycler
+
+    def test_normalized_parameters(self):
+        # Must specify at least one of cycle or cycle_length
+        self.assertRaises(
+            InsufficientParametersError,
+            self.player_class._normalize_parameters
+        )
+        self.assertRaises(
+            InsufficientParametersError,
+            self.player_class._normalize_parameters,
+            cycle=""
+        )
+        self.assertRaises(
+            InsufficientParametersError,
+            self.player_class._normalize_parameters,
+            cycle_length=0
+        )
+
+        cycle = "C" * random.randint(0, 20) + "D" * random.randint(0, 20)
+        self.assertEqual(self.player_class._normalize_parameters(cycle=cycle), (cycle, len(cycle)))
+
+        cycle_length = random.randint(1, 20)
+        random_cycle, cycle_length2 = self.player_class._normalize_parameters(cycle_length=cycle_length)
+        self.assertEqual(len(random_cycle), cycle_length)
+        self.assertEqual(cycle_length, cycle_length2)
+
+    def test_crossover_even_length(self):
+        cycle1 = "C" * 6
+        cycle2 = "D" * 6
+        cross_cycle = "CDDDDD"
+
+        player1 = self.player_class(cycle=cycle1)
+        player2 = self.player_class(cycle=cycle2)
+        axelrod.seed(3)
+        crossed = player1.crossover(player2)
+        self.assertEqual(cross_cycle, crossed.cycle)
+
+    def test_crossover_odd_length(self):
+        cycle1 = "C" * 7
+        cycle2 = "D" * 7
+        cross_cycle = "CDDDDDD"
+
+        player1 = self.player_class(cycle=cycle1)
+        player2 = self.player_class(cycle=cycle2)
+        axelrod.seed(3)
+        crossed = player1.crossover(player2)
+        self.assertEqual(cross_cycle, crossed.cycle)
+
+
+class TestEvolvableCycler2(TestEvolvablePlayer):
+    name = "EvolvableCycler"
+    player_class = EvolvableCycler
+    parent_class = Cycler
+    parent_kwargs = ["cycle"]
+    init_parameters = {"cycle_length": 100}
+
+
+class TestEvolvableCycler3(TestEvolvablePlayer):
+    name = "EvolvableCycler"
+    player_class = EvolvableCycler
+    parent_class = Cycler
+    parent_kwargs = ["cycle"]
+    init_parameters = {"cycle": "".join(random.choice(("C", "D")) for _ in range(50)),
+                       "mutation_potency": 10}
+
+
+# Substitute EvolvedCycler as a regular Cycler.
+EvolvableCyclerWithDefault = PartialClass(EvolvableCycler, cycle="CCD")
+
+
+class EvolvableCyclerAsCycler(TestBasicCycler):
+    player = EvolvableCyclerWithDefault
+
+    def test_equality_of_clone(self):
+        pass
+
+    def test_equality_of_pickle_clone(self):
+        pass
+
+    def test_repr(self):
+        pass

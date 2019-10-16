@@ -18,3 +18,4 @@ Contents:
    ecological_variant.rst
    fingerprinting.rst
    meta_strategies.rst
+   evolvable_players.rst

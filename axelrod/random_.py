@@ -1,9 +1,17 @@
 import random
 
-import numpy
+import numpy as np
+from numpy.random import choice
+
 from axelrod.action import Action
 
 C, D = Action.C, Action.D
+
+
+def seed(seed_):
+    """Sets a seed"""
+    random.seed(seed_)
+    np.random.seed(seed_)
 
 
 def random_choice(p: float = 0.5) -> Action:
@@ -63,10 +71,10 @@ def randrange(a: int, b: int) -> int:
     return a + int(r)
 
 
-def seed(seed_):
-    """Sets a seed"""
-    random.seed(seed_)
-    numpy.random.seed(seed_)
+def random_vector(size):
+    """Create a random vector of values in [0, 1] that sums to 1."""
+    vector = np.random.random(size)
+    return vector / np.sum(vector)
 
 
 class Pdf(object):
@@ -81,7 +89,7 @@ class Pdf(object):
 
     def sample(self):
         """Sample from the pdf"""
-        index = numpy.random.choice(a=range(self.size), p=self.probability)
+        index = choice(a=range(self.size), p=self.probability)
         # Numpy cannot sample from a list of n dimensional objects for n > 1,
         # need to sample an index.
         return self.sample_space[index]

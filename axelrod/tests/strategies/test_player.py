@@ -592,7 +592,7 @@ class TestPlayer(unittest.TestCase):
         dictionary."""
         player = self.player()
 
-        # Test that player has same classifier as it's class unless otherwise
+        # Test that player has same classifier as its class unless otherwise
         # specified
         if expected_class_classifier is None:
             expected_class_classifier = player.classifier

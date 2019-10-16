@@ -6,6 +6,7 @@ modules = [
     "axelrod/action.py",
     "axelrod/deterministic_cache.py",
     "axelrod/ecosystem.py",
+    "axelrod/evolvable_player.py",
     "axelrod/fingerprint.py",
     "axelrod/game.py",
     "axelrod/load_data_.py",

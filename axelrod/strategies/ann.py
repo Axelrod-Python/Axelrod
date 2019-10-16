@@ -1,16 +1,22 @@
 from typing import List, Tuple
-
 import numpy as np
+import numpy.random as random
 from axelrod.action import Action
 from axelrod.load_data_ import load_weights
+from axelrod.evolvable_player import EvolvablePlayer, InsufficientParametersError, crossover_lists
 from axelrod.player import Player
+
 
 C, D = Action.C, Action.D
 nn_weights = load_weights()
 
-
 # Neural Network and Activation functions
 relu = np.vectorize(lambda x: max(x, 0))
+
+
+def num_weights(num_features, num_hidden):
+    size = num_features * num_hidden + 2 * num_hidden
+    return size
 
 
 def compute_features(player: Player, opponent: Player) -> List[int]:
@@ -139,7 +145,7 @@ def split_weights(
 
     hidden2output = weights[start:end]
     bias = weights[end:]
-    return (input2hidden, hidden2output, bias)
+    return input2hidden, hidden2output, bias
 
 
 class ANN(Player):
@@ -185,9 +191,16 @@ class ANN(Player):
     }
 
     def __init__(
-        self, weights: List[float], num_features: int, num_hidden: int
+        self, num_features: int, num_hidden: int,
+        weights: List[float] = None
     ) -> None:
         super().__init__()
+        self.num_features = num_features
+        self.num_hidden = num_hidden
+        self._process_weights(weights, num_features, num_hidden)
+
+    def _process_weights(self, weights, num_features, num_hidden):
+        self.weights = list(weights)
         (i2h, h2o, bias) = split_weights(weights, num_features, num_hidden)
         self.input_to_hidden_layer_weights = np.array(i2h)
         self.hidden_to_output_layer_weights = np.array(h2o)
@@ -207,6 +220,66 @@ class ANN(Player):
             return D
 
 
+class EvolvableANN(ANN, EvolvablePlayer):
+    """Evolvable version of ANN."""
+    name = "EvolvableANN"
+
+    def __init__(
+        self, num_features: int, num_hidden: int,
+        weights: List[float] = None,
+        mutation_probability: float = None,
+        mutation_distance: int = 5,
+    ) -> None:
+        num_features, num_hidden, weights, mutation_probability = self._normalize_parameters(
+            num_features, num_hidden, weights, mutation_probability)
+        ANN.__init__(self,
+                     num_features=num_features,
+                     num_hidden=num_hidden,
+                     weights=weights)
+        EvolvablePlayer.__init__(self)
+        self.mutation_probability = mutation_probability
+        self.mutation_distance = mutation_distance
+        self.overwrite_init_kwargs(
+            num_features=num_features,
+            num_hidden=num_hidden,
+            weights=weights,
+            mutation_probability=mutation_probability)
+
+    @classmethod
+    def _normalize_parameters(cls, num_features=None, num_hidden=None, weights=None, mutation_probability=None):
+        if not (num_features and num_hidden):
+            raise InsufficientParametersError("Insufficient Parameters to instantiate EvolvableANN")
+        size = num_weights(num_features, num_hidden)
+        if not weights:
+            weights = [random.uniform(-1, 1) for _ in range(size)]
+        if mutation_probability is None:
+            mutation_probability = 10. / size
+        return num_features, num_hidden, weights, mutation_probability
+
+    @staticmethod
+    def mutate_weights(weights, num_features, num_hidden, mutation_probability,
+                       mutation_distance):
+        size = num_weights(num_features, num_hidden)
+        randoms = random.random(size)
+        for i, r in enumerate(randoms):
+            if r < mutation_probability:
+                p = 1 + random.uniform(-1, 1) * mutation_distance
+                weights[i] *= p
+        return weights
+
+    def mutate(self):
+        weights = self.mutate_weights(
+            self.weights, self.num_features, self.num_hidden,
+            self.mutation_probability, self.mutation_distance)
+        return self.create_new(weights=weights)
+
+    def crossover(self, other):
+        if other.__class__ != self.__class__:
+            raise TypeError("Crossover must be between the same player classes.")
+        weights = crossover_lists(self.weights, other.weights)
+        return self.create_new(weights=weights)
+
+
 class EvolvedANN(ANN):
     """
     A strategy based on a pre-trained neural network with 17 features and a
@@ -224,7 +297,10 @@ class EvolvedANN(ANN):
 
     def __init__(self) -> None:
         num_features, num_hidden, weights = nn_weights["Evolved ANN"]
-        super().__init__(weights, num_features, num_hidden)
+        super().__init__(
+            num_features=num_features,
+            num_hidden=num_hidden,
+            weights=weights)
 
 
 class EvolvedANN5(ANN):
@@ -244,7 +320,10 @@ class EvolvedANN5(ANN):
 
     def __init__(self) -> None:
         num_features, num_hidden, weights = nn_weights["Evolved ANN 5"]
-        super().__init__(weights, num_features, num_hidden)
+        super().__init__(
+            num_features=num_features,
+            num_hidden=num_hidden,
+            weights=weights)
 
 
 class EvolvedANNNoise05(ANN):
@@ -264,4 +343,8 @@ class EvolvedANNNoise05(ANN):
 
     def __init__(self) -> None:
         num_features, num_hidden, weights = nn_weights["Evolved ANN 5 Noise 05"]
-        super().__init__(weights, num_features, num_hidden)
+        super().__init__(
+            num_features=num_features,
+            num_hidden=num_hidden,
+            weights=weights)
+
