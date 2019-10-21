@@ -1,3 +1,4 @@
+import base64
 from pickle import dumps, loads
 from random import randrange
 from typing import Dict, List
@@ -36,12 +37,14 @@ class EvolvablePlayer(Player):
 
     def serialize_parameters(self):
         """Serialize parameters."""
-        return dumps(self.init_kwargs)
+        pickled = dumps(self.init_kwargs)  # bytes
+        s = base64.b64encode(pickled).decode('utf8')  # string
+        return s
 
     @classmethod
     def deserialize_parameters(cls, serialized):
         """Deserialize parameters to a Player instance."""
-        init_kwargs = loads(serialized)
+        init_kwargs = loads(base64.b64decode(serialized))
         return cls(**init_kwargs)
 
     # Optional methods for evolutionary algorithms and Moran processes.

@@ -140,6 +140,17 @@ class TestEvolvablePlayer(TestPlayer):
         self.assertEqual(player, deserialized_player)
         self.assertEqual(deserialized_player, deserialized_player.clone())
 
+    def test_serialization_csv(self):
+        """Serializing and deserializing should return the original player."""
+        seed(0)
+        player = self.player()
+        serialized = player.serialize_parameters()
+        s = "0, 1, {}, 3".format(serialized)
+        s2 = s.split(',')[2]
+        deserialized_player = player.__class__.deserialize_parameters(s2)
+        self.assertEqual(player, deserialized_player)
+        self.assertEqual(deserialized_player, deserialized_player.clone())
+
     def behavior_test(self, player1, player2):
         """Test that the evolvable player plays the same as its (nonevolvable) parent class."""
         for opponent_class in [axl.Random, axl.TitForTat, axl.Alternator]:
