@@ -1,3 +1,25 @@
+# v4.7.0, 2019-10-23
+
+New Moran process mechanics, new strategy implementations, drop support for
+python 3.5 and various minor fixes.
+
+- Drop support for python 3.5:
+  https://github.com/Axelrod-Python/Axelrod/pull/1255
+  https://github.com/Axelrod-Python/Axelrod/pull/1254
+- New strategies:
+  https://github.com/Axelrod-Python/Axelrod/pull/1263
+- Bug fix:
+  https://github.com/Axelrod-Python/Axelrod/pull/1260
+- Documentation fixes:
+  https://github.com/Axelrod-Python/Axelrod/pull/1266
+  https://github.com/Axelrod-Python/Axelrod/pull/1262
+- Implement Evolvable Player for Moran processes:
+  https://github.com/Axelrod-Python/Axelrod/pull/1267
+  https://github.com/Axelrod-Python/Axelrod/pull/1256
+- Update citations: https://github.com/Axelrod-Python/Axelrod/pull/1249
+
+https://github.com/Axelrod-Python/Axelrod/compare/v4.7.0...v4.6.0
+
 # v4.6.0, 2019-05-20
 
 New history class, new strategy from Axelrod's first tournament and a number of
