@@ -21,7 +21,7 @@ Additionally, the Moran process implementation supports a second style of mutati
 evolving new strategies utilizing the :code:`EvolvablePlayer` class via its :code:`mutate` method.
 This is in contrast to the transitional mutation that selects one of the other player types rather than (possibly)
 generating a new player variant. To use this mutation style set `mutation_method=atomic` in the initialisation
-of the Moran process:
+of the Moran process::
 
     >>> import axelrod as axl
     >>> C = axl.Action.C
