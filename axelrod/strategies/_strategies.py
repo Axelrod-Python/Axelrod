@@ -163,6 +163,7 @@ from .negation import Negation
 from .oncebitten import FoolMeForever, FoolMeOnce, ForgetfulFoolMeOnce, OnceBitten
 from .prober import (
     CollectiveStrategy,
+    Detective,
     HardProber,
     NaiveProber,
     Prober,
@@ -285,6 +286,7 @@ all_strategies = [
     DefectorHunter,
     Desperate,
     DelayedAON1,
+    Detective,
     DoubleCrosser,
     Doubler,
     DoubleResurrection,
