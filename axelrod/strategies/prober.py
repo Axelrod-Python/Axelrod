@@ -48,6 +48,45 @@ class CollectiveStrategy(Player):
         return D
 
 
+class Detective(Player):
+    """
+    Starts with C, D, C, C, or with the given sequence of actions.
+    If the opponent defects at least once in the first fixed rounds,
+    play as TFT forever, else defect forever.
+
+    Names:
+
+    - Detective: [NC2019]_
+    """
+
+    name = "Detective"
+    classifier = {
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+    def __init__(self, initial_actions: List[Action] = None) -> None:
+        super().__init__()
+        if initial_actions is None:
+            self.initial_actions = [C, D, C, C]
+        else:
+            self.initial_actions = initial_actions
+
+    def strategy(self, opponent: Player) -> Action:
+        hist_size = len(self.history)
+        init_size = len(self.initial_actions)
+        if hist_size < init_size:
+            return self.initial_actions[hist_size]
+        if D not in opponent.history[:init_size]:
+            return D
+        return opponent.history[-1] # TFT
+
+
 class Prober(Player):
     """
     Plays D, C, C initially. Defects forever if opponent cooperated in moves 2
