@@ -160,7 +160,7 @@ from .mindcontrol import MindBender, MindController, MindWarper
 from .mindreader import MindReader, MirrorMindReader, ProtectedMindReader
 from .mutual import Desperate, Hopeless, Willing
 from .negation import Negation
-from .oncebitten import FoolMeForever, FoolMeOnce, ForgetfulFoolMeOnce, OnceBitten
+from .oncebitten import FoolMeOnce, ForgetfulFoolMeOnce, OnceBitten
 from .prober import (
     CollectiveStrategy,
     Detective,
@@ -305,7 +305,6 @@ all_strategies = [
     EvolvedHMM5,
     Feld,
     FirmButFair,
-    FoolMeForever,
     FoolMeOnce,
     ForgetfulFoolMeOnce,
     ForgetfulGrudger,

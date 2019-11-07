@@ -140,33 +140,3 @@ class TestForgetfulFoolMeOnce(TestPlayer):
             seed=2,
             attrs={"D_count": 0},
         )
-
-
-class TestFoolMeForever(TestPlayer):
-
-    name = "Fool Me Forever"
-    player = axelrod.FoolMeForever
-    expected_classifier = {
-        "memory_depth": float("inf"),  # Long memory
-        "stochastic": False,
-        "makes_use_of": set(),
-        "long_run_time": False,
-        "inspects_source": False,
-        "manipulates_source": False,
-        "manipulates_state": False,
-    }
-
-    def test_strategy(self):
-        # If opponent defects more than once, cooperate forever.
-        actions = [(D, C)] * 20
-        self.versus_test(opponent=axelrod.Cooperator(), expected_actions=actions)
-
-        actions = [(D, C), (D, D)] + [(C, C), (C, D)] * 20
-        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
-
-        opponent = axelrod.MockPlayer([D] + [C] * 19)
-        actions = [(D, D)] + [(C, C)] * 19
-        self.versus_test(opponent=opponent, expected_actions=actions)
-
-        actions = [(D, D)] + [(C, D)] * 19
-        self.versus_test(opponent=axelrod.Defector(), expected_actions=actions)
