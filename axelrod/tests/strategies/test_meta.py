@@ -616,7 +616,9 @@ class TestNMWELongMemory(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (C, C), (D, D), (D, C)]
-        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions,
+                         seed=10)
 
 
 class TestNMWEMemoryOne(TestMetaPlayer):
