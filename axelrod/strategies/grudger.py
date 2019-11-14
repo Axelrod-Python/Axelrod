@@ -226,6 +226,7 @@ class EasyGo(Player):
 
     - Easy Go: [Prison1998]_
     - Reverse Grudger (RGRIM): [Li2011]_
+    - Fool Me Forever: [Harper2017]_
     """
 
     name = "EasyGo"
