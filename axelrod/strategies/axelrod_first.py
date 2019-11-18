@@ -293,6 +293,8 @@ class Graaskamp(Player):
         return C
 
 
+# TODO Need to check this one, a MoreGrofman existed in
+# axelrod_second
 class Grofman(Player):
     """
     Submitted to Axelrod's first tournament by Bernard Grofman.
@@ -658,6 +660,8 @@ class SteinAndRapoport(Player):
             return opponent.history[-1]
 
 
+# TODO Need to check this one, a MoreTidemanAndChieruzzi existed in
+# axelrod_second
 class TidemanAndChieruzzi(Player):
     """
     This strategy begins by playing Tit For Tat and then follows the following
