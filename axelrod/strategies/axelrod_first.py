@@ -593,12 +593,23 @@ class FirstByShubik(Player):
         return C
 
 
-class Tullock(Player):
+class FirstByTullock(Player):
     """
     Submitted to Axelrod's first tournament by Gordon Tullock.
 
+    The description written in [Axelrod1980]_ is:
+
+    > "This rule cooperates on the first eleven moves. It then cooperates 10%
+    > less than the other player has cooperated on the preceding ten moves. This
+    > rule is based on an idea developed in Overcast and Tullock (1971). Professor
+    > Tullock was invited to specify how the idea could be implemented, and he did
+    > so out of scientific interest rather than an expectation that it would be a
+    > likely winner."
+
+    This is interpreted as:
+
     Cooperates for the first 11 rounds then randomly cooperates 10% less often
-    than the opponent has in previous rounds.
+    than the opponent has in the previous 10 rounds.
 
     This strategy came 13th in Axelrod's original tournament.
 
@@ -607,9 +618,9 @@ class Tullock(Player):
     - Tullock: [Axelrod1980]_
     """
 
-    name = "Tullock"
+    name = "First tournament by Tullock"
     classifier = {
-        "memory_depth": 11,  # long memory, modified by init
+        "memory_depth": 11,
         "stochastic": True,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -622,7 +633,7 @@ class Tullock(Player):
         """
         Parameters
         ----------
-        rounds_to_cooperate: int, 10
+        rounds_to_cooperate: int
            The number of rounds to cooperate initially
         """
         super().__init__()
@@ -630,9 +641,9 @@ class Tullock(Player):
         self.memory_depth = rounds_to_cooperate
 
     def strategy(self, opponent: Player) -> Action:
-        rounds = self._rounds_to_cooperate
-        if len(self.history) < rounds:
+        if len(self.history) < self._rounds_to_cooperate:
             return C
+        rounds = self._rounds_to_cooperate - 1
         cooperate_count = opponent.history[-rounds:].count(C)
         prop_cooperate = cooperate_count / rounds
         prob_cooperate = max(0, prop_cooperate - 0.10)

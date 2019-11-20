@@ -28,7 +28,7 @@ An indication is given as to whether or not this strategy is implemented in the
   "Downing", "Leslie Downing", ":class:`RevisedDowning <axelrod.strategies.axelrod_first.RevisedDowning>`"
   "Feld", "Scott Feld", ":class:`Feld <axelrod.strategies.axelrod_first.FirstByFeld>`"
   "Joss", "Johann Joss", ":class:`Joss <axelrod.strategies.axelrod_first.FirstByJoss>`"
-  "Tullock",  "Gordon Tullock", ":class:`Tullock <axelrod.strategies.axelrod_first.Tullock>`"
+  "Tullock",  "Gordon Tullock", ":class:`Tullock <axelrod.strategies.axelrod_first.FirstByTullock>`"
   "Unnamed Strategy", "Unknown", ":class:`UnnamedStrategy <axelrod.strategies.axelrod_first.UnnamedStrategy>`"
   "Random", "Unknownd", ":class:`Random <axelrod.strategies.rand.Random>`"
 

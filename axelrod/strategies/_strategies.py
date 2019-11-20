@@ -16,7 +16,7 @@ from .axelrod_first import (
     FirstByShubik,
     SteinAndRapoport,
     TidemanAndChieruzzi,
-    Tullock,
+    FirstByTullock,
     UnnamedStrategy,
 )
 from .axelrod_second import (
@@ -430,7 +430,7 @@ all_strategies = [
     TrickyCooperator,
     TrickyDefector,
     TrickyLevelPunisher,
-    Tullock,
+    FirstByTullock,
     TwoTitsForTat,
     UsuallyCooperates,
     UsuallyDefects,

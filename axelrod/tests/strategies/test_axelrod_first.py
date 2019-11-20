@@ -404,10 +404,10 @@ class TestFirstByShubik(TestPlayer):
         self.versus_test(opponent, expected_actions=actions)
 
 
-class TestTullock(TestPlayer):
+class TestFirstByTullock(TestPlayer):
 
-    name = "Tullock: 11"
-    player = axelrod.Tullock
+    name = "First tournament by Tullock: 11"
+    player = axelrod.FirstByTullock
     expected_classifier = {
         "memory_depth": 11,
         "stochastic": True,
