@@ -304,10 +304,10 @@ class TestFirstByJoss(TestPlayer):
         self.versus_test(axelrod.Defector(), expected_actions=actions, seed=2)
 
 
-class TestNydegger(TestPlayer):
+class TestFirstByNydegger(TestPlayer):
 
-    name = "Nydegger"
-    player = axelrod.Nydegger
+    name = "First tournament by Nydegger"
+    player = axelrod.FirstByNydegger
     expected_classifier = {
         "memory_depth": 3,
         "stochastic": False,

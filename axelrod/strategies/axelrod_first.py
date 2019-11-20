@@ -413,9 +413,25 @@ class FirstByJoss(MemoryOnePlayer):
         super().__init__(four_vector)
 
 
-class Nydegger(Player):
+class FirstByNydegger(Player):
     """
     Submitted to Axelrod's first tournament by Rudy Nydegger.
+
+    The description written in [Axelrod1980]_ is:
+
+    > "The program begins with tit for tat for the first three moves, except
+    > that if it was the only one to cooperate on the first move and the only one
+    > to defect on the second move, it defects on the third move. After the third
+    > move, its choice is determined from the 3 preceding outcomes in the
+    > following manner. Let A be the sum formed by counting the other's defection
+    > as 2 points and one's own as 1 point, and giving weights of 16, 4, and 1 to
+    > the preceding three moves in chronological order. The choice can be
+    > described as defecting only when A equals 1, 6, 7, 17, 22, 23, 26, 29, 30,
+    > 31, 33, 38, 39, 45, 49, 54, 55, 58, or 61. Thus if all three preceding moves
+    > are mutual defection, A = 63 and the rule cooperates.  This rule was
+    > designed for use in laboratory experiments as a stooge which had a memory
+    > and appeared to be trustworthy, potentially cooperative, but not gullible
+    > (Nydegger, 1978)."
 
     The program begins with tit for tat for the first three moves, except
     that if it was the only one to cooperate on the first move and the only one
@@ -450,7 +466,7 @@ class Nydegger(Player):
     - Nydegger: [Axelrod1980]_
     """
 
-    name = "Nydegger"
+    name = "First tournament by Nydegger"
     classifier = {
         "memory_depth": 3,
         "stochastic": False,
@@ -462,7 +478,7 @@ class Nydegger(Player):
     }
 
     def __init__(self) -> None:
-        self.As = [1, 6, 7, 17, 22, 23, 26, 29, 30, 31, 33, 38, 39, 45, 54, 55, 58, 61]
+        self.As = [1, 6, 7, 17, 22, 23, 26, 29, 30, 31, 33, 38, 39, 45, 49, 54, 55, 58, 61]
         self.score_map = {(C, C): 0, (C, D): 2, (D, C): 1, (D, D): 3}
         super().__init__()
 

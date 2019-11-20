@@ -18,7 +18,7 @@ An indication is given as to whether or not this strategy is implemented in the
 
   "Tit For Tat", "Anatol Rapoport", ":class:`TitForTat <axelrod.strategies.titfortat.TitForTat>`"
   "Tideman and Chieruzzi", "T Nicolaus Tideman and Paula Chieruzz", ":class:`TidemanAndChieruzzi <axelrod.strategies.axelrod_first.TidemanAndChieruzzi>`"
-  "Nydegger", "Rudy Nydegger", ":class:`Nydegger <axelrod.strategies.axelrod_first.Nydegger>`"
+  "Nydegger", "Rudy Nydegger", ":class:`Nydegger <axelrod.strategies.axelrod_first.FirstByNydegger>`"
   "Grofman", "Bernard Grofman", ":class:`Grofman <axelrod.strategies.axelrod_first.FirstByGrofman>`"
   "Shubik", "Martin Shubik", ":class:`Shubik <axelrod.strategies.axelrod_first.Shubik>`"
   "Stein and Rapoport", "Stein and Anatol Rapoport", ":class:`SteinAndRapoport <axelrod.strategies.axelrod_first.SteinAndRapoport>`"
