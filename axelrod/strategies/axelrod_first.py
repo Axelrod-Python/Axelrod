@@ -250,25 +250,37 @@ class FirstByFeld(Player):
         return random_choice(p)
 
 
-class Graaskamp(Player):
+class FirstByGraaskamp(Player):
     """
+    Submitted to Axelrod's first tournament by James Graaskamp..
 
-    This is one of the strategies from Robert Axelrod's first tournament and is
-    described in the literature as:
+    The description written in [Axelrod1980]_ is:
+
+    > "This rule plays tit for tat for 50 moves, defects on move 51, and then
+    > plays 5 more moves of tit for tat. A check is then made to see if the player
+    > seems to be RANDOM, in which case it defects from then on. A check is also
+    > made to see if the other is TIT FOR TAT, ANALOGY (a program from the
+    > preliminary tournament), and its own twin, in which case it plays tit for
+    > tat. Otherwise it randomly defects every 5 to 15 moves, hoping that enough
+    > trust has been built up so that the other player will not notice these
+    > defections.:
+
+    This is implemented as:
 
     1. Plays Tit For Tat for the first 50 rounds;
     2. Defects on round 51;
     3. Plays 5 further rounds of Tit For Tat;
     4. A check is then made to see if the opponent is playing randomly in which
-       case it defects for the rest of the game;
+       case it defects for the rest of the game, this is implemented with a chi
+       squared test.
     5. The strategy also checks to see if the opponent is playing Tit For Tat or
-       another strategy from a preliminary tournament called ‘Analogy’  If
+       a clone of itself. If
        so it plays Tit For Tat. If not it cooperates and randomly defects every 5
        to 15 moves.
 
 
     Note that there is no information about 'Analogy' available thus Step 5 is
-    not implemented fully.
+    a "best possible" interpretation of the description in the paper.
 
     This strategy came 9th in Axelrod’s original tournament.
 
@@ -277,7 +289,7 @@ class Graaskamp(Player):
     - Graaskamp: [Axelrod1980]_
     """
 
-    name = "Graaskamp"
+    name = "First tournament by Graaskamp"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
@@ -321,8 +333,8 @@ class Graaskamp(Player):
         if all(
             opponent.history[i] == self.history[i - 1]
             for i in range(1, len(self.history))
-        ):
-            # Check if opponent plays Tit for Tat
+        ) or opponent.history == self.history:
+            # Check if opponent plays Tit for Tat or a clone of itself.
             if opponent.history[-1] == D:
                 return D
             return C

@@ -144,10 +144,10 @@ class TestFristByFeld(TestPlayer):
         self.versus_test(axelrod.Defector(), expected_actions=actions)
 
 
-class TestGraaskamp(TestPlayer):
+class TestFirstByGraaskamp(TestPlayer):
 
-    name = "Graaskamp: 0.05"
-    player = axelrod.Graaskamp
+    name = "First tournament by Graaskamp: 0.05"
+    player = axelrod.FirstByGraaskamp
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,

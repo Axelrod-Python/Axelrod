@@ -24,7 +24,7 @@ An indication is given as to whether or not this strategy is implemented in the
   "Stein and Rapoport", "Stein and Anatol Rapoport", ":class:`SteinAndRapoport <axelrod.strategies.axelrod_first.SteinAndRapoport>`"
   "Grudger", "James W Friedman", ":class:`Grudger <axelrod.strategies.grudger.Grudger>`"
   "Davis", "Morton Davis", ":class:`Davis <axelrod.strategies.axelrod_first.FirstByDavis>`"
-  "Graaskamp", "Jim Graaskamp", ":class:`Graaskamp <axelrod.strategies.axelrod_first.Graaskamp>`"
+  "Graaskamp", "Jim Graaskamp", ":class:`Graaskamp <axelrod.strategies.axelrod_first.FirstByGraaskamp>`"
   "Downing", "Leslie Downing", ":class:`RevisedDowning <axelrod.strategies.axelrod_first.RevisedDowning>`"
   "Feld", "Scott Feld", ":class:`Feld <axelrod.strategies.axelrod_first.FirstByFeld>`"
   "Joss", "Johann Joss", ":class:`Joss <axelrod.strategies.axelrod_first.Joss>`"

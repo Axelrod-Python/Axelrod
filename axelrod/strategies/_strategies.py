@@ -8,7 +8,7 @@ from .averagecopier import AverageCopier, NiceAverageCopier
 from .axelrod_first import (
     FirstByDavis,
     FirstByFeld,
-    Graaskamp,
+    FirstByGraaskamp,
     Grofman,
     Joss,
     Nydegger,
@@ -325,7 +325,7 @@ all_strategies = [
     GoByMajority40,
     GoByMajority5,
     Golden,
-    Graaskamp,
+    FirstByGraaskamp,
     SecondByGraaskampKatzen,
     Gradual,
     GradualKiller,
