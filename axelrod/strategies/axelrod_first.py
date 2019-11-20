@@ -514,12 +514,28 @@ class FirstByNydegger(Player):
         return C
 
 
-class Shubik(Player):
+class FirstByShubik(Player):
     """
     Submitted to Axelrod's first tournament by Martin Shubik.
 
+    The description written in [Axelrod1980]_ is:
+
+    > "This rule cooperates until the other defects, and then defects once. If
+    > the other defects again after the rule's cooperation is resumed, the rule
+    > defects twice. In general, the length of retaliation is increased by one for
+    > each departure from mutual cooperation. This rule is described with its
+    > strategic implications in Shubik (1970). Further treatment of its is given
+    > in Taylor (1976).
+
+    This is interpreted as:
+
     Plays like Tit-For-Tat with the following modification. After each
     retaliation, the number of rounds that Shubik retaliates increases by 1.
+
+    # TODO Read
+    # https://www.jstor.org/stable/pdf/173263.pdf?refreqid=excelsior%3A94cf485d88f107de1d72296c4cf5d988
+    # as supposedely there there is description indicating that the strategy
+    # would cooperate twice. I do not think I agree but need to check carefully.
 
     This strategy came 5th in Axelrod's original tournament.
 
@@ -528,7 +544,7 @@ class Shubik(Player):
     - Shubik: [Axelrod1980]_
     """
 
-    name = "Shubik"
+    name = "First tournament by Shubik"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,

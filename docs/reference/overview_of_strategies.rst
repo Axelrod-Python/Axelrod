@@ -20,7 +20,7 @@ An indication is given as to whether or not this strategy is implemented in the
   "Tideman and Chieruzzi", "T Nicolaus Tideman and Paula Chieruzz", ":class:`TidemanAndChieruzzi <axelrod.strategies.axelrod_first.TidemanAndChieruzzi>`"
   "Nydegger", "Rudy Nydegger", ":class:`Nydegger <axelrod.strategies.axelrod_first.FirstByNydegger>`"
   "Grofman", "Bernard Grofman", ":class:`Grofman <axelrod.strategies.axelrod_first.FirstByGrofman>`"
-  "Shubik", "Martin Shubik", ":class:`Shubik <axelrod.strategies.axelrod_first.Shubik>`"
+  "Shubik", "Martin Shubik", ":class:`Shubik <axelrod.strategies.axelrod_first.FirstByShubik>`"
   "Stein and Rapoport", "Stein and Anatol Rapoport", ":class:`SteinAndRapoport <axelrod.strategies.axelrod_first.SteinAndRapoport>`"
   "Grudger", "James W Friedman", ":class:`Grudger <axelrod.strategies.grudger.Grudger>`"
   "Davis", "Morton Davis", ":class:`Davis <axelrod.strategies.axelrod_first.FirstByDavis>`"
