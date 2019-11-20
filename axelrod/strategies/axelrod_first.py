@@ -349,16 +349,14 @@ class FirstByGraaskamp(Player):
         return C
 
 
-# TODO Need to check this one, a MoreGrofman existed in
-# axelrod_second
-class Grofman(Player):
+class FirstByGrofman(Player):
     """
-    Submitted to Axelrod's first tournament by Bernard Grofman.
+    Submitted to Axelrod's first tournament by Bernard Grofman..
 
-    Cooperate on the first two rounds and
-    returns the opponent's last action for the next 5. For the rest of the game
-    Grofman cooperates if both players selected the same action in the previous
-    round, and otherwise cooperates randomly with probability 2/7.
+    The description written in [Axelrod1980]_ is:
+
+     > "If the players did different things on the previous move, this rule
+     > cooperates with probability 2/7. Otherwise this rule always cooperates."
 
     This strategy came 4th in Axelrod's original tournament.
 
@@ -367,9 +365,9 @@ class Grofman(Player):
     - Grofman: [Axelrod1980]_
     """
 
-    name = "Grofman"
+    name = "First tournament by Grofman"
     classifier = {
-        "memory_depth": float("inf"),
+        "memory_depth": 1,
         "stochastic": True,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -377,14 +375,8 @@ class Grofman(Player):
         "manipulates_source": False,
         "manipulates_state": False,
     }
-
     def strategy(self, opponent: Player) -> Action:
-        round_number = len(self.history) + 1
-        if round_number < 3:
-            return C
-        if round_number < 8:
-            return opponent.history[-1]
-        if self.history[-1] == opponent.history[-1]:
+        if len(self.history) == 0 or self.history[-1] == opponent.history[-1]:
             return C
         return random_choice(2 / 7)
 

@@ -242,12 +242,12 @@ class TestFirstByGraaskamp(TestPlayer):
         )
 
 
-class TestGrofman(TestPlayer):
+class TestFirstByGrofman(TestPlayer):
 
-    name = "Grofman"
-    player = axelrod.Grofman
+    name = "First tournament by Grofman"
+    player = axelrod.FirstByGrofman
     expected_classifier = {
-        "memory_depth": float("inf"),
+        "memory_depth": 1,
         "stochastic": True,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -264,11 +264,11 @@ class TestGrofman(TestPlayer):
         self.versus_test(axelrod.Alternator(), expected_actions=actions)
 
         opponent = axelrod.MockPlayer(actions=[D] * 8)
-        actions = [(C, D)] * 2 + [(D, D)] * 5 + [(C, D)] + [(C, D)]
+        actions = [(C, D), (C, D), (D, D), (C, D), (D, D), (C, D), (C, D), (D, D)]
         self.versus_test(opponent, expected_actions=actions, seed=1)
 
         opponent = axelrod.MockPlayer(actions=[D] * 8)
-        actions = [(C, D)] * 2 + [(D, D)] * 5 + [(C, D)] + [(D, D)]
+        actions = [(C, D), (D, D), (C, D), (D, D), (C, D), (C, D), (C, D), (D, D)]
         self.versus_test(opponent, expected_actions=actions, seed=2)
 
 
