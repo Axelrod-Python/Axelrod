@@ -6,8 +6,8 @@ from .apavlov import APavlov2006, APavlov2011
 from .appeaser import Appeaser
 from .averagecopier import AverageCopier, NiceAverageCopier
 from .axelrod_first import (
-    Davis,
-    Feld,
+    FirstByDavis,
+    FirstByFeld,
     Graaskamp,
     Grofman,
     Joss,
@@ -280,7 +280,7 @@ all_strategies = [
     CyclerDDC,
     CyclerCCCDCD,
     Darwin,
-    Davis,
+    FirstByDavis,
     DBS,
     Defector,
     DefectorHunter,
@@ -303,7 +303,7 @@ all_strategies = [
     EvolvedLookerUp1_1_1,
     EvolvedLookerUp2_2_2,
     EvolvedHMM5,
-    Feld,
+    FirstByFeld,
     FirmButFair,
     FoolMeOnce,
     ForgetfulFoolMeOnce,

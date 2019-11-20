@@ -1,5 +1,16 @@
 """
-Additional strategies from Axelrod's first tournament.
+Strategies from Axelrod's first tournament. All strategies in this module are
+prefixed by `FirstBy` to indicate that they were submitted in Axelrod's First
+tournament by the given author.
+
+Note that in these strategies are implemented from the descriptions presented
+in:
+
+Axelrod, R. (1980). Effective Choice in the Prisoner’s Dilemma.
+Journal of Conflict Resolution, 24(1), 3–25.
+
+These descriptions are not always clear and/or precise and when assumptions have
+been made they are explained in the strategy docstrings.
 """
 
 import random
@@ -16,12 +27,14 @@ from .memoryone import MemoryOnePlayer
 C, D = Action.C, Action.D
 
 
-class Davis(Player):
+class FirstByDavis(Player):
     """
     Submitted to Axelrod's first tournament by Morton Davis.
 
-    A player starts by cooperating for 10 rounds then plays Grudger,
-    defecting if at any point the opponent has defected.
+    The description written in [Axelrod1980]_ is:
+
+    > "A player starts by cooperating for 10 rounds then plays Grudger,
+    > defecting if at any point the opponent has defected."
 
     This strategy came 8th in Axelrod's original tournament.
 
@@ -30,7 +43,7 @@ class Davis(Player):
     - Davis: [Axelrod1980]_
     """
 
-    name = "Davis"
+    name = "First tournament by Davis"
     classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": False,
@@ -56,18 +69,41 @@ class Davis(Player):
         opponent ever plays D."""
         if len(self.history) < self._rounds_to_cooperate:
             return C
-        if opponent.defections:
+        if opponent.defections > 0:
             return D
         return C
 
-
+# TODO Split this in to ttwo strategies, it's not clear to me from the internet
+# sources that the first implentation was buggy as opposed to just "poorly
+# thought out". The flaw is actually clearly described in the paper's
+# description: "Initially, they are both assumed to be .5, which amounts to the
+# pessimistic assumption that the other player is not responsive"
+# The revised version should be put in it's own module.
+# I also do not understand where the decision rules come from.
+# Need to read https://journals.sagepub.com/doi/10.1177/003755007500600402 to
+# gain understanding of decision rule.
 class RevisedDowning(Player):
-    """This strategy attempts to estimate the next move of the opponent by estimating
+    """
+    Submitted to Axelrod's first tournament by Downing
+
+    The description written in [Axelrod1980]_ is:
+
+    > "This rule selects its choice to maximize its own long- term expected payoff on
+    > the assumption that the other rule cooperates with a fixed probability which
+    > depends only on whether the other player cooperated or defected on the previous
+    > move. These two probabilities estimates are con- tinuously updated as the game
+    > progresses. Initially, they are both assumed to be .5, which amounts to the
+    > pessimistic assumption that the other player is not responsive. This rule is
+    > based on an outcome maximization interpretation of human performances proposed
+    > by Downing (1975)."
+
+    This strategy attempts to estimate the next move of the opponent by estimating
     the probability of cooperating given that they defected (:math:`p(C|D)`) or
     cooperated on the previous round (:math:`p(C|C)`). These probabilities are
     continuously updated during play and the strategy attempts to maximise the long
     term play. Note that the initial values are :math:`p(C|C)=p(C|D)=.5`.
 
+    # TODO: This paragraph is not correct (see note above)
     Downing is implemented as `RevisedDowning`. Apparently in the first tournament
     the strategy was implemented incorrectly and defected on the first two rounds.
     This can be controlled by setting `revised=True` to prevent the initial defections.
@@ -140,13 +176,21 @@ class RevisedDowning(Player):
         return move
 
 
-class Feld(Player):
+class FirstByFeld(Player):
     """
     Submitted to Axelrod's first tournament by Scott Feld.
 
+    The description written in [Axelrod1980]_ is:
+
+    > "This rule starts with tit for tat and gradually lowers its probability of
+    > cooperation following the other's cooperation to .5 by the two hundredth
+    > move. It always defects after a defection by the other."
+
     This strategy plays Tit For Tat, always defecting if the opponent defects but
     cooperating when the opponent cooperates with a gradually decreasing probability
-    until it is only .5.
+    until it is only .5. Note that the description does not clearly indicate how
+    the cooperation probability should drop, this implements a linear decreasing
+    function.
 
     This strategy came 11th in Axelrod's original tournament.
 
@@ -155,7 +199,7 @@ class Feld(Player):
     - Feld: [Axelrod1980]_
     """
 
-    name = "Feld"
+    name = "First tournament by Feld"
     classifier = {
         "memory_depth": 200,  # Varies actually, eventually becomes depth 1
         "stochastic": True,

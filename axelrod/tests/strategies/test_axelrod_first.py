@@ -7,10 +7,10 @@ from .test_player import TestPlayer, test_four_vector
 C, D = axelrod.Action.C, axelrod.Action.D
 
 
-class TestDavis(TestPlayer):
+class TestFirstByDavis(TestPlayer):
 
-    name = "Davis: 10"
-    player = axelrod.Davis
+    name = "First tournament by Davis: 10"
+    player = axelrod.FirstByDavis
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -88,10 +88,10 @@ class TestRevisedDowning(TestPlayer):
         self.assertEqual(match.play(), [(D, C), (D, C)])
 
 
-class TestFeld(TestPlayer):
+class TestFristByFeld(TestPlayer):
 
-    name = "Feld: 1.0, 0.5, 200"
-    player = axelrod.Feld
+    name = "First tournament by Feld: 1.0, 0.5, 200"
+    player = axelrod.FirstByFeld
     expected_classifier = {
         "memory_depth": 200,
         "stochastic": True,
