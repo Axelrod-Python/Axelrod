@@ -272,10 +272,10 @@ class TestFirstByGrofman(TestPlayer):
         self.versus_test(opponent, expected_actions=actions, seed=2)
 
 
-class TestJoss(TestPlayer):
+class TestFirstByJoss(TestPlayer):
 
-    name = "Joss: 0.9"
-    player = axelrod.Joss
+    name = "First tournament by Joss: 0.9"
+    player = axelrod.FirstByJoss
     expected_classifier = {
         "memory_depth": 1,
         "stochastic": True,

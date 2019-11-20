@@ -351,7 +351,7 @@ class FirstByGraaskamp(Player):
 
 class FirstByGrofman(Player):
     """
-    Submitted to Axelrod's first tournament by Bernard Grofman..
+    Submitted to Axelrod's first tournament by Bernard Grofman.
 
     The description written in [Axelrod1980]_ is:
 
@@ -381,12 +381,14 @@ class FirstByGrofman(Player):
         return random_choice(2 / 7)
 
 
-class Joss(MemoryOnePlayer):
+class FirstByJoss(MemoryOnePlayer):
     """
     Submitted to Axelrod's first tournament by Johann Joss.
 
-    Cooperates with probability 0.9 when the opponent cooperates, otherwise
-    emulates Tit-For-Tat.
+    The description written in [Axelrod1980]_ is:
+
+    > "This rule cooperates 90% of the time after a cooperation by the other. It
+    > always defects after a defection by the other."
 
     This strategy came 12th in Axelrod's original tournament.
 
@@ -396,7 +398,7 @@ class Joss(MemoryOnePlayer):
     - Hard Joss: [Stewart2012]_
     """
 
-    name = "Joss"
+    name = "First tournament by Joss"
 
     def __init__(self, p: float = 0.9) -> None:
         """
