@@ -470,10 +470,10 @@ class TestFirstByAnonymous(TestPlayer):
         self.versus_test(axelrod.Cooperator(), expected_actions=actions, seed=10)
 
 
-class TestSteinAndRapoport(TestPlayer):
+class TestFirstBySteinAndRapoport(TestPlayer):
 
-    name = "Stein and Rapoport: 0.05: (D, D)"
-    player = axelrod.SteinAndRapoport
+    name = "First tournament by Stein and Rapoport: 0.05: (D, D)"
+    player = axelrod.FirstBySteinAndRapoport
     expected_classifier = {
         "memory_depth": float("inf"),
         "long_run_time": False,

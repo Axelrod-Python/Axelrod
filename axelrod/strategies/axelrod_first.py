@@ -692,14 +692,25 @@ class FirstByAnonymous(Player):
 
 
 @FinalTransformer((D, D), name_prefix=None)
-class SteinAndRapoport(Player):
-    """This strategy plays a modification of Tit For Tat.
+class FirstBySteinAndRapoport(Player):
+    """
+    Submitted to Axelrod's first tournament by William Stein and Amnon Rapoport.
+
+    The description written in [Axelrod1980]_ is:
+
+    > "This rule plays tit for tat except that it cooperates on the first four
+    > moves, it defects on the last two moves, and every fifteen moves it checks
+    > to see if the opponent seems to be playing randomly. This check uses a
+    > chi-squared test of the other's transition probabilities and also checks for
+    > alternating moves of CD and DC.
+
+    This is implemented as follows:
 
     1. It cooperates for the first 4 moves.
     2. It defects on the last 2 moves.
     3. Every 15 moves it makes use of a `chi-squared
        test <http://en.wikipedia.org/wiki/Chi-squared_test>`_ to check if the
-       opponent is playing randomly.
+       opponent is playing randomly. If so it defects.
 
     This strategy came 6th in Axelrod's original tournament.
 
@@ -708,7 +719,7 @@ class SteinAndRapoport(Player):
     - SteinAndRapoport: [Axelrod1980]_
     """
 
-    name = "Stein and Rapoport"
+    name = "First tournament by Stein and Rapoport"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,

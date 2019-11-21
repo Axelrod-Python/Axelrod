@@ -21,7 +21,7 @@ An indication is given as to whether or not this strategy is implemented in the
   "Nydegger", "Rudy Nydegger", ":class:`Nydegger <axelrod.strategies.axelrod_first.FirstByNydegger>`"
   "Grofman", "Bernard Grofman", ":class:`Grofman <axelrod.strategies.axelrod_first.FirstByGrofman>`"
   "Shubik", "Martin Shubik", ":class:`Shubik <axelrod.strategies.axelrod_first.FirstByShubik>`"
-  "Stein and Rapoport", "Stein and Anatol Rapoport", ":class:`SteinAndRapoport <axelrod.strategies.axelrod_first.SteinAndRapoport>`"
+  "Stein and Rapoport", "Stein and Anatol Rapoport", ":class:`SteinAndRapoport <axelrod.strategies.axelrod_first.FirstBySteinAndRapoport>`"
   "Grudger", "James W Friedman", ":class:`Grudger <axelrod.strategies.grudger.Grudger>`"
   "Davis", "Morton Davis", ":class:`Davis <axelrod.strategies.axelrod_first.FirstByDavis>`"
   "Graaskamp", "Jim Graaskamp", ":class:`Graaskamp <axelrod.strategies.axelrod_first.FirstByGraaskamp>`"
