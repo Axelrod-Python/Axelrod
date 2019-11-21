@@ -29,7 +29,7 @@ An indication is given as to whether or not this strategy is implemented in the
   "Feld", "Scott Feld", ":class:`Feld <axelrod.strategies.axelrod_first.FirstByFeld>`"
   "Joss", "Johann Joss", ":class:`Joss <axelrod.strategies.axelrod_first.FirstByJoss>`"
   "Tullock",  "Gordon Tullock", ":class:`Tullock <axelrod.strategies.axelrod_first.FirstByTullock>`"
-  "Unnamed Strategy", "Unknown", ":class:`UnnamedStrategy <axelrod.strategies.axelrod_first.UnnamedStrategy>`"
+  "(Name withheld)", "Unknown", ":class:`UnnamedStrategy <axelrod.strategies.axelrod_first.FirstByAnyonymous>`"
   "Random", "Unknownd", ":class:`Random <axelrod.strategies.rand.Random>`"
 
 Axelrod's second tournament

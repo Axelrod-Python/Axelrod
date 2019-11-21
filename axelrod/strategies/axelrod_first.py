@@ -650,32 +650,31 @@ class FirstByTullock(Player):
         return random_choice(prob_cooperate)
 
 
-class UnnamedStrategy(Player):
-    """Apparently written by a grad student in political science whose name was
-    withheld, this strategy cooperates with a given probability P. This
-    probability (which has initial value .3) is updated every 10 rounds based on
-    whether the opponent seems to be random, very cooperative or very
-    uncooperative. Furthermore, if after round 130 the strategy is losing then P
-    is also adjusted.
+class FirstByAnonymous(Player):
+    """
+    Submitted to Axelrod's first tournament by a graduate student whose name was
+    withheld.
 
-    Fourteenth Place with 282.2 points is a 77-line program by a graduate
-    student of political science whose dissertation is in game theory. This rule
-    has a probability of cooperating, P, which is initially 30% and is updated
-    every 10 moves. P is adjusted if the other player seems random, very
-    cooperative, or very uncooperative. P is also adjusted after move 130 if the
-    rule has a lower score than the other player. Unfortunately, the complex
-    process of adjustment frequently left the probability of cooperation in the
-    30% to 70% range, and therefore the rule appeared random to many other players.
+    The description written in [Axelrod1980]_ is:
+
+    > "This rule has a probability of cooperating, P, which is initially 30% and
+    > is updated every 10 moves. P is adjusted if the other player seems random,
+    > very cooperative, or very uncooperative. P is also adjusted after move 130
+    > if the rule has a lower score than the other player. Unfortunately, the
+    > complex process of adjustment frequently left the probability of cooperation
+    > in the 30% to 70% range, and therefore the rule appeared random to many
+    > other players."
+
+    Given the lack of detail this strategy is implemented based on the final
+    sentence of the description which is to have a cooperation probability that
+    is uniformly random in the 30 to 70% range.
 
     Names:
 
-    - Unnamed Strategy: [Axelrod1980]_
-
-    Warning: This strategy is not identical to the original strategy (source
-    unavailable) and was written based on published descriptions.
+    - (Name withheld): [Axelrod1980]_
     """
 
-    name = "Unnamed Strategy"
+    name = "First tournament by Anonymous"
     classifier = {
         "memory_depth": 0,
         "stochastic": True,

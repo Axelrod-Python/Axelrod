@@ -448,10 +448,10 @@ class TestFirstByTullock(TestPlayer):
         self.versus_test(opponent, expected_actions=actions, seed=2)
 
 
-class TestUnnamedStrategy(TestPlayer):
+class TestFirstByAnonymous(TestPlayer):
 
-    name = "Unnamed Strategy"
-    player = axelrod.UnnamedStrategy
+    name = "First tournament by Anonymous"
+    player = axelrod.FirstByAnonymous
     expected_classifier = {
         "memory_depth": 0,
         "stochastic": True,

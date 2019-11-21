@@ -17,7 +17,7 @@ from .axelrod_first import (
     SteinAndRapoport,
     TidemanAndChieruzzi,
     FirstByTullock,
-    UnnamedStrategy,
+    FirstByAnonymous,
 )
 from .axelrod_second import (
     SecondByAppold,
@@ -281,6 +281,7 @@ all_strategies = [
     CyclerCCCDCD,
     Darwin,
     FirstByDavis,
+    FirstByAnonymous,
     DBS,
     Defector,
     DefectorHunter,
