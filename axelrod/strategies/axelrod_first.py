@@ -278,6 +278,7 @@ class FirstByGraaskamp(Player):
        so it plays Tit For Tat. If not it cooperates and randomly defects every 5
        to 15 moves.
 
+    # TODO Compare this to Fortran code.
 
     Note that there is no information about 'Analogy' available thus Step 5 is
     a "best possible" interpretation of the description in the paper.
