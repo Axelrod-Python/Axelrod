@@ -764,12 +764,26 @@ class FirstBySteinAndRapoport(Player):
             return opponent.history[-1]
 
 
-# TODO Need to check this one, a MoreTidemanAndChieruzzi existed in
-# axelrod_second
-class TidemanAndChieruzzi(Player):
+@FinalTransformer((D, D), name_prefix=None)
+class FirstByTidemanAndChieruzzi(Player):
     """
-    This strategy begins by playing Tit For Tat and then follows the following
-    rules:
+    Submitted to Axelrod's first tournament by Nicolas Tideman and Paula
+    Chieruzzi.
+
+    The description written in [Axelrod1980]_ is:
+
+    > "This rule begins with cooperation and tit for tat. However, when the
+    > other player finishes his second run of defec- tions, an extra punishment is
+    > instituted, and the number of punishing defections is increased by one with
+    > each run of the other's defections. The other player is given a fresh start
+    > if he is 10 or more points behind, if he has not just started a run of
+    > defections, if it has been at least 20 moves since a fresh start, if there
+    > are at least 10 moves remaining, and if the number of defections differs
+    > from a 50-50 random generator by at least 3.0 standard deviations. A fresh
+    > start involves two cooperations and then play as if the game had just
+    > started. The program defects automatically on the last two moves."
+
+    This is interpreted as:
 
     1. Every run of defections played by the opponent increases the number of
     defections that this strategy retaliates with by 1.
@@ -782,8 +796,10 @@ class TidemanAndChieruzzi(Player):
         - and the total number of defections differs from a 50-50 random sample
           by at least 3.0 standard deviations.
 
-    A ‘fresh start’ is a sequence of two cooperations followed by an assumption
-    that the game has just started (everything is forgotten).
+        A ‘fresh start’ is a sequence of two cooperations followed by an assumption
+        that the game has just started (everything is forgotten).
+
+    3. The strategy defects on the last two moves.
 
     This strategy came 2nd in Axelrod’s original tournament.
 
@@ -792,7 +808,7 @@ class TidemanAndChieruzzi(Player):
     - TidemanAndChieruzzi: [Axelrod1980]_
     """
 
-    name = "Tideman and Chieruzzi"
+    name = "First tournament by Tideman and Chieruzzi"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -812,6 +828,7 @@ class TidemanAndChieruzzi(Player):
         self.opponent_score = 0
         self.last_fresh_start = 0
         self.fresh_start = False
+        self.remembered_number_of_opponent_defectioons = 0
 
     def _decrease_retaliation_counter(self):
         """Lower the remaining owed retaliation count and flip to non-retaliate
@@ -826,6 +843,7 @@ class TidemanAndChieruzzi(Player):
         self.is_retaliating = False
         self.retaliation_length = 0
         self.retaliation_remaining = 0
+        self.remembered_number_of_opponent_defectioons = 0
 
     def _score_last_round(self, opponent: Player):
         """Updates the scores for each player."""
@@ -839,6 +857,9 @@ class TidemanAndChieruzzi(Player):
     def strategy(self, opponent: Player) -> Action:
         if not opponent.history:
             return C
+
+        if opponent.history[-1] == D:
+            self.remembered_number_of_opponent_defectioons += 1
 
         # Calculate the scores.
         self._score_last_round(opponent)
@@ -867,7 +888,8 @@ class TidemanAndChieruzzi(Player):
                 std_deviation = (N ** (1 / 2)) / 2
                 lower = N / 2 - 3 * std_deviation
                 upper = N / 2 + 3 * std_deviation
-                if opponent.defections <= lower or opponent.defections >= upper:
+                if (self.remembered_number_of_opponent_defectioons <= lower or
+                    self.remembered_number_of_opponent_defectioons >= upper):
                     # Opponent deserves a fresh start
                     self.last_fresh_start = current_round
                     self._fresh_start()

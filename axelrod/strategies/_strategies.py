@@ -15,7 +15,7 @@ from .axelrod_first import (
     RevisedDowning,
     FirstByShubik,
     FirstBySteinAndRapoport,
-    TidemanAndChieruzzi,
+    FirstByTidemanAndChieruzzi,
     FirstByTullock,
     FirstByAnonymous,
 )
@@ -424,7 +424,7 @@ all_strategies = [
     ThueMorse,
     ThueMorseInverse,
     Thumper,
-    TidemanAndChieruzzi,
+    FirstByTidemanAndChieruzzi,
     TitForTat,
     TitFor2Tats,
     SecondByTranquilizer,

@@ -553,10 +553,10 @@ class TestFirstBySteinAndRapoport(TestPlayer):
         )
 
 
-class TestTidemanAndChieruzzi(TestPlayer):
+class TestFirstByTidemanAndChieruzzi(TestPlayer):
 
-    name = "Tideman and Chieruzzi"
-    player = axelrod.TidemanAndChieruzzi
+    name = "First tournament by Tideman and Chieruzzi: (D, D)"
+    player = axelrod.FirstByTidemanAndChieruzzi
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -570,8 +570,14 @@ class TestTidemanAndChieruzzi(TestPlayer):
     def test_strategy(self):
         # Cooperator Test
         opponent = axelrod.Cooperator()
-        actions = [(C, C), (C, C), (C, C), (C, C)]
+        actions = [(C, C), (C, C), (D, C), (D, C)]
         self.versus_test(opponent, expected_actions=actions)
+
+        # Cooperator Test does noot defect if game length is unknown
+        opponent = axelrod.Cooperator()
+        actions = [(C, C), (C, C), (C, C), (C, C)]
+        self.versus_test(opponent, expected_actions=actions,
+                match_attributes={"length": float("inf")})
 
         # Defector Test
         opponent = axelrod.Defector()
@@ -589,7 +595,7 @@ class TestTidemanAndChieruzzi(TestPlayer):
             (D, C),
             (D, D),
             (D, C),
-            (C, D),
+            (D, D),
             (D, C),
         ]
         self.versus_test(
@@ -743,7 +749,7 @@ class TestTidemanAndChieruzzi(TestPlayer):
             (D, D),
             (D, D),
             (D, C),
-            (C, D),
+            (D, D),
             (D, D),
         ]
 
@@ -753,7 +759,7 @@ class TestTidemanAndChieruzzi(TestPlayer):
 
         # Check the fresh start condition
         opponent = axelrod.TitForTat()
-        actions = [(C, C), (C, C), (C, C), (C, C)]
+        actions = [(C, C), (C, C), (D, C), (D, D)]
         self.versus_test(
             opponent, expected_actions=actions, attrs={"fresh_start": False}
         )
@@ -794,16 +800,16 @@ class TestTidemanAndChieruzzi(TestPlayer):
             (D, C),
             (D, C),
             (C, C),
-            (C, C),
-            (C, D),
+            (D, C),
+            (D, D),
         ]
         self.versus_test(
             opponent,
             expected_actions=actions,
             match_attributes={"length": 35},
             attrs={
-                "current_score": 108,
-                "opponent_score": 78,
+                "current_score": 110,
+                "opponent_score": 75,
                 "last_fresh_start": 24,
                 "retaliation_length": 2,
                 "retaliation_remaining": 0,
