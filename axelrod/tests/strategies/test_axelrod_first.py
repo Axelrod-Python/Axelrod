@@ -43,14 +43,14 @@ class TestFirstByDavis(TestPlayer):
         self.versus_test(opponent, expected_actions=actions)
 
 
-class TestRevisedDowning(TestPlayer):
+class TestFirstByDowning(TestPlayer):
 
-    name = "Revised Downing: True"
-    player = axelrod.RevisedDowning
+    name = "First tournament by Downing"
+    player = axelrod.FirstByDowning
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
-        "makes_use_of": set(),
+        "makes_use_of": {"game"},
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -58,34 +58,27 @@ class TestRevisedDowning(TestPlayer):
     }
 
     def test_strategy(self):
-        actions = [(C, C), (C, C), (C, C)]
+        actions = [(D, C), (D, C), (C, C)]
         self.versus_test(axelrod.Cooperator(), expected_actions=actions)
 
-        actions = [(C, D), (C, D), (D, D)]
+        actions = [(D, D), (D, D), (D, D)]
         self.versus_test(axelrod.Defector(), expected_actions=actions)
 
         opponent = axelrod.MockPlayer(actions=[D, C, C])
-        actions = [(C, D), (C, C), (C, C), (C, D)]
+        actions = [(D, D), (D, C), (D, C), (D, D)]
         self.versus_test(opponent, expected_actions=actions)
 
         opponent = axelrod.MockPlayer(actions=[D, D, C])
-        actions = [(C, D), (C, D), (D, C), (D, D)]
+        actions = [(D, D), (D, D), (D, C), (D, D)]
         self.versus_test(opponent, expected_actions=actions)
 
         opponent = axelrod.MockPlayer(actions=[C, C, D, D, C, C])
-        actions = [(C, C), (C, C), (C, D), (C, D), (D, C), (D, C), (D, C)]
+        actions = [(D, C), (D, C), (C, D), (D, D), (D, C), (D, C), (D, C)]
         self.versus_test(opponent, expected_actions=actions)
 
         opponent = axelrod.MockPlayer(actions=[C, C, C, C, D, D])
-        actions = [(C, C), (C, C), (C, C), (C, C), (C, D), (C, D), (C, C)]
+        actions = [(D, C), (D, C), (C, C), (D, C), (D, D), (C, D), (D, C)]
         self.versus_test(opponent, expected_actions=actions)
-
-    def test_not_revised(self):
-        # Test not revised
-        player = self.player(revised=False)
-        opponent = axelrod.Cooperator()
-        match = axelrod.Match((player, opponent), turns=2)
-        self.assertEqual(match.play(), [(D, C), (D, C)])
 
 
 class TestFristByFeld(TestPlayer):

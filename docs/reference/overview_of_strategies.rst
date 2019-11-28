@@ -25,7 +25,7 @@ An indication is given as to whether or not this strategy is implemented in the
   "Grudger", "James W Friedman", ":class:`Grudger <axelrod.strategies.grudger.Grudger>`"
   "Davis", "Morton Davis", ":class:`Davis <axelrod.strategies.axelrod_first.FirstByDavis>`"
   "Graaskamp", "Jim Graaskamp", ":class:`Graaskamp <axelrod.strategies.axelrod_first.FirstByGraaskamp>`"
-  "Downing", "Leslie Downing", ":class:`RevisedDowning <axelrod.strategies.axelrod_first.RevisedDowning>`"
+  "FirstByDowning", "Leslie Downing", ":class:`RevisedDowning <axelrod.strategies.axelrod_first.FirstByDowning>`"
   "Feld", "Scott Feld", ":class:`Feld <axelrod.strategies.axelrod_first.FirstByFeld>`"
   "Joss", "Johann Joss", ":class:`Joss <axelrod.strategies.axelrod_first.FirstByJoss>`"
   "Tullock",  "Gordon Tullock", ":class:`Tullock <axelrod.strategies.axelrod_first.FirstByTullock>`"

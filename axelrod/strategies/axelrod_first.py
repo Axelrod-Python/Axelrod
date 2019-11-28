@@ -73,107 +73,181 @@ class FirstByDavis(Player):
             return D
         return C
 
-# TODO Split this in to ttwo strategies, it's not clear to me from the internet
-# sources that the first implentation was buggy as opposed to just "poorly
-# thought out". The flaw is actually clearly described in the paper's
-# description: "Initially, they are both assumed to be .5, which amounts to the
-# pessimistic assumption that the other player is not responsive"
-# The revised version should be put in it's own module.
-# I also do not understand where the decision rules come from.
-# Need to read https://journals.sagepub.com/doi/10.1177/003755007500600402 to
-# gain understanding of decision rule.
-class RevisedDowning(Player):
+class FirstByDowning(Player):
     """
     Submitted to Axelrod's first tournament by Downing
 
     The description written in [Axelrod1980]_ is:
 
-    > "This rule selects its choice to maximize its own long- term expected payoff on
+    > "This rule selects its choice to maximize its own longterm expected payoff on
     > the assumption that the other rule cooperates with a fixed probability which
     > depends only on whether the other player cooperated or defected on the previous
-    > move. These two probabilities estimates are con- tinuously updated as the game
+    > move. These two probabilities estimates are continuously updated as the game
     > progresses. Initially, they are both assumed to be .5, which amounts to the
     > pessimistic assumption that the other player is not responsive. This rule is
     > based on an outcome maximization interpretation of human performances proposed
     > by Downing (1975)."
 
-    This strategy attempts to estimate the next move of the opponent by estimating
-    the probability of cooperating given that they defected (:math:`p(C|D)`) or
-    cooperated on the previous round (:math:`p(C|C)`). These probabilities are
-    continuously updated during play and the strategy attempts to maximise the long
-    term play. Note that the initial values are :math:`p(C|C)=p(C|D)=.5`.
+    The Downing (1975) paper is "The Prisoner's Dilemma Game as a
+    Problem-Solving Phenomenon" [Downing1975]_ and this is used to implement the
+    strategy.
 
-    # TODO: This paragraph is not correct (see note above)
-    Downing is implemented as `RevisedDowning`. Apparently in the first tournament
-    the strategy was implemented incorrectly and defected on the first two rounds.
-    This can be controlled by setting `revised=True` to prevent the initial defections.
+    There are a number of specific points in this paper, on page 371:
 
-    This strategy came 10th in Axelrod's original tournament but would have won
-    if it had been implemented correctly.
+    > "[...] In these strategies, O's [the opponent's] response on trial N is in
+    some way dependent or contingent on S's [the subject's] response on trial N-
+    1. All varieties of these lag-one matching strategies can be defined by two
+    parameters: the conditional probability that O will choose C folloging C by
+    S, P(C_o | C_s) and the conditional probability that O will choose C
+    following D by S, P(C_o, D_s)."
+
+    Throughout the paper the strategy (S) assumes that the opponent (D) is
+    playing a reactive strategy defined by these two conditional probabilities.
+
+    The strategy aims to maximise the long run utility against such a strategy
+    and the mechanism for this is described in Appendix A (more on this later).
+
+    One final point from the main text is, on page 372:
+
+    > "For the various lag-one matching strategies of O, the maximizing
+    strategies of S will be 100% C, or 100% D, or for some strategies all S
+    strategies will be functionaly equivalent."
+
+    This implies that the strategy S will either always cooperate or always
+    defect (or be indifferent) dependent on the opponent's defining
+    probabilities.
+
+    To understand the particular mechanism that describes the strategy S, we
+    refer to Appendix A of the paper on page 389.
+
+    The state goal of the strategy is to maximize (using the notation of the
+    paper):
+
+        EV_TOT = #CC(EV_CC) + #CD(EV_CD) + #DC(EV_DC) + #DD(EV_DD)
+
+    I.E. The player aims to maximise the expected value of being in each state
+    weighted by the number of times we expect to be in that state.
+
+    On the second page of the appendix, figure 4 (page 390) supposedly
+    identifies an expression for EV_TOT however it is not clear how some of the
+    steps are carried out. To the best guess, it seems like an asymptotic
+    argument is being used. Furthermore, a specific term is made to disappear in
+    the case of T - R = P - S (which is not the case for the standard
+    (R, P, S, T) = (3, 1, 0, 5)):
+
+    > "Where (t - r) = (p - s), EV_TOT will be a function of alpha, beta, t, r,
+    p, s and N are known and V which is unknown.
+
+    V is the total number of cooperations of the player S (this is noted earlier
+    in the abstract) and as such the final expression (with only V as unknown)
+    can be used to decide if V should indicate that S always cooperates or not.
+
+    Given the lack of usable details in this paper, the following interpretation
+    is used to implement this strategy:
+
+    1. On any given turn, the strategy will estimate alpha = P(C_o | C_s) and
+    beta = P(C_o | D_s).
+    2. The stragy will calculate the expected utility of always playing C OR
+    always playing D against the estimage probabilities. This corresponds to:
+
+        a. In the case of the player always cooperating:
+
+           P_CC = alpha and P_CD = 1 - alpha
+
+        b. In the case of the player always defecting:
+
+           P_DC = beta and P_DD = 1 - beta
+
+
+    Using this we have:
+
+        E_C = alpha R + (1 - alpha) S
+        E_D = beta T + (1 - beta) P
+
+    Thus at every turn, the strategy will calculate those two values and
+    cooperate if E_C > E_D and will defect if E_C < E_D.
+
+    In the case of E_C = E_D, the player will alternate from their previous
+    move. This is based on specific sentence from Axelrod's original paper:
+
+    > "Under certain circumstances, DOWNING will even determine that the best
+    > strategy is to alternate cooperation and defection."
+
+    One final important point is the early game behaviour of the strategy. It
+    has been noted that this strategy was implemented in a way that assumed that
+    alpha and beta were both 1/2:
+
+    > "Initially, they are both assumed to be .5, which amounts to the
+    > pessimistic assumption that the other player is not responsive."
+
+    Thus, the player opens with a defection in the first two rounds. Note that
+    from the Axelrod publications alone there is nothing to indicate defections
+    on the first two rounds, although a defection in the opening round is clear.
+    However there is a presentation available at
+    http://www.sci.brooklyn.cuny.edu/~sklar/teaching/f05/alife/notes/azhar-ipd-Oct19th.pdf
+    That clearly states that Downing defected in the first two rounds, thus this
+    is assumed to be the behaviour.
+
+    Note that response to the first round allows us to estimate
+    beta = P(C_o | D_s) and we will use the opening play of the player to
+    estimate alpha = P(C_o | C_s). This is an assumption with no clear
+    indication from the literature.
+
+    --
+    This strategy came 10th in Axelrod's original tournament.
 
     Names:
 
     - Revised Downing: [Axelrod1980]_
     """
 
-    name = "Revised Downing"
+    name = "First tournament by Downing"
 
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
-        "makes_use_of": set(),
+        "makes_use_of": {"game"},
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
         "manipulates_state": False,
     }
 
-    def __init__(self, revised: bool = True) -> None:
+    def __init__(self) -> None:
         super().__init__()
-        self.revised = revised
-        self.good = 1.0
-        self.bad = 0.0
-        self.nice1 = 0
-        self.nice2 = 0
-        self.total_C = 0  # note the same as self.cooperations
-        self.total_D = 0  # note the same as self.defections
+        self.number_opponent_cooperations_in_response_to_C = 0
+        self.number_opponent_cooperations_in_response_to_D = 0
 
     def strategy(self, opponent: Player) -> Action:
         round_number = len(self.history) + 1
-        # According to internet sources, the original implementation defected
-        # on the first two moves. Otherwise it wins (if this code is removed
-        # and the comment restored.
-        # http://www.sci.brooklyn.cuny.edu/~sklar/teaching/f05/alife/notes/azhar-ipd-Oct19th.pdf
 
-        if self.revised:
-            if round_number == 1:
-                return C
-        elif not self.revised:
-            if round_number <= 2:
-                return D
+        if round_number == 1:
+            return D
+        if round_number == 2:
+            if opponent.history[-1] == C:
+                self.number_opponent_cooperations_in_response_to_C += 1
+            return D
 
-        # Update various counts
-        if round_number > 2:
-            if self.history[-1] == D:
-                if opponent.history[-1] == C:
-                    self.nice2 += 1
-                self.total_D += 1
-                self.bad = self.nice2 / self.total_D
-            else:
-                if opponent.history[-1] == C:
-                    self.nice1 += 1
-                self.total_C += 1
-                self.good = self.nice1 / self.total_C
-        # Make a decision based on the accrued counts
-        c = 6.0 * self.good - 8.0 * self.bad - 2
-        alt = 4.0 * self.good - 5.0 * self.bad - 1
-        if c >= 0 and c >= alt:
-            move = C
-        elif (c >= 0 and c < alt) or (alt >= 0):
-            move = self.history[-1].flip()
-        else:
-            move = D
-        return move
+
+        if self.history[-2] == C and opponent.history[-1] == C:
+            self.number_opponent_cooperations_in_response_to_C += 1
+        if self.history[-2] == D and opponent.history[-1] == C:
+            self.number_opponent_cooperations_in_response_to_D += 1
+
+        alpha = (self.number_opponent_cooperations_in_response_to_C /
+                 (self.cooperations + 1))  # Adding 1 to count for opening move
+        beta = (self.number_opponent_cooperations_in_response_to_D /
+                 (self.defections))
+
+        R, P, S, T = self.match_attributes["game"].RPST()
+        expected_value_of_cooperating = alpha * R + (1 - alpha) * S
+        expected_value_of_defecting = beta * T + (1 - beta) * P
+
+        if expected_value_of_cooperating > expected_value_of_defecting:
+            return C
+        if expected_value_of_cooperating < expected_value_of_defecting:
+            return D
+        return self.history[-1].flip()
 
 
 class FirstByFeld(Player):
@@ -277,8 +351,6 @@ class FirstByGraaskamp(Player):
        a clone of itself. If
        so it plays Tit For Tat. If not it cooperates and randomly defects every 5
        to 15 moves.
-
-    # TODO Compare this to Fortran code.
 
     Note that there is no information about 'Analogy' available thus Step 5 is
     a "best possible" interpretation of the description in the paper.
