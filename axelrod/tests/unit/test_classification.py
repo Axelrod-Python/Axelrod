@@ -28,8 +28,8 @@ class TestClassification(unittest.TestCase):
         P2 = axl.MemoryOnePlayer(four_vector=(1, 0, 0, 1))
         self.assertNotEqual(P1.classifier, P2.classifier)
 
-        P1 = axl.Joss()
-        P2 = axl.Joss(p=0)
+        P1 = axl.FirstByJoss()
+        P2 = axl.FirstByJoss(p=0)
         self.assertNotEqual(P1.classifier, P2.classifier)
 
         P1 = axl.GTFT(p=1)
