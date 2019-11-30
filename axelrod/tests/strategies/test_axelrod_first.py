@@ -392,7 +392,7 @@ class TestFirstByShubik(TestPlayer):
             (D, D),
             (D, C),
             (D, D),
-            (D, C),
+            (C, C),
         ]
         self.versus_test(opponent, expected_actions=actions)
 

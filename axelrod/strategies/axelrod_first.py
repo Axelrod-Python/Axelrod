@@ -600,17 +600,24 @@ class FirstByShubik(Player):
     > strategic implications in Shubik (1970). Further treatment of its is given
     > in Taylor (1976).
 
+    There is some room for interpretation as to how the strategy reacts to a
+    defection on the turn where it starts to cooperate once more. In Shubik
+    (1970) the strategy is described as:
+
+    >  "I will play my move 1 to begin with and will continue to do so, so long
+    > as my information shows that the other player has chosen his move 1. If my
+    > information tells me he has used move 2, then I will use move 2 for the
+    > immediate k subsequent periods, after which I will resume using move 1. If
+    > he uses his move 2 again after I have resumed using move 1, then I will
+    > switch to move 2 for the k + 1 immediately subsequent periods . . . and so
+    > on, increasing my retaliation by an extra period for each departure from the
+    > (1, 1) steady state."
+
     This is interpreted as:
 
-    Plays like Tit-For-Tat with the following modification. After each
-    retaliation, the number of rounds that Shubik retaliates increases by 1.
-
-    # TODO Read
-    # https://www.jstor.org/stable/pdf/173263.pdf?refreqid=excelsior%3A94cf485d88f107de1d72296c4cf5d988
-    # as supposedely there there is description indicating that the strategy
-    # would cooperate twice. I do not think I agree but need to check carefully.
-
-    This strategy came 5th in Axelrod's original tournament.
+    The player cooperates, if when it is cooperating, the opponent defects it
+    defects for k rounds. After k rounds it starts cooperating again and
+    increments the value of k if the opponent defects again.
 
     Names:
 
@@ -645,22 +652,19 @@ class FirstByShubik(Player):
     def strategy(self, opponent: Player) -> Action:
         if not opponent.history:
             return C
-        if opponent.history[-1] == D:
-            # Retaliate against defections
-            if self.history[-1] == C:  # it's on now!
-                # Lengthen the retaliation period
-                self.is_retaliating = True
-                self.retaliation_length += 1
-                self.retaliation_remaining = self.retaliation_length
-                self._decrease_retaliation_counter()
-                return D
-            else:
-                # Just retaliate
-                if self.is_retaliating:
-                    self._decrease_retaliation_counter()
-                return D
+
         if self.is_retaliating:
             # Are we retaliating still?
+            self._decrease_retaliation_counter()
+            return D
+
+        if opponent.history[-1] == D and self.history[-1] == C:
+            # "If he uses his move 2 again after I have resumed using move 1,
+            # then I will switch to move 2 for the k + 1 immediately subsequent
+            # periods"
+            self.is_retaliating = True
+            self.retaliation_length += 1
+            self.retaliation_remaining = self.retaliation_length
             self._decrease_retaliation_counter()
             return D
         return C
