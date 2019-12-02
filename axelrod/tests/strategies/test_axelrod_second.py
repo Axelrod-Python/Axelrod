@@ -11,7 +11,7 @@ C, D = axelrod.Action.C, axelrod.Action.D
 
 
 class TestChampion(TestPlayer):
-    name = "Second tournament by Champion"
+    name = "Second by Champion"
     player = axelrod.SecondByChampion
     expected_classifier = {
         "memory_depth": float("inf"),
@@ -46,7 +46,7 @@ class TestChampion(TestPlayer):
 
 class TestEatherley(TestPlayer):
 
-    name = "Second tournament by Eatherley"
+    name = "Second by Eatherley"
     player = axelrod.SecondByEatherley
     expected_classifier = {
         "memory_depth": float("inf"),
@@ -83,7 +83,7 @@ class TestEatherley(TestPlayer):
 
 class TestTester(TestPlayer):
 
-    name = "Second tournament by Tester"
+    name = "Second by Tester"
     player = axelrod.SecondByTester
     expected_classifier = {
         "memory_depth": float("inf"),
@@ -116,7 +116,7 @@ class TestTester(TestPlayer):
 
 class TestGladstein(TestPlayer):
 
-    name = "Second tournament by Gladstein"
+    name = "Second by Gladstein"
     player = axelrod.SecondByGladstein
     expected_classifier = {
         "memory_depth": float("inf"),
@@ -159,7 +159,7 @@ class TestGladstein(TestPlayer):
 
 class TestTranquilizer(TestPlayer):
 
-    name = "Second tournament by Tranquilizer"
+    name = "Second by Tranquilizer"
     player = axelrod.SecondByTranquilizer
     expected_classifier = {
         "memory_depth": float("inf"),
@@ -357,7 +357,7 @@ class TestTranquilizer(TestPlayer):
 
 class TestGrofman(TestPlayer):
 
-    name = "Second tournament by Grofman"
+    name = "Second by Grofman"
     player = axelrod.SecondByGrofman
     expected_classifier = {
         "memory_depth": 8,
@@ -533,7 +533,7 @@ class TestGrofman(TestPlayer):
 
 
 class TestKluepfel(TestPlayer):
-    name = "Second tournament by Kluepfel"
+    name = "Second by Kluepfel"
     player = axelrod.SecondByKluepfel
     expected_classifier = {
         "memory_depth": float("inf"),
@@ -627,7 +627,7 @@ class TestKluepfel(TestPlayer):
 
 
 class TestBorufsen(TestPlayer):
-    name = "Second tournament by Borufsen"
+    name = "Second by Borufsen"
     player = axelrod.SecondByBorufsen
     expected_classifier = {
         "memory_depth": float("inf"),
@@ -677,7 +677,7 @@ class TestBorufsen(TestPlayer):
 
 
 class TestCave(TestPlayer):
-    name = "Second tournament by Cave"
+    name = "Second by Cave"
     player = axelrod.SecondByCave
     expected_classifier = {
         "memory_depth": float("inf"),
@@ -795,7 +795,7 @@ class TestCave(TestPlayer):
 
 
 class TestWmAdams(TestPlayer):
-    name = "Second tournament by WmAdams"
+    name = "Second by WmAdams"
     player = axelrod.SecondByWmAdams
     expected_classifier = {
         "memory_depth": float("inf"),
@@ -878,7 +878,7 @@ class TestWmAdams(TestPlayer):
 
 
 class TestGraaskampKatzen(TestPlayer):
-    name = "Second tournament by GraaskampKatzen"
+    name = "Second by GraaskampKatzen"
     player = axelrod.SecondByGraaskampKatzen
     expected_classifier = {
         "memory_depth": float("inf"),
@@ -915,7 +915,7 @@ class TestGraaskampKatzen(TestPlayer):
 
 
 class TestWeiner(TestPlayer):
-    name = "Second tournament by Weiner"
+    name = "Second by Weiner"
     player = axelrod.SecondByWeiner
     expected_classifier = {
         "memory_depth": float("inf"),
@@ -984,7 +984,7 @@ class TestWeiner(TestPlayer):
 
 
 class TestHarrington(TestPlayer):
-    name = "Second tournament by Harrington"
+    name = "Second by Harrington"
     player = axelrod.SecondByHarrington
     expected_classifier = {
         "memory_depth": float("inf"),
@@ -1244,7 +1244,7 @@ class TestHarrington(TestPlayer):
 
 
 class TestTidemanAndChieruzzi(TestPlayer):
-    name = "Second tournament by Tideman and Chieruzzi"
+    name = "Second by Tideman and Chieruzzi"
     player = axelrod.SecondByTidemanAndChieruzzi
     expected_classifier = {
         "memory_depth": float("inf"),
@@ -1339,7 +1339,7 @@ class TestTidemanAndChieruzzi(TestPlayer):
 
 
 class TestGetzler(TestPlayer):
-    name = "Second tournament by Getzler"
+    name = "Second by Getzler"
     player = axelrod.SecondByGetzler
     expected_classifier = {
         "memory_depth": float("inf"),
@@ -1373,7 +1373,7 @@ class TestGetzler(TestPlayer):
 
 
 class TestLeyvraz(TestPlayer):
-    name = "Second tournament by Leyvraz"
+    name = "Second by Leyvraz"
     player = axelrod.SecondByLeyvraz
     expected_classifier = {
         "memory_depth": 3,
@@ -1416,7 +1416,7 @@ class TestLeyvraz(TestPlayer):
 
 
 class TestWhite(TestPlayer):
-    name = "Second tournament by White"
+    name = "Second by White"
     player = axelrod.SecondByWhite
     expected_classifier = {
         "memory_depth": float("inf"),
@@ -1484,7 +1484,7 @@ class TestWhite(TestPlayer):
 
 
 class TestBlack(TestPlayer):
-    name = "Second tournament by Black"
+    name = "Second by Black"
     player = axelrod.SecondByBlack
     expected_classifier = {
         "memory_depth": 5,
@@ -1532,7 +1532,7 @@ class TestBlack(TestPlayer):
 
 
 class TestRichardHufford(TestPlayer):
-    name = "Second tournament by RichardHufford"
+    name = "Second by RichardHufford"
     player = axelrod.SecondByRichardHufford
     expected_classifier = {
         "memory_depth": float("inf"),
@@ -1583,7 +1583,7 @@ class TestRichardHufford(TestPlayer):
 
 
 class TestYamachi(TestPlayer):
-    name = "Second tournament by Yamachi"
+    name = "Second by Yamachi"
     player = axelrod.SecondByYamachi
     expected_classifier = {
         "memory_depth": float("inf"),
@@ -1713,7 +1713,7 @@ class TestYamachi(TestPlayer):
 
 
 class TestColbert(TestPlayer):
-    name = "Second tournament by Colbert"
+    name = "Second by Colbert"
     player = axelrod.SecondByColbert
     expected_classifier = {
         "memory_depth": 4,
@@ -1741,7 +1741,7 @@ class TestColbert(TestPlayer):
 
 
 class TestMikkelson(TestPlayer):
-    name = "Second tournament by Mikkelson"
+    name = "Second by Mikkelson"
     player = axelrod.SecondByMikkelson
     expected_classifier = {
         "memory_depth": float("inf"),
@@ -1817,7 +1817,7 @@ class TestMikkelson(TestPlayer):
         # Still Cooperate, because Defect rate is low
 
 class TestRowsam(TestPlayer):
-    name = "Second tournament by Rowsam"
+    name = "Second by Rowsam"
     player = axelrod.SecondByRowsam
     expected_classifier = {
         "memory_depth": float("inf"),
@@ -1910,7 +1910,7 @@ class TestRowsam(TestPlayer):
 
 
 class TestAppold(TestPlayer):
-    name = "Second tournament by Appold"
+    name = "Second by Appold"
     player = axelrod.SecondByAppold
     expected_classifier = {
         "memory_depth": float("inf"),

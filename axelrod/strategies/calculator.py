@@ -2,14 +2,14 @@ from axelrod._strategy_utils import detect_cycle
 from axelrod.action import Action
 from axelrod.player import Player
 
-from .axelrod_first import FirstByJoss
+from .axelrod_first import FirstByJoss as Joss
 
 C, D = Action.C, Action.D
 
 
 class Calculator(Player):
     """
-    Plays like (Hard) FirstByJoss for the first 20 rounds. If periodic behavior is
+    Plays like (Hard) Joss for the first 20 rounds. If periodic behavior is
     detected, defect forever. Otherwise play TFT.
 
 
@@ -31,7 +31,7 @@ class Calculator(Player):
 
     def __init__(self) -> None:
         super().__init__()
-        self.joss_instance = FirstByJoss()
+        self.joss_instance = Joss()
 
     def strategy(self, opponent: Player) -> Action:
         turn = len(self.history)

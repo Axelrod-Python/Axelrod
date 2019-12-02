@@ -9,7 +9,7 @@ C, D = axelrod.Action.C, axelrod.Action.D
 
 class TestFirstByDavis(TestPlayer):
 
-    name = "First tournament by Davis: 10"
+    name = "First by Davis: 10"
     player = axelrod.FirstByDavis
     expected_classifier = {
         "memory_depth": float("inf"),
@@ -45,7 +45,7 @@ class TestFirstByDavis(TestPlayer):
 
 class TestFirstByDowning(TestPlayer):
 
-    name = "First tournament by Downing"
+    name = "First by Downing"
     player = axelrod.FirstByDowning
     expected_classifier = {
         "memory_depth": float("inf"),
@@ -81,9 +81,9 @@ class TestFirstByDowning(TestPlayer):
         self.versus_test(opponent, expected_actions=actions)
 
 
-class TestFristByFeld(TestPlayer):
+class TestFirstByFeld(TestPlayer):
 
-    name = "First tournament by Feld: 1.0, 0.5, 200"
+    name = "First by Feld: 1.0, 0.5, 200"
     player = axelrod.FirstByFeld
     expected_classifier = {
         "memory_depth": 200,
@@ -139,7 +139,7 @@ class TestFristByFeld(TestPlayer):
 
 class TestFirstByGraaskamp(TestPlayer):
 
-    name = "First tournament by Graaskamp: 0.05"
+    name = "First by Graaskamp: 0.05"
     player = axelrod.FirstByGraaskamp
     expected_classifier = {
         "memory_depth": float("inf"),
@@ -237,7 +237,7 @@ class TestFirstByGraaskamp(TestPlayer):
 
 class TestFirstByGrofman(TestPlayer):
 
-    name = "First tournament by Grofman"
+    name = "First by Grofman"
     player = axelrod.FirstByGrofman
     expected_classifier = {
         "memory_depth": 1,
@@ -267,7 +267,7 @@ class TestFirstByGrofman(TestPlayer):
 
 class TestFirstByJoss(TestPlayer):
 
-    name = "First tournament by Joss: 0.9"
+    name = "First by Joss: 0.9"
     player = axelrod.FirstByJoss
     expected_classifier = {
         "memory_depth": 1,
@@ -299,7 +299,7 @@ class TestFirstByJoss(TestPlayer):
 
 class TestFirstByNydegger(TestPlayer):
 
-    name = "First tournament by Nydegger"
+    name = "First by Nydegger"
     player = axelrod.FirstByNydegger
     expected_classifier = {
         "memory_depth": 3,
@@ -350,7 +350,7 @@ class TestFirstByNydegger(TestPlayer):
 
 class TestFirstByShubik(TestPlayer):
 
-    name = "First tournament by Shubik"
+    name = "First by Shubik"
     player = axelrod.FirstByShubik
     expected_classifier = {
         "memory_depth": float("inf"),
@@ -399,10 +399,10 @@ class TestFirstByShubik(TestPlayer):
 
 class TestFirstByTullock(TestPlayer):
 
-    name = "First tournament by Tullock: 11"
+    name = "First by Tullock"
     player = axelrod.FirstByTullock
     expected_classifier = {
-        "memory_depth": 11,
+        "memory_depth": float("inf"),
         "stochastic": True,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -443,7 +443,7 @@ class TestFirstByTullock(TestPlayer):
 
 class TestFirstByAnonymous(TestPlayer):
 
-    name = "First tournament by Anonymous"
+    name = "First by Anonymous"
     player = axelrod.FirstByAnonymous
     expected_classifier = {
         "memory_depth": 0,
@@ -465,7 +465,7 @@ class TestFirstByAnonymous(TestPlayer):
 
 class TestFirstBySteinAndRapoport(TestPlayer):
 
-    name = "First tournament by Stein and Rapoport: 0.05: (D, D)"
+    name = "First by Stein and Rapoport: 0.05: (D, D)"
     player = axelrod.FirstBySteinAndRapoport
     expected_classifier = {
         "memory_depth": float("inf"),
@@ -548,7 +548,7 @@ class TestFirstBySteinAndRapoport(TestPlayer):
 
 class TestFirstByTidemanAndChieruzzi(TestPlayer):
 
-    name = "First tournament by Tideman and Chieruzzi: (D, D)"
+    name = "First by Tideman and Chieruzzi: (D, D)"
     player = axelrod.FirstByTidemanAndChieruzzi
     expected_classifier = {
         "memory_depth": float("inf"),

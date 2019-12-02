@@ -43,7 +43,7 @@ class FirstByDavis(Player):
     - Davis: [Axelrod1980]_
     """
 
-    name = "First tournament by Davis"
+    name = "First by Davis"
     classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": False,
@@ -69,7 +69,7 @@ class FirstByDavis(Player):
         opponent ever plays D."""
         if len(self.history) < self._rounds_to_cooperate:
             return C
-        if opponent.defections > 0:
+        if opponent.defections > 0:  # Implement Grudger
             return D
         return C
 
@@ -97,7 +97,7 @@ class FirstByDowning(Player):
     > "[...] In these strategies, O's [the opponent's] response on trial N is in
     some way dependent or contingent on S's [the subject's] response on trial N-
     1. All varieties of these lag-one matching strategies can be defined by two
-    parameters: the conditional probability that O will choose C folloging C by
+    parameters: the conditional probability that O will choose C following C by
     S, P(C_o | C_s) and the conditional probability that O will choose C
     following D by S, P(C_o, D_s)."
 
@@ -120,7 +120,7 @@ class FirstByDowning(Player):
     To understand the particular mechanism that describes the strategy S, we
     refer to Appendix A of the paper on page 389.
 
-    The state goal of the strategy is to maximize (using the notation of the
+    The stated goal of the strategy is to maximize (using the notation of the
     paper):
 
         EV_TOT = #CC(EV_CC) + #CD(EV_CD) + #DC(EV_DC) + #DD(EV_DD)
@@ -130,7 +130,7 @@ class FirstByDowning(Player):
 
     On the second page of the appendix, figure 4 (page 390) supposedly
     identifies an expression for EV_TOT however it is not clear how some of the
-    steps are carried out. To the best guess, it seems like an asymptotic
+    steps are carried out. It seems like an asymptotic
     argument is being used. Furthermore, a specific term is made to disappear in
     the case of T - R = P - S (which is not the case for the standard
     (R, P, S, T) = (3, 1, 0, 5)):
@@ -147,8 +147,8 @@ class FirstByDowning(Player):
 
     1. On any given turn, the strategy will estimate alpha = P(C_o | C_s) and
     beta = P(C_o | D_s).
-    2. The stragy will calculate the expected utility of always playing C OR
-    always playing D against the estimage probabilities. This corresponds to:
+    2. The strategy will calculate the expected utility of always playing C OR
+    always playing D against the estimated probabilities. This corresponds to:
 
         a. In the case of the player always cooperating:
 
@@ -186,7 +186,8 @@ class FirstByDowning(Player):
     However there is a presentation available at
     http://www.sci.brooklyn.cuny.edu/~sklar/teaching/f05/alife/notes/azhar-ipd-Oct19th.pdf
     That clearly states that Downing defected in the first two rounds, thus this
-    is assumed to be the behaviour.
+    is assumed to be the behaviour. Interestingly, in future tournaments this
+    strategy was revised to not defect on the opening two rounds.
 
     Note that response to the first round allows us to estimate
     beta = P(C_o | D_s) and we will use the opening play of the player to
@@ -201,7 +202,7 @@ class FirstByDowning(Player):
     - Revised Downing: [Axelrod1980]_
     """
 
-    name = "First tournament by Downing"
+    name = "First by Downing"
 
     classifier = {
         "memory_depth": float("inf"),
@@ -273,7 +274,7 @@ class FirstByFeld(Player):
     - Feld: [Axelrod1980]_
     """
 
-    name = "First tournament by Feld"
+    name = "First by Feld"
     classifier = {
         "memory_depth": 200,  # Varies actually, eventually becomes depth 1
         "stochastic": True,
@@ -326,7 +327,7 @@ class FirstByFeld(Player):
 
 class FirstByGraaskamp(Player):
     """
-    Submitted to Axelrod's first tournament by James Graaskamp..
+    Submitted to Axelrod's first tournament by James Graaskamp.
 
     The description written in [Axelrod1980]_ is:
 
@@ -354,6 +355,9 @@ class FirstByGraaskamp(Player):
 
     Note that there is no information about 'Analogy' available thus Step 5 is
     a "best possible" interpretation of the description in the paper.
+    Furthermore the test for the clone is implemented as checking that both
+    players have played the same moves for the entire game, this is unlikely to
+    be the original approach but no further details are available.
 
     This strategy came 9th in Axelrod’s original tournament.
 
@@ -362,7 +366,7 @@ class FirstByGraaskamp(Player):
     - Graaskamp: [Axelrod1980]_
     """
 
-    name = "First tournament by Graaskamp"
+    name = "First by Graaskamp"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
@@ -438,7 +442,7 @@ class FirstByGrofman(Player):
     - Grofman: [Axelrod1980]_
     """
 
-    name = "First tournament by Grofman"
+    name = "First by Grofman"
     classifier = {
         "memory_depth": 1,
         "stochastic": True,
@@ -471,7 +475,7 @@ class FirstByJoss(MemoryOnePlayer):
     - Hard Joss: [Stewart2012]_
     """
 
-    name = "First tournament by Joss"
+    name = "First by Joss"
 
     def __init__(self, p: float = 0.9) -> None:
         """
@@ -539,7 +543,7 @@ class FirstByNydegger(Player):
     - Nydegger: [Axelrod1980]_
     """
 
-    name = "First tournament by Nydegger"
+    name = "First by Nydegger"
     classifier = {
         "memory_depth": 3,
         "stochastic": False,
@@ -604,7 +608,7 @@ class FirstByShubik(Player):
     defection on the turn where it starts to cooperate once more. In Shubik
     (1970) the strategy is described as:
 
-    >  "I will play my move 1 to begin with and will continue to do so, so long
+    > "I will play my move 1 to begin with and will continue to do so, so long
     > as my information shows that the other player has chosen his move 1. If my
     > information tells me he has used move 2, then I will use move 2 for the
     > immediate k subsequent periods, after which I will resume using move 1. If
@@ -619,12 +623,14 @@ class FirstByShubik(Player):
     defects for k rounds. After k rounds it starts cooperating again and
     increments the value of k if the opponent defects again.
 
+    This strategy came 5th in Axelrod's original tournament.
+
     Names:
 
     - Shubik: [Axelrod1980]_
     """
 
-    name = "First tournament by Shubik"
+    name = "First by Shubik"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -695,9 +701,9 @@ class FirstByTullock(Player):
     - Tullock: [Axelrod1980]_
     """
 
-    name = "First tournament by Tullock"
+    name = "First by Tullock"
     classifier = {
-        "memory_depth": 11,
+        "memory_depth": float("inf"),
         "stochastic": True,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -706,7 +712,7 @@ class FirstByTullock(Player):
         "manipulates_state": False,
     }
 
-    def __init__(self, rounds_to_cooperate: int = 11) -> None:
+    def __init__(self) -> None:
         """
         Parameters
         ----------
@@ -714,8 +720,8 @@ class FirstByTullock(Player):
            The number of rounds to cooperate initially
         """
         super().__init__()
-        self._rounds_to_cooperate = rounds_to_cooperate
-        self.memory_depth = rounds_to_cooperate
+        self._rounds_to_cooperate = 11
+        self.memory_depth = self._rounds_to_cooperate
 
     def strategy(self, opponent: Player) -> Action:
         if len(self.history) < self._rounds_to_cooperate:
@@ -751,7 +757,7 @@ class FirstByAnonymous(Player):
     - (Name withheld): [Axelrod1980]_
     """
 
-    name = "First tournament by Anonymous"
+    name = "First by Anonymous"
     classifier = {
         "memory_depth": 0,
         "stochastic": True,
@@ -796,7 +802,7 @@ class FirstBySteinAndRapoport(Player):
     - SteinAndRapoport: [Axelrod1980]_
     """
 
-    name = "First tournament by Stein and Rapoport"
+    name = "First by Stein and Rapoport"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -884,7 +890,7 @@ class FirstByTidemanAndChieruzzi(Player):
     - TidemanAndChieruzzi: [Axelrod1980]_
     """
 
-    name = "First tournament by Tideman and Chieruzzi"
+    name = "First by Tideman and Chieruzzi"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,

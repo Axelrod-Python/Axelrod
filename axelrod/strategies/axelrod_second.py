@@ -32,7 +32,7 @@ class SecondByChampion(Player):
     - Champion: [Axelrod1980b]_
     """
 
-    name = "Second tournament by Champion"
+    name = "Second by Champion"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
@@ -76,7 +76,7 @@ class SecondByEatherley(Player):
     - Eatherley: [Axelrod1980b]_
     """
 
-    name = "Second tournament by Eatherley"
+    name = "Second by Eatherley"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
@@ -117,7 +117,7 @@ class SecondByTester(Player):
     - Tester: [Axelrod1980b]_
     """
 
-    name = "Second tournament by Tester"
+    name = "Second by Tester"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -170,7 +170,7 @@ class SecondByGladstein(Player):
     - Tester: [Axelrod1980b]_
     """
 
-    name = "Second tournament by Gladstein"
+    name = "Second by Gladstein"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -318,7 +318,7 @@ class SecondByTranquilizer(Player):
     - Tranquilizer: [Axelrod1980]_
     """
 
-    name = "Second tournament by Tranquilizer"
+    name = "Second by Tranquilizer"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
@@ -449,7 +449,7 @@ class SecondByGrofman(Player):
     - K86R: [Axelrod1980b]_
     """
 
-    name = "Second tournament by Grofman"
+    name = "Second by Grofman"
     classifier = {
         "memory_depth": 8,
         "stochastic": False,
@@ -513,7 +513,7 @@ class SecondByKluepfel(Player):
     - Kluepfel: [Axelrod1980b]_
     """
 
-    name = "Second tournament by Kluepfel"
+    name = "Second by Kluepfel"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
@@ -625,7 +625,7 @@ class SecondByBorufsen(Player):
     - Borufsen: [Axelrod1980b]_
     """
 
-    name = "Second tournament by Borufsen"
+    name = "Second by Borufsen"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -761,7 +761,7 @@ class SecondByCave(Player):
     - Cave: [Axelrod1980b]_
     """
 
-    name = "Second tournament by Cave"
+    name = "Second by Cave"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
@@ -812,7 +812,7 @@ class SecondByWmAdams(Player):
     - WmAdams: [Axelrod1980b]_
     """
 
-    name = "Second tournament by WmAdams"
+    name = "Second by WmAdams"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
@@ -859,7 +859,7 @@ class SecondByGraaskampKatzen(Player):
     - GraaskampKatzen: [Axelrod1980b]_
     """
 
-    name = "Second tournament by GraaskampKatzen"
+    name = "Second by GraaskampKatzen"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -942,7 +942,7 @@ class SecondByWeiner(Player):
     - Weiner: [Axelrod1980b]_
     """
 
-    name = "Second tournament by Weiner"
+    name = "Second by Weiner"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -1095,7 +1095,7 @@ class SecondByHarrington(Player):
     - Harrington: [Axelrod1980b]_
     """
 
-    name = "Second tournament by Harrington"
+    name = "Second by Harrington"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
@@ -1369,7 +1369,7 @@ class SecondByTidemanAndChieruzzi(Player):
     - TidemanAndChieruzzi: [Axelrod1980b]_
     """
 
-    name = "Second tournament by Tideman and Chieruzzi"
+    name = "Second by Tideman and Chieruzzi"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -1465,7 +1465,7 @@ class SecondByGetzler(Player):
     - Getzler: [Axelrod1980b]_
     """
 
-    name = "Second tournament by Getzler"
+    name = "Second by Getzler"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
@@ -1509,7 +1509,7 @@ class SecondByLeyvraz(Player):
     - Leyvraz: [Axelrod1980b]_
     """
 
-    name = "Second tournament by Leyvraz"
+    name = "Second by Leyvraz"
     classifier = {
         "memory_depth": 3,
         "stochastic": True,
@@ -1559,7 +1559,7 @@ class SecondByWhite(Player):
     - White: [Axelrod1980b]_
     """
 
-    name = "Second tournament by White"
+    name = "Second by White"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -1597,7 +1597,7 @@ class SecondByBlack(Player):
     - Black: [Axelrod1980b]_
     """
 
-    name = "Second tournament by Black"
+    name = "Second by Black"
     classifier = {
         "memory_depth": 5,
         "stochastic": True,
@@ -1669,7 +1669,7 @@ class SecondByRichardHufford(Player):
     - RichardHufford: [Axelrod1980b]_
     """
 
-    name = "Second tournament by RichardHufford"
+    name = "Second by RichardHufford"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -1766,7 +1766,7 @@ class SecondByYamachi(Player):
     - Yamachi: [Axelrod1980b]_
     """
 
-    name = "Second tournament by Yamachi"
+    name = "Second by Yamachi"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -1853,7 +1853,7 @@ class SecondByColbert(FSMPlayer):
     - Colbert: [Axelrod1980b]_
     """
 
-    name = "Second tournament by Colbert"
+    name = "Second by Colbert"
     classifier = {
         "memory_depth": 4,
         "stochastic": False,
@@ -1916,7 +1916,7 @@ class SecondByMikkelson(FSMPlayer):
     - Mikkelson: [Axelrod1980b]_
     """
 
-    name = "Second tournament by Mikkelson"
+    name = "Second by Mikkelson"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -1990,7 +1990,7 @@ class SecondByRowsam(Player):
     - Rowsam: [Axelrod1980b]_
     """
 
-    name = "Second tournament by Rowsam"
+    name = "Second by Rowsam"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -2085,7 +2085,7 @@ class SecondByAppold(Player):
     - Appold: [Axelrod1980b]_
     """
 
-    name = "Second tournament by Appold"
+    name = "Second by Appold"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
