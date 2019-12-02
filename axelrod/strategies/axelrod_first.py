@@ -1,9 +1,9 @@
 """
-Strategies from Axelrod's first tournament. All strategies in this module are
-prefixed by `FirstBy` to indicate that they were submitted in Axelrod's First
-tournament by the given author.
+Strategies submitted to Axelrod's first tournament. All strategies in this
+module are prefixed by `FirstBy` to indicate that they were submitted in
+Axelrod's First tournament by the given author.
 
-Note that in these strategies are implemented from the descriptions presented
+Note that these strategies are implemented from the descriptions presented
 in:
 
 Axelrod, R. (1980). Effective Choice in the Prisoner’s Dilemma.
@@ -111,7 +111,7 @@ class FirstByDowning(Player):
 
     > "For the various lag-one matching strategies of O, the maximizing
     strategies of S will be 100% C, or 100% D, or for some strategies all S
-    strategies will be functionaly equivalent."
+    strategies will be functionally equivalent."
 
     This implies that the strategy S will either always cooperate or always
     defect (or be indifferent) dependent on the opponent's defining
@@ -264,7 +264,7 @@ class FirstByFeld(Player):
     This strategy plays Tit For Tat, always defecting if the opponent defects but
     cooperating when the opponent cooperates with a gradually decreasing probability
     until it is only .5. Note that the description does not clearly indicate how
-    the cooperation probability should drop, this implements a linear decreasing
+    the cooperation probability should drop. This implements a linear decreasing
     function.
 
     This strategy came 11th in Axelrod's original tournament.
@@ -346,7 +346,7 @@ class FirstByGraaskamp(Player):
     2. Defects on round 51;
     3. Plays 5 further rounds of Tit For Tat;
     4. A check is then made to see if the opponent is playing randomly in which
-       case it defects for the rest of the game, this is implemented with a chi
+       case it defects for the rest of the game. This is implemented with a chi
        squared test.
     5. The strategy also checks to see if the opponent is playing Tit For Tat or
        a clone of itself. If
@@ -356,7 +356,7 @@ class FirstByGraaskamp(Player):
     Note that there is no information about 'Analogy' available thus Step 5 is
     a "best possible" interpretation of the description in the paper.
     Furthermore the test for the clone is implemented as checking that both
-    players have played the same moves for the entire game, this is unlikely to
+    players have played the same moves for the entire game. This is unlikely to
     be the original approach but no further details are available.
 
     This strategy came 9th in Axelrod’s original tournament.
