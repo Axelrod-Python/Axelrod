@@ -189,10 +189,23 @@ class FirstByDowning(Player):
     is assumed to be the behaviour. Interestingly, in future tournaments this
     strategy was revised to not defect on the opening two rounds.
 
-    Note that response to the first round allows us to estimate
+    It is assumed that these first two rounds are used to create initial
+    estimates of
     beta = P(C_o | D_s) and we will use the opening play of the player to
-    estimate alpha = P(C_o | C_s). This is an assumption with no clear
-    indication from the literature.
+    estimate alpha = P(C_o | C_s).
+    Thus we assume that the opponents first play is a response to a cooperation
+    "before the match starts".
+
+    So for example, if the plays are:
+
+    [(D, C), (D, C)]
+
+    Then the opponent's first cooperation counts as a cooperation in response to
+    the non existent cooperation of round 0. The total number of cooperations in
+    response to a cooperation is 1. We need to take in to account that extra
+    phantom cooperation to estimate the probability alpha=P(C|C) as 1 / 1 = 1.
+
+    This is an assumption with no clear indication from the literature.
 
     --
     This strategy came 10th in Axelrod's original tournament.
@@ -236,7 +249,10 @@ class FirstByDowning(Player):
             self.number_opponent_cooperations_in_response_to_D += 1
 
         alpha = (self.number_opponent_cooperations_in_response_to_C /
-                 (self.cooperations + 1))  # Adding 1 to count for opening move
+                 (self.cooperations + 1))  # Adding 1 to count for assumption
+                                           # that first opponent move being a
+                                           # response to a cooperation. See
+                                           # docstring for more information.
         beta = (self.number_opponent_cooperations_in_response_to_D /
                  (self.defections))
 
