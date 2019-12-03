@@ -2034,7 +2034,7 @@ class TestAppold(TestPlayer):
 
 class TestSeconodByDowning(TestPlayer):
 
-    name = "Revised Downing"
+    name = "Second by Downing"
     player = axelrod.SecondByDowning
     expected_classifier = {
         "memory_depth": float("inf"),
