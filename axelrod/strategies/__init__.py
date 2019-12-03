@@ -77,7 +77,7 @@ axelrod_first_strategies = [
             FirstByFeld,
             FirstByJoss,
             FirstByTullock,
-            FirstByAnyonymous,
+            FirstByAnonymous,
             Random,
         ]
 basic_strategies = [s for s in all_strategies if is_basic(s())]
