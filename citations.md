@@ -2,6 +2,10 @@
 
 ### 2019
 
+* "Stability of defection, optimisation of strategies and the limits of memory in the Prisoner’s Dilemma." arXiv preprint arxiv:1911.12112 (2019). [ArXiv](https://arxiv.org/abs/1911.12112)
+* Glynatsi, Nikoleta E., and Vincent A. Knight. "A systematic literature review of the Prisoner's Dilemma; collaboration and influence." arXiv preprint arXiv:1911.06128 (2019). [ArXiv](https://arxiv.org/abs/1911.06128)
+* O'Neil, Daniel A., and Mikel D. Petty. "Synthesizing Social Networks with Iterated Prisoners' Dilemma." [Proceedings of the International Conference on Modeling, Simulation and Visualization Methods (MSV).](https://csce.ucmss.com/cr/books/2019/LFS/CSREA2019/MSV2345.pdf) The Steering Committee of The World Congress in Computer Science, Computer Engineering and Applied Computing (WorldComp), 2019.
+* Collins, David. "A Genetic Algorithm Approach to the Iterated Prisoner’s Dilemma." [Undergraduate Research in Natural and Clinical Science and Technology Journal](https://urncst.com/index.php/urncst/article/view/155) (2019): 1-9.
 * Wang, Shiheng, and Fangzhen Lin. "Invincible Strategies of Iterated Prisoner's Dilemma." Proceedings of the 18th International Conference on Autonomous Agents and MultiAgent Systems. International Foundation for Autonomous Agents and Multiagent Systems, 2019.  [ArXiv](https://arxiv.org/abs/1712.06488)
 * Knight, Vincent A., et al. "Recognising and evaluating the effectiveness of extortion in the Iterated Prisoner's Dilemma." arXiv preprint arXiv:1904.00973 (2019). [ArXiv](https://arxiv.org/abs/1904.00973)
 
@@ -23,3 +27,13 @@
 ### 2016
 
 * Knight, Vincent Anthony, et al. "An open framework for the reproducible study of the iterated prisoner's dilemma." Journal of Open Research Software 4.1 (2016). [JORS](https://openresearchsoftware.metajnl.com/articles/10.5334/jors.125/) [ArXiv](https://arxiv.org/abs/1604.00896)
+
+### 2015
+
+* Knight, Vincent. "Playing Games: A Case Study in Active Learning Applied to Game Theory." [MSOR Connections 14.1 (2015): 28-38](https://journals.gre.ac.uk/index.php/msor/article/download/254/254).
+
+### Other Preprints and Disserations
+
+* Thomas, Robert W., and José M. Vidal. "Ad Hoc Vehicle Platoon Formation." (2019) [Preprint](http://jmvidal.cse.sc.edu/papers/thomas19a.pdf)
+* Black, Ben. "An Empirical Evaluation of the Ohtsuki-Nowak Approximation." [Master's Thesis](https://www.lancaster.ac.uk/~blackb/documents/MScDiss.pdf). (2018).
+* Zakirov, Bahti. "Modes of Information Flow." (2017) [Preprint](http://london.ucdavis.edu/~reu/REU17/Papers/zakirov.pdf)
