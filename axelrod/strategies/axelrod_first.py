@@ -101,7 +101,7 @@ class FirstByDowning(Player):
     S, P(C_o | C_s) and the conditional probability that O will choose C
     following D by S, P(C_o, D_s)."
 
-    Throughout the paper the strategy (S) assumes that the opponent (D) is
+    Throughout the paper the strategy (S) assumes that the opponent (O) is
     playing a reactive strategy defined by these two conditional probabilities.
 
     The strategy aims to maximise the long run utility against such a strategy
@@ -125,13 +125,16 @@ class FirstByDowning(Player):
 
         EV_TOT = #CC(EV_CC) + #CD(EV_CD) + #DC(EV_DC) + #DD(EV_DD)
 
-    I.E. The player aims to maximise the expected value of being in each state
-    weighted by the number of times we expect to be in that state.
+    This differs from the more modern literature where #CC, #CD, #DC and #DD
+    would imply that counts of both players playing C and C, or the first
+    playing C and the second D etc...
+    In this case the author uses an argument based on the sequence of plays by
+    the player (S) so #CC denotes the number of times the player plays C twice
+    in a row. This is then used to
 
-    On the second page of the appendix, figure 4 (page 390) supposedly
-    identifies an expression for EV_TOT however it is not clear how some of the
-    steps are carried out. It seems like an asymptotic
-    argument is being used. Furthermore, a specific term is made to disappear in
+    On the second page of the appendix, figure 4 (page 390)
+    identifies an expression for EV_TOT.
+    A specific term is made to disappear in
     the case of T - R = P - S (which is not the case for the standard
     (R, P, S, T) = (3, 1, 0, 5)):
 
@@ -142,8 +145,12 @@ class FirstByDowning(Player):
     in the abstract) and as such the final expression (with only V as unknown)
     can be used to decide if V should indicate that S always cooperates or not.
 
-    Given the lack of usable details in this paper, the following interpretation
-    is used to implement this strategy:
+    This final expression is used to show that EV_TOT is linear in the number of
+    cooperations by the player thus justifying the fact that the player will
+    always cooperate or defect.
+
+    All of the above details are used to give the following interpretation of
+    the strategy:
 
     1. On any given turn, the strategy will estimate alpha = P(C_o | C_s) and
     beta = P(C_o | D_s).
@@ -180,6 +187,13 @@ class FirstByDowning(Player):
     > "Initially, they are both assumed to be .5, which amounts to the
     > pessimistic assumption that the other player is not responsive."
 
+    Note that if alpha = beta = 1 / 2 then:
+
+        E_C = alpha R + alpha S
+        E_D = alpha T + alpha P
+
+    And from the defining properties of the Prisoner's Dilemma (T > R > P > S)
+    this gives: E_D > E_C.
     Thus, the player opens with a defection in the first two rounds. Note that
     from the Axelrod publications alone there is nothing to indicate defections
     on the first two rounds, although a defection in the opening round is clear.
