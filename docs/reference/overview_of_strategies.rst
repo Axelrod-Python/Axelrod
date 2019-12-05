@@ -85,7 +85,7 @@ repository.
    "K56R_", "Stanley F Quayle", "Not Implemented"
    "K57R_", "Rudy Nydegger", "Not Implemented"
    "K58R_", "Glen Rowsam", ":class:`SecondByRowsam <axelrod.strategies.axelrod_second.SecondByRowsam>`"
-   "K59R_", "Leslie Downing", ":class:`SecondByDowning <axelrod.strategies.axelrod_second.SecondByDowning>`"
+   "K59R_", "Leslie Downing", ":class:`RevisedDowning <axelrod.strategies.revised_downing.RevisedDowning>`"
    "K60R_", "Jim Graaskamp and Ken Katzen", ":class:`SecondByGraaskampKatzen <axelrod.strategies.axelrod_second.SecondByGraaskampKatzen>`"
    "K61R_", "Danny C Champion", ":class:`SecondByChampion <axelrod.strategies.axelrod_second.SecondByChampion>`"
    "K62R_", "Howard R Hollander", "Not Implemented"
