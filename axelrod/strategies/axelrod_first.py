@@ -130,7 +130,7 @@ class FirstByDowning(Player):
     playing C and the second D etc...
     In this case the author uses an argument based on the sequence of plays by
     the player (S) so #CC denotes the number of times the player plays C twice
-    in a row. This is then used to
+    in a row.
 
     On the second page of the appendix, figure 4 (page 390)
     identifies an expression for EV_TOT.
@@ -217,7 +217,8 @@ class FirstByDowning(Player):
     Then the opponent's first cooperation counts as a cooperation in response to
     the non existent cooperation of round 0. The total number of cooperations in
     response to a cooperation is 1. We need to take in to account that extra
-    phantom cooperation to estimate the probability alpha=P(C|C) as 1 / 1 = 1.
+    phantom cooperation to estimate the probability alpha=P(C_o | C_s) as 1 / 1
+    = 1.
 
     This is an assumption with no clear indication from the literature.
 
