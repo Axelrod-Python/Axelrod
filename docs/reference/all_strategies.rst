@@ -100,6 +100,8 @@ Here are the docstrings of all the strategies in the library.
    :members:
 .. automodule:: axelrod.strategies.retaliate
    :members:
+.. automodule:: axelrod.strategies.revised_downing
+   :members:
 .. automodule:: axelrod.strategies.sequence_player
    :members:
 .. automodule:: axelrod.strategies.shortmem

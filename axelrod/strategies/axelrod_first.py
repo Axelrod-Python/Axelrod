@@ -227,7 +227,7 @@ class FirstByDowning(Player):
 
     Names:
 
-    - Revised Downing: [Axelrod1980]_
+    - Downing: [Axelrod1980]_
     """
 
     name = "First by Downing"
