@@ -26,7 +26,6 @@ from .axelrod_second import (
     SecondByCave,
     SecondByChampion,
     SecondByColbert,
-    SecondByDowning,
     SecondByEatherley,
     SecondByGetzler,
     SecondByGladstein,
@@ -190,6 +189,7 @@ from .retaliate import (
     Retaliate2,
     Retaliate3,
 )
+from .revised_downing import RevisedDowning
 from .selfsteem import SelfSteem
 from .sequence_player import SequencePlayer, ThueMorse, ThueMorseInverse
 from .shortmem import ShortMem
@@ -367,7 +367,7 @@ all_strategies = [
     MindReader,
     MindWarper,
     MirrorMindReader,
-    SecondByDowning,
+    RevisedDowning,
     SecondByGrofman,
     SecondByTidemanAndChieruzzi,
     Negation,
