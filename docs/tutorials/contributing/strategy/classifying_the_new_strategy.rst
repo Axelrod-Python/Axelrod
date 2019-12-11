@@ -26,8 +26,8 @@ default classifier dictionary from the class. This might sometimes be modified b
 the initialisation depending on input parameters. A good example of this is the
 :code:`Joss` strategy::
 
-    >>> joss = axelrod.Joss()
-    >>> boring_joss = axelrod.Joss(p=1)
+    >>> joss = axelrod.FirstByJoss()
+    >>> boring_joss = axelrod.FirstByJoss(p=1)
     >>> joss.classifier['stochastic'], boring_joss.classifier['stochastic']
     (True, False)
 

@@ -7,10 +7,10 @@ from .test_player import TestPlayer, test_four_vector
 C, D = axelrod.Action.C, axelrod.Action.D
 
 
-class TestDavis(TestPlayer):
+class TestFirstByDavis(TestPlayer):
 
-    name = "Davis: 10"
-    player = axelrod.Davis
+    name = "First by Davis: 10"
+    player = axelrod.FirstByDavis
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -43,14 +43,14 @@ class TestDavis(TestPlayer):
         self.versus_test(opponent, expected_actions=actions)
 
 
-class TestRevisedDowning(TestPlayer):
+class TestFirstByDowning(TestPlayer):
 
-    name = "Revised Downing: True"
-    player = axelrod.RevisedDowning
+    name = "First by Downing"
+    player = axelrod.FirstByDowning
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
-        "makes_use_of": set(),
+        "makes_use_of": {"game"},
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -58,40 +58,33 @@ class TestRevisedDowning(TestPlayer):
     }
 
     def test_strategy(self):
-        actions = [(C, C), (C, C), (C, C)]
+        actions = [(D, C), (D, C), (C, C)]
         self.versus_test(axelrod.Cooperator(), expected_actions=actions)
 
-        actions = [(C, D), (C, D), (D, D)]
+        actions = [(D, D), (D, D), (D, D)]
         self.versus_test(axelrod.Defector(), expected_actions=actions)
 
         opponent = axelrod.MockPlayer(actions=[D, C, C])
-        actions = [(C, D), (C, C), (C, C), (C, D)]
+        actions = [(D, D), (D, C), (D, C), (D, D)]
         self.versus_test(opponent, expected_actions=actions)
 
         opponent = axelrod.MockPlayer(actions=[D, D, C])
-        actions = [(C, D), (C, D), (D, C), (D, D)]
+        actions = [(D, D), (D, D), (D, C), (D, D)]
         self.versus_test(opponent, expected_actions=actions)
 
         opponent = axelrod.MockPlayer(actions=[C, C, D, D, C, C])
-        actions = [(C, C), (C, C), (C, D), (C, D), (D, C), (D, C), (D, C)]
+        actions = [(D, C), (D, C), (C, D), (D, D), (D, C), (D, C), (D, C)]
         self.versus_test(opponent, expected_actions=actions)
 
         opponent = axelrod.MockPlayer(actions=[C, C, C, C, D, D])
-        actions = [(C, C), (C, C), (C, C), (C, C), (C, D), (C, D), (C, C)]
+        actions = [(D, C), (D, C), (C, C), (D, C), (D, D), (C, D), (D, C)]
         self.versus_test(opponent, expected_actions=actions)
 
-    def test_not_revised(self):
-        # Test not revised
-        player = self.player(revised=False)
-        opponent = axelrod.Cooperator()
-        match = axelrod.Match((player, opponent), turns=2)
-        self.assertEqual(match.play(), [(D, C), (D, C)])
 
+class TestFirstByFeld(TestPlayer):
 
-class TestFeld(TestPlayer):
-
-    name = "Feld: 1.0, 0.5, 200"
-    player = axelrod.Feld
+    name = "First by Feld: 1.0, 0.5, 200"
+    player = axelrod.FirstByFeld
     expected_classifier = {
         "memory_depth": 200,
         "stochastic": True,
@@ -144,10 +137,10 @@ class TestFeld(TestPlayer):
         self.versus_test(axelrod.Defector(), expected_actions=actions)
 
 
-class TestGraaskamp(TestPlayer):
+class TestFirstByGraaskamp(TestPlayer):
 
-    name = "Graaskamp: 0.05"
-    player = axelrod.Graaskamp
+    name = "First by Graaskamp: 0.05"
+    player = axelrod.FirstByGraaskamp
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
@@ -242,12 +235,12 @@ class TestGraaskamp(TestPlayer):
         )
 
 
-class TestGrofman(TestPlayer):
+class TestFirstByGrofman(TestPlayer):
 
-    name = "Grofman"
-    player = axelrod.Grofman
+    name = "First by Grofman"
+    player = axelrod.FirstByGrofman
     expected_classifier = {
-        "memory_depth": float("inf"),
+        "memory_depth": 1,
         "stochastic": True,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -264,18 +257,18 @@ class TestGrofman(TestPlayer):
         self.versus_test(axelrod.Alternator(), expected_actions=actions)
 
         opponent = axelrod.MockPlayer(actions=[D] * 8)
-        actions = [(C, D)] * 2 + [(D, D)] * 5 + [(C, D)] + [(C, D)]
+        actions = [(C, D), (C, D), (D, D), (C, D), (D, D), (C, D), (C, D), (D, D)]
         self.versus_test(opponent, expected_actions=actions, seed=1)
 
         opponent = axelrod.MockPlayer(actions=[D] * 8)
-        actions = [(C, D)] * 2 + [(D, D)] * 5 + [(C, D)] + [(D, D)]
+        actions = [(C, D), (D, D), (C, D), (D, D), (C, D), (C, D), (C, D), (D, D)]
         self.versus_test(opponent, expected_actions=actions, seed=2)
 
 
-class TestJoss(TestPlayer):
+class TestFirstByJoss(TestPlayer):
 
-    name = "Joss: 0.9"
-    player = axelrod.Joss
+    name = "First by Joss: 0.9"
+    player = axelrod.FirstByJoss
     expected_classifier = {
         "memory_depth": 1,
         "stochastic": True,
@@ -304,10 +297,10 @@ class TestJoss(TestPlayer):
         self.versus_test(axelrod.Defector(), expected_actions=actions, seed=2)
 
 
-class TestNydegger(TestPlayer):
+class TestFirstByNydegger(TestPlayer):
 
-    name = "Nydegger"
-    player = axelrod.Nydegger
+    name = "First by Nydegger"
+    player = axelrod.FirstByNydegger
     expected_classifier = {
         "memory_depth": 3,
         "stochastic": False,
@@ -355,10 +348,10 @@ class TestNydegger(TestPlayer):
         self.versus_test(opponent, expected_actions=actions)
 
 
-class TestShubik(TestPlayer):
+class TestFirstByShubik(TestPlayer):
 
-    name = "Shubik"
-    player = axelrod.Shubik
+    name = "First by Shubik"
+    player = axelrod.FirstByShubik
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -399,17 +392,17 @@ class TestShubik(TestPlayer):
             (D, D),
             (D, C),
             (D, D),
-            (D, C),
+            (C, C),
         ]
         self.versus_test(opponent, expected_actions=actions)
 
 
-class TestTullock(TestPlayer):
+class TestFirstByTullock(TestPlayer):
 
-    name = "Tullock: 11"
-    player = axelrod.Tullock
+    name = "First by Tullock"
+    player = axelrod.FirstByTullock
     expected_classifier = {
-        "memory_depth": 11,
+        "memory_depth": float("inf"),
         "stochastic": True,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -448,10 +441,10 @@ class TestTullock(TestPlayer):
         self.versus_test(opponent, expected_actions=actions, seed=2)
 
 
-class TestUnnamedStrategy(TestPlayer):
+class TestFirstByAnonymous(TestPlayer):
 
-    name = "Unnamed Strategy"
-    player = axelrod.UnnamedStrategy
+    name = "First by Anonymous"
+    player = axelrod.FirstByAnonymous
     expected_classifier = {
         "memory_depth": 0,
         "stochastic": True,
@@ -470,10 +463,10 @@ class TestUnnamedStrategy(TestPlayer):
         self.versus_test(axelrod.Cooperator(), expected_actions=actions, seed=10)
 
 
-class TestSteinAndRapoport(TestPlayer):
+class TestFirstBySteinAndRapoport(TestPlayer):
 
-    name = "Stein and Rapoport: 0.05: (D, D)"
-    player = axelrod.SteinAndRapoport
+    name = "First by Stein and Rapoport: 0.05: (D, D)"
+    player = axelrod.FirstBySteinAndRapoport
     expected_classifier = {
         "memory_depth": float("inf"),
         "long_run_time": False,
@@ -553,10 +546,10 @@ class TestSteinAndRapoport(TestPlayer):
         )
 
 
-class TestTidemanAndChieruzzi(TestPlayer):
+class TestFirstByTidemanAndChieruzzi(TestPlayer):
 
-    name = "Tideman and Chieruzzi"
-    player = axelrod.TidemanAndChieruzzi
+    name = "First by Tideman and Chieruzzi: (D, D)"
+    player = axelrod.FirstByTidemanAndChieruzzi
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -570,8 +563,14 @@ class TestTidemanAndChieruzzi(TestPlayer):
     def test_strategy(self):
         # Cooperator Test
         opponent = axelrod.Cooperator()
-        actions = [(C, C), (C, C), (C, C), (C, C)]
+        actions = [(C, C), (C, C), (D, C), (D, C)]
         self.versus_test(opponent, expected_actions=actions)
+
+        # Cooperator Test does noot defect if game length is unknown
+        opponent = axelrod.Cooperator()
+        actions = [(C, C), (C, C), (C, C), (C, C)]
+        self.versus_test(opponent, expected_actions=actions,
+                match_attributes={"length": float("inf")})
 
         # Defector Test
         opponent = axelrod.Defector()
@@ -589,7 +588,7 @@ class TestTidemanAndChieruzzi(TestPlayer):
             (D, C),
             (D, D),
             (D, C),
-            (C, D),
+            (D, D),
             (D, C),
         ]
         self.versus_test(
@@ -743,7 +742,7 @@ class TestTidemanAndChieruzzi(TestPlayer):
             (D, D),
             (D, D),
             (D, C),
-            (C, D),
+            (D, D),
             (D, D),
         ]
 
@@ -753,7 +752,7 @@ class TestTidemanAndChieruzzi(TestPlayer):
 
         # Check the fresh start condition
         opponent = axelrod.TitForTat()
-        actions = [(C, C), (C, C), (C, C), (C, C)]
+        actions = [(C, C), (C, C), (D, C), (D, D)]
         self.versus_test(
             opponent, expected_actions=actions, attrs={"fresh_start": False}
         )
@@ -794,16 +793,16 @@ class TestTidemanAndChieruzzi(TestPlayer):
             (D, C),
             (D, C),
             (C, C),
-            (C, C),
-            (C, D),
+            (D, C),
+            (D, D),
         ]
         self.versus_test(
             opponent,
             expected_actions=actions,
             match_attributes={"length": 35},
             attrs={
-                "current_score": 108,
-                "opponent_score": 78,
+                "current_score": 110,
+                "opponent_score": 75,
                 "last_fresh_start": 24,
                 "retaliation_length": 2,
                 "retaliation_remaining": 0,
