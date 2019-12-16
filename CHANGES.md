@@ -1,3 +1,25 @@
+# v4.8.0, 2019-12-16
+
+Reimplementation of first tournament strategies, rename of second tournament
+strategies and
+
+- Reimplement and rename first tournament strategies and rename second
+  tournament strategies:
+  https://github.com/Axelrod-Python/Axelrod/pull/1275
+- Update citations:
+  https://github.com/Axelrod-Python/Axelrod/pull/1276
+  https://github.com/Axelrod-Python/Axelrod/pull/1278
+- Add Detective strategy:
+  https://github.com/Axelrod-Python/Axelrod/pull/1269
+- Remove Fool Me Forever (duplicate):
+  https://github.com/Axelrod-Python/Axelrod/pull/1274
+- Add documentation to a testing script:
+  https://github.com/Axelrod-Python/Axelrod/pull/1271
+- Fix documentation render:
+  https://github.com/Axelrod-Python/Axelrod/pull/1268
+
+https://github.com/Axelrod-Python/Axelrod/compare/v4.8.0...v4.7.0
+
 # v4.7.0, 2019-10-23
 
 New Moran process mechanics, new strategy implementations, drop support for
