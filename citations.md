@@ -1,5 +1,9 @@
 # Citations
 
+### 2020
+
+* Glynatsi, Nikoleta E., and Vincent A. Knight. "A meta analysis of tournaments and an evaluation of performance in the Iterated Prisoner's Dilemma" arXiv preprint arXiv:2001.05911 (2019). [ArXiv](https://arxiv.org/abs/2001.05911)
+
 ### 2019
 
 * T.J. Gaffney, Marc Harper, Vincent A. Knight. "Memory depth of finite state machine strategies for the iterated prisoner's dilemm" arXiv preprint arxiv:1912.04493 (2019). [ArXiv](https://arxiv.org/abs/1912.04493)
