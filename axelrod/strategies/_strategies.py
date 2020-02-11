@@ -213,7 +213,7 @@ from .titfortat import (
     SneakyTitForTat,
     SpitefulTitForTat,
     SuspiciousTitForTat,
-    TitFor2Tats,
+    TitFor3Tats,
     TitForTat,
     TwoTitsForTat,
 )
@@ -428,7 +428,7 @@ all_strategies = [
     Thumper,
     FirstByTidemanAndChieruzzi,
     TitForTat,
-    TitFor2Tats,
+    TitFor3Tats,
     SecondByTranquilizer,
     TrickyCooperator,
     TrickyDefector,

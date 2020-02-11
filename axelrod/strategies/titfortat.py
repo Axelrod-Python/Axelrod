@@ -47,7 +47,7 @@ class TitForTat(Player):
         return C
 
 
-class TitFor2Tats(Player):
+class TitFor3Tats(Player):
     """A player starts by cooperating and then defects only after two defects by
     opponent.
 
