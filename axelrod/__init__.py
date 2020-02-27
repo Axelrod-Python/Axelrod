@@ -5,7 +5,7 @@ from axelrod.version import __version__
 from axelrod.load_data_ import load_pso_tables, load_weights
 from axelrod import graph
 from axelrod.action import Action
-from axelrod.random_ import random_choice, random_flip, seed, Pdf
+from axelrod.random_ import Pdf, RandomGenerator, BulkRandomGenerator
 from axelrod.plot import Plot
 from axelrod.game import DefaultGame, Game
 from axelrod.history import History, LimitedHistory

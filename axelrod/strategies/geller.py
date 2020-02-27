@@ -7,7 +7,6 @@ optimising them.
 from axelrod._strategy_utils import inspect_strategy
 from axelrod.action import Action
 from axelrod.player import Player
-from axelrod.random_ import random_choice
 
 C, D = Action.C, Action.D
 
@@ -49,10 +48,9 @@ class Geller(Player):
         "manipulates_state": False,
     }
 
-    @staticmethod
-    def foil_strategy_inspection() -> Action:
+    def foil_strategy_inspection(self) -> Action:
         """Foils _strategy_utils.inspect_strategy and _strategy_utils.look_ahead"""
-        return random_choice(0.5)
+        return self._random.random_choice(0.5)
 
     def strategy(self, opponent: Player) -> Action:
         """

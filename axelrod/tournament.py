@@ -422,11 +422,12 @@ class Tournament(object):
                 (0, 1) -> [(C, D), (D, C),...]
         """
         interactions = defaultdict(list)
-        index_pair, match_params, repetitions = chunk
+        index_pair, match_params, repetitions, seed = chunk
         p1_index, p2_index = index_pair
         player1 = self.players[p1_index].clone()
         player2 = self.players[p2_index].clone()
         match_params["players"] = (player1, player2)
+        match_params["seed"] = seed
         match = Match(**match_params)
         for _ in range(repetitions):
             match.play()

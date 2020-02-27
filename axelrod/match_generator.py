@@ -1,3 +1,6 @@
+from axelrod.random_ import BulkRandomGenerator
+
+
 class MatchGenerator(object):
     def __init__(
         self,
@@ -9,6 +12,7 @@ class MatchGenerator(object):
         prob_end=None,
         edges=None,
         match_attributes=None,
+        seed=None
     ):
         """
         A class to generate matches. This is used by the Tournament class which
@@ -43,6 +47,7 @@ class MatchGenerator(object):
         self.opponents = players
         self.prob_end = prob_end
         self.match_attributes = match_attributes
+        self.random_generator = BulkRandomGenerator(seed)
 
         self.edges = edges
         if edges is not None:
@@ -73,7 +78,8 @@ class MatchGenerator(object):
 
         for index_pair in edges:
             match_params = self.build_single_match_params()
-            yield (index_pair, match_params, self.repetitions)
+            r = next(self.random_generator)
+            yield (index_pair, match_params, self.repetitions, r)
 
     def build_single_match_params(self):
         """

@@ -2,7 +2,7 @@
 
 import axelrod as axl
 
-from .test_player import TestMatch, TestPlayer
+from .test_player import TestPlayer
 
 C, D = axl.Action.C, axl.Action.D
 
@@ -37,10 +37,11 @@ class TestAdaptive(TestPlayer):
     def test_scoring(self):
         player = axl.Adaptive()
         opponent = axl.Cooperator()
-        player.play(opponent)
-        player.play(opponent)
+        match = axl.Match((player, opponent), turns=2, seed=9)
+        match.play()
         self.assertEqual(3, player.scores[C])
-        game = axl.Game(-3, 10, 10, 10)
-        player.set_match_attributes(game=game)
-        player.play(opponent)
+
+        match = axl.Match((player, opponent), turns=1, reset=True, seed=9,
+                          game=axl.Game(-3, 10, 10, 10))
+        match.play()
         self.assertEqual(0, player.scores[C])

@@ -1,6 +1,5 @@
 """Implementation of the Moran process on Graphs."""
 
-import random
 from collections import Counter
 from typing import Callable, List, Optional, Set, Tuple
 
@@ -11,35 +10,7 @@ from axelrod import EvolvablePlayer, DEFAULT_TURNS, Game, Player
 from .deterministic_cache import DeterministicCache
 from .graph import Graph, complete_graph
 from .match import Match
-from .random_ import randrange
-
-
-def fitness_proportionate_selection(
-    scores: List, fitness_transformation: Callable = None
-) -> int:
-    """Randomly selects an individual proportionally to score.
-
-    Parameters
-    ----------
-    scores: Any sequence of real numbers
-    fitness_transformation: A function mapping a score to a (non-negative) float
-
-    Returns
-    -------
-    An index of the above list selected at random proportionally to the list
-    element divided by the total.
-    """
-    if fitness_transformation is None:
-        csums = np.cumsum(scores)
-    else:
-        csums = np.cumsum([fitness_transformation(s) for s in scores])
-    total = csums[-1]
-    r = random.random() * total
-
-    for i, x in enumerate(csums):
-        if x >= r:
-            break
-    return i
+from .random_ import RandomGenerator
 
 
 class MoranProcess(object):
@@ -57,7 +28,8 @@ class MoranProcess(object):
         reproduction_graph: Graph = None,
         fitness_transformation: Callable = None,
         mutation_method="transition",
-        stop_on_fixation=True
+        stop_on_fixation=True,
+        seed = None
     ) -> None:
         """
         An agent based Moran process class. In each round, each player plays a
@@ -128,6 +100,7 @@ class MoranProcess(object):
         self.winning_strategy_name = None  # type: Optional[str]
         self.mutation_rate = mutation_rate
         self.stop_on_fixation = stop_on_fixation
+        self._random = RandomGenerator(seed=seed)
         m = mutation_method.lower()
         if m in ["atomic", "transition"]:
             self.mutation_method = m
@@ -182,6 +155,32 @@ class MoranProcess(object):
             self.players.append(player)
         self.populations = [self.population_distribution()]
 
+    def fitness_proportionate_selection(self,
+                                        scores: List, fitness_transformation: Callable = None) -> int:
+        """Randomly selects an individual proportionally to score.
+
+        Parameters
+        ----------
+        scores: Any sequence of real numbers
+        fitness_transformation: A function mapping a score to a (non-negative) float
+
+        Returns
+        -------
+        An index of the above list selected at random proportionally to the list
+        element divided by the total.
+        """
+        if fitness_transformation is None:
+            csums = np.cumsum(scores)
+        else:
+            csums = np.cumsum([fitness_transformation(s) for s in scores])
+        total = csums[-1]
+        r = self._random.random() * total
+
+        for i, x in enumerate(csums):
+            if x >= r:
+                break
+        return i
+
     def mutate(self, index: int) -> Player:
         """Mutate the player at index.
 
@@ -199,10 +198,10 @@ class MoranProcess(object):
         # Assuming mutation_method == "transition"
         if self.mutation_rate > 0:
             # Choose another strategy at random from the initial population
-            r = random.random()
+            r = self._random.random()
             if r < self.mutation_rate:
                 s = str(self.players[index])
-                j = randrange(0, len(self.mutation_targets[s]))
+                j = self._random.randrange(0, len(self.mutation_targets[s]))
                 p = self.mutation_targets[s][j]
                 return p.clone()
         # Just clone the player
@@ -223,13 +222,13 @@ class MoranProcess(object):
         """
         if index is None:
             # Select a player to be replaced globally
-            i = randrange(0, len(self.players))
+            i = self._random.randrange(0, len(self.players))
             # Record internally for use in _matchup_indices
             self.dead = i
         else:
             # Select locally
             # index is not None in this case
-            vertex = random.choice(
+            vertex = self._random.choice(
                 sorted(self.reproduction_graph.out_vertices(self.locations[index]))
             )
             i = self.index[vertex]

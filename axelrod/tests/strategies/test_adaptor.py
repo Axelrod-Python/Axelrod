@@ -1,10 +1,7 @@
 """Tests for the adaptor"""
 
-import unittest
-
 import axelrod as axl
-
-from .test_player import TestPlayer, test_four_vector
+from .test_player import TestPlayer
 
 C, D = axl.Action.C, axl.Action.D
 

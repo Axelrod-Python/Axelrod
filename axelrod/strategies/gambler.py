@@ -7,11 +7,9 @@ For the original see:
 import random
 from typing import Any
 
-from axelrod.action import Action, str_to_actions, actions_to_str
+from axelrod.action import Action
 from axelrod.load_data_ import load_pso_tables
 from axelrod.player import Player
-
-from axelrod.random_ import random_choice
 
 from .lookerup import EvolvableLookerUp, LookupTable, LookerUp, Plays, create_lookup_table_keys
 
@@ -44,7 +42,7 @@ class Gambler(LookerUp):
         actions_or_float = super(Gambler, self).strategy(opponent)
         if isinstance(actions_or_float, Action):
             return actions_or_float
-        return random_choice(actions_or_float)
+        return self._random.random_choice(actions_or_float)
 
 
 class EvolvableGambler(Gambler, EvolvableLookerUp):
@@ -87,10 +85,14 @@ class EvolvableGambler(Gambler, EvolvableLookerUp):
 
     @classmethod
     def random_value(cls):
+        # TODO: For reproducibility, this invocation of random may need to be folded into the
+        # evolutionary algorithm class, once it is merged into Axelrod.
         return random.random()
 
     @classmethod
     def mutate_value(cls, value):
+        # TODO: For reproducibility, this invocation of random may need to be folded into the
+        # evolutionary algorithm class, once it is merged into Axelrod.
         ep = random.uniform(-1, 1) / 4
         value += ep
         if value < 0:

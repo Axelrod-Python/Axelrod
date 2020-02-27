@@ -82,12 +82,9 @@ class TestMetaPlayer(TestPlayer):
             axl.Defector(),
             axl.TitForTat(),
         ]:
-            player1.reset()
-            player2.reset()
             for p in [player1, player2]:
-                axl.seed(seed)
-                m = axl.Match((p, op), turns=turns)
-                m.play()
+                match = axl.Match((p, op), turns=turns, reset=True, seed=seed)
+                match.play()
             self.assertEqual(len(player1.history), turns)
             self.assertEqual(player1.history, player2.history)
 

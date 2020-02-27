@@ -13,12 +13,10 @@ These descriptions are not always clear and/or precise and when assumptions have
 been made they are explained in the strategy docstrings.
 """
 
-import random
 from typing import Dict, List, Tuple, Optional
 
 from axelrod.action import Action
 from axelrod.player import Player
-from axelrod.random_ import random_choice
 from axelrod.strategy_transformers import FinalTransformer
 from scipy.stats import chisquare
 
@@ -355,7 +353,7 @@ class FirstByFeld(Player):
         if opponent.history[-1] == D:
             return D
         p = self._cooperation_probability()
-        return random_choice(p)
+        return self._random.random_choice(p)
 
 
 class FirstByGraaskamp(Player):
@@ -450,11 +448,11 @@ class FirstByGraaskamp(Player):
             return C
 
         if self.next_random_defection_turn is None:
-            self.next_random_defection_turn = random.randint(5, 15) + len(self.history)
+            self.next_random_defection_turn = self._random.randint(5, 15) + len(self.history)
 
         if len(self.history) == self.next_random_defection_turn:
             # resample the next defection turn
-            self.next_random_defection_turn = random.randint(5, 15) + len(self.history)
+            self.next_random_defection_turn = self._random.randint(5, 15) + len(self.history)
             return D
         return C
 
@@ -485,10 +483,11 @@ class FirstByGrofman(Player):
         "manipulates_source": False,
         "manipulates_state": False,
     }
+
     def strategy(self, opponent: Player) -> Action:
         if len(self.history) == 0 or self.history[-1] == opponent.history[-1]:
             return C
-        return random_choice(2 / 7)
+        return self._random.random_choice(2 / 7)
 
 
 class FirstByJoss(MemoryOnePlayer):
@@ -519,7 +518,7 @@ class FirstByJoss(MemoryOnePlayer):
             or (D, C), i.e. the opponent cooperated.
         """
         four_vector = (p, 0, p, 0)
-        self.p = p
+        # self.p = p
         super().__init__(four_vector)
 
 
@@ -763,7 +762,7 @@ class FirstByTullock(Player):
         cooperate_count = opponent.history[-rounds:].count(C)
         prop_cooperate = cooperate_count / rounds
         prob_cooperate = max(0, prop_cooperate - 0.10)
-        return random_choice(prob_cooperate)
+        return self._random.random_choice(prob_cooperate)
 
 
 class FirstByAnonymous(Player):
@@ -801,10 +800,9 @@ class FirstByAnonymous(Player):
         "manipulates_state": False,
     }
 
-    @staticmethod
-    def strategy(opponent: Player) -> Action:
-        r = random.uniform(3, 7) / 10
-        return random_choice(r)
+    def strategy(self, opponent: Player) -> Action:
+        r = self._random.uniform(3, 7) / 10
+        return self._random.random_choice(r)
 
 
 @FinalTransformer((D, D), name_prefix=None)

@@ -6,7 +6,6 @@ from typing import Tuple
 
 from axelrod.action import Action
 from axelrod.player import Player
-from axelrod.random_ import random_choice
 
 C, D = Action.C, Action.D
 
@@ -92,7 +91,7 @@ class MemoryOnePlayer(Player):
         # Determine which probability to use
         p = self._four_vector[(self.history[-1], opponent.history[-1])]
         # Draw a random number in [0, 1] to decide
-        return random_choice(p)
+        return self._random.random_choice(p)
 
 
 class WinStayLoseShift(MemoryOnePlayer):
@@ -321,7 +320,7 @@ class ALLCorALLD(Player):
 
     def strategy(self, opponent: Player) -> Action:
         if len(self.history) == 0:
-            return random_choice(0.6)
+            return self._random.random_choice(0.6)
         return self.history[-1]
 
 

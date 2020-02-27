@@ -2,7 +2,6 @@ from typing import Dict, Tuple
 
 from axelrod.action import Action
 from axelrod.player import Player
-from axelrod.random_ import random_choice
 
 from numpy import heaviside
 
@@ -56,7 +55,7 @@ class AbstractAdaptor(Player):
         p = self.perr + (1.0 - 2 * self.perr) * (
             heaviside(self.s + 1, 1) - heaviside(self.s - 1, 1))
         # Draw action
-        action = random_choice(p)
+        action = self._random.random_choice(p)
         return action
 
 

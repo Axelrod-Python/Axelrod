@@ -9,15 +9,11 @@ from collections import Iterable
 import copy
 import inspect
 from importlib import import_module
-import random
 from typing import Any
-
-from numpy.random import choice
 
 from axelrod.strategies.sequence_player import SequencePlayer
 from .action import Action
 from .player import Player
-from .random_ import random_choice
 
 C, D = Action.C, Action.D
 
@@ -343,7 +339,7 @@ DualTransformer = StrategyTransformerFactory(dual_wrapper, name_prefix="Dual")
 
 def noisy_wrapper(player, opponent, action, noise=0.05):
     """Flips the player's actions with probability: `noise`."""
-    r = random.random()
+    r = player._random.random()
     if r < noise:
         return action.flip()
     return action
@@ -365,7 +361,7 @@ def forgiver_wrapper(player, opponent, action, p):
     """If a strategy wants to defect, flip to cooperate with the given
     probability."""
     if action == D:
-        return random_choice(p)
+        return player._random.random_choice(p)
     return C
 
 
@@ -542,8 +538,8 @@ def mixed_wrapper(player, opponent, action, probability, m_player):
         if mutate_prob > 0:
             # Distribution of choice of mutation:
             normalised_prob = [prob / mutate_prob for prob in probability]
-            if random.random() < mutate_prob:
-                p = choice(list(m_player), p=normalised_prob)()
+            if player._random.random() < mutate_prob:
+                p = player._random.choice(list(m_player), p=normalised_prob)()
                 p._history = player._history
                 return p.strategy(opponent)
 
@@ -606,7 +602,7 @@ def joss_ann_wrapper(player, opponent, proposed_action, probability):
     remaining_probability = max(0, 1 - probability[0] - probability[1])
     probability += (remaining_probability,)
     options = [C, D, proposed_action]
-    action = choice(options, p=probability)
+    action = player._random.choice(options, p=probability)
     return action
 
 

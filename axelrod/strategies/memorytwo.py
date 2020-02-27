@@ -6,7 +6,6 @@ from typing import Dict, Tuple
 
 from axelrod.action import Action
 from axelrod.player import Player
-from axelrod.random_ import random_choice
 
 from .defector import Defector
 from .titfortat import TitFor2Tats, TitForTat
@@ -103,7 +102,7 @@ class MemoryTwoPlayer(Player):
             (tuple(self.history[-2:]), tuple(opponent.history[-2:]))
         ]
         # Draw a random number in [0, 1] to decide
-        return random_choice(p)
+        return self._random.random_choice(p)
 
 
 class AON2(MemoryTwoPlayer):
@@ -127,7 +126,7 @@ class AON2(MemoryTwoPlayer):
 
     In [Hilbe2017]_ the following vectors are reported as "equivalent" to AON2
     with their respective self-cooperation rate (note that these are not the same):
-    
+
     1. [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1], self-cooperation
     rate: 0.952
     2. [1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], self-cooperation

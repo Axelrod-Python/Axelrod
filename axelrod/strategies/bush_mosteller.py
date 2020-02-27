@@ -1,6 +1,3 @@
-import random
-
-from axelrod import random_choice
 from axelrod.action import Action
 from axelrod.player import Player
 
@@ -124,9 +121,9 @@ class BushMosteller(Player):
 
         # First turn
         if len(self.history) == 0:
-            return random_choice(self._c_prob / (self._c_prob + self._d_prob))
+            return self._random.random_choice(self._c_prob / (self._c_prob + self._d_prob))
 
         # Updating stimulus depending on his own latest choice
         self.stimulus_update(opponent)
 
-        return random_choice(self._c_prob / (self._c_prob + self._d_prob))
+        return self._random.random_choice(self._c_prob / (self._c_prob + self._d_prob))

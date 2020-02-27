@@ -1,11 +1,12 @@
-from random import randrange
-import numpy.random as random
-from numpy.random import choice
-
 from axelrod.action import Action
 from axelrod.evolvable_player import EvolvablePlayer, InsufficientParametersError, copy_lists, crossover_lists
 from axelrod.player import Player
-from axelrod.random_ import random_choice, random_vector
+from axelrod.random_ import RandomGenerator
+
+# This instance is for the mutation methods. For reproducibility,
+# random seed propagation should be refactored in the evolutionary
+# algorithms.
+random = RandomGenerator()
 
 C, D = Action.C, Action.D
 
@@ -57,7 +58,8 @@ class SimpleHMM(object):
     """
 
     def __init__(
-        self, transitions_C, transitions_D, emission_probabilities, initial_state
+        self, transitions_C, transitions_D, emission_probabilities, initial_state,
+        seed=None
     ) -> None:
         """
         Params
@@ -71,6 +73,7 @@ class SimpleHMM(object):
         self.transitions_D = transitions_D
         self.emission_probabilities = emission_probabilities
         self.state = initial_state
+        self._random = RandomGenerator(seed=seed)
 
     def is_well_formed(self) -> bool:
         """
@@ -111,12 +114,12 @@ class SimpleHMM(object):
         """
         num_states = len(self.emission_probabilities)
         if opponent_action == C:
-            next_state = choice(num_states, 1, p=self.transitions_C[self.state])
+            next_state = self._random.choice(num_states, 1, p=self.transitions_C[self.state])
         else:
-            next_state = choice(num_states, 1, p=self.transitions_D[self.state])
+            next_state = self._random.choice(num_states, 1, p=self.transitions_D[self.state])
         self.state = next_state[0]
         p = self.emission_probabilities[self.state]
-        action = random_choice(p)
+        action = self._random.random_choice(p)
         return action
 
 
@@ -158,7 +161,8 @@ class HMMPlayer(Player):
         self.initial_state = initial_state
         self.initial_action = initial_action
         self.hmm = SimpleHMM(
-            copy_lists(transitions_C), copy_lists(transitions_D), list(emission_probabilities), initial_state
+            copy_lists(transitions_C), copy_lists(transitions_D), list(emission_probabilities), initial_state,
+            seed=self._random.randint(0, 10000000)
         )
         assert self.hmm.is_well_formed()
         self.state = self.hmm.state
@@ -247,10 +251,10 @@ class EvolvableHMMPlayer(HMMPlayer, EvolvablePlayer):
         transitions_D = []
         emission_probabilities = []
         for _ in range(num_states):
-            transitions_C.append(random_vector(num_states))
-            transitions_D.append(random_vector(num_states))
+            transitions_C.append(random.random_vector(num_states))
+            transitions_D.append(random.random_vector(num_states))
             emission_probabilities.append(random.random())
-        initial_state = randrange(num_states)
+        initial_state = random.randrange(num_states)
         initial_action = C
         return transitions_C, transitions_D, emission_probabilities, initial_state, initial_action
 
@@ -277,7 +281,7 @@ class EvolvableHMMPlayer(HMMPlayer, EvolvablePlayer):
             initial_action = self.initial_action.flip()
         initial_state = self.initial_state
         if random.random() < self.mutation_probability / (10 * self.num_states):
-            initial_state = randrange(self.num_states)
+            initial_state = random.randrange(self.num_states)
         return self.create_new(
             transitions_C=transitions_C,
             transitions_D=transitions_D,

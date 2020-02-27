@@ -1,6 +1,5 @@
 from axelrod.action import Action
 from axelrod.player import Player
-from axelrod.random_ import random_choice
 from axelrod.strategy_transformers import FinalTransformer
 
 C, D = Action.C, Action.D
@@ -75,4 +74,4 @@ class Stalker(Player):
             return C
         if (current_average_score < 2) and (current_average_score > 1):
             return D
-        return random_choice()
+        return self._random.random_choice()

@@ -30,8 +30,12 @@ class Calculator(Player):
     }
 
     def __init__(self) -> None:
-        super().__init__()
         self.joss_instance = Joss()
+        super().__init__()
+
+    def set_seed(self, seed=None):
+        super().set_seed(seed)
+        self.joss_instance.set_seed(seed)
 
     def strategy(self, opponent: Player) -> Action:
         turn = len(self.history)

@@ -4,14 +4,12 @@ prefixed by `SecondBy` to indicate that they were submitted in Axelrod's Second
 tournament by the given author.
 """
 
-import random
 from typing import List
 
 import numpy as np
 from axelrod.action import Action
 from axelrod.interaction_utils import compute_final_score
 from axelrod.player import Player
-from axelrod.random_ import random_choice
 from axelrod.strategies.finite_state_machines import FSMPlayer
 
 C, D = Action.C, Action.D
@@ -56,10 +54,11 @@ class SecondByChampion(Player):
         # Now cooperate unless all of the necessary conditions are true
         defection_prop = opponent.defections / len(opponent.history)
         if opponent.history[-1] == D:
-            r = random.random()
+            r = self._random.random()
             if defection_prop >= max(0.4, r):
                 return D
         return C
+
 
 class SecondByEatherley(Player):
     """
@@ -86,8 +85,7 @@ class SecondByEatherley(Player):
         "manipulates_state": False,
     }
 
-    @staticmethod
-    def strategy(opponent: Player) -> Action:
+    def strategy(self, opponent: Player) -> Action:
         # Cooperate on the first move
         if not len(opponent.history):
             return C
@@ -97,7 +95,7 @@ class SecondByEatherley(Player):
         # Respond to defections with probability equal to opponent's total
         # proportion of defections
         defection_prop = opponent.defections / len(opponent.history)
-        return random_choice(1 - defection_prop)
+        return self._random.random_choice(1 - defection_prop)
 
 
 class SecondByTester(Player):
@@ -403,7 +401,7 @@ class SecondByTranquilizer(Player):
                 + (1 / (((len(self.history)) + 1) ** 2))
                 - (self.dict[opponent.history[-1]] / 4)
             )
-            if random.random() <= probability:
+            if self._random.random() <= probability:
                 return C
             self.num_turns_after_good_defection = 1
             return D
@@ -414,7 +412,7 @@ class SecondByTranquilizer(Player):
                 + ((current_score[0] - current_score[1]) / 100)
                 + (4 / ((len(self.history)) + 1))
             )
-            if random.random() <= probability:
+            if self._random.random() <= probability:
                 return C
             return D
         return opponent.history[-1]
@@ -565,7 +563,7 @@ class SecondByKluepfel(Player):
         if one_move_ago == two_moves_ago and two_moves_ago == three_moves_ago:
             return one_move_ago
 
-        r = random.random()  # Everything following is stochastic
+        r = self._random.random()  # Everything following is stochastic
         if one_move_ago == two_moves_ago:
             if r < 0.9:
                 return one_move_ago
@@ -791,7 +789,7 @@ class SecondByCave(Player):
             if number_defects > 17:
                 return D
             else:
-                return random_choice(0.5)
+                return self._random.random_choice(0.5)
         else:
             return C
 
@@ -832,7 +830,7 @@ class SecondByWmAdams(Player):
         if number_defects in [4, 7, 9]:
             return D
         if number_defects > 9 and opponent.history[-1] == D:
-            return random_choice((0.5) ** (number_defects - 9))
+            return self._random.random_choice((0.5) ** (number_defects - 9))
         return C
 
 
@@ -1330,7 +1328,7 @@ class SecondByHarrington(Player):
             # Defect once on turn 37 (if no streaks)
             self.more_coop, self.last_generous_n_turns_ago = 2, 1
             return self.try_return(D, lower_flags=False)
-        if self.burned or random.random() > self.prob:
+        if self.burned or self._random.random() > self.prob:
             # Tit-for-Tat with probability 1-`prob`
             return self.try_return(opponent.history[-1], inc_parity=True)
 
@@ -1486,7 +1484,7 @@ class SecondByGetzler(Player):
         self.flack += 1 if opponent.history[-1] == D else 0
         self.flack *= 0.5  # Defections have half-life of one round
 
-        return random_choice(1.0 - self.flack)
+        return self._random.random_choice(1.0 - self.flack)
 
 
 class SecondByLeyvraz(Player):
@@ -1538,7 +1536,7 @@ class SecondByLeyvraz(Player):
             if len(opponent.history) >= go_back:
                 recent_history[-go_back] = opponent.history[-go_back]
 
-        return random_choice(
+        return self._random.random_choice(
             self.prob_coop[(recent_history[-3], recent_history[-2], recent_history[-1])]
         )
 
@@ -1622,7 +1620,7 @@ class SecondByBlack(Player):
         did_d = np.vectorize(lambda action: int(action == D))
         number_defects = np.sum(did_d(recent_history))
 
-        return random_choice(self.prob_coop[number_defects])
+        return self._random.random_choice(self.prob_coop[number_defects])
 
 
 class SecondByRichardHufford(Player):
@@ -2128,4 +2126,4 @@ class SecondByAppold(Player):
         # what we know two turns ago.
         prob_coop = self.opp_c_after_x[us_two_turns_ago] / self.total_num_of_x[
             us_two_turns_ago]
-        return random_choice(prob_coop)
+        return self._random.random_choice(prob_coop)

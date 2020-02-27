@@ -1,6 +1,5 @@
 from axelrod.action import Action
 from axelrod.player import Player
-from axelrod.random_ import random_choice
 
 
 class Random(Player):
@@ -43,4 +42,4 @@ class Random(Player):
             self.classifier["stochastic"] = False
 
     def strategy(self, opponent: Player) -> Action:
-        return random_choice(self.p)
+        return self._random.random_choice(self.p)

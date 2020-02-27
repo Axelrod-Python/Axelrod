@@ -1,95 +1,138 @@
-import random
-
 import numpy as np
-from numpy.random import choice
+from numpy.random import RandomState
 
 from axelrod.action import Action
 
 C, D = Action.C, Action.D
 
 
-def seed(seed_):
-    """Sets a seed"""
-    random.seed(seed_)
-    np.random.seed(seed_)
+class RandomGenerator(object):
+    """Container around a random number generator.
+    Enables reproducibility of player behavior, matches,
+    and tournaments."""
+    def __init__(self, seed=None):
+        # self.random = random.Random()
+        # _random is the internal object that generators random values
+        self._random = RandomState()
+        self.original_seed = seed
+        self.seed(seed)
 
+    def seed(self, seed_):
+        """Sets a seed"""
+        self._random.seed(seed_)
 
-def random_choice(p: float = 0.5) -> Action:
-    """
-    Return C with probability `p`, else return D
+    def random(self, *args, **kwargs):
+        return self._random.rand(*args, **kwargs)
 
-    No random sample is carried out if p is 0 or 1.
+    def randint(self, *args, **kwargs):
+        return self._random.randint(*args, **kwargs)
 
-    Parameters
-    ----------
-    p : float
-        The probability of picking C
+    def choice(self, *args, **kwargs):
+        return self._random.choice(*args, **kwargs)
 
-    Returns
-    -------
-    axelrod.Action
-    """
-    if p == 0:
+    def uniform(self, *args, **kwargs):
+        return self._random.uniform(*args, **kwargs)
+
+    def random_choice(self, p: float = 0.5) -> Action:
+        """
+        Return C with probability `p`, else return D
+
+        No random sample is carried out if p is 0 or 1.
+
+        Parameters
+        ----------
+        p : float
+            The probability of picking C
+
+        Returns
+        -------
+        axelrod.Action
+        """
+        if p == 0:
+            return D
+
+        if p == 1:
+            return C
+
+        r = self.random()
+        if r < p:
+            return C
         return D
 
-    if p == 1:
-        return C
+    def random_flip(self, action: Action, threshold: float) -> Action:
+        """
+        Return flipped action with probability `threshold`
 
-    r = random.random()
-    if r < p:
-        return C
-    return D
+        No random sample is carried out if threshold is 0 or 1.
 
+        Parameters
+        ----------
+        action:
+            The action to flip or not
+        threshold : float
+            The probability of flipping action
 
-def random_flip(action: Action, threshold: float) -> Action:
-    """
-    Return flipped action with probability `threshold`
+        Returns
+        -------
+        axelrod.Action
+        """
+        if self.random_choice(threshold) == C:
+            return action.flip()
+        return action
 
-    No random sample is carried out if threshold is 0 or 1.
+    def randrange(self, a: int, b: int) -> int:
+        """Python 2 / 3 compatible randrange. Returns a random integer uniformly
+        between a and b (inclusive)"""
+        c = b - a
+        r = c * self.random()
+        return a + int(r)
 
-    Parameters
-    ----------
-    action:
-        The action to flip or not
-    threshold : float
-        The probability of flipping action
-
-    Returns
-    -------
-    axelrod.Action
-    """
-    if random_choice(threshold) == C:
-        return action.flip()
-    return action
-
-
-def randrange(a: int, b: int) -> int:
-    """Python 2 / 3 compatible randrange. Returns a random integer uniformly
-    between a and b (inclusive)"""
-    c = b - a
-    r = c * random.random()
-    return a + int(r)
-
-
-def random_vector(size):
-    """Create a random vector of values in [0, 1] that sums to 1."""
-    vector = np.random.random(size)
-    return vector / np.sum(vector)
+    def random_vector(self, size):
+        """Create a random vector of values in [0, 1] that sums to 1."""
+        vector = self.random(size)
+        return np.array(vector) / np.sum(vector)
 
 
 class Pdf(object):
     """A class for a probability distribution"""
 
-    def __init__(self, counter):
+    def __init__(self, counter, seed=None):
         """Take as an instance of collections.counter"""
         self.sample_space, self.counts = zip(*counter.items())
         self.size = len(self.sample_space)
         self.total = sum(self.counts)
         self.probability = list([v / self.total for v in self.counts])
+        self._random = RandomGenerator(seed=seed)
 
     def sample(self):
         """Sample from the pdf"""
-        index = choice(a=range(self.size), p=self.probability)
+        index = self._random.choice(a=range(self.size), p=self.probability)
         # Numpy cannot sample from a list of n dimensional objects for n > 1,
         # need to sample an index.
         return self.sample_space[index]
+
+
+class BulkRandomGenerator(object):
+    """Bulk generator of random integers for tournament seeding
+    and reproducibility. Use like a generator."""
+    def __init__(self, seed=None, batch_size=1000):
+        self.random_generator = RandomState()
+        self.random_generator.seed(seed)
+        self._ints = None
+        self.batch_size = batch_size
+        self._fill_ints()
+
+    def _fill_ints(self):
+        ints = self.random_generator.randint(
+            low=0,
+            high=2**32 - 1,
+            size=self.batch_size)
+        self._ints = (x for x in ints)
+
+    def __next__(self):
+        try:
+            x = next(self._ints)
+            return x
+        except StopIteration:
+            self._fill_ints()
+            return next(self._ints)
