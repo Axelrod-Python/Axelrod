@@ -10,7 +10,7 @@ from typing import List, Optional, Tuple
 import axelrod.interaction_utils as iu
 import tqdm
 from axelrod import DEFAULT_TURNS
-from axelrod.action import Action, actions_to_str, str_to_actions
+from axelrod.action import Action, actions_to_str
 from axelrod.player import Player
 
 from .game import Game

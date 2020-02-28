@@ -69,7 +69,6 @@ class Match(object):
         self.noise = noise
 
         self.seed = seed
-        self._random = RandomGenerator(seed=self.seed)
 
         if game is None:
             self.game = Game()
@@ -142,8 +141,8 @@ class Match(object):
             # Note this uses the Match classes random generator, not either
             # player's random generator. A player shouldn't be able to
             # predict the outcome of this noise flip.
-            s1 = self.random_flip(s1, noise)
-            s2 = self.random_flip(s2, noise)
+            s1 = self._random.random_flip(s1, noise)
+            s2 = self._random.random_flip(s2, noise)
         player.update_history(s1, s2)
         coplayer.update_history(s2, s1)
         return s1, s2
@@ -166,9 +165,13 @@ class Match(object):
 
         i.e. One entry per turn containing a pair of actions.
         """
+        # if self._stochastic:
         self._random = RandomGenerator(seed=self.seed)
-        r = self._random.random()
-        turns = min(sample_length(self.prob_end, r), self.turns)
+        if self.prob_end:
+            r = self._random.random()
+            turns = min(sample_length(self.prob_end, r), self.turns)
+        else:
+            turns = self.turns
         cache_key = (self.players[0], self.players[1])
 
         if self._stochastic or not self._cached_enough_turns(cache_key, turns):
@@ -176,8 +179,9 @@ class Match(object):
                 if self.reset:
                     p.reset()
                 p.set_match_attributes(**self.match_attributes)
-                # Generate a random seed for each player
-                p.set_seed(self._random.randint(0, 100000000))
+                # if p.classifier["stochastic"]:
+                # Generate a random seed for the player
+                p.set_seed(self._random.random_seed_int())
             result = []
             for _ in range(turns):
                 plays = self.simultaneous_play(

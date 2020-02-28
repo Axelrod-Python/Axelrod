@@ -7,6 +7,7 @@ from axelrod.player import Player
 
 C, D = Action.C, Action.D
 
+
 class RevisedDowning(Player):
     """
     Strategy submitted to Axelrod's second tournament by Leslie Downing.

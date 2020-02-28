@@ -58,7 +58,6 @@ class MetaPlayer(Player):
         self.team = [t() for t in self.team]
 
         super().__init__()
-        self.set_seed()
 
         # This player inherits the classifiers of its team.
         # Note that memory_depth is not simply the max memory_depth of the team.
@@ -76,9 +75,10 @@ class MetaPlayer(Player):
         self._last_results = None
 
     def set_seed(self, seed=None):
-        super().set_seed(seed)
+        super().set_seed(seed=seed)
+        # Seed the team as well
         for t in self.team:
-            t.set_seed(self._random.randint(0, 100000000))
+            t.set_seed(self._random.random_seed_int())
 
     def receive_match_attributes(self):
         for t in self.team:

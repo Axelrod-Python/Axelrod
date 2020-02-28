@@ -6,6 +6,7 @@ from typing import Any, Dict
 
 import numpy as np
 
+from axelrod import _module_random
 from axelrod.action import Action
 from axelrod.game import DefaultGame
 from axelrod.history import History
@@ -27,6 +28,18 @@ class Player(object):
         """Caches arguments for Player cloning."""
         obj = super().__new__(cls)
         obj.init_kwargs = cls.init_params(*args, **kwargs)
+        # # Set up random seed from the module level random seed
+        # # in case the user doesn't specific one later.
+        # need_seed = False
+        # try:
+        #     seed = kwargs["seed"]
+        #     if seed is None:
+        #         need_seed = True
+        # except KeyError:
+        #     need_seed = True
+        # if need_seed:
+        #     seed = _module_random.randint(0, 2**32-1)
+        # obj._seed = seed
         return obj
 
     @classmethod
@@ -34,7 +47,7 @@ class Player(object):
         """
         Return a dictionary containing the init parameters of a strategy
         (without 'self').
-        Use *args and *kwargs as value if specified
+        Use *args and **kwargs as value if specified
         and complete the rest with the default values.
         """
         sig = inspect.signature(cls.__init__)
@@ -53,7 +66,7 @@ class Player(object):
         self._history = History()
         self.classifier = copy.deepcopy(self.classifier)
         self.set_match_attributes()
-        self.set_seed()
+        # self.set_seed(seed=self._seed)
 
     def __eq__(self, other):
         """
@@ -67,8 +80,8 @@ class Player(object):
             value = getattr(self, attribute, None)
             other_value = getattr(other, attribute, None)
 
-            if attribute == "_random":
-                # Don't compare the random seeds.
+            if attribute in ["_random", "_seed"]:
+                # Don't compare the random generators.
                 continue
 
             if isinstance(value, np.ndarray):
@@ -118,9 +131,13 @@ class Player(object):
         self.receive_match_attributes()
 
     def set_seed(self, seed=None):
-        """Set a random seed for the player's random number
-        generator."""
-        self._random = RandomGenerator(seed=seed)
+        """Set a random seed for the player's random number generator."""
+        if seed is None:
+            # Warning: using global seed
+            self._seed = _module_random.random_seed_int()
+        else:
+            self._seed = seed
+        self._random = RandomGenerator(seed=self._seed)
 
     def __repr__(self):
         """The string method for the strategy.
@@ -161,6 +178,7 @@ class Player(object):
         cls = self.__class__
         new_player = cls(**self.init_kwargs)
         new_player.match_attributes = copy.copy(self.match_attributes)
+        # new_player.set_seed(self._seed)
         return new_player
 
     def reset(self):
@@ -172,6 +190,7 @@ class Player(object):
         """
         # This also resets the history.
         self.__init__(**self.init_kwargs)
+        # self.set_seed(self._seed)
 
     def update_history(self, play, coplay):
         self.history.append(play, coplay)

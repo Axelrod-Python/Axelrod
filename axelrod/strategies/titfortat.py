@@ -909,7 +909,10 @@ class RandomTitForTat(Player):
 
         if self.act_random:
             self.act_random = False
-            return self._random.random_choice(self.p)
+            try:
+                return self._random.random_choice(self.p)
+            except AttributeError:
+                return D if self.p == 0 else C
 
         self.act_random = True
         return opponent.history[-1]

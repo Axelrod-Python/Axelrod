@@ -218,12 +218,10 @@ class TestPickle(unittest.TestCase):
             opponent_1 = opponent_class()
             opponent_2 = opponent_class()
 
-            axl.seed(0)
-            match_1 = axl.Match((player, opponent_1), turns=turns)
+            match_1 = axl.Match((player, opponent_1), turns=turns, seed=1)
             result_1 = match_1.play()
 
-            axl.seed(0)
-            match_2 = axl.Match((clone, opponent_2), turns=turns)
+            match_2 = axl.Match((clone, opponent_2), turns=turns, seed=1)
             result_2 = match_2.play()
 
             self.assertEqual(result_1, result_2)
@@ -243,10 +241,9 @@ class TestPickle(unittest.TestCase):
             self.assert_equals_instance_from_pickling(player)
             opponents = (axl.Defector, axl.Cooperator, axl.Random, axl.CyclerCCCDCD)
             for opponent_class in opponents:
-                axl.seed(10)
                 player.reset()
                 opponent = opponent_class()
-                match_1 = axl.Match((player, opponent), turns=20)
+                match_1 = axl.Match((player, opponent), turns=20, seed=10)
                 _ = match_1.play()
                 self.assert_equals_instance_from_pickling(player)
 

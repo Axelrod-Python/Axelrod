@@ -29,7 +29,7 @@ class MoranProcess(object):
         fitness_transformation: Callable = None,
         mutation_method="transition",
         stop_on_fixation=True,
-        seed = None
+        seed=None
     ) -> None:
         """
         An agent based Moran process class. In each round, each player plays a
@@ -362,6 +362,7 @@ class MoranProcess(object):
                 noise=self.noise,
                 game=self.game,
                 deterministic_cache=self.deterministic_cache,
+                seed=self._random.random_seed_int()
             )
             match.play()
             match_scores = match.final_score_per_turn()

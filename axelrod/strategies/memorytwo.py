@@ -102,7 +102,10 @@ class MemoryTwoPlayer(Player):
             (tuple(self.history[-2:]), tuple(opponent.history[-2:]))
         ]
         # Draw a random number in [0, 1] to decide
-        return self._random.random_choice(p)
+        try:
+            return self._random.random_choice(p)
+        except AttributeError:
+            return D if p == 0 else C
 
 
 class AON2(MemoryTwoPlayer):

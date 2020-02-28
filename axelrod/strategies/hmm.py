@@ -58,8 +58,7 @@ class SimpleHMM(object):
     """
 
     def __init__(
-        self, transitions_C, transitions_D, emission_probabilities, initial_state,
-        seed=None
+        self, transitions_C, transitions_D, emission_probabilities, initial_state
     ) -> None:
         """
         Params
@@ -73,7 +72,6 @@ class SimpleHMM(object):
         self.transitions_D = transitions_D
         self.emission_probabilities = emission_probabilities
         self.state = initial_state
-        self._random = RandomGenerator(seed=seed)
 
     def is_well_formed(self) -> bool:
         """
@@ -161,8 +159,7 @@ class HMMPlayer(Player):
         self.initial_state = initial_state
         self.initial_action = initial_action
         self.hmm = SimpleHMM(
-            copy_lists(transitions_C), copy_lists(transitions_D), list(emission_probabilities), initial_state,
-            seed=self._random.randint(0, 10000000)
+            copy_lists(transitions_C), copy_lists(transitions_D), list(emission_probabilities), initial_state
         )
         assert self.hmm.is_well_formed()
         self.state = self.hmm.state
@@ -189,6 +186,11 @@ class HMMPlayer(Player):
             # for the strategy to function
             self.state = self.hmm.state
             return action
+
+    def set_seed(self, seed=None):
+        super().set_seed(seed=seed)
+        # Share RNG with HMM
+        self.hmm._random = self._random
 
 
 class EvolvableHMMPlayer(HMMPlayer, EvolvablePlayer):
