@@ -44,6 +44,8 @@ Here are the docstrings of all the strategies in the library.
    :members:
 .. automodule:: axelrod.strategies.doubler
    :members:
+.. automodule:: axelrod.strategies.exponential
+   :members:
 .. automodule:: axelrod.strategies.finite_state_machines
    :members:
 .. automodule:: axelrod.strategies.forgiver
