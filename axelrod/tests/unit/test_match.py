@@ -3,12 +3,14 @@ import unittest
 from collections import Counter
 
 import axelrod as axl
+from hypothesis import example, given
+from hypothesis.strategies import floats, integers
+
+from axelrod import Action
 from axelrod.deterministic_cache import DeterministicCache
 from axelrod.random_ import RandomGenerator
 from axelrod.tests.property import games
 
-from hypothesis import example, given
-from hypothesis.strategies import assume, floats, integers
 
 C, D = axl.Action.C, axl.Action.D
 
@@ -81,18 +83,10 @@ class TestMatch(unittest.TestCase):
         Test that matches have diff length and also that cache has recorded the
         outcomes
         """
-<<<<<<< HEAD
         p1, p2 = axl.Cooperator(), axl.Cooperator()
-        match = axl.Match((p1, p2), prob_end=0.5)
-        expected_lengths = [3, 1, 5]
-        for seed, expected_length in zip(range(3), expected_lengths):
-            axl.seed(seed)
-=======
-        p1, p2 = axelrod.Cooperator(), axelrod.Cooperator()
         expected_lengths = [2, 1, 1]
         for seed, expected_length in zip(range(3), expected_lengths):
-            match = axelrod.Match((p1, p2), prob_end=0.5, seed=seed)
->>>>>>> First pass on reproducible matches and parallel tournaments with random seeding
+            match = axl.Match((p1, p2), prob_end=0.5, seed=seed)
             self.assertEqual(match.players[0].match_attributes["length"], float("inf"))
             self.assertEqual(len(match.play()), expected_length)
             self.assertEqual(match.noise, 0)
@@ -127,11 +121,8 @@ class TestMatch(unittest.TestCase):
         with self.assertRaises(TypeError):
             len(match)
 
-    @given(p=floats(min_value=0, max_value=1))
+    @given(p=floats(min_value=1e-10, max_value=1-1e-10))
     def test_stochastic(self, p):
-
-        assume(0 < p < 1)
-
         p1, p2 = axl.Cooperator(), axl.Cooperator()
         match = axl.Match((p1, p2), 5)
         self.assertFalse(match._stochastic)
@@ -143,11 +134,8 @@ class TestMatch(unittest.TestCase):
         match = axl.Match((p1, p2), 5)
         self.assertTrue(match._stochastic)
 
-    @given(p=floats(min_value=0, max_value=1))
+    @given(p=floats(min_value=1e-10, max_value=1-1e-10))
     def test_cache_update_required(self, p):
-
-        assume(0 < p < 1)
-
         p1, p2 = axl.Cooperator(), axl.Cooperator()
         match = axl.Match((p1, p2), 5, noise=p)
         self.assertFalse(match._cache_update_required)
@@ -375,23 +363,12 @@ class TestSampleLength(unittest.TestCase):
             (2, 0.6, 1),
             (3, 0.4, 2),
         ]:
-<<<<<<< HEAD
-            axl.seed(seed)
-            self.assertEqual(axl.match.sample_length(prob_end), expected_length)
-
-    def test_sample_with_0_prob(self):
-        self.assertEqual(axl.match.sample_length(0), float("inf"))
-
-    def test_sample_with_1_prob(self):
-        self.assertEqual(axl.match.sample_length(1), 1)
-=======
             rg = RandomGenerator(seed)
             r = rg.random()
-            self.assertEqual(axelrod.match.sample_length(prob_end, r), expected_length)
+            self.assertEqual(axl.match.sample_length(prob_end, r), expected_length)
 
     def test_sample_with_0_prob(self):
-        self.assertEqual(axelrod.match.sample_length(0, 0.4), float("inf"))
+        self.assertEqual(axl.match.sample_length(0, 0.4), float("inf"))
 
     def test_sample_with_1_prob(self):
-        self.assertEqual(axelrod.match.sample_length(1, 0.6), 1)
->>>>>>> First pass on reproducible matches and parallel tournaments with random seeding
+        self.assertEqual(axl.match.sample_length(1, 0.6), 1)

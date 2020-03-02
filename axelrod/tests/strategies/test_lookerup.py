@@ -667,17 +667,18 @@ class TestEvolvableLookerUp(unittest.TestCase):
         pattern = ("".join([random.choice(("C", "D")) for _ in range(8)]),)
 
         self.assertRaises(
-            InsufficientParametersError, self.player_class._normalize_parameters
+            InsufficientParametersError,
+            self.player_class
         )
         self.assertRaises(
             InsufficientParametersError,
-            self.player_class._normalize_parameters,
+            self.player_class,
             pattern=pattern,
             initial_actions=initial_actions,
         )
         self.assertRaises(
             InsufficientParametersError,
-            self.player_class._normalize_parameters,
+            self.player_class,
             lookup_dict=lookup_dict,
         )
 

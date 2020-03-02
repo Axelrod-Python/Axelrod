@@ -1,19 +1,12 @@
 """Tests for the random functions."""
-<<<<<<< HEAD
-
-=======
->>>>>>> First pass on reproducible matches and parallel tournaments with random seeding
 import unittest
 
 import random
 
 from collections import Counter
 
-<<<<<<< HEAD
 import numpy
-=======
 from axelrod import Action, BulkRandomGenerator, Pdf, RandomGenerator
->>>>>>> First pass on reproducible matches and parallel tournaments with random seeding
 
 import axelrod as axl
 
@@ -22,27 +15,6 @@ C, D = axl.Action.C, axl.Action.D
 
 class TestRandomGenerator(unittest.TestCase):
     def test_return_values(self):
-<<<<<<< HEAD
-        self.assertEqual(axl.random_choice(1), C)
-        self.assertEqual(axl.random_choice(0), D)
-        axl.seed(1)
-        self.assertEqual(axl.random_choice(), C)
-        axl.seed(2)
-        self.assertEqual(axl.random_choice(), D)
-
-    def test_set_seed(self):
-        """Test that numpy and stdlib random seed is set by axelrod seed"""
-
-        numpy_random_numbers = []
-        stdlib_random_numbers = []
-        for _ in range(2):
-            axl.seed(0)
-            numpy_random_numbers.append(numpy.random.random())
-            stdlib_random_numbers.append(random.random())
-
-        self.assertEqual(numpy_random_numbers[0], numpy_random_numbers[1])
-        self.assertEqual(stdlib_random_numbers[0], stdlib_random_numbers[1])
-=======
         random = RandomGenerator()
         self.assertEqual(random.random_choice(1), C)
         self.assertEqual(random.random_choice(0), D)
@@ -50,28 +22,12 @@ class TestRandomGenerator(unittest.TestCase):
         self.assertEqual(random.random_choice(), C)
         random.seed(2)
         self.assertEqual(random.random_choice(), D)
->>>>>>> First pass on reproducible matches and parallel tournaments with random seeding
 
     def test_seed_not_offset_by_deterministic_call(self):
         """Test that when called with p = 0 or 1, the random seed is not
         affected."""
         random = RandomGenerator()
         for p in [0, 1]:
-<<<<<<< HEAD
-            axl.seed(0)
-            r = random.random()
-            axl.seed(0)
-            axl.random_choice(p)
-            self.assertEqual(r, random.random())
-
-    def test_random_flip(self):
-        self.assertEqual(C, axl.random_flip(C, 0))
-        self.assertEqual(C, axl.random_flip(D, 1))
-        axl.seed(0)
-        self.assertEqual(C, axl.random_flip(C, 0.2))
-        axl.seed(1)
-        self.assertEqual(C, axl.random_flip(D, 0.2))
-=======
             random.seed(0)
             r = random.random()
             random.seed(0)
@@ -112,7 +68,6 @@ class TestBulkRandomGenerator(unittest.TestCase):
         randoms3 = [next(rg3) for _ in range(batches * batch_size)]
         self.assertEqual(len(randoms3), len(randoms2))
         self.assertNotIn(randoms3[-1], randoms2)
->>>>>>> First pass on reproducible matches and parallel tournaments with random seeding
 
 
 class TestPdf(unittest.TestCase):
@@ -131,13 +86,8 @@ class TestPdf(unittest.TestCase):
     def test_sample(self):
         """Test that sample maps to correct domain"""
         all_samples = []
-<<<<<<< HEAD
-
-        axl.seed(0)
-=======
         random = RandomGenerator()
         random.seed(0)
->>>>>>> First pass on reproducible matches and parallel tournaments with random seeding
         for sample in range(100):
             all_samples.append(self.pdf.sample())
 
@@ -148,14 +98,7 @@ class TestPdf(unittest.TestCase):
         """Test that numpy seeds the sample properly"""
 
         for s in range(10):
-<<<<<<< HEAD
-            axl.seed(s)
-            sample = self.pdf.sample()
-            axl.seed(s)
-            self.assertEqual(sample, self.pdf.sample())
-=======
             pdf1 = Pdf(self.counter, s)
             sample = pdf1.sample()
             pdf2 = Pdf(self.counter, s)
             self.assertEqual(sample, pdf2.sample())
->>>>>>> First pass on reproducible matches and parallel tournaments with random seeding

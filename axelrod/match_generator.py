@@ -38,6 +38,7 @@ class MatchGenerator(object):
             Mapping attribute names to values which should be passed to players.
             The default is to use the correct values for turns, game and noise
             but these can be overridden if desired.
+        seed : int
         """
         self.players = players
         self.turns = turns

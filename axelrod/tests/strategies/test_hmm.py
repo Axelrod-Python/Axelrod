@@ -1,17 +1,9 @@
 """Tests for Hidden Markov Model Strategies."""
-
 import unittest
-import random
 
 import axelrod as axl
 from axelrod.evolvable_player import InsufficientParametersError
-from axelrod.strategies.hmm import (
-    EvolvableHMMPlayer,
-    HMMPlayer,
-    SimpleHMM,
-    is_stochastic_matrix,
-    random_vector,
-)
+from axelrod.strategies.hmm import EvolvableHMMPlayer, HMMPlayer, SimpleHMM, is_stochastic_matrix
 from .test_player import TestMatch, TestPlayer
 from .test_evolvable_player import PartialClass, TestEvolvablePlayer
 
@@ -50,8 +42,8 @@ class TestHMMPlayers(unittest.TestCase):
         self.assertFalse(player.is_stochastic())
         self.assertFalse(axl.Classifiers["stochastic"](player))
         opponent = axl.Alternator()
-        for i in range(6):
-            player.play(opponent)
+        match = axl.Match((player, opponent), turns=6)
+        match.play()
         self.assertEqual(opponent.history, [C, D] * 3)
         self.assertEqual(player.history, [C] * 6)
 
@@ -71,8 +63,8 @@ class TestHMMPlayers(unittest.TestCase):
         self.assertFalse(player.is_stochastic())
         self.assertFalse(axl.Classifiers["stochastic"](player))
         opponent = axl.Alternator()
-        for i in range(6):
-            player.play(opponent)
+        match = axl.Match((player, opponent), turns=6)
+        match.play()
         self.assertEqual(opponent.history, [C, D] * 3)
         self.assertEqual(player.history, [D] * 6)
 
@@ -92,14 +84,14 @@ class TestHMMPlayers(unittest.TestCase):
         self.assertFalse(player.is_stochastic())
         self.assertFalse(axl.Classifiers["stochastic"](player))
         opponent = axl.Alternator()
-        for i in range(6):
-            player.play(opponent)
+        match = axl.Match((player, opponent), turns=6)
+        match.play()
         self.assertEqual(opponent.history, [C, D] * 3)
         self.assertEqual(player.history, [C, C, D, C, D, C])
 
     def test_wsls(self):
-        """Tests that the player defined by the table for TFT is in fact
-        WSLS (also known as Pavlov."""
+        """Tests that the player defined by the table for WSLS is in fact
+        WSLS (also known as Pavlov)."""
         t_C = [[1, 0], [0, 1]]
         t_D = [[0, 1], [1, 0]]
         p = [1, 0]
@@ -113,8 +105,8 @@ class TestHMMPlayers(unittest.TestCase):
         self.assertFalse(player.is_stochastic())
         self.assertFalse(axl.Classifiers["stochastic"](player))
         opponent = axl.Alternator()
-        for i in range(6):
-            player.play(opponent)
+        match = axl.Match((player, opponent), turns=6)
+        match.play()
         self.assertEqual(opponent.history, [C, D] * 3)
         self.assertEqual(player.history, [C, C, D, D, C, C])
 
@@ -128,18 +120,22 @@ class TestHMMPlayers(unittest.TestCase):
         p = [1, 0]
         hmm = SimpleHMM(t_C, t_C, p, 0)
         self.assertTrue(hmm.is_well_formed())
+
         hmm = SimpleHMM(t_C, t_D, p, -1)
         self.assertFalse(hmm.is_well_formed())
+
         t_C = [[1, -1], [0, 1]]
         t_D = [[0, 1], [1, 0]]
         p = [1, 0]
         hmm = SimpleHMM(t_C, t_D, p, 0)
         self.assertFalse(hmm.is_well_formed())
+
         t_C = [[1, 0], [0, 1]]
         t_D = [[0, 2], [1, 0]]
         p = [1, 0]
         hmm = SimpleHMM(t_C, t_D, p, 0)
         self.assertFalse(hmm.is_well_formed())
+
         t_C = [[1, 0], [0, 1]]
         t_D = [[0, 1], [1, 0]]
         p = [-1, 2]
@@ -216,18 +212,28 @@ class TestEvolvableHMMPlayer(unittest.TestCase):
         initial_action = C
 
         self.assertRaises(
-            InsufficientParametersError, self.player_class._normalize_parameters
+            InsufficientParametersError,
+            self.player_class
         )
         self.assertRaises(
             InsufficientParametersError,
-            self.player_class._normalize_parameters,
+            self.player_class,
             transitions_C=transitions_C,
             transitions_D=transitions_D,
             emission_probabilities=emission_probabilities,
+            initial_state=None
         )
         self.assertRaises(
             InsufficientParametersError,
-            self.player_class._normalize_parameters,
+            self.player_class,
+            transitions_C=transitions_C,
+            transitions_D=transitions_D,
+            emission_probabilities=emission_probabilities,
+            initial_action=None
+        )
+        self.assertRaises(
+            InsufficientParametersError,
+            self.player_class,
             initial_state=initial_state,
             initial_action=initial_action,
         )
@@ -235,10 +241,11 @@ class TestEvolvableHMMPlayer(unittest.TestCase):
     def test_vector_to_instance(self):
         num_states = 4
         vector = []
+        rng = axl.RandomGenerator(seed=1111)
         for _ in range(2 * num_states):
-            vector.extend(list(random_vector(num_states)))
+            vector.extend(list(rng.random_vector(num_states)))
         for _ in range(num_states + 1):
-            vector.append(random.random())
+            vector.append(rng.random())
         player = self.player_class(num_states=num_states)
         player.receive_vector(vector=vector)
         self.assertIsInstance(player, self.player_class)

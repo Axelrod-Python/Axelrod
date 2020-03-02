@@ -2,9 +2,8 @@
 
 import unittest
 
-import random
-
 import axelrod as axl
+from axelrod import Match
 from axelrod.strategies.hunter import detect_cycle
 
 from .test_player import TestPlayer
@@ -136,11 +135,10 @@ class TestCycleHunter(TestPlayer):
             axl.Alternator(),
         ]:
             player.reset()
-            for i in range(30):
-                player.play(opponent)
+            match = Match((player, opponent), turns=30)
+            match.play()
             self.assertEqual(player.history[-1], D)
         # Test against non-cyclers
-        axl.seed(40)
         for opponent in [
             axl.Random(),
             axl.AntiCycler(),
@@ -148,8 +146,8 @@ class TestCycleHunter(TestPlayer):
             axl.Defector(),
         ]:
             player.reset()
-            for i in range(30):
-                player.play(opponent)
+            match = Match((player, opponent), turns=30, seed=40)
+            match.play()
             self.assertEqual(player.history[-1], C)
 
     def test_reset_attr(self):
@@ -183,11 +181,10 @@ class TestEventualCycleHunter(TestPlayer):
             axl.Alternator(),
         ]:
             player.reset()
-            for i in range(50):
-                player.play(opponent)
+            match = Match((player, opponent), turns=50)
+            match.play()
             self.assertEqual(player.history[-1], D)
         # Test against non-cyclers and cooperators
-        axl.seed(43)
         for opponent in [
             axl.Random(),
             axl.AntiCycler(),
@@ -195,8 +192,8 @@ class TestEventualCycleHunter(TestPlayer):
             axl.Cooperator(),
         ]:
             player.reset()
-            for i in range(50):
-                player.play(opponent)
+            match = Match((player, opponent), turns=50, seed=43)
+            match.play()
             self.assertEqual(player.history[-1], C)
 
     def test_reset_attr(self):
@@ -260,8 +257,8 @@ class TestRandomHunter(TestPlayer):
     def test_reset(self):
         player = self.player()
         opponent = axl.Cooperator()
-        for _ in range(100):
-            player.play(opponent)
+        match = Match((player, opponent), turns=100)
+        match.play()
         self.assertFalse(player.countCC == 0)
         player.reset()
         self.assertTrue(player.countCC == 0)

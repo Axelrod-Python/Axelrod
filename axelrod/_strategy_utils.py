@@ -137,7 +137,7 @@ def _calculate_scores(p1, p2, game):
     return s1, s2
 
 
-def look_ahead(player_1, player_2, game, rounds=10):
+def look_ahead(player1, player2, game, rounds=10):
     """Returns a constant action that maximizes score by looking ahead.
 
     Parameters
@@ -160,8 +160,10 @@ def look_ahead(player_1, player_2, game, rounds=10):
     possible_strategies = {C: Cooperator(), D: Defector()}
     for action, player in possible_strategies.items():
         # Instead of a deepcopy, create a new opponent and replay the history to it.
-        opponent_ = player_2.clone()
-        for h in player_1.history:
+        opponent_ = player2.clone()
+        if opponent_.classifier["stochastic"]:
+            opponent_.set_seed(player2._seed)
+        for h in player1.history:
             _limited_simulate_play(player, opponent_, h)
 
         # Now play forward with the constant strategy.

@@ -2,6 +2,7 @@ import unittest
 import warnings
 
 import axelrod as axl
+from axelrod import filtered_strategies, short_run_time_strategies
 from axelrod.tests.property import strategy_lists
 
 from hypothesis import example, given, settings
@@ -106,7 +107,7 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
         classifiers = [["game"], ["length"], ["game", "length"]]
 
         for classifier in classifiers:
-            axl.seed(seed_)
+            axelrod._module_random.seed(seed_)
             comprehension = set(
                 [
                     s
@@ -115,7 +116,7 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
                 ]
             )
 
-            axl.seed(seed_)
+            axelrod._module_random.seed(seed_)
             filterset = {"makes_use_of": classifier}
             filtered = set(axl.filtered_strategies(filterset, strategies=strategies))
 

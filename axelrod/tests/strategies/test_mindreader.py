@@ -1,6 +1,6 @@
 """Tests for the Mindreader strategy."""
 
-import axelrod as axl
+import axl as axl
 from axelrod._strategy_utils import simulate_match
 
 from .test_player import TestPlayer
@@ -85,8 +85,8 @@ class TestMindReader(TestPlayer):
         """Ensures that a recursion error does not occur """
         p1 = axl.MindReader()
         p2 = axl.Geller()
-        p1.strategy(p2)
-        p2.strategy(p1)
+        match = axl.Match((p1, p2), turns=5, seed=4)
+        match.play()
 
     def test_init(self):
         """Tests for init method """

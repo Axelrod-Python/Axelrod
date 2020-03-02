@@ -1,6 +1,5 @@
 from typing import List, Tuple
 import numpy as np
-import numpy.random as random
 from axelrod.action import Action
 from axelrod.load_data_ import load_weights
 from axelrod.evolvable_player import EvolvablePlayer, InsufficientParametersError, crossover_lists
@@ -229,7 +228,9 @@ class EvolvableANN(ANN, EvolvablePlayer):
         weights: List[float] = None,
         mutation_probability: float = None,
         mutation_distance: int = 5,
+        seed: int = None
     ) -> None:
+        self.set_seed(seed=seed)
         num_features, num_hidden, weights, mutation_probability = self._normalize_parameters(
             num_features, num_hidden, weights, mutation_probability)
         ANN.__init__(self,
@@ -245,25 +246,23 @@ class EvolvableANN(ANN, EvolvablePlayer):
             weights=weights,
             mutation_probability=mutation_probability)
 
-    @classmethod
-    def _normalize_parameters(cls, num_features=None, num_hidden=None, weights=None, mutation_probability=None):
+    def _normalize_parameters(self, num_features=None, num_hidden=None, weights=None, mutation_probability=None):
         if not (num_features and num_hidden):
             raise InsufficientParametersError("Insufficient Parameters to instantiate EvolvableANN")
         size = num_weights(num_features, num_hidden)
         if not weights:
-            weights = [random.uniform(-1, 1) for _ in range(size)]
+            weights = [self._random.uniform(-1, 1) for _ in range(size)]
         if mutation_probability is None:
             mutation_probability = 10. / size
         return num_features, num_hidden, weights, mutation_probability
 
-    @staticmethod
-    def mutate_weights(weights, num_features, num_hidden, mutation_probability,
+    def mutate_weights(self, weights, num_features, num_hidden, mutation_probability,
                        mutation_distance):
         size = num_weights(num_features, num_hidden)
-        randoms = random.random(size)
+        randoms = self._random.random(size)
         for i, r in enumerate(randoms):
             if r < mutation_probability:
-                p = 1 + random.uniform(-1, 1) * mutation_distance
+                p = 1 + self._random.uniform(-1, 1) * mutation_distance
                 weights[i] *= p
         return weights
 
@@ -276,7 +275,7 @@ class EvolvableANN(ANN, EvolvablePlayer):
     def crossover(self, other):
         if other.__class__ != self.__class__:
             raise TypeError("Crossover must be between the same player classes.")
-        weights = crossover_lists(self.weights, other.weights)
+        weights = crossover_lists(self.weights, other.weights, self._random)
         return self.create_new(weights=weights)
 
 

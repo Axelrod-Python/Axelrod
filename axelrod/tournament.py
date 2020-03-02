@@ -33,6 +33,7 @@ class Tournament(object):
         noise: float = 0,
         edges: List[Tuple] = None,
         match_attributes: dict = None,
+        seed: int = None
     ) -> None:
         """
         Parameters
@@ -85,6 +86,7 @@ class Tournament(object):
             noise=self.noise,
             edges=edges,
             match_attributes=match_attributes,
+            seed=seed
         )
         self._logger = logging.getLogger(__name__)
 

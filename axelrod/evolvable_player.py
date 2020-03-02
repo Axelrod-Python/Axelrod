@@ -1,6 +1,6 @@
 import base64
+import copy
 from pickle import dumps, loads
-from random import randrange
 from typing import Dict, List
 from .player import Player
 
@@ -21,6 +21,10 @@ class EvolvablePlayer(Player):
     parent_class = Player
     parent_kwargs = []  # type: List[str]
 
+    def __init__(self, seed=None):
+        super().__init__()
+        self.set_seed(seed=seed)
+
     def overwrite_init_kwargs(self, **kwargs):
         """Use to overwrite parameters for proper cloning and testing."""
         for k, v in kwargs.items():
@@ -31,6 +35,24 @@ class EvolvablePlayer(Player):
         init_kwargs = self.init_kwargs.copy()
         init_kwargs.update(kwargs)
         return self.__class__(**init_kwargs)
+
+    # def clone(self):
+    #     """Clones the player without history, reapplying configuration
+    #     parameters as necessary.
+    #
+    #     We're overriding Player.clone to also propagate the seed because EvolvablePlayers
+    #     currently randomize themselves on initialization.
+    #     """
+    #
+    #     # You may be tempted to re-implement using the `copy` module
+    #     # Note that this would require a deepcopy in some cases and there may
+    #     # be significant changes required throughout the library.
+    #     # Consider overriding in special cases only if necessary
+    #     cls = self.__class__
+    #     new_player = cls(**self.init_kwargs, seed=self._seed)
+    #     new_player.match_attributes = copy.copy(self.match_attributes)
+    #     # new_player.set_seed(self._seed)
+    #     return new_player
 
     # Serialization and deserialization. You may overwrite to obtain more human readable serializations
     # but you must overwrite both.
@@ -73,15 +95,15 @@ def copy_lists(lists: List[List]) -> List[List]:
     return list(map(list, lists))
 
 
-def crossover_lists(list1: List, list2: List) -> List:
-    cross_point = randrange(len(list1))
+def crossover_lists(list1: List, list2: List, rng) -> List:
+    cross_point = rng.randint(0, len(list1))
     new_list = list(list1[:cross_point]) + list(list2[cross_point:])
     return new_list
 
 
-def crossover_dictionaries(table1: Dict, table2: Dict) -> Dict:
+def crossover_dictionaries(table1: Dict, table2: Dict, rng) -> Dict:
     keys = list(table1.keys())
-    cross_point = randrange(len(keys))
+    cross_point = rng.randint(0, len(keys))
     new_items = [(k, table1[k]) for k in keys[:cross_point]]
     new_items += [(k, table2[k]) for k in keys[cross_point:]]
     new_table = dict(new_items)

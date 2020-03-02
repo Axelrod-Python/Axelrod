@@ -4,7 +4,6 @@ swarm algorithms.
 For the original see:
  https://gist.github.com/GDKO/60c3d0fd423598f3c4e4
 """
-import random
 from typing import Any
 
 from axelrod.action import Action
@@ -54,7 +53,8 @@ class EvolvableGambler(Gambler, EvolvableLookerUp):
         initial_actions: tuple = None,
         pattern: Any = None,  # pattern is str or tuple of Actions.
         parameters: Plays = None,
-        mutation_probability: float = None
+        mutation_probability: float = None,
+        seed: int = None
     ) -> None:
         EvolvableLookerUp.__init__(
             self,
@@ -64,6 +64,7 @@ class EvolvableGambler(Gambler, EvolvableLookerUp):
             parameters=parameters,
             mutation_probability=mutation_probability
         )
+        self.set_seed(seed=seed)
         self.pattern = list(self.pattern)
         Gambler.__init__(
             self,
@@ -83,17 +84,11 @@ class EvolvableGambler(Gambler, EvolvableLookerUp):
     # The mutate and crossover methods are mostly inherited from EvolvableLookerUp, except for the following
     # modifications.
 
-    @classmethod
-    def random_value(cls):
-        # TODO: For reproducibility, this invocation of random may need to be folded into the
-        # evolutionary algorithm class, once it is merged into Axelrod.
-        return random.random()
+    def random_value(self):
+        return self._random.random()
 
-    @classmethod
-    def mutate_value(cls, value):
-        # TODO: For reproducibility, this invocation of random may need to be folded into the
-        # evolutionary algorithm class, once it is merged into Axelrod.
-        ep = random.uniform(-1, 1) / 4
+    def mutate_value(self, value):
+        ep = self._random.uniform(-1, 1) / 4
         value += ep
         if value < 0:
             value = 0

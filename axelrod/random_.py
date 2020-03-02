@@ -119,23 +119,26 @@ class BulkRandomGenerator(object):
     """Bulk generator of random integers for tournament seeding
     and reproducibility. Use like a generator."""
     def __init__(self, seed=None, batch_size=1000):
-        self.random_generator = RandomState()
-        self.random_generator.seed(seed)
+        self._random_generator = RandomState()
+        self._random_generator.seed(seed)
         self._ints = None
-        self.batch_size = batch_size
+        self._batch_size = batch_size
+        self._index = 0
         self._fill_ints()
 
     def _fill_ints(self):
-        ints = self.random_generator.randint(
+        ints = self._random_generator.randint(
             low=0,
             high=2**32 - 1,
-            size=self.batch_size)
-        self._ints = (x for x in ints)
+            size=self._batch_size)
+        self._ints = [x for x in ints]
+        self._index = 0
 
     def __next__(self):
         try:
-            x = next(self._ints)
+            x = self._ints[self._index]
+            self._index += 1
             return x
-        except StopIteration:
+        except IndexError:
             self._fill_ints()
-            return next(self._ints)
+            return self.__next__()

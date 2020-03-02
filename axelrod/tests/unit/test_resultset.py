@@ -1,6 +1,7 @@
 import unittest
 import csv
 from collections import Counter
+
 import pandas as pd
 from dask.dataframe.core import DataFrame
 from numpy import mean, nanmedian, std
@@ -9,7 +10,7 @@ import pathlib
 import axelrod as axl
 from axelrod.load_data_ import axl_filename
 from axelrod.result_set import create_counter_dict
-from axelrod.tests.property import prob_end_tournaments, tournaments
+from axelrod.tests.property import tournaments
 
 from hypothesis import given, settings
 
@@ -495,9 +496,8 @@ class TestResultSet(unittest.TestCase):
         # Based on https://github.com/Axelrod-Python/Axelrod/issues/670
         # Note that the conclusion of #670 is incorrect and only includes one of
         # the copies of the strategy.
-        axl.seed(0)
         players = [s() for s in axl.demo_strategies]
-        tournament = axl.Tournament(players, repetitions=2, turns=5)
+        tournament = axl.Tournament(players, repetitions=2, turns=5, seed=0)
         results = tournament.play(progress_bar=False)
         self.assertEqual(results.payoff_diffs_means[-1][-1], 0.0)
 

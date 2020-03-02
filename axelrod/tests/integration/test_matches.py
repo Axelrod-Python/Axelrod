@@ -46,9 +46,8 @@ class TestMatchOutcomes(unittest.TestCase):
         same result"""
         results = []
         for _ in range(3):
-            axl.seed(seed)
             players = [s() for s in strategies]
-            results.append(axl.Match(players, turns).play())
+            results.append(axelrod.Match(players, turns=turns, seed=seed).play())
 
         self.assertEqual(results[0], results[1])
         self.assertEqual(results[1], results[2])

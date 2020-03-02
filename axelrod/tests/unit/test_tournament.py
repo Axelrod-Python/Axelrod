@@ -10,11 +10,13 @@ import pickle
 import warnings
 from multiprocessing import Queue, cpu_count
 
-from axelrod.load_data_ import axl_filename
+from hypothesis import example, given, settings
+from hypothesis.strategies import floats, integers
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
 
+from axelrod.load_data_ import axl_filename
 import axelrod as axl
 from axelrod.tests.property import (
     prob_end_tournaments,
@@ -24,8 +26,6 @@ from axelrod.tests.property import (
 )
 from axelrod.tournament import _close_objects
 
-from hypothesis import example, given, settings
-from hypothesis.strategies import floats, integers
 
 C, D = axl.Action.C, axl.Action.D
 
@@ -399,7 +399,7 @@ class TestTournament(unittest.TestCase):
             max_repetitions=4,
         )
     )
-    @settings(max_examples=50)
+    @settings(max_examples=50, deadline=None)
     @example(
         tournament=axl.Tournament(
             players=[s() for s in test_strategies],
@@ -657,7 +657,7 @@ class TestTournament(unittest.TestCase):
                 for player2_index in range(player1_index, len(self.players)):
                     index_pair = (player1_index, player2_index)
                     match_params = {"turns": turns, "game": self.game}
-                    yield (index_pair, match_params, self.test_repetitions)
+                    yield (index_pair, match_params, self.test_repetitions, 0)
 
         chunk_generator = make_chunk_generator()
         interactions = {}
@@ -748,6 +748,54 @@ class TestTournament(unittest.TestCase):
         expected_df = pd.read_csv(axl_filename(path))
         self.assertTrue(df.equals(expected_df))
 
+    @given(seed=integers(min_value=1, max_value=4294967295))
+    @settings(max_examples=5, deadline=None)
+    def test_seeding_equality(self, seed):
+        """Tests that a tournament with a given seed will return the
+        same results each time."""
+        players = [axl.Random(0.4), axl.Random(0.6), axl.Random(0.8)]
+        tournament1 = axl.Tournament(
+            name=self.test_name,
+            players=players,
+            game=self.game,
+            turns=3,
+            repetitions=3,
+            seed=seed
+        )
+        tournament2 = axl.Tournament(
+            name=self.test_name,
+            players=players,
+            game=self.game,
+            turns=3,
+            repetitions=3,
+            seed=seed
+        )
+        results1 = tournament1.play()
+        results2 = tournament2.play()
+        self.assertEqual(results1.summarise(), results2.summarise())
+
+    def test_seeding_inequality(self):
+        players = [axl.Random(0.4), axl.Random(0.6)]
+        tournament1 = axl.Tournament(
+            name=self.test_name,
+            players=players,
+            game=self.game,
+            turns=2,
+            repetitions=2,
+            seed=0
+        )
+        tournament2 = axl.Tournament(
+            name=self.test_name,
+            players=players,
+            game=self.game,
+            turns=2,
+            repetitions=2,
+            seed=10
+        )
+        results1 = tournament1.play()
+        results2 = tournament2.play()
+        self.assertNotEqual(results1, results2)
+
 
 class TestProbEndTournament(unittest.TestCase):
     @classmethod
@@ -785,14 +833,16 @@ class TestProbEndTournament(unittest.TestCase):
             max_prob_end=0.9,
             min_repetitions=2,
             max_repetitions=4,
+            seed=100
         )
     )
-    @settings(max_examples=5)
+    @settings(max_examples=5, deadline=None)
     @example(
         tournament=axl.Tournament(
             players=[s() for s in test_strategies],
             prob_end=0.2,
             repetitions=test_repetitions,
+            seed=101
         )
     )
     # These two examples are to make sure #465 is fixed.
@@ -800,12 +850,18 @@ class TestProbEndTournament(unittest.TestCase):
     # these two examples were identified by hypothesis.
     @example(
         tournament=axl.Tournament(
-            players=[axl.BackStabber(), axl.MindReader()], prob_end=0.2, repetitions=1,
+            players=[axl.BackStabber(), axl.MindReader()],
+            prob_end=0.2,
+            repetitions=1,
+            seed=102
         )
     )
     @example(
         tournament=axl.Tournament(
-            players=[axl.ThueMorse(), axl.MindReader()], prob_end=0.2, repetitions=1,
+            players=[axl.ThueMorse(), axl.MindReader()],
+            prob_end=0.2,
+            repetitions=1,
+            seed=103
         )
     )
     def test_property_serial_play(self, tournament):
@@ -857,7 +913,7 @@ class TestSpatialTournament(unittest.TestCase):
         noise=floats(min_value=0, max_value=1),
         seed=integers(min_value=0, max_value=4294967295),
     )
-    @settings(max_examples=5)
+    @settings(max_examples=5, deadline=None)
     def test_complete_tournament(self, strategies, turns, repetitions, noise, seed):
         """
         A test to check that a spatial tournament on the complete multigraph
@@ -873,16 +929,16 @@ class TestSpatialTournament(unittest.TestCase):
 
         # create a round robin tournament
         tournament = axl.Tournament(
-            players, repetitions=repetitions, turns=turns, noise=noise
+            players, repetitions=repetitions, turns=turns, noise=noise,
+            seed=seed
         )
         # create a complete spatial tournament
         spatial_tournament = axl.Tournament(
-            players, repetitions=repetitions, turns=turns, noise=noise, edges=edges
+            players, repetitions=repetitions, turns=turns, noise=noise, edges=edges,
+            seed=seed
         )
 
-        axl.seed(seed)
         results = tournament.play(progress_bar=False)
-        axl.seed(seed)
         spatial_results = spatial_tournament.play(progress_bar=False)
 
         self.assertEqual(results.ranked_names, spatial_results.ranked_names)
@@ -964,7 +1020,7 @@ class TestProbEndingSpatialTournament(unittest.TestCase):
         reps=integers(min_value=1, max_value=3),
         seed=integers(min_value=0, max_value=4294967295),
     )
-    @settings(max_examples=5)
+    @settings(max_examples=5, deadline=None)
     def test_complete_tournament(self, strategies, prob_end, seed, reps):
         """
         A test to check that a spatial tournament on the complete graph
@@ -973,8 +1029,9 @@ class TestProbEndingSpatialTournament(unittest.TestCase):
         players = [s() for s in strategies]
 
         # create a prob end round robin tournament
-        tournament = axl.Tournament(players, prob_end=prob_end, repetitions=reps)
-        axl.seed(seed)
+
+        tournament = axl.Tournament(players, prob_end=prob_end, repetitions=reps,
+                                        seed=seed)
         results = tournament.play(progress_bar=False)
 
         # create a complete spatial tournament
@@ -982,9 +1039,9 @@ class TestProbEndingSpatialTournament(unittest.TestCase):
         edges = [(i, j) for i in range(len(players)) for j in range(i, len(players))]
 
         spatial_tournament = axl.Tournament(
-            players, prob_end=prob_end, repetitions=reps, edges=edges
+            players, prob_end=prob_end, repetitions=reps, edges=edges,
+            seed=seed
         )
-        axl.seed(seed)
         spatial_results = spatial_tournament.play(progress_bar=False)
         self.assertEqual(results.match_lengths, spatial_results.match_lengths)
         self.assertEqual(results.ranked_names, spatial_results.ranked_names)
@@ -1001,7 +1058,7 @@ class TestProbEndingSpatialTournament(unittest.TestCase):
         ),
         seed=integers(min_value=0, max_value=4294967295),
     )
-    @settings(max_examples=5)
+    @settings(max_examples=5, deadline=None)
     def test_one_turn_tournament(self, tournament, seed):
         """
         Tests that gives same result as the corresponding spatial round robin
@@ -1012,10 +1069,9 @@ class TestProbEndingSpatialTournament(unittest.TestCase):
             prob_end=1,
             edges=tournament.edges,
             repetitions=tournament.repetitions,
+            seed=seed,
         )
-        axl.seed(seed)
         prob_end_results = prob_end_tour.play(progress_bar=False)
-        axl.seed(seed)
         one_turn_results = tournament.play(progress_bar=False)
         self.assertEqual(prob_end_results.scores, one_turn_results.scores)
         self.assertEqual(prob_end_results.wins, one_turn_results.wins)

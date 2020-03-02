@@ -245,7 +245,6 @@ class AshlockFingerprint(object):
         progress_bar : bool
             Whether or not to create a progress bar which will be updated
 
-
         Returns
         ----------
         edges : list of tuples
@@ -279,6 +278,7 @@ class AshlockFingerprint(object):
         processes: int = None,
         filename: str = None,
         progress_bar: bool = True,
+        seed: int = None
     ) -> dict:
         """Build and play the spatial tournament.
 
@@ -322,7 +322,8 @@ class AshlockFingerprint(object):
 
         self.step = step
         self.spatial_tournament = axl.Tournament(
-            tourn_players, turns=turns, repetitions=repetitions, edges=edges
+            tourn_players, turns=turns, repetitions=repetitions, edges=edges,
+            seed=seed
         )
         self.spatial_tournament.play(
             build_results=False,

@@ -531,8 +531,9 @@ class TestEvolvableGambler(unittest.TestCase):
         self.assertEqual(len(ub), 8)
 
     def test_mutate_value_bounds(self):
-        self.assertEqual(axl.EvolvableGambler.mutate_value(2), 1)
-        self.assertEqual(axl.EvolvableGambler.mutate_value(-2), 0)
+        player = axl.EvolvableGambler(parameters=(1, 1, 1), seed=0)
+        self.assertEqual(player.mutate_value(2), 1)
+        self.assertEqual(player.mutate_value(-2), 0)
 
 
 class TestEvolvableGambler2(TestEvolvablePlayer):

@@ -63,10 +63,12 @@ class TestPlayerClass(unittest.TestCase):
         player1, player2 = self.player(), self.player()
         player1.strategy = cooperate
         player2.strategy = defect
-        player1.play(player2)
+
+        match = axl.Match((player1, player2), turns=1)
+        match.play()
+
         self.assertEqual(player1.history[0], C)
         self.assertEqual(player2.history[0], D)
-
         # Test cooperation / defection counts
         self.assertEqual(player1.cooperations, 1)
         self.assertEqual(player1.defections, 0)
@@ -76,7 +78,8 @@ class TestPlayerClass(unittest.TestCase):
         self.assertEqual(player1.state_distribution, {(C, D): 1})
         self.assertEqual(player2.state_distribution, {(D, C): 1})
 
-        player1.play(player2)
+        match = axl.Match((player1, player2), turns=2)
+        match.play()
         self.assertEqual(player1.history[-1], C)
         self.assertEqual(player2.history[-1], D)
         # Test cooperation / defection counts
@@ -101,16 +104,6 @@ class TestPlayerClass(unittest.TestCase):
             player2.state_distribution,
             {(C, C): 1, (C, D): 1, (D, C): 2, (D, D): 1},
         )
-
-    def test_noisy_play(self):
-        noise = 0.2
-        player1, player2 = self.player(), self.player()
-        player1.strategy = cooperate
-        player2.strategy = defect
-        match = axl.Match((player1, player2), turns=1, seed=1)
-        match.play()
-        self.assertEqual(player1.history[0], D)
-        self.assertEqual(player2.history[0], D)
 
     def test_update_history(self):
         player = axl.Player()
@@ -413,7 +406,7 @@ class TestPlayer(unittest.TestCase):
         a2 = opponent()
         self.assertEqual(p1, p2)
         for player, op in [(p1, a1), (p2, a2)]:
-            m = axelrod.Match(players=(player, op), turns=10, seed=seed)
+            m = axl.Match(players=(player, op), turns=10, seed=seed)
             m.play()
         self.assertEqual(p1, p2)
         p1 = pickle.loads(pickle.dumps(p1))
@@ -424,7 +417,7 @@ class TestPlayer(unittest.TestCase):
         opponent=sampled_from(short_run_time_short_mem),
         seed=integers(min_value=1, max_value=200),
     )
-    @settings(max_examples=1)
+    @settings(max_examples=1, deadline=None)
     def test_equality_of_clone(self, seed, opponent):
         p1 = self.player()
         p2 = p1.clone()
@@ -434,7 +427,7 @@ class TestPlayer(unittest.TestCase):
         opponent=sampled_from(axl.short_run_time_strategies),
         seed=integers(min_value=1, max_value=200),
     )
-    @settings(max_examples=1)
+    @settings(max_examples=1, deadline=None)
     def test_equality_of_pickle_clone(self, seed, opponent):
         p1 = self.player()
         p2 = pickle.loads(pickle.dumps(p1))
@@ -465,10 +458,10 @@ class TestPlayer(unittest.TestCase):
     def test_reproducibility_of_play(self):
         player = self.player()
         player_clone = player.clone()
-        coplayer = axelrod.Random(0.5)
+        coplayer = axl.Random(0.5)
         coplayer_clone = coplayer.clone()
-        m1 = axelrod.Match((player, coplayer), turns=10, seed=10)
-        m2 = axelrod.Match((player_clone, coplayer_clone), turns=10, seed=10)
+        m1 = axl.Match((player, coplayer), turns=10, seed=10)
+        m2 = axl.Match((player_clone, coplayer_clone), turns=10, seed=10)
         m1.play()
         m2.play()
         self.assertEqual(m1.result, m2.result)
@@ -657,18 +650,6 @@ class TestMatch(unittest.TestCase):
         match = axl.Match((player1, player2), turns=turns, noise=noise, seed=seed)
         match.play()
         self.assertEqual(match.result, list(zip(expected_actions1, expected_actions2)))
-
-        # # Test expected sequence of play.
-        # for expected_result, result in zip(
-        #     zip(expected_actions1, expected_actions2),
-        #     match.result):
-        #     self.assertEqual()
-        #     # player1.play(player2)
-        #     # self.assertEqual(player1.history[i], outcome1)
-        #     # self.assertEqual(player2.history[i], outcome2)
-        #     self.assertEqual(match.result[i], outcome1)
-        #     self.assertEqual(player2.history[i], outcome2)
-
 
     def test_versus_with_incorrect_history_lengths(self):
         """Test the error raised by versus_test if expected actions do not

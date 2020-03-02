@@ -1,8 +1,5 @@
 import itertools
-from random import randrange
-from typing import Any, List, Sequence, Tuple, Union
-import numpy.random as random
-from numpy.random import choice
+from typing import Any, Sequence, Tuple
 from axelrod.action import Action
 from axelrod.evolvable_player import EvolvablePlayer, InsufficientParametersError, copy_lists
 from axelrod.player import Player
@@ -147,9 +144,11 @@ class EvolvableFSMPlayer(FSMPlayer, EvolvablePlayer):
         initial_action: Action = None,
         num_states: int = None,
         mutation_probability: float = 0.1,
+        seed: int = None
     ) -> None:
         """If transitions, initial_state, and initial_action are None
         then generate random parameters using num_states."""
+        self.set_seed(seed=seed)
         transitions, initial_state, initial_action, num_states = self._normalize_parameters(
             transitions, initial_state, initial_action, num_states)
         FSMPlayer.__init__(
@@ -173,14 +172,13 @@ class EvolvableFSMPlayer(FSMPlayer, EvolvablePlayer):
             normalized.append(tuple(t))
         return tuple(normalized)
 
-    @classmethod
-    def _normalize_parameters(cls, transitions: Tuple = None, initial_state: int = None, initial_action: Action = None,
+    def _normalize_parameters(self, transitions: Tuple = None, initial_state: int = None, initial_action: Action = None,
                               num_states: int = None) -> Tuple[Tuple, int, Action, int]:
         if not ((transitions is not None) and (initial_state is not None) and (initial_action is not None)):
             if not num_states:
                 raise InsufficientParametersError("Insufficient Parameters to instantiate EvolvableFSMPlayer")
-            transitions, initial_state, initial_action = cls.random_params(num_states)
-        transitions = cls.normalize_transitions(transitions)
+            transitions, initial_state, initial_action = self.random_params(num_states)
+        transitions = self.normalize_transitions(transitions)
         num_states = len(transitions) // 2
         return transitions, initial_state, initial_action, num_states
 
@@ -188,32 +186,30 @@ class EvolvableFSMPlayer(FSMPlayer, EvolvablePlayer):
     def num_states(self) -> int:
         return self.fsm.num_states()
 
-    @classmethod
-    def random_params(cls, num_states: int) -> Tuple[Tuple[Transition, ...], int, Action]:
+    def random_params(self, num_states: int) -> Tuple[Tuple[Transition, ...], int, Action]:
         rows = []
         for j in range(num_states):
             for action in actions:
-                next_state = randrange(num_states)
-                next_action = choice(actions)
+                next_state = self._random.randint(num_states)
+                next_action = self._random.choice(actions)
                 row = (j, action, next_state, next_action)
                 rows.append(row)
-        initial_state = randrange(num_states)
-        initial_action = choice(actions)
+        initial_state = self._random.randint(0, num_states)
+        initial_action = self._random.choice(actions)
         return tuple(rows), initial_state, initial_action
 
-    @staticmethod
-    def mutate_rows(rows, mutation_probability):
+    def mutate_rows(self, rows, mutation_probability):
         rows = list(rows)
-        randoms = random.random(len(rows))
+        randoms = self._random.random(len(rows))
         # Flip each value with a probability proportional to the mutation rate
         for i, row in enumerate(rows):
             if randoms[i] < mutation_probability:
                 row[3] = row[3].flip()
         # Swap Two Nodes?
-        if random.random() < 0.5:
+        if self._random.random() < 0.5:
             nodes = len(rows) // 2
-            n1 = randrange(nodes)
-            n2 = randrange(nodes)
+            n1 = self._random.randint(0, nodes)
+            n2 = self._random.randint(0, nodes)
             for j, row in enumerate(rows):
                 if row[0] == n1:
                     row[0] = n2
@@ -224,11 +220,11 @@ class EvolvableFSMPlayer(FSMPlayer, EvolvablePlayer):
 
     def mutate(self):
         initial_action = self.initial_action
-        if random.random() < self.mutation_probability / 10:
+        if self._random.random() < self.mutation_probability / 10:
             initial_action = self.initial_action.flip()
         initial_state = self.initial_state
-        if random.random() < self.mutation_probability / (10 * self.num_states):
-            initial_state = randrange(self.num_states)
+        if self._random.random() < self.mutation_probability / (10 * self.num_states):
+            initial_state = self._random.randint(0, self.num_states)
         try:
             transitions = self.mutate_rows(self.fsm.transitions(), self.mutation_probability)
             self.fsm = SimpleFSM(transitions, self.initial_state)
@@ -241,10 +237,9 @@ class EvolvableFSMPlayer(FSMPlayer, EvolvablePlayer):
             initial_action=initial_action,
         )
 
-    @staticmethod
-    def crossover_rows(rows1, rows2):
+    def crossover_rows(self, rows1, rows2):
         num_states = len(rows1) // 2
-        cross_point = 2 * randrange(num_states)
+        cross_point = 2 * self._random.randint(0, num_states)
         new_rows = copy_lists(rows1[:cross_point])
         new_rows += copy_lists(rows2[cross_point:])
         return new_rows

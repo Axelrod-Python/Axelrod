@@ -10,7 +10,7 @@ from axelrod import EvolvablePlayer, DEFAULT_TURNS, Game, Player
 from .deterministic_cache import DeterministicCache
 from .graph import Graph, complete_graph
 from .match import Match
-from .random_ import RandomGenerator
+from .random_ import RandomGenerator, BulkRandomGenerator
 
 
 class MoranProcess(object):
@@ -101,6 +101,7 @@ class MoranProcess(object):
         self.mutation_rate = mutation_rate
         self.stop_on_fixation = stop_on_fixation
         self._random = RandomGenerator(seed=seed)
+        self._bulk_random = BulkRandomGenerator(self._random.random_seed_int())
         m = mutation_method.lower()
         if m in ["atomic", "transition"]:
             self.mutation_method = m
@@ -249,13 +250,13 @@ class MoranProcess(object):
             # possible choices
             scores.pop(index)
             # Make sure to get the correct index post-pop
-            j = fitness_proportionate_selection(
+            j = self.fitness_proportionate_selection(
                 scores, fitness_transformation=self.fitness_transformation
             )
             if j >= index:
                 j += 1
         else:
-            j = fitness_proportionate_selection(
+            j = self.fitness_proportionate_selection(
                 scores, fitness_transformation=self.fitness_transformation
             )
         return j
@@ -362,7 +363,7 @@ class MoranProcess(object):
                 noise=self.noise,
                 game=self.game,
                 deterministic_cache=self.deterministic_cache,
-                seed=self._random.random_seed_int()
+                seed=next(self._bulk_random)
             )
             match.play()
             match_scores = match.final_score_per_turn()

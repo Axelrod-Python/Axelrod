@@ -1050,11 +1050,11 @@ class TestEvolvableFSMPlayer(unittest.TestCase):
     def test_normalized_parameters(self):
         self.assertRaises(
             InsufficientParametersError,
-            self.player_class._normalize_parameters
+            self.player_class
         )
         self.assertRaises(
             InsufficientParametersError,
-            self.player_class._normalize_parameters,
+            self.player_class,
             transitions=[[0, C, 1, D], [0, D, 0, D], [1, C, 1, C], [1, D, 1, D]]
         )
 

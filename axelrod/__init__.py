@@ -6,14 +6,14 @@ from axelrod.action import Action
 from axelrod.random_ import Pdf, RandomGenerator, BulkRandomGenerator
 
 # Initialize module level Random
-# This is seeded by the clock / OS entropy pool
+# This is initially seeded by the clock / OS entropy pool
 # It is not used if user specifies seeds everywhere and should only be
-# used internally by the library
+# used internally by the library and in certain tests that need to set
+# its seed.
 _module_random = RandomGenerator()
 
 from axelrod.load_data_ import load_pso_tables, load_weights
 from axelrod import graph
-from axelrod.random_ import Pdf, RandomGenerator, BulkRandomGenerator
 from axelrod.plot import Plot
 from axelrod.game import DefaultGame, Game
 from axelrod.history import History, LimitedHistory

@@ -1,6 +1,8 @@
 """Tests for the strategy utils."""
-
 import unittest
+
+from hypothesis import given, settings
+from hypothesis.strategies import integers, lists, sampled_from
 
 import axelrod as axl
 from axelrod._strategy_utils import (
@@ -11,9 +13,6 @@ from axelrod._strategy_utils import (
     simulate_match,
     thue_morse_generator,
 )
-
-from hypothesis import given, settings
-from hypothesis.strategies import integers, lists, sampled_from
 
 C, D = axl.Action.C, axl.Action.D
 
@@ -67,11 +66,13 @@ class TestInspectStrategy(unittest.TestCase):
     def test_strategies_without_countermeasures_return_their_strategy(self):
         tft = axl.TitForTat()
         inspector = axl.Alternator()
-
-        tft.play(inspector)
+        match = axl.Match((tft, inspector), turns=1)
+        match.play()
         self.assertEqual(tft.history, [C])
         self.assertEqual(inspect_strategy(inspector=inspector, opponent=tft), C)
-        tft.play(inspector)
+
+        match = axl.Match((tft, inspector), turns=2)
+        match.play()
         self.assertEqual(tft.history, [C, C])
         self.assertEqual(inspect_strategy(inspector=inspector, opponent=tft), D)
         self.assertEqual(tft.strategy(inspector), D)
@@ -79,8 +80,8 @@ class TestInspectStrategy(unittest.TestCase):
     def test_strategies_with_countermeasures_return_their_countermeasures(self):
         d_geller = axl.GellerDefector()
         inspector = axl.Cooperator()
-        d_geller.play(inspector)
-
+        match = axl.Match((d_geller, inspector), turns=1)
+        match.play()
         self.assertEqual(inspect_strategy(inspector=inspector, opponent=d_geller), D)
         self.assertEqual(d_geller.strategy(inspector), C)
 
