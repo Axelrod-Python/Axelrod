@@ -93,11 +93,10 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
         filtered = set(axl.filtered_strategies(filterset, strategies=strategies))
         self.assertEqual(comprehension, filtered)
 
-    @given(
-        seed_=integers(min_value=0, max_value=4294967295),
-        strategies=strategy_lists(min_size=20, max_size=20),
-    )
-    @settings(max_examples=5)
+    @given(seed_=integers(min_value=0, max_value=4294967295),
+           strategies=strategy_lists(min_size=20, max_size=20),
+           )
+    @settings(max_examples=5, deadline=None)
     def test_makes_use_of_filtering(self, seed_, strategies):
         """
         Test equivalent filtering using two approaches.
@@ -107,7 +106,7 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
         classifiers = [["game"], ["length"], ["game", "length"]]
 
         for classifier in classifiers:
-            axelrod._module_random.seed(seed_)
+            axl._module_random.seed(seed_)
             comprehension = set(
                 [
                     s
@@ -116,7 +115,7 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
                 ]
             )
 
-            axelrod._module_random.seed(seed_)
+            axl._module_random.seed(seed_)
             filterset = {"makes_use_of": classifier}
             filtered = set(axl.filtered_strategies(filterset, strategies=strategies))
 
