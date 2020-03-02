@@ -1,4 +1,4 @@
-from random import randint
+import random
 from axelrod.action import Action
 from axelrod.player import Player
 
@@ -259,7 +259,7 @@ class AdaptiveZeroDet(LRPlayer):
             self._scores[last_round[0]] += scores[0]
 
     def _adjust_parameters(self):
-        d = randint(0, 9) / 1000  # Selects random value to adjust s and l
+        d = random.randint(0, 9) / 1000  # Selects random value to adjust s and l
 
         if self._scores[C] > self._scores[D]:
             # This checks scores to determine how to adjust s and l either
