@@ -65,6 +65,7 @@ from .darwin import Darwin
 from .dbs import DBS
 from .defector import Defector, TrickyDefector
 from .doubler import Doubler
+from .exponential import Exponential
 from .finite_state_machines import (
     TF1,
     TF2,
@@ -305,6 +306,7 @@ all_strategies = [
     EvolvedLookerUp1_1_1,
     EvolvedLookerUp2_2_2,
     EvolvedHMM5,
+    Exponential,
     FirstByFeld,
     FirmButFair,
     FoolMeOnce,
