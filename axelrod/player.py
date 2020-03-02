@@ -28,18 +28,6 @@ class Player(object):
         """Caches arguments for Player cloning."""
         obj = super().__new__(cls)
         obj.init_kwargs = cls.init_params(*args, **kwargs)
-        # # Set up random seed from the module level random seed
-        # # in case the user doesn't specific one later.
-        # need_seed = False
-        # try:
-        #     seed = kwargs["seed"]
-        #     if seed is None:
-        #         need_seed = True
-        # except KeyError:
-        #     need_seed = True
-        # if need_seed:
-        #     seed = _module_random.randint(0, 2**32-1)
-        # obj._seed = seed
         return obj
 
     @classmethod
@@ -163,10 +151,6 @@ class Player(object):
         """This is a placeholder strategy."""
         raise NotImplementedError()
 
-    # def play(self, opponent, noise=0):
-    #     """This pits two players against each other."""
-    #     return simultaneous_play(self, opponent, noise)
-
     def clone(self):
         """Clones the player without history, reapplying configuration
         parameters as necessary."""
@@ -190,7 +174,6 @@ class Player(object):
         """
         # This also resets the history.
         self.__init__(**self.init_kwargs)
-        # self.set_seed(self._seed)
 
     def update_history(self, play, coplay):
         self.history.append(play, coplay)

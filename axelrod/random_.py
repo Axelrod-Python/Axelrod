@@ -11,7 +11,6 @@ class RandomGenerator(object):
     Enables reproducibility of player behavior, matches,
     and tournaments."""
     def __init__(self, seed=None):
-        # self.random = random.Random()
         # _random is the internal object that generators random values
         self._random = RandomState()
         self.original_seed = seed

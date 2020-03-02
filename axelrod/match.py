@@ -178,9 +178,9 @@ class Match(object):
                 if self.reset:
                     p.reset()
                 p.set_match_attributes(**self.match_attributes)
-                # if p.classifier["stochastic"]:
                 # Generate a random seed for the player
                 # TODO: Seeds only for stochastic players
+                # if p.classifier["stochastic"]:
                 p.set_seed(self._random.random_seed_int())
             result = []
             for _ in range(turns):

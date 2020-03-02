@@ -36,24 +36,6 @@ class EvolvablePlayer(Player):
         init_kwargs.update(kwargs)
         return self.__class__(**init_kwargs)
 
-    # def clone(self):
-    #     """Clones the player without history, reapplying configuration
-    #     parameters as necessary.
-    #
-    #     We're overriding Player.clone to also propagate the seed because EvolvablePlayers
-    #     currently randomize themselves on initialization.
-    #     """
-    #
-    #     # You may be tempted to re-implement using the `copy` module
-    #     # Note that this would require a deepcopy in some cases and there may
-    #     # be significant changes required throughout the library.
-    #     # Consider overriding in special cases only if necessary
-    #     cls = self.__class__
-    #     new_player = cls(**self.init_kwargs, seed=self._seed)
-    #     new_player.match_attributes = copy.copy(self.match_attributes)
-    #     # new_player.set_seed(self._seed)
-    #     return new_player
-
     # Serialization and deserialization. You may overwrite to obtain more human readable serializations
     # but you must overwrite both.
 

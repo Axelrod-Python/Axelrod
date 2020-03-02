@@ -708,9 +708,9 @@ class TestContriteTitForTat(TestPlayer):
     ]
 
     def test_init(self):
-        ctft = self.player()
-        self.assertFalse(ctft.contrite, False)
-        self.assertEqual(ctft._recorded_history, [])
+        player = self.player()
+        self.assertFalse(player.contrite, False)
+        self.assertEqual(player._recorded_history, [])
 
     @given(
         strategies=strategy_lists(strategies=deterministic_strategies, max_size=1),
@@ -719,10 +719,10 @@ class TestContriteTitForTat(TestPlayer):
     @settings(deadline=None)
     def test_is_tit_for_tat_with_no_noise(self, strategies, turns):
         tft = axl.TitForTat()
-        ctft = self.player()
+        player = self.player()
         opponent = strategies[0]()
         m1 = axl.Match((tft, opponent), turns)
-        m2 = axl.Match((ctft, opponent), turns)
+        m2 = axl.Match((player, opponent), turns)
         self.assertEqual(m1.play(), m2.play())
 
     def test_strategy_with_noise(self):
@@ -739,26 +739,26 @@ class TestContriteTitForTat(TestPlayer):
         self.assertEqual(player._recorded_history, [C])
         self.assertEqual(opponent.history, [C])
 
-        # # After noise: is contrite
-        # ctft.play(opponent)
-        # self.assertEqual(ctft.history, [D, C])
-        # self.assertEqual(ctft._recorded_history, [C, C])
-        # self.assertEqual(opponent.history, [C, D])
-        # self.assertTrue(ctft.contrite)
-        #
-        # # Cooperates and no longer contrite
-        # ctft.play(opponent)
-        # self.assertEqual(ctft.history, [D, C, C])
-        # self.assertEqual(ctft._recorded_history, [C, C, C])
-        # self.assertEqual(opponent.history, [C, D, D])
-        # self.assertFalse(ctft.contrite)
-        #
-        # # Goes back to playing tft
-        # ctft.play(opponent)
-        # self.assertEqual(ctft.history, [D, C, C, D])
-        # self.assertEqual(ctft._recorded_history, [C, C, C, D])
-        # self.assertEqual(opponent.history, [C, D, D, D])
-        # self.assertFalse(ctft.contrite)
+        # After noise: is contrite
+        player.play(opponent)
+        self.assertEqual(player.history, [D, C])
+        self.assertEqual(player._recorded_history, [C, C])
+        self.assertEqual(opponent.history, [C, D])
+        self.assertTrue(player.contrite)
+
+        # Cooperates and no longer contrite
+        player.play(opponent)
+        self.assertEqual(player.history, [D, C, C])
+        self.assertEqual(player._recorded_history, [C, C, C])
+        self.assertEqual(opponent.history, [C, D, D])
+        self.assertFalse(player.contrite)
+
+        # Goes back to playing tft
+        player.play(opponent)
+        self.assertEqual(player.history, [D, C, C, D])
+        self.assertEqual(player._recorded_history, [C, C, C, D])
+        self.assertEqual(opponent.history, [C, D, D, D])
+        self.assertFalse(player.contrite)
 
 
 class TestAdaptiveTitForTat(TestPlayer):
