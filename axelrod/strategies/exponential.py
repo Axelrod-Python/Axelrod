@@ -41,8 +41,8 @@ class Exponential(Player):
     def __init__(self):
         super().__init__()
 
-        self.grudges = 0
-        self.retaliations = 0
+        self._grudges = 0
+        self._retaliations = 0
 
     def strategy(self, opponent: player):
         if not opponent.history:
