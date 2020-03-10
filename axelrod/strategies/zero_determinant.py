@@ -230,7 +230,7 @@ class ZDSet2(LRPlayer):
 
 
 class AdaptiveZeroDet(LRPlayer):
-    """A Strategy that uses a zero determinant structure that updates
+    """A strategy that uses a zero determinant structure that updates
     its parameters after each round of play.
 
     Names:
@@ -266,43 +266,34 @@ class AdaptiveZeroDet(LRPlayer):
 
     def _adjust_parameters(self):
         d = random.randint(0, 9) / 1000  # Selects random value to adjust s and l
-
+        R, P, S, T = self.match_attributes["game"].RPST()
+        l = self.l
+        s = self.s
         if self._scores[C] > self._scores[D]:
             # This checks scores to determine how to adjust s and l either
-            # up or down by d
-            self.l = self.l + d
-            self.s = self.s - d
-            R, P, S, T = self.match_attributes["game"].RPST()
-            l = self.l
-            s = self.s
-            s_min = - min((T - l) / (l - S), (l - S) / (T - l))  # Sets minimum for s
-            if (l > R) or (s < s_min):
-                # This checks that neither s nor l is leaving its range
-                # If l would leave its range instead its distance from its max is halved
-                if l > R:
-                    l = l - d
-                    self.l = (l + R) / 2
-                # If s would leave its range instead its distance from its min is halved
-                if s < s_min:
-                    s = s + d
-                    self.s = (s + s_min) / 2
+            # up or down by d, making sure not to exceed bounds.
+            if l + d > R:
+                l = (l + R) / 2
+            else:
+                l += d
+            s_min = - min((T - l) / (l - S), (l - S) / (T - l))
+            if s - d < s_min:
+                s = (s + s_min) / 2
+            else:
+                s = s - d
         else:
-            # This adjusts s and l in the opposite direction
-            self.l = self.l - d
-            self.s = self.s + d
-            R, P, S, T = self.match_attributes["game"].RPST()
-            l = self.l
-            s = self.s
-            if (l < P) or (s > 1):
-                # This checks that neither s nor l is leaving its range
-                if l < P:
-                    l = l + d
-                    self.l = (l + P) / 2
-                # If l would leave its range instead its distance from its min is halved
-                if s > 1:
-                    s = s - d
-                    self.s = (s + 1) / 2
+            # This adjusts s and l in the opposite direction, also checking distance
+            if l - d < P:
+                l = (l + P) / 2
+            else:
+                l -= d
+            if s + d > 1:
+                s = (s + 1) / 2
+            else:
+                s += d
         # Update the four vector for the new l and s values
+        self.l = l
+        self.s = s
         self.receive_match_attributes()
 
     def strategy(self, opponent: Player) -> Action:
