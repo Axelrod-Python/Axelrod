@@ -340,5 +340,5 @@ class TestAdaptiveZeroDet(TestPlayer):
         # Play some matches to trigger all the if-then branches for coverage
         for seed in range(20):
             axelrod.seed(seed)
-            match = axelrod.Match((self.player(), self.Alternator()), turns=20)
+            match = axelrod.Match((self.player(), axelrod.Alternator()), turns=20)
             match.play()
