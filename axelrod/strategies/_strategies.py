@@ -243,6 +243,7 @@ from .zero_determinant import (
 all_strategies = [
     Adaptive,
     AdaptiveTitForTat,
+    AdaptiveZeroDet,
     AdaptorBrief,
     AdaptorLong,
     Aggravater,

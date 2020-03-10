@@ -8,8 +8,6 @@ Here are the docstrings of all the strategies in the library.
 
 .. automodule:: axelrod.strategies.adaptive
    :members:
-.. automodule:: axelrod.strategies.adaptivezerodet
-   :members:
 .. automodule:: axelrod.strategies.adaptor
    :members:
 .. automodule:: axelrod.strategies.alternator
