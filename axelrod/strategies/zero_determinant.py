@@ -1,4 +1,6 @@
+import random
 from axelrod.action import Action
+from axelrod.player import Player
 
 from .memoryone import MemoryOnePlayer
 
@@ -225,3 +227,80 @@ class ZDSet2(LRPlayer):
 
     def __init__(self, phi: float = 1 / 4, s: float = 0.0, l: float = 2) -> None:
         super().__init__(phi, s, l)
+
+
+class AdaptiveZeroDet(LRPlayer):
+    name = 'AdaptiveZeroDet'
+    classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': True,
+        'makes_use_of': set(["game"]),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def __init__(self, phi: float = 0.125, s: float = 0.5, l: float = 3,
+                 initial: Action = C) -> None:
+        # This Keeps track of the parameter values (phi,s,l) as well as the
+        # four vector which makes final decisions.
+        super().__init__(phi=phi, s=s, l=l)
+        self._scores = {C: 0, D: 0}
+        self._initial = initial
+
+    def score_last_round(self, opponent: Player):
+        """This gives the strategy the game attributes and allows the strategy
+         to score itself properly."""
+        game = self.match_attributes["game"]
+        if len(self.history):
+            last_round = (self.history[-1], opponent.history[-1])
+            scores = game.score(last_round)
+            self._scores[last_round[0]] += scores[0]
+
+    def _adjust_parameters(self):
+        d = random.randint(0, 9) / 1000  # Selects random value to adjust s and l
+
+        if self._scores[C] > self._scores[D]:
+            # This checks scores to determine how to adjust s and l either
+            # up or down by d
+            self.l = self.l + d
+            self.s = self.s - d
+            R, P, S, T = self.match_attributes["game"].RPST()
+            l = self.l
+            s = self.s
+            s_min = - min((T - l) / (l - S), (l - S) / (T - l))  # Sets minimum for s
+            if (l > R) or (s < s_min):
+                # This checks that neither s nor l is leaving its range
+                # If l would leave its range instead its distance from its max is halved
+                if l > R:
+                    l = l - d
+                    self.l = (l + R) / 2
+                # If s would leave its range instead its distance from its min is halved
+                if s < s_min:
+                    s = s + d
+                    self.s = (s + s_min) / 2
+        else:
+            # This adjusts s and l in the opposite direction
+            self.l = self.l - d
+            self.s = self.s + d
+            R, P, S, T = self.match_attributes["game"].RPST()
+            l = self.l
+            s = self.s
+            if (l < P) or (s > 1):
+                # This checks that neither s nor l is leaving its range
+                if l < P:
+                    l = l + d
+                    self.l = (l + P) / 2
+                # If l would leave its range instead its distance from its min is halved
+                if s > 1:
+                    s = s - d
+                    self.s = (s + 1) / 2
+        # Update the four vector for the new l and s values
+        self.receive_match_attributes()
+
+    def strategy(self, opponent: Player) -> Action:
+        if len(self.history) > 0:
+            self.score_last_round(opponent)
+            self._adjust_parameters()
+        return super().strategy(opponent)

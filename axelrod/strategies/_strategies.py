@@ -1,6 +1,5 @@
 from .adaptive import Adaptive
 from .adaptor import AdaptorBrief, AdaptorLong
-from .adaptivezerodet import AdaptiveZeroDet
 from .alternator import Alternator
 from .ann import ANN, EvolvableANN, EvolvedANN, EvolvedANN5, EvolvedANNNoise05
 from .apavlov import APavlov2006, APavlov2011
@@ -235,6 +234,7 @@ from .zero_determinant import (
     ZDGen2,
     ZDMischief,
     ZDSet2,
+    AdaptiveZeroDet,
 )
 
 # Note: Meta* strategies are handled in .__init__.py

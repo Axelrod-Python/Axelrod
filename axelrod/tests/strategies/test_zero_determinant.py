@@ -317,3 +317,27 @@ class TestZDSet2(TestPlayer):
 
         actions = [(C, D), (D, C), (D, D), (D, C), (D, D), (D, C)]
         self.versus_test(opponent=axelrod.CyclerDC(), expected_actions=actions, seed=5)
+
+
+class TestAdaptiveZeroDet(TestPlayer):
+    """
+    Tests for the N Tit(s) For M Tat(s) strategy
+    """
+
+    name = "AdaptiveZeroDet: 0.125, 0.5, 3, C"
+    player = axelrod.AdaptiveZeroDet
+    expected_classifier = {
+        "memory_depth": float('inf'),
+        "stochastic": True,
+        "makes_use_of": set(['game']),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+    def test_strategy(self):
+        actions = [(C, C), (C, D), (C, C), (C, D), (C, C)]
+        self.versus_test(
+            axelrod.Alternator(), expected_actions=actions
+        )
