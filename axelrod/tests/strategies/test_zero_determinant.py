@@ -321,7 +321,7 @@ class TestZDSet2(TestPlayer):
 
 class TestAdaptiveZeroDet(TestPlayer):
     """
-    Tests for the N Tit(s) For M Tat(s) strategy
+    Test the AdaptiveZeroDet strategy.
     """
 
     name = "AdaptiveZeroDet: 0.125, 0.5, 3, C"

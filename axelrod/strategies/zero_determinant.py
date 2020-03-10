@@ -230,6 +230,12 @@ class ZDSet2(LRPlayer):
 
 
 class AdaptiveZeroDet(LRPlayer):
+    """A Strategy that uses a zero determinant structure that updates
+    its parameters after each round of play.
+
+    Names:
+    - AdaptiveZeroDet by Emmanuel Estrada and Dashiell Fryer
+    """
     name = 'AdaptiveZeroDet'
     classifier = {
         'memory_depth': float('inf'),  # Long memory
