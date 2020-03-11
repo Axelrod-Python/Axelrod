@@ -337,8 +337,26 @@ class TestAdaptiveZeroDet(TestPlayer):
     }
 
     def test_strategy(self):
-        # Play some matches to trigger all the if-then branches for coverage
-        for seed in range(20):
-            axelrod.seed(seed)
-            match = axelrod.Match((self.player(), axelrod.Alternator()), turns=20)
-            match.play()
+        R, P, S, T = axelrod.Game().RPST()
+
+        player = self.player(l=R)
+        axelrod.seed(0)
+        match = axelrod.Match((player, axelrod.Alternator()), turns=200)
+        match.play()
+
+        player = self.player(l=P)
+        axelrod.seed(0)
+        match = axelrod.Match((player, axelrod.Alternator()), turns=200)
+        match.play()
+
+        player = self.player(s=1)
+        axelrod.seed(0)
+        match = axelrod.Match((player, axelrod.Alternator()), turns=200)
+        match.play()
+
+        l = 2
+        s_min = - min((T - l) / (l - S), (l - S) / (T - l))
+        player = self.player(s=s_min, l=2)
+        axelrod.seed(0)
+        match = axelrod.Match((player, axelrod.Alternator()), turns=200)
+        match.play()
