@@ -2,6 +2,7 @@ from collections import Counter, namedtuple
 import csv
 import itertools
 from multiprocessing import cpu_count
+import warnings
 
 import numpy as np
 import tqdm
@@ -405,12 +406,14 @@ class ResultSet:
 
     @update_progress_bar
     def _build_normalised_cooperation(self):
-        normalised_cooperation = [
-            list(np.nan_to_num(row))
-            for row in np.array(self.cooperation)
-            / sum(map(np.array, self.match_lengths))
-        ]
-        return normalised_cooperation
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            normalised_cooperation = [
+                list(np.nan_to_num(row))
+                for row in np.array(self.cooperation)
+                / sum(map(np.array, self.match_lengths))
+            ]
+            return normalised_cooperation
 
     @update_progress_bar
     def _build_initial_cooperation_rate(self, interactions_series):
@@ -420,10 +423,12 @@ class ResultSet:
                 for player_index in range(self.num_players)
             ]
         )
-        initial_cooperation_rate = list(
-            np.nan_to_num(np.array(self.initial_cooperation_count) / interactions_array)
-        )
-        return initial_cooperation_rate
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            initial_cooperation_rate = list(
+                np.nan_to_num(np.array(self.initial_cooperation_count) / interactions_array)
+            )
+            return initial_cooperation_rate
 
     @update_progress_bar
     def _build_ranking(self):
