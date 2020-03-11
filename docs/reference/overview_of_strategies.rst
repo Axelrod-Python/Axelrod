@@ -165,7 +165,7 @@ ALLC, ALLD, TFT and RANDOM are defined above. The remaining classical
 strategies are defined below. The tournament also included two Zero Determinant
 strategies, both implemented in the library. The full table of strategies and
 results is `available
-online <http://www.pnas.org/content/109/26/10134/F1.expansion.html>`_.
+online <https://www.pnas.org/content/pnas/109/26/10134/F1.large.jpg?width=800&height=600&carousel=1>`_.
 
 Memory one strategies
 ^^^^^^^^^^^^^^^^^^^^^
