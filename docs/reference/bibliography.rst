@@ -23,7 +23,7 @@ documentation.
 .. [Axelrod1995] Wu, J. and Axelrod, R. (1995). How to cope with noise in the Iterated prisoner’s dilemma, Journal of Conflict Resolution, 39(1), pp. 183–189. doi: 10.1177/0022002795039001008.
 .. [Banks1990] Banks, J. S., & Sundaram, R. K. (1990). Repeated games, finite automata, and complexity. Games and Economic Behavior, 2(2), 97–117.  http://doi.org/10.1016/0899-8256(90)90024-O
 .. [Bendor1993] Bendor, Jonathan. "Uncertainty and the Evolution of Cooperation." The Journal of Conflict Resolution, 37(4), 709–734.
-.. [Beaufils1997] Beaufils, B. and Delahaye, J. (1997). Our Meeting With Gradual: A Good Strategy For The Iterated Prisoner’s Dilemma. http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.42.4041
+.. [Beaufils1997] Beaufils, B. & Delahaye, J. & Mathieu, P. (1997). Our Meeting With Gradual: A Good Strategy For The Iterated Prisoner’s Dilemma. http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.42.4041
 .. [Berg2015] Berg, P. Van Den, & Weissing, F. J. (2015). The importance of mechanisms for the evolution of cooperation. Proceedings of the Royal Society B-Biological Sciences, 282.
 .. [Downing1975] Downing, Leslie L. "The Prisoner's Dilemma game as a problem-solving phenomenon: An outcome maximization interpretation." Simulation & Games 6.4 (1975): 366-391.
 .. [Eckhart2015] Eckhart Arnold (2016) CoopSim v0.9.9 beta 6.  https://github.com/jecki/CoopSim/
