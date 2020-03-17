@@ -25,6 +25,7 @@ documentation.
 .. [Bendor1993] Bendor, Jonathan. "Uncertainty and the Evolution of Cooperation." The Journal of Conflict Resolution, 37(4), 709–734.
 .. [Beaufils1997] Beaufils, B. & Delahaye, J. & Mathieu, P. (1997). Our Meeting With Gradual: A Good Strategy For The Iterated Prisoner’s Dilemma. http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.42.4041
 .. [Berg2015] Berg, P. Van Den, & Weissing, F. J. (2015). The importance of mechanisms for the evolution of cooperation. Proceedings of the Royal Society B-Biological Sciences, 282.
+.. [CRISTAL-SMAC2018] CRISTAL Lab, SMAC Team, Lille University (2018). IPD : the Iterated Prisoner's Dilemma. https://github.com/cristal-smac/ipd
 .. [Downing1975] Downing, Leslie L. "The Prisoner's Dilemma game as a problem-solving phenomenon: An outcome maximization interpretation." Simulation & Games 6.4 (1975): 366-391.
 .. [Eckhart2015] Eckhart Arnold (2016) CoopSim v0.9.9 beta 6.  https://github.com/jecki/CoopSim/
 .. [Frean1994] Frean, Marcus R. "The Prisoner's Dilemma without Synchrony." Proceedings: Biological Sciences, vol. 257, no. 1348, 1994, pp. 75–79. www.jstor.org/stable/50253.

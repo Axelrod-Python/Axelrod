@@ -387,8 +387,16 @@ class OmegaTFT(Player):
 class Gradual(Player):
     """
     A player that punishes defections with a growing number of defections
-    but after punishing enters a calming state and cooperates no matter what
-    the opponent does for two rounds.
+    but after punishing for `punishment_limit` number of times enters a calming
+    state and cooperates no matter what the opponent does for two rounds.
+
+    The `punishment_limit` is incremented whenever the opponent defects and the
+    strategy is not in either calming or punishing state.
+
+    Note that `Gradual` appears in [CRISTAL-SMAC2018]_ however that version of
+    `Gradual` does not give the results reported in [Beaufils1997]_ which is the
+    paper that first introduced the strategy. For a longer discussion of this
+    see: https://github.com/Axelrod-Python/Axelrod/issues/1294
 
     Names:
 
