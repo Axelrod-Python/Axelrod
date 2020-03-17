@@ -323,10 +323,10 @@ class TestOmegaTFT(TestPlayer):
         self.versus_test(axelrod.Alternator(), expected_actions=actions)
 
 
-class TestGradual(TestPlayer):
+class TestOriginalGradual(TestPlayer):
 
-    name = "Gradual"
-    player = axelrod.Gradual
+    name = "Original Gradual"
+    player = axelrod.OriginalGradual
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
