@@ -1,100 +1,34 @@
+from typing import Any, Callable, Text
+
+
 # TJ: Template the value type
 def Classifier(object):
-    name = None
+    def __init__(self, name: Text, f: Callable[['Player'], Any]):
+        self.name = name
+        self.f = f
 
-    def __init__(self):
-        pass
-
-    def default_calc_for_player(self, player: 'Player'):
-        return None
-
-    # TJ: Who depends on whom
+    # TJ: Who depends on whom, re: Player
     def calc_for_player(self, player: 'Player'):
-        if self.name is None:
-            raise NotImplementedError("Classifier isn't properly implemented.")
-
         if self.name in player.classifier:
             return player.classifier[self.name]
 
-        return self.default_calc_for_player(player)
+        return self.f(player)
 
 
-def Stochastic(Classifier):
-    name = "stochastic"
-
-    def __init__(self):
-        super().__init__()
-
-    def default_calc_for_player(self, player: 'Player'):
-        return False
-
-
-def MemoryDepth(Classifier):
-    name = "memory_depth"
-
-    def __init__(self):
-        super().__init__()
-
-    def default_calc_for_player(self, player: 'Player'):
-        return float("inf")
-
-
-def MakesUseOf(Classifier):
-    name = "makes_use_of"
-
-    def __init__(self):
-        super().__init__()
-
-    def default_calc_for_player(self, player: 'Player'):
-        return None
-
-
-def LongRunTime(Classifier):
-    name = "long_run_time"
-
-    def __init__(self):
-        super().__init__()
-
-    def default_calc_for_player(self, player: 'Player'):
-        return False
-
-
-def InspectsSource(Classifier):
-    name = "inspects_source"
-
-    def __init__(self):
-        super().__init__()
-
-    def default_calc_for_player(self, player: 'Player'):
-        return None
-
-
-def ManipulatesSource(Classifier):
-    name = "manipulates_source"
-
-    def __init__(self):
-        super().__init__()
-
-    def default_calc_for_player(self, player: 'Player'):
-        return None
-
-
-def ManipulatesState(Classifier):
-    name = "manipulates_state"
-
-    def __init__(self):
-        super().__init__()
-
-    def default_calc_for_player(self, player: 'Player'):
-        return None
-
+stochastic = Classifier("stochastic", lambda _: False)
+memory_depth = Classifier("memory_depth", lambda _: float("inf"))
+makes_use_of = Classifier("makes_use_of", lambda _: None)
+long_run_time = Classifier("long_run_time", lambda _: False)
+inspects_source = Classifier("inspects_source", lambda _: None)
+manipulates_source = Classifier("manipulates_source", lambda _: None)
+manipulates_state = Classifier("manipulates_state", lambda _: None)
 
 all_classifiers = [
-    Stochastic,
-    MemoryDepth,
-    MakesUseOf,
-    LongRunTime,
-    InspectsSource,
-    ManipulatesSource,
-    ManipulatesState,
+    stochastic,
+    memory_depth,
+    makes_use_of,
+    long_run_time,
+    inspects_source,
+    manipulates_source,
+    manipulates_state,
 ]
