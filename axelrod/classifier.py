@@ -1,7 +1,10 @@
-from typing import Any, Callable, Generic, Optional, Set, Text, TypeVar, Union
+from typing import Callable, Generic, List, Optional, Set, Text, TypeVar, Union
+import yaml
 
+ALL_CLASSIFIERS_PATH = "data/all_classifiers.yml"
 
 T = TypeVar('T')
+
 
 class Classifier(Generic[T]):
     def __init__(self, name: Text, f: Callable[['Player'], T]):
@@ -36,3 +39,20 @@ all_classifiers = [
     manipulates_source,
     manipulates_state,
 ]
+
+
+def CalcAllClassifiersPlayers(classifiers: List[Classifier],
+                              players: List['Player']) -> None:
+    all_player_dicts = dict()
+    for p in players:
+        new_player_dict = dict()
+        for c in classifiers:
+            new_player_dict[c.name] = c.calc_for_player(p)
+        all_player_dicts[p.name] = new_player_dict
+
+    with open(ALL_CLASSIFIERS_PATH, 'w') as f:
+        yaml.dump(all_player_dicts, f)
+
+
+from axelrod import all_strategies
+CalcAllClassifiersPlayers(all_classifiers, all_strategies)
