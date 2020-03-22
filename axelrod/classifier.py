@@ -1,4 +1,4 @@
-from typing import Callable, Generic, List, Optional, Set, Text, TypeVar, Union
+from typing import Any, Callable, Generic, List, Optional, Set, Text, TypeVar, Union
 import yaml
 
 ALL_CLASSIFIERS_PATH = "data/all_classifiers.yml"
@@ -41,8 +41,8 @@ all_classifiers = [
 ]
 
 
-def CalcAllClassifiersPlayers(classifiers: List[Classifier],
-                              players: List['Player']) -> None:
+def calc_all_classifier_players(classifiers: List[Classifier],
+                                players: List['Player']) -> None:
     all_player_dicts = dict()
     for p in players:
         new_player_dict = dict()
@@ -54,5 +54,27 @@ def CalcAllClassifiersPlayers(classifiers: List[Classifier],
         yaml.dump(all_player_dicts, f)
 
 
-from axelrod import all_strategies
-CalcAllClassifiersPlayers(all_classifiers, all_strategies)
+class ClassifierManager(object):
+    _instance = None
+    all_player_dicts = dict()
+
+    # Make this a singleton
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super(ClassifierManager, cls).__new__(cls)
+            with open(ALL_CLASSIFIERS_PATH, 'r') as f:
+                cls.all_player_dicts = yaml.load(f, Loader=yaml.FullLoader)
+
+        return cls._instance
+
+    @classmethod
+    def get_classifier(cls, classifier: Classifier, player: 'Player') -> Any:
+        if player not in cls.all_player_dicts:
+            return None
+        player_classifiers = cls.all_player_dicts[player]
+
+        if classifier not in player_classifiers:
+            return None
+        return player_classifiers[classifier]
+
+print(ClassifierManager().get_classifier("memory_depth", "Forgetful Grudger"))
