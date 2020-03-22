@@ -1,18 +1,19 @@
 from typing import Any, Callable, Generic, List, Optional, Set, Text, TypeVar, Union
 import yaml
 
+from axelrod.player import Player
+
 ALL_CLASSIFIERS_PATH = "data/all_classifiers.yml"
 
 T = TypeVar('T')
 
 
 class Classifier(Generic[T]):
-    def __init__(self, name: Text, f: Callable[['Player'], T]):
+    def __init__(self, name: Text, f: Callable[[Player], T]):
         self.name = name
         self.f = f
 
-    # TJ: Who depends on whom, re: Player
-    def calc_for_player(self, player: 'Player') -> T:
+    def calc_for_player(self, player: Player) -> T:
         if self.name in player.classifier:
             return player.classifier[self.name]
 
@@ -42,7 +43,7 @@ all_classifiers = [
 
 
 def calc_all_classifier_players(classifiers: List[Classifier],
-                                players: List['Player']) -> None:
+                                players: List[Player]) -> None:
     all_player_dicts = dict()
     for p in players:
         new_player_dict = dict()
@@ -68,7 +69,7 @@ class ClassifierManager(object):
         return cls._instance
 
     @classmethod
-    def get_classifier(cls, classifier: Classifier, player: 'Player') -> Any:
+    def get_classifier(cls, classifier: Classifier, player: Player) -> Any:
         if player not in cls.all_player_dicts:
             return None
         player_classifiers = cls.all_player_dicts[player]
@@ -77,4 +78,3 @@ class ClassifierManager(object):
             return None
         return player_classifiers[classifier]
 
-print(ClassifierManager().get_classifier("memory_depth", "Forgetful Grudger"))
