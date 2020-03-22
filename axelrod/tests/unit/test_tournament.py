@@ -1,7 +1,5 @@
 """Tests for the main tournament class."""
 
-import csv
-import filecmp
 import io
 import logging
 import os
@@ -11,9 +9,14 @@ import warnings
 from multiprocessing import Queue, cpu_count
 from unittest.mock import MagicMock, patch
 
-import axelrod
 import numpy as np
 import pandas as pd
+from hypothesis import example, given, settings
+from hypothesis.strategies import floats, integers
+from tqdm import tqdm
+
+import axelrod
+from axelrod.classifier import Classifiers
 from axelrod.tests.property import (
     prob_end_tournaments,
     spatial_tournaments,
@@ -21,10 +24,6 @@ from axelrod.tests.property import (
     tournaments,
 )
 from axelrod.tournament import _close_objects
-from tqdm import tqdm
-
-from hypothesis import example, given, settings
-from hypothesis.strategies import floats, integers
 
 C, D = axelrod.Action.C, axelrod.Action.D
 
@@ -43,7 +42,8 @@ test_prob_end = 0.5
 test_edges = [(0, 1), (1, 2), (3, 4)]
 
 deterministic_strategies = [
-    s for s in axelrod.short_run_time_strategies if not s().classifier["stochastic"]
+    s for s in axelrod.short_run_time_strategies if
+    not Classifiers().get("stochastic", s)
 ]
 
 
@@ -126,7 +126,8 @@ class TestTournament(unittest.TestCase):
         )
         mg = tournament.match_generator
         match_params = mg.build_single_match_params()
-        self.assertEqual(match_params["match_attributes"], {"length": float("inf")})
+        self.assertEqual(match_params["match_attributes"],
+                         {"length": float("inf")})
 
     def test_warning(self):
         tournament = axelrod.Tournament(
@@ -244,7 +245,8 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(pbar.total, self.test_tournament.match_generator.size)
 
         new_edges = [(0, 1), (1, 2), (2, 3), (3, 4)]
-        new_tournament = axelrod.Tournament(players=self.players, edges=new_edges)
+        new_tournament = axelrod.Tournament(players=self.players,
+                                            edges=new_edges)
         new_tournament.use_progress_bar = True
         pbar = new_tournament._get_progress_bar()
         self.assertEqual(pbar.desc, "Playing matches")
@@ -278,7 +280,8 @@ class TestTournament(unittest.TestCase):
         # Test that a non default game is passed to the result set
         game = axelrod.Game(p=-1, r=-1, s=-1, t=-1)
         tournament = axelrod.Tournament(
-            name=self.test_name, players=self.players, game=game, turns=1, repetitions=1
+            name=self.test_name, players=self.players, game=game, turns=1,
+            repetitions=1
         )
         results = tournament.play(progress_bar=False)
         self.assertLessEqual(np.max(results.scores), 0)
@@ -407,7 +410,6 @@ class TestTournament(unittest.TestCase):
             repetitions=test_repetitions,
         )
     )
-
     # These two examples are to make sure #465 is fixed.
     # As explained there: https://github.com/Axelrod-Python/Axelrod/issues/465,
     # these two examples were identified by hypothesis.
@@ -420,7 +422,8 @@ class TestTournament(unittest.TestCase):
     )
     @example(
         tournament=axelrod.Tournament(
-            players=[axelrod.BackStabber(), axelrod.ThueMorse()], turns=2, repetitions=1
+            players=[axelrod.BackStabber(), axelrod.ThueMorse()], turns=2,
+            repetitions=1
         )
     )
     def test_property_serial_play(self, tournament):
@@ -547,7 +550,8 @@ class TestTournament(unittest.TestCase):
             tournament._n_workers(processes=max_processes + 2), max_processes
         )
 
-    @unittest.skipIf(cpu_count() < 2, "not supported on single processor machines")
+    @unittest.skipIf(cpu_count() < 2,
+                     "not supported on single processor machines")
     def test_2_workers(self):
         # This is a separate test with a skip condition because we
         # cannot guarantee that the tests will always run on a machine
@@ -744,7 +748,8 @@ class TestTournament(unittest.TestCase):
             turns=2,
             repetitions=2,
         )
-        tournament.play(filename=self.filename, progress_bar=False, build_results=False)
+        tournament.play(filename=self.filename, progress_bar=False,
+                        build_results=False)
         df = pd.read_csv(self.filename)
         expected_df = pd.read_csv(
             "test_outputs/expected_test_tournament_no_results.csv"
@@ -769,7 +774,8 @@ class TestProbEndTournament(unittest.TestCase):
             prob_end=self.test_prob_end,
             noise=0.2,
         )
-        self.assertEqual(tournament.match_generator.prob_end, tournament.prob_end)
+        self.assertEqual(tournament.match_generator.prob_end,
+                         tournament.prob_end)
         self.assertEqual(len(tournament.players), len(test_strategies))
         self.assertEqual(tournament.game.score((C, C)), (3, 3))
         self.assertIsNone(tournament.turns)
@@ -798,7 +804,6 @@ class TestProbEndTournament(unittest.TestCase):
             repetitions=test_repetitions,
         )
     )
-
     # These two examples are to make sure #465 is fixed.
     # As explained there: https://github.com/Axelrod-Python/Axelrod/issues/465,
     # these two examples were identified by hypothesis.
@@ -866,7 +871,8 @@ class TestSpatialTournament(unittest.TestCase):
         seed=integers(min_value=0, max_value=4294967295),
     )
     @settings(max_examples=5)
-    def test_complete_tournament(self, strategies, turns, repetitions, noise, seed):
+    def test_complete_tournament(self, strategies, turns, repetitions, noise,
+                                 seed):
         """
         A test to check that a spatial tournament on the complete multigraph
         gives the same results as the round robin.
@@ -885,7 +891,8 @@ class TestSpatialTournament(unittest.TestCase):
         )
         # create a complete spatial tournament
         spatial_tournament = axelrod.Tournament(
-            players, repetitions=repetitions, turns=turns, noise=noise, edges=edges
+            players, repetitions=repetitions, turns=turns, noise=noise,
+            edges=edges
         )
 
         axelrod.seed(seed)
@@ -896,16 +903,20 @@ class TestSpatialTournament(unittest.TestCase):
         self.assertEqual(results.ranked_names, spatial_results.ranked_names)
         self.assertEqual(results.num_players, spatial_results.num_players)
         self.assertEqual(results.repetitions, spatial_results.repetitions)
-        self.assertEqual(results.payoff_diffs_means, spatial_results.payoff_diffs_means)
+        self.assertEqual(results.payoff_diffs_means,
+                         spatial_results.payoff_diffs_means)
         self.assertEqual(results.payoff_matrix, spatial_results.payoff_matrix)
         self.assertEqual(results.payoff_stddevs, spatial_results.payoff_stddevs)
         self.assertEqual(results.payoffs, spatial_results.payoffs)
-        self.assertEqual(results.cooperating_rating, spatial_results.cooperating_rating)
+        self.assertEqual(results.cooperating_rating,
+                         spatial_results.cooperating_rating)
         self.assertEqual(results.cooperation, spatial_results.cooperation)
         self.assertEqual(
-            results.normalised_cooperation, spatial_results.normalised_cooperation
+            results.normalised_cooperation,
+            spatial_results.normalised_cooperation
         )
-        self.assertEqual(results.normalised_scores, spatial_results.normalised_scores)
+        self.assertEqual(results.normalised_scores,
+                         spatial_results.normalised_scores)
         self.assertEqual(
             results.good_partner_matrix, spatial_results.good_partner_matrix
         )
@@ -925,7 +936,8 @@ class TestSpatialTournament(unittest.TestCase):
         edges = [(0, 2), (0, 3), (1, 2), (1, 3)]
         tournament = axelrod.Tournament(players, edges=edges)
         results = tournament.play(progress_bar=False)
-        expected_ranked_names = ["Cooperator", "Tit For Tat", "Grudger", "Defector"]
+        expected_ranked_names = ["Cooperator", "Tit For Tat", "Grudger",
+                                 "Defector"]
         self.assertEqual(results.ranked_names, expected_ranked_names)
 
         # Check that this tournament runs with noise
@@ -981,13 +993,15 @@ class TestProbEndingSpatialTournament(unittest.TestCase):
         players = [s() for s in strategies]
 
         # create a prob end round robin tournament
-        tournament = axelrod.Tournament(players, prob_end=prob_end, repetitions=reps)
+        tournament = axelrod.Tournament(players, prob_end=prob_end,
+                                        repetitions=reps)
         axelrod.seed(seed)
         results = tournament.play(progress_bar=False)
 
         # create a complete spatial tournament
         # edges
-        edges = [(i, j) for i in range(len(players)) for j in range(i, len(players))]
+        edges = [(i, j) for i in range(len(players)) for j in
+                 range(i, len(players))]
 
         spatial_tournament = axelrod.Tournament(
             players, prob_end=prob_end, repetitions=reps, edges=edges
@@ -1027,7 +1041,8 @@ class TestProbEndingSpatialTournament(unittest.TestCase):
         one_turn_results = tournament.play(progress_bar=False)
         self.assertEqual(prob_end_results.scores, one_turn_results.scores)
         self.assertEqual(prob_end_results.wins, one_turn_results.wins)
-        self.assertEqual(prob_end_results.cooperation, one_turn_results.cooperation)
+        self.assertEqual(prob_end_results.cooperation,
+                         one_turn_results.cooperation)
 
 
 class TestHelperFunctions(unittest.TestCase):

@@ -7,6 +7,7 @@ import axelrod
 from axelrod import AntiCycler, Cycler, EvolvableCycler
 from axelrod._strategy_utils import detect_cycle
 from axelrod.action import Action, str_to_actions
+from axelrod.classifier import Classifiers
 from axelrod.evolvable_player import InsufficientParametersError
 
 from .test_player import TestPlayer
@@ -92,8 +93,8 @@ class TestBasicCycler(TestPlayer):
         len_five = "DCDDC"
         depth_nine = Cycler(cycle=len_ten)
         depth_four = Cycler(cycle=len_five)
-        self.assertEqual(depth_nine.classifier["memory_depth"], 9)
-        self.assertEqual(depth_four.classifier["memory_depth"], 4)
+        self.assertEqual(Classifiers().get("memory_depth", depth_nine), 9)
+        self.assertEqual(Classifiers().get("memory_depth", depth_four), 4)
 
     def test_cycler_works_as_expected(self):
         expected = [(C, D), (D, D), (D, D), (C, D)] * 2

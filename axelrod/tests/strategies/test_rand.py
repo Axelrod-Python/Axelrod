@@ -1,7 +1,7 @@
 """Tests for the random strategy."""
 
 import axelrod
-
+from axelrod.classifier import Classifiers
 from .test_player import TestPlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D
@@ -43,4 +43,4 @@ class TestRandom(TestPlayer):
         """Test classification when p is 0 or 1"""
         for p in [0, 1]:
             player = axelrod.Random(p=p)
-            self.assertFalse(player.classifier["stochastic"])
+            self.assertFalse(Classifiers().get("stochastic", player))

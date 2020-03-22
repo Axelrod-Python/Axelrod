@@ -1,6 +1,9 @@
 import unittest
 
+from hypothesis import given, settings
+
 import axelrod
+from axelrod.classifier import Classifiers
 from axelrod.tests.property import (
     games,
     matches,
@@ -11,9 +14,8 @@ from axelrod.tests.property import (
     tournaments,
 )
 
-from hypothesis import given, settings
-
-stochastic_strategies = [s for s in axelrod.strategies if s().classifier["stochastic"]]
+stochastic_strategies = [s for s in axelrod.strategies if
+                         Classifiers().get("stochastic", s)]
 
 
 class TestStrategyList(unittest.TestCase):
@@ -55,7 +57,6 @@ class TestMatch(unittest.TestCase):
     @given(match=matches(min_turns=10, max_turns=50, min_noise=0, max_noise=1))
     @settings(max_examples=5)
     def test_decorator(self, match):
-
         self.assertIsInstance(match, axelrod.Match)
         self.assertGreaterEqual(len(match), 10)
         self.assertLessEqual(len(match), 50)
@@ -65,7 +66,6 @@ class TestMatch(unittest.TestCase):
     @given(match=matches(min_turns=10, max_turns=50, min_noise=0, max_noise=0))
     @settings(max_examples=5)
     def test_decorator_with_no_noise(self, match):
-
         self.assertIsInstance(match, axelrod.Match)
         self.assertGreaterEqual(len(match), 10)
         self.assertLessEqual(len(match), 50)
@@ -98,7 +98,8 @@ class TestTournament(unittest.TestCase):
         self.assertLessEqual(tournament.repetitions, 50)
         self.assertGreaterEqual(tournament.repetitions, 2)
 
-    @given(tournament=tournaments(strategies=axelrod.basic_strategies, max_size=3))
+    @given(
+        tournament=tournaments(strategies=axelrod.basic_strategies, max_size=3))
     @settings(max_examples=5)
     def test_decorator_with_given_strategies(self, tournament):
         self.assertIsInstance(tournament, axelrod.Tournament)
@@ -134,7 +135,8 @@ class TestProbEndTournament(unittest.TestCase):
         self.assertGreaterEqual(tournament.repetitions, 2)
 
     @given(
-        tournament=prob_end_tournaments(strategies=axelrod.basic_strategies, max_size=3)
+        tournament=prob_end_tournaments(strategies=axelrod.basic_strategies,
+                                        max_size=3)
     )
     @settings(max_examples=5)
     def test_decorator_with_given_strategies(self, tournament):
@@ -171,7 +173,8 @@ class TestSpatialTournament(unittest.TestCase):
         self.assertGreaterEqual(tournament.repetitions, 2)
 
     @given(
-        tournament=spatial_tournaments(strategies=axelrod.basic_strategies, max_size=3)
+        tournament=spatial_tournaments(strategies=axelrod.basic_strategies,
+                                       max_size=3)
     )
     @settings(max_examples=5)
     def test_decorator_with_given_strategies(self, tournament):

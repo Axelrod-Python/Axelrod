@@ -1,5 +1,5 @@
-from typing import Any, Callable, Generic, List, Optional, Set, Text, TypeVar, \
-    Union
+from typing import Any, Callable, Generic, List, Optional, Set, Text, Type, \
+    TypeVar, Union
 
 import yaml
 
@@ -11,11 +11,11 @@ T = TypeVar('T')
 
 
 class Classifier(Generic[T]):
-    def __init__(self, name: Text, f: Callable[[Player], T]):
+    def __init__(self, name: Text, f: Callable[[Type[Player]], T]):
         self.name = name
         self.f = f
 
-    def calc_for_player(self, player: Player) -> T:
+    def calc_for_player(self, player: Type[Player]) -> T:
         if self.name in player.classifier:
             return player.classifier[self.name]
 
@@ -45,7 +45,7 @@ all_classifiers = [
 
 
 def rebuild_classifier_table(classifiers: List[Classifier],
-                             players: List[Player],
+                             players: List[Type[Player]],
                              path: Text = ALL_CLASSIFIERS_PATH) -> None:
     all_player_dicts = dict()
     for p in players:
@@ -72,16 +72,32 @@ class Classifiers(object):
         return cls._instance
 
     @classmethod
-    def get(cls, classifier: Classifier, player: Player) -> Any:
+    def get(cls, classifier: Union[Classifier, Text],
+            player: Player) -> Any:
+        # Classifier may be the name or an instance.  Convert to name.
+        if not isinstance(classifier, str):
+            classifier = classifier.name
+
+        # Factory-generated players won't exist in the table.  As well, some
+        # players, like Random, may change classifiers at construction time;
+        # this get() function takes a player instance, while the saved-values
+        # are from operations on the player object itself.
+        if classifier in player.classifier:
+            return player.classifier[classifier]
+
         def return_missing() -> None:
+            """What to do with a missing entry."""
             nonlocal classifier
             nonlocal player
-            print("Classifier {} not found for {}.".format(classifier, player))
-            print("Consider rebuilding classifier table.")
 
-        if player not in cls.all_player_dicts:
+            print("Classifier {} not found for {}.".format(classifier,
+                                                           player.name))
+            print("Consider rebuilding classifier table.")
+            return None
+
+        if player.name not in cls.all_player_dicts:
             return return_missing()
-        player_classifiers = cls.all_player_dicts[player]
+        player_classifiers = cls.all_player_dicts[player.name]
 
         if classifier not in player_classifiers:
             return return_missing()

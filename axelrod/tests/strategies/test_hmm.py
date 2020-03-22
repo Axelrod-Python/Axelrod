@@ -3,6 +3,7 @@ import random
 import unittest
 
 import axelrod
+from axelrod.classifier import Classifiers
 from axelrod.evolvable_player import InsufficientParametersError
 from axelrod.strategies.hmm import EvolvableHMMPlayer, HMMPlayer, SimpleHMM, is_stochastic_matrix, random_vector
 from .test_player import TestMatch, TestPlayer
@@ -41,7 +42,7 @@ class TestHMMPlayers(unittest.TestCase):
             initial_action=C,
         )
         self.assertFalse(player.is_stochastic())
-        self.assertFalse(player.classifier["stochastic"])
+        self.assertFalse(Classifiers().get("stochastic", player))
         opponent = axelrod.Alternator()
         for i in range(6):
             player.play(opponent)
@@ -62,7 +63,7 @@ class TestHMMPlayers(unittest.TestCase):
             initial_action=D,
         )
         self.assertFalse(player.is_stochastic())
-        self.assertFalse(player.classifier["stochastic"])
+        self.assertFalse(Classifiers().get("stochastic", player))
         opponent = axelrod.Alternator()
         for i in range(6):
             player.play(opponent)
@@ -83,7 +84,7 @@ class TestHMMPlayers(unittest.TestCase):
             initial_action=C,
         )
         self.assertFalse(player.is_stochastic())
-        self.assertFalse(player.classifier["stochastic"])
+        self.assertFalse(Classifiers().get("stochastic", player))
         opponent = axelrod.Alternator()
         for i in range(6):
             player.play(opponent)
@@ -104,7 +105,7 @@ class TestHMMPlayers(unittest.TestCase):
             initial_action=C,
         )
         self.assertFalse(player.is_stochastic())
-        self.assertFalse(player.classifier["stochastic"])
+        self.assertFalse(Classifiers().get("stochastic", player))
         opponent = axelrod.Alternator()
         for i in range(6):
             player.play(opponent)

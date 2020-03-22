@@ -4,19 +4,21 @@ import random
 import types
 import unittest
 
-import axelrod
 import numpy as np
-from axelrod import DefaultGame, Player, LimitedHistory
-from axelrod.player import simultaneous_play
-from axelrod.tests.property import strategy_lists
-
 from hypothesis import given, settings
 from hypothesis.strategies import integers, sampled_from
+
+import axelrod
+from axelrod import DefaultGame, Player, LimitedHistory
+from axelrod.classifier import Classifiers
+from axelrod.player import simultaneous_play
+from axelrod.tests.property import strategy_lists
 
 C, D = axelrod.Action.C, axelrod.Action.D
 
 short_run_time_short_mem = [
-    s for s in axelrod.short_run_time_strategies if s().classifier["memory_depth"] <= 10
+    s for s in axelrod.short_run_time_strategies if
+    Classifiers().get("memory_depth", s) <= 10
 ]
 
 
@@ -53,7 +55,6 @@ class ParameterisedTestPlayer(Player):
 
 
 class TestPlayerClass(unittest.TestCase):
-
     name = "Player"
     player = Player
     classifier = {"stochastic": False}
@@ -93,10 +94,12 @@ class TestPlayerClass(unittest.TestCase):
         match = axelrod.Match((player1, player2), turns=5)
         _ = match.play()
         self.assertEqual(
-            player1.state_distribution, {(C, C): 1, (C, D): 2, (D, C): 1, (D, D): 1}
+            player1.state_distribution,
+            {(C, C): 1, (C, D): 2, (D, C): 1, (D, D): 1}
         )
         self.assertEqual(
-            player2.state_distribution, {(C, C): 1, (C, D): 1, (D, C): 2, (D, D): 1}
+            player2.state_distribution,
+            {(C, C): 1, (C, D): 1, (D, C): 2, (D, D): 1}
         )
 
     def test_noisy_play(self):
@@ -129,14 +132,16 @@ class TestPlayerClass(unittest.TestCase):
             player.history = []
 
     def test_strategy(self):
-        self.assertRaises(NotImplementedError, self.player().strategy, self.player())
+        self.assertRaises(NotImplementedError, self.player().strategy,
+                          self.player())
 
     def test_clone(self):
         """Tests player cloning."""
         player1 = axelrod.Random(p=0.75)  # 0.5 is the default
         player2 = player1.clone()
         turns = 50
-        for op in [axelrod.Cooperator(), axelrod.Defector(), axelrod.TitForTat()]:
+        for op in [axelrod.Cooperator(), axelrod.Defector(),
+                   axelrod.TitForTat()]:
             player1.reset()
             player2.reset()
             seed = random.randint(0, 10 ** 6)
@@ -345,7 +350,8 @@ class TestPlayerClass(unittest.TestCase):
         # Test that passing an unknown keyword argument or a spare one raises
         # an error.
         self.assertRaises(TypeError, ParameterisedTestPlayer, arg_test3="test")
-        self.assertRaises(TypeError, ParameterisedTestPlayer, "other", "other", "other")
+        self.assertRaises(TypeError, ParameterisedTestPlayer, "other", "other",
+                          "other")
 
 
 class TestOpponent(Player):
@@ -371,7 +377,8 @@ class TestPlayer(unittest.TestCase):
             player = self.player()
             self.assertEqual(len(player.history), 0)
             self.assertEqual(
-                player.match_attributes, {"length": -1, "game": DefaultGame, "noise": 0}
+                player.match_attributes,
+                {"length": -1, "game": DefaultGame, "noise": 0}
             )
             self.assertEqual(player.cooperations, 0)
             self.assertEqual(player.defections, 0)
@@ -495,7 +502,8 @@ class TestPlayer(unittest.TestCase):
             self.assertEqual(player1.history, player2.history)
 
     @given(
-        strategies=strategy_lists(max_size=5, strategies=short_run_time_short_mem),
+        strategies=strategy_lists(max_size=5,
+                                  strategies=short_run_time_short_mem),
         seed=integers(min_value=1, max_value=200),
         turns=integers(min_value=1, max_value=200),
     )
@@ -505,12 +513,13 @@ class TestPlayer(unittest.TestCase):
         Test that the memory depth is indeed an upper bound.
         """
         player = self.player()
-        memory = player.classifier["memory_depth"]
+        memory = Classifiers().get("memory_depth", player)
         if memory < float("inf"):
             for strategy in strategies:
                 player.reset()
                 opponent = strategy()
-                max_memory = max(memory, opponent.classifier["memory_depth"])
+                max_memory = max(memory,
+                                 Classifiers().get("memory_depth", opponent))
                 self.assertTrue(
                     test_memory(
                         player=player,
@@ -599,17 +608,21 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(expected_class_classifier, self.player.classifier)
 
         self.assertTrue(
-            "memory_depth" in player.classifier, msg="memory_depth not in classifier"
+            "memory_depth" in player.classifier,
+            msg="memory_depth not in classifier"
         )
         self.assertTrue(
-            "stochastic" in player.classifier, msg="stochastic not in classifier"
+            "stochastic" in player.classifier,
+            msg="stochastic not in classifier"
         )
         for key in TestOpponent.classifier:
             self.assertEqual(
-                player.classifier[key],
+                Classifiers().get(key, player),
                 self.expected_classifier[key],
                 msg="%s - Behaviour: %s != Expected Behaviour: %s"
-                % (key, player.classifier[key], self.expected_classifier[key]),
+                    % (
+                        key, Classifiers().get(key, player),
+                        self.expected_classifier[key]),
             )
 
 

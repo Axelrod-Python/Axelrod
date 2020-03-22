@@ -16,6 +16,7 @@ import pickle
 from collections import UserDict
 from typing import List, Tuple
 
+from axelrod.classifier import Classifiers
 from .action import Action
 from .player import Player
 
@@ -57,7 +58,8 @@ def _is_valid_key(key: CachePlayerKey) -> bool:
     ):
         return False
 
-    if key[0].classifier["stochastic"] or key[1].classifier["stochastic"]:
+    if Classifiers().get("stochastic", key[0]) or Classifiers().get(
+        "stochastic", key[1]):
         return False
 
     return True

@@ -3,6 +3,7 @@ from hypothesis import given, settings
 from hypothesis.strategies import integers
 
 import axelrod
+from axelrod.classifier import Classifiers
 from .test_player import TestPlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D
@@ -34,21 +35,23 @@ class TestMetaPlayer(TestPlayer):
             "manipulates_source",
             "manipulates_state",
         ]:
-            classifier[key] = any(t.classifier[key] for t in player.team)
+            classifier[key] = any(
+                Classifiers().get(key, t) for t in player.team)
         classifier["memory_depth"] = float("inf")
 
         for t in player.team:
             try:
-                classifier["makes_use_of"].update(t.classifier["makes_use_of"])
+                classifier["makes_use_of"].update(
+                    Classifiers().get("make_use_of", t))
             except KeyError:
                 pass
 
         for key in classifier:
             self.assertEqual(
-                player.classifier[key],
+                Classifiers().get(key, player),
                 classifier[key],
                 msg="%s - Behaviour: %s != Expected Behaviour: %s"
-                % (key, player.classifier[key], classifier[key]),
+                    % (key, Classifiers().get(key, player), classifier[key]),
             )
 
     def test_repr(self):
@@ -91,7 +94,6 @@ class TestMetaPlayer(TestPlayer):
 
 
 class TestMetaMajority(TestMetaPlayer):
-
     name = "Meta Majority"
     player = axelrod.MetaMajority
     expected_classifier = {
@@ -105,12 +107,12 @@ class TestMetaMajority(TestMetaPlayer):
     }
 
     def test_strategy(self):
-
         P1 = axelrod.MetaMajority()
         P2 = axelrod.Player()
 
         # With more cooperators on the team than defectors, we should cooperate.
-        P1.team = [axelrod.Cooperator(), axelrod.Cooperator(), axelrod.Defector()]
+        P1.team = [axelrod.Cooperator(), axelrod.Cooperator(),
+                   axelrod.Defector()]
         self.assertEqual(P1.strategy(P2), C)
 
         # With more defectors, we should defect.
@@ -119,7 +121,6 @@ class TestMetaMajority(TestMetaPlayer):
 
 
 class TestMetaMinority(TestMetaPlayer):
-
     name = "Meta Minority"
     player = axelrod.MetaMinority
     expected_classifier = {
@@ -138,12 +139,12 @@ class TestMetaMinority(TestMetaPlayer):
         self.assertEqual(len(player.team), 1)
 
     def test_strategy(self):
-
         P1 = axelrod.MetaMinority()
         P2 = axelrod.Player()
 
         # With more cooperators on the team, we should defect.
-        P1.team = [axelrod.Cooperator(), axelrod.Cooperator(), axelrod.Defector()]
+        P1.team = [axelrod.Cooperator(), axelrod.Cooperator(),
+                   axelrod.Defector()]
         self.assertEqual(P1.strategy(P2), D)
 
         # With defectors in the majority, we will cooperate here.
@@ -152,7 +153,6 @@ class TestMetaMinority(TestMetaPlayer):
 
 
 class TestNiceMetaWinner(TestMetaPlayer):
-
     name = "Nice Meta Winner"
     player = axelrod.NiceMetaWinner
     expected_classifier = {
@@ -184,7 +184,8 @@ class TestNiceMetaWinner(TestMetaPlayer):
         self.assertEqual(P1.strategy(P2), C)
 
         opponent = axelrod.Cooperator()
-        player = axelrod.NiceMetaWinner(team=[axelrod.Cooperator, axelrod.Defector])
+        player = axelrod.NiceMetaWinner(
+            team=[axelrod.Cooperator, axelrod.Defector])
         for _ in range(5):
             player.play(opponent)
         self.assertEqual(player.history[-1], C)
@@ -231,7 +232,6 @@ class TestNiceMetaWinnerEnsemble(TestMetaPlayer):
 
 
 class TestMetaHunter(TestMetaPlayer):
-
     name = "Meta Hunter"
     player = axelrod.MetaHunter
     expected_classifier = {
@@ -248,7 +248,8 @@ class TestMetaHunter(TestMetaPlayer):
         # We are not using the Cooperator Hunter here, so this should lead to
         #  cooperation.
         actions = [(C, C)] * 5
-        self.versus_test(opponent=axelrod.Cooperator(), expected_actions=actions)
+        self.versus_test(opponent=axelrod.Cooperator(),
+                         expected_actions=actions)
 
         # After long histories tit-for-tat should come into play.
         opponent = axelrod.MockPlayer([C] * 100 + [D])
@@ -256,14 +257,16 @@ class TestMetaHunter(TestMetaPlayer):
         self.versus_test(opponent=opponent, expected_actions=actions)
 
         actions = [(C, C)] * 102
-        self.versus_test(opponent=axelrod.Cooperator(), expected_actions=actions)
+        self.versus_test(opponent=axelrod.Cooperator(),
+                         expected_actions=actions)
 
         # All these others, however, should trigger a defection for the hunter.
         actions = [(C, D), (C, D), (C, D), (C, D), (D, D)]
         self.versus_test(opponent=axelrod.Defector(), expected_actions=actions)
 
         actions = [(C, C), (C, D), (C, C), (C, D), (C, C), (C, D), (D, C)]
-        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions)
 
         actions = [
             (C, C),
@@ -276,7 +279,8 @@ class TestMetaHunter(TestMetaPlayer):
             (C, D),
             (D, C),
         ]
-        self.versus_test(opponent=axelrod.CyclerCCCD(), expected_actions=actions)
+        self.versus_test(opponent=axelrod.CyclerCCCD(),
+                         expected_actions=actions)
 
 
 class TestMetaHunterAggressive(TestMetaPlayer):
@@ -296,14 +300,16 @@ class TestMetaHunterAggressive(TestMetaPlayer):
         # We are using CooperatorHunter here, so this should lead to
         # defection
         actions = [(C, C)] * 4 + [(D, C)]
-        self.versus_test(opponent=axelrod.Cooperator(), expected_actions=actions)
+        self.versus_test(opponent=axelrod.Cooperator(),
+                         expected_actions=actions)
 
         # All these others, however, should trigger a defection for the hunter.
         actions = [(C, D), (C, D), (C, D), (C, D), (D, D)]
         self.versus_test(opponent=axelrod.Defector(), expected_actions=actions)
 
         actions = [(C, C), (C, D), (C, C), (C, D), (C, C), (C, D), (D, C)]
-        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions)
 
         actions = [
             (C, C),
@@ -316,7 +322,8 @@ class TestMetaHunterAggressive(TestMetaPlayer):
             (C, D),
             (D, C),
         ]
-        self.versus_test(opponent=axelrod.CyclerCCCD(), expected_actions=actions)
+        self.versus_test(opponent=axelrod.CyclerCCCD(),
+                         expected_actions=actions)
 
         # To test the TFT action of the strategy after 100 turns, we need to
         # remove two of the hunters from its team.
@@ -333,7 +340,8 @@ class TestMetaHunterAggressive(TestMetaPlayer):
         opponent = axelrod.MockPlayer([C] * 100 + [D])
         actions = [(C, C)] * 100 + [(C, D), (D, C)]
         self.versus_test(
-            opponent=opponent, expected_actions=actions, init_kwargs={"team": team}
+            opponent=opponent, expected_actions=actions,
+            init_kwargs={"team": team}
         )
 
 
@@ -352,7 +360,8 @@ class TestMetaMajorityMemoryOne(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (C, C), (C, D), (D, C)]
-        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions)
 
 
 class TestMetaMajorityFiniteMemory(TestMetaPlayer):
@@ -370,7 +379,8 @@ class TestMetaMajorityFiniteMemory(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
-        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions)
 
 
 class TestMetaMajorityLongMemory(TestMetaPlayer):
@@ -413,7 +423,8 @@ class TestMetaWinnerMemoryOne(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (C, C), (D, D), (D, C)]
-        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions)
 
 
 class TestMetaWinnerFiniteMemory(TestMetaPlayer):
@@ -431,7 +442,8 @@ class TestMetaWinnerFiniteMemory(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (C, C), (C, D), (D, C)]
-        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions)
 
 
 class TestMetaWinnerLongMemory(TestMetaPlayer):
@@ -449,7 +461,8 @@ class TestMetaWinnerLongMemory(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (C, C), (D, D), (D, C)]
-        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions)
 
 
 class TestMetaWinnerDeterministic(TestMetaPlayer):
@@ -467,7 +480,8 @@ class TestMetaWinnerDeterministic(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (C, C), (D, D), (D, C)]
-        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions)
 
 
 class TestMetaWinnerStochastic(TestMetaPlayer):
@@ -485,11 +499,11 @@ class TestMetaWinnerStochastic(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (C, C), (D, D), (D, C)]
-        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions)
 
 
 class TestMetaMixer(TestMetaPlayer):
-
     name = "Meta Mixer"
     player = axelrod.MetaMixer
     expected_classifier = {
@@ -503,7 +517,6 @@ class TestMetaMixer(TestMetaPlayer):
     }
 
     def test_strategy(self):
-
         team = [axelrod.TitForTat, axelrod.Cooperator, axelrod.Grudger]
         distribution = [0.2, 0.5, 0.3]
 
@@ -517,7 +530,8 @@ class TestMetaMixer(TestMetaPlayer):
         )
 
         team.append(axelrod.Defector)
-        distribution = [0.2, 0.5, 0.3, 0]  # If add a defector but does not occur
+        distribution = [0.2, 0.5, 0.3,
+                        0]  # If add a defector but does not occur
         self.versus_test(
             opponent=axelrod.Cooperator(),
             expected_actions=actions,
@@ -561,7 +575,8 @@ class TestNMWEDeterministic(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (D, C), (D, D), (D, C)]
-        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions)
 
 
 class TestNMWEStochastic(TestMetaPlayer):
@@ -579,7 +594,8 @@ class TestNMWEStochastic(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (C, C), (C, D), (D, C)]
-        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions,
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions,
                          seed=20)
 
 
@@ -598,7 +614,8 @@ class TestNMWEFiniteMemory(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (D, C), (D, D), (D, C)]
-        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions)
 
 
 class TestNMWELongMemory(TestMetaPlayer):
@@ -636,11 +653,11 @@ class TestNMWEMemoryOne(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (C, C), (D, D), (D, C)]
-        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions)
 
 
 class TestMemoryDecay(TestPlayer):
-
     name = "Memory Decay: 0.1, 0.03, -2, 1, Tit For Tat, 15"
     player = axelrod.MemoryDecay
     expected_classifier = {
