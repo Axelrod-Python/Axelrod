@@ -67,15 +67,6 @@ class Player(object):
 
     name = "Player"
     classifier = {}  # type: Dict[str, Any]
-    default_classifier = {
-        "stochastic": False,
-        "memory_depth": float("inf"),
-        "makes_use_of": None,
-        "long_run_time": False,
-        "inspects_source": None,
-        "manipulates_source": None,
-        "manipulates_state": None,
-    }
 
     def __new__(cls, *args, **kwargs):
         """Caches arguments for Player cloning."""
@@ -106,9 +97,6 @@ class Player(object):
         """Initiates an empty history."""
         self._history = History()
         self.classifier = copy.deepcopy(self.classifier)
-        for dimension in self.default_classifier:
-            if dimension not in self.classifier:
-                self.classifier[dimension] = self.default_classifier[dimension]
         self.set_match_attributes()
 
     def __eq__(self, other):
