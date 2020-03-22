@@ -1,4 +1,6 @@
-from typing import Any, Callable, Generic, List, Optional, Set, Text, TypeVar, Union
+from typing import Any, Callable, Generic, List, Optional, Set, Text, TypeVar, \
+    Union
+
 import yaml
 
 from axelrod.player import Player
@@ -42,8 +44,8 @@ all_classifiers = [
 ]
 
 
-def calc_all_classifier_players(classifiers: List[Classifier],
-                                players: List[Player]) -> None:
+def rebuild_classifier_table(classifiers: List[Classifier],
+                             players: List[Player]) -> None:
     all_player_dicts = dict()
     for p in players:
         new_player_dict = dict()
@@ -70,11 +72,16 @@ class ClassifierManager(object):
 
     @classmethod
     def get_classifier(cls, classifier: Classifier, player: Player) -> Any:
+        def return_missing() -> None:
+            nonlocal classifier
+            nonlocal player
+            print("Classifier {} not found for {}.".format(classifier, player))
+            print("Consider rebuilding classifier table.")
+
         if player not in cls.all_player_dicts:
-            return None
+            return return_missing()
         player_classifiers = cls.all_player_dicts[player]
 
         if classifier not in player_classifiers:
-            return None
+            return return_missing()
         return player_classifiers[classifier]
-
