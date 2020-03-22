@@ -58,21 +58,21 @@ def rebuild_classifier_table(classifiers: List[Classifier],
         yaml.dump(all_player_dicts, f)
 
 
-class ClassifierManager(object):
+class Classifiers(object):
     _instance = None
     all_player_dicts = dict()
 
     # Make this a singleton
     def __new__(cls):
         if cls._instance is None:
-            cls._instance = super(ClassifierManager, cls).__new__(cls)
+            cls._instance = super(Classifiers, cls).__new__(cls)
             with open(ALL_CLASSIFIERS_PATH, 'r') as f:
                 cls.all_player_dicts = yaml.load(f, Loader=yaml.FullLoader)
 
         return cls._instance
 
     @classmethod
-    def get_classifier(cls, classifier: Classifier, player: Player) -> Any:
+    def get(cls, classifier: Classifier, player: Player) -> Any:
         def return_missing() -> None:
             nonlocal classifier
             nonlocal player
