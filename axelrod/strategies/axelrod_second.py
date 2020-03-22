@@ -1,5 +1,7 @@
 """
-Additional strategies from Axelrod's second tournament.
+Strategies from Axelrod's second tournament. All strategies in this module are
+prefixed by `SecondBy` to indicate that they were submitted in Axelrod's Second
+tournament by the given author.
 """
 
 import random
@@ -15,7 +17,7 @@ from axelrod.strategies.finite_state_machines import FSMPlayer
 C, D = Action.C, Action.D
 
 
-class Champion(Player):
+class SecondByChampion(Player):
     """
     Strategy submitted to Axelrod's second tournament by Danny Champion.
 
@@ -30,7 +32,7 @@ class Champion(Player):
     - Champion: [Axelrod1980b]_
     """
 
-    name = "Champion"
+    name = "Second by Champion"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
@@ -59,8 +61,7 @@ class Champion(Player):
                 return D
         return C
 
-
-class Eatherley(Player):
+class SecondByEatherley(Player):
     """
     Strategy submitted to Axelrod's second tournament by Graham Eatherley.
 
@@ -74,7 +75,7 @@ class Eatherley(Player):
     - Eatherley: [Axelrod1980b]_
     """
 
-    name = "Eatherley"
+    name = "Second by Eatherley"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
@@ -99,7 +100,7 @@ class Eatherley(Player):
         return random_choice(1 - defection_prop)
 
 
-class Tester(Player):
+class SecondByTester(Player):
     """
     Submitted to Axelrod's second tournament by David Gladstein.
 
@@ -115,7 +116,7 @@ class Tester(Player):
     - Tester: [Axelrod1980b]_
     """
 
-    name = "Tester"
+    name = "Second by Tester"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -148,7 +149,7 @@ class Tester(Player):
             return self.history[-1].flip()
 
 
-class Gladstein(Player):
+class SecondByGladstein(Player):
     """
     Submitted to Axelrod's second tournament by David Gladstein.
 
@@ -168,7 +169,7 @@ class Gladstein(Player):
     - Tester: [Axelrod1980b]_
     """
 
-    name = "Gladstein"
+    name = "Second by Gladstein"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -204,7 +205,7 @@ class Gladstein(Player):
             return opponent.history[-1]
 
 
-class Tranquilizer(Player):
+class SecondByTranquilizer(Player):
 
     """
     Submitted to Axelrod's second tournament by Craig Feathers
@@ -316,7 +317,7 @@ class Tranquilizer(Player):
     - Tranquilizer: [Axelrod1980]_
     """
 
-    name = "Tranquilizer"
+    name = "Second by Tranquilizer"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
@@ -419,7 +420,7 @@ class Tranquilizer(Player):
         return opponent.history[-1]
 
 
-class MoreGrofman(Player):
+class SecondByGrofman(Player):
     """
     Submitted to Axelrod's second tournament by Bernard Grofman.
 
@@ -447,7 +448,7 @@ class MoreGrofman(Player):
     - K86R: [Axelrod1980b]_
     """
 
-    name = "MoreGrofman"
+    name = "Second by Grofman"
     classifier = {
         "memory_depth": 8,
         "stochastic": False,
@@ -477,7 +478,7 @@ class MoreGrofman(Player):
             return D
 
 
-class Kluepfel(Player):
+class SecondByKluepfel(Player):
     """
     Strategy submitted to Axelrod's second tournament by Charles Kluepfel
     (K32R).
@@ -511,7 +512,7 @@ class Kluepfel(Player):
     - Kluepfel: [Axelrod1980b]_
     """
 
-    name = "Kluepfel"
+    name = "Second by Kluepfel"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
@@ -536,15 +537,15 @@ class Kluepfel(Player):
                     self.dd_counts += 1
             else:
                 if opponent.history[-1] == C:
-                    self.dc_counts += 1
-                else:
                     self.cc_counts += 1
+                else:
+                    self.dc_counts += 1
 
         # Check for randomness
         if len(self.history) > 26:
             if self.cd_counts >= (self.cd_counts + self.dd_counts) / 2 - 0.75 * np.sqrt(
                 self.cd_counts + self.dd_counts
-            ) and self.cc_counts >= (
+            ) and self.dc_counts >= (
                 self.dc_counts + self.cc_counts
             ) / 2 - 0.75 * np.sqrt(
                 self.dc_counts + self.cc_counts
@@ -582,7 +583,7 @@ class Kluepfel(Player):
                 return one_move_ago.flip()
 
 
-class Borufsen(Player):
+class SecondByBorufsen(Player):
     """
     Strategy submitted to Axelrod's second tournament by Otto Borufsen
     (K32R), and came in third in that tournament.
@@ -623,7 +624,7 @@ class Borufsen(Player):
     - Borufsen: [Axelrod1980b]_
     """
 
-    name = "Borufsen"
+    name = "Second by Borufsen"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -738,7 +739,7 @@ class Borufsen(Player):
             return self.try_return(opponent.history[-1])
 
 
-class Cave(Player):
+class SecondByCave(Player):
     """
     Strategy submitted to Axelrod's second tournament by Rob Cave (K49R), and
     came in fourth in that tournament.
@@ -759,7 +760,7 @@ class Cave(Player):
     - Cave: [Axelrod1980b]_
     """
 
-    name = "Cave"
+    name = "Second by Cave"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
@@ -795,7 +796,7 @@ class Cave(Player):
             return C
 
 
-class WmAdams(Player):
+class SecondByWmAdams(Player):
     """
     Strategy submitted to Axelrod's second tournament by William Adams (K44R),
     and came in fifth in that tournament.
@@ -810,7 +811,7 @@ class WmAdams(Player):
     - WmAdams: [Axelrod1980b]_
     """
 
-    name = "WmAdams"
+    name = "Second by WmAdams"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
@@ -835,7 +836,7 @@ class WmAdams(Player):
         return C
 
 
-class GraaskampKatzen(Player):
+class SecondByGraaskampKatzen(Player):
     """
     Strategy submitted to Axelrod's second tournament by Jim Graaskamp and Ken
     Katzen (K60R), and came in sixth in that tournament.
@@ -857,7 +858,7 @@ class GraaskampKatzen(Player):
     - GraaskampKatzen: [Axelrod1980b]_
     """
 
-    name = "GraaskampKatzen"
+    name = "Second by GraaskampKatzen"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -908,7 +909,7 @@ class GraaskampKatzen(Player):
         return opponent.history[-1]  # Tit-for-Tat
 
 
-class Weiner(Player):
+class SecondByWeiner(Player):
     """
     Strategy submitted to Axelrod's second tournament by Herb Weiner (K41R),
     and came in seventh in that tournament.
@@ -940,7 +941,7 @@ class Weiner(Player):
     - Weiner: [Axelrod1980b]_
     """
 
-    name = "Weiner"
+    name = "Second by Weiner"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -1000,7 +1001,7 @@ class Weiner(Player):
             return self.try_return(opponent.history[-1])
 
 
-class Harrington(Player):
+class SecondByHarrington(Player):
     """
     Strategy submitted to Axelrod's second tournament by Paul Harrington (K75R)
     and came in eighth in that tournament.
@@ -1093,7 +1094,7 @@ class Harrington(Player):
     - Harrington: [Axelrod1980b]_
     """
 
-    name = "Harrington"
+    name = "Second by Harrington"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
@@ -1339,7 +1340,7 @@ class Harrington(Player):
         return self.try_return(D, lower_flags=False)
 
 
-class MoreTidemanAndChieruzzi(Player):
+class SecondByTidemanAndChieruzzi(Player):
     """
     Strategy submitted to Axelrod's second tournament by T. Nicolaus Tideman
     and Paula Chieruzzi (K84R) and came in ninth in that tournament.
@@ -1364,10 +1365,10 @@ class MoreTidemanAndChieruzzi(Player):
 
     Names:
 
-    - MoreTidemanAndChieruzzi: [Axelrod1980b]_
+    - TidemanAndChieruzzi: [Axelrod1980b]_
     """
 
-    name = "More Tideman and Chieruzzi"
+    name = "Second by Tideman and Chieruzzi"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -1450,7 +1451,7 @@ class MoreTidemanAndChieruzzi(Player):
         return D
 
 
-class Getzler(Player):
+class SecondByGetzler(Player):
     """
     Strategy submitted to Axelrod's second tournament by Abraham Getzler (K35R)
     and came in eleventh in that tournament.
@@ -1463,7 +1464,7 @@ class Getzler(Player):
     - Getzler: [Axelrod1980b]_
     """
 
-    name = "Getzler"
+    name = "Second by Getzler"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
@@ -1488,7 +1489,7 @@ class Getzler(Player):
         return random_choice(1.0 - self.flack)
 
 
-class Leyvraz(Player):
+class SecondByLeyvraz(Player):
     """
     Strategy submitted to Axelrod's second tournament by Fransois Leyvraz
     (K68R) and came in twelfth in that tournament.
@@ -1507,7 +1508,7 @@ class Leyvraz(Player):
     - Leyvraz: [Axelrod1980b]_
     """
 
-    name = "Leyvraz"
+    name = "Second by Leyvraz"
     classifier = {
         "memory_depth": 3,
         "stochastic": True,
@@ -1542,7 +1543,7 @@ class Leyvraz(Player):
         )
 
 
-class White(Player):
+class SecondByWhite(Player):
     """
     Strategy submitted to Axelrod's second tournament by Edward C White (K72R)
     and came in thirteenth in that tournament.
@@ -1557,7 +1558,7 @@ class White(Player):
     - White: [Axelrod1980b]_
     """
 
-    name = "White"
+    name = "Second by White"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -1579,7 +1580,7 @@ class White(Player):
         return C
 
 
-class Black(Player):
+class SecondByBlack(Player):
     """
     Strategy submitted to Axelrod's second tournament by Paul E Black (K83R)
     and came in fifteenth in that tournament.
@@ -1595,7 +1596,7 @@ class Black(Player):
     - Black: [Axelrod1980b]_
     """
 
-    name = "Black"
+    name = "Second by Black"
     classifier = {
         "memory_depth": 5,
         "stochastic": True,
@@ -1624,7 +1625,7 @@ class Black(Player):
         return random_choice(self.prob_coop[number_defects])
 
 
-class RichardHufford(Player):
+class SecondByRichardHufford(Player):
     """
     Strategy submitted to Axelrod's second tournament by Richard Hufford (K47R)
     and came in sixteenth in that tournament.
@@ -1667,7 +1668,7 @@ class RichardHufford(Player):
     - RichardHufford: [Axelrod1980b]_
     """
 
-    name = "RichardHufford"
+    name = "Second by RichardHufford"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -1738,7 +1739,7 @@ class RichardHufford(Player):
         return D
 
 
-class Yamachi(Player):
+class SecondByYamachi(Player):
     """
     Strategy submitted to Axelrod's second tournament by Brian Yamachi (K64R)
     and came in seventeenth in that tournament.
@@ -1764,7 +1765,7 @@ class Yamachi(Player):
     - Yamachi: [Axelrod1980b]_
     """
 
-    name = "Yamachi"
+    name = "Second by Yamachi"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -1835,7 +1836,7 @@ class Yamachi(Player):
         return self.try_return(D, opponent.defections)
 
 
-class Colbert(FSMPlayer):
+class SecondByColbert(FSMPlayer):
     """
     Strategy submitted to Axelrod's second tournament by William Colbert (K51R)
     and came in eighteenth in that tournament.
@@ -1851,7 +1852,7 @@ class Colbert(FSMPlayer):
     - Colbert: [Axelrod1980b]_
     """
 
-    name = "Colbert"
+    name = "Second by Colbert"
     classifier = {
         "memory_depth": 4,
         "stochastic": False,
@@ -1891,7 +1892,7 @@ class Colbert(FSMPlayer):
         super().__init__(transitions=transitions, initial_state=0, initial_action=C)
 
 
-class Mikkelson(FSMPlayer):
+class SecondByMikkelson(FSMPlayer):
     """
     Strategy submitted to Axelrod's second tournament by Ray Mikkelson (K66R)
     and came in twentieth in that tournament.
@@ -1914,7 +1915,7 @@ class Mikkelson(FSMPlayer):
     - Mikkelson: [Axelrod1980b]_
     """
 
-    name = "Mikkelson"
+    name = "Second by Mikkelson"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -1955,7 +1956,7 @@ class Mikkelson(FSMPlayer):
         return C
 
 
-class Rowsam(Player):
+class SecondByRowsam(Player):
     """
     Strategy submitted to Axelrod's second tournament by Glen Rowsam (K58R)
     and came in 21st in that tournament.
@@ -1988,7 +1989,7 @@ class Rowsam(Player):
     - Rowsam: [Axelrod1980b]_
     """
 
-    name = "Rowsam"
+    name = "Second by Rowsam"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -2059,3 +2060,72 @@ class Rowsam(Player):
             self.mode = "Coop Def Cycle 1"
         return D
 
+
+class SecondByAppold(Player):
+    """
+    Strategy submitted to Axelrod's second tournament by Scott Appold (K88R) and
+    came in 22nd in that tournament.
+
+    Cooperates for first four turns.
+
+    After four turns, will cooperate immediately following the first time the
+    opponent cooperates (starting with the opponent's fourth move).  Otherwise
+    will cooperate with probability equal to:
+
+    - If this strategy defected two turns ago, the portion of the time
+      (historically) that the opponent followed a defection with a cooperation.
+    - If this strategy cooperated two turns ago, the portion of the time
+      (historically) that the opponent followed a cooperation with a cooperation.
+      The opponent's first move is counted as a response to a cooperation.
+
+
+    Names:
+
+    - Appold: [Axelrod1980b]_
+    """
+
+    name = "Second by Appold"
+    classifier = {
+        "memory_depth": float("inf"),
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+    def __init__(self) -> None:
+        super().__init__()
+
+        # Probability of a cooperation after an x is:
+        # opp_c_after_x / total_num_of_x.
+        self.opp_c_after_x = {C: 0, D: 1}
+        # This is the total counted, so it doesn't include the most recent.
+        self.total_num_of_x = {C: 0, D: 1}
+
+        self.first_opp_def = False
+
+    def strategy(self, opponent: Player) -> Action:
+        turn = len(self.history) + 1
+
+        us_two_turns_ago = C if turn <= 2 else self.history[-2]
+
+        # Update trackers
+        if turn > 1:
+            self.total_num_of_x[us_two_turns_ago] += 1
+        if turn > 1 and opponent.history[-1] == C:
+            self.opp_c_after_x[us_two_turns_ago] += 1
+
+        if turn <= 4:
+            return C
+
+        if opponent.history[-1] == D and not self.first_opp_def:
+            self.first_opp_def = True
+            return C
+
+        # Calculate the probability that the opponent cooperated last turn given
+        # what we know two turns ago.
+        prob_coop = self.opp_c_after_x[us_two_turns_ago] / self.total_num_of_x[
+            us_two_turns_ago]
+        return random_choice(prob_coop)

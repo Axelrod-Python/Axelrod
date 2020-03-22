@@ -6,7 +6,7 @@ from typing import Callable, List, Optional, Set, Tuple
 
 import matplotlib.pyplot as plt
 import numpy as np
-from axelrod import DEFAULT_TURNS, Game, Player
+from axelrod import EvolvablePlayer, DEFAULT_TURNS, Game, Player
 
 from .deterministic_cache import DeterministicCache
 from .graph import Graph, complete_graph
@@ -56,6 +56,8 @@ class MoranProcess(object):
         interaction_graph: Graph = None,
         reproduction_graph: Graph = None,
         fitness_transformation: Callable = None,
+        mutation_method="transition",
+        stop_on_fixation=True
     ) -> None:
         """
         An agent based Moran process class. In each round, each player plays a
@@ -108,6 +110,11 @@ class MoranProcess(object):
             given
         fitness_transformation:
             A function mapping a score to a (non-negative) float
+        mutation_method:
+            A string indicating if the mutation method should be between original types ("transition")
+            or based on the player's mutation method, if present ("atomic").
+        stop_on_fixation:
+            A bool indicating if the process should stop on fixation
         """
         self.turns = turns
         self.prob_end = prob_end
@@ -120,6 +127,12 @@ class MoranProcess(object):
         self.score_history = []  # type: List
         self.winning_strategy_name = None  # type: Optional[str]
         self.mutation_rate = mutation_rate
+        self.stop_on_fixation = stop_on_fixation
+        m = mutation_method.lower()
+        if m in ["atomic", "transition"]:
+            self.mutation_method = m
+        else:
+            raise ValueError("Invalid mutation method {}".format(mutation_method))
         assert (mutation_rate >= 0) and (mutation_rate <= 1)
         assert (noise >= 0) and (noise <= 1)
         mode = mode.lower()
@@ -159,6 +172,7 @@ class MoranProcess(object):
         # Map players to graph vertices
         self.locations = sorted(interaction_graph.vertices)
         self.index = dict(zip(sorted(interaction_graph.vertices), range(len(players))))
+        self.fixated = self.fixation_check()
 
     def set_players(self) -> None:
         """Copy the initial players into the first population."""
@@ -176,17 +190,23 @@ class MoranProcess(object):
         index:
             The index of the player to be mutated
         """
-        # Choose another strategy at random from the initial population
-        r = random.random()
-        if r < self.mutation_rate:
-            s = str(self.players[index])
-            j = randrange(0, len(self.mutation_targets[s]))
-            p = self.mutation_targets[s][j]
-            new_player = p.clone()
-        else:
-            # Just clone the player
-            new_player = self.players[index].clone()
-        return new_player
+
+        if self.mutation_method == "atomic":
+            if not issubclass(self.players[index].__class__, EvolvablePlayer):
+                raise TypeError("Player is not evolvable. Use a subclass of EvolvablePlayer.")
+            return self.players[index].mutate()
+
+        # Assuming mutation_method == "transition"
+        if self.mutation_rate > 0:
+            # Choose another strategy at random from the initial population
+            r = random.random()
+            if r < self.mutation_rate:
+                s = str(self.players[index])
+                j = randrange(0, len(self.mutation_targets[s]))
+                p = self.mutation_targets[s][j]
+                return p.clone()
+        # Just clone the player
+        return self.players[index].clone()
 
     def death(self, index: int = None) -> int:
         """
@@ -250,14 +270,13 @@ class MoranProcess(object):
         Boolean:
             True if fixation has occurred (population all of a single type)
         """
-        if self.mutation_rate > 0:
-            return False
         classes = set(str(p) for p in self.players)
+        self.fixated = False
         if len(classes) == 1:
             # Set the winning strategy name variable
             self.winning_strategy_name = str(self.players[0])
-            return True
-        return False
+            self.fixated = True
+        return self.fixated
 
     def __next__(self) -> object:
         """
@@ -275,7 +294,7 @@ class MoranProcess(object):
             Returns itself with a new population
         """
         # Check the exit condition, that all players are of the same type.
-        if self.fixation_check():
+        if self.stop_on_fixation and self.fixation_check():
             raise StopIteration
         if self.mode == "bd":
             # Birth then death
@@ -286,16 +305,10 @@ class MoranProcess(object):
             i = self.death()
             self.players[i] = None
             j = self.birth(i)
-        # Mutate
-        if self.mutation_rate:
-            new_player = self.mutate(j)
-        else:
-            new_player = self.players[j].clone()
-        # Replace player i with clone of player j
-        self.players[i] = new_player
+        # Mutate and/or replace player i with clone of player j
+        self.players[i] = self.mutate(j)
+        # Record population.
         self.populations.append(self.population_distribution())
-        # Check again for fixation
-        self.fixation_check()
         return self
 
     def _matchup_indices(self) -> Set[Tuple[int, int]]:
@@ -395,10 +408,10 @@ class MoranProcess(object):
          populations:
             Returns a list of all the populations
         """
-        if self.mutation_rate != 0:
+        if not self.stop_on_fixation or self.mutation_rate != 0:
             raise ValueError(
                 "MoranProcess.play() will never exit if mutation_rate is"
-                "nonzero. Use iteration instead."
+                "nonzero or stop_on_fixation is False. Use iteration instead."
             )
         while True:
             try:

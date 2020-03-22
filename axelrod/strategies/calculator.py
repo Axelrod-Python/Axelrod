@@ -2,7 +2,7 @@ from axelrod._strategy_utils import detect_cycle
 from axelrod.action import Action
 from axelrod.player import Player
 
-from .axelrod_first import Joss
+from .axelrod_first import FirstByJoss as Joss
 
 C, D = Action.C, Action.D
 
@@ -35,6 +35,9 @@ class Calculator(Player):
 
     def strategy(self, opponent: Player) -> Action:
         turn = len(self.history)
+        if turn > 0:
+            self.joss_instance.history.append(self.history[-1],
+                                              opponent.history[-1])
         if turn == 20:
             self.cycle = detect_cycle(opponent.history)
             return self.extended_strategy(opponent)
@@ -42,7 +45,6 @@ class Calculator(Player):
             return self.extended_strategy(opponent)
         else:
             play = self.joss_instance.strategy(opponent)
-            self.joss_instance.history.append(play)
             return play
 
     def extended_strategy(self, opponent: Player) -> Action:

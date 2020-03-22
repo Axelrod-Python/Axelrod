@@ -99,6 +99,9 @@ use a larger population to get a bit more data::
    :width: 50%
    :align: center
 
+Moran Process with Mutation
+---------------------------
+
 The :code:`MoranProcess` class also accepts an argument for a mutation rate.
 Nonzero mutation changes the Markov process so that it no longer has absorbing
 states, and will iterate forever. To prevent this, iterate with a loop (or

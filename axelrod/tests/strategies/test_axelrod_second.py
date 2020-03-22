@@ -11,8 +11,8 @@ C, D = axelrod.Action.C, axelrod.Action.D
 
 
 class TestChampion(TestPlayer):
-    name = "Champion"
-    player = axelrod.Champion
+    name = "Second by Champion"
+    player = axelrod.SecondByChampion
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
@@ -46,8 +46,8 @@ class TestChampion(TestPlayer):
 
 class TestEatherley(TestPlayer):
 
-    name = "Eatherley"
-    player = axelrod.Eatherley
+    name = "Second by Eatherley"
+    player = axelrod.SecondByEatherley
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
@@ -83,8 +83,8 @@ class TestEatherley(TestPlayer):
 
 class TestTester(TestPlayer):
 
-    name = "Tester"
-    player = axelrod.Tester
+    name = "Second by Tester"
+    player = axelrod.SecondByTester
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -116,8 +116,8 @@ class TestTester(TestPlayer):
 
 class TestGladstein(TestPlayer):
 
-    name = "Gladstein"
-    player = axelrod.Gladstein
+    name = "Second by Gladstein"
+    player = axelrod.SecondByGladstein
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -159,8 +159,8 @@ class TestGladstein(TestPlayer):
 
 class TestTranquilizer(TestPlayer):
 
-    name = "Tranquilizer"
-    player = axelrod.Tranquilizer
+    name = "Second by Tranquilizer"
+    player = axelrod.SecondByTranquilizer
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
@@ -175,7 +175,7 @@ class TestTranquilizer(TestPlayer):
 
     def test_init(self):
 
-        player = axelrod.Tranquilizer()
+        player = axelrod.SecondByTranquilizer()
 
         self.assertEqual(player.num_turns_after_good_defection, 0)
         self.assertEqual(player.opponent_consecutive_defections, 0)
@@ -355,10 +355,10 @@ class TestTranquilizer(TestPlayer):
         self.versus_test(opponent, expected_actions=actions, attrs=expected_attrs)
 
 
-class TestMoreGrofman(TestPlayer):
+class TestGrofman(TestPlayer):
 
-    name = "MoreGrofman"
-    player = axelrod.MoreGrofman
+    name = "Second by Grofman"
+    player = axelrod.SecondByGrofman
     expected_classifier = {
         "memory_depth": 8,
         "stochastic": False,
@@ -378,7 +378,7 @@ class TestMoreGrofman(TestPlayer):
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (C, D), (D, C)]
         self.versus_test(axelrod.Alternator(), expected_actions=actions)
 
-        # Demonstrate MoreGrofman Logic
+        # Demonstrate Grofman Logic
         # Own previous move was C, opponent defected less than 3 times in last 8
         moregrofman_actions = [C] * 7 + [C]
         opponent_actions = [C] * 6 + [D] * 2
@@ -533,8 +533,8 @@ class TestMoreGrofman(TestPlayer):
 
 
 class TestKluepfel(TestPlayer):
-    name = "Kluepfel"
-    player = axelrod.Kluepfel
+    name = "Second by Kluepfel"
+    player = axelrod.SecondByKluepfel
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
@@ -627,8 +627,8 @@ class TestKluepfel(TestPlayer):
 
 
 class TestBorufsen(TestPlayer):
-    name = "Borufsen"
-    player = axelrod.Borufsen
+    name = "Second by Borufsen"
+    player = axelrod.SecondByBorufsen
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -677,8 +677,8 @@ class TestBorufsen(TestPlayer):
 
 
 class TestCave(TestPlayer):
-    name = "Cave"
-    player = axelrod.Cave
+    name = "Second by Cave"
+    player = axelrod.SecondByCave
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
@@ -795,8 +795,8 @@ class TestCave(TestPlayer):
 
 
 class TestWmAdams(TestPlayer):
-    name = "WmAdams"
-    player = axelrod.WmAdams
+    name = "Second by WmAdams"
+    player = axelrod.SecondByWmAdams
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
@@ -878,8 +878,8 @@ class TestWmAdams(TestPlayer):
 
 
 class TestGraaskampKatzen(TestPlayer):
-    name = "GraaskampKatzen"
-    player = axelrod.GraaskampKatzen
+    name = "Second by GraaskampKatzen"
+    player = axelrod.SecondByGraaskampKatzen
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -915,8 +915,8 @@ class TestGraaskampKatzen(TestPlayer):
 
 
 class TestWeiner(TestPlayer):
-    name = "Weiner"
-    player = axelrod.Weiner
+    name = "Second by Weiner"
+    player = axelrod.SecondByWeiner
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -984,8 +984,8 @@ class TestWeiner(TestPlayer):
 
 
 class TestHarrington(TestPlayer):
-    name = "Harrington"
-    player = axelrod.Harrington
+    name = "Second by Harrington"
+    player = axelrod.SecondByHarrington
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
@@ -1243,9 +1243,9 @@ class TestHarrington(TestPlayer):
         )
 
 
-class TestMoreTidemanAndChieruzzi(TestPlayer):
-    name = "More Tideman and Chieruzzi"
-    player = axelrod.MoreTidemanAndChieruzzi
+class TestTidemanAndChieruzzi(TestPlayer):
+    name = "Second by Tideman and Chieruzzi"
+    player = axelrod.SecondByTidemanAndChieruzzi
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -1332,15 +1332,15 @@ class TestMoreTidemanAndChieruzzi(TestPlayer):
         # Build an opponent who will cause us to consider a Fresh Start, but
         # will fail the binomial test.
         opponent_actions = [C] * 5 + [D] * 5
-        C5D5_Player = axelrod.MockPlayer(actions=opponent_actions)
+        C5D5_player = axelrod.MockPlayer(actions=opponent_actions)
         actions = [(C, C)] * 5 + [(C, D)] + [(D, D)] * 3
         actions += [(D, D)]  # No Defection here means no Fresh Start.
-        self.versus_test(C5D5_Player, expected_actions=actions)
+        self.versus_test(C5D5_player, expected_actions=actions)
 
 
 class TestGetzler(TestPlayer):
-    name = "Getzler"
-    player = axelrod.Getzler
+    name = "Second by Getzler"
+    player = axelrod.SecondByGetzler
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
@@ -1373,8 +1373,8 @@ class TestGetzler(TestPlayer):
 
 
 class TestLeyvraz(TestPlayer):
-    name = "Leyvraz"
-    player = axelrod.Leyvraz
+    name = "Second by Leyvraz"
+    player = axelrod.SecondByLeyvraz
     expected_classifier = {
         "memory_depth": 3,
         "stochastic": True,
@@ -1416,8 +1416,8 @@ class TestLeyvraz(TestPlayer):
 
 
 class TestWhite(TestPlayer):
-    name = "White"
-    player = axelrod.White
+    name = "Second by White"
+    player = axelrod.SecondByWhite
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -1484,8 +1484,8 @@ class TestWhite(TestPlayer):
 
 
 class TestBlack(TestPlayer):
-    name = "Black"
-    player = axelrod.Black
+    name = "Second by Black"
+    player = axelrod.SecondByBlack
     expected_classifier = {
         "memory_depth": 5,
         "stochastic": True,
@@ -1532,8 +1532,8 @@ class TestBlack(TestPlayer):
 
 
 class TestRichardHufford(TestPlayer):
-    name = "RichardHufford"
-    player = axelrod.RichardHufford
+    name = "Second by RichardHufford"
+    player = axelrod.SecondByRichardHufford
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -1583,8 +1583,8 @@ class TestRichardHufford(TestPlayer):
 
 
 class TestYamachi(TestPlayer):
-    name = "Yamachi"
-    player = axelrod.Yamachi
+    name = "Second by Yamachi"
+    player = axelrod.SecondByYamachi
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -1713,8 +1713,8 @@ class TestYamachi(TestPlayer):
 
 
 class TestColbert(TestPlayer):
-    name = "Colbert"
-    player = axelrod.Colbert
+    name = "Second by Colbert"
+    player = axelrod.SecondByColbert
     expected_classifier = {
         "memory_depth": 4,
         "stochastic": False,
@@ -1741,8 +1741,8 @@ class TestColbert(TestPlayer):
 
 
 class TestMikkelson(TestPlayer):
-    name = "Mikkelson"
-    player = axelrod.Mikkelson
+    name = "Second by Mikkelson"
+    player = axelrod.SecondByMikkelson
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -1817,8 +1817,8 @@ class TestMikkelson(TestPlayer):
         # Still Cooperate, because Defect rate is low
 
 class TestRowsam(TestPlayer):
-    name = "Rowsam"
-    player = axelrod.Rowsam
+    name = "Second by Rowsam"
+    player = axelrod.SecondByRowsam
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -1907,4 +1907,128 @@ class TestRowsam(TestPlayer):
         actions += [(C, C)] * 18
         self.versus_test(custom_opponent, expected_actions=actions, attrs={
             "distrust_points": 2})  # But no more
+
+
+class TestAppold(TestPlayer):
+    name = "Second by Appold"
+    player = axelrod.SecondByAppold
+    expected_classifier = {
+        "memory_depth": float("inf"),
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+    def test_strategy(self):
+        # Should cooperate 100% of the time with the cooperator
+        actions = [(C, C)] * 100
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+
+        opponent = axelrod.Defector()
+        # Cooperate always the first 4 turns
+        actions = [(C, D)] * 4
+        # Should cooperate because we forgive the first_opp_def after the fourth
+        # turn.
+        actions += [(C, D)]
+        # Own move two turns ago is C, so D.
+        actions += [(D, D)]
+        # Then defect most of the time, depending on the random number.  We
+        # don't defect 100% of the time, because of the way that initialize
+        # opp_c_after_x.
+        actions += [(D, D),
+                    (C, D),
+                    (D, D),
+                    (D, D),  # C can never be two moves after a C.
+                    (D, D),
+                    (D, D),
+                    (D, D),
+                    (D, D),
+                    (D, D),
+                    (D, D),
+                    (C, D),
+                    (C, D),
+                    (D, D),
+                    (D, D),
+                    (D, D),
+                    (D, D),
+                    (D, D),
+                    (C, D),
+                    (D, D),
+                    (D, D),
+                    (D, D),
+                    (D, D),
+                    (D, D),
+                    (D, D),
+                    (C, D),
+                    (C, D),
+                    (D, D),
+                    (D, D)]
+        self.versus_test(opponent, expected_actions=actions, seed=1,
+                         attrs={"first_opp_def": True})
+
+        # An opponent who defects for a long time, then tries cooperating
+        opponent_actions = [C] * 30 + [D] + [C] * 10
+        MostlyCooperates = axelrod.MockPlayer(actions=opponent_actions)
+        # Cooperate always at first
+        actions = [(C, C)] * 30
+        # The opponent defects once
+        actions += [(C, D)]
+        # But we forgive it.
+        actions += [(C, C)] * 10
+        self.versus_test(MostlyCooperates, expected_actions=actions)
+
+        opponent = axelrod.CyclerDC()
+        # First three opponent actions get counted as reactions to C.  Fourth
+        # action will get counted on next turn.
+        actions = [(C, D), (C, C), (C, D), (C, C)]
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={"opp_c_after_x": {C: 1, D: 1},
+                                "total_num_of_x": {C: 3, D: 1}})
+        # Will cooperate 50% of the time
+        actions += [(C, D)]
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={"opp_c_after_x": {C: 2, D: 1},
+                                "total_num_of_x": {C: 4, D: 1},
+                                "first_opp_def": False}, seed=100)
+        # Always cooperate, because we forgive the first defect
+        actions += [(C, C)]
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={"first_opp_def": True}, seed=100)
+
+        # Against a random opponent, will respond mostly randomly too.
+        actions = [(C, C),
+                   (C, C),
+                   (C, D),
+                   (C, C),
+                   (C, C),
+                   (C, D),
+                   (C, C),
+                   (C, C),
+                   (C, C),
+                   (D, C),
+                   (C, D),
+                   (D, D),
+                   (C, D),
+                   (C, D),
+                   (C, C),
+                   (C, C),
+                   (D, C),
+                   (C, D),
+                   (D, D),
+                   (C, C),
+                   (C, D),
+                   (C, C),
+                   (C, C),
+                   (C, D),
+                   (D, C),
+                   (C, D),
+                   (D, D),
+                   (C, D),
+                   (C, C),
+                   (D, C)]
+        self.versus_test(axelrod.Random(0.5), expected_actions=actions, seed=7)
+
 

@@ -1,15 +1,15 @@
 import copy
 import inspect
 import itertools
-import random
 import types
-from collections import defaultdict
 from typing import Any, Dict
 
 import numpy as np
-from axelrod.action import Action
 
-from .game import DefaultGame
+from axelrod.action import Action
+from axelrod.game import DefaultGame
+from axelrod.history import History
+from axelrod.random_ import random_flip
 
 C, D = Action.C, Action.D
 
@@ -48,27 +48,15 @@ def obey_axelrod(s):
     )
 
 
-def update_history(player, move):
-    """Updates histories and cooperation / defections counts following play."""
-    # Update histories
-    player.history.append(move)
-    # Update player counts of cooperation and defection
-    if move == C:
-        player.cooperations += 1
-    elif move == D:
-        player.defections += 1
-
-
-def get_state_distribution_from_history(player, history_1, history_2):
-    """Gets state_distribution from player's and opponent's histories."""
-    for action, reply in zip(history_1, history_2):
-        update_state_distribution(player, action, reply)
-
-
-def update_state_distribution(player, action, reply):
-    """Updates state_distribution following play. """
-    last_turn = (action, reply)
-    player.state_distribution[last_turn] += 1
+def simultaneous_play(player, coplayer, noise=0):
+    """This pits two players against each other."""
+    s1, s2 = player.strategy(coplayer), coplayer.strategy(player)
+    if noise:
+        s1 = random_flip(s1, noise)
+        s2 = random_flip(s2, noise)
+    player.update_history(s1, s2)
+    coplayer.update_history(s2, s1)
+    return s1, s2
 
 
 class Player(object):
@@ -115,15 +103,12 @@ class Player(object):
         return boundargs.arguments
 
     def __init__(self):
-        """Initiates an empty history and 0 score for a player."""
-        self.history = []
+        """Initiates an empty history."""
+        self._history = History()
         self.classifier = copy.deepcopy(self.classifier)
         for dimension in self.default_classifier:
             if dimension not in self.classifier:
                 self.classifier[dimension] = self.default_classifier[dimension]
-        self.cooperations = 0
-        self.defections = 0
-        self.state_distribution = defaultdict(int)
         self.set_match_attributes()
 
     def __eq__(self, other):
@@ -145,7 +130,6 @@ class Player(object):
             elif isinstance(value, types.GeneratorType) or isinstance(
                 value, itertools.cycle
             ):
-
                 # Split the original generator so it is not touched
                 generator, original_value = itertools.tee(value)
                 other_generator, original_other_value = itertools.tee(other_value)
@@ -201,15 +185,9 @@ class Player(object):
             prefix = ", "
         return name
 
-    @staticmethod
-    def _add_noise(noise, s1, s2):
-        r = random.random()
-        if r < noise:
-            s1 = s1.flip()
-        r = random.random()
-        if r < noise:
-            s2 = s2.flip()
-        return s1, s2
+    def __getstate__(self):
+        """Used for pickling. Override if Player contains unpickleable attributes."""
+        return self.__dict__
 
     def strategy(self, opponent):
         """This is a placeholder strategy."""
@@ -217,13 +195,7 @@ class Player(object):
 
     def play(self, opponent, noise=0):
         """This pits two players against each other."""
-        s1, s2 = self.strategy(opponent), opponent.strategy(self)
-        if noise:
-            s1, s2 = self._add_noise(noise, s1, s2)
-        update_history(self, s1)
-        update_history(opponent, s2)
-        update_state_distribution(self, s1, s2)
-        update_state_distribution(opponent, s2, s1)
+        return simultaneous_play(self, opponent, noise)
 
     def clone(self):
         """Clones the player without history, reapplying configuration
@@ -232,7 +204,7 @@ class Player(object):
         # You may be tempted to re-implement using the `copy` module
         # Note that this would require a deepcopy in some cases and there may
         # be significant changes required throughout the library.
-        # Override in special cases only if absolutely necessary
+        # Consider overriding in special cases only if necessary
         cls = self.__class__
         new_player = cls(**self.init_kwargs)
         new_player.match_attributes = copy.copy(self.match_attributes)
@@ -245,8 +217,26 @@ class Player(object):
         of players) to reset a player's state to its initial starting point.
         It ensures that no 'memory' of previous matches is carried forward.
         """
-        self.history = []
-        self.cooperations = 0
-        self.defections = 0
-        self.state_distribution = defaultdict(int)
+        # This also resets the history.
         self.__init__(**self.init_kwargs)
+
+    def update_history(self, play, coplay):
+        self.history.append(play, coplay)
+
+    @property
+    def history(self):
+        return self._history
+
+    # Properties maintained for legacy API, can refactor to self.history.X
+    # in 5.0.0 to reduce function call overhead.
+    @property
+    def cooperations(self):
+        return self._history.cooperations
+
+    @property
+    def defections(self):
+        return self._history.defections
+
+    @property
+    def state_distribution(self):
+        return self._history.state_distribution

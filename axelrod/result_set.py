@@ -1,18 +1,17 @@
+from collections import Counter, namedtuple
 import csv
 import itertools
-from collections import Counter, namedtuple
 from multiprocessing import cpu_count
+import warnings
 
-import axelrod.interaction_utils as iu
 import numpy as np
 import tqdm
-from axelrod.action import Action, str_to_actions
+from axelrod.action import Action
 
 import dask as da
 import dask.dataframe as dd
 
 from . import eigen
-from .game import Game
 
 C, D = Action.C, Action.D
 
@@ -407,26 +406,29 @@ class ResultSet:
 
     @update_progress_bar
     def _build_normalised_cooperation(self):
-        normalised_cooperation = [
-            list(np.nan_to_num(row))
-            for row in np.array(self.cooperation)
-            / sum(map(np.array, self.match_lengths))
-        ]
-        return normalised_cooperation
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            normalised_cooperation = [
+                list(np.nan_to_num(row))
+                for row in np.array(self.cooperation)
+                / sum(map(np.array, self.match_lengths))
+            ]
+            return normalised_cooperation
 
     @update_progress_bar
     def _build_initial_cooperation_rate(self, interactions_series):
-        interactions_dict = interactions_series.to_dict()
         interactions_array = np.array(
             [
                 interactions_series.get(player_index, 0)
                 for player_index in range(self.num_players)
             ]
         )
-        initial_cooperation_rate = list(
-            np.nan_to_num(np.array(self.initial_cooperation_count) / interactions_array)
-        )
-        return initial_cooperation_rate
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            initial_cooperation_rate = list(
+                np.nan_to_num(np.array(self.initial_cooperation_count) / interactions_array)
+            )
+            return initial_cooperation_rate
 
     @update_progress_bar
     def _build_ranking(self):

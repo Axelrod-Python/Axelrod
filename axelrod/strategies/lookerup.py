@@ -2,13 +2,19 @@ from collections import namedtuple
 from itertools import product
 from typing import Any, TypeVar
 
+import numpy.random as random
+from numpy.random import choice
+
 from axelrod.action import Action, actions_to_str, str_to_actions
+from axelrod.evolvable_player import EvolvablePlayer, InsufficientParametersError, crossover_dictionaries
 from axelrod.player import Player
 
-C, D = Action.C, Action.D
 
+C, D = Action.C, Action.D
+actions = (C, D)
 
 Plays = namedtuple("Plays", "self_plays, op_plays, op_openings")
+Reaction = TypeVar("Reaction", Action, float)
 
 
 class LookupTable(object):
@@ -215,7 +221,10 @@ def create_lookup_table_keys(
     return [Plays(*plays_tuple) for plays_tuple in iterator]
 
 
-Reaction = TypeVar("Reaction", Action, float)
+default_tft_lookup_table = {
+    Plays(self_plays=(), op_plays=(D,), op_openings=()): D,
+    Plays(self_plays=(), op_plays=(C,), op_openings=()): C,
+}
 
 
 class LookerUp(Player):
@@ -310,19 +319,20 @@ class LookerUp(Player):
         lookup_dict: dict = None,
         initial_actions: tuple = None,
         pattern: Any = None,  # pattern is str or tuple of Action's.
-        parameters: Plays = None,
+        parameters: Plays = None
     ) -> None:
 
         super().__init__()
+        self.parameters = parameters
+        self.pattern = pattern
         self._lookup = self._get_lookup_table(lookup_dict, pattern, parameters)
-
         self._set_memory_depth()
-
         self.initial_actions = self._get_initial_actions(initial_actions)
         self._initial_actions_pool = list(self.initial_actions)
 
+    @classmethod
     def _get_lookup_table(
-        self, lookup_dict: dict, pattern: Any, parameters: tuple
+        cls, lookup_dict: dict, pattern: Any, parameters: tuple
     ) -> LookupTable:
         if lookup_dict:
             return LookupTable(lookup_dict=lookup_dict)
@@ -333,7 +343,7 @@ class LookerUp(Player):
             return LookupTable.from_pattern(
                 pattern, self_depth, op_depth, op_openings_depth
             )
-        return LookupTable(self.default_tft_lookup_table)
+        return LookupTable(default_tft_lookup_table)
 
     def _set_memory_depth(self):
         if self._lookup.op_openings_depth == 0:
@@ -383,6 +393,117 @@ class LookerUp(Player):
         :param sort_by: only_elements='self_plays', 'op_plays', 'op_openings'
         """
         return self._lookup.display(sort_by=sort_by)
+
+
+class EvolvableLookerUp(LookerUp, EvolvablePlayer):
+    name = "EvolvableLookerUp"
+
+    def __init__(
+        self,
+        lookup_dict: dict = None,
+        initial_actions: tuple = None,
+        pattern: Any = None,  # pattern is str or tuple of Action's.
+        parameters: Plays = None,
+        mutation_probability: float = None
+    ) -> None:
+        lookup_dict, initial_actions, pattern, parameters, mutation_probability = self._normalize_parameters(
+            lookup_dict, initial_actions, pattern, parameters, mutation_probability
+        )
+        LookerUp.__init__(
+            self,
+            lookup_dict=lookup_dict,
+            initial_actions=initial_actions,
+            pattern=pattern,
+            parameters=parameters,
+        )
+        EvolvablePlayer.__init__(self)
+        self.mutation_probability = mutation_probability
+        self.overwrite_init_kwargs(
+            lookup_dict=lookup_dict,
+            initial_actions=initial_actions,
+            pattern=pattern,
+            parameters=parameters,
+            mutation_probability=mutation_probability,
+        )
+
+    @classmethod
+    def _normalize_parameters(cls, lookup_dict=None, initial_actions=None, pattern=None, parameters=None,
+                              mutation_probability=None):
+        if lookup_dict and initial_actions:
+            # Compute the associated pattern and parameters
+            # Map the table keys to namedTuple Plays
+            lookup_table = cls._get_lookup_table(lookup_dict, pattern, parameters)
+            lookup_dict = lookup_table.dictionary
+            parameters = (lookup_table.player_depth, lookup_table.op_depth, lookup_table.op_openings_depth)
+            pattern = tuple(v for k, v in sorted(lookup_dict.items()))
+        elif pattern and parameters and initial_actions:
+            # Compute the associated lookup table
+            plays, op_plays, op_start_plays = parameters
+            lookup_table = cls._get_lookup_table(lookup_dict, pattern, parameters)
+            lookup_dict = lookup_table.dictionary
+        elif parameters:
+            # Generate a random pattern and (maybe) initial actions
+            plays, op_plays, op_start_plays = parameters
+            pattern, lookup_table = cls.random_params(plays, op_plays, op_start_plays)
+            lookup_dict = lookup_table.dictionary
+            if not initial_actions:
+                num_actions = max([plays, op_plays, op_start_plays])
+                initial_actions = tuple([choice((C, D)) for _ in range(num_actions)])
+        else:
+            raise InsufficientParametersError("Insufficient Parameters to instantiate EvolvableLookerUp")
+        # Normalize pattern
+        if isinstance(pattern, str):
+            pattern = str_to_actions(pattern)
+        pattern = tuple(pattern)
+        if mutation_probability is None:
+            plays, op_plays, op_start_plays = parameters
+            keys = create_lookup_table_keys(plays, op_plays, op_start_plays)
+            mutation_probability = 2. / len(keys)
+        return lookup_dict, initial_actions, pattern, parameters, mutation_probability
+
+    @classmethod
+    def random_value(cls):
+        return choice(actions)
+
+    @classmethod
+    def random_params(cls, plays, op_plays, op_start_plays):
+        keys = create_lookup_table_keys(plays, op_plays, op_start_plays)
+        # To get a pattern, we just randomly pick between C and D for each key
+        pattern = [cls.random_value() for _ in keys]
+        table = dict(zip(keys, pattern))
+        return pattern, LookupTable(table)
+
+    @classmethod
+    def mutate_value(cls, value):
+        return value.flip()
+
+    @classmethod
+    def mutate_table(cls, table, mutation_probability):
+        randoms = random.random(len(table.keys()))
+        # Flip each value with a probability proportional to the mutation rate
+        for i, (history, move) in enumerate(table.items()):
+            if randoms[i] < mutation_probability:
+                table[history] = cls.mutate_value(move)
+        return table
+
+    def mutate(self):
+        lookup_dict = self.mutate_table(self.lookup_dict, self.mutation_probability)
+        # Add in starting moves
+        initial_actions = list(self.initial_actions)
+        for i in range(len(initial_actions)):
+            r = random.random()
+            if r < self.mutation_probability:
+                initial_actions[i] = initial_actions[i].flip()
+        return self.create_new(
+            lookup_dict=lookup_dict,
+            initial_actions=tuple(initial_actions),
+        )
+
+    def crossover(self, other):
+        if other.__class__ != self.__class__:
+            raise TypeError("Crossover must be between the same player classes.")
+        lookup_dict = crossover_dictionaries(self.lookup_dict, other.lookup_dict)
+        return self.create_new(lookup_dict=lookup_dict)
 
 
 class EvolvedLookerUp1_1_1(LookerUp):

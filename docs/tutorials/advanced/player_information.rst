@@ -4,13 +4,12 @@ Player information
 ==================
 
 It is possible to determine what information players know about their matches.
-By default all known information is given.
-For example let us create a match with 5 turns between :code:`SteinAndRapoport`
-and :code:`Alternator`. The latter of these two always defects on the last 2
-turns::
+By default all known information is given.  For example let us create a match
+with 5 turns between :code:`FirstBySteinAndRapoport` and :code:`Alternator`. The
+latter of these two always defects on the last 2 turns::
 
     >>> import axelrod as axl
-    >>> players = (axl.Alternator(), axl.SteinAndRapoport())
+    >>> players = (axl.Alternator(), axl.FirstBySteinAndRapoport())
     >>> axl.Match(players, turns=5).play()
     [(C, C), (D, C), (C, C), (D, D), (C, D)]
 

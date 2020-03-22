@@ -23,8 +23,9 @@ documentation.
 .. [Axelrod1995] Wu, J. and Axelrod, R. (1995). How to cope with noise in the Iterated prisoner’s dilemma, Journal of Conflict Resolution, 39(1), pp. 183–189. doi: 10.1177/0022002795039001008.
 .. [Banks1990] Banks, J. S., & Sundaram, R. K. (1990). Repeated games, finite automata, and complexity. Games and Economic Behavior, 2(2), 97–117.  http://doi.org/10.1016/0899-8256(90)90024-O
 .. [Bendor1993] Bendor, Jonathan. "Uncertainty and the Evolution of Cooperation." The Journal of Conflict Resolution, 37(4), 709–734.
-.. [Beaufils1997] Beaufils, B. and Delahaye, J. (1997). Our Meeting With Gradual: A Good Strategy For The Iterated Prisoner’s Dilemma. http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.42.4041
+.. [Beaufils1997] Beaufils, B. & Delahaye, J. & Mathieu, P. (1997). Our Meeting With Gradual: A Good Strategy For The Iterated Prisoner’s Dilemma. http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.42.4041
 .. [Berg2015] Berg, P. Van Den, & Weissing, F. J. (2015). The importance of mechanisms for the evolution of cooperation. Proceedings of the Royal Society B-Biological Sciences, 282.
+.. [Downing1975] Downing, Leslie L. "The Prisoner's Dilemma game as a problem-solving phenomenon: An outcome maximization interpretation." Simulation & Games 6.4 (1975): 366-391.
 .. [Eckhart2015] Eckhart Arnold (2016) CoopSim v0.9.9 beta 6.  https://github.com/jecki/CoopSim/
 .. [Frean1994] Frean, Marcus R. "The Prisoner's Dilemma without Synchrony." Proceedings: Biological Sciences, vol. 257, no. 1348, 1994, pp. 75–79. www.jstor.org/stable/50253.
 .. [Harper2017] Harper, M., Knight, V., Jones, M., Koutsovoulos, G., Glynatsi, N. E., & Campbell, O. (2017) Reinforcement learning produces dominant strategies for the Iterated Prisoner’s Dilemma. PloS one.  https://doi.org/10.1371/journal.pone.0188046
@@ -45,6 +46,7 @@ documentation.
   International Conference on Autonomous Agents and Multiagent Systems.
 .. [Mittal2009] Mittal, S., & Deb, K. (2009). Optimal strategies of the iterated prisoner’s dilemma problem for multiple conflicting objectives. IEEE Transactions on Evolutionary Computation, 13(3), 554–565. https://doi.org/10.1109/TEVC.2008.2009459
 .. [Nachbar1992] Nachbar J., Evolution in the finitely repeated prisoner’s dilemma, Journal of Economic Behavior & Organization, 19(3): 307-326, 1992.
+.. [NC2019] https://github.com/ncase/trust (Accessed: 30 October 2019)
 .. [Nowak1989] Nowak, Martin, and Karl Sigmund. "Game-dynamical aspects of the prisoner's dilemma." Applied Mathematics and Computation 30.3 (1989): 191-213.
 .. [Nowak1990] Nowak, M., & Sigmund, K. (1990). The evolution of stochastic strategies in the Prisoner's Dilemma. Acta Applicandae Mathematica. https://link.springer.com/article/10.1007/BF00049570
 .. [Nowak1992] Nowak, M.., & May, R. M. (1992). Evolutionary games and spatial chaos. Nature. http://doi.org/10.1038/359826a0

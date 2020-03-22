@@ -4,6 +4,8 @@ from axelrod.action import Action
 from axelrod.player import Player, obey_axelrod
 from axelrod.strategies import TitForTat
 from axelrod.strategy_transformers import NiceTransformer
+
+import numpy as np
 from numpy.random import choice
 
 from ._strategies import all_strategies
@@ -19,6 +21,7 @@ from .hunter import (
 
 # Needs to be computed manually to prevent circular dependency
 ordinary_strategies = [s for s in all_strategies if obey_axelrod(s)]
+
 C, D = Action.C, Action.D
 
 
@@ -35,7 +38,7 @@ class MetaPlayer(Player):
     classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": True,
-        "makes_use_of": {"game", "length"},
+        "makes_use_of": set(),
         "long_run_time": True,
         "inspects_source": False,
         "manipulates_source": False,
@@ -43,7 +46,6 @@ class MetaPlayer(Player):
     }
 
     def __init__(self, team=None):
-        super().__init__()
         # The default is to use all strategies available, but we need to import
         # the list at runtime, since _strategies import also _this_ module
         # before defining the list.
@@ -52,13 +54,12 @@ class MetaPlayer(Player):
         else:
             # Needs to be computed manually to prevent circular dependency
             self.team = ordinary_strategies
-
         # Make sure we don't use any meta players to avoid infinite recursion.
         self.team = [t for t in self.team if not issubclass(t, MetaPlayer)]
-        self.nteam = len(self.team)
-
-        # Initiate all the player in our team.
+        # Initiate all the players in our team.
         self.team = [t() for t in self.team]
+
+        super().__init__()
 
         # This player inherits the classifiers of its team.
         # Note that memory_depth is not simply the max memory_depth of the team.
@@ -73,20 +74,34 @@ class MetaPlayer(Player):
         for t in self.team:
             self.classifier["makes_use_of"].update(t.classifier["makes_use_of"])
 
+        self._last_results = None
+
+    def receive_match_attributes(self):
+        for t in self.team:
+            t.set_match_attributes(**self.match_attributes)
+
     def __repr__(self):
         team_size = len(self.team)
         return "{}: {} player{}".format(
             self.name, team_size, "s" if team_size > 1 else ""
         )
 
+    def update_histories(self, coplay):
+        # Update team histories.
+        for player, play in zip(self.team, self._last_results):
+            player.history.append(play, coplay)
+
+    def update_history(self, play, coplay):
+        super().update_history(play, coplay)
+        self.update_histories(coplay)
+
     def strategy(self, opponent):
         # Get the results of all our players.
         results = []
         for player in self.team:
             play = player.strategy(opponent)
-            player.history.append(play)
             results.append(play)
-
+        self._last_results = results
         # A subclass should just define a way to choose the result based on
         # team results.
         return self.meta_strategy(results, opponent)
@@ -102,13 +117,10 @@ class MetaMajority(MetaPlayer):
 
     Names:
 
-    - Meta Marjority: Original name by Karol Langner
+    - Meta Majority: Original name by Karol Langner
     """
 
     name = "Meta Majority"
-
-    def __init__(self, team=None):
-        super().__init__(team=team)
 
     @staticmethod
     def meta_strategy(results, opponent):
@@ -126,9 +138,6 @@ class MetaMinority(MetaPlayer):
     """
 
     name = "Meta Minority"
-
-    def __init__(self, team=None):
-        super().__init__(team=team)
 
     @staticmethod
     def meta_strategy(results, opponent):
@@ -151,21 +160,25 @@ class MetaWinner(MetaPlayer):
         super().__init__(team=team)
         # For each player, we will keep the history of proposed moves and
         # a running score since the beginning of the game.
-        self.scores = [0] * len(self.team)
+        self.scores = np.zeros(len(self.team))
         self.classifier["long_run_time"] = True
 
-    def _update_scores(self, opponent):
+    def _update_scores(self, coplay):
         # Update the running score for each player, before determining the
         # next move.
         game = self.match_attributes["game"]
-        if len(self.history):
-            for i, player in enumerate(self.team):
-                last_round = (player.history[-1], opponent.history[-1])
-                s = game.scores[last_round][0]
-                self.scores[i] += s
+        scores = []
+        for player in self.team:
+            last_round = (player.history[-1], coplay)
+            s = game.scores[last_round][0]
+            scores.append(s)
+        self.scores += np.array(scores)
+
+    def update_histories(self, coplay):
+        super().update_histories(coplay)
+        self._update_scores(coplay)
 
     def meta_strategy(self, results, opponent):
-        self._update_scores(opponent)
         # Choice an action based on the collection of scores
         bestscore = max(self.scores)
         beststrategies = [
@@ -192,7 +205,6 @@ class MetaWinnerEnsemble(MetaWinner):
     name = "Meta Winner Ensemble"
 
     def meta_strategy(self, results, opponent):
-        self._update_scores(opponent)
         # Sort by score
         scores = [(score, i) for (i, score) in enumerate(self.scores)]
         # Choose one of the best scorers at random
@@ -587,7 +599,7 @@ class MemoryDecay(MetaPlayer):
     altered (i.e., a C decision becomes D or vice versa; default probability
     is 0.03) or deleted (default probability is 0.1).
 
-    It is possible to pass a different axelrod player class to change the inital
+    It is possible to pass a different axelrod player class to change the initial
     player behavior.
 
     Name: Memory Decay
@@ -620,8 +632,9 @@ class MemoryDecay(MetaPlayer):
         self.p_memory_alter = p_memory_alter
         self.loss_value = loss_value
         self.gain_value = gain_value
-        self.memory = [] if memory == None else memory
+        self.memory = [] if not memory else memory
         self.start_strategy_duration = start_strategy_duration
+        self.gloss_values = None
 
     def __repr__(self):
         return Player.__repr__(self)
@@ -647,15 +660,13 @@ class MemoryDecay(MetaPlayer):
         """
         self.memory.pop(choice(range(0, len(self.memory))))
 
-    def strategy(self, opponent):
+    def meta_strategy(self, results, opponent):
         try:
             self.memory.append(opponent.history[-1])
         except IndexError:
             pass
         if len(self.history) < self.start_strategy_duration:
-            play = self.team[0].strategy(opponent)
-            self.team[0].history.append(play)
-            return play
+            return results[0]
         else:
             if random.random() <= self.p_memory_alter:
                 self.memory_alter()

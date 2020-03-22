@@ -1,3 +1,63 @@
+# v4.8.0, 2019-12-16
+
+Reimplementation of first tournament strategies, rename of second tournament
+strategies and
+
+- Reimplement and rename first tournament strategies and rename second
+  tournament strategies:
+  https://github.com/Axelrod-Python/Axelrod/pull/1275
+- Update citations:
+  https://github.com/Axelrod-Python/Axelrod/pull/1276
+  https://github.com/Axelrod-Python/Axelrod/pull/1278
+- Add Detective strategy:
+  https://github.com/Axelrod-Python/Axelrod/pull/1269
+- Remove Fool Me Forever (duplicate):
+  https://github.com/Axelrod-Python/Axelrod/pull/1274
+- Add documentation to a testing script:
+  https://github.com/Axelrod-Python/Axelrod/pull/1271
+- Fix documentation render:
+  https://github.com/Axelrod-Python/Axelrod/pull/1268
+
+https://github.com/Axelrod-Python/Axelrod/compare/v4.8.0...v4.7.0
+
+# v4.7.0, 2019-10-23
+
+New Moran process mechanics, new strategy implementations, drop support for
+python 3.5 and various minor fixes.
+
+- Drop support for python 3.5:
+  https://github.com/Axelrod-Python/Axelrod/pull/1255
+  https://github.com/Axelrod-Python/Axelrod/pull/1254
+- New strategies:
+  https://github.com/Axelrod-Python/Axelrod/pull/1263
+- Bug fix:
+  https://github.com/Axelrod-Python/Axelrod/pull/1260
+- Documentation fixes:
+  https://github.com/Axelrod-Python/Axelrod/pull/1266
+  https://github.com/Axelrod-Python/Axelrod/pull/1262
+- Implement Evolvable Player for Moran processes:
+  https://github.com/Axelrod-Python/Axelrod/pull/1267
+  https://github.com/Axelrod-Python/Axelrod/pull/1256
+- Update citations: https://github.com/Axelrod-Python/Axelrod/pull/1249
+
+https://github.com/Axelrod-Python/Axelrod/compare/v4.7.0...v4.6.0
+
+# v4.6.0, 2019-05-20
+
+New history class, new strategy from Axelrod's first tournament and a number of
+internal fixes/improvements.
+
+- A new history class: https://github.com/Axelrod-Python/Axelrod/pull/1241
+- Minor internal fixes: https://github.com/Axelrod-Python/Axelrod/pull/1236
+  https://github.com/Axelrod-Python/Axelrod/pull/1237
+  https://github.com/Axelrod-Python/Axelrod/pull/1243
+- Test speed up and refactor:
+  https://github.com/Axelrod-Python/Axelrod/pull/1238
+- New strategy (Graaskamp from RA's first tournament):
+  https://github.com/Axelrod-Python/Axelrod/pull/1244
+
+https://github.com/Axelrod-Python/Axelrod/compare/v4.6.0...v4.5.0
+
 # v4.5.0, 2019-01-31
 
 Implemented algorithm for memory depth of Finite State Machines, some new

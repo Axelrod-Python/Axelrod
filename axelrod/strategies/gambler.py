@@ -4,13 +4,16 @@ swarm algorithms.
 For the original see:
  https://gist.github.com/GDKO/60c3d0fd423598f3c4e4
 """
+import random
+from typing import Any
 
-from axelrod.action import Action
+from axelrod.action import Action, str_to_actions, actions_to_str
 from axelrod.load_data_ import load_pso_tables
 from axelrod.player import Player
+
 from axelrod.random_ import random_choice
 
-from .lookerup import LookerUp, Plays
+from .lookerup import EvolvableLookerUp, LookupTable, LookerUp, Plays, create_lookup_table_keys
 
 C, D = Action.C, Action.D
 tables = load_pso_tables("pso_gambler.csv", directory="data")
@@ -42,6 +45,72 @@ class Gambler(LookerUp):
         if isinstance(actions_or_float, Action):
             return actions_or_float
         return random_choice(actions_or_float)
+
+
+class EvolvableGambler(Gambler, EvolvableLookerUp):
+    name = "EvolvableGambler"
+
+    def __init__(
+        self,
+        lookup_dict: dict = None,
+        initial_actions: tuple = None,
+        pattern: Any = None,  # pattern is str or tuple of Actions.
+        parameters: Plays = None,
+        mutation_probability: float = None
+    ) -> None:
+        EvolvableLookerUp.__init__(
+            self,
+            lookup_dict=lookup_dict,
+            initial_actions=initial_actions,
+            pattern=pattern,
+            parameters=parameters,
+            mutation_probability=mutation_probability
+        )
+        self.pattern = list(self.pattern)
+        Gambler.__init__(
+            self,
+            lookup_dict=self.lookup_dict,
+            initial_actions=self.initial_actions,
+            pattern=self.pattern,
+            parameters=self.parameters
+        )
+        self.overwrite_init_kwargs(
+            lookup_dict=self.lookup_dict,
+            initial_actions=self.initial_actions,
+            pattern=self.pattern,
+            parameters=self.parameters,
+            mutation_probability=self.mutation_probability,
+        )
+
+    # The mutate and crossover methods are mostly inherited from EvolvableLookerUp, except for the following
+    # modifications.
+
+    @classmethod
+    def random_value(cls):
+        return random.random()
+
+    @classmethod
+    def mutate_value(cls, value):
+        ep = random.uniform(-1, 1) / 4
+        value += ep
+        if value < 0:
+            value = 0
+        elif value > 1:
+            value = 1
+        return value
+
+    def receive_vector(self, vector):
+        """Receives a vector and updates the player's pattern. Ignores extra parameters."""
+        self.pattern = vector
+        self_depth, op_depth, op_openings_depth = self.parameters
+        self._lookup = LookupTable.from_pattern(self.pattern, self_depth, op_depth, op_openings_depth)
+
+    def create_vector_bounds(self):
+        """Creates the bounds for the decision variables. Ignores extra parameters."""
+        size = len(self.pattern)
+        lb = [0.0] * size
+        ub = [1.0] * size
+        return lb, ub
 
 
 class PSOGamblerMem1(Gambler):

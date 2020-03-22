@@ -23,7 +23,7 @@ class Grudger(Player):
 
     name = "Grudger"
     classifier = {
-        "memory_depth": 1,
+        "memory_depth": float('inf'),
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -226,6 +226,7 @@ class EasyGo(Player):
 
     - Easy Go: [Prison1998]_
     - Reverse Grudger (RGRIM): [Li2011]_
+    - Fool Me Forever: [Harper2017]_
     """
 
     name = "EasyGo"

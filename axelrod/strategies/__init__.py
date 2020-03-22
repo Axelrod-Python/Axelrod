@@ -63,6 +63,23 @@ all_strategies += [
 # Distinguished strategy collections in addition to
 # `all_strategies` from _strategies.py
 demo_strategies = [Cooperator, Defector, TitForTat, Grudger, Random]
+axelrod_first_strategies = [
+            TitForTat,
+            FirstByTidemanAndChieruzzi,
+            FirstByNydegger,
+            FirstByGrofman,
+            FirstByShubik,
+            FirstBySteinAndRapoport,
+            Grudger,
+            FirstByDavis,
+            FirstByGraaskamp,
+            FirstByDowning,
+            FirstByFeld,
+            FirstByJoss,
+            FirstByTullock,
+            FirstByAnonymous,
+            Random,
+        ]
 basic_strategies = [s for s in all_strategies if is_basic(s())]
 strategies = [s for s in all_strategies if obey_axelrod(s())]
 

@@ -4,7 +4,7 @@ import unittest
 from collections import Counter
 
 import numpy
-from axelrod import Action, Pdf, random_choice, seed
+from axelrod import Action, Pdf, random_choice, random_flip, seed
 
 C, D = Action.C, Action.D
 
@@ -40,6 +40,14 @@ class TestRandom_(unittest.TestCase):
             seed(0)
             random_choice(p)
             self.assertEqual(r, random.random())
+
+    def test_random_flip(self):
+        self.assertEqual(C, random_flip(C, 0))
+        self.assertEqual(C, random_flip(D, 1))
+        seed(0)
+        self.assertEqual(C, random_flip(C, 0.2))
+        seed(1)
+        self.assertEqual(C, random_flip(D, 0.2))
 
 
 class TestPdf(unittest.TestCase):

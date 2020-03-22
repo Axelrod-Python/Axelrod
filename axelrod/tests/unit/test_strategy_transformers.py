@@ -207,60 +207,6 @@ class TestTransformers(unittest.TestCase):
         results = match.play()
         self.assertEqual(results, [(C, D), (C, D), (C, D)])
 
-    def test_flip_history(self):
-        player = axelrod.Alternator()
-        opponent = axelrod.Cooperator()
-        for _ in range(5):
-            player.play(opponent)
-
-        self.assertEqual(player.history, [C, D, C, D, C])
-        flip_history(player)
-        self.assertEqual(player.history, [D, C, D, C, D])
-
-    def test_switch_cooperations_and_defections(self):
-        player = axelrod.Alternator()
-        opponent = axelrod.Cooperator()
-        for _ in range(5):
-            player.play(opponent)
-
-        self.assertEqual(player.cooperations, 3)
-        self.assertEqual(player.defections, 2)
-        switch_cooperations_and_defections(player)
-        self.assertEqual(player.cooperations, 2)
-        self.assertEqual(player.defections, 3)
-
-    def test_flip_state_distribution(self):
-        player = axelrod.Alternator()
-        opponent = axelrod.CyclerCCD()
-        for _ in range(16):
-            player.play(opponent)
-
-        expected = defaultdict(int, {(C, C): 5, (D, C): 6, (C, D): 3, (D, D): 2})
-        self.assertEqual(player.state_distribution, expected)
-
-        flip_state_distribution(player)
-
-        flip_expected = defaultdict(int, {(D, C): 5, (C, C): 6, (D, D): 3, (C, D): 2})
-        self.assertEqual(player.state_distribution, flip_expected)
-
-    def test_flip_play_attributes(self):
-        p1 = axelrod.WinStayLoseShift()
-        p2 = DualTransformer()(axelrod.WinStayLoseShift)()
-        p3 = axelrod.CyclerCCD()
-
-        for _ in range(10):
-            p1.play(p3)
-
-        p3.reset()
-        for _ in range(10):
-            p2.play(p3)
-
-        flip_play_attributes(p1)
-        self.assertEqual(p1.history, p2.history)
-        self.assertEqual(p1.cooperations, p2.cooperations)
-        self.assertEqual(p1.defections, p2.defections)
-        self.assertEqual(p1.state_distribution, p2.state_distribution)
-
     def test_dual_transformer_with_all_strategies(self):
         """Tests that DualTransformer produces the opposite results when faced
         with the same opponent history.
@@ -705,14 +651,11 @@ class TestTransformers(unittest.TestCase):
                 for third_player in [axelrod.Cooperator(), axelrod.Defector()]:
                     player = PlayerClass()
                     transformed = transformer(transformer(PlayerClass))()
-                    for _ in range(5):
-                        self.assertEqual(
-                            player.strategy(third_player),
-                            transformed.strategy(third_player),
-                        )
+                    clone = third_player.clone()
+                    for i in range(5):
                         player.play(third_player)
-                        third_player.history.pop(-1)
-                        transformed.play(third_player)
+                        transformed.play(clone)
+                    self.assertEqual(player.history, transformed.history)
 
     def test_idempotency(self):
         """Show that these transformers are idempotent, i.e. that
@@ -734,16 +677,13 @@ class TestTransformers(unittest.TestCase):
         ]:
             for PlayerClass in [axelrod.Cooperator, axelrod.Defector]:
                 for third_player in [axelrod.Cooperator(), axelrod.Defector()]:
+                    clone = third_player.clone()
                     player = transformer(PlayerClass)()
                     transformed = transformer(transformer(PlayerClass))()
                     for i in range(5):
-                        self.assertEqual(
-                            player.strategy(third_player),
-                            transformed.strategy(third_player),
-                        )
                         player.play(third_player)
-                        third_player.history.pop(-1)
-                        transformed.play(third_player)
+                        transformed.play(clone)
+                    self.assertEqual(player.history, transformed.history)
 
     def test_implementation(self):
         """A test that demonstrates the difference in outcomes if

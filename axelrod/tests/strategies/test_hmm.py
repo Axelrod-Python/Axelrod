@@ -1,10 +1,12 @@
 """Tests for Hidden Markov Model Strategies."""
+import random
 import unittest
 
 import axelrod
-from axelrod.strategies.hmm import SimpleHMM, is_stochastic_matrix
-
+from axelrod.evolvable_player import InsufficientParametersError
+from axelrod.strategies.hmm import EvolvableHMMPlayer, HMMPlayer, SimpleHMM, is_stochastic_matrix, random_vector
 from .test_player import TestMatch, TestPlayer
+from .test_evolvable_player import PartialClass, TestEvolvablePlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D
 
@@ -195,3 +197,112 @@ class TestEvolvedHMM5vsDefector(TestMatch):
         self.versus_test(
             axelrod.EvolvedHMM5(), axelrod.Defector(), [C, C, D], [D, D, D]
         )
+
+
+class TestEvolvableHMMPlayer(unittest.TestCase):
+
+    player_class = EvolvableHMMPlayer
+
+    def test_normalized_parameters(self):
+        transitions_C = [[1, 0], [1, 0]]
+        transitions_D = [[0, 1], [0, 1]]
+        emission_probabilities = [1, 0]
+        initial_state = 0
+        initial_action = C
+
+        self.assertRaises(
+            InsufficientParametersError,
+            self.player_class._normalize_parameters
+        )
+        self.assertRaises(
+            InsufficientParametersError,
+            self.player_class._normalize_parameters,
+            transitions_C=transitions_C,
+            transitions_D=transitions_D,
+            emission_probabilities=emission_probabilities
+        )
+        self.assertRaises(
+            InsufficientParametersError,
+            self.player_class._normalize_parameters,
+            initial_state=initial_state,
+            initial_action=initial_action
+        )
+
+    def test_vector_to_instance(self):
+        num_states = 4
+        vector = []
+        for _ in range(2 * num_states):
+            vector.extend(list(random_vector(num_states)))
+        for _ in range(num_states + 1):
+            vector.append(random.random())
+        player = self.player_class(num_states=num_states)
+        player.receive_vector(vector=vector)
+        self.assertIsInstance(player, self.player_class)
+
+    def test_create_vector_bounds(self):
+        num_states = 4
+        size = 2 * num_states ** 2 + num_states + 1
+
+        player = self.player_class(num_states=num_states)
+        lb, ub = player.create_vector_bounds()
+
+        self.assertIsInstance(lb, list)
+        self.assertEqual(len(lb), size)
+        self.assertIsInstance(ub, list)
+        self.assertEqual(len(ub), size)
+
+
+class TestEvolvableHMMPlayer2(TestEvolvablePlayer):
+    name = "EvolvableHMMPlayer"
+    player_class = EvolvableHMMPlayer
+    parent_class = HMMPlayer
+    parent_kwargs = ["transitions_C", "transitions_D", "emission_probabilities",
+                     "initial_state", "initial_action"]
+    init_parameters = {"num_states": 4}
+
+
+class TestEvolvableHMMPlayer3(TestEvolvablePlayer):
+    name = "EvolvableHMMPlayer"
+    player_class = EvolvableHMMPlayer
+    parent_class = HMMPlayer
+    parent_kwargs = ["transitions_C", "transitions_D", "emission_probabilities",
+                     "initial_state", "initial_action"]
+    init_parameters = {"num_states": 8}
+
+
+class TestEvolvableHMMPlayer4(TestEvolvablePlayer):
+    name = "EvolvableHMMPlayer"
+    player_class = EvolvableHMMPlayer
+    parent_class = HMMPlayer
+    parent_kwargs = ["transitions_C", "transitions_D", "emission_probabilities",
+                     "initial_state", "initial_action"]
+    init_parameters = {
+        "transitions_C": [[1, 0], [1, 0]],
+        "transitions_D": [[0, 1], [0, 1]],
+        "emission_probabilities": [1, 0],
+        "initial_state": 0,
+        "initial_action": C,
+    }
+
+
+# Substitute EvolvableHMMPlayer as a regular HMMPlayer.
+EvolvableHMMPlayerWithDefault = PartialClass(
+    EvolvableHMMPlayer,
+    transitions_C=[[1]],
+    transitions_D=[[1]],
+    emission_probabilities=[0.5],
+    initial_state=0
+)
+
+
+class EvolvableHMMPlayerAsHMMPlayer(TestHMMPlayer):
+    player = EvolvableHMMPlayerWithDefault
+
+    def test_equality_of_clone(self):
+        pass
+
+    def test_equality_of_pickle_clone(self):
+        pass
+
+    def test_repr(self):
+        pass

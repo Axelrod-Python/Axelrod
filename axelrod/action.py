@@ -42,8 +42,7 @@ class Action(Enum):
         """Returns the opposite Action."""
         if self == Action.C:
             return Action.D
-        if self == Action.D:
-            return Action.C
+        return Action.C
 
     @classmethod
     def from_char(cls, character):

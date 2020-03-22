@@ -56,6 +56,6 @@ class TrickyDefector(Player):
         Defect if opponent has cooperated at least once in the past and has
         defected for the last 3 turns in a row.
         """
-        if C in opponent.history and opponent.history[-3:] == [D] * 3:
+        if opponent.history.cooperations > 0 and opponent.history[-3:] == [D] * 3:
             return C
         return D

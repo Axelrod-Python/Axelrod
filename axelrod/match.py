@@ -29,6 +29,7 @@ class Match(object):
         deterministic_cache=None,
         noise=0,
         match_attributes=None,
+        reset=True
     ):
         """
         Parameters
@@ -49,6 +50,8 @@ class Match(object):
             Mapping attribute names to values which should be passed to players.
             The default is to use the correct values for turns, game and noise
             but these can be overridden if desired.
+        reset : bool
+            Whether to reset players or not
         """
 
         defaults = {
@@ -83,6 +86,7 @@ class Match(object):
             self.match_attributes = match_attributes
 
         self.players = list(players)
+        self.reset = reset
 
     @property
     def players(self):
@@ -117,13 +121,13 @@ class Match(object):
         )
 
     def _cached_enough_turns(self, cache_key, turns):
-      """
-      Returns true iff there are is a entry in self._cache for the given key and
-      it's at least turns long.
-      """
-      if cache_key not in self._cache:
-        return False
-      return len(self._cache[cache_key]) >= turns
+        """
+        Returns true iff there are is a entry in self._cache for the given key and
+        it's at least turns long.
+        """
+        if cache_key not in self._cache:
+            return False
+        return len(self._cache[cache_key]) >= turns
 
     def play(self):
         """
@@ -148,16 +152,18 @@ class Match(object):
 
         if self._stochastic or not self._cached_enough_turns(cache_key, turns):
             for p in self.players:
-                p.reset()
+                if self.reset:
+                    p.reset()
                 p.set_match_attributes(**self.match_attributes)
+            result = []
             for _ in range(turns):
-                self.players[0].play(self.players[1], self.noise)
-            result = list(zip(self.players[0].history, self.players[1].history))
+                plays = self.players[0].play(self.players[1], self.noise)
+                result.append(plays)
 
             if self._cache_update_required:
                 self._cache[cache_key] = result
         else:
-          result = self._cache[cache_key][:turns]
+            result = self._cache[cache_key][:turns]
 
         self.result = result
         return result

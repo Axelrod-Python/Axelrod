@@ -36,6 +36,51 @@ class TestCollectiveStrategy(TestPlayer):
         self.versus_test(opponent=axelrod.Defector(), expected_actions=actions)
 
 
+class TestDetective(TestPlayer):
+
+    name = "Detective"
+    player = axelrod.Detective
+    expected_classifier = {
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+    def test_strategy(self):
+        self.versus_test(
+            opponent=axelrod.TitForTat(),
+            expected_actions=[(C, C), (D, C), (C, D)] + [(C, C)] * 15,
+        )
+
+        self.versus_test(
+            opponent=axelrod.Cooperator(),
+            expected_actions=[(C, C), (D, C), (C, C), (C, C)] + [(D, C)] * 15,
+        )
+
+        self.versus_test(
+            opponent=axelrod.Defector(),
+            expected_actions=[(C, D), (D, D), (C, D), (C, D)] + [(D, D)] * 15,
+        )
+
+    def test_other_initial_actions(self):
+        self.versus_test(
+            opponent=axelrod.TitForTat(),
+            expected_actions=[(C, C), (C, C), (D, C)] + [(D, D)] * 15,
+            init_kwargs={"initial_actions": [C, C]},
+        )
+
+        # Extreme case: no memory at all, it's simply a defector
+        self.versus_test(
+            opponent=axelrod.TitForTat(),
+            expected_actions=[(D, C)] + [(D, D)] * 15,
+            init_kwargs={"initial_actions": []},
+        )
+
+
 class TestProber(TestPlayer):
 
     name = "Prober"

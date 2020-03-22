@@ -241,3 +241,64 @@ class TestComplete(unittest.TestCase):
         for vertex in range(4):
             self.assertEqual(set(g.out_vertices(vertex)), set(neighbors))
             self.assertEqual(set(g.in_vertices(vertex)), set(neighbors))
+
+
+class TestAttachedComplete(unittest.TestCase):
+    def test_size_2(self):
+        g = graph.attached_complete_graphs(2, loops=False)
+        self.assertEqual(g.vertices, ['0:0', '0:1', '1:0', '1:1'])
+        self.assertEqual(
+            g.edges,
+            [('0:0', '0:1'), ('0:1', '0:0'), ('1:0', '1:1'), ('1:1', '1:0'), ('0:0', '1:0'), ('1:0', '0:0')]
+        )
+        self.assertEqual(g.directed, False)
+
+    def test_size_3(self):
+        g = graph.attached_complete_graphs(3, loops=False)
+        self.assertEqual(g.vertices, ['0:0', '0:1', '0:2', '1:0', '1:1', '1:2'])
+        self.assertEqual(
+            g.edges,
+            [('0:0', '0:1'),
+             ('0:1', '0:0'),
+             ('0:0', '0:2'),
+             ('0:2', '0:0'),
+             ('0:1', '0:2'),
+             ('0:2', '0:1'),
+             ('1:0', '1:1'),
+             ('1:1', '1:0'),
+             ('1:0', '1:2'),
+             ('1:2', '1:0'),
+             ('1:1', '1:2'),
+             ('1:2', '1:1'),
+             ('0:0', '1:0'),
+             ('1:0', '0:0')]
+        )
+        self.assertEqual(g.directed, False)
+
+    def test_size_3_with_loops(self):
+        g = graph.attached_complete_graphs(3, loops=True)
+        self.assertEqual(g.vertices, ['0:0', '0:1', '0:2', '1:0', '1:1', '1:2'])
+        self.assertEqual(
+            g.edges,
+            [('0:0', '0:1'),
+             ('0:1', '0:0'),
+             ('0:0', '0:2'),
+             ('0:2', '0:0'),
+             ('0:1', '0:2'),
+             ('0:2', '0:1'),
+             ('1:0', '1:1'),
+             ('1:1', '1:0'),
+             ('1:0', '1:2'),
+             ('1:2', '1:0'),
+             ('1:1', '1:2'),
+             ('1:2', '1:1'),
+             ('0:0', '1:0'),
+             ('1:0', '0:0'),
+             ('0:0', '0:0'),
+             ('0:1', '0:1'),
+             ('0:2', '0:2'),
+             ('1:0', '1:0'),
+             ('1:1', '1:1'),
+             ('1:2', '1:2')]
+        )
+        self.assertEqual(g.directed, False)

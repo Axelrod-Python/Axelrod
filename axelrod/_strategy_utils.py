@@ -4,7 +4,6 @@ import itertools
 from functools import lru_cache
 
 from axelrod.action import Action
-from axelrod.player import update_history
 from axelrod.strategies.cooperator import Cooperator
 from axelrod.strategies.defector import Defector
 
@@ -56,7 +55,7 @@ def inspect_strategy(inspector, opponent):
     ----------
     inspector: Player
         The player doing the inspecting
-    oponnent: Player
+    opponent: Player
         The player being inspected
 
     Returns
@@ -91,8 +90,8 @@ def _limited_simulate_play(player_1, player_2, h1):
         The next action for first player.
     """
     h2 = inspect_strategy(player_1, player_2)
-    update_history(player_1, h1)
-    update_history(player_2, h2)
+    player_1.update_history(h1, h2)
+    player_2.update_history(h2, h1)
 
 
 def simulate_match(player_1, player_2, strategy, rounds=10):
@@ -190,6 +189,5 @@ def recursive_thue_morse(n):
 
 def thue_morse_generator(start=0):
     """A generator for the Thue-Morse sequence."""
-
     for n in itertools.count(start):
         yield recursive_thue_morse(n)

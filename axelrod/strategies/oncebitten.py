@@ -128,35 +128,3 @@ class ForgetfulFoolMeOnce(Player):
         if self.D_count > 1:
             return D
         return C
-
-    def reset(self):
-        super().reset()
-        self.D_count = 0
-
-
-class FoolMeForever(Player):
-    """
-    Fool me once, shame on me. Teach a man to fool me and I'll be fooled for
-    the rest of my life.
-
-    Names:
-
-    - Fool Me Forever: Original name by Marc Harper
-    """
-
-    name = "Fool Me Forever"
-    classifier = {
-        "memory_depth": float("inf"),  # Long memory
-        "stochastic": False,
-        "makes_use_of": set(),
-        "long_run_time": False,
-        "inspects_source": False,
-        "manipulates_source": False,
-        "manipulates_state": False,
-    }
-
-    @staticmethod
-    def strategy(opponent: Player) -> Action:
-        if opponent.defections > 0:
-            return C
-        return D
