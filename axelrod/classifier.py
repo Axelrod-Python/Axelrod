@@ -45,7 +45,8 @@ all_classifiers = [
 
 
 def rebuild_classifier_table(classifiers: List[Classifier],
-                             players: List[Player]) -> None:
+                             players: List[Player],
+                             path: Text = ALL_CLASSIFIERS_PATH) -> None:
     all_player_dicts = dict()
     for p in players:
         new_player_dict = dict()
@@ -53,7 +54,7 @@ def rebuild_classifier_table(classifiers: List[Classifier],
             new_player_dict[c.name] = c.calc_for_player(p)
         all_player_dicts[p.name] = new_player_dict
 
-    with open(ALL_CLASSIFIERS_PATH, 'w') as f:
+    with open(path, 'w') as f:
         yaml.dump(all_player_dicts, f)
 
 
