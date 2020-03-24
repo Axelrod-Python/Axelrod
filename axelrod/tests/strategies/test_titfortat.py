@@ -323,6 +323,183 @@ class TestOmegaTFT(TestPlayer):
         self.versus_test(axelrod.Alternator(), expected_actions=actions)
 
 
+class TestGradual(TestPlayer):
+
+    name = "Gradual"
+    player = axelrod.Gradual
+    expected_classifier = {
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+    def test_strategy(self):
+        # Punishes defection with a growing number of defections and calms
+        # the opponent with two cooperations in a row.
+        opponent = axelrod.MockPlayer(actions=[C])
+        actions = [(C, C)]
+        self.versus_test(
+            opponent,
+            expected_actions=actions,
+            attrs={
+                "calm_count": 0,
+                "punish_count": 0,
+            },
+        )
+
+        opponent = axelrod.MockPlayer(actions=[D])
+        actions = [(C, D)]
+        self.versus_test(
+            opponent,
+            expected_actions=actions,
+            attrs={
+                "calm_count": 0,
+                "punish_count": 0,
+            },
+        )
+
+        opponent = axelrod.MockPlayer(actions=[D, C])
+        actions = [(C, D), (D, C)]
+        self.versus_test(
+            opponent,
+            expected_actions=actions,
+            attrs={
+                "calm_count": 2,
+                "punish_count": 0,
+            },
+        )
+
+        opponent = axelrod.MockPlayer(actions=[D, C, C])
+        actions = [(C, D), (D, C), (C, C)]
+        self.versus_test(
+            opponent,
+            expected_actions=actions,
+            attrs={
+                "calm_count": 1,
+                "punish_count": 0,
+            },
+        )
+
+        opponent = axelrod.MockPlayer(actions=[D, C, D, C])
+        actions = [(C, D), (D, C), (C, D), (C, C)]
+        self.versus_test(
+            opponent,
+            expected_actions=actions,
+            attrs={
+                "calm_count": 0,
+                "punish_count": 0,
+            },
+        )
+
+        opponent = axelrod.MockPlayer(actions=[D, C, D, C, C])
+        actions = [(C, D), (D, C), (C, D), (C, C), (C, C)]
+        self.versus_test(
+            opponent,
+            expected_actions=actions,
+            attrs={
+                "calm_count": 0,
+                "punish_count": 0,
+            },
+        )
+
+        opponent = axelrod.MockPlayer(actions=[D, C, D, C, C, C])
+        actions = [(C, D), (D, C), (C, D), (C, C), (C, C), (C, C)]
+        self.versus_test(
+            opponent,
+            expected_actions=actions,
+            attrs={
+                "calm_count": 0,
+                "punish_count": 0,
+            },
+        )
+
+        opponent = axelrod.MockPlayer(actions=[D, C, D, C, C, C, D, C])
+        actions = [(C, D), (D, C), (C, D), (C, C), (C, C), (C, C), (C, D), (D, C)]
+        self.versus_test(
+            opponent,
+            expected_actions=actions,
+            attrs={
+                "calm_count": 2,
+                "punish_count": 2,
+            },
+        )
+
+        opponent = axelrod.MockPlayer(actions=[D, C, D, C, C, D, D, D])
+        actions = [(C, D), (D, C), (C, D), (C, C), (C, C), (C, D), (D, D), (D, D)]
+        self.versus_test(
+            opponent,
+            expected_actions=actions,
+            attrs={
+                "calm_count": 2,
+                "punish_count": 1,
+            },
+        )
+
+        opponent = axelrod.Defector()
+        actions = [
+                (C, D),
+                (D, D), # 1 defection as a response to the 1 defection by opponent
+                (C, D),
+                (C, D),
+                (D, D), # starts defecting after a total of 4 defections by the opponent
+                (D, D),
+                (D, D),
+                (D, D), # 4 defections
+                (C, D),
+                (C, D),
+                (D, D), # Start defecting after a total of 10 defections by the opponent
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),  # 10 defections
+                (C, D),
+                (C, D),
+                (D, D), # starts defecting after 22 defections by the opponent
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D), # 22 defections
+                (C, D),
+                (C, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+        ]
+        self.versus_test(
+            opponent,
+            expected_actions=actions,
+            attrs={
+                "calm_count": 2,
+                "punish_count": 42,
+            },
+        )
+
 class TestOriginalGradual(TestPlayer):
 
     name = "Original Gradual"
@@ -466,6 +643,9 @@ class TestOriginalGradual(TestPlayer):
         Dilemma" Proc. Artif. Life 1996
 
         This test just ensures that the strategy is as was originally defined.
+
+        See https://github.com/Axelrod-Python/Axelrod/issues/1294 for another
+        discussion of this.
         """
         player = self.player()
 

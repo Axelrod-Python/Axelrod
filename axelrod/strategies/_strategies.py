@@ -202,6 +202,7 @@ from .titfortat import (
     ContriteTitForTat,
     DynamicTwoTitsForTat,
     EugineNier,
+    Gradual,
     HardTitFor2Tats,
     HardTitForTat,
     Michaelos,
