@@ -447,6 +447,7 @@ class OriginalGradual(Player):
 
         return C
 
+
 class Gradual(Player):
     """
     Similar to OriginalGradual, this is a player that punishes defections with a
@@ -493,7 +494,6 @@ class Gradual(Player):
         if len(self.history) == 0:
             return C
 
-
         if self.punish_count > 0:
             self.punish_count -= 1
             return D
@@ -507,7 +507,6 @@ class Gradual(Player):
             self.calm_count = 2
             return D
         return C
-
 
 
 @TrackHistoryTransformer(name_prefix=None)
