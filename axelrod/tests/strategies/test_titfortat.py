@@ -682,7 +682,7 @@ class TestOriginalGradual(TestPlayer):
     def test_output_from_literature(self):
         """
         This strategy is not fully described in the literature, however the
-        following two results are reported in:
+        scores for the strategy against a set of opponents is reported
 
         Bruno Beaufils, Jean-Paul Delahaye, Philippe Mathie
         "Our Meeting With Gradual: A Good Strategy For The Iterated Prisoner's
@@ -693,17 +693,41 @@ class TestOriginalGradual(TestPlayer):
         See https://github.com/Axelrod-Python/Axelrod/issues/1294 for another
         discussion of this.
         """
-        player = self.player()
+        players = [axelrod.Cooperator(),
+                   axelrod.Defector(),
+                   axelrod.Random(),
+                   axelrod.TitForTat(),
+                   axelrod.Grudger(),
+                   axelrod.CyclerDDC(),
+                   axelrod.CyclerCCD(),
+                   axelrod.GoByMajority(),
+                   axelrod.SuspiciousTitForTat(),
+                   axelrod.Prober(),
+                   self.player(),
+                   axelrod.WinStayLoseShift(),
+                   ]
 
-        opp1 = axelrod.Defector()
-        match = axelrod.Match((player, opp1), 1000)
-        match.play()
-        self.assertEqual(match.final_score(), (915, 1340))
-
-        opp2 = axelrod.CyclerCCD()
-        match = axelrod.Match((player, opp2), 1000)
-        match.play()
-        self.assertEqual(match.final_score(), (3472, 767))
+        axelrod.seed(1)
+        turns = 1000
+        tournament = axelrod.Tournament(players, turns=turns, repetitions=1)
+        results = tournament.play(progress_bar=False)
+        scores = [round(average_score_per_turn * 1000, 1)
+                  for average_score_per_turn in results.payoff_matrix[-2]]
+        expected_scores = [
+                    3000.0,
+                    915.0,
+                    2763.0,
+                    3000.0,
+                    3000.0,
+                    2219.0,
+                    3472.0,
+                    3000.0,
+                    2996.0,
+                    2999.0,
+                    3000.0,
+                    3000.0,
+                ]
+        self.assertEqual(scores, expected_scores)
 
 
 class TestContriteTitForTat(TestPlayer):
