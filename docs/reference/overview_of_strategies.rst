@@ -377,8 +377,9 @@ probability randomly defects. Default value for a probability of defection is
 Beaufils et al.'s tournament (1997)
 -----------------------------------
 
-In 1997, [Beaufils1997]_ presented used a tournament to describe a new strategy
-of their called "Gradual". The description given in the paper of "Gradual" is:
+In 1997, [Beaufils1997]_ the authors used a tournament to describe a new
+strategy of their called "Gradual". The description given in the paper of
+"Gradual" is:
 
     This strategy acts as tit-for-tat, except when it is time to forgive and
     remember the past. It uses cooperation on the first move and then continues
