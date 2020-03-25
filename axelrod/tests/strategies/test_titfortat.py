@@ -500,6 +500,52 @@ class TestGradual(TestPlayer):
             },
         )
 
+    def test_specific_set_of_results(self):
+        """
+        This tests specific reported results as discussed in
+        https://github.com/Axelrod-Python/Axelrod/issues/1294
+
+        The results there used a version of mistrust with a bug that corresponds
+        to a memory one player that start by defecting and only cooperates if
+        both players cooperated in the previous round.
+        """
+        mistrust_with_bug = axelrod.MemoryOnePlayer(
+                initial=D,
+                four_vector=(1, 0, 0, 0),
+                )
+        players = [
+               self.player(),
+               axelrod.TitForTat(),
+               axelrod.GoByMajority(),
+               axelrod.Grudger(),
+               axelrod.WinStayLoseShift(),
+               axelrod.Prober(),
+               axelrod.Defector(),
+               mistrust_with_bug,
+               axelrod.Cooperator(),
+               axelrod.CyclerCCD(),
+               axelrod.CyclerDDC(),
+        ]
+        axelrod.seed(1)
+        tournament = axelrod.Tournament(players, turns=1000, repetitions=1)
+        results = tournament.play(progress_bar=False)
+        scores = [round(average_score_per_turn * 1000, 1)
+                  for average_score_per_turn in results.payoff_matrix[0]]
+        expected_scores = [
+                3000.0,
+                3000.0,
+                3000.0,
+                3000.0,
+                3000.0,
+                2999.0,
+                983.0,
+                983.0,
+                3000.0,
+                3596.0,
+                2302.0,
+                ]
+        self.assertEqual(scores, expected_scores)
+
 class TestOriginalGradual(TestPlayer):
 
     name = "Original Gradual"
