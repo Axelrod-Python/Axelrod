@@ -455,13 +455,11 @@ The :code:`OriginalGradual` strategy implemented has the following description:
     The `punishment_limit` is incremented whenever the opponent defects and the
     strategy is not in either calming or punishing state.
 
-Note that this is not the strategy that was intended to have been written in
-[Beaufils1997]_. It appears that the authors had a bug in their code.
-This was brought to the attention of the maintainers of the
-library and is documented here
-`<https://github.com/Axelrod-Python/Axelrod/issues/1294>`_. The strategy that was
-intended to be written and that is implemented at [CRISTAL-SMAC2018]_ has the
-following description:
+Note that a different version of Gradual appears in [CRISTAL-SMAC2018]_.
+This was brought to the attention of the maintainers of the library by one of the
+authors of [Beaufils1997]_ and is documented here `<https://github.com/Axelrod-Python/Axelrod/issues/1294>`_.
+
+The strategy implemented in [CRISTAL-SMAC2018]_ and defined here as :code:`Gradual` has the following description:
 
     Similar to OriginalGradual, this is a player that punishes defections with a
     growing number of defections but after punishing for `punishment_limit`
