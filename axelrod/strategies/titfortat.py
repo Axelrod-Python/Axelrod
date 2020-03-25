@@ -449,7 +449,6 @@ class OriginalGradual(Player):
 
 class Gradual(Player):
     """
-
     Similar to OriginalGradual, this is a player that punishes defections with a
     growing number of defections but after punishing for `punishment_limit`
     number of times enters a calming state and cooperates no matter what the
