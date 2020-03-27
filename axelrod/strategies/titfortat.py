@@ -384,18 +384,27 @@ class OmegaTFT(Player):
         return move
 
 
-class Gradual(Player):
+class OriginalGradual(Player):
     """
     A player that punishes defections with a growing number of defections
-    but after punishing enters a calming state and cooperates no matter what
-    the opponent does for two rounds.
+    but after punishing for `punishment_limit` number of times enters a calming
+    state and cooperates no matter what the opponent does for two rounds.
+
+    The `punishment_limit` is incremented whenever the opponent defects and the
+    strategy is not in either calming or punishing state.
+
+    Note that `Gradual` appears in [CRISTAL-SMAC2018]_ however that version of
+    `Gradual` does not give the results reported in [Beaufils1997]_ which is the
+    paper that first introduced the strategy. For a longer discussion of this
+    see: https://github.com/Axelrod-Python/Axelrod/issues/1294. This is why this
+    strategy has been renamed to `OriginalGradual`.
 
     Names:
 
     - Gradual: [Beaufils1997]_
      """
 
-    name = "Gradual"
+    name = "Original Gradual"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -436,6 +445,67 @@ class Gradual(Player):
             self.punishment_limit += 1
             return D
 
+        return C
+
+
+class Gradual(Player):
+    """
+    Similar to OriginalGradual, this is a player that punishes defections with a
+    growing number of defections but after punishing for `punishment_limit`
+    number of times enters a calming state and cooperates no matter what the
+    opponent does for two rounds.
+
+    This version of Gradual is an update of `OriginalGradual` and the difference
+    is that the `punishment_limit` is incremented whenever the opponent defects
+    (regardless of the state of the player).
+
+    Note that this version of `Gradual` appears in [CRISTAL-SMAC2018]_ however
+    this version of
+    `Gradual` does not give the results reported in [Beaufils1997]_ which is the
+    paper that first introduced the strategy. For a longer discussion of this
+    see: https://github.com/Axelrod-Python/Axelrod/issues/1294.
+
+    This version is based on  https://github.com/cristal-smac/ipd/blob/master/src/strategies.py#L224
+
+    Names:
+
+    - Gradual: [CRISTAL-SMAC2018]_
+    """
+
+    name = "Gradual"
+    classifier = {
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+    def __init__(self) -> None:
+
+        super().__init__()
+        self.calm_count = 0
+        self.punish_count = 0
+
+    def strategy(self, opponent: Player) -> Action:
+
+        if len(self.history) == 0:
+            return C
+
+        if self.punish_count > 0:
+            self.punish_count -= 1
+            return D
+
+        if self.calm_count > 0:
+            self.calm_count -= 1
+            return C
+
+        if opponent.history[-1] == D:
+            self.punish_count = opponent.defections - 1
+            self.calm_count = 2
+            return D
         return C
 
 

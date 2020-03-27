@@ -208,6 +208,7 @@ from .titfortat import (
     Michaelos,
     NTitsForMTats,
     OmegaTFT,
+    OriginalGradual,
     RandomTitForTat,
     SlowTitForTwoTats2,
     SneakyTitForTat,
