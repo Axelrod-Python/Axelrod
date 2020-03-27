@@ -1,5 +1,4 @@
-from ..classifier import Classifiers
-from ..player import is_basic, obey_axelrod
+from ..classifier import Classifiers, is_basic, obey_axelrod
 from ._strategies import *
 from ._filters import passes_filterset
 
@@ -85,10 +84,10 @@ basic_strategies = [s for s in all_strategies if is_basic(s())]
 strategies = [s for s in all_strategies if obey_axelrod(s())]
 
 long_run_time_strategies = [
-    s for s in all_strategies if Classifiers().get("long_run_time", s)
+    s for s in all_strategies if Classifiers().get("long_run_time", s())
 ]
 short_run_time_strategies = [
-    s for s in strategies if not Classifiers().get("long_run_time", s)
+    s for s in strategies if not Classifiers().get("long_run_time", s())
 ]
 cheating_strategies = [s for s in all_strategies if not obey_axelrod(s())]
 

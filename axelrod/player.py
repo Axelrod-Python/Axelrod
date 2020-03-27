@@ -7,44 +7,11 @@ from typing import Any, Dict
 import numpy as np
 
 from axelrod.action import Action
-from axelrod.classifier import Classifiers
 from axelrod.game import DefaultGame
 from axelrod.history import History
 from axelrod.random_ import random_flip
 
 C, D = Action.C, Action.D
-
-
-# Strategy classifiers
-
-
-def is_basic(s):
-    """
-    Defines criteria for a strategy to be considered 'basic'
-    """
-    stochastic = Classifiers().get("stochastic", s)
-    depth = Classifiers().get("depth", s)
-    inspects_source = Classifiers().get("inspects_source", s)
-    manipulates_source = Classifiers().get("manipulates_source", s)
-    manipulates_state = Classifiers().get("manipulates_state", s)
-    return (
-        not stochastic
-        and not inspects_source
-        and not manipulates_source
-        and not manipulates_state
-        and depth in (0, 1)
-    )
-
-
-def obey_axelrod(s):
-    """
-    A function to check if a strategy obeys Axelrod's original tournament
-    rules.
-    """
-    for c in ["inspects_source", "manipulates_source", "manipulates_state"]:
-        if Classifiers().get(c, s):
-            return False
-    return True
 
 
 def simultaneous_play(player, coplayer, noise=0):

@@ -1,12 +1,39 @@
 """Tests for the classification."""
 
+import os
 import unittest
+from typing import Text
+
+import yaml
 
 import axelrod as axl
-from axelrod.classifier import Classifiers
+from axelrod.classifier import Classifier, Classifiers, rebuild_classifier_table
 
 
 class TestClassification(unittest.TestCase):
+    def test_classifier_build(self):
+        test_path = "../test_outputs/classifier_test.yaml"
+
+        # Just returns the name of the player.  For testing.
+        name_classifier = Classifier[Text]("name", lambda player: player.name)
+        rebuild_classifier_table(classifiers=[name_classifier],
+                                 players=[axl.Cooperator, axl.Defector],
+                                 path=test_path)
+
+        filename = os.path.join("../..", test_path)
+        with open(filename, 'r') as f:
+            all_player_dicts = yaml.load(f, Loader=yaml.FullLoader)
+
+        self.assertDictEqual(all_player_dicts,
+                             {"Cooperator": {"name": "Cooperator"},
+                              "Defector": {"name": "Defector"}})
+
+    def test_singletonity_of_classifiers_class(self):
+        classifiers_1 = Classifiers()
+        classifiers_2 = Classifiers()
+
+        self.assertIs(classifiers_1, classifiers_2)
+
     def test_known_classifiers(self):
         # A set of dimensions that are known to have been fully applied
         known_keys = [
@@ -223,7 +250,7 @@ class TestStrategies(unittest.TestCase):
             str_reps(axl.long_run_time_strategies)
         )
         self.assertTrue(
-            all(Classifiers().get("long_run_time", s) for s in
+            all(Classifiers().get("long_run_time", s()) for s in
                 axl.long_run_time_strategies)
         )
 
@@ -237,7 +264,7 @@ class TestStrategies(unittest.TestCase):
             str_reps(axl.short_run_time_strategies)
         )
         self.assertFalse(
-            any(Classifiers().get("long_run_time", s) for s in
+            any(Classifiers().get("long_run_time", s()) for s in
                 axl.short_run_time_strategies)
         )
 

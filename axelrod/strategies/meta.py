@@ -4,8 +4,8 @@ import numpy as np
 from numpy.random import choice
 
 from axelrod.action import Action
-from axelrod.classifier import Classifiers
-from axelrod.player import Player, obey_axelrod
+from axelrod.classifier import Classifiers, obey_axelrod
+from axelrod.player import Player
 from axelrod.strategies import TitForTat
 from axelrod.strategy_transformers import NiceTransformer
 from ._strategies import all_strategies
