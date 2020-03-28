@@ -336,6 +336,229 @@ class TestGradual(TestPlayer):
             opponent,
             expected_actions=actions,
             attrs={
+                "calm_count": 0,
+                "punish_count": 0,
+            },
+        )
+
+        opponent = axelrod.MockPlayer(actions=[D])
+        actions = [(C, D)]
+        self.versus_test(
+            opponent,
+            expected_actions=actions,
+            attrs={
+                "calm_count": 0,
+                "punish_count": 0,
+            },
+        )
+
+        opponent = axelrod.MockPlayer(actions=[D, C])
+        actions = [(C, D), (D, C)]
+        self.versus_test(
+            opponent,
+            expected_actions=actions,
+            attrs={
+                "calm_count": 2,
+                "punish_count": 0,
+            },
+        )
+
+        opponent = axelrod.MockPlayer(actions=[D, C, C])
+        actions = [(C, D), (D, C), (C, C)]
+        self.versus_test(
+            opponent,
+            expected_actions=actions,
+            attrs={
+                "calm_count": 1,
+                "punish_count": 0,
+            },
+        )
+
+        opponent = axelrod.MockPlayer(actions=[D, C, D, C])
+        actions = [(C, D), (D, C), (C, D), (C, C)]
+        self.versus_test(
+            opponent,
+            expected_actions=actions,
+            attrs={
+                "calm_count": 0,
+                "punish_count": 0,
+            },
+        )
+
+        opponent = axelrod.MockPlayer(actions=[D, C, D, C, C])
+        actions = [(C, D), (D, C), (C, D), (C, C), (C, C)]
+        self.versus_test(
+            opponent,
+            expected_actions=actions,
+            attrs={
+                "calm_count": 0,
+                "punish_count": 0,
+            },
+        )
+
+        opponent = axelrod.MockPlayer(actions=[D, C, D, C, C, C])
+        actions = [(C, D), (D, C), (C, D), (C, C), (C, C), (C, C)]
+        self.versus_test(
+            opponent,
+            expected_actions=actions,
+            attrs={
+                "calm_count": 0,
+                "punish_count": 0,
+            },
+        )
+
+        opponent = axelrod.MockPlayer(actions=[D, C, D, C, C, C, D, C])
+        actions = [(C, D), (D, C), (C, D), (C, C), (C, C), (C, C), (C, D), (D, C)]
+        self.versus_test(
+            opponent,
+            expected_actions=actions,
+            attrs={
+                "calm_count": 2,
+                "punish_count": 2,
+            },
+        )
+
+        opponent = axelrod.MockPlayer(actions=[D, C, D, C, C, D, D, D])
+        actions = [(C, D), (D, C), (C, D), (C, C), (C, C), (C, D), (D, D), (D, D)]
+        self.versus_test(
+            opponent,
+            expected_actions=actions,
+            attrs={
+                "calm_count": 2,
+                "punish_count": 1,
+            },
+        )
+
+        opponent = axelrod.Defector()
+        actions = [
+                (C, D),
+                (D, D), # 1 defection as a response to the 1 defection by opponent
+                (C, D),
+                (C, D),
+                (D, D), # starts defecting after a total of 4 defections by the opponent
+                (D, D),
+                (D, D),
+                (D, D), # 4 defections
+                (C, D),
+                (C, D),
+                (D, D), # Start defecting after a total of 10 defections by the opponent
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),  # 10 defections
+                (C, D),
+                (C, D),
+                (D, D), # starts defecting after 22 defections by the opponent
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D), # 22 defections
+                (C, D),
+                (C, D),
+                (D, D),
+                (D, D),
+                (D, D),
+                (D, D),
+        ]
+        self.versus_test(
+            opponent,
+            expected_actions=actions,
+            attrs={
+                "calm_count": 2,
+                "punish_count": 42,
+            },
+        )
+
+    def test_specific_set_of_results(self):
+        """
+        This tests specific reported results as discussed in
+        https://github.com/Axelrod-Python/Axelrod/issues/1294
+
+        The results there used a version of mistrust with a bug that corresponds
+        to a memory one player that start by defecting and only cooperates if
+        both players cooperated in the previous round.
+        """
+        mistrust_with_bug = axelrod.MemoryOnePlayer(
+                initial=D,
+                four_vector=(1, 0, 0, 0),
+                )
+        players = [
+               self.player(),
+               axelrod.TitForTat(),
+               axelrod.GoByMajority(),
+               axelrod.Grudger(),
+               axelrod.WinStayLoseShift(),
+               axelrod.Prober(),
+               axelrod.Defector(),
+               mistrust_with_bug,
+               axelrod.Cooperator(),
+               axelrod.CyclerCCD(),
+               axelrod.CyclerDDC(),
+        ]
+        axelrod.seed(1)
+        tournament = axelrod.Tournament(players, turns=1000, repetitions=1)
+        results = tournament.play(progress_bar=False)
+        scores = [round(average_score_per_turn * 1000, 1)
+                  for average_score_per_turn in results.payoff_matrix[0]]
+        expected_scores = [
+                3000.0,
+                3000.0,
+                3000.0,
+                3000.0,
+                3000.0,
+                2999.0,
+                983.0,
+                983.0,
+                3000.0,
+                3596.0,
+                2302.0,
+                ]
+        self.assertEqual(scores, expected_scores)
+
+class TestOriginalGradual(TestPlayer):
+
+    name = "Original Gradual"
+    player = axelrod.OriginalGradual
+    expected_classifier = {
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+    def test_strategy(self):
+        # Punishes defection with a growing number of defections and calms
+        # the opponent with two cooperations in a row.
+        opponent = axelrod.MockPlayer(actions=[C])
+        actions = [(C, C)]
+        self.versus_test(
+            opponent,
+            expected_actions=actions,
+            attrs={
                 "calming": False,
                 "punishing": False,
                 "punishment_count": 0,
@@ -452,25 +675,52 @@ class TestGradual(TestPlayer):
     def test_output_from_literature(self):
         """
         This strategy is not fully described in the literature, however the
-        following two results are reported in:
+        scores for the strategy against a set of opponents is reported
 
         Bruno Beaufils, Jean-Paul Delahaye, Philippe Mathie
         "Our Meeting With Gradual: A Good Strategy For The Iterated Prisoner's
         Dilemma" Proc. Artif. Life 1996
 
         This test just ensures that the strategy is as was originally defined.
+
+        See https://github.com/Axelrod-Python/Axelrod/issues/1294 for another
+        discussion of this.
         """
-        player = self.player()
+        players = [axelrod.Cooperator(),
+                   axelrod.Defector(),
+                   axelrod.Random(),
+                   axelrod.TitForTat(),
+                   axelrod.Grudger(),
+                   axelrod.CyclerDDC(),
+                   axelrod.CyclerCCD(),
+                   axelrod.GoByMajority(),
+                   axelrod.SuspiciousTitForTat(),
+                   axelrod.Prober(),
+                   self.player(),
+                   axelrod.WinStayLoseShift(),
+                   ]
 
-        opp1 = axelrod.Defector()
-        match = axelrod.Match((player, opp1), 1000)
-        match.play()
-        self.assertEqual(match.final_score(), (915, 1340))
-
-        opp2 = axelrod.CyclerCCD()
-        match = axelrod.Match((player, opp2), 1000)
-        match.play()
-        self.assertEqual(match.final_score(), (3472, 767))
+        axelrod.seed(1)
+        turns = 1000
+        tournament = axelrod.Tournament(players, turns=turns, repetitions=1)
+        results = tournament.play(progress_bar=False)
+        scores = [round(average_score_per_turn * 1000, 1)
+                  for average_score_per_turn in results.payoff_matrix[-2]]
+        expected_scores = [
+                    3000.0,
+                    915.0,
+                    2763.0,
+                    3000.0,
+                    3000.0,
+                    2219.0,
+                    3472.0,
+                    3000.0,
+                    2996.0,
+                    2999.0,
+                    3000.0,
+                    3000.0,
+                ]
+        self.assertEqual(scores, expected_scores)
 
 
 class TestContriteTitForTat(TestPlayer):

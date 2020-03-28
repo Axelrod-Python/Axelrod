@@ -373,3 +373,103 @@ NaiveProber
 NAIVE_PROBER is a modification of Tit For Tat strategy which with a small
 probability randomly defects. Default value for a probability of defection is
 0.1.
+
+Beaufils et al.'s tournament (1997)
+-----------------------------------
+
+In 1997, [Beaufils1997]_ the authors used a tournament to describe a new
+strategy of their called "Gradual". The description given in the paper of
+"Gradual" is:
+
+    This strategy acts as tit-for-tat, except when it is time to forgive and
+    remember the past. It uses cooperation on the first move and then continues
+    to do so as long as the other player cooperates. Then after the first
+    defection of the other player, it defects one time and cooperates two times;
+    after the second defection of the opponent, it defects two times and
+    cooperates two times, ... after the nth defection it reacts with n
+    consecutive defections and then calms down its opponent with two
+    cooperations.
+
+This is the only description of the strategy however the paper does include a
+table of results of the tournament. The scores of "Gradual" against the
+opponents (including itself) are:
+
+
+.. csv-table:: Score of Gradual reported in [Beaufils1997]_
+   :header: "Name", "Name used in [Beaufils1997]_", "Score (1000 turns)"
+
+   "Cooperator", "coop", 3000
+   "Defector", "def", 915
+   "Random", "rand", 2815
+   "Tit For Tat", "tft", 3000
+   "Grudger", "spite", 3000
+   "Cycler DDC", "p_nst", 2219
+   "Cycler CCD", "p_kn", 3472
+   "Go By Majority", "sft_mj", 3000
+   "Suspicious Tit For Tat", "mist", 2996
+   "Prober", "prob", 2999
+   "Gradual", "grad", 3000
+   "Win Stay Lose Shift", "pav", 3000
+
+The following code reproduces the above::
+
+    >>> import axelrod as axl
+    >>> players = [axl.Cooperator(),
+    ...            axl.Defector(),
+    ...            axl.Random(),
+    ...            axl.TitForTat(),
+    ...            axl.Grudger(),
+    ...            axl.CyclerDDC(),
+    ...            axl.CyclerCCD(),
+    ...            axl.GoByMajority(),
+    ...            axl.SuspiciousTitForTat(),
+    ...            axl.Prober(),
+    ...            axl.OriginalGradual(),
+    ...            axl.WinStayLoseShift(),
+    ...            ]
+    >>> axl.seed(1)
+    >>> turns = 1000
+    >>> tournament = axl.Tournament(players, turns=turns, repetitions=1)
+    >>> results = tournament.play(progress_bar=False)
+    >>> for average_score_per_turn in results.payoff_matrix[-2]:
+    ...     print(round(average_score_per_turn * turns, 1))
+    3000.0
+    915.0
+    2763.0
+    3000.0
+    3000.0
+    2219.0
+    3472.0
+    3000.0
+    2996.0
+    2999.0
+    3000.0
+    3000.0
+
+The :code:`OriginalGradual` strategy implemented has the following description:
+
+    A player that punishes defections with a growing number of defections
+    but after punishing for `punishment_limit` number of times enters a calming
+    state and cooperates no matter what the opponent does for two rounds.
+
+    The `punishment_limit` is incremented whenever the opponent defects and the
+    strategy is not in either calming or punishing state.
+
+Note that a different version of Gradual appears in [CRISTAL-SMAC2018]_.
+This was brought to the attention of the maintainers of the library by one of the
+authors of [Beaufils1997]_ and is documented here `<https://github.com/Axelrod-Python/Axelrod/issues/1294>`_.
+
+The strategy implemented in [CRISTAL-SMAC2018]_ and defined here as :code:`Gradual` has the following description:
+
+    Similar to OriginalGradual, this is a player that punishes defections with a
+    growing number of defections but after punishing for `punishment_limit`
+    number of times enters a calming state and cooperates no matter what the
+    opponent does for two rounds.
+
+    This version of Gradual is an update of `OriginalGradual` and the difference
+    is that the `punishment_limit` is incremented whenever the opponent defects
+    (regardless of the state of the player).
+
+This highlights the importance of best practice and reproducible computational
+research. Both strategies implemented in this library are fully tested and
+documented clearly and precisely.
