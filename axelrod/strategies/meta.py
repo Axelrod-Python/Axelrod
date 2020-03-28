@@ -618,6 +618,10 @@ class MemoryDecay(MetaPlayer):
         start_strategy_duration: int = 15,
     ):
         super().__init__(team=[start_strategy])
+        # This strategy is stochastic even if none of the team is.  The
+        # MetaPlayer initializer will set stochastic to be False in that case.
+        self.classifier["stochastic"] = True
+
         self.p_memory_delete = p_memory_delete
         self.p_memory_alter = p_memory_alter
         self.loss_value = loss_value
