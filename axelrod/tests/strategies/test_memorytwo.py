@@ -70,8 +70,8 @@ class TestGenericPlayerTwo(unittest.TestCase):
         self.assertFalse(Classifiers().get("stochastic", self.p2))
 
     def test_stochastic_classification(self):
-        self.assertFalse(Classifiers().get("stochastic", self.p3))
-        self.assertFalse(Classifiers().get("stochastic", self.p4))
+        self.assertTrue(Classifiers().get("stochastic", self.p3))
+        self.assertTrue(Classifiers().get("stochastic", self.p4))
 
 
 class TestMemoryTwoPlayer(unittest.TestCase):

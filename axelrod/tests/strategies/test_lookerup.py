@@ -308,11 +308,11 @@ class TestLookerUp(TestPlayer):
 
         mem_depth_3 = axelrod.LookerUp(pattern="C" * 16,
                                        parameters=Plays(1, 3, 0))
-        self.assertEqual(Classifiers().get("memory_depth", mem_depth_1), 3)
+        self.assertEqual(Classifiers().get("memory_depth", mem_depth_3), 3)
 
         mem_depth_inf = axelrod.LookerUp(pattern="CC",
                                          parameters=Plays(0, 0, 1))
-        self.assertEqual(Classifiers().get("memory_depth", mem_depth_1),
+        self.assertEqual(Classifiers().get("memory_depth", mem_depth_inf),
                          float("inf"))
 
     def test_strategy(self):
