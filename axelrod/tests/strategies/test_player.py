@@ -512,14 +512,19 @@ class TestPlayer(unittest.TestCase):
         """
         Test that the memory depth is indeed an upper bound.
         """
+        def get_memory_depth_or_zero(player):
+            # Some of the test strategies have no entry in the classifiers
+            # table, so there isn't logic to load default value of zero.
+            memory = Classifiers().get("memory_depth", player)
+            return memory if memory else 0
+
         player = self.player()
-        memory = Classifiers().get("memory_depth", player)
+        memory = get_memory_depth_or_zero(player)
         if memory < float("inf"):
             for strategy in strategies:
                 player.reset()
                 opponent = strategy()
-                max_memory = max(memory,
-                                 Classifiers().get("memory_depth", opponent))
+                max_memory = max(memory, get_memory_depth_or_zero(opponent))
                 self.assertTrue(
                     test_memory(
                         player=player,
