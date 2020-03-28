@@ -5,6 +5,14 @@ To get the strategy to be recognised by the library we need to add it to the
 files that initialise when someone types :code:`import axelrod`.  This is done
 in the :code:`axelrod/strategies/_strategies.py` file.
 
+To classify the new strategy, run rebuild_classifier_table::
+
+    python rebuild_classifier_table.py
+
+This will update :code:`axelrod/strategies/_strategies.py`.  Check that the
+recorded classifications for the strategies are what you expected, then add this
+file to your git commit.
+
 If you have added your strategy to a file that already existed (perhaps you
 added a new variant of :code:`titfortat` to the :code:`titfortat.py` file),
 simply add your strategy to the list of strategies already imported from
