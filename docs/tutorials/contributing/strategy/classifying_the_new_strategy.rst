@@ -31,9 +31,9 @@ the initialisation depending on input parameters. A good example of this is the
 
     >>> joss = axelrod.FirstByJoss()
     >>> boring_joss = axelrod.FirstByJoss(p=1)
-    >>> Classifiers().get("stochastic", joss)
+    >>> axelrod.Classifiers().get("stochastic", joss)
     True
-    >>> Classifiers().get("stochastic", boring_joss)
+    >>> axelrod.Classifiers().get("stochastic", boring_joss)
     False
 
 A classifier value defined on the instance overrides the value defined for the
