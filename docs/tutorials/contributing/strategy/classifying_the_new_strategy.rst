@@ -4,7 +4,7 @@ Classifying the new strategy
 Every strategy class has a classifier dictionary that gives some classification
 of the strategy according to certain dimensions.  Some of the classifiers have
 formulas that try to compute the value for different strategies.  Where these
-exist, they're overriden by the values defined in this dictionary.  When
+exist, they're overridden by the values defined in this dictionary.  When
 creating a new strategy, you should try to fill out all of the dictionary.
 
 Let us take a look at the dimensions available by looking at :code:`TitForTat`::

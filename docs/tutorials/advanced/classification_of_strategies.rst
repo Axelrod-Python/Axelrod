@@ -28,14 +28,29 @@ Note that instances of the class also have this classifier::
     >>> s.classifier == expected_dictionary
     True
 
-and that we can retrieve individual entries from that :code:`classifier` dictionary::
+The instance starts with a copy of the class's classifier dictionary, but is
+allowed to change this classifier dictionary at any point, and many
+strategies do so upon initialization.
 
-    >>> s = axl.TitForTat
-    >>> s.classifier['memory_depth']
+In addition to the classifier dictionary, each classifier is defined with
+some logic that maps classifier definitions to values.  To learn the
+classification of a strategy, we first look in the strategy's classifier
+dictionary, then if the key is not present, then we refer to this logic.
+This logic must be defined for a class, and not specific instances.
+
+To lookup the classifier of a strategy, using the classifier dict, or the
+strategy's logic as default, we use :code:`Classifiers().get(<classifier>,
+<strategy>)`::
+
+    >>> from axelrod.classifier import Classifiers
+    >>> Classifiers().get('memory_depth', axl.TitForTat())
     1
-    >>> s = axl.Random
-    >>> s.classifier['stochastic']
+    >>> Classifiers().get('stochastic', axl.Random())
     True
+
+Because the logic may take time to run, the script in
+:code:`rebuild_classifier_table.py` pre-calculates these values, and stores to
+:code:`data/all_classifiers.yml`.
 
 We can use this classification to generate sets of strategies according to
 filters which we define in a 'filterset' dictionary and then pass to the
