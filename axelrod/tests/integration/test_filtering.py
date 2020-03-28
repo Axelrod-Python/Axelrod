@@ -52,7 +52,7 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
 
         min_comprehension = set(
             [s for s in strategies if
-             Classifiers().get("memory_depth", s) >= min_memory_depth]
+             Classifiers().get("memory_depth", s()) >= min_memory_depth]
         )
         min_filterset = {"min_memory_depth": min_memory_depth}
         min_filtered = set(filtered_strategies(min_filterset,
@@ -61,7 +61,7 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
 
         max_comprehension = set(
             [s for s in strategies if
-             Classifiers().get("memory_depth", s) <= max_memory_depth]
+             Classifiers().get("memory_depth", s()) <= max_memory_depth]
         )
         max_filterset = {"max_memory_depth": max_memory_depth}
         max_filtered = set(filtered_strategies(max_filterset,
@@ -70,7 +70,7 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
 
         comprehension = set(
             [s for s in strategies if
-             Classifiers().get("memory_depth", s) == memory_depth]
+             Classifiers().get("memory_depth", s()) == memory_depth]
         )
         filterset = {"memory_depth": memory_depth}
         filtered = set(filtered_strategies(filterset, strategies=strategies))
@@ -92,7 +92,7 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
             seed(seed_)
             comprehension = set(
                 [s for s in strategies if set(classifier).issubset(
-                    set(Classifiers().get("makes_use_of", s)))]
+                    set(Classifiers().get("makes_use_of", s())))]
             )
 
             seed(seed_)

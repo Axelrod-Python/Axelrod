@@ -339,7 +339,6 @@ class MetaMajorityMemoryOne(MetaMajority):
         super().__init__(team=team)
         self.classifier["long_run_time"] = False
 
-
 class MetaMajorityFiniteMemory(MetaMajority):
     """MetaMajority with the team of Finite Memory Players
 
