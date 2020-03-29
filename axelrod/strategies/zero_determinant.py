@@ -6,15 +6,44 @@ C, D = Action.C, Action.D
 
 
 class LRPlayer(MemoryOnePlayer):
-    """Abstraction for Linear Relation players. These players enforce a linear
-    difference in stationary payoffs s * (S_xy - l) = S_yx - l, with 0 <= l <= R.
-    The parameter `s` is called the slope and the parameter `l` the
-    baseline payoff. For extortionate strategies, the extortion factor is the
-    inverse of the slope.
+    """
+    Abstraction for Linear Relation players. These players enforce a linear
+    difference in stationary payoffs :math:`s (S_{xy} - l) = S_{yx} - l.`
 
-    This parameterization is Equation 14 in
-    http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0077886.
-    See Figure 2 of the article for a more in-depth explanation.
+    The parameter :math:`s` is called the slope and the parameter :math:`l` the
+    baseline payoff. For extortionate strategies, the extortion factor
+    :math:`\chi` is the inverse of the slope :math:`s`.
+
+    For the standard prisoner's dilemma where :math:`T > R > P > S` and
+    :math:`R > (T + S) / 2 > P`, a pair :math:`(l, s)` is enforceable iff
+
+    .. math::
+       :nowrap:
+
+       \\begin{eqnarray}
+       &P &<= l <= R \\\\
+       &s_{min} &= -\min\\left( \\frac{T - l}{l - S}, \\frac{l - S}{T - l}\\right) <= s <= 1
+       \\end{eqnarray}
+
+    And also that there exists :math:`\\phi` such that
+
+    .. math::
+       :nowrap:
+
+       \\begin{eqnarray}
+          p1 &= P(C|CC) &= 1 - \\phi (1 - s)(R - l) \\\\
+          p2 &= P(C|CD) &= 1 - \\phi (s(l - S) + (T - l)) \\\\
+          p3 &= P(C|DC) &= \\phi ((l - S) + s(T - l)) \\\\
+          p4 &= P(C|DD) &= \\phi (1 - s)(l - P)
+       \\end{eqnarray}
+
+
+    These conditions also force :math:`\\phi >= 0`. For a given pair :math:`(l, s)`
+    there may be multiple such :math:`\\phi`.
+
+    This parameterization is Equation 14 in [Hilbe2013]_.
+    See Figure 2 of the article for a more in-depth explanation. Other game
+    parameters can alter the relations and bounds above.
 
     Names:
 
