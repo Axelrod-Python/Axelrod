@@ -163,12 +163,6 @@ class Classifiers(object):
 
         def return_missing() -> None:
             """What to do with a missing entry."""
-            nonlocal classifier
-            nonlocal player
-
-            print("Classifier {} not found for {}.".format(classifier,
-                                                           player.name))
-            print("Consider rebuilding classifier table.")
             return None
 
         if player.name not in cls.all_player_dicts:
