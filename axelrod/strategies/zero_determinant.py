@@ -31,10 +31,10 @@ class LRPlayer(MemoryOnePlayer):
        :nowrap:
 
        \\begin{eqnarray}
-          p1 &= P(C|CC) &= 1 - \\phi (1 - s)(R - l) \\\\
-          p2 &= P(C|CD) &= 1 - \\phi (s(l - S) + (T - l)) \\\\
-          p3 &= P(C|DC) &= \\phi ((l - S) + s(T - l)) \\\\
-          p4 &= P(C|DD) &= \\phi (1 - s)(l - P)
+          p_1 &= P(C|CC) &= 1 - \\phi (1 - s)(R - l) \\\\
+          p_2 &= P(C|CD) &= 1 - \\phi (s(l - S) + (T - l)) \\\\
+          p_3 &= P(C|DC) &= \\phi ((l - S) + s(T - l)) \\\\
+          p_4 &= P(C|DD) &= \\phi (1 - s)(l - P)
        \\end{eqnarray}
 
 
