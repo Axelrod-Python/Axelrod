@@ -2,7 +2,6 @@ from collections import Counter, namedtuple
 import csv
 import itertools
 from multiprocessing import cpu_count
-from typing import List
 import warnings
 
 import numpy as np
@@ -118,12 +117,9 @@ class ResultSet:
             alternative=0,
         )
 
-        self.wins = self._reshape_two_dim_list(
-            sum_per_player_repetition_df["Win"])
-        self.scores = self._reshape_two_dim_list(
-            sum_per_player_repetition_df["Score"])
-        self.normalised_scores = self._reshape_two_dim_list(
-            normalised_scores_series)
+        self.wins = self._reshape_two_dim_list(sum_per_player_repetition_df["Win"])
+        self.scores = self._reshape_two_dim_list(sum_per_player_repetition_df["Score"])
+        self.normalised_scores = self._reshape_two_dim_list(normalised_scores_series)
 
         self.cooperation = self._build_cooperation(
             sum_per_player_opponent_df["Cooperation count"]
@@ -170,8 +166,7 @@ class ResultSet:
         self.ranked_names = self._build_ranked_names()
 
         self.payoff_matrix = self._build_summary_matrix(self.payoffs)
-        self.payoff_stddevs = self._build_summary_matrix(self.payoffs,
-                                                         func=np.std)
+        self.payoff_stddevs = self._build_summary_matrix(self.payoffs, func=np.std)
 
         self.payoff_diffs_means = self._build_payoff_diffs_means()
         self.cooperating_rating = self._build_cooperating_rating()
@@ -271,9 +266,7 @@ class ResultSet:
                     # interactions.
                     row.append(0)
                 else:
-                    row.append(
-                        good_partner_dict.get((player_index, opponent_index),
-                                              0))
+                    row.append(good_partner_dict.get((player_index, opponent_index), 0))
             good_partner_matrix.append(row)
         return good_partner_matrix
 
@@ -341,15 +334,13 @@ class ResultSet:
             for counter in player:
                 total = sum(counter.values())
                 counters.append(
-                    Counter(
-                        {key: value / total for key, value in counter.items()})
+                    Counter({key: value / total for key, value in counter.items()})
                 )
             normalised_state_distribution.append(counters)
         return normalised_state_distribution
 
     @update_progress_bar
-    def _build_state_to_action_distribution(self,
-                                            state_to_action_distribution_series):
+    def _build_state_to_action_distribution(self, state_to_action_distribution_series):
         state_to_action_key_map = {
             "CC to C count": ((C, C), C),
             "CC to D count": ((C, C), D),
@@ -405,8 +396,7 @@ class ResultSet:
         return normalised_state_to_action_distribution
 
     @update_progress_bar
-    def _build_initial_cooperation_count(self,
-                                         initial_cooperation_count_series):
+    def _build_initial_cooperation_count(self, initial_cooperation_count_series):
         initial_cooperation_count_dict = initial_cooperation_count_series.to_dict()
         initial_cooperation_count = [
             initial_cooperation_count_dict.get(player_index, 0)
@@ -421,7 +411,7 @@ class ResultSet:
             normalised_cooperation = [
                 list(np.nan_to_num(row))
                 for row in np.array(self.cooperation)
-                           / sum(map(np.array, self.match_lengths))
+                / sum(map(np.array, self.match_lengths))
             ]
             return normalised_cooperation
 
@@ -436,8 +426,7 @@ class ResultSet:
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             initial_cooperation_rate = list(
-                np.nan_to_num(np.array(
-                    self.initial_cooperation_count) / interactions_array)
+                np.nan_to_num(np.array(self.initial_cooperation_count) / interactions_array)
             )
             return initial_cooperation_rate
 
@@ -462,8 +451,7 @@ class ResultSet:
         The eigenmoses rating as defined in:
         http://www.scottaaronson.com/morality.pdf
         """
-        eigenvector, eigenvalue = eigen.principal_eigenvector(
-            self.vengeful_cooperation)
+        eigenvector, eigenvalue = eigen.principal_eigenvector(self.vengeful_cooperation)
 
         return eigenvector.tolist()
 
@@ -587,8 +575,7 @@ class ResultSet:
         ]
         sum_per_player_opponent_task = df.groupby(groups)[columns].sum()
 
-        ignore_self_interactions_task = df["Player index"] != df[
-            "Opponent index"]
+        ignore_self_interactions_task = df["Player index"] != df["Opponent index"]
         adf = df[ignore_self_interactions_task]
 
         groups = ["Player index", "Repetition"]
@@ -602,8 +589,7 @@ class ResultSet:
         groups = ["Player index"]
         column = "Initial cooperation"
         initial_cooperation_count_task = adf.groupby(groups)[column].sum()
-        interactions_count_task = adf.groupby("Player index")[
-            "Player index"].count()
+        interactions_count_task = adf.groupby("Player index")["Player index"].count()
 
         return (
             mean_per_reps_player_opponent_task,
@@ -623,18 +609,6 @@ class ResultSet:
             other : axelrod.ResultSet
                 Another results set against which to check equality
         """
-
-        def list_equal_with_nans(v1: List[float], v2: List[float]) -> bool:
-            """Matches lists, accounting for NaNs."""
-            if len(v1) != len(v2):
-                return False
-            for i1, i2 in zip(v1, v2):
-                if np.isnan(i1) and np.isnan(i2):
-                    continue
-                if i1 != i2:
-                    return False
-            return True
-
         return all(
             [
                 self.wins == other.wins,
@@ -654,10 +628,8 @@ class ResultSet:
                 self.cooperating_rating == other.cooperating_rating,
                 self.good_partner_matrix == other.good_partner_matrix,
                 self.good_partner_rating == other.good_partner_rating,
-                list_equal_with_nans(self.eigenmoses_rating,
-                                     other.eigenmoses_rating),
-                list_equal_with_nans(self.eigenjesus_rating,
-                                     other.eigenjesus_rating),
+                self.eigenmoses_rating == other.eigenmoses_rating,
+                self.eigenjesus_rating == other.eigenjesus_rating,
             ]
         )
 
@@ -727,8 +699,7 @@ class ResultSet:
             rates = []
             for state in states:
                 counts = [
-                    counter[(state, C)] for counter in player if
-                    counter[(state, C)] > 0
+                    counter[(state, C)] for counter in player if counter[(state, C)] > 0
                 ]
 
                 if len(counts) > 0:
@@ -751,8 +722,7 @@ class ResultSet:
 
         summary_data = []
         for rank, i in enumerate(self.ranking):
-            data = list(summary_measures[i]) + state_prob[i] + state_to_C_prob[
-                i]
+            data = list(summary_measures[i]) + state_prob[i] + state_to_C_prob[i]
             summary_data.append(self.player(rank, *data))
 
         return summary_data
