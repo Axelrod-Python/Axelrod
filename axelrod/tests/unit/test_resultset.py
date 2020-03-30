@@ -195,6 +195,23 @@ class TestResultSet(unittest.TestCase):
             for j in range(len(matrix[i])):
                 matrix[i][j] = 0
 
+    def test_ne(self):
+        rs_1 = axelrod.ResultSet(
+            self.filename,
+            self.players,
+            self.repetitions
+        )
+
+        rs_2 = axelrod.ResultSet(
+            self.filename,
+            self.players,
+            self.repetitions
+        )
+
+        rs_2.wins = -1
+
+        self.assertNotEqual(rs_1, rs_2)
+
     def test_nan_vectors(self):
         rs_1 = axelrod.ResultSet(
             self.filename,
