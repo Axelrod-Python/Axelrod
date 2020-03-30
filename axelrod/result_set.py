@@ -426,7 +426,9 @@ class ResultSet:
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             initial_cooperation_rate = list(
-                np.nan_to_num(np.array(self.initial_cooperation_count) / interactions_array)
+                np.nan_to_num(
+                    np.array(self.initial_cooperation_count) / interactions_array
+                )
             )
             return initial_cooperation_rate
 
@@ -628,8 +630,8 @@ class ResultSet:
                 self.cooperating_rating == other.cooperating_rating,
                 self.good_partner_matrix == other.good_partner_matrix,
                 self.good_partner_rating == other.good_partner_rating,
-                self.eigenmoses_rating == other.eigenmoses_rating,
-                self.eigenjesus_rating == other.eigenjesus_rating,
+                list_equal_with_nans(self.eigenmoses_rating, other.eigenmoses_rating),
+                list_equal_with_nans(self.eigenjesus_rating, other.eigenjesus_rating),
             ]
         )
 
