@@ -195,7 +195,7 @@ class TestResultSet(unittest.TestCase):
             for j in range(len(matrix[i])):
                 matrix[i][j] = 0
 
-    def test_ne(self):
+    def test_ne_vectors(self):
         rs_1 = axelrod.ResultSet(
             self.filename,
             self.players,
@@ -208,7 +208,8 @@ class TestResultSet(unittest.TestCase):
             self.repetitions
         )
 
-        rs_2.wins = -1
+        # A different vector
+        rs_2.eigenmoses_rating = (-1, -1, -1)
 
         self.assertNotEqual(rs_1, rs_2)
 
