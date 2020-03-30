@@ -12,7 +12,9 @@ from axelrod.classifier import Classifier, Classifiers, rebuild_classifier_table
 
 class TestClassification(unittest.TestCase):
     def test_classifier_build(self):
-        test_path = "../test_outputs/classifier_test.yaml"
+        dirname = os.path.dirname(__file__)
+        test_path = os.path.join(dirname,
+                                 "../../../test_outputs/classifier_test.yaml")
 
         # Just returns the name of the player.  For testing.
         name_classifier = Classifier[Text]("name", lambda player: player.name)

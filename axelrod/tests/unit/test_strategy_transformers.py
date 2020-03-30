@@ -407,7 +407,7 @@ class TestTransformers(unittest.TestCase):
         self.assertEqual(Classifiers().get("makes_use_of", p2), set(["length"]))
         self.assertEqual(Classifiers().get("memory_depth", p2), 3)
         self.assertEqual(
-            Classifiers().get("makes_user_of", axelrod.Cooperator()), set([]))
+            Classifiers().get("makes_use_of", axelrod.Cooperator()), set([]))
 
         p2.match_attributes["length"] = 6
         for _ in range(8):
