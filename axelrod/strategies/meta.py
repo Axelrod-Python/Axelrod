@@ -4,7 +4,7 @@ import numpy as np
 from numpy.random import choice
 
 from axelrod.action import Action
-from axelrod.classifier import Classifiers, obey_axelrod
+from axelrod.classifier import Classifiers
 from axelrod.player import Player
 from axelrod.strategies import TitForTat
 from axelrod.strategy_transformers import NiceTransformer
@@ -20,7 +20,7 @@ from .hunter import (
 )
 
 # Needs to be computed manually to prevent circular dependency
-ordinary_strategies = [s for s in all_strategies if obey_axelrod(s)]
+ordinary_strategies = [s for s in all_strategies if Classifiers.obey_axelrod(s)]
 
 C, D = Action.C, Action.D
 

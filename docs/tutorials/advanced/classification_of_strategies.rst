@@ -114,12 +114,12 @@ Some strategies have been classified as having a particularly long run time::
     18
 
 Strategies that :code:`manipulate_source`, :code:`manipulate_state`
-and/or :code:`inspect_source` return :code:`False` for the :code:`obey_axelrod`
-function::
+and/or :code:`inspect_source` return :code:`False` for the
+:code:`Classifier.obey_axelrod` function::
 
     >>> s = axl.MindBender()
-    >>> axl.obey_axelrod(s)
+    >>> axl.Classifier.obey_axelrod(s)
     False
     >>> s = axl.TitForTat()
-    >>> axl.obey_axelrod(s)
+    >>> axl.Classifier.obey_axelrod(s)
     True

@@ -1,4 +1,4 @@
-from ..classifier import Classifiers, is_basic, obey_axelrod
+from ..classifier import Classifiers
 from ._strategies import *
 from ._filters import passes_filterset
 
@@ -80,8 +80,8 @@ axelrod_first_strategies = [
     FirstByAnonymous,
     Random,
 ]
-basic_strategies = [s for s in all_strategies if is_basic(s())]
-strategies = [s for s in all_strategies if obey_axelrod(s())]
+basic_strategies = [s for s in all_strategies if Classifiers.is_basic(s)]
+strategies = [s for s in all_strategies if Classifiers.obey_axelrod(s)]
 
 long_run_time_strategies = [
     s for s in all_strategies if Classifiers["long_run_time"](s)
@@ -89,7 +89,7 @@ long_run_time_strategies = [
 short_run_time_strategies = [
     s for s in strategies if not Classifiers["long_run_time"](s)
 ]
-cheating_strategies = [s for s in all_strategies if not obey_axelrod(s())]
+cheating_strategies = [s for s in all_strategies if not Classifiers.obey_axelrod(s)]
 
 ordinary_strategies = strategies  # This is a legacy and will be removed
 

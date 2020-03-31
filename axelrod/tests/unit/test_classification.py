@@ -151,13 +151,13 @@ class TestClassification(unittest.TestCase):
         ]
 
         for strategy in known_cheaters:
-            self.assertFalse(axl.obey_axelrod(strategy()), msg=strategy)
+            self.assertFalse(axl.Classifiers.obey_axelrod(strategy), msg=strategy)
 
         for strategy in known_basic:
-            self.assertTrue(axl.obey_axelrod(strategy()), msg=strategy)
+            self.assertTrue(axl.Classifiers.obey_axelrod(strategy), msg=strategy)
 
         for strategy in known_ordinary:
-            self.assertTrue(axl.obey_axelrod(strategy()), msg=strategy)
+            self.assertTrue(axl.Classifiers.obey_axelrod(strategy), msg=strategy)
 
     def test_is_basic(self):
         """A test that verifies if the is_basic function works correctly"""
@@ -193,13 +193,13 @@ class TestClassification(unittest.TestCase):
         ]
 
         for strategy in known_cheaters:
-            self.assertFalse(axl.is_basic(strategy()), msg=strategy)
+            self.assertFalse(axl.Classifiers.is_basic(strategy), msg=strategy)
 
         for strategy in known_basic:
-            self.assertTrue(axl.is_basic(strategy()), msg=strategy)
+            self.assertTrue(axl.Classifiers.is_basic(strategy), msg=strategy)
 
         for strategy in known_ordinary:
-            self.assertFalse(axl.is_basic(strategy()), msg=strategy)
+            self.assertFalse(axl.Classifiers.is_basic(strategy), msg=strategy)
 
 
 def str_reps(xs):

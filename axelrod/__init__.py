@@ -10,7 +10,7 @@ from axelrod.plot import Plot
 from axelrod.game import DefaultGame, Game
 from axelrod.history import History, LimitedHistory
 from axelrod.player import Player
-from axelrod.classifier import Classifiers, is_basic, obey_axelrod
+from axelrod.classifier import Classifiers
 from axelrod.evolvable_player import EvolvablePlayer
 from axelrod.mock_player import MockPlayer
 from axelrod.match import Match

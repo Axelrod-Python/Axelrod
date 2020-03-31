@@ -203,37 +203,34 @@ class _Classifiers(object):
 
         return classify_player_for_this_classifier
 
+    @classmethod
+    def is_basic(cls, s: Union[Player, Type[Player]]):
+        """
+        Defines criteria for a strategy to be considered 'basic'
+        """
+        stochastic = cls.__getitem__("stochastic")(s)
+        depth = cls.__getitem__("memory_depth")(s)
+        inspects_source = cls.__getitem__("inspects_source")(s)
+        manipulates_source = cls.__getitem__("manipulates_source")(s)
+        manipulates_state = cls.__getitem__("manipulates_state")(s)
+        return (
+            not stochastic
+            and not inspects_source
+            and not manipulates_source
+            and not manipulates_state
+            and depth in (0, 1)
+        )
+
+    @classmethod
+    def obey_axelrod(cls, s: Union[Player, Type[Player]]):
+        """
+        A function to check if a strategy obeys Axelrod's original tournament
+        rules.
+        """
+        for c in ["inspects_source", "manipulates_source", "manipulates_state"]:
+            if cls.__getitem__(c)(s):
+                return False
+        return True
+
 
 Classifiers = _Classifiers()
-
-
-# Strategy classifiers
-
-
-def is_basic(s):
-    """
-    Defines criteria for a strategy to be considered 'basic'
-    """
-    stochastic = Classifiers["stochastic"](s)
-    depth = Classifiers["memory_depth"](s)
-    inspects_source = Classifiers["inspects_source"](s)
-    manipulates_source = Classifiers["manipulates_source"](s)
-    manipulates_state = Classifiers["manipulates_state"](s)
-    return (
-        not stochastic
-        and not inspects_source
-        and not manipulates_source
-        and not manipulates_state
-        and depth in (0, 1)
-    )
-
-
-def obey_axelrod(s):
-    """
-    A function to check if a strategy obeys Axelrod's original tournament
-    rules.
-    """
-    for c in ["inspects_source", "manipulates_source", "manipulates_state"]:
-        if Classifiers[c](s):
-            return False
-    return True
