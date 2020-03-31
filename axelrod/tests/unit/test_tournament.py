@@ -12,6 +12,7 @@ from multiprocessing import Queue, cpu_count
 from unittest.mock import MagicMock, patch
 
 import axelrod
+from axelrod.load_data_ import axl_filename
 import numpy as np
 import pandas as pd
 from axelrod.tests.property import (
@@ -88,7 +89,7 @@ class TestTournament(unittest.TestCase):
             [200, 200, 1, 200, 200],
         ]
 
-        cls.filename = "test_outputs/test_tournament.csv"
+        cls.filename = axl_filename("test_outputs/test_tournament.csv")
 
     def setUp(self):
         self.test_tournament = axelrod.Tournament(
@@ -733,7 +734,9 @@ class TestTournament(unittest.TestCase):
         )
         tournament.play(filename=self.filename, progress_bar=False)
         df = pd.read_csv(self.filename)
-        expected_df = pd.read_csv("test_outputs/expected_test_tournament.csv")
+        expected_df = pd.read_csv(
+            axl_filename("test_outputs/expected_test_tournament.csv")
+        )
         self.assertTrue(df.equals(expected_df))
 
     def test_write_to_csv_without_results(self):
@@ -747,7 +750,7 @@ class TestTournament(unittest.TestCase):
         tournament.play(filename=self.filename, progress_bar=False, build_results=False)
         df = pd.read_csv(self.filename)
         expected_df = pd.read_csv(
-            "test_outputs/expected_test_tournament_no_results.csv"
+            axl_filename("test_outputs/expected_test_tournament_no_results.csv")
         )
         self.assertTrue(df.equals(expected_df))
 

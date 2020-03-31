@@ -1,6 +1,17 @@
-from typing import Dict, List, Tuple
+from typing import Dict, List, Text, Tuple
 
+import os
 import pkg_resources
+
+
+def axl_filename(axl_path: Text) -> Text:
+    """Get the path to Axelrod/<axl_path> from the working directory."""
+    # Working directory
+    dirname = os.path.dirname(__file__)
+
+    # We go up a dir because this code is located in Axelrod/axelrod and
+    # axl_path is from the top-level Axelrod dir.
+    return os.path.join(dirname, "..", axl_path)
 
 
 def load_file(filename: str, directory: str) -> List[List[str]]:

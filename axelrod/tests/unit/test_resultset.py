@@ -5,6 +5,7 @@ from collections import Counter
 import axelrod
 import axelrod.interaction_utils as iu
 import pandas as pd
+from axelrod.load_data_ import axl_filename
 from axelrod.result_set import create_counter_dict
 from axelrod.tests.property import prob_end_tournaments, tournaments
 from numpy import mean, nanmedian, std
@@ -19,7 +20,7 @@ class TestResultSet(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
 
-        cls.filename = "test_outputs/test_results.csv"
+        cls.filename = axl_filename("test_outputs/test_results.csv")
 
         cls.players = [axelrod.Alternator(), axelrod.TitForTat(), axelrod.Defector()]
         cls.repetitions = 3
@@ -647,7 +648,7 @@ class TestResultSetSpatialStructure(TestResultSet):
     @classmethod
     def setUpClass(cls):
 
-        cls.filename = "test_outputs/test_results_spatial.csv"
+        cls.filename = axl_filename("test_outputs/test_results_spatial.csv")
         cls.players = [axelrod.Alternator(), axelrod.TitForTat(), axelrod.Defector()]
         cls.turns = 5
         cls.edges = [(0, 1), (0, 2)]

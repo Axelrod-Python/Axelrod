@@ -3,6 +3,7 @@ import pickle
 import unittest
 
 from axelrod import Action, Defector, DeterministicCache, Random, TitForTat
+from axelrod.load_data_ import axl_filename
 
 C, D = Action.C, Action.D
 
@@ -12,8 +13,8 @@ class TestDeterministicCache(unittest.TestCase):
     def setUpClass(cls):
         cls.test_key = (TitForTat(), Defector())
         cls.test_value = [(C, D), (D, D), (D, D)]
-        cls.test_save_file = "test_cache_save.txt"
-        cls.test_load_file = "test_cache_load.txt"
+        cls.test_save_file = axl_filename("test_outputs/test_cache_save.txt")
+        cls.test_load_file = axl_filename("test_outputs/test_cache_load.txt")
         test_data_to_pickle = {("Tit For Tat", "Defector"): [(C, D), (D, D), (D, D)]}
         cls.test_pickle = pickle.dumps(test_data_to_pickle)
 
@@ -92,7 +93,7 @@ class TestDeterministicCache(unittest.TestCase):
         self.assertEqual(self.cache[self.test_key], self.test_value)
 
     def test_load_error_for_inccorect_format(self):
-        filename = "test_outputs/test.cache"
+        filename = axl_filename("test_outputs/test.cache")
         with open(filename, "wb") as io:
             pickle.dump(range(5), io)
 
