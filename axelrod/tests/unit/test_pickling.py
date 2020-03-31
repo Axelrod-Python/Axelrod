@@ -1,6 +1,8 @@
-import pickle
-import random
 import unittest
+
+import pickle
+
+import random
 
 import axelrod as axl
 import axelrod.strategy_transformers as st

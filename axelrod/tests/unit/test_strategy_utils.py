@@ -2,8 +2,7 @@
 
 import unittest
 
-import axelrod
-from axelrod import Action, Game, Player
+import axelrod as axl
 from axelrod._strategy_utils import (
     detect_cycle,
     inspect_strategy,
@@ -16,7 +15,7 @@ from axelrod._strategy_utils import (
 from hypothesis import given, settings
 from hypothesis.strategies import integers, lists, sampled_from
 
-C, D = Action.C, Action.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestDetectCycle(unittest.TestCase):
@@ -106,8 +105,8 @@ class TestSimulateMatch(unittest.TestCase):
 
 class TestLookAhead(unittest.TestCase):
     def setUp(self):
-        self.inspector = Player()
-        self.game = Game()
+        self.inspector = axl.Player()
+        self.game = axl.Game()
 
     def test_cooperator(self):
         tft = axelrod.Cooperator()

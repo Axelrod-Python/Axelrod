@@ -1,15 +1,15 @@
 import unittest
+
 from collections import Counter
 
-import axelrod
-from axelrod import Action
+import axelrod as axl
 from axelrod.deterministic_cache import DeterministicCache
 from axelrod.tests.property import games
 
 from hypothesis import example, given
 from hypothesis.strategies import assume, floats, integers
 
-C, D = Action.C, Action.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestMatch(unittest.TestCase):

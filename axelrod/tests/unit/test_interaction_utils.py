@@ -1,12 +1,13 @@
-import tempfile
 import unittest
+
+import tempfile
+
 from collections import Counter
 
-import axelrod
+import axelrod as axl
 import axelrod.interaction_utils as iu
-from axelrod import Action
 
-C, D = Action.C, Action.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestMatch(unittest.TestCase):
@@ -130,8 +131,8 @@ class TestMatch(unittest.TestCase):
 
     def test_read_interactions_from_file(self):
         tmp_file = tempfile.NamedTemporaryFile(mode="w", delete=False)
-        players = [axelrod.Cooperator(), axelrod.Defector()]
-        tournament = axelrod.Tournament(players=players, turns=2, repetitions=3)
+        players = [axl.Cooperator(), axl.Defector()]
+        tournament = axl.Tournament(players=players, turns=2, repetitions=3)
         tournament.play(filename=tmp_file.name)
         tmp_file.close()
         expected_interactions = {

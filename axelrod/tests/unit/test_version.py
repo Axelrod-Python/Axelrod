@@ -1,9 +1,10 @@
 """Tests the version number."""
+
 import unittest
 
-from axelrod import __version__
+import axelrod as axl
 
 
 class TestVersion(unittest.TestCase):
     def test_version(self):
-        self.assertIsInstance(__version__, str)
+        self.assertIsInstance(axl.__version__, str)
