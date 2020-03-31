@@ -1,18 +1,23 @@
-import csv
 import unittest
+
+import csv
+
 from collections import Counter
 
-import axelrod
-import axelrod.interaction_utils as iu
 import pandas as pd
-from axelrod.result_set import create_counter_dict
-from axelrod.tests.property import prob_end_tournaments, tournaments
-from numpy import mean, nanmedian, std
 
 from dask.dataframe.core import DataFrame
+
+from numpy import mean, nanmedian, std
+
+import axelrod as axl
+import axelrod.interaction_utils as iu
+from axelrod.result_set import create_counter_dict
+from axelrod.tests.property import prob_end_tournaments, tournaments
+
 from hypothesis import given, settings
 
-C, D = axelrod.Action.C, axelrod.Action.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestResultSet(unittest.TestCase):
@@ -21,7 +26,7 @@ class TestResultSet(unittest.TestCase):
 
         cls.filename = "test_outputs/test_results.csv"
 
-        cls.players = [axelrod.Alternator(), axelrod.TitForTat(), axelrod.Defector()]
+        cls.players = [axl.Alternator(), axl.TitForTat(), axl.Defector()]
         cls.repetitions = 3
         cls.turns = 5
         cls.edges = [(0, 1), (0, 2), (1, 2)]
@@ -184,14 +189,14 @@ class TestResultSet(unittest.TestCase):
         ]
 
     def test_init(self):
-        rs = axelrod.ResultSet(
+        rs = axl.ResultSet(
             self.filename, self.players, self.repetitions, progress_bar=False
         )
         self.assertEqual(rs.players, self.players)
         self.assertEqual(rs.num_players, len(self.players))
 
     def test_init_multiprocessing(self):
-        rs = axelrod.ResultSet(
+        rs = axl.ResultSet(
             self.filename,
             self.players,
             self.repetitions,
@@ -201,7 +206,7 @@ class TestResultSet(unittest.TestCase):
         self.assertEqual(rs.players, self.players)
         self.assertEqual(rs.num_players, len(self.players))
 
-        rs = axelrod.ResultSet(
+        rs = axl.ResultSet(
             self.filename,
             self.players,
             self.repetitions,
@@ -212,7 +217,7 @@ class TestResultSet(unittest.TestCase):
         self.assertEqual(rs.num_players, len(self.players))
 
     def test_with_progress_bar(self):
-        rs = axelrod.ResultSet(
+        rs = axl.ResultSet(
             self.filename, self.players, self.repetitions, progress_bar=True
         )
         self.assertTrue(rs.progress_bar)
@@ -220,7 +225,7 @@ class TestResultSet(unittest.TestCase):
         self.assertEqual(rs.progress_bar.n, rs.progress_bar.total)
 
     def test_match_lengths(self):
-        rs = axelrod.ResultSet(
+        rs = axl.ResultSet(
             self.filename, self.players, self.repetitions, progress_bar=False
         )
         self.assertIsInstance(rs.match_lengths, list)
@@ -242,7 +247,7 @@ class TestResultSet(unittest.TestCase):
                         self.assertEqual(length, self.turns)
 
     def test_scores(self):
-        rs = axelrod.ResultSet(
+        rs = axl.ResultSet(
             self.filename, self.players, self.repetitions, progress_bar=False
         )
         self.assertIsInstance(rs.scores, list)
@@ -250,7 +255,7 @@ class TestResultSet(unittest.TestCase):
         self.assertEqual(rs.scores, self.expected_scores)
 
     def test_ranking(self):
-        rs = axelrod.ResultSet(
+        rs = axl.ResultSet(
             self.filename, self.players, self.repetitions, progress_bar=False
         )
         self.assertIsInstance(rs.ranking, list)
@@ -258,7 +263,7 @@ class TestResultSet(unittest.TestCase):
         self.assertEqual(rs.ranking, self.expected_ranking)
 
     def test_ranked_names(self):
-        rs = axelrod.ResultSet(
+        rs = axl.ResultSet(
             self.filename, self.players, self.repetitions, progress_bar=False
         )
         self.assertIsInstance(rs.ranked_names, list)
@@ -266,7 +271,7 @@ class TestResultSet(unittest.TestCase):
         self.assertEqual(rs.ranked_names, self.expected_ranked_names)
 
     def test_wins(self):
-        rs = axelrod.ResultSet(
+        rs = axl.ResultSet(
             self.filename, self.players, self.repetitions, progress_bar=False
         )
         self.assertIsInstance(rs.wins, list)
@@ -274,7 +279,7 @@ class TestResultSet(unittest.TestCase):
         self.assertEqual(rs.wins, self.expected_wins)
 
     def test_normalised_scores(self):
-        rs = axelrod.ResultSet(
+        rs = axl.ResultSet(
             self.filename, self.players, self.repetitions, progress_bar=False
         )
         self.assertIsInstance(rs.normalised_scores, list)
@@ -282,7 +287,7 @@ class TestResultSet(unittest.TestCase):
         self.assertEqual(rs.normalised_scores, self.expected_normalised_scores)
 
     def test_payoffs(self):
-        rs = axelrod.ResultSet(
+        rs = axl.ResultSet(
             self.filename, self.players, self.repetitions, progress_bar=False
         )
         self.assertIsInstance(rs.payoffs, list)
@@ -290,7 +295,7 @@ class TestResultSet(unittest.TestCase):
         self.assertEqual(rs.payoffs, self.expected_payoffs)
 
     def test_payoff_matrix(self):
-        rs = axelrod.ResultSet(
+        rs = axl.ResultSet(
             self.filename, self.players, self.repetitions, progress_bar=False
         )
         self.assertIsInstance(rs.payoff_matrix, list)
@@ -298,7 +303,7 @@ class TestResultSet(unittest.TestCase):
         self.assertEqual(rs.payoff_matrix, self.expected_payoff_matrix)
 
     def test_score_diffs(self):
-        rs = axelrod.ResultSet(
+        rs = axl.ResultSet(
             self.filename, self.players, self.repetitions, progress_bar=False
         )
         self.assertIsInstance(rs.score_diffs, list)
@@ -309,7 +314,7 @@ class TestResultSet(unittest.TestCase):
                     self.assertAlmostEqual(score, self.expected_score_diffs[i][j][k])
 
     def test_payoff_diffs_means(self):
-        rs = axelrod.ResultSet(
+        rs = axl.ResultSet(
             self.filename, self.players, self.repetitions, progress_bar=False
         )
         self.assertIsInstance(rs.payoff_diffs_means, list)
@@ -319,7 +324,7 @@ class TestResultSet(unittest.TestCase):
                 self.assertAlmostEqual(col, self.expected_payoff_diffs_means[i][j])
 
     def test_payoff_stddevs(self):
-        rs = axelrod.ResultSet(
+        rs = axl.ResultSet(
             self.filename, self.players, self.repetitions, progress_bar=False
         )
         self.assertIsInstance(rs.payoff_stddevs, list)
@@ -327,7 +332,7 @@ class TestResultSet(unittest.TestCase):
         self.assertEqual(rs.payoff_stddevs, self.expected_payoff_stddevs)
 
     def test_cooperation(self):
-        rs = axelrod.ResultSet(
+        rs = axl.ResultSet(
             self.filename, self.players, self.repetitions, progress_bar=False
         )
         self.assertIsInstance(rs.cooperation, list)
@@ -335,7 +340,7 @@ class TestResultSet(unittest.TestCase):
         self.assertEqual(rs.cooperation, self.expected_cooperation)
 
     def test_initial_cooperation_count(self):
-        rs = axelrod.ResultSet(
+        rs = axl.ResultSet(
             self.filename, self.players, self.repetitions, progress_bar=False
         )
         self.assertIsInstance(rs.initial_cooperation_count, list)
@@ -345,7 +350,7 @@ class TestResultSet(unittest.TestCase):
         )
 
     def test_normalised_cooperation(self):
-        rs = axelrod.ResultSet(
+        rs = axl.ResultSet(
             self.filename, self.players, self.repetitions, progress_bar=False
         )
         self.assertIsInstance(rs.normalised_cooperation, list)
@@ -355,7 +360,7 @@ class TestResultSet(unittest.TestCase):
                 self.assertAlmostEqual(col, self.expected_normalised_cooperation[i][j])
 
     def test_initial_cooperation_rate(self):
-        rs = axelrod.ResultSet(
+        rs = axl.ResultSet(
             self.filename, self.players, self.repetitions, progress_bar=False
         )
         self.assertIsInstance(rs.initial_cooperation_rate, list)
@@ -365,7 +370,7 @@ class TestResultSet(unittest.TestCase):
         )
 
     def test_state_distribution(self):
-        rs = axelrod.ResultSet(
+        rs = axl.ResultSet(
             self.filename, self.players, self.repetitions, progress_bar=False
         )
         self.assertIsInstance(rs.state_distribution, list)
@@ -373,7 +378,7 @@ class TestResultSet(unittest.TestCase):
         self.assertEqual(rs.state_distribution, self.expected_state_distribution)
 
     def test_state_normalised_distribution(self):
-        rs = axelrod.ResultSet(
+        rs = axl.ResultSet(
             self.filename, self.players, self.repetitions, progress_bar=False
         )
         self.assertIsInstance(rs.normalised_state_distribution, list)
@@ -384,7 +389,7 @@ class TestResultSet(unittest.TestCase):
         )
 
     def test_state_to_action_distribution(self):
-        rs = axelrod.ResultSet(
+        rs = axl.ResultSet(
             self.filename, self.players, self.repetitions, progress_bar=False
         )
         self.assertIsInstance(rs.state_to_action_distribution, list)
@@ -395,7 +400,7 @@ class TestResultSet(unittest.TestCase):
         )
 
     def test_normalised_state_to_action_distribution(self):
-        rs = axelrod.ResultSet(
+        rs = axl.ResultSet(
             self.filename, self.players, self.repetitions, progress_bar=False
         )
         self.assertIsInstance(rs.normalised_state_to_action_distribution, list)
@@ -408,7 +413,7 @@ class TestResultSet(unittest.TestCase):
         )
 
     def test_vengeful_cooperation(self):
-        rs = axelrod.ResultSet(
+        rs = axl.ResultSet(
             self.filename, self.players, self.repetitions, progress_bar=False
         )
         self.assertIsInstance(rs.vengeful_cooperation, list)
@@ -418,7 +423,7 @@ class TestResultSet(unittest.TestCase):
                 self.assertAlmostEqual(col, self.expected_vengeful_cooperation[i][j])
 
     def test_cooperating_rating(self):
-        rs = axelrod.ResultSet(
+        rs = axl.ResultSet(
             self.filename, self.players, self.repetitions, progress_bar=False
         )
         self.assertIsInstance(rs.cooperating_rating, list)
@@ -426,7 +431,7 @@ class TestResultSet(unittest.TestCase):
         self.assertEqual(rs.cooperating_rating, self.expected_cooperating_rating)
 
     def test_good_partner_matrix(self):
-        rs = axelrod.ResultSet(
+        rs = axl.ResultSet(
             self.filename, self.players, self.repetitions, progress_bar=False
         )
         self.assertIsInstance(rs.good_partner_matrix, list)
@@ -434,7 +439,7 @@ class TestResultSet(unittest.TestCase):
         self.assertEqual(rs.good_partner_matrix, self.expected_good_partner_matrix)
 
     def test_good_partner_rating(self):
-        rs = axelrod.ResultSet(
+        rs = axl.ResultSet(
             self.filename, self.players, self.repetitions, progress_bar=False
         )
         self.assertIsInstance(rs.good_partner_rating, list)
@@ -442,7 +447,7 @@ class TestResultSet(unittest.TestCase):
         self.assertEqual(rs.good_partner_rating, self.expected_good_partner_rating)
 
     def test_eigenjesus_rating(self):
-        rs = axelrod.ResultSet(
+        rs = axl.ResultSet(
             self.filename, self.players, self.repetitions, progress_bar=False
         )
         self.assertIsInstance(rs.eigenjesus_rating, list)
@@ -451,7 +456,7 @@ class TestResultSet(unittest.TestCase):
             self.assertAlmostEqual(rate, self.expected_eigenjesus_rating[j])
 
     def test_eigenmoses_rating(self):
-        rs = axelrod.ResultSet(
+        rs = axl.ResultSet(
             self.filename, self.players, self.repetitions, progress_bar=False
         )
         self.assertIsInstance(rs.eigenmoses_rating, list)
@@ -463,28 +468,28 @@ class TestResultSet(unittest.TestCase):
         # Based on https://github.com/Axelrod-Python/Axelrod/issues/670
         # Note that the conclusion of #670 is incorrect and only includes one of
         # the copies of the strategy.
-        axelrod.seed(0)
-        players = [s() for s in axelrod.demo_strategies]
-        tournament = axelrod.Tournament(players, repetitions=2, turns=5)
+        axl.seed(0)
+        players = [s() for s in axl.demo_strategies]
+        tournament = axl.Tournament(players, repetitions=2, turns=5)
         results = tournament.play(progress_bar=False)
         self.assertEqual(results.payoff_diffs_means[-1][-1], 0.0)
 
     def test_equality(self):
         rs_sets = [
-            axelrod.ResultSet(
+            axl.ResultSet(
                 self.filename, self.players, self.repetitions, progress_bar=False
             )
             for _ in range(2)
         ]
         self.assertEqual(rs_sets[0], rs_sets[1])
 
-        players = [s() for s in axelrod.demo_strategies]
-        tournament = axelrod.Tournament(players, repetitions=2, turns=5)
+        players = [s() for s in axl.demo_strategies]
+        tournament = axl.Tournament(players, repetitions=2, turns=5)
         results = tournament.play(progress_bar=False)
         self.assertNotEqual(results, rs_sets[0])
 
     def test_summarise(self):
-        rs = axelrod.ResultSet(
+        rs = axl.ResultSet(
             self.filename, self.players, self.repetitions, progress_bar=False
         )
         sd = rs.summarise()
@@ -535,12 +540,12 @@ class TestResultSet(unittest.TestCase):
     # docs/tutorial/getting_started/summarising_tournaments.rst
     def test_summarise_regression_test(self):
         players = [
-            axelrod.Cooperator(),
-            axelrod.Defector(),
-            axelrod.TitForTat(),
-            axelrod.Grudger(),
+            axl.Cooperator(),
+            axl.Defector(),
+            axl.TitForTat(),
+            axl.Grudger(),
         ]
-        tournament = axelrod.Tournament(players, turns=10, repetitions=3)
+        tournament = axl.Tournament(players, turns=10, repetitions=3)
         results = tournament.play()
 
         summary = [
@@ -619,7 +624,7 @@ class TestResultSet(unittest.TestCase):
                     )
 
     def test_write_summary(self):
-        rs = axelrod.ResultSet(
+        rs = axl.ResultSet(
             self.filename, self.players, self.repetitions, progress_bar=False
         )
         rs.write_summary(filename=self.filename + ".summary")
@@ -636,7 +641,7 @@ class TestResultSet(unittest.TestCase):
 class TestDecorator(unittest.TestCase):
     def test_update_progress_bar(self):
         method = lambda x: None
-        self.assertEqual(axelrod.result_set.update_progress_bar(method)(1), None)
+        self.assertEqual(axl.result_set.update_progress_bar(method)(1), None)
 
 
 class TestResultSetSpatialStructure(TestResultSet):
@@ -648,7 +653,7 @@ class TestResultSetSpatialStructure(TestResultSet):
     def setUpClass(cls):
 
         cls.filename = "test_outputs/test_results_spatial.csv"
-        cls.players = [axelrod.Alternator(), axelrod.TitForTat(), axelrod.Defector()]
+        cls.players = [axl.Alternator(), axl.TitForTat(), axl.Defector()]
         cls.turns = 5
         cls.edges = [(0, 1), (0, 2)]
 
@@ -799,7 +804,7 @@ class TestResultSetSpatialStructure(TestResultSet):
         of players-nodes that are end vertices of an edge is equal to the
         number of turns. Otherwise it is 0.
         """
-        rs = axelrod.ResultSet(
+        rs = axl.ResultSet(
             self.filename, self.players, self.repetitions, progress_bar=False
         )
         self.assertIsInstance(rs.match_lengths, list)
@@ -829,10 +834,10 @@ class TestResultSetSpatialStructureTwo(TestResultSetSpatialStructure):
 
         cls.filename = "test_outputs/test_results_spatial_two.csv"
         cls.players = [
-            axelrod.Alternator(),
-            axelrod.TitForTat(),
-            axelrod.Defector(),
-            axelrod.Cooperator(),
+            axl.Alternator(),
+            axl.TitForTat(),
+            axl.Defector(),
+            axl.Cooperator(),
         ]
         cls.turns = 5
         cls.edges = [(0, 1), (2, 3)]
@@ -1030,10 +1035,10 @@ class TestResultSetSpatialStructureThree(TestResultSetSpatialStructure):
 
         cls.filename = "test_outputs/test_results_spatial_three.csv"
         cls.players = [
-            axelrod.Alternator(),
-            axelrod.TitForTat(),
-            axelrod.Defector(),
-            axelrod.Cooperator(),
+            axl.Alternator(),
+            axl.TitForTat(),
+            axl.Defector(),
+            axl.Cooperator(),
         ]
         cls.turns = 5
         cls.edges = [(0, 0), (1, 1), (2, 2), (3, 3)]
@@ -1167,7 +1172,7 @@ class TestResultSetSpatialStructureThree(TestResultSetSpatialStructure):
 
     def test_summarise(self):
         """Overwriting for this particular case"""
-        rs = axelrod.ResultSet(
+        rs = axl.ResultSet(
             self.filename, self.players, self.repetitions, progress_bar=False
         )
         sd = rs.summarise()

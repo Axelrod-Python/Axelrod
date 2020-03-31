@@ -1,21 +1,21 @@
 import unittest
 
-import axelrod
+import axelrod as axl
 from axelrod.match_generator import graph_is_connected
 
 from hypothesis import example, given, settings
 from hypothesis.strategies import floats, integers
 
 test_strategies = [
-    axelrod.Cooperator,
-    axelrod.TitForTat,
-    axelrod.Defector,
-    axelrod.Grudger,
-    axelrod.GoByMajority,
+    axl.Cooperator,
+    axl.TitForTat,
+    axl.Defector,
+    axl.Grudger,
+    axl.GoByMajority,
 ]
 test_turns = 100
 test_repetitions = 20
-test_game = axelrod.Game()
+test_game = axl.Game()
 
 
 class TestMatchGenerator(unittest.TestCase):
@@ -24,7 +24,7 @@ class TestMatchGenerator(unittest.TestCase):
         cls.players = [s() for s in test_strategies]
 
     def test_build_single_match_params(self):
-        rr = axelrod.MatchGenerator(
+        rr = axl.MatchGenerator(
             players=self.players,
             turns=test_turns,
             game=test_game,
@@ -38,14 +38,14 @@ class TestMatchGenerator(unittest.TestCase):
         self.assertIsNone(match_params["prob_end"])
 
         # Check that can build a match
-        players = [axelrod.Cooperator(), axelrod.Defector()]
+        players = [axl.Cooperator(), axl.Defector()]
         match_params["players"] = players
-        match = axelrod.Match(**match_params)
-        self.assertIsInstance(match, axelrod.Match)
+        match = axl.Match(**match_params)
+        self.assertIsInstance(match, axl.Match)
         self.assertEqual(len(match), test_turns)
 
     def test_build_single_match_params_with_noise(self):
-        rr = axelrod.MatchGenerator(
+        rr = axl.MatchGenerator(
             players=self.players,
             turns=test_turns,
             game=test_game,
@@ -60,14 +60,14 @@ class TestMatchGenerator(unittest.TestCase):
         self.assertIsNone(match_params["prob_end"])
 
         # Check that can build a match
-        players = [axelrod.Cooperator(), axelrod.Defector()]
+        players = [axl.Cooperator(), axl.Defector()]
         match_params["players"] = players
-        match = axelrod.Match(**match_params)
-        self.assertIsInstance(match, axelrod.Match)
+        match = axl.Match(**match_params)
+        self.assertIsInstance(match, axl.Match)
         self.assertEqual(len(match), test_turns)
 
     def test_build_single_match_params_with_prob_end(self):
-        rr = axelrod.MatchGenerator(
+        rr = axl.MatchGenerator(
             players=self.players,
             game=test_game,
             repetitions=test_repetitions,
@@ -81,15 +81,15 @@ class TestMatchGenerator(unittest.TestCase):
         self.assertEqual(match_params["prob_end"], 0.5)
 
         # Check that can build a match
-        players = [axelrod.Cooperator(), axelrod.Defector()]
+        players = [axl.Cooperator(), axl.Defector()]
         match_params["players"] = players
-        match = axelrod.Match(**match_params)
-        self.assertIsInstance(match, axelrod.Match)
+        match = axl.Match(**match_params)
+        self.assertIsInstance(match, axl.Match)
         with self.assertRaises(TypeError):
             len(match)
 
     def test_build_single_match_params_with_prob_end_and_noise(self):
-        rr = axelrod.MatchGenerator(
+        rr = axl.MatchGenerator(
             players=self.players,
             game=test_game,
             repetitions=test_repetitions,
@@ -104,15 +104,15 @@ class TestMatchGenerator(unittest.TestCase):
         self.assertEqual(match_params["noise"], 0.5)
 
         # Check that can build a match
-        players = [axelrod.Cooperator(), axelrod.Defector()]
+        players = [axl.Cooperator(), axl.Defector()]
         match_params["players"] = players
-        match = axelrod.Match(**match_params)
-        self.assertIsInstance(match, axelrod.Match)
+        match = axl.Match(**match_params)
+        self.assertIsInstance(match, axl.Match)
         with self.assertRaises(TypeError):
             len(match)
 
     def test_build_single_match_params_with_prob_end_and_turns(self):
-        rr = axelrod.MatchGenerator(
+        rr = axl.MatchGenerator(
             players=self.players,
             game=test_game,
             repetitions=test_repetitions,
@@ -127,16 +127,16 @@ class TestMatchGenerator(unittest.TestCase):
         self.assertEqual(match_params["noise"], 0)
 
         # Check that can build a match
-        players = [axelrod.Cooperator(), axelrod.Defector()]
+        players = [axl.Cooperator(), axl.Defector()]
         match_params["players"] = players
-        match = axelrod.Match(**match_params)
-        self.assertIsInstance(match, axelrod.Match)
+        match = axl.Match(**match_params)
+        self.assertIsInstance(match, axl.Match)
         self.assertIsInstance(len(match), int)
         self.assertGreater(len(match), 0)
         self.assertLessEqual(len(match), 10)
 
     def test_build_single_match_params_with_fixed_length_unknown(self):
-        rr = axelrod.MatchGenerator(
+        rr = axl.MatchGenerator(
             players=self.players,
             game=test_game,
             repetitions=test_repetitions,
@@ -152,10 +152,10 @@ class TestMatchGenerator(unittest.TestCase):
         self.assertEqual(match_params["match_attributes"], {"length": float("inf")})
 
         # Check that can build a match
-        players = [axelrod.Cooperator(), axelrod.Defector()]
+        players = [axl.Cooperator(), axl.Defector()]
         match_params["players"] = players
-        match = axelrod.Match(**match_params)
-        self.assertIsInstance(match, axelrod.Match)
+        match = axl.Match(**match_params)
+        self.assertIsInstance(match, axl.Match)
         self.assertEqual(len(match), 5)
         self.assertEqual(match.match_attributes, {"length": float("inf")})
 
@@ -163,7 +163,7 @@ class TestMatchGenerator(unittest.TestCase):
     @settings(max_examples=5)
     @example(repetitions=test_repetitions)
     def test_build_match_chunks(self, repetitions):
-        rr = axelrod.MatchGenerator(
+        rr = axl.MatchGenerator(
             players=self.players,
             turns=test_turns,
             game=test_game,
@@ -185,7 +185,7 @@ class TestMatchGenerator(unittest.TestCase):
     @example(repetitions=test_repetitions)
     def test_spatial_build_match_chunks(self, repetitions):
         cycle = [(0, 1), (1, 2), (2, 3), (3, 4), (4, 1)]
-        rr = axelrod.MatchGenerator(
+        rr = axl.MatchGenerator(
             players=self.players,
             turns=test_turns,
             game=test_game,
@@ -204,7 +204,7 @@ class TestMatchGenerator(unittest.TestCase):
     def test_len(self):
         turns = 5
         repetitions = 10
-        rr = axelrod.MatchGenerator(
+        rr = axl.MatchGenerator(
             players=self.players,
             turns=test_turns,
             game=test_game,
@@ -215,7 +215,7 @@ class TestMatchGenerator(unittest.TestCase):
     def test_init_with_graph_edges_not_including_all_players(self):
         edges = [(0, 1), (1, 2)]
         with self.assertRaises(ValueError):
-            axelrod.MatchGenerator(
+            axl.MatchGenerator(
                 players=self.players,
                 repetitions=3,
                 game=test_game,
