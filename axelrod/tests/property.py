@@ -3,14 +3,15 @@ A module for creating hypothesis based strategies for property based testing
 """
 import itertools
 
-from axelrod import Game, Match, Tournament, short_run_time_strategies, strategies
+import axelrod as axl
+from axelrod import strategies
 
 from hypothesis.strategies import composite, floats, integers, lists, sampled_from
 
 
 @composite
 def strategy_lists(
-    draw, strategies=short_run_time_strategies, min_size=1, max_size=len(strategies)
+    draw, strategies=axl.short_run_time_strategies, min_size=1, max_size=len(strategies)
 ):
     """
     A hypothesis decorator to return a list of strategies
@@ -31,7 +32,7 @@ def strategy_lists(
 @composite
 def matches(
     draw,
-    strategies=short_run_time_strategies,
+    strategies=axl.short_run_time_strategies,
     min_turns=1,
     max_turns=200,
     min_noise=0,
@@ -61,14 +62,14 @@ def matches(
     players = [s() for s in strategies]
     turns = draw(integers(min_value=min_turns, max_value=max_turns))
     noise = draw(floats(min_value=min_noise, max_value=max_noise))
-    match = Match(players, turns=turns, noise=noise)
+    match = axl.Match(players, turns=turns, noise=noise)
     return match
 
 
 @composite
 def tournaments(
     draw,
-    strategies=short_run_time_strategies,
+    strategies=axl.short_run_time_strategies,
     min_size=1,
     max_size=10,
     min_turns=1,
@@ -108,14 +109,14 @@ def tournaments(
     repetitions = draw(integers(min_value=min_repetitions, max_value=max_repetitions))
     noise = draw(floats(min_value=min_noise, max_value=max_noise))
 
-    tournament = Tournament(players, turns=turns, repetitions=repetitions, noise=noise)
+    tournament = axl.Tournament(players, turns=turns, repetitions=repetitions, noise=noise)
     return tournament
 
 
 @composite
 def prob_end_tournaments(
     draw,
-    strategies=short_run_time_strategies,
+    strategies=axl.short_run_time_strategies,
     min_size=1,
     max_size=10,
     min_prob_end=0,
@@ -155,7 +156,7 @@ def prob_end_tournaments(
     repetitions = draw(integers(min_value=min_repetitions, max_value=max_repetitions))
     noise = draw(floats(min_value=min_noise, max_value=max_noise))
 
-    tournament = Tournament(
+    tournament = axl.Tournament(
         players, prob_end=prob_end, repetitions=repetitions, noise=noise
     )
     return tournament
@@ -164,7 +165,7 @@ def prob_end_tournaments(
 @composite
 def spatial_tournaments(
     draw,
-    strategies=short_run_time_strategies,
+    strategies=axl.short_run_time_strategies,
     min_size=1,
     max_size=10,
     min_turns=1,
@@ -223,7 +224,7 @@ def spatial_tournaments(
     repetitions = draw(integers(min_value=min_repetitions, max_value=max_repetitions))
     noise = draw(floats(min_value=min_noise, max_value=max_noise))
 
-    tournament = Tournament(
+    tournament = axl.Tournament(
         players, turns=turns, repetitions=repetitions, noise=noise, edges=edges
     )
     return tournament
@@ -232,7 +233,7 @@ def spatial_tournaments(
 @composite
 def prob_end_spatial_tournaments(
     draw,
-    strategies=short_run_time_strategies,
+    strategies=axl.short_run_time_strategies,
     min_size=1,
     max_size=10,
     min_prob_end=0,
@@ -291,7 +292,7 @@ def prob_end_spatial_tournaments(
     repetitions = draw(integers(min_value=min_repetitions, max_value=max_repetitions))
     noise = draw(floats(min_value=min_noise, max_value=max_noise))
 
-    tournament = Tournament(
+    tournament = axl.Tournament(
         players, prob_end=prob_end, repetitions=repetitions, noise=noise, edges=edges
     )
     return tournament
@@ -331,5 +332,5 @@ def games(draw, prisoners_dilemma=True, max_value=100):
         r = draw(integers(max_value=max_value))
         p = draw(integers(max_value=max_value))
 
-    game = Game(r=r, s=s, t=t, p=p)
+    game = axl.Game(r=r, s=s, t=t, p=p)
     return game
