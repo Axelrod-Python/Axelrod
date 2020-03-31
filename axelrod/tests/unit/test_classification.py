@@ -7,7 +7,24 @@ from typing import Text
 import yaml
 
 import axelrod as axl
-from axelrod.classifier import Classifier, Classifiers, rebuild_classifier_table
+from axelrod.classifier import (
+    Classifier,
+    Classifiers,
+    _Classifiers,
+    memory_depth,
+    rebuild_classifier_table,
+)
+from axelrod.player import Player
+
+
+class TestTitForTat(Player):
+    """
+    Same name as TitForTat, but with empty classifier.
+    """
+
+    # Classifiers are looked up by name, so only the name matters.
+    name = "Tit For Tat"
+    classifier = {}
 
 
 class TestClassification(unittest.TestCase):
@@ -33,10 +50,22 @@ class TestClassification(unittest.TestCase):
         )
 
     def test_singletonity_of_classifiers_class(self):
-        classifiers_1 = Classifiers
-        classifiers_2 = Classifiers
+        classifiers_1 = _Classifiers()
+        classifiers_2 = _Classifiers()
 
         self.assertIs(classifiers_1, classifiers_2)
+
+    def test_get_name_from_classifier(self):
+        # Should be able to take a string or a Classifier instance.
+        self.assertEqual(Classifiers["memory_depth"](axl.TitForTat), 1)
+        self.assertEqual(Classifiers[memory_depth](axl.TitForTat), 1)
+
+    def test_key_error_on_uknown_classifier(self):
+        with self.assertRaises(KeyError):
+            Classifiers["invalid_key"](axl.TitForTat)
+
+    def test_will_lookup_key_in_dict(self):
+        self.assertEqual(Classifiers["memory_depth"](TestTitForTat), 1)
 
     def test_known_classifiers(self):
         # A set of dimensions that are known to have been fully applied

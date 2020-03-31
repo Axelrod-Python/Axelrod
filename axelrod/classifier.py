@@ -194,13 +194,12 @@ class _Classifiers(object):
             if key in player.classifier:
                 return player.classifier[key]
 
-            if player.name not in cls.all_player_dicts:
+            try:
+                player_classifiers = cls.all_player_dicts[player.name]
+            except:
                 return None
-            player_classifiers = cls.all_player_dicts[player.name]
 
-            if key not in player_classifiers:
-                return None
-            return player_classifiers[key]
+            return player_classifiers.get(key, None)
 
         return classify_player_for_this_classifier
 
