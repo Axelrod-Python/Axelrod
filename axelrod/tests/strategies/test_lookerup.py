@@ -4,15 +4,15 @@ import random
 import unittest
 
 import axelrod
+from axelrod import Classifiers
 from axelrod.action import str_to_actions
-from axelrod.classifier import Classifiers
 from axelrod.evolvable_player import InsufficientParametersError
 from axelrod.strategies.lookerup import (
     EvolvableLookerUp,
     LookupTable,
     Plays,
     create_lookup_table_keys,
-    make_keys_into_plays
+    make_keys_into_plays,
 )
 from .test_evolvable_player import PartialClass, TestEvolvablePlayer
 from .test_player import TestPlayer
@@ -69,8 +69,7 @@ class TestLookupTable(unittest.TestCase):
         table = LookupTable.from_pattern(
             pattern, player_depth=2, op_depth=1, op_openings_depth=0
         )
-        self.assertEqual(table.dictionary,
-                         make_keys_into_plays(self.lookup_dict))
+        self.assertEqual(table.dictionary, make_keys_into_plays(self.lookup_dict))
 
     def test_from_pattern_raises_error_pattern_len_ne_dict_size(self):
         too_big = (C,) * 17
@@ -152,8 +151,7 @@ class TestLookupTableHelperFunctions(unittest.TestCase):
         self.assertEqual(Plays(1, 2, 3), (1, 2, 3))
 
     def test_plays_assign_values(self):
-        self.assertEqual(Plays(op_plays=2, self_plays=1, op_openings=3),
-                         Plays(1, 2, 3))
+        self.assertEqual(Plays(op_plays=2, self_plays=1, op_openings=3), Plays(1, 2, 3))
 
     def test_make_keys_into_plays(self):
         old = {((C, D), (C,), ()): 1, ((D, D), (D,), ()): 2}
@@ -304,16 +302,13 @@ class TestLookerUp(TestPlayer):
 
     def test_set_memory_depth(self):
         mem_depth_1 = axelrod.LookerUp(pattern="CC", parameters=Plays(1, 0, 0))
-        self.assertEqual(Classifiers().get("memory_depth", mem_depth_1), 1)
+        self.assertEqual(Classifiers["memory_depth"](mem_depth_1), 1)
 
-        mem_depth_3 = axelrod.LookerUp(pattern="C" * 16,
-                                       parameters=Plays(1, 3, 0))
-        self.assertEqual(Classifiers().get("memory_depth", mem_depth_3), 3)
+        mem_depth_3 = axelrod.LookerUp(pattern="C" * 16, parameters=Plays(1, 3, 0))
+        self.assertEqual(Classifiers["memory_depth"](mem_depth_3), 3)
 
-        mem_depth_inf = axelrod.LookerUp(pattern="CC",
-                                         parameters=Plays(0, 0, 1))
-        self.assertEqual(Classifiers().get("memory_depth", mem_depth_inf),
-                         float("inf"))
+        mem_depth_inf = axelrod.LookerUp(pattern="CC", parameters=Plays(0, 0, 1))
+        self.assertEqual(Classifiers["memory_depth"](mem_depth_inf), float("inf"))
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (D, C), (C, D)]
@@ -381,12 +376,10 @@ class TestLookerUp(TestPlayer):
 
     def test_lookup_table_display(self):
         player = axelrod.LookerUp(
-            pattern="CCCC",
-            parameters=Plays(self_plays=2, op_plays=0, op_openings=0)
+            pattern="CCCC", parameters=Plays(self_plays=2, op_plays=0, op_openings=0)
         )
         self.assertEqual(
-            player.lookup_table_display(
-                ("self_plays", "op_plays", "op_openings")),
+            player.lookup_table_display(("self_plays", "op_plays", "op_openings")),
             (
                 "self_plays | op_plays  |op_openings\n"
                 + "   C, C    ,           ,           : C,\n"
@@ -528,17 +521,14 @@ class TestEvolvedLookerUp2_2_2(TestPlayer):
         opponent_actions = [D, D] + [C, D] * 3
         expected = [(C, D), (C, D)] + [(D, C), (C, D)] * 3
         self.versus_test(
-            axelrod.MockPlayer(actions=opponent_actions),
-            expected_actions=expected
+            axelrod.MockPlayer(actions=opponent_actions), expected_actions=expected
         )
 
     def test_vs_initial_d_c(self):
         opponent_actions = [D, C] + [C, D] * 3
-        expected = [(C, D), (C, C)] + [(D, C), (C, D), (C, C), (D, D), (C, C),
-                                       (C, D)]
+        expected = [(C, D), (C, C)] + [(D, C), (C, D), (C, C), (D, D), (C, C), (C, D)]
         self.versus_test(
-            axelrod.MockPlayer(actions=opponent_actions),
-            expected_actions=expected
+            axelrod.MockPlayer(actions=opponent_actions), expected_actions=expected
         )
 
 
@@ -581,8 +571,7 @@ class TestWinner12(TestPlayer):
         self.versus_test(axelrod.Cooperator(), expected_actions=[(C, C)] * 10)
 
         self.versus_test(
-            axelrod.Defector(),
-            expected_actions=([(C, D), (C, D)] + [(D, D)] * 10)
+            axelrod.Defector(), expected_actions=([(C, D), (C, D)] + [(D, D)] * 10)
         )
 
 
@@ -627,8 +616,7 @@ class TestWinner21(TestPlayer):
         )
 
         self.versus_test(
-            axelrod.Defector(),
-            expected_actions=([(D, D), (C, D)] + [(D, D)] * 10)
+            axelrod.Defector(), expected_actions=([(D, D), (C, D)] + [(D, D)] * 10)
         )
 
 
@@ -637,8 +625,7 @@ class TestDictConversionFunctions(unittest.TestCase):
         opponent_starting_plays = ""
         player_last_plays = "CC"
         opponent_last_plays = "D"
-        old_key = (
-        opponent_starting_plays, player_last_plays, opponent_last_plays)
+        old_key = (opponent_starting_plays, player_last_plays, opponent_last_plays)
 
         new_key = Plays(self_plays=(C, C), op_plays=(D,), op_openings=())
 
@@ -670,7 +657,10 @@ class TestEvolvableLookerUp(unittest.TestCase):
     player_class = EvolvableLookerUp
 
     def test_normalized_parameters(self):
-        initial_actions = (C, C,)
+        initial_actions = (
+            C,
+            C,
+        )
         lookup_dict = {
             ((C, C), (C,), ()): C,
             ((C, C), (D,), ()): D,
@@ -681,17 +671,16 @@ class TestEvolvableLookerUp(unittest.TestCase):
             ((D, D), (C,), ()): D,
             ((D, D), (D,), ()): C,
         }
-        pattern = "".join([random.choice(('C', 'D')) for _ in range(8)]),
+        pattern = ("".join([random.choice(("C", "D")) for _ in range(8)]),)
 
         self.assertRaises(
-            InsufficientParametersError,
-            self.player_class._normalize_parameters
+            InsufficientParametersError, self.player_class._normalize_parameters
         )
         self.assertRaises(
             InsufficientParametersError,
             self.player_class._normalize_parameters,
             pattern=pattern,
-            initial_actions=initial_actions
+            initial_actions=initial_actions,
         )
         self.assertRaises(
             InsufficientParametersError,
@@ -721,10 +710,11 @@ class TestEvolvableLookerUp4(TestEvolvablePlayer):
     player_class = axelrod.EvolvableLookerUp
     parent_class = axelrod.LookerUp
     parent_kwargs = ["lookup_dict", "initial_actions"]
-    init_parameters = {"parameters": (2, 2, 2),
-                       "pattern": "".join(
-                           [random.choice(('C', 'D')) for _ in range(64)]),
-                       "initial_actions": (C, C,)}
+    init_parameters = {
+        "parameters": (2, 2, 2),
+        "pattern": "".join([random.choice(("C", "D")) for _ in range(64)]),
+        "initial_actions": (C, C,),
+    }
 
 
 class TestEvolvableLookerUp5(TestEvolvablePlayer):
@@ -743,7 +733,7 @@ class TestEvolvableLookerUp5(TestEvolvablePlayer):
             ((D, C), (D,), ()): D,
             ((D, D), (C,), ()): D,
             ((D, D), (D,), ()): C,
-        }
+        },
     }
 
 
@@ -757,7 +747,8 @@ EvolvableLookerUpWithDefault = PartialClass(
         ((), (C,), ()): C,
         ((), (C,), ()): C,
     },
-    initial_actions=(C,))
+    initial_actions=(C,),
+)
 
 
 class EvolvableLookerUpAsLookerUp(TestLookerUp):

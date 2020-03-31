@@ -1,21 +1,31 @@
-from typing import Any, Callable, Generic, List, Optional, Set, Text, Type, \
-    TypeVar, Union
-
 import os
+from typing import (
+    Any,
+    Callable,
+    Generic,
+    List,
+    Optional,
+    Set,
+    Text,
+    Type,
+    TypeVar,
+    Union,
+)
+
 import yaml
 
 from axelrod.player import Player
 
 ALL_CLASSIFIERS_PATH = "data/all_classifiers.yml"
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 class Classifier(Generic[T]):
     """Describes a Player (strategy).
 
     User sets a name and function, f, at initialization.  Through
-    calc_for_player, looks for the classifier to be set in the passed Player
+    classify_player, looks for the classifier to be set in the passed Player
     class.  If not set, then passes to f for calculation.
 
     f must operate on the class, and not an instance.  If necessary, f may
@@ -29,21 +39,23 @@ class Classifier(Generic[T]):
     ----------
     name: An identifier for the classifier, used as a dict key in storage and in
         'classifier' dicts of Player classes.
-    f: A function that takes in a Player class (not an instance) and returns a
-        value.
+    player_class_classifier: A function that takes in a Player class (not an
+        instance) and returns a value.
     """
 
-    def __init__(self, name: Text, f: Callable[[Type[Player]], T]):
+    def __init__(
+        self, name: Text, player_class_classifier: Callable[[Type[Player]], T]
+    ):
         self.name = name
-        self.f = f
+        self.player_class_classifier = player_class_classifier
 
-    def calc_for_player(self, player: Type[Player]) -> T:
+    def classify_player(self, player: Type[Player]) -> T:
         """Look for this classifier in the passed player's 'classifier' dict,
         otherwise pass to the player to f."""
-        if self.name in player.classifier:
+        try:
             return player.classifier[self.name]
-
-        return self.f(player)
+        except:
+            return self.player_class_classifier(player)
 
 
 stochastic = Classifier[bool]("stochastic", lambda _: False)
@@ -69,9 +81,11 @@ all_classifiers = [
 ]
 
 
-def rebuild_classifier_table(classifiers: List[Classifier],
-                             players: List[Type[Player]],
-                             path: Text = ALL_CLASSIFIERS_PATH) -> None:
+def rebuild_classifier_table(
+    classifiers: List[Classifier],
+    players: List[Type[Player]],
+    path: Text = ALL_CLASSIFIERS_PATH,
+) -> None:
     """Builds the classifier table in data.
 
     Parameters
@@ -89,14 +103,14 @@ def rebuild_classifier_table(classifiers: List[Classifier],
     for p in players:
         new_player_dict = dict()
         for c in classifiers:
-            new_player_dict[c.name] = c.calc_for_player(p)
+            new_player_dict[c.name] = c.classify_player(p)
         all_player_dicts[p.name] = new_player_dict
 
-    with open(filename, 'w') as f:
+    with open(filename, "w") as f:
         yaml.dump(all_player_dicts, f)
 
 
-class Classifiers(object):
+class _Classifiers(object):
     """A singleton used to calculate any known classifier.
 
     Attributes
@@ -105,18 +119,19 @@ class Classifiers(object):
         The keys are player names, and the values are 'classifier' dicts (keyed
         by classifier name).
     """
+
     _instance = None
     all_player_dicts = dict()
 
     # Make this a singleton
     def __new__(cls):
         if cls._instance is None:
-            cls._instance = super(Classifiers, cls).__new__(cls)
+            cls._instance = super(_Classifiers, cls).__new__(cls)
             # When this is first created, read from the classifier table file.
             # Get absolute path
             dirname = os.path.dirname(__file__)
             filename = os.path.join(dirname, ALL_CLASSIFIERS_PATH)
-            with open(filename, 'r') as f:
+            with open(filename, "r") as f:
                 cls.all_player_dicts = yaml.load(f, Loader=yaml.FullLoader)
 
         return cls._instance
@@ -128,63 +143,83 @@ class Classifiers(object):
         return classifier_name in (c.name for c in all_classifiers)
 
     @classmethod
-    def get(cls, classifier: Union[Classifier, Text],
-            player: Player) -> Any:
+    def __getitem__(
+        cls, key: Union[Classifier, Text]
+    ) -> Callable[[Union[Player, Type[Player]]], Any]:
         """Looks up the classifier for the player.
 
-        If the classifier is found in the 'classifier' dict on the player, then
-        return that.  Otherwise look for the classifier for the player in the
-        all_player_dicts.  Returns None if the classifier is not found in either
-        of those.
+        Given a passed classifier key, return a function that:
+
+        Takes a player.  If the classifier is found in the 'classifier' dict on
+        the player, then return that.  Otherwise look for the classifier for the
+        player in the all_player_dicts.  Returns None if the classifier is not
+        found in either of those.
+
+        The returned function expects Player instances, but if a Player class is
+        passed, then it will create an instance by calling an argument-less
+        initializer.  If no such initializer exists on the class, then an error
+        will result.
 
         Parameters
         ----------
-        classifier: A classifier or classifier name that we want to calculate
-            for the player.
-        player: The player (instance) for which we compute the classifier.
+        key: A classifier or classifier name that we want to calculate for the
+            player.
 
         Returns
         -------
-        The classifier value for the player, or None if unknown.
+        A function that will map Player (or Player instances) to their value for
+            this classification.
         """
-        # Classifier may be the name or an instance.  Convert to name.
-        if not isinstance(classifier, str):
-            classifier = classifier.name
+        # Key may be the name or an instance.  Convert to name.
+        if not isinstance(key, str):
+            key = key.name
 
-        if not cls.known_classifier(classifier):
+        if not cls.known_classifier(key):
             raise KeyError("Unknown classifier")
 
-        # Factory-generated players won't exist in the table.  As well, some
-        # players, like Random, may change classifiers at construction time;
-        # this get() function takes a player instance, while the saved-values
-        # are from operations on the player object itself.
-        if classifier in player.classifier:
-            return player.classifier[classifier]
+        def classify_player_for_this_classifier(
+            player: Union[Player, Type[Player]]) -> Any:
+            # If the passed player is not an instance, then try to initialize an
+            # instance without arguments.
+            if not isinstance(player, Player):
+                try:
+                    player = player()
+                except:
+                    pass
 
-        def return_missing() -> None:
-            """What to do with a missing entry."""
-            return None
+            # Factory-generated players won't exist in the table.  As well, some
+            # players, like Random, may change classifiers at construction time;
+            # this get() function takes a player instance, while the saved-values
+            # are from operations on the player object itself.
+            if key in player.classifier:
+                return player.classifier[key]
 
-        if player.name not in cls.all_player_dicts:
-            return return_missing()
-        player_classifiers = cls.all_player_dicts[player.name]
+            if player.name not in cls.all_player_dicts:
+                return None
+            player_classifiers = cls.all_player_dicts[player.name]
 
-        if classifier not in player_classifiers:
-            return return_missing()
-        return player_classifiers[classifier]
+            if key not in player_classifiers:
+                return None
+            return player_classifiers[key]
+
+        return classify_player_for_this_classifier
+
+
+Classifiers = _Classifiers()
 
 
 # Strategy classifiers
+
 
 def is_basic(s):
     """
     Defines criteria for a strategy to be considered 'basic'
     """
-    stochastic = Classifiers().get("stochastic", s)
-    depth = Classifiers().get("memory_depth", s)
-    inspects_source = Classifiers().get("inspects_source", s)
-    manipulates_source = Classifiers().get("manipulates_source", s)
-    manipulates_state = Classifiers().get("manipulates_state", s)
+    stochastic = Classifiers["stochastic"](s)
+    depth = Classifiers["memory_depth"](s)
+    inspects_source = Classifiers["inspects_source"](s)
+    manipulates_source = Classifiers["manipulates_source"](s)
+    manipulates_state = Classifiers["manipulates_state"](s)
     return (
         not stochastic
         and not inspects_source
@@ -200,6 +235,6 @@ def obey_axelrod(s):
     rules.
     """
     for c in ["inspects_source", "manipulates_source", "manipulates_state"]:
-        if Classifiers().get(c, s):
+        if Classifiers[c](s):
             return False
     return True

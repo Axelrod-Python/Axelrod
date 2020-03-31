@@ -13,26 +13,28 @@ from axelrod.classifier import Classifier, Classifiers, rebuild_classifier_table
 class TestClassification(unittest.TestCase):
     def test_classifier_build(self):
         dirname = os.path.dirname(__file__)
-        test_path = os.path.join(dirname,
-                                 "../../../test_outputs/classifier_test.yaml")
+        test_path = os.path.join(dirname, "../../../test_outputs/classifier_test.yaml")
 
         # Just returns the name of the player.  For testing.
         name_classifier = Classifier[Text]("name", lambda player: player.name)
-        rebuild_classifier_table(classifiers=[name_classifier],
-                                 players=[axl.Cooperator, axl.Defector],
-                                 path=test_path)
+        rebuild_classifier_table(
+            classifiers=[name_classifier],
+            players=[axl.Cooperator, axl.Defector],
+            path=test_path,
+        )
 
         filename = os.path.join("../..", test_path)
-        with open(filename, 'r') as f:
+        with open(filename, "r") as f:
             all_player_dicts = yaml.load(f, Loader=yaml.FullLoader)
 
-        self.assertDictEqual(all_player_dicts,
-                             {"Cooperator": {"name": "Cooperator"},
-                              "Defector": {"name": "Defector"}})
+        self.assertDictEqual(
+            all_player_dicts,
+            {"Cooperator": {"name": "Cooperator"}, "Defector": {"name": "Defector"}},
+        )
 
     def test_singletonity_of_classifiers_class(self):
-        classifiers_1 = Classifiers()
-        classifiers_2 = Classifiers()
+        classifiers_1 = Classifiers
+        classifiers_2 = Classifiers
 
         self.assertIs(classifiers_1, classifiers_2)
 
@@ -49,8 +51,7 @@ class TestClassification(unittest.TestCase):
 
         for s in axl.all_strategies:
             s = s()
-            self.assertTrue(
-                None not in [Classifiers().get(key, s) for key in known_keys])
+            self.assertTrue(None not in [Classifiers[key](s) for key in known_keys])
 
     def test_multiple_instances(self):
         """Certain instances of classes of strategies will have different
@@ -222,8 +223,7 @@ class TestStrategies(unittest.TestCase):
             axl.basic_strategies,
             axl.long_run_time_strategies,
         ]:
-            self.assertTrue(
-                str_reps(strategy_list).issubset(str_reps(strategies_set)))
+            self.assertTrue(str_reps(strategy_list).issubset(str_reps(strategies_set)))
 
     def test_long_run_strategies(self):
         long_run_time_strategies = [
@@ -248,12 +248,10 @@ class TestStrategies(unittest.TestCase):
         ]
 
         self.assertEqual(
-            str_reps(long_run_time_strategies),
-            str_reps(axl.long_run_time_strategies)
+            str_reps(long_run_time_strategies), str_reps(axl.long_run_time_strategies)
         )
         self.assertTrue(
-            all(Classifiers().get("long_run_time", s()) for s in
-                axl.long_run_time_strategies)
+            all(map(Classifiers["long_run_time"], axl.long_run_time_strategies))
         )
 
     def test_short_run_strategies(self):
@@ -262,12 +260,10 @@ class TestStrategies(unittest.TestCase):
         ]
 
         self.assertEqual(
-            str_reps(short_run_time_strategies),
-            str_reps(axl.short_run_time_strategies)
+            str_reps(short_run_time_strategies), str_reps(axl.short_run_time_strategies)
         )
         self.assertFalse(
-            any(Classifiers().get("long_run_time", s()) for s in
-                axl.short_run_time_strategies)
+            any(map(Classifiers["long_run_time"], axl.short_run_time_strategies))
         )
 
     def test_meta_inclusion(self):
@@ -286,5 +282,4 @@ class TestStrategies(unittest.TestCase):
             axl.Grudger,
             axl.Random,
         ]
-        self.assertTrue(str_reps(demo_strategies),
-                        str_reps(axl.demo_strategies))
+        self.assertTrue(str_reps(demo_strategies), str_reps(axl.demo_strategies))

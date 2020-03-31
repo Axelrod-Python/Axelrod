@@ -5,18 +5,16 @@ from hypothesis import given, settings
 from hypothesis.strategies import integers
 
 import axelrod
-from axelrod.classifier import Classifiers
+from axelrod import Classifiers
 from axelrod.tests.property import strategy_lists
 
 C, D = axelrod.Action.C, axelrod.Action.D
 
 deterministic_strategies = [
-    s for s in axelrod.short_run_time_strategies if
-    not Classifiers().get("stochastic", s)
+    s for s in axelrod.short_run_time_strategies if not Classifiers["stochastic"](s)
 ]
 stochastic_strategies = [
-    s for s in axelrod.short_run_time_strategies if
-    Classifiers().get("stochastic", s)
+    s for s in axelrod.short_run_time_strategies if Classifiers["stochastic"](s)
 ]
 
 

@@ -4,7 +4,7 @@ from math import ceil, log
 import axelrod.interaction_utils as iu
 from axelrod import DEFAULT_TURNS
 from axelrod.action import Action
-from axelrod.classifier import Classifiers
+from axelrod import Classifiers
 from axelrod.game import Game
 from .deterministic_cache import DeterministicCache
 
@@ -14,7 +14,7 @@ C, D = Action.C, Action.D
 def is_stochastic(players, noise):
     """Determines if a match is stochastic -- true if there is noise or if any
     of the players involved is stochastic."""
-    return noise or any(Classifiers().get("stochastic", p) for p in players)
+    return noise or any(Classifiers["stochastic"](p) for p in players)
 
 
 class Match(object):
@@ -29,7 +29,7 @@ class Match(object):
         deterministic_cache=None,
         noise=0,
         match_attributes=None,
-        reset=True
+        reset=True,
     ):
         """
         Parameters
@@ -117,8 +117,7 @@ class Match(object):
         return (
             not self.noise
             and self._cache.mutable
-            and not (
-            any(Classifiers().get("stochastic", p) for p in self.players))
+            and not (any(Classifiers["stochastic"](p) for p in self.players))
         )
 
     def _cached_enough_turns(self, cache_key, turns):

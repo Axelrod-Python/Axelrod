@@ -69,12 +69,10 @@ class MetaPlayer(Player):
             "manipulates_source",
             "manipulates_state",
         ]:
-            self.classifier[key] = any(
-                Classifiers().get(key, t) for t in self.team)
+            self.classifier[key] = any(map(Classifiers[key], self.team))
 
         for t in self.team:
-            self.classifier["makes_use_of"].update(
-                Classifiers().get("makes_use_of", t))
+            self.classifier["makes_use_of"].update(Classifiers["makes_use_of"](t))
 
         self._last_results = None
 
@@ -334,10 +332,10 @@ class MetaMajorityMemoryOne(MetaMajority):
     name = "Meta Majority Memory One"
 
     def __init__(self):
-        team = [s for s in ordinary_strategies if
-                Classifiers().get("memory_depth", s) <= 1]
+        team = [s for s in ordinary_strategies if Classifiers["memory_depth"](s) <= 1]
         super().__init__(team=team)
         self.classifier["long_run_time"] = False
+
 
 class MetaMajorityFiniteMemory(MetaMajority):
     """MetaMajority with the team of Finite Memory Players
@@ -350,8 +348,11 @@ class MetaMajorityFiniteMemory(MetaMajority):
     name = "Meta Majority Finite Memory"
 
     def __init__(self):
-        team = [s for s in ordinary_strategies if
-                Classifiers().get("memory_depth", s) < float("inf")]
+        team = [
+            s
+            for s in ordinary_strategies
+            if Classifiers["memory_depth"](s) < float("inf")
+        ]
         super().__init__(team=team)
 
 
@@ -366,8 +367,11 @@ class MetaMajorityLongMemory(MetaMajority):
     name = "Meta Majority Long Memory"
 
     def __init__(self):
-        team = [s for s in ordinary_strategies if
-                Classifiers().get("memory_depth", s) == float("inf")]
+        team = [
+            s
+            for s in ordinary_strategies
+            if Classifiers["memory_depth"](s) == float("inf")
+        ]
         super().__init__(team=team)
 
 
@@ -382,8 +386,7 @@ class MetaWinnerMemoryOne(MetaWinner):
     name = "Meta Winner Memory One"
 
     def __init__(self):
-        team = [s for s in ordinary_strategies if
-                Classifiers().get("memory_depth", s) <= 1]
+        team = [s for s in ordinary_strategies if Classifiers["memory_depth"](s) <= 1]
         super().__init__(team=team)
         self.classifier["long_run_time"] = False
 
@@ -399,8 +402,11 @@ class MetaWinnerFiniteMemory(MetaWinner):
     name = "Meta Winner Finite Memory"
 
     def __init__(self):
-        team = [s for s in ordinary_strategies if
-                Classifiers().get("memory_depth", s) < float("inf")]
+        team = [
+            s
+            for s in ordinary_strategies
+            if Classifiers["memory_depth"](s) < float("inf")
+        ]
         super().__init__(team=team)
 
 
@@ -415,8 +421,11 @@ class MetaWinnerLongMemory(MetaWinner):
     name = "Meta Winner Long Memory"
 
     def __init__(self):
-        team = [s for s in ordinary_strategies if
-                Classifiers().get("memory_depth", s) == float("inf")]
+        team = [
+            s
+            for s in ordinary_strategies
+            if Classifiers["memory_depth"](s) == float("inf")
+        ]
         super().__init__(team=team)
 
 
@@ -431,8 +440,7 @@ class MetaWinnerDeterministic(MetaWinner):
     name = "Meta Winner Deterministic"
 
     def __init__(self):
-        team = [s for s in ordinary_strategies if
-                not Classifiers().get("stochastic", s)]
+        team = [s for s in ordinary_strategies if not Classifiers["stochastic"](s)]
         super().__init__(team=team)
         self.classifier["stochastic"] = False
 
@@ -448,8 +456,7 @@ class MetaWinnerStochastic(MetaWinner):
     name = "Meta Winner Stochastic"
 
     def __init__(self):
-        team = [s for s in ordinary_strategies if
-                Classifiers().get("stochastic", s)]
+        team = [s for s in ordinary_strategies if Classifiers["stochastic"](s)]
         super().__init__(team=team)
 
 
@@ -505,8 +512,7 @@ class NMWEDeterministic(NiceMetaWinnerEnsemble):
     name = "NMWE Deterministic"
 
     def __init__(self):
-        team = [s for s in ordinary_strategies if
-                not Classifiers().get("stochastic", s)]
+        team = [s for s in ordinary_strategies if not Classifiers["stochastic"](s)]
         super().__init__(team=team)
         self.classifier["stochastic"] = True
 
@@ -522,8 +528,7 @@ class NMWEStochastic(NiceMetaWinnerEnsemble):
     name = "NMWE Stochastic"
 
     def __init__(self):
-        team = [s for s in ordinary_strategies if
-                Classifiers().get("stochastic", s)]
+        team = [s for s in ordinary_strategies if Classifiers["stochastic"](s)]
         super().__init__(team=team)
 
 
@@ -538,8 +543,11 @@ class NMWEFiniteMemory(NiceMetaWinnerEnsemble):
     name = "NMWE Finite Memory"
 
     def __init__(self):
-        team = [s for s in ordinary_strategies if
-                Classifiers().get("memory_depth", s) < float("inf")]
+        team = [
+            s
+            for s in ordinary_strategies
+            if Classifiers["memory_depth"](s) < float("inf")
+        ]
         super().__init__(team=team)
 
 
@@ -554,8 +562,11 @@ class NMWELongMemory(NiceMetaWinnerEnsemble):
     name = "NMWE Long Memory"
 
     def __init__(self):
-        team = [s for s in ordinary_strategies if
-                Classifiers().get("memory_depth", s) == float("inf")]
+        team = [
+            s
+            for s in ordinary_strategies
+            if Classifiers["memory_depth"](s) == float("inf")
+        ]
         super().__init__(team=team)
 
 
@@ -570,8 +581,7 @@ class NMWEMemoryOne(NiceMetaWinnerEnsemble):
     name = "NMWE Memory One"
 
     def __init__(self):
-        team = [s for s in ordinary_strategies if
-                Classifiers().get("memory_depth", s) <= 1]
+        team = [s for s in ordinary_strategies if Classifiers["memory_depth"](s) <= 1]
         super().__init__(team=team)
         self.classifier["long_run_time"] = False
 

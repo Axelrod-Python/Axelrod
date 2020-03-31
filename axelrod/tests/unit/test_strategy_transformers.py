@@ -55,8 +55,7 @@ class TestTransformers(unittest.TestCase):
         args = decorator.args
         kwargs = decorator.kwargs.copy()
 
-        new_decorator = DecoratorReBuilder()(factory_args, args, kwargs,
-                                             new_prefix)
+        new_decorator = DecoratorReBuilder()(factory_args, args, kwargs, new_prefix)
 
         self.assertEqual(
             decorator(axelrod.Cooperator)(), new_decorator(axelrod.Cooperator)()
@@ -220,8 +219,7 @@ class TestTransformers(unittest.TestCase):
         player_class = JossAnnTransformer((0.2, 0.3))(axelrod.Alternator)
         self.assert_dual_wrapper_correct(player_class)
 
-        player_class = JossAnnTransformer((0.5, 0.4))(
-            axelrod.EvolvedLookerUp2_2_2)
+        player_class = JossAnnTransformer((0.5, 0.4))(axelrod.EvolvedLookerUp2_2_2)
         self.assert_dual_wrapper_correct(player_class)
 
     def test_dual_transformer_simple_play_regression_test(self):
@@ -282,7 +280,7 @@ class TestTransformers(unittest.TestCase):
         """
         probability = (1, 0)
         p1 = JossAnnTransformer(probability)(axelrod.Defector)()
-        self.assertFalse(Classifiers().get("stochastic", p1))
+        self.assertFalse(Classifiers["stochastic"](p1))
         p2 = axelrod.Cooperator()
         for _ in range(5):
             p1.play(p2)
@@ -290,7 +288,7 @@ class TestTransformers(unittest.TestCase):
 
         probability = (0, 1)
         p1 = JossAnnTransformer(probability)(axelrod.Cooperator)()
-        self.assertFalse(Classifiers().get("stochastic", p1))
+        self.assertFalse(Classifiers["stochastic"](p1))
         p2 = axelrod.Cooperator()
         for _ in range(5):
             p1.play(p2)
@@ -298,7 +296,7 @@ class TestTransformers(unittest.TestCase):
 
         probability = (0.3, 0.3)
         p1 = JossAnnTransformer(probability)(axelrod.TitForTat)()
-        self.assertTrue(Classifiers().get("stochastic", p1))
+        self.assertTrue(Classifiers["stochastic"](p1))
 
         p2 = axelrod.Cycler()
         axelrod.seed(0)
@@ -308,7 +306,7 @@ class TestTransformers(unittest.TestCase):
 
         probability = (0.6, 0.6)
         p1 = JossAnnTransformer(probability)(axelrod.Cooperator)()
-        self.assertTrue(Classifiers().get("stochastic", p1))
+        self.assertTrue(Classifiers["stochastic"](p1))
         p2 = axelrod.Cooperator()
         for _ in range(5):
             p1.play(p2)
@@ -316,27 +314,27 @@ class TestTransformers(unittest.TestCase):
 
         probability = (0, 1)
         p1 = JossAnnTransformer(probability)(axelrod.Random)
-        self.assertFalse(Classifiers().get("stochastic", p1()))
+        self.assertFalse(Classifiers["stochastic"](p1))
 
         probability = (1, 0)
         p1 = JossAnnTransformer(probability)(axelrod.Random)
-        self.assertFalse(Classifiers().get("stochastic", p1()))
+        self.assertFalse(Classifiers["stochastic"](p1))
 
         probability = (0.5, 0.5)
         p1 = JossAnnTransformer(probability)(axelrod.TitForTat)
-        self.assertTrue(Classifiers().get("stochastic", p1()))
+        self.assertTrue(Classifiers["stochastic"](p1))
 
         probability = (0, 0.5)
         p1 = JossAnnTransformer(probability)(axelrod.TitForTat)
-        self.assertTrue(Classifiers().get("stochastic", p1()))
+        self.assertTrue(Classifiers["stochastic"](p1))
 
         probability = (0, 0)
         p1 = JossAnnTransformer(probability)(axelrod.TitForTat)
-        self.assertFalse(Classifiers().get("stochastic", p1()))
+        self.assertFalse(Classifiers["stochastic"](p1))
 
         probability = (0, 0)
         p1 = JossAnnTransformer(probability)(axelrod.Random)
-        self.assertTrue(Classifiers().get("stochastic", p1()))
+        self.assertTrue(Classifiers["stochastic"](p1))
 
     def test_noisy_transformer(self):
         """Tests that the noisy transformed does flip some moves."""
@@ -344,48 +342,48 @@ class TestTransformers(unittest.TestCase):
         # Cooperator to Defector
         p1 = axelrod.Cooperator()
         p2 = NoisyTransformer(0.5)(axelrod.Cooperator)()
-        self.assertTrue(Classifiers().get("stochastic", p2))
+        self.assertTrue(Classifiers["stochastic"](p2))
         for _ in range(10):
             p1.play(p2)
         self.assertEqual(p2.history, [C, C, C, C, C, C, D, D, C, C])
 
         p2 = NoisyTransformer(0)(axelrod.Cooperator)
-        self.assertFalse(Classifiers().get("stochastic", p2()))
+        self.assertFalse(Classifiers["stochastic"](p2))
 
         p2 = NoisyTransformer(1)(axelrod.Cooperator)
-        self.assertFalse(Classifiers().get("stochastic", p2()))
+        self.assertFalse(Classifiers["stochastic"](p2))
 
         p2 = NoisyTransformer(0.3)(axelrod.Cooperator)
-        self.assertTrue(Classifiers().get("stochastic", p2()))
+        self.assertTrue(Classifiers["stochastic"](p2))
 
         p2 = NoisyTransformer(0)(axelrod.Random)
-        self.assertTrue(Classifiers().get("stochastic", p2()))
+        self.assertTrue(Classifiers["stochastic"](p2))
 
         p2 = NoisyTransformer(1)(axelrod.Random)
-        self.assertTrue(Classifiers().get("stochastic", p2()))
+        self.assertTrue(Classifiers["stochastic"](p2))
 
     def test_forgiving(self):
         """Tests that the forgiving transformer flips some defections."""
         random.seed(10)
         p1 = ForgiverTransformer(0.5)(axelrod.Alternator)()
-        self.assertTrue(Classifiers().get("stochastic", p1))
+        self.assertTrue(Classifiers["stochastic"](p1))
         p2 = axelrod.Defector()
         for _ in range(10):
             p1.play(p2)
         self.assertEqual(p1.history, [C, D, C, C, D, C, C, D, C, D])
 
         p1 = ForgiverTransformer(0)(axelrod.Alternator)()
-        self.assertFalse(Classifiers().get("stochastic", p1))
+        self.assertFalse(Classifiers["stochastic"](p1))
 
         p1 = ForgiverTransformer(1)(axelrod.Alternator)()
-        self.assertFalse(Classifiers().get("stochastic", p1))
+        self.assertFalse(Classifiers["stochastic"](p1))
 
     def test_initial_transformer(self):
         """Tests the InitialTransformer."""
         p1 = axelrod.Cooperator()
-        self.assertEqual(Classifiers().get("memory_depth", p1), 0)
+        self.assertEqual(Classifiers["memory_depth"](p1), 0)
         p2 = InitialTransformer([D, D])(axelrod.Cooperator)()
-        self.assertEqual(Classifiers().get("memory_depth", p2), 2)
+        self.assertEqual(Classifiers["memory_depth"](p2), 2)
         for _ in range(5):
             p1.play(p2)
         self.assertEqual(p2.history, [D, D, C, C, C])
@@ -397,17 +395,16 @@ class TestTransformers(unittest.TestCase):
         self.assertEqual(p2.history, [D, D, C, D, C])
 
         p3 = InitialTransformer([D, D])(axelrod.Adaptive)()
-        self.assertEqual(Classifiers().get("memory_depth", p3), float("inf"))
+        self.assertEqual(Classifiers["memory_depth"](p3), float("inf"))
 
     def test_final_transformer(self):
         """Tests the FinalTransformer when tournament length is known."""
         # Final play transformer
         p1 = axelrod.Cooperator()
         p2 = FinalTransformer([D, D, D])(axelrod.Cooperator)()
-        self.assertEqual(Classifiers().get("makes_use_of", p2), set(["length"]))
-        self.assertEqual(Classifiers().get("memory_depth", p2), 3)
-        self.assertEqual(
-            Classifiers().get("makes_use_of", axelrod.Cooperator()), set([]))
+        self.assertEqual(Classifiers["makes_use_of"](p2), set(["length"]))
+        self.assertEqual(Classifiers["memory_depth"](p2), 3)
+        self.assertEqual(Classifiers["makes_use_of"](axelrod.Cooperator()), set([]))
 
         p2.match_attributes["length"] = 6
         for _ in range(8):
@@ -415,7 +412,7 @@ class TestTransformers(unittest.TestCase):
         self.assertEqual(p2.history, [C, C, C, D, D, D, C, C])
 
         p3 = FinalTransformer([D, D])(axelrod.Adaptive)()
-        self.assertEqual(Classifiers().get("memory_depth", p3), float("inf"))
+        self.assertEqual(Classifiers["memory_depth"](p3), float("inf"))
 
     def test_final_transformer2(self):
         """Tests the FinalTransformer when tournament length is not known."""
@@ -444,8 +441,7 @@ class TestTransformers(unittest.TestCase):
             p1.play(p2)
         self.assertEqual(p1.history, [D, D, C, C, C, C, D, D])
 
-        cls1 = FinalTransformer([D, D])(
-            InitialTransformer([D, D])(axelrod.Cooperator))
+        cls1 = FinalTransformer([D, D])(InitialTransformer([D, D])(axelrod.Cooperator))
         p1 = cls1()
         p2 = axelrod.Cooperator()
         p1.match_attributes["length"] = 8
@@ -518,8 +514,7 @@ class TestTransformers(unittest.TestCase):
         for _ in range(5):
             p1.play(p2)
         self.assertEqual(p1.history, [D, C, D, C, D])
-        ApologizingDefector = ApologyTransformer([D, D], [C, C])(
-            axelrod.Defector)
+        ApologizingDefector = ApologyTransformer([D, D], [C, C])(axelrod.Defector)
         p1 = ApologizingDefector()
         p2 = axelrod.Cooperator()
         for _ in range(6):
@@ -530,7 +525,7 @@ class TestTransformers(unittest.TestCase):
         """Tests the MixedTransformer."""
         probability = 1
         MD = MixedTransformer(probability, axelrod.Cooperator)(axelrod.Defector)
-        self.assertFalse(Classifiers().get("stochastic", MD()))
+        self.assertFalse(Classifiers["stochastic"](MD))
 
         p1 = MD()
         p2 = axelrod.Cooperator()
@@ -540,7 +535,7 @@ class TestTransformers(unittest.TestCase):
 
         probability = 0
         MD = MixedTransformer(probability, axelrod.Cooperator)(axelrod.Defector)
-        self.assertFalse(Classifiers().get("stochastic", MD()))
+        self.assertFalse(Classifiers["stochastic"](MD))
 
         p1 = MD()
         p2 = axelrod.Cooperator()
@@ -554,7 +549,7 @@ class TestTransformers(unittest.TestCase):
         probability = [0.3, 0.2, 0]
         strategies = [axelrod.TitForTat, axelrod.Grudger, axelrod.Defector]
         MD = MixedTransformer(probability, strategies)(axelrod.Cooperator)
-        self.assertTrue(Classifiers().get("stochastic", MD()))
+        self.assertTrue(Classifiers["stochastic"](MD))
 
         p1 = MD()
         # Against a cooperator we see that we only cooperate
@@ -567,7 +562,7 @@ class TestTransformers(unittest.TestCase):
         probability = (0, 0, 1)  # Note can also pass tuple
         strategies = [axelrod.TitForTat, axelrod.Grudger, axelrod.Defector]
         MD = MixedTransformer(probability, strategies)(axelrod.Cooperator)
-        self.assertFalse(Classifiers().get("stochastic", MD()))
+        self.assertFalse(Classifiers["stochastic"](MD))
 
         p1 = MD()
         # Against a cooperator we see that we only defect
@@ -589,8 +584,7 @@ class TestTransformers(unittest.TestCase):
         # Now let's use the transformer to break the deadlock to achieve
         # Mutual cooperation
         p1 = axelrod.TitForTat()
-        p2 = DeadlockBreakingTransformer()(
-            InitialTransformer([D])(axelrod.TitForTat))()
+        p2 = DeadlockBreakingTransformer()(InitialTransformer([D])(axelrod.TitForTat))()
         for _ in range(4):
             p1.play(p2)
         self.assertEqual(p1.history, [C, D, C, C])

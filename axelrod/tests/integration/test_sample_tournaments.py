@@ -12,7 +12,6 @@ class TestSampleTournaments(unittest.TestCase):
 
     @classmethod
     def get_test_outcome(cls, outcome, turns=10):
-
         # Extract the name of players from the outcome tuples,
         # and initiate the players by getting the classes from axelrod.
         names = [out[0] for out in outcome]

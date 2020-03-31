@@ -5,7 +5,7 @@ import unittest
 import warnings
 
 import axelrod
-from axelrod.classifier import Classifiers
+from axelrod import Classifiers
 from axelrod.strategies.memorytwo import MemoryTwoPlayer
 
 from .test_player import TestPlayer
@@ -66,12 +66,12 @@ class TestGenericPlayerTwo(unittest.TestCase):
         )
 
     def test_deterministic_classification(self):
-        self.assertFalse(Classifiers().get("stochastic", self.p1))
-        self.assertFalse(Classifiers().get("stochastic", self.p2))
+        self.assertFalse(Classifiers["stochastic"](self.p1))
+        self.assertFalse(Classifiers["stochastic"](self.p2))
 
     def test_stochastic_classification(self):
-        self.assertTrue(Classifiers().get("stochastic", self.p3))
-        self.assertTrue(Classifiers().get("stochastic", self.p4))
+        self.assertTrue(Classifiers["stochastic"](self.p3))
+        self.assertTrue(Classifiers["stochastic"](self.p4))
 
 
 class TestMemoryTwoPlayer(unittest.TestCase):

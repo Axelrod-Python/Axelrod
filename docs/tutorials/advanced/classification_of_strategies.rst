@@ -39,18 +39,14 @@ dictionary, then if the key is not present, then we refer to this logic.
 This logic must be defined for a class, and not specific instances.
 
 To lookup the classifier of a strategy, using the classifier dict, or the
-strategy's logic as default, we use :code:`Classifiers().get(<classifier>,
+strategy's logic as default, we use :code:`Classifiers[<classifier>](
 <strategy>)`::
 
-    >>> from axelrod.classifier import Classifiers
-    >>> Classifiers().get('memory_depth', axl.TitForTat())
+    >>> from axelrod import Classifiers
+    >>> Classifiers['memory_depth'](axl.TitForTat)
     1
-    >>> Classifiers().get('stochastic', axl.Random())
+    >>> Classifiers['stochastic'](axl.Random())
     True
-
-Because the logic may take time to run, the script in
-:code:`rebuild_classifier_table.py` pre-calculates these values, and stores to
-:code:`data/all_classifiers.yml`.
 
 We can use this classification to generate sets of strategies according to
 filters which we define in a 'filterset' dictionary and then pass to the

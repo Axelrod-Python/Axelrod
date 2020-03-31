@@ -5,7 +5,7 @@ import warnings
 
 import axelrod
 from axelrod import Game
-from axelrod.classifier import Classifiers
+from axelrod import Classifiers
 from axelrod.strategies.memoryone import MemoryOnePlayer
 
 from .test_player import TestPlayer, test_four_vector
@@ -27,9 +27,9 @@ class TestGenericPlayerOne(unittest.TestCase):
         self.assertEqual(self.p3.name, "Generic Memory One Player: (1, 0.5, 1, 0.5)")
 
     def test_stochastic_classification(self):
-        self.assertFalse(Classifiers().get("stochastic", self.p1))
-        self.assertFalse(Classifiers().get("stochastic", self.p2))
-        self.assertTrue(Classifiers().get("stochastic", self.p3))
+        self.assertFalse(Classifiers["stochastic"](self.p1))
+        self.assertFalse(Classifiers["stochastic"](self.p2))
+        self.assertTrue(Classifiers["stochastic"](self.p3))
 
 
 class TestWinStayLoseShift(TestPlayer):
@@ -72,8 +72,7 @@ class TestWinShiftLoseStayTestPlayer(TestPlayer):
     def test_strategy(self):
         # Check that switches if does not get best payoff.
         actions = [(D, C), (C, D), (C, C), (D, D), (D, C)]
-        self.versus_test(opponent=axelrod.Alternator(),
-                         expected_actions=actions)
+        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
 
 
 class TestGTFT(TestPlayer):
@@ -335,9 +334,9 @@ class TestGenericReactiveStrategy(unittest.TestCase):
         )
 
     def test_stochastic_classification(self):
-        self.assertFalse(Classifiers().get("stochastic", self.p1))
-        self.assertFalse(Classifiers().get("stochastic", self.p2))
-        self.assertTrue(Classifiers().get("stochastic", self.p3))
+        self.assertFalse(Classifiers["stochastic"](self.p1))
+        self.assertFalse(Classifiers["stochastic"](self.p2))
+        self.assertTrue(Classifiers["stochastic"](self.p3))
 
     def test_subclass(self):
         self.assertIsInstance(self.p1, MemoryOnePlayer)

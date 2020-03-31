@@ -16,7 +16,7 @@ import pickle
 from collections import UserDict
 from typing import List, Tuple
 
-from axelrod.classifier import Classifiers
+from axelrod import Classifiers
 from .action import Action
 from .player import Player
 
@@ -52,14 +52,10 @@ def _is_valid_key(key: CachePlayerKey) -> bool:
     if not isinstance(key, tuple) or len(key) != 2:
         return False
 
-    if not (
-        isinstance(key[0], Player)
-        and isinstance(key[1], Player)
-    ):
+    if not (isinstance(key[0], Player) and isinstance(key[1], Player)):
         return False
 
-    if Classifiers().get("stochastic", key[0]) or Classifiers().get(
-        "stochastic", key[1]):
+    if Classifiers["stochastic"](key[0]) or Classifiers["stochastic"](key[1]):
         return False
 
     return True
