@@ -10,8 +10,7 @@ To classify the new strategy, run rebuild_classifier_table::
     python rebuild_classifier_table.py
 
 This will update :code:`axelrod/strategies/_strategies.py`.  Check that the
-recorded classifications for the strategies are what you expected, then add this
-file to your git commit.
+recorded classifications for the strategies are what you expected.
 
 If you have added your strategy to a file that already existed (perhaps you
 added a new variant of :code:`titfortat` to the :code:`titfortat.py` file),
