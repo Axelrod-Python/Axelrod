@@ -118,8 +118,8 @@ and/or :code:`inspect_source` return :code:`False` for the
 :code:`Classifier.obey_axelrod` function::
 
     >>> s = axl.MindBender()
-    >>> axl.Classifier.obey_axelrod(s)
+    >>> axl.Classifiers.obey_axelrod(s)
     False
     >>> s = axl.TitForTat()
-    >>> axl.Classifier.obey_axelrod(s)
+    >>> axl.Classifiers.obey_axelrod(s)
     True
