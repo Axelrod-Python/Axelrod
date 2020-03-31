@@ -1,9 +1,12 @@
 """Test for the Looker Up strategy."""
-import copy
-import random
+
 import unittest
 
-import axelrod
+import copy
+
+import random
+
+import axelrod as axl
 from axelrod.action import str_to_actions
 from axelrod.evolvable_player import InsufficientParametersError
 from axelrod.strategies.lookerup import (
@@ -18,7 +21,7 @@ from axelrod.strategies.lookerup import (
 from .test_player import TestPlayer
 from .test_evolvable_player import PartialClass, TestEvolvablePlayer
 
-C, D = axelrod.Action.C, axelrod.Action.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestLookupTable(unittest.TestCase):
@@ -188,7 +191,7 @@ class TestLookupTableHelperFunctions(unittest.TestCase):
 class TestLookerUp(TestPlayer):
 
     name = "LookerUp"
-    player = axelrod.LookerUp
+    player = axl.LookerUp
 
     expected_classifier = {
         "memory_depth": 1,  # Default TFT
@@ -212,7 +215,7 @@ class TestLookerUp(TestPlayer):
     def test_pattern_and_params_init_pattern_is_string(self):
         pattern = "CCCC"
         parameters = Plays(1, 1, 0)
-        player = axelrod.LookerUp(pattern=pattern, parameters=parameters)
+        player = axl.LookerUp(pattern=pattern, parameters=parameters)
         expected_lookup_table = {
             Plays((C,), (D,), ()): C,
             Plays((D,), (D,), ()): C,
@@ -224,7 +227,7 @@ class TestLookerUp(TestPlayer):
     def test_pattern_and_params_init_pattern_is_tuple(self):
         pattern = (C, C, C, C)
         parameters = Plays(1, 1, 0)
-        player = axelrod.LookerUp(pattern=pattern, parameters=parameters)
+        player = axl.LookerUp(pattern=pattern, parameters=parameters)
         expected_lookup_table = {
             Plays((C,), (D,), ()): C,
             Plays((D,), (D,), ()): C,
@@ -236,7 +239,7 @@ class TestLookerUp(TestPlayer):
     def test_pattern_and_params_init_can_still_use_regular_tuple(self):
         pattern = (C, C)
         parameters = (1, 0, 0)
-        player = axelrod.LookerUp(pattern=pattern, parameters=parameters)
+        player = axl.LookerUp(pattern=pattern, parameters=parameters)
         expected_lookup_table = {Plays((C,), (), ()): C, Plays((D,), (), ()): C}
         self.assertEqual(player.lookup_dict, expected_lookup_table)
 
@@ -244,8 +247,8 @@ class TestLookerUp(TestPlayer):
         default = {Plays((), (D,), ()): D, Plays((), (C,), ()): C}
         pattern = "CC"
         parameters = Plays(self_plays=0, op_plays=1, op_openings=0)
-        player1 = axelrod.LookerUp(pattern=pattern)
-        player2 = axelrod.LookerUp(parameters=parameters)
+        player1 = axl.LookerUp(pattern=pattern)
+        player2 = axl.LookerUp(parameters=parameters)
 
         self.assertEqual(player1.lookup_dict, default)
         self.assertEqual(player2.lookup_dict, default)
@@ -257,7 +260,7 @@ class TestLookerUp(TestPlayer):
             ((C,), (C,), ()): C,
             ((D,), (C,), ()): C,
         }
-        player = axelrod.LookerUp(lookup_dict=lookup_table)
+        player = axl.LookerUp(lookup_dict=lookup_table)
         self.assertEqual(player.lookup_dict, lookup_table)
         self.assertIsInstance(next(iter(player.lookup_dict)), Plays)
 
@@ -270,7 +273,7 @@ class TestLookerUp(TestPlayer):
         }
         pattern = "CCCCCCCC"
         parameters = Plays(self_plays=1, op_plays=1, op_openings=1)
-        player = axelrod.LookerUp(
+        player = axl.LookerUp(
             lookup_dict=lookup_table, pattern=pattern, parameters=parameters
         )
 
@@ -279,24 +282,24 @@ class TestLookerUp(TestPlayer):
     def test_init_raises_errors(self):
         mismatch_dict = {((C,), (C,), ()): C, ((D, D), (D, D), ()): C}
         with self.assertRaises(ValueError):
-            axelrod.LookerUp(lookup_dict=mismatch_dict)
+            axl.LookerUp(lookup_dict=mismatch_dict)
 
         incomplete_lookup_dict = {((C,), (C,), ()): C, ((D,), (D,), ()): C}
         with self.assertRaises(ValueError):
-            axelrod.LookerUp(lookup_dict=incomplete_lookup_dict)
+            axl.LookerUp(lookup_dict=incomplete_lookup_dict)
 
         too_short_pattern = "CC"
         with self.assertRaises(ValueError):
-            axelrod.LookerUp(pattern=too_short_pattern, parameters=(3, 3, 3))
+            axl.LookerUp(pattern=too_short_pattern, parameters=(3, 3, 3))
 
     def test_initial_actions_set_to_max_table_depth(self):
         initial_actions = (D, D, D)
-        table_depth_one = axelrod.LookerUp(initial_actions=initial_actions)
+        table_depth_one = axl.LookerUp(initial_actions=initial_actions)
         self.assertEqual(table_depth_one.initial_actions, (D,))
 
     def test_initial_actions_makes_up_missing_actions_with_c(self):
         initial_actions = (D,)
-        table_depth_three = axelrod.LookerUp(
+        table_depth_three = axl.LookerUp(
             initial_actions=initial_actions,
             pattern="CCCCCCCC",
             parameters=Plays(3, 0, 0),
@@ -304,27 +307,27 @@ class TestLookerUp(TestPlayer):
         self.assertEqual(table_depth_three.initial_actions, (D, C, C))
 
     def test_set_memory_depth(self):
-        mem_depth_1 = axelrod.LookerUp(pattern="CC", parameters=Plays(1, 0, 0))
+        mem_depth_1 = axl.LookerUp(pattern="CC", parameters=Plays(1, 0, 0))
         self.assertEqual(mem_depth_1.classifier["memory_depth"], 1)
 
-        mem_depth_3 = axelrod.LookerUp(pattern="C" * 16, parameters=Plays(1, 3, 0))
+        mem_depth_3 = axl.LookerUp(pattern="C" * 16, parameters=Plays(1, 3, 0))
         self.assertEqual(mem_depth_3.classifier["memory_depth"], 3)
 
-        mem_depth_inf = axelrod.LookerUp(pattern="CC", parameters=Plays(0, 0, 1))
+        mem_depth_inf = axl.LookerUp(pattern="CC", parameters=Plays(0, 0, 1))
         self.assertEqual(mem_depth_inf.classifier["memory_depth"], float("inf"))
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (D, C), (C, D)]
-        self.versus_test(axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(axl.Alternator(), expected_actions=actions)
 
         actions = [(C, D), (D, D), (D, D)]
-        self.versus_test(axelrod.Defector(), expected_actions=actions)
+        self.versus_test(axl.Defector(), expected_actions=actions)
 
     def test_cooperator_table(self):
         lookup_table = {((), (), ()): C}
         actions = [(C, D)] * 5
         self.versus_test(
-            axelrod.Defector(),
+            axl.Defector(),
             expected_actions=actions,
             init_kwargs={"lookup_dict": lookup_table},
         )
@@ -341,7 +344,7 @@ class TestLookerUp(TestPlayer):
         }
         actions = [(C, C)] + [(D, D), (D, C)] * 4
         self.versus_test(
-            axelrod.Alternator(),
+            axl.Alternator(),
             expected_actions=actions,
             init_kwargs={"lookup_dict": defector_table},
         )
@@ -353,7 +356,7 @@ class TestLookerUp(TestPlayer):
 
         tft_vs_alternator = [(C, C)] + [(D, D), (C, C)] * 5
         self.versus_test(
-            axelrod.Alternator(),
+            axl.Alternator(),
             expected_actions=tft_vs_alternator,
             init_kwargs={"parameters": parameters, "pattern": anti_tft_pattern},
         )
@@ -364,13 +367,13 @@ class TestLookerUp(TestPlayer):
 
         vs_alternator = [(C, C), (C, D)] * 5
         self.versus_test(
-            axelrod.Alternator(),
+            axl.Alternator(),
             expected_actions=vs_alternator,
             init_kwargs={"lookup_dict": first_move_table},
         )
 
         vs_initial_defector = [(C, D)] + [(D, C), (D, D)] * 10
-        opponent = axelrod.MockPlayer(actions=[D, C])
+        opponent = axl.MockPlayer(actions=[D, C])
         self.versus_test(
             opponent,
             expected_actions=vs_initial_defector,
@@ -378,7 +381,7 @@ class TestLookerUp(TestPlayer):
         )
 
     def test_lookup_table_display(self):
-        player = axelrod.LookerUp(
+        player = axl.LookerUp(
             pattern="CCCC", parameters=Plays(self_plays=2, op_plays=0, op_openings=0)
         )
         self.assertEqual(
@@ -396,7 +399,7 @@ class TestLookerUp(TestPlayer):
 class TestEvolvedLookerUp1_1_1(TestPlayer):
 
     name = "EvolvedLookerUp1_1_1"
-    player = axelrod.EvolvedLookerUp1_1_1
+    player = axl.EvolvedLookerUp1_1_1
 
     expected_classifier = {
         "memory_depth": float("inf"),
@@ -426,21 +429,21 @@ class TestEvolvedLookerUp1_1_1(TestPlayer):
         opponent = [D, C, C, D, D, C]
         expected = [(C, D), (D, C), (C, C), (D, D), (D, D), (D, C)]
         self.versus_test(
-            axelrod.MockPlayer(actions=opponent), expected_actions=expected
+            axl.MockPlayer(actions=opponent), expected_actions=expected
         )
 
     def test_vs_initial_cooperator(self):
         opponent = [C, D, D, C, C, D]
         expected = [(C, C), (C, D), (D, D), (D, C), (D, C), (D, D)]
         self.versus_test(
-            axelrod.MockPlayer(actions=opponent), expected_actions=expected
+            axl.MockPlayer(actions=opponent), expected_actions=expected
         )
 
 
 class TestEvolvedLookerUp2_2_2(TestPlayer):
 
     name = "EvolvedLookerUp2_2_2"
-    player = axelrod.EvolvedLookerUp2_2_2
+    player = axl.EvolvedLookerUp2_2_2
 
     expected_classifier = {
         "memory_depth": float("inf"),
@@ -526,20 +529,20 @@ class TestEvolvedLookerUp2_2_2(TestPlayer):
         opponent_actions = [D, D] + [C, D] * 3
         expected = [(C, D), (C, D)] + [(D, C), (C, D)] * 3
         self.versus_test(
-            axelrod.MockPlayer(actions=opponent_actions), expected_actions=expected
+            axl.MockPlayer(actions=opponent_actions), expected_actions=expected
         )
 
     def test_vs_initial_d_c(self):
         opponent_actions = [D, C] + [C, D] * 3
         expected = [(C, D), (C, C)] + [(D, C), (C, D), (C, C), (D, D), (C, C), (C, D)]
         self.versus_test(
-            axelrod.MockPlayer(actions=opponent_actions), expected_actions=expected
+            axl.MockPlayer(actions=opponent_actions), expected_actions=expected
         )
 
 
 class TestWinner12(TestPlayer):
     name = "Winner12"
-    player = axelrod.Winner12
+    player = axl.Winner12
 
     expected_classifier = {
         "memory_depth": 2,
@@ -571,18 +574,18 @@ class TestWinner12(TestPlayer):
     def test_strategy(self):
         """Starts by cooperating twice."""
         vs_alternator = [(C, C), (C, D), (D, C), (D, D)] * 5
-        self.versus_test(axelrod.Alternator(), expected_actions=vs_alternator)
+        self.versus_test(axl.Alternator(), expected_actions=vs_alternator)
 
-        self.versus_test(axelrod.Cooperator(), expected_actions=[(C, C)] * 10)
+        self.versus_test(axl.Cooperator(), expected_actions=[(C, C)] * 10)
 
         self.versus_test(
-            axelrod.Defector(), expected_actions=([(C, D), (C, D)] + [(D, D)] * 10)
+            axl.Defector(), expected_actions=([(C, D), (C, D)] + [(D, D)] * 10)
         )
 
 
 class TestWinner21(TestPlayer):
     name = "Winner21"
-    player = axelrod.Winner21
+    player = axl.Winner21
 
     expected_classifier = {
         "memory_depth": 2,
@@ -614,14 +617,14 @@ class TestWinner21(TestPlayer):
     def test_strategy(self):
         """Starts by cooperating twice."""
         vs_alternator = [(D, C), (C, D)] + [(D, C), (D, D)] * 5
-        self.versus_test(axelrod.Alternator(), expected_actions=vs_alternator)
+        self.versus_test(axl.Alternator(), expected_actions=vs_alternator)
 
         self.versus_test(
-            axelrod.Cooperator(), expected_actions=[(D, C)] + [(C, C)] * 10
+            axl.Cooperator(), expected_actions=[(D, C)] + [(C, C)] * 10
         )
 
         self.versus_test(
-            axelrod.Defector(), expected_actions=([(D, D), (C, D)] + [(D, D)] * 10)
+            axl.Defector(), expected_actions=([(D, D), (C, D)] + [(D, D)] * 10)
         )
 
 
@@ -694,24 +697,24 @@ class TestEvolvableLookerUp(unittest.TestCase):
 
 class TestEvolvableLookerUp2(TestEvolvablePlayer):
     name = "EvolvableLookerUp"
-    player_class = axelrod.EvolvableLookerUp
-    parent_class = axelrod.LookerUp
+    player_class = axl.EvolvableLookerUp
+    parent_class = axl.LookerUp
     parent_kwargs = ["lookup_dict", "initial_actions"]
     init_parameters = {"parameters": (1, 1, 1)}
 
 
 class TestEvolvableLookerUp3(TestEvolvablePlayer):
     name = "EvolvableLookerUp"
-    player_class = axelrod.EvolvableLookerUp
-    parent_class = axelrod.LookerUp
+    player_class = axl.EvolvableLookerUp
+    parent_class = axl.LookerUp
     parent_kwargs = ["lookup_dict", "initial_actions"]
     init_parameters = {"parameters": (2, 1, 3)}
 
 
 class TestEvolvableLookerUp4(TestEvolvablePlayer):
     name = "EvolvableLookerUp"
-    player_class = axelrod.EvolvableLookerUp
-    parent_class = axelrod.LookerUp
+    player_class = axl.EvolvableLookerUp
+    parent_class = axl.LookerUp
     parent_kwargs = ["lookup_dict", "initial_actions"]
     init_parameters = {"parameters": (2, 2, 2),
                        "pattern": "".join([random.choice(('C', 'D')) for _ in range(64)]),
@@ -720,8 +723,8 @@ class TestEvolvableLookerUp4(TestEvolvablePlayer):
 
 class TestEvolvableLookerUp5(TestEvolvablePlayer):
     name = "EvolvableLookerUp"
-    player_class = axelrod.EvolvableLookerUp
-    parent_class = axelrod.LookerUp
+    player_class = axl.EvolvableLookerUp
+    parent_class = axl.LookerUp
     parent_kwargs = ["lookup_dict", "initial_actions"]
     init_parameters = {
         "initial_actions": (C, C,),

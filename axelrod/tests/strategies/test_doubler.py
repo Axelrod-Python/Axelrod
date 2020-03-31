@@ -1,16 +1,16 @@
 """Tests for the Doubler strategy."""
 
-import axelrod
+import axelrod as axl
 
 from .test_player import TestPlayer
 
-C, D = axelrod.Action.C, axelrod.Action.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestDoubler(TestPlayer):
 
     name = "Doubler"
-    player = axelrod.Doubler
+    player = axl.Doubler
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -27,7 +27,7 @@ class TestDoubler(TestPlayer):
         opponent_plays = [C] * 7 + [D] * 4 + [C]
         actions = [(C, C)] * 7 + [(C, D)] * 4 + [(D, C)]
         self.versus_test(
-            axelrod.MockPlayer(actions=opponent_plays), expected_actions=actions
+            axl.MockPlayer(actions=opponent_plays), expected_actions=actions
         )
 
     def test_defects_if_opponent_last_play_D_and_defections_equal_two_times_cooperations(
@@ -36,7 +36,7 @@ class TestDoubler(TestPlayer):
         opponent_plays = [C] * 8 + [D] * 4 + [C]
         actions = [(C, C)] * 8 + [(C, D)] * 4 + [(D, C)]
         self.versus_test(
-            axelrod.MockPlayer(actions=opponent_plays), expected_actions=actions
+            axl.MockPlayer(actions=opponent_plays), expected_actions=actions
         )
 
     def test_cooperates_if_opponent_last_play_is_C(self):
@@ -45,5 +45,5 @@ class TestDoubler(TestPlayer):
         opponent_plays = opponent_first_five + [C] + [D]
         actions = actions_first_five + [(D, C)] + [(C, D)]
         self.versus_test(
-            axelrod.MockPlayer(actions=opponent_plays), expected_actions=actions
+            axl.MockPlayer(actions=opponent_plays), expected_actions=actions
         )

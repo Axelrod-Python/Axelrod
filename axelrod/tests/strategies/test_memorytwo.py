@@ -1,15 +1,17 @@
 """Tests for the Memorytwo strategies."""
 
-import random
 import unittest
+
+import random
+
 import warnings
 
-import axelrod
+import axelrod as axl
 from axelrod.strategies.memorytwo import MemoryTwoPlayer
 
 from .test_player import TestPlayer
 
-C, D = axelrod.Action.C, axelrod.Action.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestGenericPlayerTwo(unittest.TestCase):
@@ -142,7 +144,7 @@ class TestMemoryStochastic(TestPlayer):
     name = (
         "Generic Memory Two Player: (1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1): C"
     )
-    player = axelrod.MemoryTwoPlayer
+    player = axl.MemoryTwoPlayer
     expected_classifier = {
         "memory_depth": 2,  # Memory-two Sixteen-Vector
         "stochastic": False,
@@ -154,12 +156,12 @@ class TestMemoryStochastic(TestPlayer):
     }
 
     def test_strategy(self):
-        axelrod.seed(0)
+        axl.seed(0)
         vector = [random.random() for _ in range(16)]
 
         actions = [(C, C), (C, C), (D, D), (D, C), (C, C), (C, D), (C, C)]
         self.versus_test(
-            opponent=axelrod.CyclerCCD(),
+            opponent=axl.CyclerCCD(),
             expected_actions=actions,
             seed=0,
             init_kwargs={"sixteen_vector": vector},
@@ -167,7 +169,7 @@ class TestMemoryStochastic(TestPlayer):
 
         actions = [(C, C), (C, C), (C, D), (D, C), (C, C), (C, D), (C, C)]
         self.versus_test(
-            opponent=axelrod.CyclerCCD(),
+            opponent=axl.CyclerCCD(),
             expected_actions=actions,
             seed=1,
             init_kwargs={"sixteen_vector": vector},
@@ -175,7 +177,7 @@ class TestMemoryStochastic(TestPlayer):
 
         actions = [(C, C), (C, C), (D, C), (D, D), (C, D), (C, C), (D, C)]
         self.versus_test(
-            opponent=axelrod.TitForTat(),
+            opponent=axl.TitForTat(),
             expected_actions=actions,
             seed=0,
             init_kwargs={"sixteen_vector": vector},
@@ -183,7 +185,7 @@ class TestMemoryStochastic(TestPlayer):
 
         actions = [(C, C), (C, C), (C, C), (D, C), (D, D), (C, D), (C, C)]
         self.versus_test(
-            opponent=axelrod.TitForTat(),
+            opponent=axl.TitForTat(),
             expected_actions=actions,
             seed=1,
             init_kwargs={"sixteen_vector": vector},
@@ -193,7 +195,7 @@ class TestMemoryStochastic(TestPlayer):
 class TestAON2(TestPlayer):
 
     name = "AON2"
-    player = axelrod.AON2
+    player = axl.AON2
     expected_classifier = {
         "memory_depth": 2,
         "stochastic": False,
@@ -207,31 +209,31 @@ class TestAON2(TestPlayer):
     def test_strategy(self):
         # tests states 2, 7, 14 and 15
         actions = [(C, C), (C, D), (D, C), (D, D), (D, C), (D, D)]
-        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions)
 
         # tests states 4, 16 and 11
         actions = [(C, D), (C, D), (D, C), (D, D), (D, D), (C, C), (C, D)]
-        self.versus_test(opponent=axelrod.CyclerDDC(), expected_actions=actions)
+        self.versus_test(opponent=axl.CyclerDDC(), expected_actions=actions)
 
         # tests states 3, 5 and 12
         actions = [(C, D), (C, C), (D, C), (D, D), (D, D), (C, D)]
         self.versus_test(
-            opponent=axelrod.SuspiciousTitForTat(), expected_actions=actions
+            opponent=axl.SuspiciousTitForTat(), expected_actions=actions
         )
 
         # tests state 1
         actions = [(C, C), (C, C), (C, C), (C, C)]
-        self.versus_test(opponent=axelrod.Cooperator(), expected_actions=actions)
+        self.versus_test(opponent=axl.Cooperator(), expected_actions=actions)
 
         # tests state 6
         actions = [(C, D), (C, C), (D, D), (C, C)]
-        self.versus_test(opponent=axelrod.CyclerDC(), expected_actions=actions)
+        self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions)
 
 
 class TestDelayedAON1(TestPlayer):
 
     name = "Delayed AON1"
-    player = axelrod.DelayedAON1
+    player = axl.DelayedAON1
     expected_classifier = {
         "memory_depth": 2,
         "stochastic": False,
@@ -245,25 +247,25 @@ class TestDelayedAON1(TestPlayer):
     def test_strategy_mutually_cooperative(self):
         # tests states 2, 7, 14 and 11
         actions = [(C, C), (C, D), (D, C), (D, D), (C, C), (C, D)]
-        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions)
 
         # tests states 1, 4 and 8
         actions = [(C, D), (C, D), (D, D), (C, C), (C, C), (C, D)]
         self.versus_test(
-            opponent=axelrod.Cycler(["D", "D", "D", "C", "C"]), expected_actions=actions
+            opponent=axl.Cycler(["D", "D", "D", "C", "C"]), expected_actions=actions
         )
 
         # tests states 3, 5
         actions = [(C, D), (C, C), (D, C), (D, D), (C, D)]
         self.versus_test(
-            opponent=axelrod.SuspiciousTitForTat(), expected_actions=actions
+            opponent=axl.SuspiciousTitForTat(), expected_actions=actions
         )
 
 
 class TestMEM2(TestPlayer):
 
     name = "MEM2"
-    player = axelrod.MEM2
+    player = axl.MEM2
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -278,18 +280,18 @@ class TestMEM2(TestPlayer):
         # Start with TFT
         actions = [(C, C), (C, C)]
         self.versus_test(
-            opponent=axelrod.Cooperator(),
+            opponent=axl.Cooperator(),
             expected_actions=actions,
             attrs={"play_as": "TFT", "shift_counter": 1, "alld_counter": 0},
         )
         actions = [(C, D), (D, D)]
         self.versus_test(
-            opponent=axelrod.Defector(),
+            opponent=axl.Defector(),
             expected_actions=actions,
             attrs={"play_as": "TFT", "shift_counter": 1, "alld_counter": 0},
         )
         # TFTT if C, D and D, C
-        opponent = axelrod.MockPlayer([D, C, D, D])
+        opponent = axl.MockPlayer([D, C, D, D])
         actions = [(C, D), (D, C), (C, D), (C, D)]
         self.versus_test(
             opponent=opponent,
@@ -297,7 +299,7 @@ class TestMEM2(TestPlayer):
             attrs={"play_as": "TFTT", "shift_counter": 1, "alld_counter": 0},
         )
 
-        opponent = axelrod.MockPlayer([D, C, D, D])
+        opponent = axl.MockPlayer([D, C, D, D])
         actions = [
             (C, D),
             (D, C),

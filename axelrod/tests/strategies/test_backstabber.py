@@ -1,14 +1,16 @@
 """Tests for BackStabber and DoubleCrosser."""
-import axelrod
+
+import axelrod as axl
+
 from .test_player import TestPlayer
 
-C, D = axelrod.Action.C, axelrod.Action.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestBackStabber(TestPlayer):
 
     name = "BackStabber: (D, D)"
-    player = axelrod.BackStabber
+    player = axl.BackStabber
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -23,13 +25,13 @@ class TestBackStabber(TestPlayer):
         # Forgives three defections
         defector_actions = [(C, D), (C, D), (C, D), (C, D), (D, D), (D, D)]
         self.versus_test(
-            axelrod.Defector(),
+            axl.Defector(),
             expected_actions=defector_actions,
             match_attributes={"length": 200},
         )
         alternator_actions = [(C, C), (C, D)] * 4 + [(D, C), (D, D)] * 2
         self.versus_test(
-            axelrod.Alternator(),
+            axl.Alternator(),
             expected_actions=alternator_actions,
             match_attributes={"length": 200},
         )
@@ -37,27 +39,27 @@ class TestBackStabber(TestPlayer):
     def test_defects_on_last_two_rounds_by_match_len(self):
         actions = [(C, C)] * 198 + [(D, C), (D, C)]
         self.versus_test(
-            axelrod.Cooperator(),
+            axl.Cooperator(),
             expected_actions=actions,
             match_attributes={"length": 200},
         )
         actions = [(C, C)] * 10 + [(D, C), (D, C)]
         self.versus_test(
-            axelrod.Cooperator(),
+            axl.Cooperator(),
             expected_actions=actions,
             match_attributes={"length": 12},
         )
         # Test that exceeds tournament length.
         actions = [(C, C)] * 198 + [(D, C), (D, C), (C, C), (C, C)]
         self.versus_test(
-            axelrod.Cooperator(),
+            axl.Cooperator(),
             expected_actions=actions,
             match_attributes={"length": 200},
         )
         # But only if the tournament is known.
         actions = [(C, C)] * 202
         self.versus_test(
-            axelrod.Cooperator(),
+            axl.Cooperator(),
             expected_actions=actions,
             match_attributes={"length": -1},
         )
@@ -71,7 +73,7 @@ class TestDoubleCrosser(TestBackStabber):
     """
 
     name = "DoubleCrosser: (D, D)"
-    player = axelrod.DoubleCrosser
+    player = axl.DoubleCrosser
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -93,7 +95,7 @@ class TestDoubleCrosser(TestBackStabber):
         opponent_actions = starting_cooperation + [D, D, C, D]
         expected_actions = starting_rounds + [(C, D), (C, D), (D, C), (C, D)]
         self.versus_test(
-            axelrod.MockPlayer(actions=opponent_actions),
+            axl.MockPlayer(actions=opponent_actions),
             expected_actions=expected_actions,
             match_attributes={"length": 200},
         )
@@ -108,7 +110,7 @@ class TestDoubleCrosser(TestBackStabber):
             (C, D),
         ]
         self.versus_test(
-            axelrod.MockPlayer(actions=opponent_actions),
+            axl.MockPlayer(actions=opponent_actions),
             expected_actions=expected_actions,
             match_attributes={"length": 200},
         )
@@ -124,7 +126,7 @@ class TestDoubleCrosser(TestBackStabber):
         actions = defects_on_first + opponent_actions_suffix
         expected_actions = defects_on_first_actions + expected_actions_suffix
         self.versus_test(
-            axelrod.MockPlayer(actions=actions),
+            axl.MockPlayer(actions=actions),
             expected_actions=expected_actions,
             match_attributes={"length": 200},
         )
@@ -142,7 +144,7 @@ class TestDoubleCrosser(TestBackStabber):
         actions = defects_in_middle + opponent_actions_suffix
         expected_actions = defects_in_middle_actions + expected_actions_suffix
         self.versus_test(
-            axelrod.MockPlayer(actions=actions),
+            axl.MockPlayer(actions=actions),
             expected_actions=expected_actions,
             match_attributes={"length": 200},
         )
@@ -152,7 +154,7 @@ class TestDoubleCrosser(TestBackStabber):
         actions = defects_on_last + opponent_actions_suffix
         expected_actions = defects_on_last_actions + expected_actions_suffix
         self.versus_test(
-            axelrod.MockPlayer(actions=actions),
+            axl.MockPlayer(actions=actions),
             expected_actions=expected_actions,
             match_attributes={"length": 200},
         )
@@ -163,7 +165,7 @@ class TestDoubleCrosser(TestBackStabber):
         opponent_actions = one_eighty_opponent_actions + [C] * 6
         expected_actions = one_eighty_expected_actions + [(D, C)] * 6
         self.versus_test(
-            axelrod.MockPlayer(actions=opponent_actions),
+            axl.MockPlayer(actions=opponent_actions),
             expected_actions=expected_actions,
             match_attributes={"length": 200},
         )

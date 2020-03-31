@@ -1,16 +1,16 @@
 """Tests for the AverageCopier strategies."""
 
-import axelrod
+import axelrod as axl
 
 from .test_player import TestPlayer
 
-C, D = axelrod.Action.C, axelrod.Action.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestAverageCopier(TestPlayer):
 
     name = "Average Copier"
-    player = axelrod.AverageCopier
+    player = axl.AverageCopier
     expected_classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": True,
@@ -24,15 +24,15 @@ class TestAverageCopier(TestPlayer):
     def test_strategy(self):
         # Tests that if opponent has played all C then player chooses C.
         actions = [(C, C)] * 10
-        self.versus_test(axelrod.Cooperator(), expected_actions=actions, seed=1)
+        self.versus_test(axl.Cooperator(), expected_actions=actions, seed=1)
         actions = [(D, C)] + [(C, C)] * 9
-        self.versus_test(axelrod.Cooperator(), expected_actions=actions, seed=2)
+        self.versus_test(axl.Cooperator(), expected_actions=actions, seed=2)
 
         # Tests that if opponent has played all D then player chooses D.
         actions = [(C, D)] + [(D, D)] * 9
-        self.versus_test(axelrod.Defector(), expected_actions=actions, seed=1)
+        self.versus_test(axl.Defector(), expected_actions=actions, seed=1)
         actions = [(D, D)] + [(D, D)] * 9
-        self.versus_test(axelrod.Defector(), expected_actions=actions, seed=2)
+        self.versus_test(axl.Defector(), expected_actions=actions, seed=2)
 
         # Variable behaviour based on the history and stochastic
 
@@ -48,7 +48,7 @@ class TestAverageCopier(TestPlayer):
             (D, C),
             (C, D),
         ]
-        self.versus_test(axelrod.Alternator(), expected_actions=actions, seed=1)
+        self.versus_test(axl.Alternator(), expected_actions=actions, seed=1)
 
         actions = [
             (D, C),
@@ -62,9 +62,9 @@ class TestAverageCopier(TestPlayer):
             (C, C),
             (D, D),
         ]
-        self.versus_test(axelrod.Alternator(), expected_actions=actions, seed=2)
+        self.versus_test(axl.Alternator(), expected_actions=actions, seed=2)
 
-        opponent = axelrod.MockPlayer(actions=[C, C, D, D, D, D])
+        opponent = axl.MockPlayer(actions=[C, C, D, D, D, D])
         actions = [
             (C, C),
             (C, C),
@@ -79,7 +79,7 @@ class TestAverageCopier(TestPlayer):
         ]
         self.versus_test(opponent, expected_actions=actions, seed=1)
 
-        opponent = axelrod.MockPlayer(actions=[C, C, C, D, D, D])
+        opponent = axl.MockPlayer(actions=[C, C, C, D, D, D])
         actions = [
             (D, C),
             (C, C),
@@ -98,7 +98,7 @@ class TestAverageCopier(TestPlayer):
 class TestNiceAverageCopier(TestPlayer):
 
     name = "Nice Average Copier"
-    player = axelrod.NiceAverageCopier
+    player = axl.NiceAverageCopier
     expected_classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": True,
@@ -112,11 +112,11 @@ class TestNiceAverageCopier(TestPlayer):
     def test_strategy(self):
         # Tests that if opponent has played all C then player chooses C.
         actions = [(C, C)] * 10
-        self.versus_test(axelrod.Cooperator(), expected_actions=actions, seed=1)
+        self.versus_test(axl.Cooperator(), expected_actions=actions, seed=1)
 
         # Tests that if opponent has played all D then player chooses D.
         actions = [(C, D)] + [(D, D)] * 9
-        self.versus_test(axelrod.Defector(), expected_actions=actions, seed=1)
+        self.versus_test(axl.Defector(), expected_actions=actions, seed=1)
 
         # Variable behaviour based on the history and stochastic behaviour
         actions = [
@@ -131,7 +131,7 @@ class TestNiceAverageCopier(TestPlayer):
             (D, C),
             (D, D),
         ]
-        self.versus_test(axelrod.Alternator(), expected_actions=actions, seed=1)
+        self.versus_test(axl.Alternator(), expected_actions=actions, seed=1)
 
         actions = [
             (C, C),
@@ -145,9 +145,9 @@ class TestNiceAverageCopier(TestPlayer):
             (D, C),
             (C, D),
         ]
-        self.versus_test(axelrod.Alternator(), expected_actions=actions, seed=2)
+        self.versus_test(axl.Alternator(), expected_actions=actions, seed=2)
 
-        opponent = axelrod.MockPlayer(actions=[C, C, D, D, D, D])
+        opponent = axl.MockPlayer(actions=[C, C, D, D, D, D])
         actions = [
             (C, C),
             (C, C),
@@ -162,7 +162,7 @@ class TestNiceAverageCopier(TestPlayer):
         ]
         self.versus_test(opponent, expected_actions=actions, seed=1)
 
-        opponent = axelrod.MockPlayer(actions=[C, C, C, D, D, D])
+        opponent = axl.MockPlayer(actions=[C, C, C, D, D, D])
         actions = [
             (C, C),
             (C, C),

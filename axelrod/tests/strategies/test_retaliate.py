@@ -1,16 +1,16 @@
 """Tests for the retaliate strategy."""
 
-import axelrod
+import axelrod as axl
 
 from .test_player import TestOpponent, TestPlayer
 
-C, D = axelrod.Action.C, axelrod.Action.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestRetaliate(TestPlayer):
 
     name = "Retaliate: 0.1"
-    player = axelrod.Retaliate
+    player = axl.Retaliate
     expected_classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": False,
@@ -23,11 +23,11 @@ class TestRetaliate(TestPlayer):
 
     def test_strategy(self):
         # If opponent has defected more than 10 percent of the time, defect.
-        opponent = axelrod.Cooperator()
+        opponent = axl.Cooperator()
         actions = [(C, C)] * 5
         self.versus_test(opponent=opponent, expected_actions=actions)
 
-        opponent = axelrod.MockPlayer([C, C, C, D, C])
+        opponent = axl.MockPlayer([C, C, C, D, C])
         actions = [(C, C), (C, C), (C, C), (C, D), (D, C), (D, C)]
         self.versus_test(opponent=opponent, expected_actions=actions)
 
@@ -35,7 +35,7 @@ class TestRetaliate(TestPlayer):
 class TestRetaliate2(TestPlayer):
 
     name = "Retaliate 2: 0.08"
-    player = axelrod.Retaliate2
+    player = axl.Retaliate2
     expected_classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": False,
@@ -48,7 +48,7 @@ class TestRetaliate2(TestPlayer):
 
     def test_strategy(self):
         # If opponent has defected more than 8 percent of the time, defect.
-        opponent = axelrod.MockPlayer([C] * 13 + [D])
+        opponent = axl.MockPlayer([C] * 13 + [D])
         actions = [(C, C)] * 13 + [(C, D), (D, C)]
         self.versus_test(opponent=opponent, expected_actions=actions)
 
@@ -56,7 +56,7 @@ class TestRetaliate2(TestPlayer):
 class TestRetaliate3(TestPlayer):
 
     name = "Retaliate 3: 0.05"
-    player = axelrod.Retaliate3
+    player = axl.Retaliate3
     expected_classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": False,
@@ -69,7 +69,7 @@ class TestRetaliate3(TestPlayer):
 
     def test_strategy(self):
         # If opponent has defected more than 5 percent of the time, defect.
-        opponent = axelrod.MockPlayer([C] * 19 + [D])
+        opponent = axl.MockPlayer([C] * 19 + [D])
         actions = [(C, C)] * 19 + [(C, D), (D, C)]
         self.versus_test(opponent=opponent, expected_actions=actions)
 
@@ -77,7 +77,7 @@ class TestRetaliate3(TestPlayer):
 class TestLimitedRetaliate(TestPlayer):
 
     name = "Limited Retaliate: 0.1, 20"
-    player = axelrod.LimitedRetaliate
+    player = axl.LimitedRetaliate
     expected_classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": False,
@@ -90,27 +90,27 @@ class TestLimitedRetaliate(TestPlayer):
 
     def test_strategy(self):
         # If opponent has never defected, co-operate
-        opponent = axelrod.Cooperator()
+        opponent = axl.Cooperator()
         actions = [(C, C)] * 5
         self.versus_test(
             opponent=opponent, expected_actions=actions, attrs={"retaliating": False}
         )
 
         # Retaliate after a (C, D) round.
-        opponent = axelrod.MockPlayer([C, C, C, D, C])
+        opponent = axl.MockPlayer([C, C, C, D, C])
         actions = [(C, C), (C, C), (C, C), (C, D), (D, C), (D, C)]
         self.versus_test(
             opponent=opponent, expected_actions=actions, attrs={"retaliating": True}
         )
 
-        opponent = axelrod.Alternator()
+        opponent = axl.Alternator()
 
         # Count retaliations
         actions = [(C, C), (C, D), (D, C), (D, D), (D, C)]
         self.versus_test(
             opponent=opponent, expected_actions=actions, attrs={"retaliation_count": 3}
         )
-        opponent = axelrod.Alternator()
+        opponent = axl.Alternator()
 
         # Cooperate if we hit the retaliation limit
         actions = [(C, C), (C, D), (D, C), (D, D), (C, C)]

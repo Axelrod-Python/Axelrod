@@ -1,16 +1,16 @@
 """Tests for the Geller strategy."""
 
-import axelrod
+import axelrod as axl
 
 from .test_player import TestPlayer
 
-C, D = axelrod.Action.C, axelrod.Action.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestGeller(TestPlayer):
 
     name = "Geller"
-    player = axelrod.Geller
+    player = axl.Geller
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
@@ -24,16 +24,16 @@ class TestGeller(TestPlayer):
     @classmethod
     def tearDownClass(cls):
         """After all tests have run, makes sure the Darwin genome is reset."""
-        axelrod.Darwin.reset_genome()
+        axl.Darwin.reset_genome()
         super(TestGeller, cls).tearDownClass()
 
     def setUp(self):
         """Each test starts with the basic Darwin genome."""
-        axelrod.Darwin.reset_genome()
+        axl.Darwin.reset_genome()
         super(TestGeller, self).setUp()
 
     def test_foil_strategy_inspection(self):
-        axelrod.seed(2)
+        axl.seed(2)
         player = self.player()
         self.assertEqual(player.foil_strategy_inspection(), D)
         self.assertEqual(player.foil_strategy_inspection(), D)
@@ -41,9 +41,9 @@ class TestGeller(TestPlayer):
 
     def test_strategy(self):
         """Should cooperate against cooperators and defect against defectors."""
-        self.versus_test(axelrod.Defector(), expected_actions=[(D, D)] * 5)
-        self.versus_test(axelrod.Cooperator(), expected_actions=[(C, C)] * 5)
-        self.versus_test(axelrod.Alternator(), expected_actions=[(C, C), (D, D)] * 5)
+        self.versus_test(axl.Defector(), expected_actions=[(D, D)] * 5)
+        self.versus_test(axl.Cooperator(), expected_actions=[(C, C)] * 5)
+        self.versus_test(axl.Alternator(), expected_actions=[(C, C), (D, D)] * 5)
 
     def test_strategy_against_lookerup_players(self):
         """
@@ -51,30 +51,30 @@ class TestGeller(TestPlayer):
         https://github.com/Axelrod-Python/Axelrod/issues/1185
         """
         self.versus_test(
-            axelrod.EvolvedLookerUp1_1_1(), expected_actions=[(C, C), (C, C)]
+            axl.EvolvedLookerUp1_1_1(), expected_actions=[(C, C), (C, C)]
         )
         self.versus_test(
-            axelrod.EvolvedLookerUp2_2_2(), expected_actions=[(C, C), (C, C)]
+            axl.EvolvedLookerUp2_2_2(), expected_actions=[(C, C), (C, C)]
         )
 
     def test_returns_foil_inspection_strategy_of_opponent(self):
         self.versus_test(
-            axelrod.GellerDefector(),
+            axl.GellerDefector(),
             expected_actions=[(D, D), (D, D), (D, C), (D, C)],
             seed=2,
         )
 
-        self.versus_test(axelrod.Darwin(), expected_actions=[(C, C), (C, C), (C, C)])
+        self.versus_test(axl.Darwin(), expected_actions=[(C, C), (C, C), (C, C)])
 
         self.versus_test(
-            axelrod.MindReader(), expected_actions=[(D, D), (D, D), (D, D)], seed=1
+            axl.MindReader(), expected_actions=[(D, D), (D, D), (D, D)], seed=1
         )
 
 
 class TestGellerCooperator(TestGeller):
 
     name = "Geller Cooperator"
-    player = axelrod.GellerCooperator
+    player = axl.GellerCooperator
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -91,20 +91,20 @@ class TestGellerCooperator(TestGeller):
 
     def test_returns_foil_inspection_strategy_of_opponent(self):
         self.versus_test(
-            axelrod.GellerDefector(), expected_actions=[(D, C), (D, C), (D, C), (D, C)]
+            axl.GellerDefector(), expected_actions=[(D, C), (D, C), (D, C), (D, C)]
         )
 
-        self.versus_test(axelrod.Darwin(), expected_actions=[(C, C), (C, C), (C, C)])
+        self.versus_test(axl.Darwin(), expected_actions=[(C, C), (C, C), (C, C)])
 
         self.versus_test(
-            axelrod.MindReader(), expected_actions=[(D, D), (D, D), (D, D)]
+            axl.MindReader(), expected_actions=[(D, D), (D, D), (D, D)]
         )
 
 
 class TestGellerDefector(TestGeller):
 
     name = "Geller Defector"
-    player = axelrod.GellerDefector
+    player = axl.GellerDefector
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -122,11 +122,11 @@ class TestGellerDefector(TestGeller):
     def test_returns_foil_inspection_strategy_of_opponent(self):
 
         self.versus_test(
-            axelrod.GellerDefector(), expected_actions=[(D, D), (D, D), (D, D), (D, D)]
+            axl.GellerDefector(), expected_actions=[(D, D), (D, D), (D, D), (D, D)]
         )
 
-        self.versus_test(axelrod.Darwin(), expected_actions=[(C, C), (C, C), (C, C)])
+        self.versus_test(axl.Darwin(), expected_actions=[(C, C), (C, C), (C, C)])
 
         self.versus_test(
-            axelrod.MindReader(), expected_actions=[(D, D), (D, D), (D, D)]
+            axl.MindReader(), expected_actions=[(D, D), (D, D), (D, D)]
         )

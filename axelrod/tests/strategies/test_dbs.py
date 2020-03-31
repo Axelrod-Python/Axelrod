@@ -2,12 +2,12 @@
 
 import unittest
 
-import axelrod
+import axelrod as axl
 from axelrod.strategies import dbs
 
 from .test_player import TestPlayer
 
-C, D = axelrod.Action.C, axelrod.Action.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestNode(unittest.TestCase):
@@ -198,7 +198,7 @@ class TestTreeSearch(unittest.TestCase):
 
 class TestDBS(TestPlayer):
     name = "DBS: 0.75, 3, 4, 3, 5"
-    player = axelrod.DBS
+    player = axl.DBS
 
     expected_classifier = {
         "memory_depth": float("inf"),
@@ -222,7 +222,7 @@ class TestDBS(TestPlayer):
         # Test that DBS always cooperate against Cooperator.
         actions = [(C, C)] * 7
         self.versus_test(
-            opponent=axelrod.Cooperator(),
+            opponent=axl.Cooperator(),
             expected_actions=actions,
             init_kwargs=default_init_kwargs,
         )
@@ -230,7 +230,7 @@ class TestDBS(TestPlayer):
         # Test if it correctly learns Alternator strategy.
         actions = [(C, C), (C, D)] * 3 + [(D, C), (C, D)] * 3
         self.versus_test(
-            opponent=axelrod.Alternator(),
+            opponent=axl.Alternator(),
             expected_actions=actions,
             init_kwargs=default_init_kwargs,
         )
@@ -240,7 +240,7 @@ class TestDBS(TestPlayer):
         mock_actions = [C, C, C, D, D, D, D, D, D, D]
         exp_actions = [(C, C)] * 3 + [(C, D)] * 4 + [(D, D)] * 3
         self.versus_test(
-            opponent=axelrod.MockPlayer(actions=mock_actions),
+            opponent=axl.MockPlayer(actions=mock_actions),
             expected_actions=exp_actions,
             init_kwargs=default_init_kwargs,
         )
@@ -256,7 +256,7 @@ class TestDBS(TestPlayer):
         mock_actions = [C, C, C, D, D, D, D, D, D, D]
         exp_actions = [(C, C)] * 3 + [(C, D)] * 3 + [(D, D)] * 4
         self.versus_test(
-            opponent=axelrod.MockPlayer(actions=mock_actions),
+            opponent=axl.MockPlayer(actions=mock_actions),
             expected_actions=exp_actions,
             init_kwargs=init_kwargs_2,
         )
@@ -277,7 +277,7 @@ class TestDBS(TestPlayer):
         exp_actions += [(D, D), (C, D)] * 3 + [(D, D)]
         mock_actions = [C, D, C, D, C, D, C, D, C, D, C, D, D, D, D, D, D, D, D]
         self.versus_test(
-            opponent=axelrod.MockPlayer(actions=mock_actions),
+            opponent=axl.MockPlayer(actions=mock_actions),
             expected_actions=exp_actions,
             init_kwargs=init_kwargs_3,
         )

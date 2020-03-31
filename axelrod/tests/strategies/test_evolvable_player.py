@@ -1,6 +1,8 @@
-import functools
-import random
 import unittest
+
+import functools
+
+import random
 
 import axelrod as axl
 from axelrod import EvolvablePlayer, seed

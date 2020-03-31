@@ -1,8 +1,10 @@
 """Tests for Finite State Machine Strategies."""
-import random
+
 import unittest
 
-import axelrod
+import random
+
+import axelrod as axl
 from axelrod.compute_finite_state_machine_memory import get_memory_from_transitions
 from axelrod.evolvable_player import InsufficientParametersError
 from axelrod.strategies.finite_state_machines import EvolvableFSMPlayer, FSMPlayer, SimpleFSM
@@ -10,7 +12,7 @@ from axelrod.strategies.finite_state_machines import EvolvableFSMPlayer, FSMPlay
 from .test_player import TestPlayer
 from .test_evolvable_player import PartialClass, TestEvolvablePlayer
 
-C, D = axelrod.Action.C, axelrod.Action.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestSimpleFSM(unittest.TestCase):
@@ -95,7 +97,7 @@ class TestSampleFSMPlayer(TestPlayer):
     working as intended."""
 
     name = "FSM Player: ((1, C, 1, C), (1, D, 1, D)), 1, C"
-    player = axelrod.FSMPlayer
+    player = axl.FSMPlayer
 
     expected_classifier = {
         "memory_depth": 1,
@@ -116,7 +118,7 @@ class TestSampleFSMPlayer(TestPlayer):
             "initial_action": C,
         }
         self.versus_test(
-            axelrod.Alternator(),
+            axl.Alternator(),
             expected_actions=[(C, C), (C, D)] * 5,
             init_kwargs=cooperator_init_kwargs,
         )
@@ -130,7 +132,7 @@ class TestSampleFSMPlayer(TestPlayer):
             "initial_action": D,
         }
         self.versus_test(
-            axelrod.Alternator(),
+            axl.Alternator(),
             expected_actions=[(D, C), (D, D)] * 5,
             init_kwargs=defector_init_kwargs,
         )
@@ -144,7 +146,7 @@ class TestSampleFSMPlayer(TestPlayer):
             "initial_action": C,
         }
         self.versus_test(
-            axelrod.Alternator(),
+            axl.Alternator(),
             expected_actions=[(C, C)] + [(C, D), (D, C)] * 5,
             init_kwargs=tft_init_kwargs,
         )
@@ -159,7 +161,7 @@ class TestSampleFSMPlayer(TestPlayer):
         }
         expected = [(C, C), (C, D), (D, C), (D, D)] * 3
         self.versus_test(
-            axelrod.Alternator(),
+            axl.Alternator(),
             expected_actions=expected,
             init_kwargs=wsls_init_kwargs,
         )
@@ -167,7 +169,7 @@ class TestSampleFSMPlayer(TestPlayer):
 
 class TestFSMPlayer(TestPlayer):
     name = "FSM Player: ((1, C, 1, C), (1, D, 1, D)), 1, C"
-    player = axelrod.FSMPlayer
+    player = axl.FSMPlayer
 
     expected_classifier = {
         "memory_depth": 1,
@@ -210,7 +212,7 @@ class TestFSMPlayer(TestPlayer):
             )
 
         self.versus_test(
-            axelrod.MockPlayer(actions=opponent_actions),
+            axl.MockPlayer(actions=opponent_actions),
             expected_actions=expected_actions,
         )
 
@@ -223,7 +225,7 @@ class TestFSMPlayer(TestPlayer):
         self.assertEqual(test_fsm.state, expected_state)
 
     def test_transitions_with_default_fsm(self):
-        if self.player is axelrod.FSMPlayer:
+        if self.player is axl.FSMPlayer:
             state_action = [(1, C), (1, D)]
             self.transitions_test(state_action)
 
@@ -265,7 +267,7 @@ class TestFSMPlayer(TestPlayer):
             (7, C, 7, D),
             (7, D, 5, C),
         )
-        opponent = axelrod.MockPlayer([D, D, C, C, D])
+        opponent = axl.MockPlayer([D, D, C, C, D])
         actions = [(C, D), (C, D), (C, C), (D, C), (C, D)]
         self.versus_test(
             opponent, expected_actions=actions, init_kwargs={"transitions": transitions}
@@ -282,7 +284,7 @@ class TestFSMPlayer(TestPlayer):
 class TestFortress3(TestFSMPlayer):
 
     name = "Fortress3"
-    player = axelrod.Fortress3
+    player = axl.Fortress3
     expected_classifier = {
         "memory_depth": 2,
         "stochastic": False,
@@ -319,7 +321,7 @@ class TestFortress3(TestFSMPlayer):
 class TestFortress4(TestFSMPlayer):
 
     name = "Fortress4"
-    player = axelrod.Fortress4
+    player = axl.Fortress4
     expected_classifier = {
         "memory_depth": 3,
         "stochastic": False,
@@ -365,7 +367,7 @@ class TestFortress4(TestFSMPlayer):
 class TestPredator(TestFSMPlayer):
 
     name = "Predator"
-    player = axelrod.Predator
+    player = axl.Predator
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -427,7 +429,7 @@ class TestPredator(TestFSMPlayer):
 class TestPun1(TestFSMPlayer):
 
     name = "Pun1"
-    player = axelrod.Pun1
+    player = axl.Pun1
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -455,7 +457,7 @@ class TestPun1(TestFSMPlayer):
 class TestRaider(TestFSMPlayer):
 
     name = "Raider"
-    player = axelrod.Raider
+    player = axl.Raider
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -493,7 +495,7 @@ class TestRaider(TestFSMPlayer):
 class TestRipoff(TestFSMPlayer):
 
     name = "Ripoff"
-    player = axelrod.Ripoff
+    player = axl.Ripoff
     expected_classifier = {
         "memory_depth": 3,
         "stochastic": False,
@@ -525,7 +527,7 @@ class TestRipoff(TestFSMPlayer):
 
 class TestUsuallyCooperates(TestFSMPlayer):
     name = "UsuallyCooperates"
-    player = axelrod.UsuallyCooperates
+    player = axl.UsuallyCooperates
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -558,7 +560,7 @@ class TestUsuallyCooperates(TestFSMPlayer):
 
 class TestUsuallyDefects(TestFSMPlayer):
     name = "UsuallyDefects"
-    player = axelrod.UsuallyDefects
+    player = axl.UsuallyDefects
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -592,7 +594,7 @@ class TestUsuallyDefects(TestFSMPlayer):
 class TestSolutionB1(TestFSMPlayer):
 
     name = "SolutionB1"
-    player = axelrod.SolutionB1
+    player = axl.SolutionB1
     expected_classifier = {
         "memory_depth": 2,
         "stochastic": False,
@@ -625,7 +627,7 @@ class TestSolutionB1(TestFSMPlayer):
 class TestSolutionB5(TestFSMPlayer):
 
     name = "SolutionB5"
-    player = axelrod.SolutionB5
+    player = axl.SolutionB5
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -675,7 +677,7 @@ class TestSolutionB5(TestFSMPlayer):
 class TestThumper(TestFSMPlayer):
 
     name = "Thumper"
-    player = axelrod.Thumper
+    player = axl.Thumper
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -704,7 +706,7 @@ class TestThumper(TestFSMPlayer):
 class TestEvolvedFSM4(TestFSMPlayer):
 
     name = "Evolved FSM 4"
-    player = axelrod.EvolvedFSM4
+    player = axl.EvolvedFSM4
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -749,7 +751,7 @@ class TestEvolvedFSM4(TestFSMPlayer):
 class TestEvolvedFSM16(TestFSMPlayer):
 
     name = "Evolved FSM 16"
-    player = axelrod.EvolvedFSM16
+    player = axl.EvolvedFSM16
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -863,7 +865,7 @@ class TestEvolvedFSM16(TestFSMPlayer):
 class TestEvolvedFSM16Noise05(TestFSMPlayer):
 
     name = "Evolved FSM 16 Noise 05"
-    player = axelrod.EvolvedFSM16Noise05
+    player = axl.EvolvedFSM16Noise05
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -989,7 +991,7 @@ class TestEvolvedFSM16Noise05(TestFSMPlayer):
 
 class TestTF1(TestFSMPlayer):
     name = "TF1"
-    player = axelrod.TF1
+    player = axl.TF1
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -1002,12 +1004,12 @@ class TestTF1(TestFSMPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (D, C), (D, D), (D, C)]
-        self.versus_test(axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(axl.Alternator(), expected_actions=actions)
 
 
 class TestTF2(TestFSMPlayer):
     name = "TF2"
-    player = axelrod.TF2
+    player = axl.TF2
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -1020,12 +1022,12 @@ class TestTF2(TestFSMPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (D, D), (D, C), (C, D), (D, C)]
-        self.versus_test(axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(axl.Alternator(), expected_actions=actions)
 
 
 class TestTF3(TestFSMPlayer):
     name = "TF3"
-    player = axelrod.TF3
+    player = axl.TF3
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -1038,7 +1040,7 @@ class TestTF3(TestFSMPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (C, C), (D, D), (D, C)]
-        self.versus_test(axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(axl.Alternator(), expected_actions=actions)
 
 
 class TestEvolvableFSMPlayer(unittest.TestCase):
@@ -1058,7 +1060,7 @@ class TestEvolvableFSMPlayer(unittest.TestCase):
 
     def test_init(self):
         transitions = [[0, C, 1, D], [0, D, 0, D], [1, C, 1, C], [1, D, 1, D]]
-        player = axelrod.EvolvableFSMPlayer(
+        player = axl.EvolvableFSMPlayer(
             transitions=transitions,
             initial_action=D,
             initial_state=1
@@ -1071,9 +1073,9 @@ class TestEvolvableFSMPlayer(unittest.TestCase):
     def test_vector_to_instance(self):
         num_states = 4
         vector = [random.random() for _ in range(num_states * 4 + 1)]
-        player = axelrod.EvolvableFSMPlayer(num_states=num_states)
+        player = axl.EvolvableFSMPlayer(num_states=num_states)
         player.receive_vector(vector)
-        self.assertIsInstance(player, axelrod.EvolvableFSMPlayer)
+        self.assertIsInstance(player, axl.EvolvableFSMPlayer)
 
         serialized = player.serialize_parameters()
         deserialized_player = player.__class__.deserialize_parameters(serialized)
@@ -1082,7 +1084,7 @@ class TestEvolvableFSMPlayer(unittest.TestCase):
 
     def test_create_vector_bounds(self):
         num_states = 4
-        player = axelrod.EvolvableFSMPlayer(num_states=num_states)
+        player = axl.EvolvableFSMPlayer(num_states=num_states)
         lb, ub = player.create_vector_bounds()
         self.assertEqual(lb, [0] * (4 * num_states + 1))
         self.assertEqual(ub, [1] * (4 * num_states + 1))
@@ -1090,7 +1092,7 @@ class TestEvolvableFSMPlayer(unittest.TestCase):
 
 class TestEvolvableFSMPlayer2(TestEvolvablePlayer):
     name = "EvolvableFSMPlayer"
-    player_class = axelrod.EvolvableFSMPlayer
+    player_class = axl.EvolvableFSMPlayer
     parent_class = FSMPlayer
     parent_kwargs = ["transitions", "initial_action", "initial_state"]
     init_parameters = {"num_states": 4}
@@ -1098,7 +1100,7 @@ class TestEvolvableFSMPlayer2(TestEvolvablePlayer):
 
 class TestEvolvableFSMPlayer3(TestEvolvablePlayer):
     name = "EvolvableFSMPlayer"
-    player_class = axelrod.EvolvableFSMPlayer
+    player_class = axl.EvolvableFSMPlayer
     parent_class = FSMPlayer
     parent_kwargs = ["transitions", "initial_action", "initial_state"]
     init_parameters = {"num_states": 16}
@@ -1106,7 +1108,7 @@ class TestEvolvableFSMPlayer3(TestEvolvablePlayer):
 
 class TestEvolvableFSMPlayer4(TestEvolvablePlayer):
     name = "EvolvableFSMPlayer"
-    player_class = axelrod.EvolvableFSMPlayer
+    player_class = axl.EvolvableFSMPlayer
     parent_class = FSMPlayer
     parent_kwargs = ["transitions", "initial_action", "initial_state"]
     init_parameters = {

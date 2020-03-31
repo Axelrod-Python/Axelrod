@@ -1,16 +1,16 @@
 """Tests for the Adaptive strategy."""
 
-import axelrod
+import axelrod as axl
 
 from .test_player import TestMatch, TestPlayer
 
-C, D = axelrod.Action.C, axelrod.Action.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestAdaptive(TestPlayer):
 
     name = "Adaptive"
-    player = axelrod.Adaptive
+    player = axl.Adaptive
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -23,24 +23,24 @@ class TestAdaptive(TestPlayer):
 
     def test_strategy(self):
         actions = [(C, C)] * 6 + [(D, C)] * 8
-        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+        self.versus_test(axl.Cooperator(), expected_actions=actions)
 
         actions = [(C, D)] * 6 + [(D, D)] * 8
-        self.versus_test(axelrod.Defector(), expected_actions=actions)
+        self.versus_test(axl.Defector(), expected_actions=actions)
 
         actions = [(C, C), (C, D)] * 3 + [(D, C), (D, D)] * 4
-        self.versus_test(axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(axl.Alternator(), expected_actions=actions)
 
         actions = [(C, C)] * 6 + [(D, C)] + [(D, D)] * 4 + [(C, D), (C, C)]
-        self.versus_test(axelrod.TitForTat(), expected_actions=actions)
+        self.versus_test(axl.TitForTat(), expected_actions=actions)
 
     def test_scoring(self):
-        player = axelrod.Adaptive()
-        opponent = axelrod.Cooperator()
+        player = axl.Adaptive()
+        opponent = axl.Cooperator()
         player.play(opponent)
         player.play(opponent)
         self.assertEqual(3, player.scores[C])
-        game = axelrod.Game(-3, 10, 10, 10)
+        game = axl.Game(-3, 10, 10, 10)
         player.set_match_attributes(game=game)
         player.play(opponent)
         self.assertEqual(0, player.scores[C])

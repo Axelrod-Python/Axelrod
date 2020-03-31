@@ -1,15 +1,16 @@
 """Tests for strategies Desperate, Hopeless, Willing, and Grim."""
-import axelrod
+
+import axelrod as axl
 
 from .test_player import TestPlayer
 
-C, D = axelrod.Action.C, axelrod.Action.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestDesperate(TestPlayer):
 
     name = "Desperate"
-    player = axelrod.Desperate
+    player = axl.Desperate
     expected_classifier = {
         "memory_depth": 1,
         "long_run_time": False,
@@ -22,33 +23,33 @@ class TestDesperate(TestPlayer):
 
     def test_strategy(self):
         # Our Player (Desperate) vs Cooperator SEED --> 1
-        opponent = axelrod.Cooperator()
+        opponent = axl.Cooperator()
         opponent_actions = [C] * 5
         actions = [(C, C), (D, C), (D, C), (D, C), (D, C)]
         self.versus_test(opponent, expected_actions=actions, seed=1)
 
         # Our Player (Desperate) vs Cooperator SEED --> 2
-        opponent = axelrod.Cooperator()
+        opponent = axl.Cooperator()
         actions = [(D, C), (D, C), (D, C), (D, C), (D, C)]
         self.versus_test(opponent, expected_actions=actions, seed=2)
 
         # Our Player (Desperate) vs Defector SEED --> 1
-        opponent = axelrod.Defector()
+        opponent = axl.Defector()
         actions = [(C, D), (D, D), (C, D), (D, D), (C, D)]
         self.versus_test(opponent, expected_actions=actions, seed=1)
 
         # Our Player (Desperate) vs Defector SEED --> 2
-        opponent = axelrod.Defector()
+        opponent = axl.Defector()
         actions = [(D, D), (C, D), (D, D), (C, D), (D, D)]
         self.versus_test(opponent, expected_actions=actions, seed=2)
 
         # Our Player (Desperate) vs Alternator SEED --> 1
-        opponent = axelrod.Alternator()
+        opponent = axl.Alternator()
         actions = [(C, C), (D, D), (C, C), (D, D), (C, C)]
         self.versus_test(opponent, expected_actions=actions, seed=1)
 
         # Our Player (Desperate) vs Alternator SEED --> 2
-        opponent = axelrod.Alternator()
+        opponent = axl.Alternator()
         actions = [(D, C), (D, D), (C, C), (D, D), (C, C)]
         self.versus_test(opponent, expected_actions=actions, seed=2)
 
@@ -56,7 +57,7 @@ class TestDesperate(TestPlayer):
 class TestHopeless(TestPlayer):
 
     name = "Hopeless"
-    player = axelrod.Hopeless
+    player = axl.Hopeless
     expected_classifier = {
         "memory_depth": 1,
         "long_run_time": False,
@@ -69,33 +70,33 @@ class TestHopeless(TestPlayer):
 
     def test_strategy(self):
         # Our Player (Hopeless) vs Cooperator SEED --> 1
-        opponent = axelrod.Cooperator()
+        opponent = axl.Cooperator()
         opponent_actions = [C] * 5
         actions = [(C, C), (D, C), (C, C), (D, C), (C, C)]
         self.versus_test(opponent, expected_actions=actions, seed=1)
 
         # Our Player (Hopeless) vs Cooperator SEED --> 2
-        opponent = axelrod.Cooperator()
+        opponent = axl.Cooperator()
         actions = [(D, C), (C, C), (D, C), (C, C), (D, C)]
         self.versus_test(opponent, expected_actions=actions, seed=2)
 
         # Our Player (Hopeless) vs Defector SEED --> 1
-        opponent = axelrod.Defector()
+        opponent = axl.Defector()
         actions = [(C, D), (C, D), (C, D), (C, D), (C, D)]
         self.versus_test(opponent, expected_actions=actions, seed=1)
 
         # Our Player (Hopeless) vs Defector SEED --> 2
-        opponent = axelrod.Defector()
+        opponent = axl.Defector()
         actions = [(D, D), (C, D), (C, D), (C, D), (C, D)]
         self.versus_test(opponent, expected_actions=actions, seed=2)
 
         # Our Player (Hopeless) vs Alternator SEED --> 1
-        opponent = axelrod.Alternator()
+        opponent = axl.Alternator()
         actions = [(C, C), (D, D), (C, C), (D, D), (C, C)]
         self.versus_test(opponent, expected_actions=actions, seed=1)
 
         # Our Player (Hopeless) vs Alternator SEED --> 2
-        opponent = axelrod.Alternator()
+        opponent = axl.Alternator()
         actions = [(D, C), (C, D), (C, C), (D, D), (C, C)]
         self.versus_test(opponent, expected_actions=actions, seed=2)
 
@@ -103,7 +104,7 @@ class TestHopeless(TestPlayer):
 class TestWilling(TestPlayer):
 
     name = "Willing"
-    player = axelrod.Willing
+    player = axl.Willing
     expected_classifier = {
         "memory_depth": 1,
         "long_run_time": False,
@@ -116,32 +117,32 @@ class TestWilling(TestPlayer):
 
     def test_strategy(self):
         # Our Player (Willing) vs Cooperator SEED --> 1
-        opponent = axelrod.Cooperator()
+        opponent = axl.Cooperator()
         opponent_actions = [C] * 5
         actions = [(C, C), (C, C), (C, C), (C, C), (C, C)]
         self.versus_test(opponent, expected_actions=actions, seed=1)
 
         # Our Player (Willing) vs Cooperator SEED --> 2
-        opponent = axelrod.Cooperator()
+        opponent = axl.Cooperator()
         actions = [(D, C), (C, C), (C, C), (C, C), (C, C)]
         self.versus_test(opponent, expected_actions=actions, seed=2)
 
         # Our Player (Willing) vs Defector SEED --> 1
-        opponent = axelrod.Defector()
+        opponent = axl.Defector()
         actions = [(C, D), (C, D), (C, D), (C, D), (C, D)]
         self.versus_test(opponent, expected_actions=actions, seed=1)
 
         # Our Player (Willing) vs Defector SEED --> 2
-        opponent = axelrod.Defector()
+        opponent = axl.Defector()
         actions = [(D, D), (D, D), (D, D), (D, D), (D, D)]
         self.versus_test(opponent, expected_actions=actions, seed=2)
 
         # Our Player (Willing) vs Alternator SEED --> 1
-        opponent = axelrod.Alternator()
+        opponent = axl.Alternator()
         actions = [(C, C), (C, D), (C, C), (C, D), (C, C)]
         self.versus_test(opponent, expected_actions=actions, seed=1)
 
         # Our Player (Willing) vs Alternator SEED --> 2
-        opponent = axelrod.Alternator()
+        opponent = axl.Alternator()
         actions = [(D, C), (C, D), (C, C), (C, D), (C, C)]
         self.versus_test(opponent, expected_actions=actions, seed=2)

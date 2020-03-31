@@ -1,16 +1,16 @@
 """Test for the Resurrection strategy."""
 
-import axelrod
+import axelrod as axl
 
 from .test_player import TestPlayer
 
-C, D = axelrod.Action.C, axelrod.Action.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class Resurrection(TestPlayer):
 
     name = "Resurrection"
-    player = axelrod.Resurrection
+    player = axl.Resurrection
     expected_classifier = {
         "memory_depth": 5,
         "stochastic": False,
@@ -24,20 +24,20 @@ class Resurrection(TestPlayer):
     def test_strategy(self):
         # Check if the turns played are greater than 5
         actions = [(C, C), (C, C), (C, C), (C, C), (C, C), (C, C), (C, C)]
-        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+        self.versus_test(axl.Cooperator(), expected_actions=actions)
 
         actions = [(C, D), (D, D), (D, D), (D, D), (D, D), (D, D), (D, D)]
-        self.versus_test(axelrod.Defector(), expected_actions=actions)
+        self.versus_test(axl.Defector(), expected_actions=actions)
 
         # Check for TFT behavior after 5 rounds
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (C, D), (D, C)]
-        self.versus_test(axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(axl.Alternator(), expected_actions=actions)
 
 
 class TestDoubleResurrection(TestPlayer):
 
     name = "DoubleResurrection"
-    player = axelrod.DoubleResurrection
+    player = axl.DoubleResurrection
     expected_classifier = {
         "memory_depth": 5,
         "stochastic": False,
@@ -50,10 +50,10 @@ class TestDoubleResurrection(TestPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (C, D)]
-        self.versus_test(axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(axl.Alternator(), expected_actions=actions)
 
         actions = [(C, C), (C, C), (C, C), (C, C), (C, C), (D, C)]
-        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+        self.versus_test(axl.Cooperator(), expected_actions=actions)
 
         actions = [(C, D), (D, D), (D, D), (D, D), (D, D), (D, D), (C, D)]
-        self.versus_test(axelrod.Defector(), expected_actions=actions)
+        self.versus_test(axl.Defector(), expected_actions=actions)

@@ -1,17 +1,16 @@
 """Tests for the GoByMajority strategies."""
 
-import axelrod
-from axelrod import MockPlayer
+import axelrod as axl
 
 from .test_player import TestPlayer
 
-C, D = axelrod.Action.C, axelrod.Action.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestHardGoByMajority(TestPlayer):
 
     name = "Hard Go By Majority"
-    player = axelrod.HardGoByMajority
+    player = axl.HardGoByMajority
     default_soft = False
 
     expected_classifier = {
@@ -38,7 +37,7 @@ class TestHardGoByMajority(TestPlayer):
             + [(D, C)] * 51
             + [(C, C)]
         )
-        opponent = MockPlayer(actions=opponent_actions)
+        opponent = axl.MockPlayer(actions=opponent_actions)
         self.versus_test(opponent, expected_actions=actions, init_kwargs=init_kwargs)
 
     def test_memory_depth_even_soft_is_false(self):
@@ -47,7 +46,7 @@ class TestHardGoByMajority(TestPlayer):
         if self.default_soft:
             init_kwargs["soft"] = False
 
-        opponent = MockPlayer(actions=[C] * memory_depth + [D] * memory_depth)
+        opponent = axl.MockPlayer(actions=[C] * memory_depth + [D] * memory_depth)
         actions = (
             [(D, C)]
             + [(C, C)] * 3
@@ -65,7 +64,7 @@ class TestHardGoByMajority(TestPlayer):
             first_action = [(C, C)]
         else:
             first_action = [(D, C)]
-        opponent = MockPlayer(actions=[C] * memory_depth + [D] * memory_depth)
+        opponent = axl.MockPlayer(actions=[C] * memory_depth + [D] * memory_depth)
         actions = (
             first_action
             + [(C, C)] * 4
@@ -85,7 +84,7 @@ class TestHardGoByMajority(TestPlayer):
 class TestGoByMajority(TestHardGoByMajority):
 
     name = "Soft Go By Majority"
-    player = axelrod.GoByMajority
+    player = axl.GoByMajority
     default_soft = True
 
     def test_memory_depth_infinite_soft_is_true(self):
@@ -93,14 +92,14 @@ class TestGoByMajority(TestHardGoByMajority):
         actions = (
             [(C, C)] * 50 + [(C, D)] * 51 + [(D, D)] * 49 + [(D, C)] * 50 + [(C, C)] * 2
         )
-        opponent = MockPlayer(actions=opponent_actions)
+        opponent = axl.MockPlayer(actions=opponent_actions)
         self.versus_test(opponent, expected_actions=actions)
 
     def test_memory_depth_even_soft_is_true(self):
         memory_depth = 4
         init_kwargs = {"memory_depth": memory_depth}
 
-        opponent = MockPlayer([C] * memory_depth + [D] * memory_depth)
+        opponent = axl.MockPlayer([C] * memory_depth + [D] * memory_depth)
         actions = [(C, C)] * 4 + [(C, D)] * 3 + [(D, D)] + [(D, C)] * 2 + [(C, C)] * 2
         self.versus_test(opponent, expected_actions=actions, init_kwargs=init_kwargs)
 
@@ -135,7 +134,7 @@ def factory_TestGoByRecentMajority(memory_depth, soft=True):
     class TestGoByRecentMajority(TestPlayer):
 
         name = "{} Go By Majority: {}".format(prefix, memory_depth)
-        player = getattr(axelrod, "{}GoByMajority{}".format(prefix2, memory_depth))
+        player = getattr(axl, "{}GoByMajority{}".format(prefix2, memory_depth))
 
         expected_classifier = {
             "stochastic": False,
@@ -152,7 +151,7 @@ def factory_TestGoByRecentMajority(memory_depth, soft=True):
             # soft actions = [(C, C), (C, C), (C, D), (C, D)]
             # hard actions = [(D, C), (C, C), (C, D), (D, D)]
             opponent_actions = [C] * memory_depth + [D] * memory_depth
-            opponent = MockPlayer(actions=opponent_actions)
+            opponent = axl.MockPlayer(actions=opponent_actions)
             if soft:
                 first_player_action = [C]
             else:
