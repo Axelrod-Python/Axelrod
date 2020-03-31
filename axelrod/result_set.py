@@ -2,6 +2,7 @@ from collections import Counter, namedtuple
 import csv
 import itertools
 from multiprocessing import cpu_count
+from typing import List
 import warnings
 
 import numpy as np
@@ -611,6 +612,18 @@ class ResultSet:
             other : axelrod.ResultSet
                 Another results set against which to check equality
         """
+
+        def list_equal_with_nans(v1: List[float], v2: List[float]) -> bool:
+            """Matches lists, accounting for NaNs."""
+            if len(v1) != len(v2):
+                return False
+            for i1, i2 in zip(v1, v2):
+                if np.isnan(i1) and np.isnan(i2):
+                    continue
+                if i1 != i2:
+                    return False
+            return True
+
         return all(
             [
                 self.wins == other.wins,

@@ -7,7 +7,7 @@ import axelrod.interaction_utils as iu
 import pandas as pd
 from axelrod.result_set import create_counter_dict
 from axelrod.tests.property import prob_end_tournaments, tournaments
-from numpy import mean, nanmedian, std
+from numpy import mean, nan, nanmedian, std
 
 from dask.dataframe.core import DataFrame
 from hypothesis import given, settings
