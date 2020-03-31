@@ -1,16 +1,16 @@
 """Tests for the Darwin PD strategy."""
 
-import axelrod
+import axelrod as axl
 
 from .test_player import TestPlayer
 
-C, D = axelrod.Action.C, axelrod.Action.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestDarwin(TestPlayer):
 
     name = "Darwin"
-    player = axelrod.Darwin
+    player = axl.Darwin
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -45,38 +45,38 @@ class TestDarwin(TestPlayer):
         p1.reset()
 
         self.versus_test(
-            axelrod.Cooperator(),
+            axl.Cooperator(),
             expected_actions=[(C, C)] * 5,
             attrs={"genome": [C] * 5},
         )
 
         expected_genome = [D] * 4 + [C]
         self.versus_test(
-            axelrod.Defector(),
+            axl.Defector(),
             expected_actions=[(C, D)] * 5,
             attrs={"genome": expected_genome},
         )
 
         # uses genome
         expected_actions = [(C, C)] + [(D, C)] * 3 + [(C, C)] * 2
-        self.versus_test(axelrod.Cooperator(), expected_actions)
+        self.versus_test(axl.Cooperator(), expected_actions)
 
     def test_against_geller_and_mindreader(self):
         self.versus_test(
-            axelrod.GellerCooperator(),
+            axl.GellerCooperator(),
             expected_actions=[(C, C)] * 2,
             attrs={"genome": [C, C]},
         )
 
         self.versus_test(
-            axelrod.MindReader(),
+            axl.MindReader(),
             expected_actions=[(C, D)] * 2,
             attrs={"genome": [D, C]},
         )
 
     def test_reset_history_and_attributes(self):
         # Overwrite this method because Darwin does not reset
-        self.versus_test(axelrod.Defector(), expected_actions=[(C, D)] + [(D, D)] * 4)
+        self.versus_test(axl.Defector(), expected_actions=[(C, D)] + [(D, D)] * 4)
 
         p1 = self.player()
         self.assertEqual(p1.genome, [D, C, C, C, D])
@@ -89,7 +89,7 @@ class TestDarwin(TestPlayer):
         p2 = self.player()
         self.assertIs(p1.genome, p2.genome)
 
-        self.versus_test(axelrod.Defector(), expected_actions=[(C, D)] + [(D, D)] * 4)
+        self.versus_test(axl.Defector(), expected_actions=[(C, D)] + [(D, D)] * 4)
 
         self.assertEqual(p2.genome, [D, C, C, C, D])
         self.assertIs(p1.genome, p2.genome)
@@ -97,7 +97,7 @@ class TestDarwin(TestPlayer):
         self.assertIs(p3.genome, p2.genome)
 
     def test_reset_genome(self):
-        self.versus_test(axelrod.Defector(), expected_actions=[(C, D)] + [(D, D)] * 4)
+        self.versus_test(axl.Defector(), expected_actions=[(C, D)] + [(D, D)] * 4)
         self.player.reset_genome()
         self.assertEqual(self.player().genome, [C])
 

@@ -1,16 +1,16 @@
 """Tests for mind controllers and other wizards."""
 
-import axelrod
+import axelrod as axl
 
 from .test_player import TestPlayer
 
-C, D = axelrod.Action.C, axelrod.Action.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestMindController(TestPlayer):
 
     name = "Mind Controller"
-    player = axelrod.MindController
+    player = axl.MindController
     expected_classifier = {
         "memory_depth": -10,
         "stochastic": False,
@@ -24,24 +24,24 @@ class TestMindController(TestPlayer):
     def test_strategy(self):
         """ Will always make opponent cooperate """
 
-        p1 = axelrod.MindController()
-        p2 = axelrod.Cooperator()
+        p1 = axl.MindController()
+        p2 = axl.Cooperator()
         self.assertEqual(p1.strategy(p2), D)
         self.assertEqual(p2.strategy(p1), C)
 
     def test_vs_defect(self):
         """ Will force even defector to cooperate """
 
-        p1 = axelrod.MindController()
-        p2 = axelrod.Defector()
+        p1 = axl.MindController()
+        p2 = axl.Defector()
         self.assertEqual(p1.strategy(p2), D)
         self.assertEqual(p2.strategy(p1), C)
 
     def test_vs_grudger(self):
         """ Will force even Grudger to forget its grudges"""
 
-        p1 = axelrod.MindController()
-        p2 = axelrod.Grudger()
+        p1 = axl.MindController()
+        p2 = axl.Grudger()
         for _ in range(4):
             p1.history.append(D, C)
             p2.history.append(C, D)
@@ -52,7 +52,7 @@ class TestMindController(TestPlayer):
 class TestMindWarper(TestMindController):
 
     name = "Mind Warper"
-    player = axelrod.MindWarper
+    player = axl.MindWarper
     expected_classifier = {
         "memory_depth": -10,
         "stochastic": False,
@@ -69,7 +69,7 @@ class TestMindWarper(TestMindController):
 
     def test_strategy(self):
         player = self.player()
-        opponent = axelrod.Defector()
+        opponent = axl.Defector()
         play1 = player.strategy(opponent)
         play2 = opponent.strategy(player)
         self.assertEqual(play1, D)
@@ -79,7 +79,7 @@ class TestMindWarper(TestMindController):
 class TestMindBender(TestMindController):
 
     name = "Mind Bender"
-    player = axelrod.MindBender
+    player = axl.MindBender
     expected_classifier = {
         "memory_depth": -10,
         "stochastic": False,
@@ -92,7 +92,7 @@ class TestMindBender(TestMindController):
 
     def test_strategy(self):
         player = self.player()
-        opponent = axelrod.Defector()
+        opponent = axl.Defector()
         play1 = player.strategy(opponent)
         play2 = opponent.strategy(player)
         self.assertEqual(play1, D)

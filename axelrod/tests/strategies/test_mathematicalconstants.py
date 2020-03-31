@@ -1,16 +1,16 @@
 """Tests for the golden and other mathematical strategies."""
 
-import axelrod
+import axelrod as axl
 
 from .test_player import TestPlayer
 
-C, D = axelrod.Action.C, axelrod.Action.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestGolden(TestPlayer):
 
     name = "$\phi$"
-    player = axelrod.Golden
+    player = axl.Golden
     expected_classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": False,
@@ -23,19 +23,19 @@ class TestGolden(TestPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (D, D), (C, C), (D, D), (C, C)]
-        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions)
 
         actions = [(C, C), (D, C), (D, C), (D, C), (D, C)]
-        self.versus_test(opponent=axelrod.Cooperator(), expected_actions=actions)
+        self.versus_test(opponent=axl.Cooperator(), expected_actions=actions)
 
         actions = [(C, D), (C, D), (C, D), (C, D), (C, D)]
-        self.versus_test(opponent=axelrod.Defector(), expected_actions=actions)
+        self.versus_test(opponent=axl.Defector(), expected_actions=actions)
 
 
 class TestPi(TestPlayer):
 
     name = "$\pi$"
-    player = axelrod.Pi
+    player = axl.Pi
     expected_classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": False,
@@ -48,19 +48,19 @@ class TestPi(TestPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (D, D), (C, C), (C, D), (C, C)]
-        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions)
 
         actions = [(C, C), (D, C), (D, C), (D, C), (D, C)]
-        self.versus_test(opponent=axelrod.Cooperator(), expected_actions=actions)
+        self.versus_test(opponent=axl.Cooperator(), expected_actions=actions)
 
         actions = [(C, D), (C, D), (C, D), (C, D), (C, D)]
-        self.versus_test(opponent=axelrod.Defector(), expected_actions=actions)
+        self.versus_test(opponent=axl.Defector(), expected_actions=actions)
 
 
 class Teste(TestPlayer):
 
     name = "$e$"
-    player = axelrod.e
+    player = axl.e
     expected_classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": False,
@@ -73,10 +73,10 @@ class Teste(TestPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (D, D), (C, C), (C, D), (C, C)]
-        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions)
 
         actions = [(C, C), (D, C), (D, C), (D, C), (D, C)]
-        self.versus_test(opponent=axelrod.Cooperator(), expected_actions=actions)
+        self.versus_test(opponent=axl.Cooperator(), expected_actions=actions)
 
         actions = [(C, D), (C, D), (C, D), (C, D), (C, D)]
-        self.versus_test(opponent=axelrod.Defector(), expected_actions=actions)
+        self.versus_test(opponent=axl.Defector(), expected_actions=actions)

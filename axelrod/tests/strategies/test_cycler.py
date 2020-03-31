@@ -1,9 +1,12 @@
 """Tests for the Cycler strategies."""
-import itertools
-import random
+
 import unittest
 
-import axelrod
+import itertools
+
+import random
+
+import axelrod as axl
 from axelrod import AntiCycler, Cycler, EvolvableCycler
 from axelrod._strategy_utils import detect_cycle
 from axelrod.action import Action, str_to_actions
@@ -18,7 +21,7 @@ C, D = Action.C, Action.D
 class TestAntiCycler(TestPlayer):
 
     name = "AntiCycler"
-    player = axelrod.AntiCycler
+    player = axl.AntiCycler
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -33,7 +36,7 @@ class TestAntiCycler(TestPlayer):
         test_range = 100
         player = AntiCycler()
         for _ in range(test_range):
-            player.play(axelrod.Cooperator())
+            player.play(axl.Cooperator())
 
         contains_no_cycles = player.history
         for slice_at in range(1, len(contains_no_cycles) + 1):
@@ -70,8 +73,8 @@ class TestAntiCycler(TestPlayer):
         against_defector = list(zip(anticycler_rounds, [D] * num_elements))
         against_cooperator = list(zip(anticycler_rounds, [C] * num_elements))
 
-        self.versus_test(axelrod.Defector(), expected_actions=against_defector)
-        self.versus_test(axelrod.Cooperator(), expected_actions=against_cooperator)
+        self.versus_test(axl.Defector(), expected_actions=against_defector)
+        self.versus_test(axl.Cooperator(), expected_actions=against_cooperator)
 
 
 class TestBasicCycler(TestPlayer):
@@ -98,7 +101,7 @@ class TestBasicCycler(TestPlayer):
     def test_cycler_works_as_expected(self):
         expected = [(C, D), (D, D), (D, D), (C, D)] * 2
         self.versus_test(
-            axelrod.Defector(), expected_actions=expected, init_kwargs={"cycle": "CDDC"}
+            axl.Defector(), expected_actions=expected, init_kwargs={"cycle": "CDDC"}
         )
 
     def test_cycle_raises_value_error_on_bad_cycle_str(self):
@@ -109,7 +112,7 @@ def test_cycler_factory(cycle_str):
     class TestCyclerChild(TestPlayer):
 
         name = "Cycler %s" % cycle_str
-        player = getattr(axelrod, "Cycler%s" % cycle_str)
+        player = getattr(axl, "Cycler%s" % cycle_str)
         expected_classifier = {
             "memory_depth": len(cycle_str) - 1,
             "stochastic": False,
@@ -125,7 +128,7 @@ def test_cycler_factory(cycle_str):
             match_len = 20
             actions_generator = _get_actions_cycle_against_cooperator(cycle_str)
             test_actions = [next(actions_generator) for _ in range(match_len)]
-            self.versus_test(axelrod.Cooperator(), expected_actions=test_actions)
+            self.versus_test(axl.Cooperator(), expected_actions=test_actions)
 
     return TestCyclerChild
 
@@ -183,7 +186,7 @@ class TestEvolvableCycler(unittest.TestCase):
 
         player1 = self.player_class(cycle=cycle1)
         player2 = self.player_class(cycle=cycle2)
-        axelrod.seed(3)
+        axl.seed(3)
         crossed = player1.crossover(player2)
         self.assertEqual(cross_cycle, crossed.cycle)
 
@@ -194,7 +197,7 @@ class TestEvolvableCycler(unittest.TestCase):
 
         player1 = self.player_class(cycle=cycle1)
         player2 = self.player_class(cycle=cycle2)
-        axelrod.seed(3)
+        axl.seed(3)
         crossed = player1.crossover(player2)
         self.assertEqual(cross_cycle, crossed.cycle)
 

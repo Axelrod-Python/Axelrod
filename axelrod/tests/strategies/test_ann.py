@@ -1,7 +1,7 @@
 """Tests for the ANN strategy."""
 import unittest
 
-import axelrod
+import axelrod as axl
 from axelrod.evolvable_player import InsufficientParametersError
 from axelrod.load_data_ import load_weights
 from axelrod.strategies.ann import split_weights
@@ -9,7 +9,7 @@ from .test_player import TestPlayer
 from .test_evolvable_player import PartialClass, TestEvolvablePlayer
 
 
-C, D = axelrod.Action.C, axelrod.Action.D
+C, D = axl.Action.C, axl.Action.D
 nn_weights = load_weights()
 num_features, num_hidden, weights = nn_weights["Evolved ANN 5"]
 
@@ -26,7 +26,7 @@ class TestSplitWeights(unittest.TestCase):
 class TestEvolvedANN(TestPlayer):
 
     name = "Evolved ANN"
-    player = axelrod.EvolvedANN
+    player = axl.EvolvedANN
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -39,19 +39,19 @@ class TestEvolvedANN(TestPlayer):
 
     def test_strategy(self):
         actions = [(C, C)] * 5
-        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+        self.versus_test(axl.Cooperator(), expected_actions=actions)
 
         actions = [(C, D)] + [(D, D)] * 5
-        self.versus_test(axelrod.Defector(), expected_actions=actions)
+        self.versus_test(axl.Defector(), expected_actions=actions)
 
         actions = [(C, C)] * 5
-        self.versus_test(axelrod.TitForTat(), expected_actions=actions)
+        self.versus_test(axl.TitForTat(), expected_actions=actions)
 
 
 class TestEvolvedANN5(TestPlayer):
 
     name = "Evolved ANN 5"
-    player = axelrod.EvolvedANN5
+    player = axl.EvolvedANN5
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -64,16 +64,16 @@ class TestEvolvedANN5(TestPlayer):
 
     def test_strategy(self):
         actions = [(C, C)] * 5
-        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+        self.versus_test(axl.Cooperator(), expected_actions=actions)
 
         actions = [(C, D)] + [(D, D)] * 4
-        self.versus_test(axelrod.Defector(), expected_actions=actions)
+        self.versus_test(axl.Defector(), expected_actions=actions)
 
 
 class TestEvolvedANNNoise05(TestPlayer):
 
     name = "Evolved ANN 5 Noise 05"
-    player = axelrod.EvolvedANNNoise05
+    player = axl.EvolvedANNNoise05
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -86,15 +86,15 @@ class TestEvolvedANNNoise05(TestPlayer):
 
     def test_strategy(self):
         actions = [(C, C)] * 5
-        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+        self.versus_test(axl.Cooperator(), expected_actions=actions)
 
         actions = [(C, D), (D, D), (D, D)]
-        self.versus_test(axelrod.Defector(), expected_actions=actions)
+        self.versus_test(axl.Defector(), expected_actions=actions)
 
 
 class TestEvolvableANN(unittest.TestCase):
 
-    player_class = axelrod.EvolvableANN
+    player_class = axl.EvolvableANN
 
     def test_normalized_parameters(self):
         # Must specify at least one of cycle or cycle_length
@@ -111,16 +111,16 @@ class TestEvolvableANN(unittest.TestCase):
 
 class TestEvolvableANN2(TestEvolvablePlayer):
     name = "EvolvableANN"
-    player_class = axelrod.EvolvableANN
-    parent_class = axelrod.ANN
+    player_class = axl.EvolvableANN
+    parent_class = axl.ANN
     parent_kwargs = ["num_features", "num_hidden", "weights"]
     init_parameters = {"num_features": 17, "num_hidden": 8}
 
 
 class TestEvolvableANN3(TestEvolvablePlayer):
     name = "EvolvableANN"
-    player_class = axelrod.EvolvableANN
-    parent_class = axelrod.ANN
+    player_class = axl.EvolvableANN
+    parent_class = axl.ANN
     parent_kwargs = ["num_features", "num_hidden", "weights"]
     init_parameters = {
         "num_features": nn_weights["Evolved ANN 5"][0],
@@ -131,7 +131,7 @@ class TestEvolvableANN3(TestEvolvablePlayer):
 
 # Substitute EvolvableANN as a regular EvolvedANN5.
 EvolvableANNPlayerWithDefault = PartialClass(
-    axelrod.EvolvableANN,
+    axl.EvolvableANN,
     num_features=num_features,
     num_hidden=num_hidden,
     weights=weights
