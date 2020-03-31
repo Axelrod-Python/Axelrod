@@ -191,9 +191,9 @@ class TestResultSet(unittest.TestCase):
         self.assertEqual(rs.num_players, len(self.players))
 
     def _clear_matrix(self, matrix):
-        for i in range(len(matrix)):
-            for j in range(len(matrix[i])):
-                matrix[i][j] = 0
+        for i, row in enumerate(matrix):
+            for j, _ in enumerate(row):
+                 matrix[i][j] = 0
 
     def test_ne_vectors(self):
         rs_1 = axelrod.ResultSet(self.filename, self.players, self.repetitions)
