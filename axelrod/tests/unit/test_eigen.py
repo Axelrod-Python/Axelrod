@@ -15,6 +15,13 @@ class FunctionCases(unittest.TestCase):
             self.assertAlmostEqual(evalue, 1)
             assert_array_almost_equal(evector, _normalise(numpy.ones(size)))
 
+    def test_zero_matrix(self):
+        mat = numpy.array([[0, 0], [0, 0]])
+        evector, evalue = principal_eigenvector(mat)
+        self.assertTrue(numpy.isnan(evalue))
+        self.assertTrue(numpy.isnan(evector[0]))
+        self.assertTrue(numpy.isnan(evector[1]))
+
     def test_2x2_matrix(self):
         mat = numpy.array([[2, 1], [1, 2]])
         evector, evalue = principal_eigenvector(mat)
