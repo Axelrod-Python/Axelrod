@@ -17,7 +17,7 @@ from axelrod.classifier import (
 from axelrod.player import Player
 
 
-class TestTitForTat(Player):
+class TitForTatWithEmptyClassifier(Player):
     """
     Same name as TitForTat, but with empty classifier.
     """
@@ -65,7 +65,7 @@ class TestClassification(unittest.TestCase):
             Classifiers["invalid_key"](axl.TitForTat)
 
     def test_will_lookup_key_in_dict(self):
-        self.assertEqual(Classifiers["memory_depth"](TestTitForTat), 1)
+        self.assertEqual(Classifiers["memory_depth"](TitForTatWithEmptyClassifier), 1)
 
     def test_known_classifiers(self):
         # A set of dimensions that are known to have been fully applied

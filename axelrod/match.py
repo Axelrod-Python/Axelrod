@@ -14,7 +14,7 @@ C, D = Action.C, Action.D
 def is_stochastic(players, noise):
     """Determines if a match is stochastic -- true if there is noise or if any
     of the players involved is stochastic."""
-    return noise or any(Classifiers["stochastic"](p) for p in players)
+    return noise or any(map(Classifiers["stochastic"], players))
 
 
 class Match(object):
