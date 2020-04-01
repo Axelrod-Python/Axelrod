@@ -179,13 +179,22 @@ class _Classifiers(object):
 
         def classify_player_for_this_classifier(
             player: Union[Player, Type[Player]]) -> Any:
+            def try_lookup() -> Any:
+                try:
+                    player_classifiers = cls.all_player_dicts[player.name]
+                except:
+                    return None
+
+                return player_classifiers.get(key, None)
+
             # If the passed player is not an instance, then try to initialize an
             # instance without arguments.
             if not isinstance(player, Player):
                 try:
                     player = player()
                 except:
-                    pass
+                    # Can't use the instances, so just go by name.
+                    return try_lookup()
 
             # Factory-generated players won't exist in the table.  As well, some
             # players, like Random, may change classifiers at construction time;
@@ -194,12 +203,8 @@ class _Classifiers(object):
             if key in player.classifier:
                 return player.classifier[key]
 
-            try:
-                player_classifiers = cls.all_player_dicts[player.name]
-            except:
-                return None
-
-            return player_classifiers.get(key, None)
+            # Try to find the name in the all_player_dicts, read from disk.
+            return try_lookup()
 
         return classify_player_for_this_classifier
 

@@ -2,7 +2,7 @@
 
 import os
 import unittest
-from typing import Text
+from typing import Any, Text
 
 import yaml
 
@@ -21,6 +21,20 @@ class TitForTatWithEmptyClassifier(Player):
     """
     Same name as TitForTat, but with empty classifier.
     """
+
+    # Classifiers are looked up by name, so only the name matters.
+    name = "Tit For Tat"
+    classifier = {}
+
+
+class TitForTatWithNonTrivialInitialzer(Player):
+    """
+    Same name as TitForTat, but with empty classifier.
+    """
+
+    def __init__(self, x: Any):
+        self.x = x  # Doesn't actually do anything.
+        super(TitForTatWithNonTrivialInitialzer).__init__()
 
     # Classifiers are looked up by name, so only the name matters.
     name = "Tit For Tat"
@@ -66,6 +80,9 @@ class TestClassification(unittest.TestCase):
 
     def test_will_lookup_key_in_dict(self):
         self.assertEqual(Classifiers["memory_depth"](TitForTatWithEmptyClassifier), 1)
+
+    def test_will_lookup_key_for_classes_that_cant_init(self):
+        self.assertEqual(Classifiers["memory_depth"](TitForTatWithNonTrivialInitialzer), 1)
 
     def test_known_classifiers(self):
         # A set of dimensions that are known to have been fully applied
