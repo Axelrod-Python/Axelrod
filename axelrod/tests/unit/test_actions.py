@@ -38,11 +38,11 @@ class TestAction(unittest.TestCase):
         self.assertEqual(axl.Action.from_char("D"), D)
 
     def test_from_char_error(self):
-        self.assertRaises(UnknownActionError, Action.from_char, "")
-        self.assertRaises(UnknownActionError, Action.from_char, "c")
-        self.assertRaises(UnknownActionError, Action.from_char, "d")
-        self.assertRaises(UnknownActionError, Action.from_char, "A")
-        self.assertRaises(UnknownActionError, Action.from_char, "CC")
+        self.assertRaises(UnknownActionError, axl.Action.from_char, "")
+        self.assertRaises(UnknownActionError, axl.Action.from_char, "c")
+        self.assertRaises(UnknownActionError, axl.Action.from_char, "d")
+        self.assertRaises(UnknownActionError, axl.Action.from_char, "A")
+        self.assertRaises(UnknownActionError, axl.Action.from_char, "CC")
 
     def test_str_to_actions(self):
         self.assertEqual(str_to_actions(""), ())
