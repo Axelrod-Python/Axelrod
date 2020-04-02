@@ -1,14 +1,15 @@
 import unittest
 
-from axelrod import filtered_strategies
-from axelrod.strategies._filters import *
-
 from hypothesis import example, given, settings
 from hypothesis.strategies import integers
 
+from axelrod import filtered_strategies
+from axelrod.player import Player
+from axelrod.strategies._filters import *
+
 
 class TestFilters(unittest.TestCase):
-    class TestStrategy(object):
+    class TestStrategy(Player):
         classifier = {
             "stochastic": True,
             "inspects_source": False,
@@ -126,17 +127,17 @@ class TestFilters(unittest.TestCase):
         self.assertFalse(passes_filterset(self.TestStrategy, sparse_failing_filterset))
 
     def test_filtered_strategies(self):
-        class StochasticTestStrategy(object):
+        class StochasticTestStrategy(Player):
             classifier = {
                 "stochastic": True,
                 "memory_depth": float("inf"),
                 "makes_use_of": [],
             }
 
-        class MemoryDepth2TestStrategy(object):
+        class MemoryDepth2TestStrategy(Player):
             classifier = {"stochastic": False, "memory_depth": 2, "makes_use_of": []}
 
-        class UsesLengthTestStrategy(object):
+        class UsesLengthTestStrategy(Player):
             classifier = {
                 "stochastic": True,
                 "memory_depth": float("inf"),
