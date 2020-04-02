@@ -11,7 +11,7 @@ from typing import (
     TypeVar,
     Union,
 )
-
+import warnings
 import yaml
 
 from axelrod.player import Player
@@ -59,15 +59,12 @@ class Classifier(Generic[T]):
 
 
 stochastic = Classifier[bool]("stochastic", lambda _: False)
-memory_depth = Classifier[Union[float, int]]("memory_depth",
-                                             lambda _: float("inf"))
+memory_depth = Classifier[Union[float, int]]("memory_depth", lambda _: float("inf"))
 makes_use_of = Classifier[Optional[Set[Text]]]("makes_use_of", lambda _: None)
 long_run_time = Classifier[bool]("long_run_time", lambda _: False)
 inspects_source = Classifier[Optional[bool]]("inspects_source", lambda _: None)
-manipulates_source = Classifier[Optional[bool]]("manipulates_source",
-                                                lambda _: None)
-manipulates_state = Classifier[Optional[bool]]("manipulates_state",
-                                               lambda _: None)
+manipulates_source = Classifier[Optional[bool]]("manipulates_source", lambda _: None)
+manipulates_state = Classifier[Optional[bool]]("manipulates_state", lambda _: None)
 
 # Should list all known classifiers.
 all_classifiers = [
@@ -178,7 +175,8 @@ class _Classifiers(object):
             raise KeyError("Unknown classifier")
 
         def classify_player_for_this_classifier(
-            player: Union[Player, Type[Player]]) -> Any:
+            player: Union[Player, Type[Player]]
+        ) -> Any:
             def try_lookup() -> Any:
                 try:
                     player_classifiers = cls.all_player_dicts[player.name]
@@ -192,9 +190,16 @@ class _Classifiers(object):
             if not isinstance(player, Player):
                 try:
                     player = player()
+                    warnings.warn(
+                        "Classifiers are intended to run on player instances. "
+                        "Passed player {} was initialized with default "
+                        "arguments.".format(player.name)
+                    )
                 except:
-                    # Can't use the instances, so just go by name.
-                    return try_lookup()
+                    # All strategies must have trivial initializers.
+                    raise Exception(
+                        "Passed player class doesn't have a trivial initializer."
+                    )
 
             # Factory-generated players won't exist in the table.  As well, some
             # players, like Random, may change classifiers at construction time;
