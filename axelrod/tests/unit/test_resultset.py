@@ -201,9 +201,9 @@ class TestResultSet(unittest.TestCase):
                  matrix[i][j] = 0
 
     def test_ne_vectors(self):
-        rs_1 = axelrod.ResultSet(self.filename, self.players, self.repetitions)
+        rs_1 = axl.ResultSet(self.filename, self.players, self.repetitions)
 
-        rs_2 = axelrod.ResultSet(self.filename, self.players, self.repetitions)
+        rs_2 = axl.ResultSet(self.filename, self.players, self.repetitions)
 
         # A different vector
         rs_2.eigenmoses_rating = (-1, -1, -1)
@@ -211,13 +211,13 @@ class TestResultSet(unittest.TestCase):
         self.assertNotEqual(rs_1, rs_2)
 
     def test_nan_vectors(self):
-        rs_1 = axelrod.ResultSet(self.filename, self.players, self.repetitions)
+        rs_1 = axl.ResultSet(self.filename, self.players, self.repetitions)
         # Force a broken eigenmoses, by replacing vengeful_cooperation with
         # zeroes.
         self._clear_matrix(rs_1.vengeful_cooperation)
         rs_1.eigenmoses_rating = rs_1._build_eigenmoses_rating()
 
-        rs_2 = axelrod.ResultSet(self.filename, self.players, self.repetitions)
+        rs_2 = axl.ResultSet(self.filename, self.players, self.repetitions)
         # Force a broken eigenmoses, by replacing vengeful_cooperation with
         # zeroes.
         self._clear_matrix(rs_2.vengeful_cooperation)
