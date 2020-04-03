@@ -2,12 +2,11 @@ import unittest
 
 import filecmp
 
-from hypothesis import given, settings
-
 import axelrod as axl
 from axelrod.strategy_transformers import FinalTransformer
 from axelrod.tests.property import tournaments
 
+from hypothesis import given, settings
 
 class TestTournament(unittest.TestCase):
     @classmethod
