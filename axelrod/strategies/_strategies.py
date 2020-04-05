@@ -235,6 +235,7 @@ from .zero_determinant import (
     ZDGen2,
     ZDMischief,
     ZDSet2,
+    AdaptiveZeroDet,
 )
 
 # Note: Meta* strategies are handled in .__init__.py
@@ -243,6 +244,7 @@ from .zero_determinant import (
 all_strategies = [
     Adaptive,
     AdaptiveTitForTat,
+    AdaptiveZeroDet,
     AdaptorBrief,
     AdaptorLong,
     Aggravater,

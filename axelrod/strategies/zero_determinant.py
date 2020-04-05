@@ -1,4 +1,6 @@
+import random
 from axelrod.action import Action
+from axelrod.player import Player
 
 from .memoryone import MemoryOnePlayer
 
@@ -254,3 +256,77 @@ class ZDSet2(LRPlayer):
 
     def __init__(self, phi: float = 1 / 4, s: float = 0.0, l: float = 2) -> None:
         super().__init__(phi, s, l)
+
+
+class AdaptiveZeroDet(LRPlayer):
+    """A strategy that uses a zero determinant structure that updates
+    its parameters after each round of play.
+
+    Names:
+    - AdaptiveZeroDet by Emmanuel Estrada and Dashiell Fryer
+    """
+    name = 'AdaptiveZeroDet'
+    classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': True,
+        'makes_use_of': set(["game"]),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def __init__(self, phi: float = 0.125, s: float = 0.5, l: float = 3,
+                 initial: Action = C) -> None:
+        # This Keeps track of the parameter values (phi,s,l) as well as the
+        # four vector which makes final decisions.
+        super().__init__(phi=phi, s=s, l=l)
+        self._scores = {C: 0, D: 0}
+        self._initial = initial
+
+    def score_last_round(self, opponent: Player):
+        """This gives the strategy the game attributes and allows the strategy
+         to score itself properly."""
+        game = self.match_attributes["game"]
+        if len(self.history):
+            last_round = (self.history[-1], opponent.history[-1])
+            scores = game.score(last_round)
+            self._scores[last_round[0]] += scores[0]
+
+    def _adjust_parameters(self):
+        d = random.randint(0, 9) / 1000  # Selects random value to adjust s and l
+        R, P, S, T = self.match_attributes["game"].RPST()
+        l = self.l
+        s = self.s
+        if self._scores[C] > self._scores[D]:
+            # This checks scores to determine how to adjust s and l either
+            # up or down by d, making sure not to exceed bounds.
+            if l + d > R:
+                l = (l + R) / 2
+            else:
+                l += d
+            s_min = - min((T - l) / (l - S), (l - S) / (T - l))
+            if s - d < s_min:
+                s = (s + s_min) / 2
+            else:
+                s = s - d
+        else:
+            # This adjusts s and l in the opposite direction, also checking distance
+            if l - d < P:
+                l = (l + P) / 2
+            else:
+                l -= d
+            if s + d > 1:
+                s = (s + 1) / 2
+            else:
+                s += d
+        # Update the four vector for the new l and s values
+        self.l = l
+        self.s = s
+        self.receive_match_attributes()
+
+    def strategy(self, opponent: Player) -> Action:
+        if len(self.history) > 0:
+            self.score_last_round(opponent)
+            self._adjust_parameters()
+        return super().strategy(opponent)

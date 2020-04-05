@@ -317,3 +317,46 @@ class TestZDSet2(TestPlayer):
 
         actions = [(C, D), (D, C), (D, D), (D, C), (D, D), (D, C)]
         self.versus_test(opponent=axelrod.CyclerDC(), expected_actions=actions, seed=5)
+
+
+class TestAdaptiveZeroDet(TestPlayer):
+    """
+    Test the AdaptiveZeroDet strategy.
+    """
+
+    name = "AdaptiveZeroDet: 0.125, 0.5, 3, C"
+    player = axelrod.AdaptiveZeroDet
+    expected_classifier = {
+        "memory_depth": float('inf'),
+        "stochastic": True,
+        "makes_use_of": set(['game']),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+    def test_strategy(self):
+        R, P, S, T = axelrod.Game().RPST()
+
+        player = self.player(l=R)
+        axelrod.seed(0)
+        match = axelrod.Match((player, axelrod.Alternator()), turns=200)
+        match.play()
+
+        player = self.player(l=P)
+        axelrod.seed(0)
+        match = axelrod.Match((player, axelrod.Alternator()), turns=200)
+        match.play()
+
+        player = self.player(s=1)
+        axelrod.seed(0)
+        match = axelrod.Match((player, axelrod.Alternator()), turns=200)
+        match.play()
+
+        l = 2
+        s_min = - min((T - l) / (l - S), (l - S) / (T - l))
+        player = self.player(s=s_min, l=2)
+        axelrod.seed(0)
+        match = axelrod.Match((player, axelrod.Alternator()), turns=200)
+        match.play()
