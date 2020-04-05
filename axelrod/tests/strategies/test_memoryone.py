@@ -1,11 +1,8 @@
 """Tests for the Memoryone strategies."""
-
 import unittest
-
 import warnings
 
 import axelrod as axl
-from axelrod import Game
 from axelrod.strategies.memoryone import MemoryOnePlayer
 
 from .test_player import TestPlayer, test_four_vector
@@ -101,7 +98,7 @@ class TestGTFT(TestPlayer):
         )
 
     def test_four_vector(self):
-        (R, P, S, T) = Game().RPST()
+        (R, P, S, T) = axl.Game().RPST()
         p = min(1 - (T - R) / (R - S), (R - P) / (T - P))
         expected_dictionary = {(C, C): 1.0, (C, D): p, (D, C): 1.0, (D, D): p}
         test_four_vector(self, expected_dictionary)

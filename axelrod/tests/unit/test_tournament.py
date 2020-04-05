@@ -1,27 +1,18 @@
 """Tests for the main tournament class."""
-
 import unittest
 from unittest.mock import MagicMock, patch
 
 import csv
-
 import filecmp
-
 import io
-
 import logging
-
 import os
-
 import pickle
-
 import warnings
-
 from multiprocessing import Queue, cpu_count
-
 import numpy as np
-
 import pandas as pd
+from tqdm import tqdm
 
 import axelrod as axl
 from axelrod.tests.property import (
@@ -31,7 +22,6 @@ from axelrod.tests.property import (
     tournaments,
 )
 from axelrod.tournament import _close_objects
-from tqdm import tqdm
 
 from hypothesis import example, given, settings
 from hypothesis.strategies import floats, integers

@@ -1,17 +1,11 @@
 import unittest
-
 import itertools
-
 import pickle
-
 import random
-
 import types
-
 import numpy as np
 
 import axelrod as axl
-from axelrod import DefaultGame, Player, LimitedHistory
 from axelrod.player import simultaneous_play
 from axelrod.tests.property import strategy_lists
 
@@ -47,7 +41,7 @@ _test_classifier = {
 }
 
 
-class ParameterisedTestPlayer(Player):
+class ParameterisedTestPlayer(axl.Player):
     """A simple Player class for testing init parameters"""
 
     name = "ParameterisedTestPlayer"
@@ -60,7 +54,7 @@ class ParameterisedTestPlayer(Player):
 class TestPlayerClass(unittest.TestCase):
 
     name = "Player"
-    player = Player
+    player = axl.Player
     classifier = {"stochastic": False}
 
     def test_play(self):
@@ -115,7 +109,7 @@ class TestPlayerClass(unittest.TestCase):
         self.assertEqual(player2.history[0], D)
 
     def test_update_history(self):
-        player = Player()
+        player = axl.Player()
         self.assertEqual(player.history, [])
         self.assertEqual(player.cooperations, 0)
         self.assertEqual(player.defections, 0)
@@ -129,7 +123,7 @@ class TestPlayerClass(unittest.TestCase):
         self.assertEqual(player.cooperations, 1)
 
     def test_history_assignment(self):
-        player = Player()
+        player = axl.Player()
         with self.assertRaises(AttributeError):
             player.history = []
 
@@ -320,9 +314,9 @@ class TestPlayerClass(unittest.TestCase):
         # Test that init_kwargs exist and are empty
         self.assertEqual(self.player().init_kwargs, {})
         # Test that passing a positional argument raises an error
-        self.assertRaises(TypeError, Player, "test")
+        self.assertRaises(TypeError, axl.Player, "test")
         # Test that passing a keyword argument raises an error
-        self.assertRaises(TypeError, Player, arg_test1="test")
+        self.assertRaises(TypeError, axl.Player, arg_test1="test")
 
         # Tests for Players with init parameters
 
@@ -353,7 +347,7 @@ class TestPlayerClass(unittest.TestCase):
         self.assertRaises(TypeError, ParameterisedTestPlayer, "other", "other", "other")
 
 
-class TestOpponent(Player):
+class TestOpponent(axl.Player):
     """A player who only exists so we have something to test against"""
 
     name = "TestOpponent"
@@ -376,7 +370,7 @@ class TestPlayer(unittest.TestCase):
             player = self.player()
             self.assertEqual(len(player.history), 0)
             self.assertEqual(
-                player.match_attributes, {"length": -1, "game": DefaultGame, "noise": 0}
+                player.match_attributes, {"length": -1, "game": axl.DefaultGame, "noise": 0}
             )
             self.assertEqual(player.cooperations, 0)
             self.assertEqual(player.defections, 0)
@@ -682,8 +676,8 @@ def test_memory(player, opponent, memory_length, seed=0, turns=10):
     # Play with limited history.
     player.reset()
     opponent.reset()
-    player._history = LimitedHistory(memory_length)
-    opponent._history = LimitedHistory(memory_length)
+    player._history = axl.LimitedHistory(memory_length)
+    opponent._history = axl.LimitedHistory(memory_length)
     axl.seed(seed)
     match = axl.Match((player, opponent), turns=turns, reset=False)
     limited_plays = [p[0] for p in match.play()]

@@ -1,13 +1,9 @@
 """Tests for the Cycler strategies."""
-
 import unittest
-
 import itertools
-
 import random
 
 import axelrod as axl
-from axelrod import AntiCycler, Cycler, EvolvableCycler
 from axelrod._strategy_utils import detect_cycle
 from axelrod.action import Action, str_to_actions
 from axelrod.evolvable_player import InsufficientParametersError
@@ -34,7 +30,7 @@ class TestAntiCycler(TestPlayer):
 
     def test_has_no_cycles(self):
         test_range = 100
-        player = AntiCycler()
+        player = axl.AntiCycler()
         for _ in range(test_range):
             player.play(axl.Cooperator())
 
@@ -79,7 +75,7 @@ class TestAntiCycler(TestPlayer):
 
 class TestBasicCycler(TestPlayer):
     name = "Cycler: CCD"
-    player = Cycler
+    player = axl.Cycler
     expected_classifier = {
         "memory_depth": 2,
         "stochastic": False,
@@ -93,8 +89,8 @@ class TestBasicCycler(TestPlayer):
     def test_memory_depth_is_len_cycle_minus_one(self):
         len_ten = "DCDCDDCDCD"
         len_five = "DCDDC"
-        depth_nine = Cycler(cycle=len_ten)
-        depth_four = Cycler(cycle=len_five)
+        depth_nine = axl.Cycler(cycle=len_ten)
+        depth_four = axl.Cycler(cycle=len_five)
         self.assertEqual(depth_nine.classifier["memory_depth"], 9)
         self.assertEqual(depth_four.classifier["memory_depth"], 4)
 
@@ -105,7 +101,7 @@ class TestBasicCycler(TestPlayer):
         )
 
     def test_cycle_raises_value_error_on_bad_cycle_str(self):
-        self.assertRaises(ValueError, Cycler, cycle="CdDC")
+        self.assertRaises(ValueError, axl.Cycler, cycle="CdDC")
 
 
 def test_cycler_factory(cycle_str):
@@ -152,7 +148,7 @@ TestCyclerCCCDCD = test_cycler_factory("CCCDCD")
 
 class TestEvolvableCycler(unittest.TestCase):
 
-    player_class = EvolvableCycler
+    player_class = axl.EvolvableCycler
 
     def test_normalized_parameters(self):
         # Must specify at least one of cycle or cycle_length
@@ -204,23 +200,23 @@ class TestEvolvableCycler(unittest.TestCase):
 
 class TestEvolvableCycler2(TestEvolvablePlayer):
     name = "EvolvableCycler"
-    player_class = EvolvableCycler
-    parent_class = Cycler
+    player_class = axl.EvolvableCycler
+    parent_class = axl.Cycler
     parent_kwargs = ["cycle"]
     init_parameters = {"cycle_length": 100}
 
 
 class TestEvolvableCycler3(TestEvolvablePlayer):
     name = "EvolvableCycler"
-    player_class = EvolvableCycler
-    parent_class = Cycler
+    player_class = axl.EvolvableCycler
+    parent_class = axl.Cycler
     parent_kwargs = ["cycle"]
     init_parameters = {"cycle": "".join(random.choice(("C", "D")) for _ in range(50)),
                        "mutation_potency": 10}
 
 
 # Substitute EvolvedCycler as a regular Cycler.
-EvolvableCyclerWithDefault = PartialClass(EvolvableCycler, cycle="CCD")
+EvolvableCyclerWithDefault = PartialClass(axl.EvolvableCycler, cycle="CCD")
 
 
 class EvolvableCyclerAsCycler(TestBasicCycler):

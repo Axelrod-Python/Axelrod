@@ -1,7 +1,5 @@
 import unittest
-
 import tempfile
-
 from collections import Counter
 
 import axelrod as axl

@@ -1,7 +1,5 @@
 import unittest
-
 import os
-
 import pickle
 
 import axelrod as axl

@@ -1,13 +1,8 @@
 import unittest
-
 import csv
-
 from collections import Counter
-
 import pandas as pd
-
 from dask.dataframe.core import DataFrame
-
 from numpy import mean, nanmedian, std
 
 import axelrod as axl
