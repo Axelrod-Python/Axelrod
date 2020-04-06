@@ -3,7 +3,6 @@ import pickle
 import random
 
 import axelrod as axl
-import axelrod.strategy_transformers as st
 
 C, D = axl.Action.C, axl.Action.D
 
@@ -12,7 +11,7 @@ C, D = axl.Action.C, axl.Action.D
 
 # First set: special cases
 
-PointerToWrappedStrategy = st.FlipTransformer()(st.FlipTransformer()(axl.Cooperator))
+PointerToWrappedStrategy = axl.strategy_transformers.FlipTransformer()(axl.strategy_transformers.FlipTransformer()(axl.Cooperator))
 
 
 class MyDefector(axl.Player):
@@ -23,40 +22,40 @@ class MyDefector(axl.Player):
         return D
 
 
-PointerToWrappedClassNotInStrategies = st.FlipTransformer()(
-    st.FlipTransformer()(MyDefector)
+PointerToWrappedClassNotInStrategies = axl.strategy_transformers.FlipTransformer()(
+    axl.strategy_transformers.FlipTransformer()(MyDefector)
 )
 
 
-@st.InitialTransformer((D, C, D), name_prefix=None)
-@st.DualTransformer(name_prefix=None)
-@st.FlipTransformer(name_prefix=None)
-@st.DualTransformer(name_prefix=None)
+@axl.strategy_transformers.InitialTransformer((D, C, D), name_prefix=None)
+@axl.strategy_transformers.DualTransformer(name_prefix=None)
+@axl.strategy_transformers.FlipTransformer(name_prefix=None)
+@axl.strategy_transformers.DualTransformer(name_prefix=None)
 class InterspersedDualTransformersNamePrefixAbsent(axl.Cooperator):
     pass
 
 
-@st.IdentityTransformer((D, D, C))
-@st.DualTransformer()
-@st.FlipTransformer()
-@st.DualTransformer()
+@axl.strategy_transformers.IdentityTransformer((D, D, C))
+@axl.strategy_transformers.DualTransformer()
+@axl.strategy_transformers.FlipTransformer()
+@axl.strategy_transformers.DualTransformer()
 class InterspersedDualTransformersNamePrefixPresent(axl.Cooperator):
     pass
 
 
-@st.FlipTransformer()
+@axl.strategy_transformers.FlipTransformer()
 class MyCooperator(axl.Player):
     def strategy(self, opponent):
         return C
 
 
-@st.FlipTransformer()
-@st.FlipTransformer()
+@axl.strategy_transformers.FlipTransformer()
+@axl.strategy_transformers.FlipTransformer()
 class DoubleFlip(axl.Cooperator):
     pass
 
 
-@st.FlipTransformer()
+@axl.strategy_transformers.FlipTransformer()
 class SingleFlip(axl.Cooperator):
     pass
 
@@ -64,47 +63,47 @@ class SingleFlip(axl.Cooperator):
 # Second set: All the transformers
 
 
-@st.ApologyTransformer([D], [C], name_prefix=None)
+@axl.strategy_transformers.ApologyTransformer([D], [C], name_prefix=None)
 class Apology(axl.Cooperator):
     pass
 
 
-@st.DeadlockBreakingTransformer(name_prefix=None)
+@axl.strategy_transformers.DeadlockBreakingTransformer(name_prefix=None)
 class DeadlockBreaking(axl.Cooperator):
     pass
 
 
-@st.DualTransformer(name_prefix=None)
+@axl.strategy_transformers.DualTransformer(name_prefix=None)
 class Dual(axl.Cooperator):
     pass
 
 
-@st.FlipTransformer(name_prefix=None)
+@axl.strategy_transformers.FlipTransformer(name_prefix=None)
 class Flip(axl.Cooperator):
     pass
 
 
-@st.FinalTransformer((D, D), name_prefix=None)
+@axl.strategy_transformers.FinalTransformer((D, D), name_prefix=None)
 class Final(axl.Cooperator):
     pass
 
 
-@st.ForgiverTransformer(0.2, name_prefix=None)
+@axl.strategy_transformers.ForgiverTransformer(0.2, name_prefix=None)
 class Forgiver(axl.Cooperator):
     pass
 
 
-@st.GrudgeTransformer(3, name_prefix=None)
+@axl.strategy_transformers.GrudgeTransformer(3, name_prefix=None)
 class Grudge(axl.Cooperator):
     pass
 
 
-@st.InitialTransformer((C, D), name_prefix=None)
+@axl.strategy_transformers.InitialTransformer((C, D), name_prefix=None)
 class Initial(axl.Cooperator):
     pass
 
 
-@st.JossAnnTransformer((0.2, 0.2), name_prefix=None)
+@axl.strategy_transformers.JossAnnTransformer((0.2, 0.2), name_prefix=None)
 class JossAnn(axl.Cooperator):
     pass
 
@@ -113,42 +112,42 @@ strategies = [axl.Grudger, axl.TitForTat]
 probability = [0.2, 0.3]
 
 
-@st.MixedTransformer(probability, strategies, name_prefix=None)
+@axl.strategy_transformers.MixedTransformer(probability, strategies, name_prefix=None)
 class Mixed(axl.Cooperator):
     pass
 
 
-@st.NiceTransformer(name_prefix=None)
+@axl.strategy_transformers.NiceTransformer(name_prefix=None)
 class Nice(axl.Cooperator):
     pass
 
 
-@st.NoisyTransformer(0.2, name_prefix=None)
+@axl.strategy_transformers.NoisyTransformer(0.2, name_prefix=None)
 class Noisy(axl.Cooperator):
     pass
 
 
-@st.RetaliationTransformer(3, name_prefix=None)
+@axl.strategy_transformers.RetaliationTransformer(3, name_prefix=None)
 class Retaliation(axl.Cooperator):
     pass
 
 
-@st.RetaliateUntilApologyTransformer(name_prefix=None)
+@axl.strategy_transformers.RetaliateUntilApologyTransformer(name_prefix=None)
 class RetaliateUntilApology(axl.Cooperator):
     pass
 
 
-@st.TrackHistoryTransformer(name_prefix=None)
+@axl.strategy_transformers.TrackHistoryTransformer(name_prefix=None)
 class TrackHistory(axl.Cooperator):
     pass
 
 
-@st.IdentityTransformer()
+@axl.strategy_transformers.IdentityTransformer()
 class Identity(axl.Cooperator):
     pass
 
 
-@st.IdentityTransformer(name_prefix=None)
+@axl.strategy_transformers.IdentityTransformer(name_prefix=None)
 class TransformedThue(axl.ThueMorse):
     pass
 
@@ -161,7 +160,7 @@ class MetaThue(axl.MetaPlayer):
         super().__init__(team=team)
 
 
-TransformedMetaThue = st.IdentityTransformer(name_prefix=None)(MetaThue)
+TransformedMetaThue = axl.strategy_transformers.IdentityTransformer(name_prefix=None)(MetaThue)
 
 
 transformed_no_prefix = [
@@ -184,22 +183,22 @@ transformed_no_prefix = [
 ]
 
 transformer_instances = [
-    st.ApologyTransformer([D], [C]),
-    st.DeadlockBreakingTransformer(),
-    st.DualTransformer(),
-    st.FlipTransformer(),
-    st.FinalTransformer((D, D)),
-    st.ForgiverTransformer(0.2),
-    st.GrudgeTransformer(3),
-    st.InitialTransformer((C, D)),
-    st.JossAnnTransformer((0.2, 0.6)),
-    st.MixedTransformer(probability, strategies),
-    st.NiceTransformer(),
-    st.NoisyTransformer(0.2),
-    st.RetaliationTransformer(3),
-    st.RetaliateUntilApologyTransformer(),
-    st.TrackHistoryTransformer(),
-    st.IdentityTransformer(),
+    axl.strategy_transformers.ApologyTransformer([D], [C]),
+    axl.strategy_transformers.DeadlockBreakingTransformer(),
+    axl.strategy_transformers.DualTransformer(),
+    axl.strategy_transformers.FlipTransformer(),
+    axl.strategy_transformers.FinalTransformer((D, D)),
+    axl.strategy_transformers.ForgiverTransformer(0.2),
+    axl.strategy_transformers.GrudgeTransformer(3),
+    axl.strategy_transformers.InitialTransformer((C, D)),
+    axl.strategy_transformers.JossAnnTransformer((0.2, 0.6)),
+    axl.strategy_transformers.MixedTransformer(probability, strategies),
+    axl.strategy_transformers.NiceTransformer(),
+    axl.strategy_transformers.NoisyTransformer(0.2),
+    axl.strategy_transformers.RetaliationTransformer(3),
+    axl.strategy_transformers.RetaliateUntilApologyTransformer(),
+    axl.strategy_transformers.TrackHistoryTransformer(),
+    axl.strategy_transformers.IdentityTransformer(),
 ]
 
 
@@ -237,7 +236,7 @@ class TestPickle(unittest.TestCase):
         self.assert_original_equals_pickled(player)
 
     def test_sequence_player(self):
-        inline_transformed_thue = st.IdentityTransformer(name_prefix="Transformed")(axl.ThueMorse)()
+        inline_transformed_thue = axl.strategy_transformers.IdentityTransformer(name_prefix="Transformed")(axl.ThueMorse)()
         for player in [axl.ThueMorse(), axl.ThueMorseInverse(), MetaThue(), TransformedMetaThue(),
                        inline_transformed_thue, TransformedThue(),
                        ]:
@@ -276,9 +275,9 @@ class TestPickle(unittest.TestCase):
                 self.assert_original_equals_pickled(player)
 
     def test_created_on_the_spot_multiple_transformers(self):
-        player_class = st.FlipTransformer()(axl.Cooperator)
-        player_class = st.DualTransformer()(player_class)
-        player = st.FinalTransformer((C, D))(player_class)()
+        player_class = axl.strategy_transformers.FlipTransformer()(axl.Cooperator)
+        player_class = axl.strategy_transformers.DualTransformer()(player_class)
+        player = axl.strategy_transformers.FinalTransformer((C, D))(player_class)()
 
         self.assert_original_equals_pickled(player)
 
@@ -294,10 +293,10 @@ class TestPickle(unittest.TestCase):
         self.assert_original_equals_pickled(player)
 
         player_class = axl.WinStayLoseShift
-        player_class = st.DualTransformer()(player_class)
-        player_class = st.InitialTransformer((C, D))(player_class)
-        player_class = st.DualTransformer()(player_class)
-        player_class = st.TrackHistoryTransformer()(player_class)
+        player_class = axl.strategy_transformers.DualTransformer()(player_class)
+        player_class = axl.strategy_transformers.InitialTransformer((C, D))(player_class)
+        player_class = axl.strategy_transformers.DualTransformer()(player_class)
+        player_class = axl.strategy_transformers.TrackHistoryTransformer()(player_class)
 
         interspersed_dual_transformers = player_class()
 
@@ -370,7 +369,7 @@ class TestPickle(unittest.TestCase):
 
         self.assertRaises(AttributeError, pickle.dumps, un_transformed)
 
-        player = st.FlipTransformer()(LocalCooperator)()
+        player = axl.strategy_transformers.FlipTransformer()(LocalCooperator)()
         pickled = pickle.dumps(player)
         self.assertRaises(AttributeError, pickle.loads, pickled)
 
@@ -379,17 +378,17 @@ class TestPickle(unittest.TestCase):
         self.assertEqual(no_prefix.__class__.__name__, "Flip")
         self.assert_original_equals_pickled(no_prefix)
 
-        default_prefix = st.FlipTransformer()(axl.Cooperator)()
+        default_prefix = axl.strategy_transformers.FlipTransformer()(axl.Cooperator)()
         self.assertEqual(default_prefix.__class__.__name__, "FlippedCooperator")
         self.assert_original_equals_pickled(default_prefix)
 
-        fliptastic = st.FlipTransformer(name_prefix="Fliptastic")
+        fliptastic = axl.strategy_transformers.FlipTransformer(name_prefix="Fliptastic")
         new_prefix = fliptastic(axl.Cooperator)()
         self.assertEqual(new_prefix.__class__.__name__, "FliptasticCooperator")
         self.assert_original_equals_pickled(new_prefix)
 
     def test_dynamic_class_no_name_prefix(self):
-        player = st.FlipTransformer(name_prefix=None)(axl.Cooperator)()
+        player = axl.strategy_transformers.FlipTransformer(name_prefix=None)(axl.Cooperator)()
 
         self.assertEqual(player.__class__.__name__, "Cooperator")
         self.assert_original_equals_pickled(player)
