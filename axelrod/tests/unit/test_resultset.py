@@ -648,7 +648,7 @@ class TestResultSetSpatialStructure(TestResultSet):
     @classmethod
     def setUpClass(cls):
 
-        cls.filename = axl_filename("test_outputs/test_results_spatial.csv")
+        cls.filename = axl_filename("test_outputs", "test_results_spatial.csv")
         cls.players = [axelrod.Alternator(), axelrod.TitForTat(), axelrod.Defector()]
         cls.turns = 5
         cls.edges = [(0, 1), (0, 2)]

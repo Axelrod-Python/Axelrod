@@ -212,7 +212,7 @@ class TestFingerprint(unittest.TestCase):
         self.assertFalse(os.path.isfile(filename))
 
     def test_fingerprint_with_filename(self):
-        filename = axl_filename("test_outputs/test_fingerprint.csv")
+        filename = axl_filename("test_outputs", "test_fingerprint.csv")
         af = AshlockFingerprint(axl.TitForTat)
         af.fingerprint(
             turns=1, repetitions=1, step=0.5, progress_bar=False, filename=filename
@@ -426,7 +426,7 @@ class TestTransitiveFingerprint(unittest.TestCase):
         )
 
     def test_fingerprint_with_filename(self):
-        filename = axl_filename("test_outputs/test_fingerprint.csv")
+        filename = axl_filename("test_outputs", "test_fingerprint.csv")
         strategy = axl.TitForTat()
         tf = TransitiveFingerprint(strategy)
         tf.fingerprint(turns=1, repetitions=1, progress_bar=False, filename=filename)
@@ -440,7 +440,7 @@ class TestTransitiveFingerprint(unittest.TestCase):
         tf.fingerprint(
             repetitions=1,
             progress_bar=False,
-            filename=axl_filename("test_outputs/tran_fin.csv"),
+            filename=axl_filename("test_outputs", "tran_fin.csv"),
         )
         self.assertEqual(tf.data.shape, (50, 50))
 
@@ -453,7 +453,7 @@ class TestTransitiveFingerprint(unittest.TestCase):
 
     def test_analyse_cooperation_ratio(self):
         tf = TransitiveFingerprint(axl.TitForTat)
-        filename = axl_filename("test_outputs/test_fingerprint.csv")
+        filename = axl_filename("test_outputs", "test_fingerprint.csv")
         with open(filename, "w") as f:
             f.write(
                 """Interaction index,Player index,Opponent index,Repetition,Player name,Opponent name,Actions

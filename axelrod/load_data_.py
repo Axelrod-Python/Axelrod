@@ -1,17 +1,28 @@
+import pathlib
 from typing import Dict, List, Text, Tuple
 
-import os
 import pkg_resources
 
 
-def axl_filename(axl_path: Text) -> Text:
-    """Get the path to Axelrod/<axl_path> from the working directory."""
-    # Working directory
-    dirname = os.path.dirname(__file__)
+def axl_filename(*axl_path: Text) -> Text:
+    """Given a path under Axelrod/, return absolute filepath.
 
-    # We go up a dir because this code is located in Axelrod/axelrod and
-    # axl_path is from the top-level Axelrod dir.
-    return os.path.join(dirname, "..", axl_path)
+    Parameters
+    ----------
+    axl_path
+        Path to file located under top-level Axelrod directory, with file names
+        separated at "/".  For example, to get the path to "Axelrod/xxx/yyy.py"
+        call this function with axl_filename("xxx", "yyy.py").
+
+    Returns
+    -------
+        Absolute path to the given path.
+    """
+    # We go up a dir because this code is located in Axelrod/axelrod.
+    path = pathlib.Path(__file__).resolve().parent.parent
+    for p in axl_path:
+        path = path / p
+    return str(path)
 
 
 def load_file(filename: str, directory: str) -> List[List[str]]:

@@ -89,7 +89,7 @@ class TestTournament(unittest.TestCase):
             [200, 200, 1, 200, 200],
         ]
 
-        cls.filename = axl_filename("test_outputs/test_tournament.csv")
+        cls.filename = axl_filename("test_outputs", "test_tournament.csv")
 
     def setUp(self):
         self.test_tournament = axelrod.Tournament(
@@ -735,7 +735,7 @@ class TestTournament(unittest.TestCase):
         tournament.play(filename=self.filename, progress_bar=False)
         df = pd.read_csv(self.filename)
         expected_df = pd.read_csv(
-            axl_filename("test_outputs/expected_test_tournament.csv")
+            axl_filename("test_outputs", "expected_test_tournament.csv")
         )
         self.assertTrue(df.equals(expected_df))
 
@@ -750,7 +750,7 @@ class TestTournament(unittest.TestCase):
         tournament.play(filename=self.filename, progress_bar=False, build_results=False)
         df = pd.read_csv(self.filename)
         expected_df = pd.read_csv(
-            axl_filename("test_outputs/expected_test_tournament_no_results.csv")
+            axl_filename("test_outputs", "expected_test_tournament_no_results.csv")
         )
         self.assertTrue(df.equals(expected_df))
 

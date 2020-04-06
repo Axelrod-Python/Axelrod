@@ -11,7 +11,7 @@ from numpy import mean
 class TestPlot(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.filename = axl_filename("test_outputs/test_results.csv")
+        cls.filename = axl_filename("test_outputs", "test_results.csv")
 
         cls.players = [axelrod.Alternator(), axelrod.TitForTat(), axelrod.Defector()]
         cls.repetitions = 3
