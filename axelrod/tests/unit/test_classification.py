@@ -33,8 +33,7 @@ class TitForTatWithNonTrivialInitialzer(Player):
     """
 
     def __init__(self, x: Any):
-        self.x = x  # Doesn't actually do anything.
-        super(TitForTatWithNonTrivialInitialzer).__init__()
+        pass
 
     # Classifiers are looked up by name, so only the name matters.
     name = "Tit For Tat"
