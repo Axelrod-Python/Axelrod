@@ -34,9 +34,11 @@ jobs:
         python -m pip install coverage
         python -m pip install hypothesis==3.2
         python -m pip install mypy
-    - name: Run tests and coverage
+    - name: Run tests
       run: |
         coverage run --source=axelrod -m unittest discover
+    - name: Report coverage
+      run: |
         coverage report -m --fail-under=100
     - name: Run doctest
       run: |
