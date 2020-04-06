@@ -1,11 +1,13 @@
-import tempfile
 import unittest
 
-import axelrod
-from axelrod.load_data_ import axl_filename
+import tempfile
 import matplotlib
 import matplotlib.pyplot as plt
+
 from numpy import mean
+
+import axelrod as axl
+from axelrod.load_data_ import axl_filename
 
 
 class TestPlot(unittest.TestCase):
@@ -13,15 +15,15 @@ class TestPlot(unittest.TestCase):
     def setUpClass(cls):
         cls.filename = axl_filename("test_outputs", "test_results.csv")
 
-        cls.players = [axelrod.Alternator(), axelrod.TitForTat(), axelrod.Defector()]
+        cls.players = [axl.Alternator(), axl.TitForTat(), axl.Defector()]
         cls.repetitions = 3
         cls.turns = 5
 
-        cls.test_result_set = axelrod.ResultSet(
+        cls.test_result_set = axl.ResultSet(
             cls.filename, cls.players, cls.repetitions, progress_bar=False
         )
 
-        cls.test_result_set = axelrod.ResultSet(
+        cls.test_result_set = axl.ResultSet(
             cls.filename, cls.players, cls.repetitions, progress_bar=False
         )
         cls.expected_boxplot_dataset = [
@@ -58,66 +60,66 @@ class TestPlot(unittest.TestCase):
         )
 
     def test_default_cmap(self):
-        cmap = axelrod.plot.default_cmap("0.0")
+        cmap = axl.plot.default_cmap("0.0")
         self.assertEqual(cmap, "YlGnBu")
 
-        cmap = axelrod.plot.default_cmap("1.3alpha")
+        cmap = axl.plot.default_cmap("1.3alpha")
         self.assertEqual(cmap, "YlGnBu")
 
-        cmap = axelrod.plot.default_cmap("1.4.99")
+        cmap = axl.plot.default_cmap("1.4.99")
         self.assertEqual(cmap, "YlGnBu")
 
-        cmap = axelrod.plot.default_cmap("1.4")
+        cmap = axl.plot.default_cmap("1.4")
         self.assertEqual(cmap, "YlGnBu")
 
-        cmap = axelrod.plot.default_cmap()
+        cmap = axl.plot.default_cmap()
         self.assertEqual(cmap, "viridis")
 
-        cmap = axelrod.plot.default_cmap("1.5")
+        cmap = axl.plot.default_cmap("1.5")
         self.assertEqual(cmap, "viridis")
 
-        cmap = axelrod.plot.default_cmap("1.5beta")
+        cmap = axl.plot.default_cmap("1.5beta")
         self.assertEqual(cmap, "viridis")
 
-        cmap = axelrod.plot.default_cmap("1.7")
+        cmap = axl.plot.default_cmap("1.7")
         self.assertEqual(cmap, "viridis")
 
-        cmap = axelrod.plot.default_cmap("2.0")
+        cmap = axl.plot.default_cmap("2.0")
         self.assertEqual(cmap, "viridis")
 
     def test_init(self):
-        plot = axelrod.Plot(self.test_result_set)
+        plot = axl.Plot(self.test_result_set)
         self.assertEqual(plot.result_set, self.test_result_set)
 
     def test_init_from_resulsetfromfile(self):
         tmp_file = tempfile.NamedTemporaryFile(mode="w", delete=False)
-        players = [axelrod.Cooperator(), axelrod.TitForTat(), axelrod.Defector()]
-        tournament = axelrod.Tournament(players=players, turns=2, repetitions=2)
+        players = [axl.Cooperator(), axl.TitForTat(), axl.Defector()]
+        tournament = axl.Tournament(players=players, turns=2, repetitions=2)
         tournament.play(filename=tmp_file.name, progress_bar=False)
         tmp_file.close()
-        rs = axelrod.ResultSet(tmp_file.name, players, 2, progress_bar=False)
+        rs = axl.ResultSet(tmp_file.name, players, 2, progress_bar=False)
 
-        plot = axelrod.Plot(rs)
+        plot = axl.Plot(rs)
         self.assertEqual(plot.result_set, rs)
 
     def test_boxplot_dataset(self):
-        plot = axelrod.Plot(self.test_result_set)
+        plot = axl.Plot(self.test_result_set)
         self.assertSequenceEqual(plot._boxplot_dataset, self.expected_boxplot_dataset)
 
     def test_boxplot_xticks_locations(self):
-        plot = axelrod.Plot(self.test_result_set)
+        plot = axl.Plot(self.test_result_set)
         self.assertEqual(
             plot._boxplot_xticks_locations, self.expected_boxplot_xticks_locations
         )
 
     def test_boxplot_xticks_labels(self):
-        plot = axelrod.Plot(self.test_result_set)
+        plot = axl.Plot(self.test_result_set)
         self.assertEqual(
             plot._boxplot_xticks_labels, self.expected_boxplot_xticks_labels
         )
 
     def test_boxplot(self):
-        plot = axelrod.Plot(self.test_result_set)
+        plot = axl.Plot(self.test_result_set)
         fig = plot.boxplot()
         self.assertIsInstance(fig, matplotlib.pyplot.Figure)
         plt.close(fig)
@@ -126,7 +128,7 @@ class TestPlot(unittest.TestCase):
         # Test that can plot on a given matplotlib axes
         fig, axarr = plt.subplots(2, 2)
         self.assertEqual(axarr[0, 1].get_ylim(), (0, 1))
-        plot = axelrod.Plot(self.test_result_set)
+        plot = axl.Plot(self.test_result_set)
         plot.boxplot(ax=axarr[0, 1])
         self.assertNotEqual(axarr[0, 1].get_ylim(), (0, 1))
 
@@ -136,65 +138,65 @@ class TestPlot(unittest.TestCase):
         self.assertEqual(axarr[1, 0].get_title(), "dummy title")
 
     def test_boxplot_with_title(self):
-        plot = axelrod.Plot(self.test_result_set)
+        plot = axl.Plot(self.test_result_set)
         fig = plot.boxplot(title="title")
         self.assertIsInstance(fig, matplotlib.pyplot.Figure)
         plt.close(fig)
 
     def test_winplot_dataset(self):
-        plot = axelrod.Plot(self.test_result_set)
+        plot = axl.Plot(self.test_result_set)
         self.assertSequenceEqual(plot._winplot_dataset, self.expected_winplot_dataset)
 
     def test_winplot(self):
-        plot = axelrod.Plot(self.test_result_set)
+        plot = axl.Plot(self.test_result_set)
         fig = plot.winplot()
         self.assertIsInstance(fig, matplotlib.pyplot.Figure)
         plt.close(fig)
 
     def test_sdvplot_dataset(self):
-        plot = axelrod.Plot(self.test_result_set)
+        plot = axl.Plot(self.test_result_set)
         self.assertSequenceEqual(plot._sdv_plot_dataset, self.expected_sdvplot_dataset)
 
     def test_sdvplot(self):
-        plot = axelrod.Plot(self.test_result_set)
+        plot = axl.Plot(self.test_result_set)
         fig = plot.sdvplot()
         self.assertIsInstance(fig, matplotlib.pyplot.Figure)
         plt.close(fig)
 
     def test_lengthplot_dataset(self):
-        plot = axelrod.Plot(self.test_result_set)
+        plot = axl.Plot(self.test_result_set)
         self.assertSequenceEqual(plot._winplot_dataset, self.expected_winplot_dataset)
 
     def test_lengthplot(self):
-        plot = axelrod.Plot(self.test_result_set)
+        plot = axl.Plot(self.test_result_set)
         fig = plot.lengthplot()
         self.assertIsInstance(fig, matplotlib.pyplot.Figure)
         plt.close(fig)
 
     def test_pdplot(self):
-        plot = axelrod.Plot(self.test_result_set)
+        plot = axl.Plot(self.test_result_set)
         fig = plot.pdplot()
         self.assertIsInstance(fig, matplotlib.pyplot.Figure)
         plt.close(fig)
 
     def test_payoff_dataset(self):
-        plot = axelrod.Plot(self.test_result_set)
+        plot = axl.Plot(self.test_result_set)
         self.assertSequenceEqual(plot._payoff_dataset, self.expected_payoff_dataset)
 
     def test_payoff(self):
-        plot = axelrod.Plot(self.test_result_set)
+        plot = axl.Plot(self.test_result_set)
         fig = plot.payoff()
         self.assertIsInstance(fig, matplotlib.pyplot.Figure)
         plt.close(fig)
 
     def test_payoff_with_title(self):
-        plot = axelrod.Plot(self.test_result_set)
+        plot = axl.Plot(self.test_result_set)
         fig = plot.payoff(title="dummy title")
         self.assertIsInstance(fig, matplotlib.pyplot.Figure)
         plt.close(fig)
 
     def test_payoff_with_passed_axes(self):
-        plot = axelrod.Plot(self.test_result_set)
+        plot = axl.Plot(self.test_result_set)
         fig, axarr = plt.subplots(2, 2)
         self.assertEqual(axarr[0, 1].get_xlim(), (0, 1))
 
@@ -208,10 +210,10 @@ class TestPlot(unittest.TestCase):
         plt.close(fig)
 
     def test_stackplot(self):
-        eco = axelrod.Ecosystem(self.test_result_set)
+        eco = axl.Ecosystem(self.test_result_set)
         eco.reproduce(100)
 
-        plot = axelrod.Plot(self.test_result_set)
+        plot = axl.Plot(self.test_result_set)
         fig = plot.stackplot(eco)
         self.assertIsInstance(fig, matplotlib.pyplot.Figure)
         plt.close(fig)
@@ -224,9 +226,9 @@ class TestPlot(unittest.TestCase):
 
     def test_stackplot_with_passed_axes(self):
         # Test that can plot on a given matplotlib axes
-        eco = axelrod.Ecosystem(self.test_result_set)
+        eco = axl.Ecosystem(self.test_result_set)
         eco.reproduce(100)
-        plot = axelrod.Plot(self.test_result_set)
+        plot = axl.Plot(self.test_result_set)
 
         fig, axarr = plt.subplots(2, 2)
         self.assertEqual(axarr[0, 1].get_xlim(), (0, 1))
@@ -241,7 +243,7 @@ class TestPlot(unittest.TestCase):
         plt.close(fig)
 
     def test_all_plots(self):
-        plot = axelrod.Plot(self.test_result_set)
+        plot = axl.Plot(self.test_result_set)
         # Test that this method does not crash.
         self.assertIsNone(
             plot.save_all_plots(prefix="test_outputs/", progress_bar=False)

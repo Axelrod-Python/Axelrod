@@ -1,14 +1,14 @@
 import unittest
 
-import axelrod
+import axelrod as axl
 
-C, D = axelrod.Action.C, axelrod.Action.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestSampleTournaments(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.game = axelrod.Game()
+        cls.game = axl.Game()
 
     @classmethod
     def get_test_outcome(cls, outcome, turns=10):
@@ -16,10 +16,10 @@ class TestSampleTournaments(unittest.TestCase):
         # Extract the name of players from the outcome tuples,
         # and initiate the players by getting the classes from axelrod.
         names = [out[0] for out in outcome]
-        players = [getattr(axelrod, n)() for n in names]
+        players = [getattr(axl, n)() for n in names]
 
         # Play the tournament and build the actual outcome tuples.
-        tournament = axelrod.Tournament(
+        tournament = axl.Tournament(
             players=players, game=cls.game, turns=turns, repetitions=1
         )
         results = tournament.play(progress_bar=False)

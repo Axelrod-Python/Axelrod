@@ -1,24 +1,22 @@
 """Tests for the Memoryone strategies."""
-
 import unittest
 import warnings
 
-import axelrod
-from axelrod import Game
+import axelrod as axl
 from axelrod.strategies.memoryone import MemoryOnePlayer
 
 from .test_player import TestPlayer, test_four_vector
 
-C, D = axelrod.Action.C, axelrod.Action.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestGenericPlayerOne(unittest.TestCase):
     """A class to test the naming and classification of generic memory one
     players."""
 
-    p1 = axelrod.MemoryOnePlayer(four_vector=(0, 0, 0, 0))
-    p2 = axelrod.MemoryOnePlayer(four_vector=(1, 0, 1, 0))
-    p3 = axelrod.MemoryOnePlayer(four_vector=(1, 0.5, 1, 0.5))
+    p1 = axl.MemoryOnePlayer(four_vector=(0, 0, 0, 0))
+    p2 = axl.MemoryOnePlayer(four_vector=(1, 0, 1, 0))
+    p3 = axl.MemoryOnePlayer(four_vector=(1, 0.5, 1, 0.5))
 
     def test_name(self):
         self.assertEqual(self.p1.name, "Generic Memory One Player: (0, 0, 0, 0)")
@@ -34,7 +32,7 @@ class TestGenericPlayerOne(unittest.TestCase):
 class TestWinStayLoseShift(TestPlayer):
 
     name = "Win-Stay Lose-Shift: C"
-    player = axelrod.WinStayLoseShift
+    player = axl.WinStayLoseShift
     expected_classifier = {
         "memory_depth": 1,
         "stochastic": False,
@@ -51,13 +49,13 @@ class TestWinStayLoseShift(TestPlayer):
     def test_strategy(self):
         # Check that switches if does not get best payoff.
         actions = [(C, C), (C, D), (D, C), (D, D), (C, C)]
-        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions)
 
 
 class TestWinShiftLoseStayTestPlayer(TestPlayer):
 
     name = "Win-Shift Lose-Stay: D"
-    player = axelrod.WinShiftLoseStay
+    player = axl.WinShiftLoseStay
     expected_classifier = {
         "memory_depth": 1,
         "stochastic": False,
@@ -71,14 +69,14 @@ class TestWinShiftLoseStayTestPlayer(TestPlayer):
     def test_strategy(self):
         # Check that switches if does not get best payoff.
         actions = [(D, C), (C, D), (C, C), (D, D), (D, C)]
-        self.versus_test(opponent=axelrod.Alternator(),
+        self.versus_test(opponent=axl.Alternator(),
                          expected_actions=actions)
 
 
 class TestGTFT(TestPlayer):
 
     name = "GTFT: 0.33"
-    player = axelrod.GTFT
+    player = axl.GTFT
     expected_classifier = {
         "memory_depth": 1,
         "stochastic": True,
@@ -91,16 +89,16 @@ class TestGTFT(TestPlayer):
     def test_strategy(self):
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
         self.versus_test(
-            opponent=axelrod.Alternator(), expected_actions=actions, seed=0
+            opponent=axl.Alternator(), expected_actions=actions, seed=0
         )
 
         actions = [(C, C), (C, D), (C, C), (C, D), (D, C)]
         self.versus_test(
-            opponent=axelrod.Alternator(), expected_actions=actions, seed=1
+            opponent=axl.Alternator(), expected_actions=actions, seed=1
         )
 
     def test_four_vector(self):
-        (R, P, S, T) = Game().RPST()
+        (R, P, S, T) = axl.Game().RPST()
         p = min(1 - (T - R) / (R - S), (R - P) / (T - P))
         expected_dictionary = {(C, C): 1.0, (C, D): p, (D, C): 1.0, (D, D): p}
         test_four_vector(self, expected_dictionary)
@@ -114,7 +112,7 @@ class TestGTFT(TestPlayer):
 class TestFirmButFair(TestPlayer):
 
     name = "Firm But Fair"
-    player = axelrod.FirmButFair
+    player = axl.FirmButFair
     expected_classifier = {
         "memory_depth": 1,
         "stochastic": True,
@@ -132,19 +130,19 @@ class TestFirmButFair(TestPlayer):
     def test_strategy(self):
 
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
-        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions)
 
         actions = [(C, D), (D, D), (D, D), (D, D), (C, D)]
-        self.versus_test(opponent=axelrod.Defector(), expected_actions=actions, seed=0)
+        self.versus_test(opponent=axl.Defector(), expected_actions=actions, seed=0)
 
         actions = [(C, D), (D, D), (C, D), (D, D), (D, D)]
-        self.versus_test(opponent=axelrod.Defector(), expected_actions=actions, seed=1)
+        self.versus_test(opponent=axl.Defector(), expected_actions=actions, seed=1)
 
 
 class TestStochasticCooperator(TestPlayer):
 
     name = "Stochastic Cooperator"
-    player = axelrod.StochasticCooperator
+    player = axl.StochasticCooperator
     expected_classifier = {
         "memory_depth": 1,
         "stochastic": True,
@@ -167,29 +165,29 @@ class TestStochasticCooperator(TestPlayer):
     def test_strategy(self):
         actions = [(C, C), (D, D), (C, C), (C, D), (C, C), (D, D)]
         self.versus_test(
-            opponent=axelrod.Alternator(), expected_actions=actions, seed=15
+            opponent=axl.Alternator(), expected_actions=actions, seed=15
         )
 
         actions = [(C, C), (C, D), (D, C), (D, D), (C, C), (C, D)]
         self.versus_test(
-            opponent=axelrod.Alternator(), expected_actions=actions, seed=1
+            opponent=axl.Alternator(), expected_actions=actions, seed=1
         )
 
         actions = [(C, C), (C, D), (D, C), (D, D), (D, C), (D, D)]
         self.versus_test(
-            opponent=axelrod.Alternator(), expected_actions=actions, seed=3
+            opponent=axl.Alternator(), expected_actions=actions, seed=3
         )
 
         actions = [(C, C), (C, D), (D, C), (D, D), (D, C), (C, D)]
         self.versus_test(
-            opponent=axelrod.Alternator(), expected_actions=actions, seed=13
+            opponent=axl.Alternator(), expected_actions=actions, seed=13
         )
 
 
 class TestStochasticWSLS(TestPlayer):
 
     name = "Stochastic WSLS: 0.05"
-    player = axelrod.StochasticWSLS
+    player = axl.StochasticWSLS
     expected_classifier = {
         "memory_depth": 1,
         "stochastic": True,
@@ -203,19 +201,19 @@ class TestStochasticWSLS(TestPlayer):
     def test_strategy(self):
         actions = [(C, C), (D, D), (C, C), (C, D), (D, C), (D, D)]
         self.versus_test(
-            opponent=axelrod.Alternator(), expected_actions=actions, seed=2
+            opponent=axl.Alternator(), expected_actions=actions, seed=2
         )
 
         actions = [(C, C), (C, D), (D, C), (D, D), (C, C), (C, D)]
         self.versus_test(
-            opponent=axelrod.Alternator(), expected_actions=actions, seed=31
+            opponent=axl.Alternator(), expected_actions=actions, seed=31
         )
 
         actions = [(C, D), (D, C), (D, D), (C, C), (C, D), (D, C)]
-        self.versus_test(opponent=axelrod.CyclerDC(), expected_actions=actions, seed=2)
+        self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=2)
 
         actions = [(C, D), (C, C), (C, D), (D, C), (D, D), (C, C)]
-        self.versus_test(opponent=axelrod.CyclerDC(), expected_actions=actions, seed=31)
+        self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=31)
 
     def test_four_vector(self):
         player = self.player()
@@ -258,7 +256,7 @@ class TestMemoryOnePlayer(unittest.TestCase):
 class TestSoftJoss(TestPlayer):
 
     name = "Soft Joss: 0.9"
-    player = axelrod.SoftJoss
+    player = axl.SoftJoss
     expected_classifier = {
         "memory_depth": 1,
         "stochastic": True,
@@ -276,17 +274,17 @@ class TestSoftJoss(TestPlayer):
     def test_strategy(self):
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (C, D)]
         self.versus_test(
-            opponent=axelrod.Alternator(), expected_actions=actions, seed=2
+            opponent=axl.Alternator(), expected_actions=actions, seed=2
         )
 
         actions = [(C, D), (D, C), (C, D), (D, C), (C, D), (D, C)]
-        self.versus_test(opponent=axelrod.CyclerDC(), expected_actions=actions, seed=5)
+        self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=5)
 
 
 class TestALLCorALLD(TestPlayer):
 
     name = "ALLCorALLD"
-    player = axelrod.ALLCorALLD
+    player = axl.ALLCorALLD
     expected_classifier = {
         "memory_depth": 1,
         "stochastic": True,
@@ -300,11 +298,11 @@ class TestALLCorALLD(TestPlayer):
     def test_strategy(self):
         actions = [(D, C)] * 10
         self.versus_test(
-            opponent=axelrod.Cooperator(), expected_actions=actions, seed=0
+            opponent=axl.Cooperator(), expected_actions=actions, seed=0
         )
         actions = [(C, C)] * 10
         self.versus_test(
-            opponent=axelrod.Cooperator(), expected_actions=actions, seed=1
+            opponent=axl.Cooperator(), expected_actions=actions, seed=1
         )
 
 
@@ -313,9 +311,9 @@ class TestGenericReactiveStrategy(unittest.TestCase):
     Tests for the Reactive Strategy which.
     """
 
-    p1 = axelrod.ReactivePlayer(probabilities=(0, 0))
-    p2 = axelrod.ReactivePlayer(probabilities=(1, 0))
-    p3 = axelrod.ReactivePlayer(probabilities=(1, 0.5))
+    p1 = axl.ReactivePlayer(probabilities=(0, 0))
+    p2 = axl.ReactivePlayer(probabilities=(1, 0))
+    p3 = axl.ReactivePlayer(probabilities=(1, 0.5))
 
     def test_name(self):
         self.assertEqual(self.p1.name, "Reactive Player: (0, 0)")

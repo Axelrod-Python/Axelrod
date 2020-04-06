@@ -1,14 +1,15 @@
-from os import linesep
 from unittest import TestCase
 from unittest.mock import patch
 
-from axelrod import Action, Cooperator, Player
+from os import linesep
+
+import axelrod as axl
 from axelrod.strategies.human import ActionValidator, Human
 from prompt_toolkit.validation import ValidationError
 
 from .test_player import TestPlayer
 
-C, D = Action.C, Action.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestDocument(object):
@@ -80,7 +81,7 @@ class TestHumanClass(TestPlayer):
     def test_get_human_input_c(self):
         with patch("axelrod.human.prompt", return_value="c") as prompt_:
             actions = [(C, C)] * 5
-            self.versus_test(Cooperator(), expected_actions=actions)
+            self.versus_test(axl.Cooperator(), expected_actions=actions)
             self.assertEqual(
                 prompt_.call_args[0], ("Turn 5 action [C or D] for human: ",)
             )
@@ -88,7 +89,7 @@ class TestHumanClass(TestPlayer):
     def test_get_human_input_C(self):
         with patch("axelrod.human.prompt", return_value="C") as prompt_:
             actions = [(C, C)] * 5
-            self.versus_test(Cooperator(), expected_actions=actions)
+            self.versus_test(axl.Cooperator(), expected_actions=actions)
             self.assertEqual(
                 prompt_.call_args[0], ("Turn 5 action [C or D] for human: ",)
             )
@@ -96,7 +97,7 @@ class TestHumanClass(TestPlayer):
     def test_get_human_input_d(self):
         with patch("axelrod.human.prompt", return_value="d") as prompt_:
             actions = [(D, C)] * 5
-            self.versus_test(Cooperator(), expected_actions=actions)
+            self.versus_test(axl.Cooperator(), expected_actions=actions)
             self.assertEqual(
                 prompt_.call_args[0], ("Turn 5 action [C or D] for human: ",)
             )
@@ -104,7 +105,7 @@ class TestHumanClass(TestPlayer):
     def test_get_human_input_D(self):
         with patch("axelrod.human.prompt", return_value="D") as prompt_:
             actions = [(D, C)] * 5
-            self.versus_test(Cooperator(), expected_actions=actions)
+            self.versus_test(axl.Cooperator(), expected_actions=actions)
             self.assertEqual(
                 prompt_.call_args[0], ("Turn 5 action [C or D] for human: ",)
             )
@@ -112,7 +113,7 @@ class TestHumanClass(TestPlayer):
     def test_strategy(self):
         human = Human()
         expected_action = C
-        actual_action = human.strategy(Player(), lambda: C)
+        actual_action = human.strategy(axl.Player(), lambda: C)
         self.assertEqual(actual_action, expected_action)
 
     def test_reset_history_and_attributes(self):

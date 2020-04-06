@@ -1,22 +1,26 @@
 """Tests for the random functions."""
-import random
+
 import unittest
+
+import random
+
 from collections import Counter
 
 import numpy
-from axelrod import Action, Pdf, random_choice, random_flip, seed
 
-C, D = Action.C, Action.D
+import axelrod as axl
+
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestRandom_(unittest.TestCase):
     def test_return_values(self):
-        self.assertEqual(random_choice(1), C)
-        self.assertEqual(random_choice(0), D)
-        seed(1)
-        self.assertEqual(random_choice(), C)
-        seed(2)
-        self.assertEqual(random_choice(), D)
+        self.assertEqual(axl.random_choice(1), C)
+        self.assertEqual(axl.random_choice(0), D)
+        axl.seed(1)
+        self.assertEqual(axl.random_choice(), C)
+        axl.seed(2)
+        self.assertEqual(axl.random_choice(), D)
 
     def test_set_seed(self):
         """Test that numpy and stdlib random seed is set by axelrod seed"""
@@ -24,7 +28,7 @@ class TestRandom_(unittest.TestCase):
         numpy_random_numbers = []
         stdlib_random_numbers = []
         for _ in range(2):
-            seed(0)
+            axl.seed(0)
             numpy_random_numbers.append(numpy.random.random())
             stdlib_random_numbers.append(random.random())
 
@@ -35,19 +39,19 @@ class TestRandom_(unittest.TestCase):
         """Test that when called with p = 0 or 1, the random seed is not
         affected."""
         for p in [0, 1]:
-            seed(0)
+            axl.seed(0)
             r = random.random()
-            seed(0)
-            random_choice(p)
+            axl.seed(0)
+            axl.random_choice(p)
             self.assertEqual(r, random.random())
 
     def test_random_flip(self):
-        self.assertEqual(C, random_flip(C, 0))
-        self.assertEqual(C, random_flip(D, 1))
-        seed(0)
-        self.assertEqual(C, random_flip(C, 0.2))
-        seed(1)
-        self.assertEqual(C, random_flip(D, 0.2))
+        self.assertEqual(C, axl.random_flip(C, 0))
+        self.assertEqual(C, axl.random_flip(D, 1))
+        axl.seed(0)
+        self.assertEqual(C, axl.random_flip(C, 0.2))
+        axl.seed(1)
+        self.assertEqual(C, axl.random_flip(D, 0.2))
 
 
 class TestPdf(unittest.TestCase):
@@ -55,7 +59,7 @@ class TestPdf(unittest.TestCase):
 
     observations = [(C, D)] * 4 + [(C, C)] * 12 + [(D, C)] * 2 + [(D, D)] * 15
     counter = Counter(observations)
-    pdf = Pdf(counter)
+    pdf = axl.Pdf(counter)
 
     def test_init(self):
         self.assertEqual(set(self.pdf.sample_space), set(self.counter.keys()))
@@ -67,7 +71,7 @@ class TestPdf(unittest.TestCase):
         """Test that sample maps to correct domain"""
         all_samples = []
 
-        seed(0)
+        axl.seed(0)
         for sample in range(100):
             all_samples.append(self.pdf.sample())
 
@@ -78,7 +82,7 @@ class TestPdf(unittest.TestCase):
         """Test that numpy seeds the sample properly"""
 
         for s in range(10):
-            seed(s)
+            axl.seed(s)
             sample = self.pdf.sample()
-            seed(s)
+            axl.seed(s)
             self.assertEqual(sample, self.pdf.sample())

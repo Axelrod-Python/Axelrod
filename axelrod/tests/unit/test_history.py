@@ -1,11 +1,11 @@
-from collections import Counter
 import unittest
 
-import axelrod
-from axelrod import Action
+from collections import Counter
+
+import axelrod as axl
 from axelrod.history import History, LimitedHistory
 
-C, D = Action.C, Action.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestHistory(unittest.TestCase):
@@ -66,8 +66,8 @@ class TestHistory(unittest.TestCase):
         self.assertEqual(h3.defections, 2)
 
     def test_flip_plays(self):
-        player = axelrod.Alternator()
-        opponent = axelrod.Cooperator()
+        player = axl.Alternator()
+        opponent = axl.Cooperator()
         for _ in range(5):
             player.play(opponent)
 

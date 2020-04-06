@@ -1,9 +1,8 @@
+import unittest
 import functools
 import random
-import unittest
 
 import axelrod as axl
-from axelrod import EvolvablePlayer, seed
 from axelrod.action import Action
 from axelrod.evolvable_player import copy_lists, crossover_lists, crossover_dictionaries
 from .test_player import TestPlayer
@@ -20,7 +19,7 @@ def PartialClass(cls, **kwargs):
     return PartialedClass
 
 
-class EvolvableTestOpponent(EvolvablePlayer):
+class EvolvableTestOpponent(axl.EvolvablePlayer):
     name = "EvolvableTestOpponent"
 
     def __init__(self, value=None):
@@ -74,13 +73,13 @@ class TestEvolvablePlayer(TestPlayer):
         """Test that randomization on initialization produces different strategies."""
         if self.init_parameters:
             return
-        seed(0)
+        axl.seed(0)
         player1 = self.player()
-        seed(0)
+        axl.seed(0)
         player2 = self.player()
         self.assertEqual(player1, player2)
         for seed_ in range(2, 20):
-            seed(seed_)
+            axl.seed(seed_)
             player2 = self.player()
             if player1 != player2:
                 return
@@ -91,7 +90,7 @@ class TestEvolvablePlayer(TestPlayer):
         """Generate many variations to test that mutate produces different strategies."""
         if not self.init_parameters:
             return
-        seed(100)
+        axl.seed(100)
         variants_produced = False
         for _ in range(2, 400):
             player = self.player()
@@ -102,7 +101,7 @@ class TestEvolvablePlayer(TestPlayer):
 
     def test_mutate_and_clone(self):
         """Test that mutated players clone properly."""
-        seed(0)
+        axl.seed(0)
         player = self.player()
         mutant = player.clone().mutate()
         clone = mutant.clone()
@@ -111,7 +110,7 @@ class TestEvolvablePlayer(TestPlayer):
     def test_crossover(self):
         """Test that crossover produces different strategies."""
         for seed_ in range(20):
-            seed(seed_)
+            axl.seed(seed_)
             players = []
             for _ in range(2):
                 player = self.player()
@@ -133,7 +132,7 @@ class TestEvolvablePlayer(TestPlayer):
 
     def test_serialization(self):
         """Serializing and deserializing should return the original player."""
-        seed(0)
+        axl.seed(0)
         player = self.player()
         serialized = player.serialize_parameters()
         deserialized_player = player.__class__.deserialize_parameters(serialized)
@@ -142,7 +141,7 @@ class TestEvolvablePlayer(TestPlayer):
 
     def test_serialization_csv(self):
         """Serializing and deserializing should return the original player."""
-        seed(0)
+        axl.seed(0)
         player = self.player()
         serialized = player.serialize_parameters()
         s = "0, 1, {}, 3".format(serialized)

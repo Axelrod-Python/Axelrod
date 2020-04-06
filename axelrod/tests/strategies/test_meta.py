@@ -1,11 +1,13 @@
 """Tests for the various Meta strategies."""
+
+import axelrod as axl
+
+from .test_player import TestPlayer
+
 from hypothesis import given, settings
 from hypothesis.strategies import integers
 
-import axelrod
-from .test_player import TestPlayer
-
-C, D = axelrod.Action.C, axelrod.Action.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestMetaPlayer(TestPlayer):
@@ -14,7 +16,7 @@ class TestMetaPlayer(TestPlayer):
     the TestPlayer class."""
 
     name = "Meta Player"
-    player = axelrod.MetaPlayer
+    player = axl.MetaPlayer
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
@@ -76,15 +78,15 @@ class TestMetaPlayer(TestPlayer):
 
         turns = 10
         for op in [
-            axelrod.Cooperator(),
-            axelrod.Defector(),
-            axelrod.TitForTat(),
+            axl.Cooperator(),
+            axl.Defector(),
+            axl.TitForTat(),
         ]:
             player1.reset()
             player2.reset()
             for p in [player1, player2]:
-                axelrod.seed(seed)
-                m = axelrod.Match((p, op), turns=turns)
+                axl.seed(seed)
+                m = axl.Match((p, op), turns=turns)
                 m.play()
             self.assertEqual(len(player1.history), turns)
             self.assertEqual(player1.history, player2.history)
@@ -93,7 +95,7 @@ class TestMetaPlayer(TestPlayer):
 class TestMetaMajority(TestMetaPlayer):
 
     name = "Meta Majority"
-    player = axelrod.MetaMajority
+    player = axl.MetaMajority
     expected_classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": True,
@@ -106,22 +108,22 @@ class TestMetaMajority(TestMetaPlayer):
 
     def test_strategy(self):
 
-        P1 = axelrod.MetaMajority()
-        P2 = axelrod.Player()
+        P1 = axl.MetaMajority()
+        P2 = axl.Player()
 
         # With more cooperators on the team than defectors, we should cooperate.
-        P1.team = [axelrod.Cooperator(), axelrod.Cooperator(), axelrod.Defector()]
+        P1.team = [axl.Cooperator(), axl.Cooperator(), axl.Defector()]
         self.assertEqual(P1.strategy(P2), C)
 
         # With more defectors, we should defect.
-        P1.team = [axelrod.Cooperator(), axelrod.Defector(), axelrod.Defector()]
+        P1.team = [axl.Cooperator(), axl.Defector(), axl.Defector()]
         self.assertEqual(P1.strategy(P2), D)
 
 
 class TestMetaMinority(TestMetaPlayer):
 
     name = "Meta Minority"
-    player = axelrod.MetaMinority
+    player = axl.MetaMinority
     expected_classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": True,
@@ -133,28 +135,28 @@ class TestMetaMinority(TestMetaPlayer):
     }
 
     def test_team(self):
-        team = [axelrod.Cooperator]
+        team = [axl.Cooperator]
         player = self.player(team=team)
         self.assertEqual(len(player.team), 1)
 
     def test_strategy(self):
 
-        P1 = axelrod.MetaMinority()
-        P2 = axelrod.Player()
+        P1 = axl.MetaMinority()
+        P2 = axl.Player()
 
         # With more cooperators on the team, we should defect.
-        P1.team = [axelrod.Cooperator(), axelrod.Cooperator(), axelrod.Defector()]
+        P1.team = [axl.Cooperator(), axl.Cooperator(), axl.Defector()]
         self.assertEqual(P1.strategy(P2), D)
 
         # With defectors in the majority, we will cooperate here.
-        P1.team = [axelrod.Cooperator(), axelrod.Defector(), axelrod.Defector()]
+        P1.team = [axl.Cooperator(), axl.Defector(), axl.Defector()]
         self.assertEqual(P1.strategy(P2), C)
 
 
 class TestNiceMetaWinner(TestMetaPlayer):
 
     name = "Nice Meta Winner"
-    player = axelrod.NiceMetaWinner
+    player = axl.NiceMetaWinner
     expected_classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": True,
@@ -166,8 +168,8 @@ class TestNiceMetaWinner(TestMetaPlayer):
     }
 
     def test_strategy(self):
-        P1 = axelrod.NiceMetaWinner(team=[axelrod.Cooperator, axelrod.Defector])
-        P2 = axelrod.Player()
+        P1 = axl.NiceMetaWinner(team=[axl.Cooperator, axl.Defector])
+        P2 = axl.Player()
 
         # This meta player will simply choose the strategy with the highest
         # current score.
@@ -183,20 +185,20 @@ class TestNiceMetaWinner(TestMetaPlayer):
         P1.team[1].score = 1
         self.assertEqual(P1.strategy(P2), C)
 
-        opponent = axelrod.Cooperator()
-        player = axelrod.NiceMetaWinner(team=[axelrod.Cooperator, axelrod.Defector])
+        opponent = axl.Cooperator()
+        player = axl.NiceMetaWinner(team=[axl.Cooperator, axl.Defector])
         for _ in range(5):
             player.play(opponent)
         self.assertEqual(player.history[-1], C)
 
-        opponent = axelrod.Defector()
-        player = axelrod.NiceMetaWinner(team=[axelrod.Defector])
+        opponent = axl.Defector()
+        player = axl.NiceMetaWinner(team=[axl.Defector])
         for _ in range(20):
             player.play(opponent)
         self.assertEqual(player.history[-1], D)
 
-        opponent = axelrod.Defector()
-        player = axelrod.MetaWinner(team=[axelrod.Cooperator, axelrod.Defector])
+        opponent = axl.Defector()
+        player = axl.MetaWinner(team=[axl.Cooperator, axl.Defector])
         for _ in range(20):
             player.play(opponent)
         self.assertEqual(player.history[-1], D)
@@ -204,7 +206,7 @@ class TestNiceMetaWinner(TestMetaPlayer):
 
 class TestNiceMetaWinnerEnsemble(TestMetaPlayer):
     name = "Nice Meta Winner Ensemble"
-    player = axelrod.NiceMetaWinnerEnsemble
+    player = axl.NiceMetaWinnerEnsemble
     expected_classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": True,
@@ -218,22 +220,22 @@ class TestNiceMetaWinnerEnsemble(TestMetaPlayer):
     def test_strategy(self):
         actions = [(C, C)] * 8
         self.versus_test(
-            opponent=axelrod.Cooperator(),
+            opponent=axl.Cooperator(),
             expected_actions=actions,
-            init_kwargs={"team": [axelrod.Cooperator, axelrod.Defector]},
+            init_kwargs={"team": [axl.Cooperator, axl.Defector]},
         )
         actions = [(C, D)] + [(D, D)] * 7
         self.versus_test(
-            opponent=axelrod.Defector(),
+            opponent=axl.Defector(),
             expected_actions=actions,
-            init_kwargs={"team": [axelrod.Cooperator, axelrod.Defector]},
+            init_kwargs={"team": [axl.Cooperator, axl.Defector]},
         )
 
 
 class TestMetaHunter(TestMetaPlayer):
 
     name = "Meta Hunter"
-    player = axelrod.MetaHunter
+    player = axl.MetaHunter
     expected_classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": False,
@@ -248,22 +250,22 @@ class TestMetaHunter(TestMetaPlayer):
         # We are not using the Cooperator Hunter here, so this should lead to
         #  cooperation.
         actions = [(C, C)] * 5
-        self.versus_test(opponent=axelrod.Cooperator(), expected_actions=actions)
+        self.versus_test(opponent=axl.Cooperator(), expected_actions=actions)
 
         # After long histories tit-for-tat should come into play.
-        opponent = axelrod.MockPlayer([C] * 100 + [D])
+        opponent = axl.MockPlayer([C] * 100 + [D])
         actions = [(C, C)] * 100 + [(C, D)] + [(D, C)]
         self.versus_test(opponent=opponent, expected_actions=actions)
 
         actions = [(C, C)] * 102
-        self.versus_test(opponent=axelrod.Cooperator(), expected_actions=actions)
+        self.versus_test(opponent=axl.Cooperator(), expected_actions=actions)
 
         # All these others, however, should trigger a defection for the hunter.
         actions = [(C, D), (C, D), (C, D), (C, D), (D, D)]
-        self.versus_test(opponent=axelrod.Defector(), expected_actions=actions)
+        self.versus_test(opponent=axl.Defector(), expected_actions=actions)
 
         actions = [(C, C), (C, D), (C, C), (C, D), (C, C), (C, D), (D, C)]
-        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions)
 
         actions = [
             (C, C),
@@ -276,12 +278,12 @@ class TestMetaHunter(TestMetaPlayer):
             (C, D),
             (D, C),
         ]
-        self.versus_test(opponent=axelrod.CyclerCCCD(), expected_actions=actions)
+        self.versus_test(opponent=axl.CyclerCCCD(), expected_actions=actions)
 
 
 class TestMetaHunterAggressive(TestMetaPlayer):
     name = "Meta Hunter Aggressive"
-    player = axelrod.MetaHunterAggressive
+    player = axl.MetaHunterAggressive
     expected_classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": False,
@@ -296,14 +298,14 @@ class TestMetaHunterAggressive(TestMetaPlayer):
         # We are using CooperatorHunter here, so this should lead to
         # defection
         actions = [(C, C)] * 4 + [(D, C)]
-        self.versus_test(opponent=axelrod.Cooperator(), expected_actions=actions)
+        self.versus_test(opponent=axl.Cooperator(), expected_actions=actions)
 
         # All these others, however, should trigger a defection for the hunter.
         actions = [(C, D), (C, D), (C, D), (C, D), (D, D)]
-        self.versus_test(opponent=axelrod.Defector(), expected_actions=actions)
+        self.versus_test(opponent=axl.Defector(), expected_actions=actions)
 
         actions = [(C, C), (C, D), (C, C), (C, D), (C, C), (C, D), (D, C)]
-        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions)
 
         actions = [
             (C, C),
@@ -316,7 +318,7 @@ class TestMetaHunterAggressive(TestMetaPlayer):
             (C, D),
             (D, C),
         ]
-        self.versus_test(opponent=axelrod.CyclerCCCD(), expected_actions=actions)
+        self.versus_test(opponent=axl.CyclerCCCD(), expected_actions=actions)
 
         # To test the TFT action of the strategy after 100 turns, we need to
         # remove two of the hunters from its team.
@@ -324,13 +326,13 @@ class TestMetaHunterAggressive(TestMetaPlayer):
         # without triggering one of the hunters in the default team. As at
         # 16-Mar-2017, none of the strategies in the library does so.
         team = [
-            axelrod.DefectorHunter,
-            axelrod.AlternatorHunter,
-            axelrod.RandomHunter,
-            axelrod.CycleHunter,
-            axelrod.EventualCycleHunter,
+            axl.DefectorHunter,
+            axl.AlternatorHunter,
+            axl.RandomHunter,
+            axl.CycleHunter,
+            axl.EventualCycleHunter,
         ]
-        opponent = axelrod.MockPlayer([C] * 100 + [D])
+        opponent = axl.MockPlayer([C] * 100 + [D])
         actions = [(C, C)] * 100 + [(C, D), (D, C)]
         self.versus_test(
             opponent=opponent, expected_actions=actions, init_kwargs={"team": team}
@@ -339,7 +341,7 @@ class TestMetaHunterAggressive(TestMetaPlayer):
 
 class TestMetaMajorityMemoryOne(TestMetaPlayer):
     name = "Meta Majority Memory One"
-    player = axelrod.MetaMajorityMemoryOne
+    player = axl.MetaMajorityMemoryOne
     expected_classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": True,
@@ -352,12 +354,12 @@ class TestMetaMajorityMemoryOne(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (C, C), (C, D), (D, C)]
-        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions)
 
 
 class TestMetaMajorityFiniteMemory(TestMetaPlayer):
     name = "Meta Majority Finite Memory"
-    player = axelrod.MetaMajorityFiniteMemory
+    player = axl.MetaMajorityFiniteMemory
     expected_classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": True,
@@ -370,12 +372,12 @@ class TestMetaMajorityFiniteMemory(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
-        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions)
 
 
 class TestMetaMajorityLongMemory(TestMetaPlayer):
     name = "Meta Majority Long Memory"
-    player = axelrod.MetaMajorityLongMemory
+    player = axl.MetaMajorityLongMemory
     expected_classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": True,
@@ -389,18 +391,18 @@ class TestMetaMajorityLongMemory(TestMetaPlayer):
     def test_strategy(self):
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
         self.versus_test(
-            opponent=axelrod.Alternator(), expected_actions=actions, seed=0
+            opponent=axl.Alternator(), expected_actions=actions, seed=0
         )
 
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
         self.versus_test(
-            opponent=axelrod.Alternator(), expected_actions=actions, seed=1
+            opponent=axl.Alternator(), expected_actions=actions, seed=1
         )
 
 
 class TestMetaWinnerMemoryOne(TestMetaPlayer):
     name = "Meta Winner Memory One"
-    player = axelrod.MetaWinnerMemoryOne
+    player = axl.MetaWinnerMemoryOne
     expected_classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": True,
@@ -413,12 +415,12 @@ class TestMetaWinnerMemoryOne(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (C, C), (D, D), (D, C)]
-        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions)
 
 
 class TestMetaWinnerFiniteMemory(TestMetaPlayer):
     name = "Meta Winner Finite Memory"
-    player = axelrod.MetaWinnerFiniteMemory
+    player = axl.MetaWinnerFiniteMemory
     expected_classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": True,
@@ -431,12 +433,12 @@ class TestMetaWinnerFiniteMemory(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (C, C), (C, D), (D, C)]
-        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions)
 
 
 class TestMetaWinnerLongMemory(TestMetaPlayer):
     name = "Meta Winner Long Memory"
-    player = axelrod.MetaWinnerLongMemory
+    player = axl.MetaWinnerLongMemory
     expected_classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": True,
@@ -449,12 +451,12 @@ class TestMetaWinnerLongMemory(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (C, C), (D, D), (D, C)]
-        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions)
 
 
 class TestMetaWinnerDeterministic(TestMetaPlayer):
     name = "Meta Winner Deterministic"
-    player = axelrod.MetaWinnerDeterministic
+    player = axl.MetaWinnerDeterministic
     expected_classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": False,
@@ -467,12 +469,12 @@ class TestMetaWinnerDeterministic(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (C, C), (D, D), (D, C)]
-        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions)
 
 
 class TestMetaWinnerStochastic(TestMetaPlayer):
     name = "Meta Winner Stochastic"
-    player = axelrod.MetaWinnerStochastic
+    player = axl.MetaWinnerStochastic
     expected_classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": True,
@@ -485,13 +487,13 @@ class TestMetaWinnerStochastic(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (C, C), (D, D), (D, C)]
-        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions)
 
 
 class TestMetaMixer(TestMetaPlayer):
 
     name = "Meta Mixer"
-    player = axelrod.MetaMixer
+    player = axl.MetaMixer
     expected_classifier = {
         "inspects_source": False,
         "long_run_time": True,
@@ -504,22 +506,22 @@ class TestMetaMixer(TestMetaPlayer):
 
     def test_strategy(self):
 
-        team = [axelrod.TitForTat, axelrod.Cooperator, axelrod.Grudger]
+        team = [axl.TitForTat, axl.Cooperator, axl.Grudger]
         distribution = [0.2, 0.5, 0.3]
 
-        P1 = axelrod.MetaMixer(team=team, distribution=distribution)
-        P2 = axelrod.Cooperator()
+        P1 = axl.MetaMixer(team=team, distribution=distribution)
+        P2 = axl.Cooperator()
         actions = [(C, C)] * 20
         self.versus_test(
-            opponent=axelrod.Cooperator(),
+            opponent=axl.Cooperator(),
             expected_actions=actions,
             init_kwargs={"team": team, "distribution": distribution},
         )
 
-        team.append(axelrod.Defector)
+        team.append(axl.Defector)
         distribution = [0.2, 0.5, 0.3, 0]  # If add a defector but does not occur
         self.versus_test(
-            opponent=axelrod.Cooperator(),
+            opponent=axl.Cooperator(),
             expected_actions=actions,
             init_kwargs={"team": team, "distribution": distribution},
         )
@@ -527,24 +529,24 @@ class TestMetaMixer(TestMetaPlayer):
         distribution = [0, 0, 0, 1]  # If defector is only one that is played
         actions = [(D, C)] * 20
         self.versus_test(
-            opponent=axelrod.Cooperator(),
+            opponent=axl.Cooperator(),
             expected_actions=actions,
             init_kwargs={"team": team, "distribution": distribution},
         )
 
     def test_raise_error_in_distribution(self):
-        team = [axelrod.TitForTat, axelrod.Cooperator, axelrod.Grudger]
+        team = [axl.TitForTat, axl.Cooperator, axl.Grudger]
         distribution = [0.2, 0.5, 0.5]  # Not a valid probability distribution
 
-        player = axelrod.MetaMixer(team=team, distribution=distribution)
-        opponent = axelrod.Cooperator()
+        player = axl.MetaMixer(team=team, distribution=distribution)
+        opponent = axl.Cooperator()
 
         self.assertRaises(ValueError, player.strategy, opponent)
 
 
 class TestNMWEDeterministic(TestMetaPlayer):
     name = "NMWE Deterministic"
-    player = axelrod.NMWEDeterministic
+    player = axl.NMWEDeterministic
     expected_classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": True,
@@ -561,12 +563,12 @@ class TestNMWEDeterministic(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (D, C), (D, D), (D, C)]
-        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions)
 
 
 class TestNMWEStochastic(TestMetaPlayer):
     name = "NMWE Stochastic"
-    player = axelrod.NMWEStochastic
+    player = axl.NMWEStochastic
     expected_classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": True,
@@ -579,13 +581,13 @@ class TestNMWEStochastic(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (C, C), (C, D), (D, C)]
-        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions,
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions,
                          seed=20)
 
 
 class TestNMWEFiniteMemory(TestMetaPlayer):
     name = "NMWE Finite Memory"
-    player = axelrod.NMWEFiniteMemory
+    player = axl.NMWEFiniteMemory
     expected_classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": True,
@@ -598,12 +600,12 @@ class TestNMWEFiniteMemory(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (D, C), (D, D), (D, C)]
-        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions)
 
 
 class TestNMWELongMemory(TestMetaPlayer):
     name = "NMWE Long Memory"
-    player = axelrod.NMWELongMemory
+    player = axl.NMWELongMemory
     expected_classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": True,
@@ -616,14 +618,14 @@ class TestNMWELongMemory(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (C, C), (D, D), (D, C)]
-        self.versus_test(opponent=axelrod.Alternator(),
+        self.versus_test(opponent=axl.Alternator(),
                          expected_actions=actions,
                          seed=10)
 
 
 class TestNMWEMemoryOne(TestMetaPlayer):
     name = "NMWE Memory One"
-    player = axelrod.NMWEMemoryOne
+    player = axl.NMWEMemoryOne
     expected_classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": True,
@@ -636,13 +638,13 @@ class TestNMWEMemoryOne(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (C, C), (D, D), (D, C)]
-        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions)
 
 
 class TestMemoryDecay(TestPlayer):
 
     name = "Memory Decay: 0.1, 0.03, -2, 1, Tit For Tat, 15"
-    player = axelrod.MemoryDecay
+    player = axl.MemoryDecay
     expected_classifier = {
         "memory_depth": float("inf"),
         "long_run_time": False,
@@ -655,30 +657,30 @@ class TestMemoryDecay(TestPlayer):
 
     def test_strategy(self):
         # Test TitForTat behavior in first 15 turns
-        opponent = axelrod.Cooperator()
+        opponent = axl.Cooperator()
         actions = list([(C, C)]) * 15
         self.versus_test(opponent, expected_actions=actions)
 
-        opponent = axelrod.Defector()
+        opponent = axl.Defector()
         actions = [(C, D)] + list([(D, D)]) * 14
         self.versus_test(opponent, expected_actions=actions)
 
-        opponent = axelrod.Alternator()
+        opponent = axl.Alternator()
         actions = [(C, C)] + [(C, D), (D, C)] * 7
         self.versus_test(opponent, expected_actions=actions)
 
         opponent_actions = [C, D, D, C, D, C, C, D, C, D, D, C, C, D, D]
-        opponent = axelrod.MockPlayer(actions=opponent_actions)
+        opponent = axl.MockPlayer(actions=opponent_actions)
         mem_actions = [C, C, D, D, C, D, C, C, D, C, D, D, C, C, D]
         actions = list(zip(mem_actions, opponent_actions))
         self.versus_test(opponent, expected_actions=actions)
 
-        opponent = axelrod.Random()
+        opponent = axl.Random()
         actions = [(C, D), (D, D), (D, C), (C, C), (C, D), (D, C)]
         self.versus_test(opponent, expected_actions=actions, seed=0)
 
         # Test net-cooperation-score (NCS) based decisions in subsequent turns
-        opponent = axelrod.Cooperator()
+        opponent = axl.Cooperator()
         actions = [(C, C)] * 15 + [(C, C)]
         self.versus_test(
             opponent,
@@ -687,7 +689,7 @@ class TestMemoryDecay(TestPlayer):
             init_kwargs={"memory": [D] * 5 + [C] * 10},
         )
 
-        opponent = axelrod.Cooperator()
+        opponent = axl.Cooperator()
         actions = [(C, C)] * 15 + [(C, C)]
         self.versus_test(
             opponent,
@@ -697,31 +699,31 @@ class TestMemoryDecay(TestPlayer):
         )
 
         # Test alternative starting strategies
-        opponent = axelrod.Cooperator()
+        opponent = axl.Cooperator()
         actions = list([(D, C)]) * 15
         self.versus_test(
             opponent,
             expected_actions=actions,
-            init_kwargs={"start_strategy": axelrod.Defector},
+            init_kwargs={"start_strategy": axl.Defector},
         )
 
-        opponent = axelrod.Cooperator()
+        opponent = axl.Cooperator()
         actions = list([(C, C)]) * 15
         self.versus_test(
             opponent,
             expected_actions=actions,
-            init_kwargs={"start_strategy": axelrod.Cooperator},
+            init_kwargs={"start_strategy": axl.Cooperator},
         )
 
-        opponent = axelrod.Cooperator()
+        opponent = axl.Cooperator()
         actions = [(C, C)] + list([(D, C), (C, C)]) * 7
         self.versus_test(
             opponent,
             expected_actions=actions,
-            init_kwargs={"start_strategy": axelrod.Alternator},
+            init_kwargs={"start_strategy": axl.Alternator},
         )
 
-        opponent = axelrod.Defector()
+        opponent = axl.Defector()
         actions = [(C, D)] * 7 + [(D, D)]
         self.versus_test(
             opponent,
@@ -729,7 +731,7 @@ class TestMemoryDecay(TestPlayer):
             seed=4,
             init_kwargs={
                 "memory": [C] * 12,
-                "start_strategy": axelrod.Defector,
+                "start_strategy": axl.Defector,
                 "start_strategy_duration": 0,
             },
         )
