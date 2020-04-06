@@ -12,7 +12,7 @@ with open("README.rst", "r") as f:
     long_description = f.read()
 
 # Read in the version number
-exec(open("axelrod/version.py", "r").read())
+exec(open("axelrod/version.py", "r").read()
 
 setup(
     name="Axelrod",
