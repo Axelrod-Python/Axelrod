@@ -1,9 +1,5 @@
 DEFAULT_TURNS = 200
 
-# We allow behavior at initialization that we don't want users to do.
-import warnings
-warnings.simplefilter('ignore', category=UserWarning)
-
 # The order of imports matters!
 from axelrod.version import __version__
 from axelrod.load_data_ import load_pso_tables, load_weights
@@ -26,5 +22,3 @@ from axelrod.tournament import Tournament
 from axelrod.result_set import ResultSet
 from axelrod.ecosystem import Ecosystem
 from axelrod.fingerprint import AshlockFingerprint, TransitiveFingerprint
-
-warnings.simplefilter('default', category=UserWarning)

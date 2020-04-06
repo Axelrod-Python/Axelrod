@@ -708,7 +708,7 @@ class TestContriteTitForTat(TestPlayer):
     }
 
     deterministic_strategies = [
-        s for s in axelrod.strategies if not Classifiers["stochastic"](s)
+        s for s in axelrod.strategies if not Classifiers["stochastic"](s())
     ]
 
     def test_init(self):

@@ -1,4 +1,5 @@
 import unittest
+import warnings
 
 from hypothesis import example, given, settings
 from hypothesis.strategies import integers
@@ -13,6 +14,9 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
     Test that the results of filtering strategies via a filterset dict
     match the results from using a list comprehension.
     """
+    def setUp(self) -> None:
+        # Ignore warnings about classifiers running on instances
+        warnings.simplefilter("ignore", category=UserWarning)
 
     @given(strategies=strategy_lists(min_size=20, max_size=20))
     def test_boolean_filtering(self, strategies):

@@ -11,10 +11,10 @@ from axelrod.tests.property import strategy_lists
 C, D = axelrod.Action.C, axelrod.Action.D
 
 deterministic_strategies = [
-    s for s in axelrod.short_run_time_strategies if not Classifiers["stochastic"](s)
+    s for s in axelrod.short_run_time_strategies if not Classifiers["stochastic"](s())
 ]
 stochastic_strategies = [
-    s for s in axelrod.short_run_time_strategies if Classifiers["stochastic"](s)
+    s for s in axelrod.short_run_time_strategies if Classifiers["stochastic"](s())
 ]
 
 

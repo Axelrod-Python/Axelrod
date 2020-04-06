@@ -15,7 +15,7 @@ from axelrod.tests.property import (
 )
 
 stochastic_strategies = [
-    s for s in axelrod.strategies if Classifiers["stochastic"](s)
+    s for s in axelrod.strategies if Classifiers["stochastic"](s())
 ]
 
 

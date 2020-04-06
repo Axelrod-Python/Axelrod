@@ -42,7 +42,7 @@ test_prob_end = 0.5
 test_edges = [(0, 1), (1, 2), (3, 4)]
 
 deterministic_strategies = [
-    s for s in axelrod.short_run_time_strategies if not Classifiers["stochastic"](s)
+    s for s in axelrod.short_run_time_strategies if not Classifiers["stochastic"](s())
 ]
 
 

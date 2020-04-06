@@ -314,27 +314,27 @@ class TestTransformers(unittest.TestCase):
 
         probability = (0, 1)
         p1 = JossAnnTransformer(probability)(axelrod.Random)
-        self.assertFalse(Classifiers["stochastic"](p1))
+        self.assertFalse(Classifiers["stochastic"](p1()))
 
         probability = (1, 0)
         p1 = JossAnnTransformer(probability)(axelrod.Random)
-        self.assertFalse(Classifiers["stochastic"](p1))
+        self.assertFalse(Classifiers["stochastic"](p1()))
 
         probability = (0.5, 0.5)
         p1 = JossAnnTransformer(probability)(axelrod.TitForTat)
-        self.assertTrue(Classifiers["stochastic"](p1))
+        self.assertTrue(Classifiers["stochastic"](p1()))
 
         probability = (0, 0.5)
         p1 = JossAnnTransformer(probability)(axelrod.TitForTat)
-        self.assertTrue(Classifiers["stochastic"](p1))
+        self.assertTrue(Classifiers["stochastic"](p1()))
 
         probability = (0, 0)
         p1 = JossAnnTransformer(probability)(axelrod.TitForTat)
-        self.assertFalse(Classifiers["stochastic"](p1))
+        self.assertFalse(Classifiers["stochastic"](p1()))
 
         probability = (0, 0)
         p1 = JossAnnTransformer(probability)(axelrod.Random)
-        self.assertTrue(Classifiers["stochastic"](p1))
+        self.assertTrue(Classifiers["stochastic"](p1()))
 
     def test_noisy_transformer(self):
         """Tests that the noisy transformed does flip some moves."""
@@ -348,19 +348,19 @@ class TestTransformers(unittest.TestCase):
         self.assertEqual(p2.history, [C, C, C, C, C, C, D, D, C, C])
 
         p2 = NoisyTransformer(0)(axelrod.Cooperator)
-        self.assertFalse(Classifiers["stochastic"](p2))
+        self.assertFalse(Classifiers["stochastic"](p2()))
 
         p2 = NoisyTransformer(1)(axelrod.Cooperator)
-        self.assertFalse(Classifiers["stochastic"](p2))
+        self.assertFalse(Classifiers["stochastic"](p2()))
 
         p2 = NoisyTransformer(0.3)(axelrod.Cooperator)
-        self.assertTrue(Classifiers["stochastic"](p2))
+        self.assertTrue(Classifiers["stochastic"](p2()))
 
         p2 = NoisyTransformer(0)(axelrod.Random)
-        self.assertTrue(Classifiers["stochastic"](p2))
+        self.assertTrue(Classifiers["stochastic"](p2()))
 
         p2 = NoisyTransformer(1)(axelrod.Random)
-        self.assertTrue(Classifiers["stochastic"](p2))
+        self.assertTrue(Classifiers["stochastic"](p2()))
 
     def test_forgiving(self):
         """Tests that the forgiving transformer flips some defections."""
@@ -525,7 +525,7 @@ class TestTransformers(unittest.TestCase):
         """Tests the MixedTransformer."""
         probability = 1
         MD = MixedTransformer(probability, axelrod.Cooperator)(axelrod.Defector)
-        self.assertFalse(Classifiers["stochastic"](MD))
+        self.assertFalse(Classifiers["stochastic"](MD()))
 
         p1 = MD()
         p2 = axelrod.Cooperator()
@@ -535,7 +535,7 @@ class TestTransformers(unittest.TestCase):
 
         probability = 0
         MD = MixedTransformer(probability, axelrod.Cooperator)(axelrod.Defector)
-        self.assertFalse(Classifiers["stochastic"](MD))
+        self.assertFalse(Classifiers["stochastic"](MD()))
 
         p1 = MD()
         p2 = axelrod.Cooperator()
@@ -549,7 +549,7 @@ class TestTransformers(unittest.TestCase):
         probability = [0.3, 0.2, 0]
         strategies = [axelrod.TitForTat, axelrod.Grudger, axelrod.Defector]
         MD = MixedTransformer(probability, strategies)(axelrod.Cooperator)
-        self.assertTrue(Classifiers["stochastic"](MD))
+        self.assertTrue(Classifiers["stochastic"](MD()))
 
         p1 = MD()
         # Against a cooperator we see that we only cooperate
@@ -562,7 +562,7 @@ class TestTransformers(unittest.TestCase):
         probability = (0, 0, 1)  # Note can also pass tuple
         strategies = [axelrod.TitForTat, axelrod.Grudger, axelrod.Defector]
         MD = MixedTransformer(probability, strategies)(axelrod.Cooperator)
-        self.assertFalse(Classifiers["stochastic"](MD))
+        self.assertFalse(Classifiers["stochastic"](MD()))
 
         p1 = MD()
         # Against a cooperator we see that we only defect

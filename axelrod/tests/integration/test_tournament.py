@@ -82,7 +82,7 @@ class TestTournament(unittest.TestCase):
         deterministic_players = [
             s()
             for s in axelrod.short_run_time_strategies
-            if not Classifiers["stochastic"](s)
+            if not Classifiers["stochastic"](s())
         ]
         files = []
         for _ in range(2):
@@ -105,7 +105,7 @@ class TestTournament(unittest.TestCase):
         for _ in range(2):
             axelrod.seed(0)
             stochastic_players = [s() for s in axelrod.short_run_time_strategies
-                                  if Classifiers["stochastic"](s)]
+                                  if Classifiers["stochastic"](s())]
             tournament = axelrod.Tournament(
                 name="test",
                 players=stochastic_players,

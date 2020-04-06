@@ -17,7 +17,7 @@ from axelrod.tests.property import strategy_lists
 C, D = axelrod.Action.C, axelrod.Action.D
 
 short_run_time_short_mem = [
-    s for s in axelrod.short_run_time_strategies if Classifiers["memory_depth"](s) <= 10
+    s for s in axelrod.short_run_time_strategies if Classifiers["memory_depth"](s()) <= 10
 ]
 
 
