@@ -2,13 +2,13 @@
 
 import unittest
 
-import axelrod
+import axelrod as axl
 from axelrod.game import DefaultGame
 from axelrod.strategies.zero_determinant import LRPlayer
 
 from .test_player import TestPlayer, test_four_vector
 
-C, D = axelrod.Action.C, axelrod.Action.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestLRPlayer(unittest.TestCase):
@@ -20,7 +20,7 @@ class TestLRPlayer(unittest.TestCase):
 class TestZDExtortion(TestPlayer):
 
     name = "ZD-Extortion: 0.2, 0.1, 1"
-    player = axelrod.ZDExtortion
+    player = axl.ZDExtortion
     expected_classifier = {
         "memory_depth": 1,
         "stochastic": True,
@@ -38,17 +38,17 @@ class TestZDExtortion(TestPlayer):
     def test_strategy(self):
         actions = [(C, C), (C, D), (D, C), (D, D), (D, C), (D, D)]
         self.versus_test(
-            opponent=axelrod.Alternator(), expected_actions=actions, seed=3
+            opponent=axl.Alternator(), expected_actions=actions, seed=3
         )
 
         actions = [(C, D), (D, C), (D, D), (D, C), (D, D), (D, C)]
-        self.versus_test(opponent=axelrod.CyclerDC(), expected_actions=actions, seed=6)
+        self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=6)
 
 
 class TestZDExtort2(TestPlayer):
 
     name = "ZD-Extort-2: 0.1111111111111111, 0.5"
-    player = axelrod.ZDExtort2
+    player = axl.ZDExtort2
     expected_classifier = {
         "memory_depth": 1,
         "stochastic": True,
@@ -71,25 +71,25 @@ class TestZDExtort2(TestPlayer):
     def test_strategy(self):
         actions = [(C, C), (D, D), (D, C), (D, D), (D, C), (C, D)]
         self.versus_test(
-            opponent=axelrod.Alternator(), expected_actions=actions, seed=2
+            opponent=axl.Alternator(), expected_actions=actions, seed=2
         )
 
         actions = [(C, C), (C, D), (C, C), (C, D), (D, C), (C, D)]
         self.versus_test(
-            opponent=axelrod.Alternator(), expected_actions=actions, seed=31
+            opponent=axl.Alternator(), expected_actions=actions, seed=31
         )
 
         actions = [(C, D), (D, C), (D, D), (D, C), (C, D), (C, C)]
-        self.versus_test(opponent=axelrod.CyclerDC(), expected_actions=actions, seed=2)
+        self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=2)
 
         actions = [(C, D), (C, C), (C, D), (C, C), (C, D), (C, C)]
-        self.versus_test(opponent=axelrod.CyclerDC(), expected_actions=actions, seed=31)
+        self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=31)
 
 
 class TestZDExtort2v2(TestPlayer):
 
     name = "ZD-Extort-2 v2: 0.125, 0.5, 1"
-    player = axelrod.ZDExtort2v2
+    player = axl.ZDExtort2v2
     expected_classifier = {
         "memory_depth": 1,
         "stochastic": True,
@@ -112,16 +112,16 @@ class TestZDExtort2v2(TestPlayer):
     def test_strategy(self):
         actions = [(C, C), (D, D), (D, C), (D, D), (D, C), (C, D)]
         self.versus_test(
-            opponent=axelrod.Alternator(), expected_actions=actions, seed=2
+            opponent=axl.Alternator(), expected_actions=actions, seed=2
         )
 
         actions = [(C, D), (D, C), (D, D), (D, C), (D, D), (D, C)]
-        self.versus_test(opponent=axelrod.CyclerDC(), expected_actions=actions, seed=5)
+        self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=5)
 
 
 class TestZDExtort3(TestPlayer):
     name = "ZD-Extort3: 0.11538461538461539, 0.3333333333333333, 1"
-    player = axelrod.ZDExtort3
+    player = axl.ZDExtort3
     expected_classifier = {
         "memory_depth": 1,
         "stochastic": True,
@@ -145,18 +145,18 @@ class TestZDExtort3(TestPlayer):
         actions = [(C, C), (C, D), (D, C), (D, D), (D, C), (D, D)]
 
         self.versus_test(
-            opponent=axelrod.Alternator(), expected_actions=actions, seed=3
+            opponent=axl.Alternator(), expected_actions=actions, seed=3
         )
 
         actions = [(C, D), (D, C), (D, D), (D, C), (D, D), (D, C)]
 
-        self.versus_test(opponent=axelrod.CyclerDC(), expected_actions=actions, seed=6)
+        self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=6)
 
 
 class TestZDExtort4(TestPlayer):
 
     name = "ZD-Extort-4: 0.23529411764705882, 0.25, 1"
-    player = axelrod.ZDExtort4
+    player = axl.ZDExtort4
     expected_classifier = {
         "memory_depth": 1,
         "stochastic": True,
@@ -174,17 +174,17 @@ class TestZDExtort4(TestPlayer):
     def test_strategy(self):
         actions = [(C, C), (D, D), (D, C), (D, D), (D, C), (C, D)]
         self.versus_test(
-            opponent=axelrod.Alternator(), expected_actions=actions, seed=2
+            opponent=axl.Alternator(), expected_actions=actions, seed=2
         )
 
         actions = [(C, D), (D, C), (D, D), (D, C), (D, D), (D, C)]
-        self.versus_test(opponent=axelrod.CyclerDC(), expected_actions=actions, seed=5)
+        self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=5)
 
 
 class TestZDGen2(TestPlayer):
 
     name = "ZD-GEN-2: 0.125, 0.5, 3"
-    player = axelrod.ZDGen2
+    player = axl.ZDGen2
     expected_classifier = {
         "memory_depth": 1,
         "stochastic": True,
@@ -203,25 +203,25 @@ class TestZDGen2(TestPlayer):
 
         actions = [(C, C), (C, D), (D, C), (D, D), (C, C), (C, D)]
         self.versus_test(
-            opponent=axelrod.Alternator(), expected_actions=actions, seed=2
+            opponent=axl.Alternator(), expected_actions=actions, seed=2
         )
 
         actions = [(C, C), (C, D), (C, C), (C, D), (C, C), (C, D)]
         self.versus_test(
-            opponent=axelrod.Alternator(), expected_actions=actions, seed=31
+            opponent=axl.Alternator(), expected_actions=actions, seed=31
         )
 
         actions = [(C, D), (D, C), (D, D), (C, C), (C, D), (C, C)]
-        self.versus_test(opponent=axelrod.CyclerDC(), expected_actions=actions, seed=2)
+        self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=2)
 
         actions = [(C, D), (C, C), (C, D), (C, C), (C, D), (C, C)]
-        self.versus_test(opponent=axelrod.CyclerDC(), expected_actions=actions, seed=31)
+        self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=31)
 
 
 class TestZDGTFT2(TestPlayer):
 
     name = "ZD-GTFT-2: 0.25, 0.5"
-    player = axelrod.ZDGTFT2
+    player = axl.ZDGTFT2
     expected_classifier = {
         "memory_depth": 1,
         "stochastic": True,
@@ -243,25 +243,25 @@ class TestZDGTFT2(TestPlayer):
     def test_strategy(self):
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (C, D)]
         self.versus_test(
-            opponent=axelrod.Alternator(), expected_actions=actions, seed=2
+            opponent=axl.Alternator(), expected_actions=actions, seed=2
         )
 
         actions = [(C, C), (C, D), (C, C), (C, D), (C, C), (C, D)]
         self.versus_test(
-            opponent=axelrod.Alternator(), expected_actions=actions, seed=31
+            opponent=axl.Alternator(), expected_actions=actions, seed=31
         )
 
         actions = [(C, D), (D, C), (C, D), (D, C), (C, D), (C, C)]
-        self.versus_test(opponent=axelrod.CyclerDC(), expected_actions=actions, seed=2)
+        self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=2)
 
         actions = [(C, D), (C, C), (C, D), (C, C), (C, D), (D, C)]
-        self.versus_test(opponent=axelrod.CyclerDC(), expected_actions=actions, seed=31)
+        self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=31)
 
 
 class TestZDMischief(TestPlayer):
 
     name = "ZD-Mischief: 0.1, 0.0, 1"
-    player = axelrod.ZDMischief
+    player = axl.ZDMischief
     expected_classifier = {
         "memory_depth": 1,
         "stochastic": True,
@@ -279,17 +279,17 @@ class TestZDMischief(TestPlayer):
     def test_strategy(self):
         actions = [(C, C), (D, D), (D, C), (D, D), (D, C), (C, D)]
         self.versus_test(
-            opponent=axelrod.Alternator(), expected_actions=actions, seed=2
+            opponent=axl.Alternator(), expected_actions=actions, seed=2
         )
 
         actions = [(C, D), (D, C), (D, D), (D, C), (D, D), (D, C)]
-        self.versus_test(opponent=axelrod.CyclerDC(), expected_actions=actions, seed=5)
+        self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=5)
 
 
 class TestZDSet2(TestPlayer):
 
     name = "ZD-SET-2: 0.25, 0.0, 2"
-    player = axelrod.ZDSet2
+    player = axl.ZDSet2
     expected_classifier = {
         "memory_depth": 1,
         "stochastic": True,
@@ -312,8 +312,8 @@ class TestZDSet2(TestPlayer):
     def test_strategy(self):
         actions = [(C, C), (D, D), (D, C), (C, D), (C, C), (D, D)]
         self.versus_test(
-            opponent=axelrod.Alternator(), expected_actions=actions, seed=2
+            opponent=axl.Alternator(), expected_actions=actions, seed=2
         )
 
         actions = [(C, D), (D, C), (D, D), (D, C), (D, D), (D, C)]
-        self.versus_test(opponent=axelrod.CyclerDC(), expected_actions=actions, seed=5)
+        self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=5)

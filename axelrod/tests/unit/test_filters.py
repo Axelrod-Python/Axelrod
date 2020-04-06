@@ -1,11 +1,11 @@
 import unittest
 
-from hypothesis import example, given, settings
-from hypothesis.strategies import integers
-
-from axelrod import filtered_strategies
+import axelrod as axl
 from axelrod.player import Player
 from axelrod.strategies._filters import *
+
+from hypothesis import example, given, settings
+from hypothesis.strategies import integers
 
 
 class TestFilters(unittest.TestCase):
@@ -157,14 +157,14 @@ class TestFilters(unittest.TestCase):
         uses_length_filterset = {"stochastic": True, "makes_use_of": ["length"]}
 
         self.assertEqual(
-            filtered_strategies(stochastic_filterset, strategies),
+            axl.filtered_strategies(stochastic_filterset, strategies),
             [StochasticTestStrategy, UsesLengthTestStrategy],
         )
         self.assertEqual(
-            filtered_strategies(deterministic_filterset, strategies),
+            axl.filtered_strategies(deterministic_filterset, strategies),
             [MemoryDepth2TestStrategy],
         )
         self.assertEqual(
-            filtered_strategies(uses_length_filterset, strategies),
+            axl.filtered_strategies(uses_length_filterset, strategies),
             [UsesLengthTestStrategy],
         )

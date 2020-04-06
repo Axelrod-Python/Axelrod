@@ -2,6 +2,7 @@ from collections import Counter, namedtuple
 import csv
 import itertools
 from multiprocessing import cpu_count
+from typing import List
 import warnings
 
 import numpy as np
@@ -426,7 +427,9 @@ class ResultSet:
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             initial_cooperation_rate = list(
-                np.nan_to_num(np.array(self.initial_cooperation_count) / interactions_array)
+                np.nan_to_num(
+                    np.array(self.initial_cooperation_count) / interactions_array
+                )
             )
             return initial_cooperation_rate
 
@@ -609,6 +612,18 @@ class ResultSet:
             other : axelrod.ResultSet
                 Another results set against which to check equality
         """
+
+        def list_equal_with_nans(v1: List[float], v2: List[float]) -> bool:
+            """Matches lists, accounting for NaNs."""
+            if len(v1) != len(v2):
+                return False
+            for i1, i2 in zip(v1, v2):
+                if np.isnan(i1) and np.isnan(i2):
+                    continue
+                if i1 != i2:
+                    return False
+            return True
+
         return all(
             [
                 self.wins == other.wins,
@@ -628,8 +643,8 @@ class ResultSet:
                 self.cooperating_rating == other.cooperating_rating,
                 self.good_partner_matrix == other.good_partner_matrix,
                 self.good_partner_rating == other.good_partner_rating,
-                self.eigenmoses_rating == other.eigenmoses_rating,
-                self.eigenjesus_rating == other.eigenjesus_rating,
+                list_equal_with_nans(self.eigenmoses_rating, other.eigenmoses_rating),
+                list_equal_with_nans(self.eigenjesus_rating, other.eigenjesus_rating),
             ]
         )
 

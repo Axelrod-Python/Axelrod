@@ -1,14 +1,14 @@
-import axelrod
+import axelrod as axl
 
 from .test_player import TestPlayer
 
-C, D = axelrod.Action.C, axelrod.Action.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestBushMostellar(TestPlayer):
 
     name = "Bush Mosteller: 0.5, 0.5, 3.0, 0.5"
-    player = axelrod.BushMosteller
+    player = axl.BushMosteller
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
@@ -22,7 +22,7 @@ class TestBushMostellar(TestPlayer):
     def test_strategy(self):
         actions = [(C, C), (D, C), (D, C)]
         self.versus_test(
-            axelrod.Cooperator(),
+            axl.Cooperator(),
             expected_actions=actions,
             attrs={"_stimulus": 1},
             seed=1,
@@ -31,7 +31,7 @@ class TestBushMostellar(TestPlayer):
         # Making sure probabilities changes following payoffs
         actions = [(C, C), (D, D)]
         self.versus_test(
-            axelrod.Alternator(),
+            axl.Alternator(),
             expected_actions=actions,
             attrs={"_stimulus": 0.4, "_c_prob": 0.6, "_d_prob": 0.5},
             seed=1,
@@ -39,7 +39,7 @@ class TestBushMostellar(TestPlayer):
 
         actions = [(C, D), (D, D), (D, D)]
         self.versus_test(
-            axelrod.Defector(),
+            axl.Defector(),
             expected_actions=actions,
             attrs={
                 "_stimulus": -0.20000000000000004,
@@ -52,7 +52,7 @@ class TestBushMostellar(TestPlayer):
         # Testing that stimulus never goes under -1
         actions = [(C, C), (D, C), (D, C)]
         self.versus_test(
-            axelrod.Cooperator(),
+            axl.Cooperator(),
             expected_actions=actions,
             attrs={"_stimulus": -1},
             init_kwargs={"aspiration_level_divider": 0.1},
@@ -62,7 +62,7 @@ class TestBushMostellar(TestPlayer):
         # Ensures that the player will never play C or D if his probability is equal to 0
         actions = [(C, C)] * 100
         self.versus_test(
-            axelrod.Cooperator(),
+            axl.Cooperator(),
             expected_actions=actions,
             init_kwargs={"d_prob": 0.0},
             seed=1,
@@ -70,7 +70,7 @@ class TestBushMostellar(TestPlayer):
 
         actions = [(D, C)] * 100
         self.versus_test(
-            axelrod.Cooperator(),
+            axl.Cooperator(),
             expected_actions=actions,
             init_kwargs={"c_prob": 0.0},
             seed=1,

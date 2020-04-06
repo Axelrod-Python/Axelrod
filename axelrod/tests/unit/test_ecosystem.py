@@ -2,33 +2,33 @@
 
 import unittest
 
-import axelrod
+import axelrod as axl
 
 
 class TestEcosystem(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cooperators = axelrod.Tournament(
+        cooperators = axl.Tournament(
             players=[
-                axelrod.Cooperator(),
-                axelrod.Cooperator(),
-                axelrod.Cooperator(),
-                axelrod.Cooperator(),
+                axl.Cooperator(),
+                axl.Cooperator(),
+                axl.Cooperator(),
+                axl.Cooperator(),
             ]
         )
-        defector_wins = axelrod.Tournament(
+        defector_wins = axl.Tournament(
             players=[
-                axelrod.Cooperator(),
-                axelrod.Cooperator(),
-                axelrod.Cooperator(),
-                axelrod.Defector(),
+                axl.Cooperator(),
+                axl.Cooperator(),
+                axl.Cooperator(),
+                axl.Defector(),
             ]
         )
         cls.res_cooperators = cooperators.play()
         cls.res_defector_wins = defector_wins.play()
 
     def test_default_population_sizes(self):
-        eco = axelrod.Ecosystem(self.res_cooperators)
+        eco = axl.Ecosystem(self.res_cooperators)
         pops = eco.population_sizes
         self.assertEqual(eco.num_players, 4)
         self.assertEqual(len(pops), 1)
@@ -37,7 +37,7 @@ class TestEcosystem(unittest.TestCase):
         self.assertEqual(list(set(pops[0])), [0.25])
 
     def test_non_default_population_sizes(self):
-        eco = axelrod.Ecosystem(
+        eco = axl.Ecosystem(
             self.res_cooperators, population=[0.7, 0.25, 0.03, 0.02]
         )
         pops = eco.population_sizes
@@ -48,7 +48,7 @@ class TestEcosystem(unittest.TestCase):
         self.assertEqual(pops[0], [0.7, 0.25, 0.03, 0.02])
 
     def test_population_normalization(self):
-        eco = axelrod.Ecosystem(self.res_cooperators, population=[70, 25, 3, 2])
+        eco = axl.Ecosystem(self.res_cooperators, population=[70, 25, 3, 2])
         pops = eco.population_sizes
         self.assertEqual(eco.num_players, 4)
         self.assertEqual(len(pops), 1)
@@ -59,7 +59,7 @@ class TestEcosystem(unittest.TestCase):
     def test_results_and_population_of_different_sizes(self):
         self.assertRaises(
             TypeError,
-            axelrod.Ecosystem,
+            axl.Ecosystem,
             self.res_cooperators,
             population=[0.7, 0.2, 0.03, 0.1, 0.1],
         )
@@ -67,18 +67,18 @@ class TestEcosystem(unittest.TestCase):
     def test_negative_populations(self):
         self.assertRaises(
             TypeError,
-            axelrod.Ecosystem,
+            axl.Ecosystem,
             self.res_cooperators,
             population=[0.7, -0.2, 0.03, 0.2],
         )
 
     def test_fitness_function(self):
         fitness = lambda p: 2 * p
-        eco = axelrod.Ecosystem(self.res_cooperators, fitness=fitness)
+        eco = axl.Ecosystem(self.res_cooperators, fitness=fitness)
         self.assertTrue(eco.fitness(10), 20)
 
     def test_cooperators_are_stable_over_time(self):
-        eco = axelrod.Ecosystem(self.res_cooperators)
+        eco = axl.Ecosystem(self.res_cooperators)
         eco.reproduce(100)
         pops = eco.population_sizes
         self.assertEqual(len(pops), 101)
@@ -88,7 +88,7 @@ class TestEcosystem(unittest.TestCase):
             self.assertEqual(list(set(p)), [0.25])
 
     def test_defector_wins_with_only_cooperators(self):
-        eco = axelrod.Ecosystem(self.res_defector_wins)
+        eco = axl.Ecosystem(self.res_defector_wins)
         eco.reproduce(1000)
         pops = eco.population_sizes
         self.assertEqual(len(pops), 1001)

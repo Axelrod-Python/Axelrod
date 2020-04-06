@@ -1,20 +1,19 @@
 """Tests for some expected match behaviours"""
 import unittest
 
+import axelrod as axl
+from axelrod.tests.property import strategy_lists
+
 from hypothesis import given, settings
 from hypothesis.strategies import integers
 
-import axelrod
-from axelrod import Classifiers
-from axelrod.tests.property import strategy_lists
-
-C, D = axelrod.Action.C, axelrod.Action.D
+C, D = axl.Action.C, axl.Action.D
 
 deterministic_strategies = [
-    s for s in axelrod.short_run_time_strategies if not Classifiers["stochastic"](s())
+    s for s in axl.short_run_time_strategies if not axl.Classifiers["stochastic"](s())
 ]
 stochastic_strategies = [
-    s for s in axelrod.short_run_time_strategies if Classifiers["stochastic"](s())
+    s for s in axl.short_run_time_strategies if axl.Classifiers["stochastic"](s())
 ]
 
 
@@ -30,7 +29,7 @@ class TestMatchOutcomes(unittest.TestCase):
         """A test that if we repeat 3 matches with deterministic and well
         behaved strategies then we get the same result"""
         players = [s() for s in strategies]
-        matches = [axelrod.Match(players, turns) for _ in range(3)]
+        matches = [axl.Match(players, turns) for _ in range(3)]
         self.assertEqual(matches[0].play(), matches[1].play())
         self.assertEqual(matches[1].play(), matches[2].play())
 
@@ -47,9 +46,9 @@ class TestMatchOutcomes(unittest.TestCase):
         same result"""
         results = []
         for _ in range(3):
-            axelrod.seed(seed)
+            axl.seed(seed)
             players = [s() for s in strategies]
-            results.append(axelrod.Match(players, turns).play())
+            results.append(axl.Match(players, turns).play())
 
         self.assertEqual(results[0], results[1])
         self.assertEqual(results[1], results[2])
@@ -58,15 +57,15 @@ class TestMatchOutcomes(unittest.TestCase):
         """A test based on a bug found in the cache.
 
         See: https://github.com/Axelrod-Python/Axelrod/issues/779"""
-        p1 = axelrod.MemoryOnePlayer(four_vector=(0, 0, 0, 0))
-        p2 = axelrod.MemoryOnePlayer(four_vector=(1, 0, 1, 0))
-        p3 = axelrod.MemoryOnePlayer(four_vector=(1, 1, 1, 0))
+        p1 = axl.MemoryOnePlayer(four_vector=(0, 0, 0, 0))
+        p2 = axl.MemoryOnePlayer(four_vector=(1, 0, 1, 0))
+        p3 = axl.MemoryOnePlayer(four_vector=(1, 1, 1, 0))
 
-        m = axelrod.Match((p1, p2), turns=3)
+        m = axl.Match((p1, p2), turns=3)
         self.assertEqual(m.play(), [(C, C), (D, C), (D, D)])
 
-        m = axelrod.Match((p2, p3), turns=3)
+        m = axl.Match((p2, p3), turns=3)
         self.assertEqual(m.play(), [(C, C), (C, C), (C, C)])
 
-        m = axelrod.Match((p1, p3), turns=3)
+        m = axl.Match((p1, p3), turns=3)
         self.assertEqual(m.play(), [(C, C), (D, C), (D, C)])

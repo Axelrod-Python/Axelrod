@@ -3,8 +3,10 @@
 import unittest
 
 import numpy
-from axelrod.eigen import _normalise, principal_eigenvector
 from numpy.testing import assert_array_almost_equal
+
+from axelrod.eigen import _normalise, principal_eigenvector
+
 
 
 class FunctionCases(unittest.TestCase):
@@ -14,6 +16,13 @@ class FunctionCases(unittest.TestCase):
             evector, evalue = principal_eigenvector(mat)
             self.assertAlmostEqual(evalue, 1)
             assert_array_almost_equal(evector, _normalise(numpy.ones(size)))
+
+    def test_zero_matrix(self):
+        mat = numpy.array([[0, 0], [0, 0]])
+        evector, evalue = principal_eigenvector(mat)
+        self.assertTrue(numpy.isnan(evalue))
+        self.assertTrue(numpy.isnan(evector[0]))
+        self.assertTrue(numpy.isnan(evector[1]))
 
     def test_2x2_matrix(self):
         mat = numpy.array([[2, 1], [1, 2]])

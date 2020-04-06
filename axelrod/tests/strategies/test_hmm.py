@@ -1,9 +1,9 @@
 """Tests for Hidden Markov Model Strategies."""
-import random
-import unittest
 
-import axelrod
-from axelrod import Classifiers
+import unittest
+import random
+
+import axelrod as axl
 from axelrod.evolvable_player import InsufficientParametersError
 from axelrod.strategies.hmm import (
     EvolvableHMMPlayer,
@@ -15,7 +15,7 @@ from axelrod.strategies.hmm import (
 from .test_player import TestMatch, TestPlayer
 from .test_evolvable_player import PartialClass, TestEvolvablePlayer
 
-C, D = axelrod.Action.C, axelrod.Action.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestHMMPlayers(unittest.TestCase):
@@ -40,7 +40,7 @@ class TestHMMPlayers(unittest.TestCase):
         t_C = [[1]]
         t_D = [[1]]
         p = [1]
-        player = axelrod.HMMPlayer(
+        player = axl.HMMPlayer(
             transitions_C=t_C,
             transitions_D=t_D,
             emission_probabilities=p,
@@ -48,8 +48,8 @@ class TestHMMPlayers(unittest.TestCase):
             initial_action=C,
         )
         self.assertFalse(player.is_stochastic())
-        self.assertFalse(Classifiers["stochastic"](player))
-        opponent = axelrod.Alternator()
+        self.assertFalse(axl.Classifiers["stochastic"](player))
+        opponent = axl.Alternator()
         for i in range(6):
             player.play(opponent)
         self.assertEqual(opponent.history, [C, D] * 3)
@@ -61,7 +61,7 @@ class TestHMMPlayers(unittest.TestCase):
         t_C = [[1]]
         t_D = [[1]]
         p = [0]
-        player = axelrod.HMMPlayer(
+        player = axl.HMMPlayer(
             transitions_C=t_C,
             transitions_D=t_D,
             emission_probabilities=p,
@@ -69,8 +69,8 @@ class TestHMMPlayers(unittest.TestCase):
             initial_action=D,
         )
         self.assertFalse(player.is_stochastic())
-        self.assertFalse(Classifiers["stochastic"](player))
-        opponent = axelrod.Alternator()
+        self.assertFalse(axl.Classifiers["stochastic"](player))
+        opponent = axl.Alternator()
         for i in range(6):
             player.play(opponent)
         self.assertEqual(opponent.history, [C, D] * 3)
@@ -82,7 +82,7 @@ class TestHMMPlayers(unittest.TestCase):
         t_C = [[1, 0], [1, 0]]
         t_D = [[0, 1], [0, 1]]
         p = [1, 0]
-        player = axelrod.HMMPlayer(
+        player = axl.HMMPlayer(
             transitions_C=t_C,
             transitions_D=t_D,
             emission_probabilities=p,
@@ -90,8 +90,8 @@ class TestHMMPlayers(unittest.TestCase):
             initial_action=C,
         )
         self.assertFalse(player.is_stochastic())
-        self.assertFalse(Classifiers["stochastic"](player))
-        opponent = axelrod.Alternator()
+        self.assertFalse(axl.Classifiers["stochastic"](player))
+        opponent = axl.Alternator()
         for i in range(6):
             player.play(opponent)
         self.assertEqual(opponent.history, [C, D] * 3)
@@ -103,7 +103,7 @@ class TestHMMPlayers(unittest.TestCase):
         t_C = [[1, 0], [0, 1]]
         t_D = [[0, 1], [1, 0]]
         p = [1, 0]
-        player = axelrod.HMMPlayer(
+        player = axl.HMMPlayer(
             transitions_C=t_C,
             transitions_D=t_D,
             emission_probabilities=p,
@@ -111,8 +111,8 @@ class TestHMMPlayers(unittest.TestCase):
             initial_action=C,
         )
         self.assertFalse(player.is_stochastic())
-        self.assertFalse(Classifiers["stochastic"](player))
-        opponent = axelrod.Alternator()
+        self.assertFalse(axl.Classifiers["stochastic"](player))
+        opponent = axl.Alternator()
         for i in range(6):
             player.play(opponent)
         self.assertEqual(opponent.history, [C, D] * 3)
@@ -150,7 +150,7 @@ class TestHMMPlayers(unittest.TestCase):
 class TestHMMPlayer(TestPlayer):
 
     name = "HMM Player: 0, C"
-    player = axelrod.HMMPlayer
+    player = axl.HMMPlayer
 
     expected_classifier = {
         "memory_depth": 1,
@@ -177,7 +177,7 @@ class TestHMMPlayer(TestPlayer):
 class TestEvolvedHMM5(TestPlayer):
 
     name = "Evolved HMM 5"
-    player = axelrod.EvolvedHMM5
+    player = axl.EvolvedHMM5
 
     expected_classifier = {
         "memory_depth": 5,
@@ -191,19 +191,17 @@ class TestEvolvedHMM5(TestPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (D, C), (D, D), (D, C)]
-        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions)
 
 
 class TestEvolvedHMM5vsCooperator(TestMatch):
     def test_rounds(self):
-        self.versus_test(axelrod.EvolvedHMM5(), axelrod.Cooperator(), [C] * 5, [C] * 5)
+        self.versus_test(axl.EvolvedHMM5(), axl.Cooperator(), [C] * 5, [C] * 5)
 
 
 class TestEvolvedHMM5vsDefector(TestMatch):
     def test_rounds(self):
-        self.versus_test(
-            axelrod.EvolvedHMM5(), axelrod.Defector(), [C, C, D], [D, D, D]
-        )
+        self.versus_test(axl.EvolvedHMM5(), axl.Defector(), [C, C, D], [D, D, D])
 
 
 class TestEvolvableHMMPlayer(unittest.TestCase):

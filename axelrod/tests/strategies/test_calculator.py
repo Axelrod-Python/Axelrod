@@ -1,17 +1,17 @@
 """Tests for Calculator strategy."""
 
-import axelrod
+import axelrod as axl
 from axelrod._strategy_utils import detect_cycle
 
 from .test_player import TestPlayer
 
-C, D = axelrod.Action.C, axelrod.Action.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestCalculator(TestPlayer):
 
     name = "Calculator"
-    player = axelrod.Calculator
+    player = axl.Calculator
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
@@ -33,10 +33,10 @@ class TestCalculator(TestPlayer):
 
         expected_actions = twenty_test_actions + [(D, C), (D, D), (D, C), (D, D)]
         self.versus_test(
-            axelrod.Alternator(), expected_actions=twenty_test_actions, seed=seed
+            axl.Alternator(), expected_actions=twenty_test_actions, seed=seed
         )
         self.versus_test(
-            axelrod.Alternator(), expected_actions=expected_actions, seed=seed
+            axl.Alternator(), expected_actions=expected_actions, seed=seed
         )
 
     def test_twenty_rounds_joss_then_tit_for_tat_for_non_cyclers(self):
@@ -85,12 +85,12 @@ class TestCalculator(TestPlayer):
         opponent_actions = twenty_non_cyclical_actions + subsequent_opponent_actions
         test_actions = twenty_test_actions + subsequent_test_actions
         self.versus_test(
-            axelrod.MockPlayer(actions=twenty_non_cyclical_actions),
+            axl.MockPlayer(actions=twenty_non_cyclical_actions),
             expected_actions=twenty_test_actions,
             seed=seed,
         )
         self.versus_test(
-            axelrod.MockPlayer(actions=opponent_actions),
+            axl.MockPlayer(actions=opponent_actions),
             expected_actions=test_actions,
             seed=seed,
         )
@@ -106,7 +106,7 @@ class TestCalculator(TestPlayer):
         opponent_actions = ten_length_cycle * 2 + [C, D, C]
         expected = ten_cycle_twenty_rounds + [(D, C), (D, D), (D, C)]
         self.versus_test(
-            axelrod.MockPlayer(actions=opponent_actions),
+            axl.MockPlayer(actions=opponent_actions),
             expected_actions=expected,
             seed=seed,
         )
@@ -126,7 +126,7 @@ class TestCalculator(TestPlayer):
 
         uses_tit_for_tat_after_twenty_rounds = twenty_rounds + [(D, C), (C, D)]
         self.versus_test(
-            axelrod.MockPlayer(actions=opponent_actions),
+            axl.MockPlayer(actions=opponent_actions),
             expected_actions=uses_tit_for_tat_after_twenty_rounds,
             seed=seed,
         )

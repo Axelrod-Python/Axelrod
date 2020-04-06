@@ -1,16 +1,16 @@
 """Tests for the inverse strategy."""
 
-import axelrod
+import axelrod as axl
 
 from .test_player import TestPlayer
 
-C, D = axelrod.Action.C, axelrod.Action.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestInverse(TestPlayer):
 
     name = "Inverse"
-    player = axelrod.Inverse
+    player = axl.Inverse
     expected_classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": True,
@@ -24,10 +24,10 @@ class TestInverse(TestPlayer):
     def test_strategy(self):
         # Test that as long as the opponent has not defected the player will
         # cooperate.
-        self.versus_test(axelrod.Cooperator(), expected_actions=[(C, C)])
+        self.versus_test(axl.Cooperator(), expected_actions=[(C, C)])
 
         # Tests that if opponent has played all D then player chooses D.
-        self.versus_test(axelrod.Defector(), expected_actions=[(C, D)] + [(D, D)] * 9)
+        self.versus_test(axl.Defector(), expected_actions=[(C, D)] + [(D, D)] * 9)
 
         expected_actions = [
             (C, D),
@@ -42,7 +42,7 @@ class TestInverse(TestPlayer):
             (D, D),
         ]
         self.versus_test(
-            axelrod.MockPlayer(actions=[a[1] for a in expected_actions]),
+            axl.MockPlayer(actions=[a[1] for a in expected_actions]),
             expected_actions=expected_actions,
             seed=0,
         )

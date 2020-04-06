@@ -2,8 +2,7 @@
 
 import unittest
 
-import axelrod
-from axelrod import Action, Game, Player
+import axelrod as axl
 from axelrod._strategy_utils import (
     detect_cycle,
     inspect_strategy,
@@ -16,7 +15,7 @@ from axelrod._strategy_utils import (
 from hypothesis import given, settings
 from hypothesis.strategies import integers, lists, sampled_from
 
-C, D = Action.C, Action.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestDetectCycle(unittest.TestCase):
@@ -66,8 +65,8 @@ class TestDetectCycle(unittest.TestCase):
 
 class TestInspectStrategy(unittest.TestCase):
     def test_strategies_without_countermeasures_return_their_strategy(self):
-        tft = axelrod.TitForTat()
-        inspector = axelrod.Alternator()
+        tft = axl.TitForTat()
+        inspector = axl.Alternator()
 
         tft.play(inspector)
         self.assertEqual(tft.history, [C])
@@ -78,8 +77,8 @@ class TestInspectStrategy(unittest.TestCase):
         self.assertEqual(tft.strategy(inspector), D)
 
     def test_strategies_with_countermeasures_return_their_countermeasures(self):
-        d_geller = axelrod.GellerDefector()
-        inspector = axelrod.Cooperator()
+        d_geller = axl.GellerDefector()
+        inspector = axl.Cooperator()
         d_geller.play(inspector)
 
         self.assertEqual(inspect_strategy(inspector=inspector, opponent=d_geller), D)
@@ -88,16 +87,16 @@ class TestInspectStrategy(unittest.TestCase):
 
 class TestSimulateMatch(unittest.TestCase):
     def test_tft_reacts_to_cooperation(self):
-        tft = axelrod.TitForTat()
-        inspector = axelrod.Alternator()
+        tft = axl.TitForTat()
+        inspector = axl.Alternator()
 
         simulate_match(inspector, tft, C, 5)
         self.assertEqual(inspector.history, [C, C, C, C, C])
         self.assertEqual(tft.history, [C, C, C, C, C])
 
     def test_tft_reacts_to_defection(self):
-        tft = axelrod.TitForTat()
-        inspector = axelrod.Alternator()
+        tft = axl.TitForTat()
+        inspector = axl.Alternator()
 
         simulate_match(inspector, tft, D, 5)
         self.assertEqual(inspector.history, [D, D, D, D, D])
@@ -106,18 +105,18 @@ class TestSimulateMatch(unittest.TestCase):
 
 class TestLookAhead(unittest.TestCase):
     def setUp(self):
-        self.inspector = Player()
-        self.game = Game()
+        self.inspector = axl.Player()
+        self.game = axl.Game()
 
     def test_cooperator(self):
-        tft = axelrod.Cooperator()
+        tft = axl.Cooperator()
         # It always makes sense to defect here.
         self.assertEqual(look_ahead(self.inspector, tft, self.game, 1), D)
         self.assertEqual(look_ahead(self.inspector, tft, self.game, 2), D)
         self.assertEqual(look_ahead(self.inspector, tft, self.game, 5), D)
 
     def test_tit_for_tat(self):
-        tft = axelrod.TitForTat()
+        tft = axl.TitForTat()
         # Cooperation should be chosen if we look ahead further than one move.
         self.assertEqual(look_ahead(self.inspector, tft, self.game, 1), D)
         self.assertEqual(look_ahead(self.inspector, tft, self.game, 2), C)
