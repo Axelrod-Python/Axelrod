@@ -21,7 +21,7 @@ class TestMatch(unittest.TestCase):
         self.assertEqual(match.result, [])
         self.assertEqual(match.players, [p1, p2])
         self.assertEqual(match.turns, turns)
-        self.assertEqual(match.prob_end, 0)
+        self.assertEqual(match.prob_end, "foo")
         self.assertEqual(match.noise, 0)
         self.assertEqual(match.game.RPST(), game.RPST())
 
