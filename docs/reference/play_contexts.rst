@@ -6,7 +6,7 @@ Play Contexts and Generic Prisoner's Dilemma
 There are four possible round outcomes:
 
 - Mutual cooperation: :math:`(C, C)`
-- Defection: :math:`(C, D)` or :math:`(D, C)`
+- Defection: :math`(C, D)` or :math:`(D, C)`
 - Mutual defection: :math:`(D, D)`
 
 Each of these corresponds to one particular set of payoffs in the following
@@ -15,7 +15,7 @@ generic Prisoner's dilemma:
 
 +----------+---------------+---------------+
 |          | Cooperate     | Defect        |
-+==========+===============+===============+
++========+===============+===============+
 |Cooperate | (R,R)         | (S,T)         |
 +----------+---------------+---------------+
 |Defect    | (T,S)         | (P,P)         |
