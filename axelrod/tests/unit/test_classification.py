@@ -3,7 +3,7 @@
 import os
 import unittest
 from typing import Any, Text
-
+import warnings
 import yaml
 
 import axelrod as axl
@@ -42,6 +42,10 @@ class TitForTatWithNonTrivialInitialzer(Player):
 
 
 class TestClassification(unittest.TestCase):
+    def setUp(self) -> None:
+        # Ignore warnings about classifiers running on instances
+        warnings.simplefilter("ignore", category=UserWarning)
+
     def test_classifier_build(self):
         dirname = os.path.dirname(__file__)
         test_path = os.path.join(dirname, "../../../test_outputs/classifier_test.yaml")
@@ -82,7 +86,12 @@ class TestClassification(unittest.TestCase):
         self.assertEqual(Classifiers["memory_depth"](TitForTatWithEmptyClassifier), 1)
 
     def test_will_lookup_key_for_classes_that_cant_init(self):
-        self.assertEqual(Classifiers["memory_depth"](TitForTatWithNonTrivialInitialzer), 1)
+        with self.assertRaises(Exception) as exptn:
+            Classifiers["memory_depth"](TitForTatWithNonTrivialInitialzer)
+        self.assertEqual(
+            str(exptn.exception),
+            "Passed player class doesn't have a trivial initializer.",
+        )
 
     def test_known_classifiers(self):
         # A set of dimensions that are known to have been fully applied
