@@ -80,8 +80,6 @@ Here are the docstrings of all the strategies in the library.
    :members:
 .. automodule:: axelrod.strategies.mindcontrol
    :members:
-.. automodule:: axelrod.strategies.mindreader
-   :members:
 .. automodule:: axelrod.strategies.mutual
    :members:
 .. automodule:: axelrod.strategies.negation
