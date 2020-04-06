@@ -33,7 +33,7 @@ class Tournament(object):
         noise: float = 0,
         edges: List[Tuple] = None,
         match_attributes: dict = None,
-    ) -> float:
+    ) -> None:
         """
         Parameters
         ----------
