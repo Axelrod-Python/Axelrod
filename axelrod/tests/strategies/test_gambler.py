@@ -1,25 +1,28 @@
 """Test for the Gambler strategy. Most tests come from the LookerUp test suite.
 """
+import unittest
 
 import copy
+
 import random
-import unittest
-import axelrod
+
+import axelrod as axl
 from axelrod.load_data_ import load_pso_tables
 from axelrod.strategies.lookerup import create_lookup_table_keys
+
 from .test_lookerup import convert_original_to_current
 from .test_player import TestPlayer
 from .test_evolvable_player import PartialClass, TestEvolvablePlayer
 
 
 tables = load_pso_tables("pso_gambler.csv", directory="data")
-C, D = axelrod.Action.C, axelrod.Action.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestGambler(TestPlayer):
 
     name = "Gambler"
-    player = axelrod.Gambler
+    player = axl.Gambler
 
     expected_classifier = {
         "memory_depth": 1,
@@ -37,7 +40,7 @@ class TestGambler(TestPlayer):
     def test_strategy(self):
         tft_table = {((), (D,), ()): 0, ((), (C,), ()): 1}
         self.versus_test(
-            axelrod.Alternator(),
+            axl.Alternator(),
             expected_actions=[(C, C)] + [(C, D), (D, C)] * 5,
             init_kwargs={"lookup_dict": tft_table},
         )
@@ -46,7 +49,7 @@ class TestGambler(TestPlayer):
         stochastic_lookup = {((), (), ()): 0.3}
         expected_actions = [(C, C), (D, C), (D, C), (C, C), (D, C)]
         self.versus_test(
-            axelrod.Cooperator(),
+            axl.Cooperator(),
             expected_actions=expected_actions,
             init_kwargs={"lookup_dict": stochastic_lookup},
             seed=1,
@@ -56,7 +59,7 @@ class TestGambler(TestPlayer):
 class TestPSOGamblerMem1(TestPlayer):
 
     name = "PSO Gambler Mem1"
-    player = axelrod.PSOGamblerMem1
+    player = axl.PSOGamblerMem1
 
     expected_classifier = {
         "memory_depth": 1,
@@ -82,14 +85,14 @@ class TestPSOGamblerMem1(TestPlayer):
 
     def test_strategy(self):
         vs_cooperator = [(C, C)] * 5
-        self.versus_test(axelrod.Cooperator(), expected_actions=vs_cooperator)
+        self.versus_test(axl.Cooperator(), expected_actions=vs_cooperator)
 
     def test_defects_forever_with_correct_conditions(self):
         seed = 1
         opponent_actions = [D, D] + [C] * 10
         expected = [(C, D), (C, D), (D, C)] + [(D, C)] * 9
         self.versus_test(
-            axelrod.MockPlayer(actions=opponent_actions),
+            axl.MockPlayer(actions=opponent_actions),
             expected_actions=expected,
             seed=seed,
         )
@@ -98,7 +101,7 @@ class TestPSOGamblerMem1(TestPlayer):
 class TestPSOGambler1_1_1(TestPlayer):
 
     name = "PSO Gambler 1_1_1"
-    player = axelrod.PSOGambler1_1_1
+    player = axl.PSOGambler1_1_1
 
     expected_classifier = {
         "memory_depth": float("inf"),
@@ -129,7 +132,7 @@ class TestPSOGambler1_1_1(TestPlayer):
         opponent = [D] * 3 + [C] * 10
         expected = [(C, D), (D, D), (D, D)] + [(C, C)] * 10
         self.versus_test(
-            axelrod.MockPlayer(opponent), expected_actions=expected, seed=seed
+            axl.MockPlayer(opponent), expected_actions=expected, seed=seed
         )
 
     def test_defect_forever(self):
@@ -137,20 +140,20 @@ class TestPSOGambler1_1_1(TestPlayer):
         opponent_actions = [C] + [D] + [C] * 10
         expected = [(C, C), (C, D)] + [(D, C)] * 10
         self.versus_test(
-            axelrod.MockPlayer(opponent_actions), expected_actions=expected, seed=seed
+            axl.MockPlayer(opponent_actions), expected_actions=expected, seed=seed
         )
 
         opponent_actions = [D] + [C] * 10
         expected = [(C, D)] + [(D, C)] * 10
         self.versus_test(
-            axelrod.MockPlayer(opponent_actions), expected_actions=expected, seed=seed
+            axl.MockPlayer(opponent_actions), expected_actions=expected, seed=seed
         )
 
 
 class TestPSOGambler2_2_2(TestPlayer):
 
     name = "PSO Gambler 2_2_2"
-    player = axelrod.PSOGambler2_2_2
+    player = axl.PSOGambler2_2_2
 
     expected_classifier = {
         "memory_depth": float("inf"),
@@ -234,16 +237,16 @@ class TestPSOGambler2_2_2(TestPlayer):
 
     def test_vs_defector(self):
         expected = [(C, D), (C, D)] + [(D, D)] * 10
-        self.versus_test(axelrod.Defector(), expected_actions=expected)
+        self.versus_test(axl.Defector(), expected_actions=expected)
 
     def test_vs_cooperator(self):
         expected = [(C, C)] * 10
-        self.versus_test(axelrod.Cooperator(), expected_actions=expected)
+        self.versus_test(axl.Cooperator(), expected_actions=expected)
 
     def test_vs_alternator(self):
         seed = 1
         expected = [(C, C), (C, D), (C, C), (D, D), (D, C), (D, D), (D, C)]
-        self.versus_test(axelrod.Alternator(), expected_actions=expected, seed=seed)
+        self.versus_test(axl.Alternator(), expected_actions=expected, seed=seed)
 
     def test_vs_DCDDC(self):
         seed = 2
@@ -261,7 +264,7 @@ class TestPSOGambler2_2_2(TestPlayer):
             (C, C),
         ]
         self.versus_test(
-            axelrod.MockPlayer(actions=opponent_actions),
+            axl.MockPlayer(actions=opponent_actions),
             expected_actions=expected,
             seed=seed,
         )
@@ -269,7 +272,7 @@ class TestPSOGambler2_2_2(TestPlayer):
         new_seed = 139  # First seed with different result.
         expected[5] = (C, D)
         self.versus_test(
-            axelrod.MockPlayer(actions=opponent_actions),
+            axl.MockPlayer(actions=opponent_actions),
             expected_actions=expected,
             seed=new_seed,
         )
@@ -277,7 +280,7 @@ class TestPSOGambler2_2_2(TestPlayer):
 
 class TestPSOGambler2_2_2_Noise05(TestPlayer):
     name = "PSO Gambler 2_2_2 Noise 05"
-    player = axelrod.PSOGambler2_2_2_Noise05
+    player = axl.PSOGambler2_2_2_Noise05
 
     expected_classifier = {
         "memory_depth": float("inf"),
@@ -361,21 +364,21 @@ class TestPSOGambler2_2_2_Noise05(TestPlayer):
 
     def test_vs_defector(self):
         expected = [(C, D), (C, D)] + [(D, D)] * 10
-        self.versus_test(axelrod.Defector(), expected_actions=expected)
+        self.versus_test(axl.Defector(), expected_actions=expected)
 
     def test_vs_cooperator(self):
         expected = [(C, C)] * 10
-        self.versus_test(axelrod.Cooperator(), expected_actions=expected)
+        self.versus_test(axl.Cooperator(), expected_actions=expected)
 
     def test_vs_alternator(self):
         seed = 2
         expected = [(C, C), (C, D), (C, C), (D, D), (D, C), (D, D), (C, C)]
-        self.versus_test(axelrod.Alternator(), expected_actions=expected, seed=seed)
+        self.versus_test(axl.Alternator(), expected_actions=expected, seed=seed)
 
         new_seed = 1
         expected[4] = (C, C)
         expected[6] = (D, C)
-        self.versus_test(axelrod.Alternator(), expected_actions=expected, seed=new_seed)
+        self.versus_test(axl.Alternator(), expected_actions=expected, seed=new_seed)
 
     def test_vs_DCDDC(self):
         opponent_actions = [D, C, D, D, C]
@@ -393,13 +396,13 @@ class TestPSOGambler2_2_2_Noise05(TestPlayer):
             (C, D),
         ]
         self.versus_test(
-            axelrod.MockPlayer(opponent_actions), expected_actions=expected, seed=seed
+            axl.MockPlayer(opponent_actions), expected_actions=expected, seed=seed
         )
 
         new_seed = 3
         expected[8] = (D, D)
         self.versus_test(
-            axelrod.MockPlayer(opponent_actions),
+            axl.MockPlayer(opponent_actions),
             expected_actions=expected,
             seed=new_seed,
         )
@@ -407,7 +410,7 @@ class TestPSOGambler2_2_2_Noise05(TestPlayer):
         new_seed = 2
         new_expected = expected[:6] + [(C, C), (D, D), (D, D)]
         self.versus_test(
-            axelrod.MockPlayer(opponent_actions),
+            axl.MockPlayer(opponent_actions),
             expected_actions=new_expected,
             seed=new_seed,
         )
@@ -415,7 +418,7 @@ class TestPSOGambler2_2_2_Noise05(TestPlayer):
 
 class TestZDMem2(TestPlayer):
     name = "ZD-Mem2"
-    player = axelrod.ZDMem2
+    player = axl.ZDMem2
 
     expected_classifier = {
         "memory_depth": 2,
@@ -464,7 +467,7 @@ class TestZDMem2(TestPlayer):
             (D, D),
         ]
 
-        self.versus_test(axelrod.Defector(), expected_actions=expected, seed=seed)
+        self.versus_test(axl.Defector(), expected_actions=expected, seed=seed)
 
     def test_vs_cooperator(self):
         seed = 5
@@ -481,26 +484,26 @@ class TestZDMem2(TestPlayer):
             (C, C),
         ]
 
-        self.versus_test(axelrod.Cooperator(), expected_actions=expected, seed=seed)
+        self.versus_test(axl.Cooperator(), expected_actions=expected, seed=seed)
 
     def test_vs_alternator(self):
         seed = 2
         expected = [(C, C), (C, D), (D, C), (D, D), (C, C), (C, D), (D, C)]
-        self.versus_test(axelrod.Alternator(), expected_actions=expected, seed=seed)
+        self.versus_test(axl.Alternator(), expected_actions=expected, seed=seed)
 
         new_seed = 1
         expected = [(C, C), (C, D), (C, C), (D, D), (D, C), (C, D), (D, C)]
-        self.versus_test(axelrod.Alternator(), expected_actions=expected, seed=new_seed)
+        self.versus_test(axl.Alternator(), expected_actions=expected, seed=new_seed)
 
 
 class TestEvolvableGambler(unittest.TestCase):
 
     def test_receive_vector(self):
         plays, op_plays, op_start_plays = 1, 1, 1
-        player = axelrod.EvolvableGambler(
+        player = axl.EvolvableGambler(
             parameters=(plays, op_plays, op_start_plays))
 
-        self.assertRaises(AttributeError, axelrod.EvolvableGambler.__getattribute__,
+        self.assertRaises(AttributeError, axl.EvolvableGambler.__getattribute__,
                           *[player, 'vector'])
 
         vector = [random.random() for _ in range(8)]
@@ -509,7 +512,7 @@ class TestEvolvableGambler(unittest.TestCase):
 
     def test_vector_to_instance(self):
         plays, op_plays, op_start_plays = 1, 1, 1
-        player = axelrod.EvolvableGambler(
+        player = axl.EvolvableGambler(
             parameters=(plays, op_plays, op_start_plays))
 
         vector = [random.random() for _ in range(8)]
@@ -521,7 +524,7 @@ class TestEvolvableGambler(unittest.TestCase):
 
     def test_create_vector_bounds(self):
         plays, op_plays, op_start_plays = 1, 1, 1
-        player = axelrod.EvolvableGambler(
+        player = axl.EvolvableGambler(
             parameters=(plays, op_plays, op_start_plays))
         lb, ub = player.create_vector_bounds()
         self.assertIsInstance(lb, list)
@@ -530,14 +533,14 @@ class TestEvolvableGambler(unittest.TestCase):
         self.assertEqual(len(ub), 8)
 
     def test_mutate_value_bounds(self):
-        self.assertEqual(axelrod.EvolvableGambler.mutate_value(2), 1)
-        self.assertEqual(axelrod.EvolvableGambler.mutate_value(-2), 0)
+        self.assertEqual(axl.EvolvableGambler.mutate_value(2), 1)
+        self.assertEqual(axl.EvolvableGambler.mutate_value(-2), 0)
 
 
 class TestEvolvableGambler2(TestEvolvablePlayer):
     name = "EvolvableGambler"
-    player_class = axelrod.EvolvableGambler
-    parent_class = axelrod.Gambler
+    player_class = axl.EvolvableGambler
+    parent_class = axl.Gambler
     parent_kwargs = ["lookup_dict"]
     init_parameters = {"parameters": (1, 1, 1),
                        "initial_actions": (C,)}
@@ -545,8 +548,8 @@ class TestEvolvableGambler2(TestEvolvablePlayer):
 
 class TestEvolvableGambler3(TestEvolvablePlayer):
     name = "EvolvableGambler"
-    player_class = axelrod.EvolvableGambler
-    parent_class = axelrod.Gambler
+    player_class = axl.EvolvableGambler
+    parent_class = axl.Gambler
     parent_kwargs = ["lookup_dict"]
     init_parameters = {"parameters": (3, 2, 1),
                        "initial_actions": (C, C, C,)}
@@ -554,8 +557,8 @@ class TestEvolvableGambler3(TestEvolvablePlayer):
 
 class TestEvolvableGambler4(TestEvolvablePlayer):
     name = "EvolvableGambler"
-    player_class = axelrod.EvolvableGambler
-    parent_class = axelrod.Gambler
+    player_class = axl.EvolvableGambler
+    parent_class = axl.Gambler
     parent_kwargs = ["lookup_dict"]
     init_parameters = {"parameters": (2, 2, 2),
                        "pattern": [random.random() for _ in range(64)],
@@ -564,7 +567,7 @@ class TestEvolvableGambler4(TestEvolvablePlayer):
 
 # Substitute EvolvableHMMPlayer as a regular HMMPlayer.
 EvolvableGamblerWithDefault = PartialClass(
-    axelrod.EvolvableGambler,
+    axl.EvolvableGambler,
     pattern=tables[("PSO Gambler 2_2_2", 2, 2, 2)],
     parameters=(2, 2, 2),
     initial_actions=(C, C,)

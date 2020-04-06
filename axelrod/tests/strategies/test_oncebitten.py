@@ -2,17 +2,17 @@
 
 import random
 
-import axelrod
+import axelrod as axl
 
 from .test_player import TestPlayer
 
-C, D = axelrod.Action.C, axelrod.Action.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestOnceBitten(TestPlayer):
 
     name = "Once Bitten"
-    player = axelrod.OnceBitten
+    player = axl.OnceBitten
     expected_classifier = {
         "memory_depth": 12,
         "stochastic": False,
@@ -27,7 +27,7 @@ class TestOnceBitten(TestPlayer):
         """If opponent defects at any point then the player will defect
         forever."""
         # Become grudged if the opponent defects twice in a row
-        opponent = axelrod.MockPlayer([C, C, C, D])
+        opponent = axl.MockPlayer([C, C, C, D])
         actions = [(C, C), (C, C), (C, C), (C, D), (C, C)]
         self.versus_test(
             opponent=opponent,
@@ -35,7 +35,7 @@ class TestOnceBitten(TestPlayer):
             attrs={"grudged": False, "grudge_memory": 0},
         )
 
-        opponent = axelrod.MockPlayer([C, C, C, D, D, D])
+        opponent = axl.MockPlayer([C, C, C, D, D, D])
         actions = [
             (C, C),
             (C, C),
@@ -56,7 +56,7 @@ class TestOnceBitten(TestPlayer):
         )
 
         # After 10 rounds of being grudged: forgives
-        opponent = axelrod.MockPlayer([C, D, D, C] + [C] * 10)
+        opponent = axl.MockPlayer([C, D, D, C] + [C] * 10)
         actions = [(C, C), (C, D), (C, D), (D, C)] + [(D, C)] * 10 + [(C, C)]
         self.versus_test(
             opponent=opponent,
@@ -67,7 +67,7 @@ class TestOnceBitten(TestPlayer):
     def test_reset(self):
         """Check that grudged gets reset properly"""
         p1 = self.player()
-        p2 = axelrod.Defector()
+        p2 = axl.Defector()
         p1.play(p2)
         p1.play(p2)
         p1.play(p2)
@@ -79,7 +79,7 @@ class TestOnceBitten(TestPlayer):
 class TestFoolMeOnce(TestPlayer):
 
     name = "Fool Me Once"
-    player = axelrod.FoolMeOnce
+    player = axl.FoolMeOnce
     expected_classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": False,
@@ -93,16 +93,16 @@ class TestFoolMeOnce(TestPlayer):
     def test_strategy(self):
         # If opponent defects more than once, defect forever
         actions = [(C, C)] * 10
-        self.versus_test(opponent=axelrod.Cooperator(), expected_actions=actions)
+        self.versus_test(opponent=axl.Cooperator(), expected_actions=actions)
 
-        opponent = axelrod.MockPlayer([D] + [C] * 9)
+        opponent = axl.MockPlayer([D] + [C] * 9)
         actions = [(C, D)] + [(C, C)] * 9
         self.versus_test(opponent=opponent, expected_actions=actions)
 
         actions = [(C, D)] * 2 + [(D, D)] * 8
-        self.versus_test(opponent=axelrod.Defector(), expected_actions=actions)
+        self.versus_test(opponent=axl.Defector(), expected_actions=actions)
 
-        opponent = axelrod.MockPlayer([D, D] + [C] * 9)
+        opponent = axl.MockPlayer([D, D] + [C] * 9)
         actions = [(C, D)] * 2 + [(D, C)] * 8
         self.versus_test(opponent=opponent, expected_actions=actions)
 
@@ -110,7 +110,7 @@ class TestFoolMeOnce(TestPlayer):
 class TestForgetfulFoolMeOnce(TestPlayer):
 
     name = "Forgetful Fool Me Once: 0.05"
-    player = axelrod.ForgetfulFoolMeOnce
+    player = axl.ForgetfulFoolMeOnce
     expected_classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": True,
@@ -126,7 +126,7 @@ class TestForgetfulFoolMeOnce(TestPlayer):
         # forgets count.
         actions = [(C, C), (C, D), (C, C), (C, D), (D, C)]
         self.versus_test(
-            opponent=axelrod.Alternator(),
+            opponent=axl.Alternator(),
             expected_actions=actions,
             seed=2,
             attrs={"D_count": 2},
@@ -135,7 +135,7 @@ class TestForgetfulFoolMeOnce(TestPlayer):
         # Sometime eventually forget count:
         actions = [(C, D), (C, D)] + [(D, D)] * 18 + [(C, D)]
         self.versus_test(
-            opponent=axelrod.Defector(),
+            opponent=axl.Defector(),
             expected_actions=actions,
             seed=2,
             attrs={"D_count": 0},

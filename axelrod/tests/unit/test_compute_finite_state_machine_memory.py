@@ -1,10 +1,11 @@
 """Tests for Compute FSM Memory."""
-import axelrod
+
 import unittest
 
+import axelrod as axl
 from axelrod.compute_finite_state_machine_memory import *
 
-C, D = axelrod.Action.C, axelrod.Action.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestOrderedMemitTuple(unittest.TestCase):

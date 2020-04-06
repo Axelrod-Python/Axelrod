@@ -2,18 +2,17 @@
 
 import random
 
-import axelrod
-from axelrod import Game
+import axelrod as axl
 
 from .test_player import TestPlayer
 
-C, D = axelrod.Action.C, axelrod.Action.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestRiskyQLearner(TestPlayer):
 
     name = "Risky QLearner"
-    player = axelrod.RiskyQLearner
+    player = axl.RiskyQLearner
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
@@ -25,7 +24,7 @@ class TestRiskyQLearner(TestPlayer):
     }
 
     def test_payoff_matrix(self):
-        (R, P, S, T) = Game().RPST()
+        (R, P, S, T) = axl.Game().RPST()
         payoff_matrix = {C: {C: R, D: S}, D: {C: T, D: P}}
         player = self.player()
         self.assertEqual(player.payoff_matrix, payoff_matrix)
@@ -33,7 +32,7 @@ class TestRiskyQLearner(TestPlayer):
     def test_strategy(self):
         actions = [(C, C), (D, C), (C, C), (C, C)]
         self.versus_test(
-            opponent=axelrod.Cooperator(),
+            opponent=axl.Cooperator(),
             expected_actions=actions,
             seed=5,
             attrs={
@@ -53,7 +52,7 @@ class TestRiskyQLearner(TestPlayer):
 class TestArrogantQLearner(TestPlayer):
 
     name = "Arrogant QLearner"
-    player = axelrod.ArrogantQLearner
+    player = axl.ArrogantQLearner
     expected_classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": True,
@@ -67,7 +66,7 @@ class TestArrogantQLearner(TestPlayer):
     def test_strategy(self):
         actions = [(C, C), (D, C), (C, C), (C, C)]
         self.versus_test(
-            opponent=axelrod.Cooperator(),
+            opponent=axl.Cooperator(),
             expected_actions=actions,
             seed=5,
             attrs={
@@ -87,7 +86,7 @@ class TestArrogantQLearner(TestPlayer):
 class TestHesitantQLearner(TestPlayer):
 
     name = "Hesitant QLearner"
-    player = axelrod.HesitantQLearner
+    player = axl.HesitantQLearner
     expected_classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": True,
@@ -101,7 +100,7 @@ class TestHesitantQLearner(TestPlayer):
     def test_strategy(self):
         actions = [(C, D), (D, D), (C, D), (C, D)]
         self.versus_test(
-            opponent=axelrod.Defector(),
+            opponent=axl.Defector(),
             expected_actions=actions,
             seed=5,
             attrs={
@@ -121,7 +120,7 @@ class TestHesitantQLearner(TestPlayer):
 class TestCautiousQLearner(TestPlayer):
 
     name = "Cautious QLearner"
-    player = axelrod.CautiousQLearner
+    player = axl.CautiousQLearner
     expected_classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": True,
@@ -135,7 +134,7 @@ class TestCautiousQLearner(TestPlayer):
     def test_strategy(self):
         actions = [(C, D), (D, D), (C, D), (C, D)]
         self.versus_test(
-            opponent=axelrod.Defector(),
+            opponent=axl.Defector(),
             expected_actions=actions,
             seed=5,
             attrs={

@@ -1,16 +1,16 @@
 """Tests for the VeryBad strategy."""
 
-import axelrod
+import axelrod as axl
 
 from .test_player import TestPlayer
 
-C, D = axelrod.Action.C, axelrod.Action.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestVeryBad(TestPlayer):
 
     name = "VeryBad"
-    player = axelrod.VeryBad
+    player = axl.VeryBad
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -24,12 +24,12 @@ class TestVeryBad(TestPlayer):
         # axelrod.Defector -
         #   cooperates for the first three, defects for the rest P(C) < .5
         self.versus_test(
-            axelrod.Defector(), expected_actions=([(C, D)] * 3 + [(D, D)] * 7)
+            axl.Defector(), expected_actions=([(C, D)] * 3 + [(D, D)] * 7)
         )
 
         # axelrod.Cooperator -
         #   cooperate for all, P(C) == 1
-        self.versus_test(axelrod.Cooperator(), expected_actions=[(C, C)])
+        self.versus_test(axl.Cooperator(), expected_actions=[(C, C)])
 
         expected_actions = [
             (C, C),  # first three cooperate
@@ -43,5 +43,5 @@ class TestVeryBad(TestPlayer):
             (D, C),  # P(C) = .375
             (D, D),  # P(C) = .4
         ]
-        mock_player = axelrod.MockPlayer(actions=[a[1] for a in expected_actions])
+        mock_player = axl.MockPlayer(actions=[a[1] for a in expected_actions])
         self.versus_test(mock_player, expected_actions=expected_actions)

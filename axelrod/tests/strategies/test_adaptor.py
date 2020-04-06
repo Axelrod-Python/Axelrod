@@ -2,18 +2,17 @@
 
 import unittest
 
-import axelrod
-from axelrod import Game
+import axelrod as axl
 
 from .test_player import TestPlayer, test_four_vector
 
-C, D = axelrod.Action.C, axelrod.Action.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestAdaptorBrief(TestPlayer):
 
     name = "AdaptorBrief"
-    player = axelrod.AdaptorBrief
+    player = axl.AdaptorBrief
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
@@ -27,38 +26,38 @@ class TestAdaptorBrief(TestPlayer):
         # No error.
         actions = [(C, C), (C, C), (C, C), (C, C)]
         self.versus_test(
-            opponent=axelrod.AdaptorBrief(), expected_actions=actions, seed=0
+            opponent=axl.AdaptorBrief(), expected_actions=actions, seed=0
         )
 
         # Error corrected.
         actions = [(C, C), (C, D), (D, C), (C, C)]
         self.versus_test(
-            opponent=axelrod.AdaptorBrief(), expected_actions=actions, seed=22
+            opponent=axl.AdaptorBrief(), expected_actions=actions, seed=22
         )
 
         # Error corrected, example 2
         actions = [(D, C), (C, D), (D, C), (C, D), (C, C)]
         self.versus_test(
-            opponent=axelrod.AdaptorBrief(), expected_actions=actions, seed=925
+            opponent=axl.AdaptorBrief(), expected_actions=actions, seed=925
         )
 
         # Versus Cooperator
         actions = [(C, C)] * 8
         self.versus_test(
-            opponent=axelrod.Cooperator(), expected_actions=actions, seed=0
+            opponent=axl.Cooperator(), expected_actions=actions, seed=0
         )
 
         # Versus Defector
         actions = [(C, D), (D, D), (D, D), (D, D), (D, D), (D, D), (D, D)]
         self.versus_test(
-            opponent=axelrod.Defector(), expected_actions=actions, seed=0
+            opponent=axl.Defector(), expected_actions=actions, seed=0
         )
 
 
 class TestAdaptorLong(TestPlayer):
 
     name = "AdaptorLong"
-    player = axelrod.AdaptorLong
+    player = axl.AdaptorLong
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
@@ -72,23 +71,23 @@ class TestAdaptorLong(TestPlayer):
         # No error.
         actions = [(C, C), (C, C), (C, C), (C, C)]
         self.versus_test(
-            opponent=axelrod.AdaptorLong(), expected_actions=actions, seed=0
+            opponent=axl.AdaptorLong(), expected_actions=actions, seed=0
         )
 
         # Error corrected.
         actions = [(C, C), (C, D), (D, D), (C, C), (C, C)]
         self.versus_test(
-            opponent=axelrod.AdaptorLong(), expected_actions=actions, seed=22
+            opponent=axl.AdaptorLong(), expected_actions=actions, seed=22
         )
 
         # Versus Cooperator
         actions = [(C, C)] * 8
         self.versus_test(
-            opponent=axelrod.Cooperator(), expected_actions=actions, seed=0
+            opponent=axl.Cooperator(), expected_actions=actions, seed=0
         )
 
         # Versus Defector
         actions = [(C, D), (D, D), (C, D), (D, D), (D, D), (C, D), (D, D)]
         self.versus_test(
-            opponent=axelrod.Defector(), expected_actions=actions, seed=0
+            opponent=axl.Defector(), expected_actions=actions, seed=0
         )

@@ -1,10 +1,10 @@
 """Strategy match tests."""
 
-import axelrod
+import axelrod as axl
 
 from .test_player import TestMatch
 
-C, D = axelrod.Action.C, axelrod.Action.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestTFTvsWSLS(TestMatch):
@@ -12,7 +12,7 @@ class TestTFTvsWSLS(TestMatch):
 
     def test_rounds(self):
         self.versus_test(
-            axelrod.TitForTat(), axelrod.WinStayLoseShift(), [C, C, C, C], [C, C, C, C]
+            axl.TitForTat(), axl.WinStayLoseShift(), [C, C, C, C], [C, C, C, C]
         )
 
 
@@ -21,8 +21,8 @@ class TestTFTvSTFT(TestMatch):
 
     def test_rounds(self):
         self.versus_test(
-            axelrod.TitForTat(),
-            axelrod.SuspiciousTitForTat(),
+            axl.TitForTat(),
+            axl.SuspiciousTitForTat(),
             [C, D, C, D, C, D],
             [D, C, D, C, D, C],
         )
@@ -33,7 +33,7 @@ class TestTFTvsBully(TestMatch):
 
     def test_rounds(self):
         self.versus_test(
-            axelrod.TitForTat(), axelrod.Bully(), [C, D, D, C, C, D], [D, D, C, C, D, D]
+            axl.TitForTat(), axl.Bully(), [C, D, D, C, C, D], [D, D, C, C, D, D]
         )
 
 
@@ -42,8 +42,8 @@ class TestTF2TvsBully(TestMatch):
 
     def test_rounds(self):
         self.versus_test(
-            axelrod.TitFor2Tats(),
-            axelrod.Bully(),
+            axl.TitFor2Tats(),
+            axl.Bully(),
             [C, C, D, D, C, C, C, D],
             [D, D, D, C, C, D, D, D],
         )
@@ -54,8 +54,8 @@ class TestZDGTFT2vsBully(TestMatch):
 
     def test_rounds(self):
         self.versus_test(
-            axelrod.ZDGTFT2(),
-            axelrod.Bully(),
+            axl.ZDGTFT2(),
+            axl.Bully(),
             [C, D, D, C, C, C],
             [D, D, C, C, D, D],
             seed=2,
@@ -67,8 +67,8 @@ class TestZDExtort2vsTFT(TestMatch):
 
     def test_rounds(self):
         self.versus_test(
-            axelrod.ZDExtort2(),
-            axelrod.TitForTat(),
+            axl.ZDExtort2(),
+            axl.TitForTat(),
             [C, D, D, D, D, D],
             [C, C, D, D, D, D],
             seed=2,
@@ -80,8 +80,8 @@ class FoolMeOncevsBully(TestMatch):
 
     def test_rounds(self):
         self.versus_test(
-            axelrod.FoolMeOnce(),
-            axelrod.Bully(),
+            axl.FoolMeOnce(),
+            axl.Bully(),
             [C, C, D, D, D, D],
             [D, D, D, C, C, C],
         )
@@ -92,7 +92,7 @@ class FoolMeOncevsSTFT(TestMatch):
 
     def test_rounds(self):
         self.versus_test(
-            axelrod.FoolMeOnce(), axelrod.SuspiciousTitForTat(), [C] * 9, [D] + [C] * 8
+            axl.FoolMeOnce(), axl.SuspiciousTitForTat(), [C] * 9, [D] + [C] * 8
         )
 
 
@@ -101,8 +101,8 @@ class GrudgervsSTFT(TestMatch):
 
     def test_rounds(self):
         self.versus_test(
-            axelrod.Grudger(),
-            axelrod.SuspiciousTitForTat(),
+            axl.Grudger(),
+            axl.SuspiciousTitForTat(),
             [C] + [D] * 9,
             [D, C] + [D] * 8,
         )
@@ -113,8 +113,8 @@ class TestWSLSvsBully(TestMatch):
 
     def test_rounds(self):
         self.versus_test(
-            axelrod.WinStayLoseShift(),
-            axelrod.Bully(),
+            axl.WinStayLoseShift(),
+            axl.Bully(),
             [C, D, C, C, D],
             [D, D, C, D, D],
         )

@@ -1,16 +1,16 @@
 """Tests for the BetterAndBetter strategy."""
 
-import axelrod
+import axelrod as axl
 
 from .test_player import TestPlayer
 
-C, D = axelrod.Action.C, axelrod.Action.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestBetterAndBetter(TestPlayer):
 
     name = "Better and Better"
-    player = axelrod.BetterAndBetter
+    player = axl.BetterAndBetter
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
@@ -24,7 +24,7 @@ class TestBetterAndBetter(TestPlayer):
     def test_strategy(self):
         """Tests that the strategy gives expected behaviour."""
         self.versus_test(
-            axelrod.Defector(),
+            axl.Defector(),
             expected_actions=[
                 (D, D),
                 (D, D),
@@ -39,7 +39,7 @@ class TestBetterAndBetter(TestPlayer):
             seed=6,
         )
         self.versus_test(
-            axelrod.Cooperator(),
+            axl.Cooperator(),
             expected_actions=[
                 (D, C),
                 (D, C),
@@ -54,7 +54,7 @@ class TestBetterAndBetter(TestPlayer):
             seed=8,
         )
         self.versus_test(
-            axelrod.Defector(),
+            axl.Defector(),
             expected_actions=[
                 (C, D),
                 (D, D),
@@ -91,4 +91,4 @@ class TestBetterAndBetter(TestPlayer):
                 actions.append((C, D))
             else:
                 actions.append((D, D))
-        self.versus_test(axelrod.Defector(), expected_actions=actions, seed=8)
+        self.versus_test(axl.Defector(), expected_actions=actions, seed=8)
