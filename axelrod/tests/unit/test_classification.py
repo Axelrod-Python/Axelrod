@@ -82,6 +82,7 @@ class TestClassification(unittest.TestCase):
         self.assertEqual(Classifiers[memory_depth](axl.TitForTat()), 1)
 
     def test_classifier_works_on_non_instances(self):
+        warnings.simplefilter("default", category=UserWarning)
         with warnings.catch_warnings(record=True) as w:
             self.assertEqual(Classifiers["memory_depth"](axl.TitForTat), 1)
             self.assertEquals(len(w), 1)
@@ -185,13 +186,13 @@ class TestClassification(unittest.TestCase):
         ]
 
         for strategy in known_cheaters:
-            self.assertFalse(axl.Classifiers.obey_axelrod(strategy), msg=strategy)
+            self.assertFalse(axl.Classifiers.obey_axelrod(strategy()), msg=strategy)
 
         for strategy in known_basic:
-            self.assertTrue(axl.Classifiers.obey_axelrod(strategy), msg=strategy)
+            self.assertTrue(axl.Classifiers.obey_axelrod(strategy()), msg=strategy)
 
         for strategy in known_ordinary:
-            self.assertTrue(axl.Classifiers.obey_axelrod(strategy), msg=strategy)
+            self.assertTrue(axl.Classifiers.obey_axelrod(strategy()), msg=strategy)
 
     def test_is_basic(self):
         """A test that verifies if the is_basic function works correctly"""
@@ -242,6 +243,14 @@ def str_reps(xs):
 
 
 class TestStrategies(unittest.TestCase):
+    def setUp(self) -> None:
+        # Ignore warnings about classifiers running on instances.  We want to
+        # allow this for some of the map functions.
+        warnings.simplefilter("ignore", category=UserWarning)
+
+    def tearDown(self) -> None:
+        warnings.simplefilter("default", category=UserWarning)
+
     def test_strategy_list(self):
         for strategy_list in [
             "all_strategies",
