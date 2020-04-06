@@ -7,6 +7,7 @@ import filecmp
 import io
 import logging
 import os
+import pathlib
 import pickle
 import warnings
 from multiprocessing import Queue, cpu_count
@@ -90,7 +91,8 @@ class TestTournament(unittest.TestCase):
             [200, 200, 1, 200, 200],
         ]
 
-        cls.filename = axl_filename("test_outputs", "test_tournament.csv")
+        path = pathlib.Path("test_outputs/test_tournament.csv")
+        cls.filename = axl_filename(path)
 
     def setUp(self):
         self.test_tournament = axl.Tournament(
@@ -110,9 +112,7 @@ class TestTournament(unittest.TestCase):
             noise=0.2,
         )
         self.assertEqual(len(tournament.players), len(test_strategies))
-        self.assertIsInstance(
-            tournament.players[0].match_attributes["game"], axl.Game
-        )
+        self.assertIsInstance(tournament.players[0].match_attributes["game"], axl.Game)
         self.assertEqual(tournament.game.score((C, C)), (3, 3))
         self.assertEqual(tournament.turns, self.test_turns)
         self.assertEqual(tournament.repetitions, 10)
@@ -415,9 +415,7 @@ class TestTournament(unittest.TestCase):
     # these two examples were identified by hypothesis.
     @example(
         tournament=axl.Tournament(
-            players=[axl.BackStabber(), axl.MindReader()],
-            turns=2,
-            repetitions=1,
+            players=[axl.BackStabber(), axl.MindReader()], turns=2, repetitions=1,
         )
     )
     @example(
@@ -735,9 +733,8 @@ class TestTournament(unittest.TestCase):
         )
         tournament.play(filename=self.filename, progress_bar=False)
         df = pd.read_csv(self.filename)
-        expected_df = pd.read_csv(
-            axl_filename("test_outputs", "expected_test_tournament.csv")
-        )
+        path = pathlib.Path("test_outputs/expected_test_tournament.csv")
+        expected_df = pd.read_csv(axl_filename(path))
         self.assertTrue(df.equals(expected_df))
 
     def test_write_to_csv_without_results(self):
@@ -750,9 +747,8 @@ class TestTournament(unittest.TestCase):
         )
         tournament.play(filename=self.filename, progress_bar=False, build_results=False)
         df = pd.read_csv(self.filename)
-        expected_df = pd.read_csv(
-            axl_filename("test_outputs", "expected_test_tournament_no_results.csv")
-        )
+        path = pathlib.Path("test_outputs/expected_test_tournament_no_results.csv")
+        expected_df = pd.read_csv(axl_filename(path))
         self.assertTrue(df.equals(expected_df))
 
 
@@ -808,16 +804,12 @@ class TestProbEndTournament(unittest.TestCase):
     # these two examples were identified by hypothesis.
     @example(
         tournament=axl.Tournament(
-            players=[axl.BackStabber(), axl.MindReader()],
-            prob_end=0.2,
-            repetitions=1,
+            players=[axl.BackStabber(), axl.MindReader()], prob_end=0.2, repetitions=1,
         )
     )
     @example(
         tournament=axl.Tournament(
-            players=[axl.ThueMorse(), axl.MindReader()],
-            prob_end=0.2,
-            repetitions=1,
+            players=[axl.ThueMorse(), axl.MindReader()], prob_end=0.2, repetitions=1,
         )
     )
     def test_property_serial_play(self, tournament):

@@ -4,25 +4,21 @@ from typing import Dict, List, Text, Tuple
 import pkg_resources
 
 
-def axl_filename(*axl_path: Text) -> Text:
+def axl_filename(path: pathlib.Path) -> pathlib.Path:
     """Given a path under Axelrod/, return absolute filepath.
 
     Parameters
     ----------
     axl_path
-        Path to file located under top-level Axelrod directory, with file names
-        separated at "/".  For example, to get the path to "Axelrod/xxx/yyy.py"
-        call this function with axl_filename("xxx", "yyy.py").
+        A pathlib.Path object with the relative directory under Axelrod/
 
     Returns
     -------
-        Absolute path to the given path.
+        A pathlib.Path object with the absolute directory.
     """
     # We go up a dir because this code is located in Axelrod/axelrod.
-    path = pathlib.Path(__file__).resolve().parent.parent
-    for p in axl_path:
-        path = path / p
-    return str(path)
+    axl_path = pathlib.Path(__file__).resolve().parent.parent
+    return axl_path / path
 
 
 def load_file(filename: str, directory: str) -> List[List[str]]:

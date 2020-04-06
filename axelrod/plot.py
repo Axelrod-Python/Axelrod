@@ -4,6 +4,7 @@ from typing import List, Union
 import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.transforms as transforms
+import pathlib
 import tqdm
 from numpy import arange, median, nan_to_num
 
@@ -324,7 +325,8 @@ class Plot(object):
 
         for method, name in plots:
             f = getattr(self, method)(title="{} - {}".format(title_prefix, name))
-            f.savefig(axl_filename("{}_{}.{}".format(prefix, method, filetype)))
+            path = pathlib.Path("{}_{}.{}".format(prefix, method, filetype))
+            f.savefig(axl_filename(path))
             plt.close(f)
 
             if progress_bar:

@@ -1,6 +1,7 @@
 import unittest
 
 import filecmp
+import pathlib
 
 import axelrod as axl
 from axelrod.load_data_ import axl_filename
@@ -49,7 +50,8 @@ class TestTournament(unittest.TestCase):
     def test_big_tournaments(self, tournament):
         """A test to check that tournament runs with a sample of non-cheating
         strategies."""
-        filename = axl_filename("test_outputs", "test_tournament.csv")
+        path = pathlib.Path("test_outputs/test_tournament.csv")
+        filename = axl_filename(path)
         self.assertIsNone(
             tournament.play(progress_bar=False, filename=filename, build_results=False)
         )
@@ -94,9 +96,8 @@ class TestTournament(unittest.TestCase):
                 turns=2,
                 repetitions=2,
             )
-            files.append(
-                axl_filename("test_outputs", "stochastic_tournament_{}.csv".format(_))
-            )
+            path = pathlib.Path("test_outputs/stochastic_tournament_{}.csv".format(_))
+            files.append(axl_filename(path))
             tournament.play(progress_bar=False, filename=files[-1], build_results=False)
         self.assertTrue(filecmp.cmp(files[0], files[1]))
 
@@ -119,9 +120,8 @@ class TestTournament(unittest.TestCase):
                 turns=2,
                 repetitions=2,
             )
-            files.append(
-                axl_filename("test_outputs", "stochastic_tournament_{}.csv".format(_))
-            )
+            path = pathlib.Path("test_outputs/stochastic_tournament_{}.csv".format(_))
+            files.append(axl_filename(path))
             tournament.play(progress_bar=False, filename=files[-1], build_results=False)
         self.assertTrue(filecmp.cmp(files[0], files[1]))
 

@@ -1,4 +1,5 @@
 import os
+import pathlib
 import unittest
 
 from axelrod.load_data_ import axl_filename
@@ -6,7 +7,8 @@ from axelrod.load_data_ import axl_filename
 
 class TestLoadData(unittest.TestCase):
     def test_axl_filename(self):
-        actual_fn = axl_filename("axelrod/strategies/titfortat.py")
+        path = pathlib.Path("axelrod/strategies/titfortat.py")
+        actual_fn = axl_filename(path)
 
         # First go from "unit" up to "tests", then up to "axelrod"
         dirname = os.path.dirname(__file__)
