@@ -46,6 +46,9 @@ class TestClassification(unittest.TestCase):
         # Ignore warnings about classifiers running on instances
         warnings.simplefilter("ignore", category=UserWarning)
 
+    def tearDown(self) -> None:
+        warnings.simplefilter("default", category=UserWarning)
+
     def test_classifier_build(self):
         dirname = os.path.dirname(__file__)
         test_path = os.path.join(dirname, "../../../test_outputs/classifier_test.yaml")
@@ -75,8 +78,13 @@ class TestClassification(unittest.TestCase):
 
     def test_get_name_from_classifier(self):
         # Should be able to take a string or a Classifier instance.
-        self.assertEqual(Classifiers["memory_depth"](axl.TitForTat), 1)
-        self.assertEqual(Classifiers[memory_depth](axl.TitForTat), 1)
+        self.assertEqual(Classifiers["memory_depth"](axl.TitForTat()), 1)
+        self.assertEqual(Classifiers[memory_depth](axl.TitForTat()), 1)
+
+    def test_classifier_works_on_non_instances(self):
+        with warnings.catch_warnings(record=True) as w:
+            self.assertEqual(Classifiers["memory_depth"](axl.TitForTat), 1)
+            self.assertEquals(len(w), 1)
 
     def test_key_error_on_uknown_classifier(self):
         with self.assertRaises(KeyError):
@@ -219,13 +227,13 @@ class TestClassification(unittest.TestCase):
         ]
 
         for strategy in known_cheaters:
-            self.assertFalse(axl.Classifiers.is_basic(strategy), msg=strategy)
+            self.assertFalse(axl.Classifiers.is_basic(strategy()), msg=strategy)
 
         for strategy in known_basic:
-            self.assertTrue(axl.Classifiers.is_basic(strategy), msg=strategy)
+            self.assertTrue(axl.Classifiers.is_basic(strategy()), msg=strategy)
 
         for strategy in known_ordinary:
-            self.assertFalse(axl.Classifiers.is_basic(strategy), msg=strategy)
+            self.assertFalse(axl.Classifiers.is_basic(strategy()), msg=strategy)
 
 
 def str_reps(xs):

@@ -18,6 +18,9 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
         # Ignore warnings about classifiers running on instances
         warnings.simplefilter("ignore", category=UserWarning)
 
+    def tearDown(self) -> None:
+        warnings.simplefilter("default", category=UserWarning)
+
     @given(strategies=strategy_lists(min_size=20, max_size=20))
     def test_boolean_filtering(self, strategies):
 
