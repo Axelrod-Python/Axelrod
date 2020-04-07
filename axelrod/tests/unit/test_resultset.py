@@ -4,8 +4,10 @@ from collections import Counter
 import pandas as pd
 from dask.dataframe.core import DataFrame
 from numpy import mean, nanmedian, std
+import pathlib
 
 import axelrod as axl
+from axelrod.load_data_ import axl_filename
 from axelrod.result_set import create_counter_dict
 from axelrod.tests.property import prob_end_tournaments, tournaments
 
@@ -18,7 +20,8 @@ class TestResultSet(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
 
-        cls.filename = "test_outputs/test_results.csv"
+        path = pathlib.Path("test_outputs/test_results.csv")
+        cls.filename = str(axl_filename(path))
 
         cls.players = [axl.Alternator(), axl.TitForTat(), axl.Defector()]
         cls.repetitions = 3
@@ -192,7 +195,7 @@ class TestResultSet(unittest.TestCase):
     def _clear_matrix(self, matrix):
         for i, row in enumerate(matrix):
             for j, _ in enumerate(row):
-                 matrix[i][j] = 0
+                matrix[i][j] = 0
 
     def test_ne_vectors(self):
         rs_1 = axl.ResultSet(self.filename, self.players, self.repetitions)
@@ -676,7 +679,8 @@ class TestResultSetSpatialStructure(TestResultSet):
     @classmethod
     def setUpClass(cls):
 
-        cls.filename = "test_outputs/test_results_spatial.csv"
+        path = pathlib.Path("test_outputs/test_results_spatial.csv")
+        cls.filename = str(axl_filename(path))
         cls.players = [axl.Alternator(), axl.TitForTat(), axl.Defector()]
         cls.turns = 5
         cls.edges = [(0, 1), (0, 2)]
@@ -856,7 +860,8 @@ class TestResultSetSpatialStructureTwo(TestResultSetSpatialStructure):
     @classmethod
     def setUpClass(cls):
 
-        cls.filename = "test_outputs/test_results_spatial_two.csv"
+        path = pathlib.Path("test_outputs/test_results_spatial_two.csv")
+        cls.filename = str(axl_filename(path))
         cls.players = [
             axl.Alternator(),
             axl.TitForTat(),
@@ -1057,7 +1062,8 @@ class TestResultSetSpatialStructureThree(TestResultSetSpatialStructure):
     @classmethod
     def setUpClass(cls):
 
-        cls.filename = "test_outputs/test_results_spatial_three.csv"
+        path = pathlib.Path("test_outputs/test_results_spatial_three.csv")
+        cls.filename = str(axl_filename(path))
         cls.players = [
             axl.Alternator(),
             axl.TitForTat(),

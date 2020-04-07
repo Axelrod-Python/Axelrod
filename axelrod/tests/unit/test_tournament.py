@@ -5,9 +5,12 @@ from unittest.mock import MagicMock, patch
 import io
 import logging
 import os
+import pathlib
 import pickle
 import warnings
 from multiprocessing import Queue, cpu_count
+
+from axelrod.load_data_ import axl_filename
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
@@ -86,7 +89,8 @@ class TestTournament(unittest.TestCase):
             [200, 200, 1, 200, 200],
         ]
 
-        cls.filename = "test_outputs/test_tournament.csv"
+        path = pathlib.Path("test_outputs/test_tournament.csv")
+        cls.filename = axl_filename(path)
 
     def setUp(self):
         self.test_tournament = axl.Tournament(
@@ -726,7 +730,8 @@ class TestTournament(unittest.TestCase):
         )
         tournament.play(filename=self.filename, progress_bar=False)
         df = pd.read_csv(self.filename)
-        expected_df = pd.read_csv("test_outputs/expected_test_tournament.csv")
+        path = pathlib.Path("test_outputs/expected_test_tournament.csv")
+        expected_df = pd.read_csv(axl_filename(path))
         self.assertTrue(df.equals(expected_df))
 
     def test_write_to_csv_without_results(self):
@@ -739,9 +744,8 @@ class TestTournament(unittest.TestCase):
         )
         tournament.play(filename=self.filename, progress_bar=False, build_results=False)
         df = pd.read_csv(self.filename)
-        expected_df = pd.read_csv(
-            "test_outputs/expected_test_tournament_no_results.csv"
-        )
+        path = pathlib.Path("test_outputs/expected_test_tournament_no_results.csv")
+        expected_df = pd.read_csv(axl_filename(path))
         self.assertTrue(df.equals(expected_df))
 
 
