@@ -2,8 +2,6 @@
 import unittest
 from unittest.mock import MagicMock, patch
 
-import csv
-import filecmp
 import io
 import logging
 import os
@@ -43,7 +41,7 @@ test_prob_end = 0.5
 test_edges = [(0, 1), (1, 2), (3, 4)]
 
 deterministic_strategies = [
-    s for s in axl.short_run_time_strategies if not s().classifier["stochastic"]
+    s for s in axl.short_run_time_strategies if not axl.Classifiers["stochastic"](s())
 ]
 
 
@@ -108,9 +106,7 @@ class TestTournament(unittest.TestCase):
             noise=0.2,
         )
         self.assertEqual(len(tournament.players), len(test_strategies))
-        self.assertIsInstance(
-            tournament.players[0].match_attributes["game"], axl.Game
-        )
+        self.assertIsInstance(tournament.players[0].match_attributes["game"], axl.Game)
         self.assertEqual(tournament.game.score((C, C)), (3, 3))
         self.assertEqual(tournament.turns, self.test_turns)
         self.assertEqual(tournament.repetitions, 10)
@@ -407,15 +403,12 @@ class TestTournament(unittest.TestCase):
             repetitions=test_repetitions,
         )
     )
-
     # These two examples are to make sure #465 is fixed.
     # As explained there: https://github.com/Axelrod-Python/Axelrod/issues/465,
     # these two examples were identified by hypothesis.
     @example(
         tournament=axl.Tournament(
-            players=[axl.BackStabber(), axl.MindReader()],
-            turns=2,
-            repetitions=1,
+            players=[axl.BackStabber(), axl.MindReader()], turns=2, repetitions=1,
         )
     )
     @example(
@@ -798,22 +791,17 @@ class TestProbEndTournament(unittest.TestCase):
             repetitions=test_repetitions,
         )
     )
-
     # These two examples are to make sure #465 is fixed.
     # As explained there: https://github.com/Axelrod-Python/Axelrod/issues/465,
     # these two examples were identified by hypothesis.
     @example(
         tournament=axl.Tournament(
-            players=[axl.BackStabber(), axl.MindReader()],
-            prob_end=0.2,
-            repetitions=1,
+            players=[axl.BackStabber(), axl.MindReader()], prob_end=0.2, repetitions=1,
         )
     )
     @example(
         tournament=axl.Tournament(
-            players=[axl.ThueMorse(), axl.MindReader()],
-            prob_end=0.2,
-            repetitions=1,
+            players=[axl.ThueMorse(), axl.MindReader()], prob_end=0.2, repetitions=1,
         )
     )
     def test_property_serial_play(self, tournament):

@@ -14,40 +14,6 @@ from axelrod.random_ import random_flip
 C, D = Action.C, Action.D
 
 
-# Strategy classifiers
-
-
-def is_basic(s):
-    """
-    Defines criteria for a strategy to be considered 'basic'
-    """
-    stochastic = s.classifier["stochastic"]
-    depth = s.classifier["memory_depth"]
-    inspects_source = s.classifier["inspects_source"]
-    manipulates_source = s.classifier["manipulates_source"]
-    manipulates_state = s.classifier["manipulates_state"]
-    return (
-        not stochastic
-        and not inspects_source
-        and not manipulates_source
-        and not manipulates_state
-        and depth in (0, 1)
-    )
-
-
-def obey_axelrod(s):
-    """
-    A function to check if a strategy obeys Axelrod's original tournament
-    rules.
-    """
-    classifier = s.classifier
-    return not (
-        classifier["inspects_source"]
-        or classifier["manipulates_source"]
-        or classifier["manipulates_state"]
-    )
-
-
 def simultaneous_play(player, coplayer, noise=0):
     """This pits two players against each other."""
     s1, s2 = player.strategy(coplayer), coplayer.strategy(player)
@@ -67,15 +33,6 @@ class Player(object):
 
     name = "Player"
     classifier = {}  # type: Dict[str, Any]
-    default_classifier = {
-        "stochastic": False,
-        "memory_depth": float("inf"),
-        "makes_use_of": None,
-        "long_run_time": False,
-        "inspects_source": None,
-        "manipulates_source": None,
-        "manipulates_state": None,
-    }
 
     def __new__(cls, *args, **kwargs):
         """Caches arguments for Player cloning."""
@@ -106,9 +63,6 @@ class Player(object):
         """Initiates an empty history."""
         self._history = History()
         self.classifier = copy.deepcopy(self.classifier)
-        for dimension in self.default_classifier:
-            if dimension not in self.classifier:
-                self.classifier[dimension] = self.default_classifier[dimension]
         self.set_match_attributes()
 
     def __eq__(self, other):

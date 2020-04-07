@@ -8,6 +8,7 @@ from axelrod.tests.property import tournaments
 
 from hypothesis import given, settings
 
+
 class TestTournament(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -32,15 +33,17 @@ class TestTournament(unittest.TestCase):
         ]
         cls.expected_outcome.sort()
 
-    @given(tournaments(
-        strategies=axl.short_run_time_strategies,
-        min_size=10,
-        max_size=30,
-        min_turns=2,
-        max_turns=210,
-        min_repetitions=1,
-        max_repetitions=4,
-    ))
+    @given(
+        tournaments(
+            strategies=axl.short_run_time_strategies,
+            min_size=10,
+            max_size=30,
+            min_turns=2,
+            max_turns=210,
+            min_repetitions=1,
+            max_repetitions=4,
+        )
+    )
     @settings(max_examples=1)
     def test_big_tournaments(self, tournament):
         """A test to check that tournament runs with a sample of non-cheating
@@ -79,7 +82,7 @@ class TestTournament(unittest.TestCase):
         deterministic_players = [
             s()
             for s in axl.short_run_time_strategies
-            if not s().classifier["stochastic"]
+            if not axl.Classifiers["stochastic"](s())
         ]
         files = []
         for _ in range(2):
@@ -104,7 +107,7 @@ class TestTournament(unittest.TestCase):
             stochastic_players = [
                 s()
                 for s in axl.short_run_time_strategies
-                if s().classifier["stochastic"]
+                if axl.Classifiers["stochastic"](s())
             ]
             tournament = axl.Tournament(
                 name="test",

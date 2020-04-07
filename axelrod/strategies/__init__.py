@@ -1,4 +1,4 @@
-from ..player import is_basic, obey_axelrod
+from ..classifier import Classifiers
 from ._strategies import *
 from ._filters import passes_filterset
 
@@ -64,32 +64,32 @@ all_strategies += [
 # `all_strategies` from _strategies.py
 demo_strategies = [Cooperator, Defector, TitForTat, Grudger, Random]
 axelrod_first_strategies = [
-            TitForTat,
-            FirstByTidemanAndChieruzzi,
-            FirstByNydegger,
-            FirstByGrofman,
-            FirstByShubik,
-            FirstBySteinAndRapoport,
-            Grudger,
-            FirstByDavis,
-            FirstByGraaskamp,
-            FirstByDowning,
-            FirstByFeld,
-            FirstByJoss,
-            FirstByTullock,
-            FirstByAnonymous,
-            Random,
-        ]
-basic_strategies = [s for s in all_strategies if is_basic(s())]
-strategies = [s for s in all_strategies if obey_axelrod(s())]
+    TitForTat,
+    FirstByTidemanAndChieruzzi,
+    FirstByNydegger,
+    FirstByGrofman,
+    FirstByShubik,
+    FirstBySteinAndRapoport,
+    Grudger,
+    FirstByDavis,
+    FirstByGraaskamp,
+    FirstByDowning,
+    FirstByFeld,
+    FirstByJoss,
+    FirstByTullock,
+    FirstByAnonymous,
+    Random,
+]
+basic_strategies = [s for s in all_strategies if Classifiers.is_basic(s())]
+strategies = [s for s in all_strategies if Classifiers.obey_axelrod(s())]
 
 long_run_time_strategies = [
-    s for s in all_strategies if s().classifier["long_run_time"]
+    s for s in all_strategies if Classifiers["long_run_time"](s())
 ]
 short_run_time_strategies = [
-    s for s in strategies if not s().classifier["long_run_time"]
+    s for s in strategies if not Classifiers["long_run_time"](s())
 ]
-cheating_strategies = [s for s in all_strategies if not obey_axelrod(s())]
+cheating_strategies = [s for s in all_strategies if not Classifiers.obey_axelrod(s())]
 
 ordinary_strategies = strategies  # This is a legacy and will be removed
 

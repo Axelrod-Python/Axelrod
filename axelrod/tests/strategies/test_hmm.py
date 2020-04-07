@@ -1,12 +1,17 @@
 """Tests for Hidden Markov Model Strategies."""
 
 import unittest
-
 import random
 
 import axelrod as axl
 from axelrod.evolvable_player import InsufficientParametersError
-from axelrod.strategies.hmm import EvolvableHMMPlayer, HMMPlayer, SimpleHMM, is_stochastic_matrix, random_vector
+from axelrod.strategies.hmm import (
+    EvolvableHMMPlayer,
+    HMMPlayer,
+    SimpleHMM,
+    is_stochastic_matrix,
+    random_vector,
+)
 from .test_player import TestMatch, TestPlayer
 from .test_evolvable_player import PartialClass, TestEvolvablePlayer
 
@@ -43,7 +48,7 @@ class TestHMMPlayers(unittest.TestCase):
             initial_action=C,
         )
         self.assertFalse(player.is_stochastic())
-        self.assertFalse(player.classifier["stochastic"])
+        self.assertFalse(axl.Classifiers["stochastic"](player))
         opponent = axl.Alternator()
         for i in range(6):
             player.play(opponent)
@@ -64,7 +69,7 @@ class TestHMMPlayers(unittest.TestCase):
             initial_action=D,
         )
         self.assertFalse(player.is_stochastic())
-        self.assertFalse(player.classifier["stochastic"])
+        self.assertFalse(axl.Classifiers["stochastic"](player))
         opponent = axl.Alternator()
         for i in range(6):
             player.play(opponent)
@@ -85,7 +90,7 @@ class TestHMMPlayers(unittest.TestCase):
             initial_action=C,
         )
         self.assertFalse(player.is_stochastic())
-        self.assertFalse(player.classifier["stochastic"])
+        self.assertFalse(axl.Classifiers["stochastic"](player))
         opponent = axl.Alternator()
         for i in range(6):
             player.play(opponent)
@@ -106,7 +111,7 @@ class TestHMMPlayers(unittest.TestCase):
             initial_action=C,
         )
         self.assertFalse(player.is_stochastic())
-        self.assertFalse(player.classifier["stochastic"])
+        self.assertFalse(axl.Classifiers["stochastic"](player))
         opponent = axl.Alternator()
         for i in range(6):
             player.play(opponent)
@@ -196,9 +201,7 @@ class TestEvolvedHMM5vsCooperator(TestMatch):
 
 class TestEvolvedHMM5vsDefector(TestMatch):
     def test_rounds(self):
-        self.versus_test(
-            axl.EvolvedHMM5(), axl.Defector(), [C, C, D], [D, D, D]
-        )
+        self.versus_test(axl.EvolvedHMM5(), axl.Defector(), [C, C, D], [D, D, D])
 
 
 class TestEvolvableHMMPlayer(unittest.TestCase):
@@ -213,21 +216,20 @@ class TestEvolvableHMMPlayer(unittest.TestCase):
         initial_action = C
 
         self.assertRaises(
-            InsufficientParametersError,
-            self.player_class._normalize_parameters
+            InsufficientParametersError, self.player_class._normalize_parameters
         )
         self.assertRaises(
             InsufficientParametersError,
             self.player_class._normalize_parameters,
             transitions_C=transitions_C,
             transitions_D=transitions_D,
-            emission_probabilities=emission_probabilities
+            emission_probabilities=emission_probabilities,
         )
         self.assertRaises(
             InsufficientParametersError,
             self.player_class._normalize_parameters,
             initial_state=initial_state,
-            initial_action=initial_action
+            initial_action=initial_action,
         )
 
     def test_vector_to_instance(self):
@@ -258,8 +260,13 @@ class TestEvolvableHMMPlayer2(TestEvolvablePlayer):
     name = "EvolvableHMMPlayer"
     player_class = EvolvableHMMPlayer
     parent_class = HMMPlayer
-    parent_kwargs = ["transitions_C", "transitions_D", "emission_probabilities",
-                     "initial_state", "initial_action"]
+    parent_kwargs = [
+        "transitions_C",
+        "transitions_D",
+        "emission_probabilities",
+        "initial_state",
+        "initial_action",
+    ]
     init_parameters = {"num_states": 4}
 
 
@@ -267,8 +274,13 @@ class TestEvolvableHMMPlayer3(TestEvolvablePlayer):
     name = "EvolvableHMMPlayer"
     player_class = EvolvableHMMPlayer
     parent_class = HMMPlayer
-    parent_kwargs = ["transitions_C", "transitions_D", "emission_probabilities",
-                     "initial_state", "initial_action"]
+    parent_kwargs = [
+        "transitions_C",
+        "transitions_D",
+        "emission_probabilities",
+        "initial_state",
+        "initial_action",
+    ]
     init_parameters = {"num_states": 8}
 
 
@@ -276,8 +288,13 @@ class TestEvolvableHMMPlayer4(TestEvolvablePlayer):
     name = "EvolvableHMMPlayer"
     player_class = EvolvableHMMPlayer
     parent_class = HMMPlayer
-    parent_kwargs = ["transitions_C", "transitions_D", "emission_probabilities",
-                     "initial_state", "initial_action"]
+    parent_kwargs = [
+        "transitions_C",
+        "transitions_D",
+        "emission_probabilities",
+        "initial_state",
+        "initial_action",
+    ]
     init_parameters = {
         "transitions_C": [[1, 0], [1, 0]],
         "transitions_D": [[0, 1], [0, 1]],
@@ -293,7 +310,7 @@ EvolvableHMMPlayerWithDefault = PartialClass(
     transitions_C=[[1]],
     transitions_D=[[1]],
     emission_probabilities=[0.5],
-    initial_state=0
+    initial_state=0,
 )
 
 

@@ -36,21 +36,21 @@ class TestMetaPlayer(TestPlayer):
             "manipulates_source",
             "manipulates_state",
         ]:
-            classifier[key] = any(t.classifier[key] for t in player.team)
+            classifier[key] = any(axl.Classifiers[key](t) for t in player.team)
         classifier["memory_depth"] = float("inf")
 
         for t in player.team:
             try:
-                classifier["makes_use_of"].update(t.classifier["makes_use_of"])
+                classifier["makes_use_of"].update(axl.Classifiers["make_use_of"](t))
             except KeyError:
                 pass
 
         for key in classifier:
             self.assertEqual(
-                player.classifier[key],
+                axl.Classifiers[key](player),
                 classifier[key],
                 msg="%s - Behaviour: %s != Expected Behaviour: %s"
-                % (key, player.classifier[key], classifier[key]),
+                % (key, axl.Classifiers[key](player), classifier[key]),
             )
 
     def test_repr(self):
@@ -93,7 +93,6 @@ class TestMetaPlayer(TestPlayer):
 
 
 class TestMetaMajority(TestMetaPlayer):
-
     name = "Meta Majority"
     player = axl.MetaMajority
     expected_classifier = {
@@ -107,7 +106,6 @@ class TestMetaMajority(TestMetaPlayer):
     }
 
     def test_strategy(self):
-
         P1 = axl.MetaMajority()
         P2 = axl.Player()
 
@@ -121,7 +119,6 @@ class TestMetaMajority(TestMetaPlayer):
 
 
 class TestMetaMinority(TestMetaPlayer):
-
     name = "Meta Minority"
     player = axl.MetaMinority
     expected_classifier = {
@@ -140,7 +137,6 @@ class TestMetaMinority(TestMetaPlayer):
         self.assertEqual(len(player.team), 1)
 
     def test_strategy(self):
-
         P1 = axl.MetaMinority()
         P2 = axl.Player()
 
@@ -154,7 +150,6 @@ class TestMetaMinority(TestMetaPlayer):
 
 
 class TestNiceMetaWinner(TestMetaPlayer):
-
     name = "Nice Meta Winner"
     player = axl.NiceMetaWinner
     expected_classifier = {
@@ -233,7 +228,6 @@ class TestNiceMetaWinnerEnsemble(TestMetaPlayer):
 
 
 class TestMetaHunter(TestMetaPlayer):
-
     name = "Meta Hunter"
     player = axl.MetaHunter
     expected_classifier = {
@@ -390,14 +384,10 @@ class TestMetaMajorityLongMemory(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
-        self.versus_test(
-            opponent=axl.Alternator(), expected_actions=actions, seed=0
-        )
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=0)
 
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
-        self.versus_test(
-            opponent=axl.Alternator(), expected_actions=actions, seed=1
-        )
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=1)
 
 
 class TestMetaWinnerMemoryOne(TestMetaPlayer):
@@ -491,7 +481,6 @@ class TestMetaWinnerStochastic(TestMetaPlayer):
 
 
 class TestMetaMixer(TestMetaPlayer):
-
     name = "Meta Mixer"
     player = axl.MetaMixer
     expected_classifier = {
@@ -505,7 +494,6 @@ class TestMetaMixer(TestMetaPlayer):
     }
 
     def test_strategy(self):
-
         team = [axl.TitForTat, axl.Cooperator, axl.Grudger]
         distribution = [0.2, 0.5, 0.3]
 
@@ -581,8 +569,7 @@ class TestNMWEStochastic(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (C, C), (C, D), (D, C)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions,
-                         seed=20)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=20)
 
 
 class TestNMWEFiniteMemory(TestMetaPlayer):
@@ -618,9 +605,7 @@ class TestNMWELongMemory(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (C, C), (D, D), (D, C)]
-        self.versus_test(opponent=axl.Alternator(),
-                         expected_actions=actions,
-                         seed=10)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=10)
 
 
 class TestNMWEMemoryOne(TestMetaPlayer):
@@ -642,7 +627,6 @@ class TestNMWEMemoryOne(TestMetaPlayer):
 
 
 class TestMemoryDecay(TestPlayer):
-
     name = "Memory Decay: 0.1, 0.03, -2, 1, Tit For Tat, 15"
     player = axl.MemoryDecay
     expected_classifier = {

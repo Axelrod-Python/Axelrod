@@ -2,7 +2,10 @@ Classifying the new strategy
 ============================
 
 Every strategy class has a classifier dictionary that gives some classification
-of the strategy according to certain dimensions.
+of the strategy according to certain dimensions.  Some of the classifiers have
+formulas that try to compute the value for different strategies.  Where these
+exist, they're overridden by the values defined in this dictionary.  When
+creating a new strategy, you should try to fill out all of the dictionary.
 
 Let us take a look at the dimensions available by looking at :code:`TitForTat`::
 
@@ -28,10 +31,13 @@ the initialisation depending on input parameters. A good example of this is the
 
     >>> joss = axelrod.FirstByJoss()
     >>> boring_joss = axelrod.FirstByJoss(p=1)
-    >>> joss.classifier['stochastic'], boring_joss.classifier['stochastic']
-    (True, False)
+    >>> axelrod.Classifiers["stochastic"](joss)
+    True
+    >>> axelrod.Classifiers["stochastic"](boring_joss)
+    False
 
-Dimensions that are not classified have value :code:`None` in the dictionary.
+A classifier value defined on the instance overrides the value defined for the
+class.
 
 There are currently three important dimensions that help identify if a strategy
 obeys axelrod's original tournament rules.

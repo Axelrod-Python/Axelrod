@@ -91,8 +91,8 @@ class TestBasicCycler(TestPlayer):
         len_five = "DCDDC"
         depth_nine = axl.Cycler(cycle=len_ten)
         depth_four = axl.Cycler(cycle=len_five)
-        self.assertEqual(depth_nine.classifier["memory_depth"], 9)
-        self.assertEqual(depth_four.classifier["memory_depth"], 4)
+        self.assertEqual(axl.Classifiers["memory_depth"](depth_nine), 9)
+        self.assertEqual(axl.Classifiers["memory_depth"](depth_four), 4)
 
     def test_cycler_works_as_expected(self):
         expected = [(C, D), (D, D), (D, D), (C, D)] * 2
@@ -153,25 +153,28 @@ class TestEvolvableCycler(unittest.TestCase):
     def test_normalized_parameters(self):
         # Must specify at least one of cycle or cycle_length
         self.assertRaises(
-            InsufficientParametersError,
-            self.player_class._normalize_parameters
+            InsufficientParametersError, self.player_class._normalize_parameters
         )
         self.assertRaises(
             InsufficientParametersError,
             self.player_class._normalize_parameters,
-            cycle=""
+            cycle="",
         )
         self.assertRaises(
             InsufficientParametersError,
             self.player_class._normalize_parameters,
-            cycle_length=0
+            cycle_length=0,
         )
 
         cycle = "C" * random.randint(0, 20) + "D" * random.randint(0, 20)
-        self.assertEqual(self.player_class._normalize_parameters(cycle=cycle), (cycle, len(cycle)))
+        self.assertEqual(
+            self.player_class._normalize_parameters(cycle=cycle), (cycle, len(cycle))
+        )
 
         cycle_length = random.randint(1, 20)
-        random_cycle, cycle_length2 = self.player_class._normalize_parameters(cycle_length=cycle_length)
+        random_cycle, cycle_length2 = self.player_class._normalize_parameters(
+            cycle_length=cycle_length
+        )
         self.assertEqual(len(random_cycle), cycle_length)
         self.assertEqual(cycle_length, cycle_length2)
 
@@ -211,8 +214,10 @@ class TestEvolvableCycler3(TestEvolvablePlayer):
     player_class = axl.EvolvableCycler
     parent_class = axl.Cycler
     parent_kwargs = ["cycle"]
-    init_parameters = {"cycle": "".join(random.choice(("C", "D")) for _ in range(50)),
-                       "mutation_potency": 10}
+    init_parameters = {
+        "cycle": "".join(random.choice(("C", "D")) for _ in range(50)),
+        "mutation_potency": 10,
+    }
 
 
 # Substitute EvolvedCycler as a regular Cycler.
