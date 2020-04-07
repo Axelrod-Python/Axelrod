@@ -33,7 +33,7 @@ class TitForTatWithNonTrivialInitialzer(Player):
     """
 
     def __init__(self, x: Any):
-        pass
+        pass  # pragma: no cover
 
     # Classifiers are looked up by name, so only the name matters.
     name = "Tit For Tat"
