@@ -71,7 +71,7 @@ a peer reviewed paper introducing the library (22 authors).
 Installation
 ------------
 
-The library requires Python 3.5 or greater.
+The library requires Python 3.6 or greater.
 
 The simplest way to install is::
 
