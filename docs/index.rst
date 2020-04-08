@@ -8,7 +8,7 @@ Welcome to the documentation for the Axelrod Python library
 
 Here is quick overview of the current capabilities of the library:
 
-* Over 100 strategies from the literature and some exciting original
+* Over 230 strategies including from the literature and some exciting original
   contributions
 
     * Classic strategies like TiT-For-Tat, WSLS, and variants
