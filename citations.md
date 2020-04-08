@@ -3,7 +3,7 @@
 ### 2020
 
 * Glynatsi, Nikoleta E., and Vincent A. Knight. "A meta analysis of tournaments and an evaluation of performance in the Iterated Prisoner's Dilemma" arXiv preprint arXiv:2001.05911 (2019). [ArXiv](https://arxiv.org/abs/2001.05911)
-* Wang, Shiheng, and Fangzhen Lin. "Nice Invincible Strategy for the Average-Payoff IPD." https://www.aaai.org/Papers/AAAI/2020GB/AAAI-WangS.1218.pdf
+* Wang, Shiheng, and Fangzhen Lin. "Nice Invincible Strategy for the Average-Payoff IPD." [pdf](https://www.aaai.org/Papers/AAAI/2020GB/AAAI-WangS.1218.pdf)
 
 ### 2019
 
