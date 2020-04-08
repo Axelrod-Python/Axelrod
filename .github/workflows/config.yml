@@ -52,3 +52,5 @@ jobs:
     - name: Check that installs
       run: |
         python setup.py install
+        cd ..
+        python -c "import axelrod"
