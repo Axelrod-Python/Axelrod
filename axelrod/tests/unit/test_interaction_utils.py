@@ -49,14 +49,17 @@ class TestMatch(unittest.TestCase):
 
     def test_compute_final_score(self):
         for inter, final_score in zip(self.interactions, self.final_scores):
-            self.assertEqual(final_score, axl.interaction_utils.compute_final_score(inter))
+            self.assertEqual(
+                final_score, axl.interaction_utils.compute_final_score(inter)
+            )
 
     def test_compute_final_score_per_turn(self):
         for inter, final_score_per_round in zip(
             self.interactions, self.final_score_per_turn
         ):
             self.assertEqual(
-                final_score_per_round, axl.interaction_utils.compute_final_score_per_turn(inter)
+                final_score_per_round,
+                axl.interaction_utils.compute_final_score_per_turn(inter),
             )
 
     def test_compute_winner_index(self):
@@ -69,19 +72,27 @@ class TestMatch(unittest.TestCase):
 
     def test_compute_normalised_cooperations(self):
         for inter, coop in zip(self.interactions, self.normalised_cooperations):
-            self.assertEqual(coop, axl.interaction_utils.compute_normalised_cooperation(inter))
+            self.assertEqual(
+                coop, axl.interaction_utils.compute_normalised_cooperation(inter)
+            )
 
     def test_compute_state_distribution(self):
         for inter, dist in zip(self.interactions, self.state_distribution):
-            self.assertEqual(dist, axl.interaction_utils.compute_state_distribution(inter))
+            self.assertEqual(
+                dist, axl.interaction_utils.compute_state_distribution(inter)
+            )
 
     def test_compute_normalised_state_distribution(self):
         for inter, dist in zip(self.interactions, self.normalised_state_distribution):
-            self.assertEqual(dist, axl.interaction_utils.compute_normalised_state_distribution(inter))
+            self.assertEqual(
+                dist, axl.interaction_utils.compute_normalised_state_distribution(inter)
+            )
 
     def test_compute_state_to_action_distribution(self):
         for inter, dist in zip(self.interactions, self.state_to_action_distribution):
-            self.assertEqual(dist, axl.interaction_utils.compute_state_to_action_distribution(inter))
+            self.assertEqual(
+                dist, axl.interaction_utils.compute_state_to_action_distribution(inter)
+            )
         inter = [(C, D), (D, C), (C, D), (D, C), (D, D), (C, C), (C, D)]
         expected_dist = [
             Counter(
@@ -96,14 +107,20 @@ class TestMatch(unittest.TestCase):
             Counter({((C, C), D): 1, ((C, D), C): 2, ((D, C), D): 2, ((D, D), C): 1}),
         ]
 
-        self.assertEqual(expected_dist, axl.interaction_utils.compute_state_to_action_distribution(inter))
+        self.assertEqual(
+            expected_dist,
+            axl.interaction_utils.compute_state_to_action_distribution(inter),
+        )
 
     def test_compute_normalised_state_to_action_distribution(self):
         for inter, dist in zip(
             self.interactions, self.normalised_state_to_action_distribution
         ):
             self.assertEqual(
-                dist, axl.interaction_utils.compute_normalised_state_to_action_distribution(inter)
+                dist,
+                axl.interaction_utils.compute_normalised_state_to_action_distribution(
+                    inter
+                ),
             )
         inter = [(C, D), (D, C), (C, D), (D, C), (D, D), (C, C), (C, D)]
         expected_dist = [
@@ -119,7 +136,10 @@ class TestMatch(unittest.TestCase):
             Counter({((C, C), D): 1, ((C, D), C): 1, ((D, C), D): 1, ((D, D), C): 1}),
         ]
         self.assertEqual(
-            expected_dist, axl.interaction_utils.compute_normalised_state_to_action_distribution(inter)
+            expected_dist,
+            axl.interaction_utils.compute_normalised_state_to_action_distribution(
+                inter
+            ),
         )
 
     def test_compute_sparklines(self):
@@ -137,10 +157,14 @@ class TestMatch(unittest.TestCase):
             (0, 1): [[(C, D), (C, D)] for _ in range(3)],
             (1, 1): [[(D, D), (D, D)] for _ in range(3)],
         }
-        interactions = axl.interaction_utils.read_interactions_from_file(tmp_file.name, progress_bar=False)
+        interactions = axl.interaction_utils.read_interactions_from_file(
+            tmp_file.name, progress_bar=False
+        )
         self.assertEqual(expected_interactions, interactions)
 
     def test_string_to_interactions(self):
         string = "CDCDDD"
         interactions = [(C, D), (C, D), (D, D)]
-        self.assertEqual(axl.interaction_utils.string_to_interactions(string), interactions)
+        self.assertEqual(
+            axl.interaction_utils.string_to_interactions(string), interactions
+        )

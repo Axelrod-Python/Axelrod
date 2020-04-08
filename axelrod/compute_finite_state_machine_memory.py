@@ -47,10 +47,7 @@ class Memit(object):
 
     def __eq__(self, other_memit) -> bool:
         """In action and out actions are the same."""
-        return (
-            self.in_act == other_memit.in_act
-            and self.out_act == other_memit.out_act
-        )
+        return self.in_act == other_memit.in_act and self.out_act == other_memit.out_act
 
     def __lt__(self, other_memit) -> bool:
         return repr(self) < repr(other_memit)
@@ -110,9 +107,10 @@ def get_accessible_transitions(
     accessible_transitions = dict()
     for trans in transition_iterator(transitions):
         if trans.state in accessible_states:
-            accessible_transitions[
-                (trans.state, trans.last_opponent_action)
-            ] = (trans.next_state, trans.next_action)
+            accessible_transitions[(trans.state, trans.last_opponent_action)] = (
+                trans.next_state,
+                trans.next_action,
+            )
 
     return accessible_transitions
 
@@ -179,9 +177,7 @@ def get_memory_from_transitions(
         transitions = get_accessible_transitions(transitions, initial_state)
 
     # Get the incoming actions for each state.
-    incoming_action_by_state = defaultdict(
-        set
-    )  # type: DefaultDict[int, Set[Action]]
+    incoming_action_by_state = defaultdict(set)  # type: DefaultDict[int, Set[Action]]
     for trans in transition_iterator(transitions):
         incoming_action_by_state[trans.next_state].add(trans.next_action)
 
@@ -193,23 +189,17 @@ def get_memory_from_transitions(
         # That is to say that the opponent could do anything
         for out_action in all_actions:
             # More recent in action history
-            starting_node = Memit(
-                trans.next_action, trans.next_state, out_action
-            )
+            starting_node = Memit(trans.next_action, trans.next_state, out_action)
             # All incoming paths to current state
             for in_action in incoming_action_by_state[trans.state]:
                 # Less recent in action history
-                ending_node = Memit(
-                    in_action, trans.state, trans.last_opponent_action
-                )
+                ending_node = Memit(in_action, trans.state, trans.last_opponent_action)
                 memit_edges[starting_node].add(ending_node)
 
     all_memits = list(memit_edges.keys())
 
     pair_nodes = set()
-    pair_edges = defaultdict(
-        set
-    )  # type: DefaultDict[MemitPair, Set[MemitPair]]
+    pair_edges = defaultdict(set)  # type: DefaultDict[MemitPair, Set[MemitPair]]
     # Loop through all pairs of memits.
     for x, y in [(x, y) for x in all_memits for y in all_memits]:
         if x == y and x.state == y.state:
@@ -236,9 +226,7 @@ def get_memory_from_transitions(
     next_action_by_memit = dict()
     for trans in transition_iterator(transitions):
         for in_action in incoming_action_by_state[trans.state]:
-            memit_key = Memit(
-                in_action, trans.state, trans.last_opponent_action
-            )
+            memit_key = Memit(in_action, trans.state, trans.last_opponent_action)
             next_action_by_memit[memit_key] = trans.next_action
 
     # Calculate the longest path.
@@ -263,4 +251,3 @@ def get_memory_from_transitions(
     if len(next_action_set) == 1:
         return 0
     return 1
-

@@ -39,12 +39,13 @@ class AbstractAdaptor(Player):
         "manipulates_state": False,
     }
 
-    def __init__(self, delta: Dict[Tuple[Action, Action], float],
-                 perr: float = 0.01) -> None:
+    def __init__(
+        self, delta: Dict[Tuple[Action, Action], float], perr: float = 0.01
+    ) -> None:
         super().__init__()
         self.perr = perr
         self.delta = delta
-        self.s = 0.
+        self.s = 0.0
 
     def strategy(self, opponent: Player) -> Action:
         if self.history:
@@ -54,7 +55,8 @@ class AbstractAdaptor(Player):
 
         # Compute probability of Cooperation
         p = self.perr + (1.0 - 2 * self.perr) * (
-            heaviside(self.s + 1, 1) - heaviside(self.s - 1, 1))
+            heaviside(self.s + 1, 1) - heaviside(self.s - 1, 1)
+        )
         # Draw action
         action = random_choice(p)
         return action
@@ -74,10 +76,10 @@ class AdaptorBrief(AbstractAdaptor):
 
     def __init__(self) -> None:
         delta = {
-            (C, C): 0.,         # R
+            (C, C): 0.0,  # R
             (C, D): -1.001505,  # S
-            (D, C): 0.992107,   # T
-            (D, D): -0.638734   # P
+            (D, C): 0.992107,  # T
+            (D, D): -0.638734,  # P
         }
         super().__init__(delta=delta)
 
@@ -96,9 +98,9 @@ class AdaptorLong(AbstractAdaptor):
 
     def __init__(self) -> None:
         delta = {
-            (C, C): 0.,        # R
+            (C, C): 0.0,  # R
             (C, D): 1.888159,  # S
             (D, C): 1.858883,  # T
-            (D, D): -0.995703  # P
+            (D, D): -0.995703,  # P
         }
         super().__init__(delta=delta)

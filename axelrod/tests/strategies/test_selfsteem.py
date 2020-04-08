@@ -32,9 +32,7 @@ class TestSelfSteem(TestPlayer):
 
         # Check for f < -0.95, cooperate
         actions = [(D, C), (C, C), (D, C), (D, C), (C, C), (D, C), (C, C), (C, C)]
-        self.versus_test(
-            opponent=axl.Cooperator(), expected_actions=actions, seed=0
-        )
+        self.versus_test(opponent=axl.Cooperator(), expected_actions=actions, seed=0)
 
         actions = [(D, D)] + [(D, D)] * 5 + [(D, D), (C, D), (C, D)]
         self.versus_test(opponent=axl.Defector(), expected_actions=actions, seed=0)
@@ -46,9 +44,7 @@ class TestSelfSteem(TestPlayer):
             + [(D, C), (D, C)]
             + [(C, C)] * 7
         )
-        self.versus_test(
-            opponent=axl.Cooperator(), expected_actions=actions, seed=6
-        )
+        self.versus_test(opponent=axl.Cooperator(), expected_actions=actions, seed=6)
 
         actions = (
             [(D, D)] * 7

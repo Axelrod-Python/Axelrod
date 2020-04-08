@@ -12,7 +12,7 @@ class TestShortMem(TestPlayer):
     name = "ShortMem"
     player = axl.ShortMem
     expected_classifier = {
-        "memory_depth": float('inf'),
+        "memory_depth": float("inf"),
         "stochastic": False,
         "makes_use_of": set(),
         "inspects_source": False,

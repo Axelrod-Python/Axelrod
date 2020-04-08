@@ -22,10 +22,7 @@ class TestBushMostellar(TestPlayer):
     def test_strategy(self):
         actions = [(C, C), (D, C), (D, C)]
         self.versus_test(
-            axl.Cooperator(),
-            expected_actions=actions,
-            attrs={"_stimulus": 1},
-            seed=1,
+            axl.Cooperator(), expected_actions=actions, attrs={"_stimulus": 1}, seed=1,
         )
 
         # Making sure probabilities changes following payoffs

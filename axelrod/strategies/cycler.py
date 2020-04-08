@@ -4,7 +4,11 @@ import random
 from typing import List, Tuple
 
 from axelrod.action import Action, actions_to_str, str_to_actions
-from axelrod.evolvable_player import EvolvablePlayer, InsufficientParametersError, crossover_lists
+from axelrod.evolvable_player import (
+    EvolvablePlayer,
+    InsufficientParametersError,
+    crossover_lists,
+)
 from axelrod.player import Player
 
 C, D = Action.C, Action.D
@@ -109,16 +113,14 @@ class EvolvableCycler(Cycler, EvolvablePlayer):
         cycle: str = None,
         cycle_length: int = None,
         mutation_probability: float = 0.2,
-        mutation_potency: int = 1
+        mutation_potency: int = 1,
     ) -> None:
         cycle, cycle_length = self._normalize_parameters(cycle, cycle_length)
         # The following __init__ sets self.cycle = cycle
         Cycler.__init__(self, cycle=cycle)
         EvolvablePlayer.__init__(self)
         # Overwrite init_kwargs in the case that we generated a new cycle from cycle_length
-        self.overwrite_init_kwargs(
-            cycle=cycle,
-            cycle_length=cycle_length)
+        self.overwrite_init_kwargs(cycle=cycle, cycle_length=cycle_length)
         self.mutation_probability = mutation_probability
         self.mutation_potency = mutation_potency
 
@@ -127,7 +129,9 @@ class EvolvableCycler(Cycler, EvolvablePlayer):
         """Compute other parameters from those that may be missing, to ensure proper cloning."""
         if not cycle:
             if not cycle_length:
-                raise InsufficientParametersError("Insufficient Parameters to instantiate EvolvableCycler")
+                raise InsufficientParametersError(
+                    "Insufficient Parameters to instantiate EvolvableCycler"
+                )
             cycle = cls._generate_random_cycle(cycle_length)
         cycle_length = len(cycle)
         return cycle, cycle_length
@@ -147,7 +151,9 @@ class EvolvableCycler(Cycler, EvolvablePlayer):
             mutated_sequence = list(str_to_actions(self.cycle))
             for _ in range(self.mutation_potency):
                 index_to_change = random.randint(0, len(mutated_sequence) - 1)
-                mutated_sequence[index_to_change] = mutated_sequence[index_to_change].flip()
+                mutated_sequence[index_to_change] = mutated_sequence[
+                    index_to_change
+                ].flip()
             cycle = actions_to_str(mutated_sequence)
         else:
             cycle = self.cycle

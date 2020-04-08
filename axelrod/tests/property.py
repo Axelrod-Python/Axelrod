@@ -10,7 +10,10 @@ from hypothesis.strategies import composite, floats, integers, lists, sampled_fr
 
 @composite
 def strategy_lists(
-    draw, strategies=axl.short_run_time_strategies, min_size=1, max_size=len(axl.strategies)
+    draw,
+    strategies=axl.short_run_time_strategies,
+    min_size=1,
+    max_size=len(axl.strategies),
 ):
     """
     A hypothesis decorator to return a list of strategies
@@ -108,7 +111,9 @@ def tournaments(
     repetitions = draw(integers(min_value=min_repetitions, max_value=max_repetitions))
     noise = draw(floats(min_value=min_noise, max_value=max_noise))
 
-    tournament = axl.Tournament(players, turns=turns, repetitions=repetitions, noise=noise)
+    tournament = axl.Tournament(
+        players, turns=turns, repetitions=repetitions, noise=noise
+    )
     return tournament
 
 

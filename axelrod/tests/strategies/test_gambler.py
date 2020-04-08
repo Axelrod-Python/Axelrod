@@ -131,9 +131,7 @@ class TestPSOGambler1_1_1(TestPlayer):
         seed = 2
         opponent = [D] * 3 + [C] * 10
         expected = [(C, D), (D, D), (D, D)] + [(C, C)] * 10
-        self.versus_test(
-            axl.MockPlayer(opponent), expected_actions=expected, seed=seed
-        )
+        self.versus_test(axl.MockPlayer(opponent), expected_actions=expected, seed=seed)
 
     def test_defect_forever(self):
         seed = 2
@@ -402,9 +400,7 @@ class TestPSOGambler2_2_2_Noise05(TestPlayer):
         new_seed = 3
         expected[8] = (D, D)
         self.versus_test(
-            axl.MockPlayer(opponent_actions),
-            expected_actions=expected,
-            seed=new_seed,
+            axl.MockPlayer(opponent_actions), expected_actions=expected, seed=new_seed,
         )
 
         new_seed = 2
@@ -497,14 +493,13 @@ class TestZDMem2(TestPlayer):
 
 
 class TestEvolvableGambler(unittest.TestCase):
-
     def test_receive_vector(self):
         plays, op_plays, op_start_plays = 1, 1, 1
-        player = axl.EvolvableGambler(
-            parameters=(plays, op_plays, op_start_plays))
+        player = axl.EvolvableGambler(parameters=(plays, op_plays, op_start_plays))
 
-        self.assertRaises(AttributeError, axl.EvolvableGambler.__getattribute__,
-                          *[player, 'vector'])
+        self.assertRaises(
+            AttributeError, axl.EvolvableGambler.__getattribute__, *[player, "vector"]
+        )
 
         vector = [random.random() for _ in range(8)]
         player.receive_vector(vector)
@@ -512,20 +507,19 @@ class TestEvolvableGambler(unittest.TestCase):
 
     def test_vector_to_instance(self):
         plays, op_plays, op_start_plays = 1, 1, 1
-        player = axl.EvolvableGambler(
-            parameters=(plays, op_plays, op_start_plays))
+        player = axl.EvolvableGambler(parameters=(plays, op_plays, op_start_plays))
 
         vector = [random.random() for _ in range(8)]
         player.receive_vector(vector)
-        keys = create_lookup_table_keys(player_depth=plays, op_depth=op_plays,
-                                        op_openings_depth=op_start_plays)
+        keys = create_lookup_table_keys(
+            player_depth=plays, op_depth=op_plays, op_openings_depth=op_start_plays
+        )
         action_dict = dict(zip(keys, vector))
         self.assertEqual(player._lookup.dictionary, action_dict)
 
     def test_create_vector_bounds(self):
         plays, op_plays, op_start_plays = 1, 1, 1
-        player = axl.EvolvableGambler(
-            parameters=(plays, op_plays, op_start_plays))
+        player = axl.EvolvableGambler(parameters=(plays, op_plays, op_start_plays))
         lb, ub = player.create_vector_bounds()
         self.assertIsInstance(lb, list)
         self.assertIsInstance(ub, list)
@@ -542,8 +536,7 @@ class TestEvolvableGambler2(TestEvolvablePlayer):
     player_class = axl.EvolvableGambler
     parent_class = axl.Gambler
     parent_kwargs = ["lookup_dict"]
-    init_parameters = {"parameters": (1, 1, 1),
-                       "initial_actions": (C,)}
+    init_parameters = {"parameters": (1, 1, 1), "initial_actions": (C,)}
 
 
 class TestEvolvableGambler3(TestEvolvablePlayer):
@@ -551,8 +544,7 @@ class TestEvolvableGambler3(TestEvolvablePlayer):
     player_class = axl.EvolvableGambler
     parent_class = axl.Gambler
     parent_kwargs = ["lookup_dict"]
-    init_parameters = {"parameters": (3, 2, 1),
-                       "initial_actions": (C, C, C,)}
+    init_parameters = {"parameters": (3, 2, 1), "initial_actions": (C, C, C,)}
 
 
 class TestEvolvableGambler4(TestEvolvablePlayer):
@@ -560,9 +552,11 @@ class TestEvolvableGambler4(TestEvolvablePlayer):
     player_class = axl.EvolvableGambler
     parent_class = axl.Gambler
     parent_kwargs = ["lookup_dict"]
-    init_parameters = {"parameters": (2, 2, 2),
-                       "pattern": [random.random() for _ in range(64)],
-                       "initial_actions": (C, C,)}
+    init_parameters = {
+        "parameters": (2, 2, 2),
+        "pattern": [random.random() for _ in range(64)],
+        "initial_actions": (C, C,),
+    }
 
 
 # Substitute EvolvableHMMPlayer as a regular HMMPlayer.
@@ -570,7 +564,7 @@ EvolvableGamblerWithDefault = PartialClass(
     axl.EvolvableGambler,
     pattern=tables[("PSO Gambler 2_2_2", 2, 2, 2)],
     parameters=(2, 2, 2),
-    initial_actions=(C, C,)
+    initial_actions=(C, C,),
 )
 
 

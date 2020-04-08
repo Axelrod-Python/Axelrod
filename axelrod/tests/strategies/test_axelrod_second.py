@@ -1116,9 +1116,7 @@ class TestHarrington(TestPlayer):
         # doesn't reset.  This logic comes before parity streaks or the turn-
         # based logic.
         self.versus_test(
-            axl.Defector(),
-            expected_actions=actions,
-            attrs={"recorded_defects": 119},
+            axl.Defector(), expected_actions=actions, attrs={"recorded_defects": 119},
         )
 
         # Detect random
@@ -1406,9 +1404,7 @@ class TestLeyvraz(TestPlayer):
             (D, C),
             (C, D),
         ]
-        self.versus_test(
-            axl.SuspiciousTitForTat(), expected_actions=actions, seed=1
-        )
+        self.versus_test(axl.SuspiciousTitForTat(), expected_actions=actions, seed=1)
 
         actions = [(C, C), (C, D), (D, C)] + [(D, D), (C, C)] * 3
         self.versus_test(axl.Alternator(), expected_actions=actions, seed=2)
@@ -1761,29 +1757,19 @@ class TestMikkelson(TestPlayer):
         )
 
         actions = [(C, D), (C, D), (C, D), (C, D)]
-        self.versus_test(
-            axl.Defector(), expected_actions=actions, attrs={"credit": 1}
-        )
+        self.versus_test(axl.Defector(), expected_actions=actions, attrs={"credit": 1})
         # Defect then reset to 4
         actions += [(D, D)]
-        self.versus_test(
-            axl.Defector(), expected_actions=actions, attrs={"credit": 4}
-        )
+        self.versus_test(axl.Defector(), expected_actions=actions, attrs={"credit": 4})
         # Repeat
         actions += [(C, D), (D, D)] * 2
-        self.versus_test(
-            axl.Defector(), expected_actions=actions, attrs={"credit": 4}
-        )
+        self.versus_test(axl.Defector(), expected_actions=actions, attrs={"credit": 4})
         # With ten turns passed, keep defecting now
         actions += [(C, D), (D, D)]
-        self.versus_test(
-            axl.Defector(), expected_actions=actions, attrs={"credit": 0}
-        )
+        self.versus_test(axl.Defector(), expected_actions=actions, attrs={"credit": 0})
         # With ten turns passed, keep defecting now
         actions += [(D, D)] * 30
-        self.versus_test(
-            axl.Defector(), expected_actions=actions, attrs={"credit": -7}
-        )
+        self.versus_test(axl.Defector(), expected_actions=actions, attrs={"credit": -7})
 
         actions = [(C, D), (C, D), (C, C)]
         self.versus_test(
@@ -1817,6 +1803,7 @@ class TestMikkelson(TestPlayer):
         )
         # Still Cooperate, because Defect rate is low
 
+
 class TestRowsam(TestPlayer):
     name = "Second by Rowsam"
     player = axl.SecondByRowsam
@@ -1838,12 +1825,16 @@ class TestRowsam(TestPlayer):
         # Against a Defector should eventually enter Defect mode
         actions = [(C, D)] * 5
         actions += [(D, D), (C, D), (D, D)]  # Do a Coop-Def cycle
-        self.versus_test(axl.Defector(), expected_actions=actions, attrs={
-            "distrust_points": 5})
+        self.versus_test(
+            axl.Defector(), expected_actions=actions, attrs={"distrust_points": 5}
+        )
         actions += [(C, D)] * 3  # Continue for now
         actions += [(D, D)] * 100  # Now Defect mode
-        self.versus_test(axl.Defector(), expected_actions=actions, attrs={
-            "distrust_points": 10, "mode": "Defect"})
+        self.versus_test(
+            axl.Defector(),
+            expected_actions=actions,
+            attrs={"distrust_points": 10, "mode": "Defect"},
+        )
 
         # Test specific score scenarios
         # 5 Defects
@@ -1851,8 +1842,11 @@ class TestRowsam(TestPlayer):
         custom_opponent = axl.MockPlayer(actions=opponent_actions)
         actions = [(C, D)] * 5
         actions += [(D, C)]
-        self.versus_test(custom_opponent, expected_actions=actions, attrs={
-            "distrust_points": 5, "current_score": 0})
+        self.versus_test(
+            custom_opponent,
+            expected_actions=actions,
+            attrs={"distrust_points": 5, "current_score": 0},
+        )
 
         # 3 Defects
         opponent_actions = [D] * 3 + [C] * 100
@@ -1860,8 +1854,11 @@ class TestRowsam(TestPlayer):
         actions = [(C, D)] * 3
         actions += [(C, C)] * 2
         actions += [(D, C)]
-        self.versus_test(custom_opponent, expected_actions=actions, attrs={
-            "distrust_points": 3, "current_score": 6})
+        self.versus_test(
+            custom_opponent,
+            expected_actions=actions,
+            attrs={"distrust_points": 3, "current_score": 6},
+        )
 
         # 2 Defects
         opponent_actions = [D] * 2 + [C] * 100
@@ -1869,8 +1866,11 @@ class TestRowsam(TestPlayer):
         actions = [(C, D)] * 2
         actions += [(C, C)] * 3
         actions += [(D, C)]
-        self.versus_test(custom_opponent, expected_actions=actions, attrs={
-            "distrust_points": 2, "current_score": 9})
+        self.versus_test(
+            custom_opponent,
+            expected_actions=actions,
+            attrs={"distrust_points": 2, "current_score": 9},
+        )
 
         # 1 Defect
         opponent_actions = [D] * 1 + [C] * 100
@@ -1878,8 +1878,11 @@ class TestRowsam(TestPlayer):
         actions = [(C, D)] * 1
         actions += [(C, C)] * 4
         actions += [(D, C)]
-        self.versus_test(custom_opponent, expected_actions=actions, attrs={
-            "distrust_points": 1, "current_score": 12})
+        self.versus_test(
+            custom_opponent,
+            expected_actions=actions,
+            attrs={"distrust_points": 1, "current_score": 12},
+        )
 
         # Test that some distrust_points wear off.
         opponent_actions = [D] * 3 + [C] * 100
@@ -1887,27 +1890,38 @@ class TestRowsam(TestPlayer):
         actions = [(C, D)] * 3
         actions += [(C, C)] * 2
         actions += [(D, C)]
-        self.versus_test(custom_opponent, expected_actions=actions, attrs={
-            "distrust_points": 3, "current_score": 6})
+        self.versus_test(
+            custom_opponent,
+            expected_actions=actions,
+            attrs={"distrust_points": 3, "current_score": 6},
+        )
         custom_opponent = axl.MockPlayer(actions=opponent_actions)
         actions += [(C, C), (D, C)]  # Complete Coop-Def cycle
         actions += [(C, C)] * 3
         actions += [(D, C)]
-        self.versus_test(custom_opponent, expected_actions=actions, attrs={
-            "distrust_points": 4, "current_score": 28})
+        self.versus_test(
+            custom_opponent,
+            expected_actions=actions,
+            attrs={"distrust_points": 4, "current_score": 28},
+        )
         custom_opponent = axl.MockPlayer(actions=opponent_actions)
         actions += [(C, C), (D, C)]  # Complete Coop-Def cycle
         actions += [(C, C)] * 4  # No defect or cycle this time.
-        self.versus_test(custom_opponent, expected_actions=actions, attrs={
-            "distrust_points": 3, "current_score": 50})  # One point wears off.
+        self.versus_test(
+            custom_opponent,
+            expected_actions=actions,
+            attrs={"distrust_points": 3, "current_score": 50},
+        )  # One point wears off.
         custom_opponent = axl.MockPlayer(actions=opponent_actions)
         actions += [(C, C)] * 18
-        self.versus_test(custom_opponent, expected_actions=actions, attrs={
-            "distrust_points": 2})  # Second point wears off
+        self.versus_test(
+            custom_opponent, expected_actions=actions, attrs={"distrust_points": 2}
+        )  # Second point wears off
         custom_opponent = axl.MockPlayer(actions=opponent_actions)
         actions += [(C, C)] * 18
-        self.versus_test(custom_opponent, expected_actions=actions, attrs={
-            "distrust_points": 2})  # But no more
+        self.versus_test(
+            custom_opponent, expected_actions=actions, attrs={"distrust_points": 2}
+        )  # But no more
 
 
 class TestAppold(TestPlayer):
@@ -1939,36 +1953,39 @@ class TestAppold(TestPlayer):
         # Then defect most of the time, depending on the random number.  We
         # don't defect 100% of the time, because of the way that initialize
         # opp_c_after_x.
-        actions += [(D, D),
-                    (C, D),
-                    (D, D),
-                    (D, D),  # C can never be two moves after a C.
-                    (D, D),
-                    (D, D),
-                    (D, D),
-                    (D, D),
-                    (D, D),
-                    (D, D),
-                    (C, D),
-                    (C, D),
-                    (D, D),
-                    (D, D),
-                    (D, D),
-                    (D, D),
-                    (D, D),
-                    (C, D),
-                    (D, D),
-                    (D, D),
-                    (D, D),
-                    (D, D),
-                    (D, D),
-                    (D, D),
-                    (C, D),
-                    (C, D),
-                    (D, D),
-                    (D, D)]
-        self.versus_test(opponent, expected_actions=actions, seed=1,
-                         attrs={"first_opp_def": True})
+        actions += [
+            (D, D),
+            (C, D),
+            (D, D),
+            (D, D),  # C can never be two moves after a C.
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (C, D),
+            (C, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (C, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (C, D),
+            (C, D),
+            (D, D),
+            (D, D),
+        ]
+        self.versus_test(
+            opponent, expected_actions=actions, seed=1, attrs={"first_opp_def": True}
+        )
 
         # An opponent who defects for a long time, then tries cooperating
         opponent_actions = [C] * 30 + [D] + [C] * 10
@@ -1985,51 +2002,60 @@ class TestAppold(TestPlayer):
         # First three opponent actions get counted as reactions to C.  Fourth
         # action will get counted on next turn.
         actions = [(C, D), (C, C), (C, D), (C, C)]
-        self.versus_test(opponent, expected_actions=actions,
-                         attrs={"opp_c_after_x": {C: 1, D: 1},
-                                "total_num_of_x": {C: 3, D: 1}})
+        self.versus_test(
+            opponent,
+            expected_actions=actions,
+            attrs={"opp_c_after_x": {C: 1, D: 1}, "total_num_of_x": {C: 3, D: 1}},
+        )
         # Will cooperate 50% of the time
         actions += [(C, D)]
-        self.versus_test(opponent, expected_actions=actions,
-                         attrs={"opp_c_after_x": {C: 2, D: 1},
-                                "total_num_of_x": {C: 4, D: 1},
-                                "first_opp_def": False}, seed=100)
+        self.versus_test(
+            opponent,
+            expected_actions=actions,
+            attrs={
+                "opp_c_after_x": {C: 2, D: 1},
+                "total_num_of_x": {C: 4, D: 1},
+                "first_opp_def": False,
+            },
+            seed=100,
+        )
         # Always cooperate, because we forgive the first defect
         actions += [(C, C)]
-        self.versus_test(opponent, expected_actions=actions,
-                         attrs={"first_opp_def": True}, seed=100)
+        self.versus_test(
+            opponent, expected_actions=actions, attrs={"first_opp_def": True}, seed=100
+        )
 
         # Against a random opponent, will respond mostly randomly too.
-        actions = [(C, C),
-                   (C, C),
-                   (C, D),
-                   (C, C),
-                   (C, C),
-                   (C, D),
-                   (C, C),
-                   (C, C),
-                   (C, C),
-                   (D, C),
-                   (C, D),
-                   (D, D),
-                   (C, D),
-                   (C, D),
-                   (C, C),
-                   (C, C),
-                   (D, C),
-                   (C, D),
-                   (D, D),
-                   (C, C),
-                   (C, D),
-                   (C, C),
-                   (C, C),
-                   (C, D),
-                   (D, C),
-                   (C, D),
-                   (D, D),
-                   (C, D),
-                   (C, C),
-                   (D, C)]
+        actions = [
+            (C, C),
+            (C, C),
+            (C, D),
+            (C, C),
+            (C, C),
+            (C, D),
+            (C, C),
+            (C, C),
+            (C, C),
+            (D, C),
+            (C, D),
+            (D, D),
+            (C, D),
+            (C, D),
+            (C, C),
+            (C, C),
+            (D, C),
+            (C, D),
+            (D, D),
+            (C, C),
+            (C, D),
+            (C, C),
+            (C, C),
+            (C, D),
+            (D, C),
+            (C, D),
+            (D, D),
+            (C, D),
+            (C, C),
+            (D, C),
+        ]
         self.versus_test(axl.Random(0.5), expected_actions=actions, seed=7)
-
-

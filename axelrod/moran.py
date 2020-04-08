@@ -57,7 +57,7 @@ class MoranProcess(object):
         reproduction_graph: Graph = None,
         fitness_transformation: Callable = None,
         mutation_method="transition",
-        stop_on_fixation=True
+        stop_on_fixation=True,
     ) -> None:
         """
         An agent based Moran process class. In each round, each player plays a
@@ -193,7 +193,9 @@ class MoranProcess(object):
 
         if self.mutation_method == "atomic":
             if not issubclass(self.players[index].__class__, EvolvablePlayer):
-                raise TypeError("Player is not evolvable. Use a subclass of EvolvablePlayer.")
+                raise TypeError(
+                    "Player is not evolvable. Use a subclass of EvolvablePlayer."
+                )
             return self.players[index].mutate()
 
         # Assuming mutation_method == "transition"

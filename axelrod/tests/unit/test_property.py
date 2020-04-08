@@ -13,7 +13,9 @@ from axelrod.tests.property import (
 
 from hypothesis import given, settings
 
-stochastic_strategies = [s for s in axl.strategies if axl.Classifiers["stochastic"](s())]
+stochastic_strategies = [
+    s for s in axl.strategies if axl.Classifiers["stochastic"](s())
+]
 
 
 class TestStrategyList(unittest.TestCase):

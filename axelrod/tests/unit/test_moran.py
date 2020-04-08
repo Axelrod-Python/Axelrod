@@ -48,7 +48,9 @@ class TestMoranProcess(unittest.TestCase):
             sorted([(0, 1), (2, 0), (1, 2), (0, 0), (1, 1), (2, 2)]),
         )
 
-        mp = axl.MoranProcess(players, interaction_graph=graph, reproduction_graph=graph)
+        mp = axl.MoranProcess(
+            players, interaction_graph=graph, reproduction_graph=graph
+        )
         self.assertEqual(mp.interaction_graph._edges, [(0, 1), (2, 0), (1, 2)])
         self.assertEqual(mp.reproduction_graph._edges, [(0, 1), (2, 0), (1, 2)])
 
@@ -380,38 +382,38 @@ class TestMoranProcess(unittest.TestCase):
 
     def test_atomic_mutation_fsm(self):
         axl.seed(12)
-        players = [axl.EvolvableFSMPlayer(num_states=2, initial_state=1, initial_action=C)
-                   for _ in range(5)]
+        players = [
+            axl.EvolvableFSMPlayer(num_states=2, initial_state=1, initial_action=C)
+            for _ in range(5)
+        ]
         mp = axl.MoranProcess(players, turns=10, mutation_method="atomic")
         population = mp.play()
         self.assertEqual(
             mp.winning_strategy_name,
-            'EvolvableFSMPlayer: ((0, C, 1, D), (0, D, 1, C), (1, C, 0, D), (1, D, 1, C)), 1, C, 2, 0.1')
+            "EvolvableFSMPlayer: ((0, C, 1, D), (0, D, 1, C), (1, C, 0, D), (1, D, 1, C)), 1, C, 2, 0.1",
+        )
         self.assertEqual(len(mp.populations), 31)
         self.assertTrue(mp.fixated)
 
     def test_atomic_mutation_cycler(self):
         axl.seed(10)
         cycle_length = 5
-        players = [axl.EvolvableCycler(cycle_length=cycle_length)
-                   for _ in range(5)]
+        players = [axl.EvolvableCycler(cycle_length=cycle_length) for _ in range(5)]
         mp = axl.MoranProcess(players, turns=10, mutation_method="atomic")
         population = mp.play()
-        self.assertEqual(mp.winning_strategy_name, 'EvolvableCycler: CDCDD, 5, 0.2, 1')
+        self.assertEqual(mp.winning_strategy_name, "EvolvableCycler: CDCDD, 5, 0.2, 1")
         self.assertEqual(len(mp.populations), 19)
         self.assertTrue(mp.fixated)
 
     def test_mutation_method_exceptions(self):
         axl.seed(10)
         cycle_length = 5
-        players = [axl.EvolvableCycler(cycle_length=cycle_length)
-                   for _ in range(5)]
+        players = [axl.EvolvableCycler(cycle_length=cycle_length) for _ in range(5)]
         with self.assertRaises(ValueError):
             axl.MoranProcess(players, turns=10, mutation_method="random")
 
         axl.seed(0)
-        players = [axl.Cycler(cycle="CD" * random.randint(2, 10))
-                   for _ in range(10)]
+        players = [axl.Cycler(cycle="CD" * random.randint(2, 10)) for _ in range(10)]
 
         mp = axl.MoranProcess(players, turns=10, mutation_method="atomic")
         with self.assertRaises(TypeError):
@@ -537,7 +539,11 @@ class TestApproximateMoranProcess(unittest.TestCase):
         """Test the initialisation process"""
         self.assertEqual(
             set(self.amp.cached_outcomes.keys()),
-            {("Cooperator", "Defector"), ("Cooperator", "Cooperator"), ("Defector", "Defector")},
+            {
+                ("Cooperator", "Defector"),
+                ("Cooperator", "Cooperator"),
+                ("Defector", "Defector"),
+            },
         )
         self.assertEqual(self.amp.players, self.players)
         self.assertEqual(self.amp.turns, 0)

@@ -50,12 +50,8 @@ class TestGeller(TestPlayer):
         Regression test for a bug discussed in
         https://github.com/Axelrod-Python/Axelrod/issues/1185
         """
-        self.versus_test(
-            axl.EvolvedLookerUp1_1_1(), expected_actions=[(C, C), (C, C)]
-        )
-        self.versus_test(
-            axl.EvolvedLookerUp2_2_2(), expected_actions=[(C, C), (C, C)]
-        )
+        self.versus_test(axl.EvolvedLookerUp1_1_1(), expected_actions=[(C, C), (C, C)])
+        self.versus_test(axl.EvolvedLookerUp2_2_2(), expected_actions=[(C, C), (C, C)])
 
     def test_returns_foil_inspection_strategy_of_opponent(self):
         self.versus_test(
@@ -96,9 +92,7 @@ class TestGellerCooperator(TestGeller):
 
         self.versus_test(axl.Darwin(), expected_actions=[(C, C), (C, C), (C, C)])
 
-        self.versus_test(
-            axl.MindReader(), expected_actions=[(D, D), (D, D), (D, D)]
-        )
+        self.versus_test(axl.MindReader(), expected_actions=[(D, D), (D, D), (D, D)])
 
 
 class TestGellerDefector(TestGeller):
@@ -127,6 +121,4 @@ class TestGellerDefector(TestGeller):
 
         self.versus_test(axl.Darwin(), expected_actions=[(C, C), (C, C), (C, C)])
 
-        self.versus_test(
-            axl.MindReader(), expected_actions=[(D, D), (D, D), (D, D)]
-        )
+        self.versus_test(axl.MindReader(), expected_actions=[(D, D), (D, D), (D, D)])

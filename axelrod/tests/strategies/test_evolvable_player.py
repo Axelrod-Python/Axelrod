@@ -11,10 +11,8 @@ C, D = Action.C, Action.D
 
 
 def PartialClass(cls, **kwargs):
-
     class PartialedClass(cls):
-        __init__ = functools.partialmethod(
-            cls.__init__, **kwargs)
+        __init__ = functools.partialmethod(cls.__init__, **kwargs)
 
     return PartialedClass
 
@@ -145,7 +143,7 @@ class TestEvolvablePlayer(TestPlayer):
         player = self.player()
         serialized = player.serialize_parameters()
         s = "0, 1, {}, 3".format(serialized)
-        s2 = s.split(',')[2]
+        s2 = s.split(",")[2]
         deserialized_player = player.__class__.deserialize_parameters(s2)
         self.assertEqual(player, deserialized_player)
         self.assertEqual(deserialized_player, deserialized_player.clone())
@@ -181,7 +179,6 @@ class TestEvolvablePlayer(TestPlayer):
 
 
 class TestUtilityFunctions(unittest.TestCase):
-
     def test_copy_lists(self):
         l1 = [list(range(10)), list(range(20))]
         l2 = copy_lists(l1)
@@ -200,14 +197,13 @@ class TestUtilityFunctions(unittest.TestCase):
         self.assertEqual(crossed, list1[:1] + list2[1:])
 
     def test_crossover_dictionaries(self):
-        dict1 = {'1': 1, '2': 2, '3': 3}
-        dict2 = {'1': 'a', '2': 'b', '3': 'c'}
+        dict1 = {"1": 1, "2": 2, "3": 3}
+        dict2 = {"1": "a", "2": "b", "3": "c"}
 
         axl.seed(0)
         crossed = crossover_dictionaries(dict1, dict2)
-        self.assertEqual(crossed, {'1': 1, '2': 'b', '3': 'c'})
+        self.assertEqual(crossed, {"1": 1, "2": "b", "3": "c"})
 
         axl.seed(1)
         crossed = crossover_dictionaries(dict1, dict2)
         self.assertEqual(crossed, dict2)
-
