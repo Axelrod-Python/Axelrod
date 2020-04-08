@@ -1,3 +1,14 @@
+# v4.9.1, 2020-04-08
+
+Bug fixes
+
+- Fix install problem:
+  https://github.com/Axelrod-Python/Axelrod/pull/1314
+- Fix read the docs configuration:
+  https://github.com/Axelrod-Python/Axelrod/pull/1313
+
+https://github.com/Axelrod-Python/Axelrod/compare/v4.9.1...v4.9.0
+
 # v4.9.0, 2020-04-07
 
 New strategies, new classifier system and internal improvements/fixes.
