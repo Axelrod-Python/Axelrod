@@ -43,6 +43,7 @@ MOCK_MODULES = [
     "toolz.curried",
     "toolz.functoolz",
     "tqdm",
+    "yaml",
 ]
 
 for mod_name in MOCK_MODULES:
