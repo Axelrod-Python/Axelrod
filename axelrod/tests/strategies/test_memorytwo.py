@@ -67,12 +67,12 @@ class TestGenericPlayerTwo(unittest.TestCase):
         )
 
     def test_deterministic_classification(self):
-        self.assertFalse(self.p1.classifier["stochastic"])
-        self.assertFalse(self.p2.classifier["stochastic"])
+        self.assertFalse(axl.Classifiers["stochastic"](self.p1))
+        self.assertFalse(axl.Classifiers["stochastic"](self.p2))
 
     def test_stochastic_classification(self):
-        self.assertTrue(self.p3.classifier["stochastic"])
-        self.assertTrue(self.p4.classifier["stochastic"])
+        self.assertTrue(axl.Classifiers["stochastic"](self.p3))
+        self.assertTrue(axl.Classifiers["stochastic"](self.p4))
 
 
 class TestMemoryTwoPlayer(unittest.TestCase):
@@ -217,9 +217,7 @@ class TestAON2(TestPlayer):
 
         # tests states 3, 5 and 12
         actions = [(C, D), (C, C), (D, C), (D, D), (D, D), (C, D)]
-        self.versus_test(
-            opponent=axl.SuspiciousTitForTat(), expected_actions=actions
-        )
+        self.versus_test(opponent=axl.SuspiciousTitForTat(), expected_actions=actions)
 
         # tests state 1
         actions = [(C, C), (C, C), (C, C), (C, C)]
@@ -257,9 +255,7 @@ class TestDelayedAON1(TestPlayer):
 
         # tests states 3, 5
         actions = [(C, D), (C, C), (D, C), (D, D), (C, D)]
-        self.versus_test(
-            opponent=axl.SuspiciousTitForTat(), expected_actions=actions
-        )
+        self.versus_test(opponent=axl.SuspiciousTitForTat(), expected_actions=actions)
 
 
 class TestMEM2(TestPlayer):

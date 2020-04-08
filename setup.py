@@ -27,7 +27,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/x-rst",
     include_package_data=True,
-    package_data={"": ["axelrod/data/*.csv"]},
+    package_data={"": ["axelrod/data/*"]},
     classifiers=[
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",

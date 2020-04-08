@@ -56,9 +56,7 @@ class TestTransformers(unittest.TestCase):
 
         new_decorator = DecoratorReBuilder()(factory_args, args, kwargs, new_prefix)
 
-        self.assertEqual(
-            decorator(axl.Cooperator)(), new_decorator(axl.Cooperator)()
-        )
+        self.assertEqual(decorator(axl.Cooperator)(), new_decorator(axl.Cooperator)())
 
     def test_StrategyReBuilder_declared_class_with_name_prefix(self):
         player = CanNotPickle()
@@ -160,15 +158,9 @@ class TestTransformers(unittest.TestCase):
             str(InitialTransformer([D, D, C])(axl.Alternator)()),
             "Initial Alternator: [D, D, C]",
         )
+        self.assertEqual(str(FlipTransformer()(axl.Random)(0.1)), "Flipped Random: 0.1")
         self.assertEqual(
-            str(FlipTransformer()(axl.Random)(0.1)), "Flipped Random: 0.1"
-        )
-        self.assertEqual(
-            str(
-                MixedTransformer(0.3, (axl.Alternator, axl.Bully))(
-                    axl.Random
-                )(0.1)
-            ),
+            str(MixedTransformer(0.3, (axl.Alternator, axl.Bully))(axl.Random)(0.1)),
             "Mutated Random: 0.1: 0.3, ['Alternator', 'Bully']",
         )
 
@@ -279,7 +271,7 @@ class TestTransformers(unittest.TestCase):
         """
         probability = (1, 0)
         p1 = JossAnnTransformer(probability)(axl.Defector)()
-        self.assertFalse(p1.classifier["stochastic"])
+        self.assertFalse(axl.Classifiers["stochastic"](p1))
         p2 = axl.Cooperator()
         for _ in range(5):
             p1.play(p2)
@@ -287,7 +279,7 @@ class TestTransformers(unittest.TestCase):
 
         probability = (0, 1)
         p1 = JossAnnTransformer(probability)(axl.Cooperator)()
-        self.assertFalse(p1.classifier["stochastic"])
+        self.assertFalse(axl.Classifiers["stochastic"](p1))
         p2 = axl.Cooperator()
         for _ in range(5):
             p1.play(p2)
@@ -295,7 +287,7 @@ class TestTransformers(unittest.TestCase):
 
         probability = (0.3, 0.3)
         p1 = JossAnnTransformer(probability)(axl.TitForTat)()
-        self.assertTrue(p1.classifier["stochastic"])
+        self.assertTrue(axl.Classifiers["stochastic"](p1))
 
         p2 = axl.Cycler()
         axl.seed(0)
@@ -305,7 +297,7 @@ class TestTransformers(unittest.TestCase):
 
         probability = (0.6, 0.6)
         p1 = JossAnnTransformer(probability)(axl.Cooperator)()
-        self.assertTrue(p1.classifier["stochastic"])
+        self.assertTrue(axl.Classifiers["stochastic"](p1))
         p2 = axl.Cooperator()
         for _ in range(5):
             p1.play(p2)
@@ -313,33 +305,27 @@ class TestTransformers(unittest.TestCase):
 
         probability = (0, 1)
         p1 = JossAnnTransformer(probability)(axl.Random)
-        self.assertFalse(p1.classifier["stochastic"])
-        self.assertFalse(p1().classifier["stochastic"])
+        self.assertFalse(axl.Classifiers["stochastic"](p1()))
 
         probability = (1, 0)
         p1 = JossAnnTransformer(probability)(axl.Random)
-        self.assertFalse(p1.classifier["stochastic"])
-        self.assertFalse(p1().classifier["stochastic"])
+        self.assertFalse(axl.Classifiers["stochastic"](p1()))
 
         probability = (0.5, 0.5)
         p1 = JossAnnTransformer(probability)(axl.TitForTat)
-        self.assertTrue(p1.classifier["stochastic"])
-        self.assertTrue(p1().classifier["stochastic"])
+        self.assertTrue(axl.Classifiers["stochastic"](p1()))
 
         probability = (0, 0.5)
         p1 = JossAnnTransformer(probability)(axl.TitForTat)
-        self.assertTrue(p1.classifier["stochastic"])
-        self.assertTrue(p1().classifier["stochastic"])
+        self.assertTrue(axl.Classifiers["stochastic"](p1()))
 
         probability = (0, 0)
         p1 = JossAnnTransformer(probability)(axl.TitForTat)
-        self.assertFalse(p1.classifier["stochastic"])
-        self.assertFalse(p1().classifier["stochastic"])
+        self.assertFalse(axl.Classifiers["stochastic"](p1()))
 
         probability = (0, 0)
         p1 = JossAnnTransformer(probability)(axl.Random)
-        self.assertTrue(p1.classifier["stochastic"])
-        self.assertTrue(p1().classifier["stochastic"])
+        self.assertTrue(axl.Classifiers["stochastic"](p1()))
 
     def test_noisy_transformer(self):
         """Tests that the noisy transformed does flip some moves."""
@@ -347,53 +333,48 @@ class TestTransformers(unittest.TestCase):
         # Cooperator to Defector
         p1 = axl.Cooperator()
         p2 = NoisyTransformer(0.5)(axl.Cooperator)()
-        self.assertTrue(p2.classifier["stochastic"])
+        self.assertTrue(axl.Classifiers["stochastic"](p2))
         for _ in range(10):
             p1.play(p2)
         self.assertEqual(p2.history, [C, C, C, C, C, C, D, D, C, C])
 
         p2 = NoisyTransformer(0)(axl.Cooperator)
-        self.assertFalse(p2.classifier["stochastic"])
-        self.assertFalse(p2().classifier["stochastic"])
+        self.assertFalse(axl.Classifiers["stochastic"](p2()))
 
         p2 = NoisyTransformer(1)(axl.Cooperator)
-        self.assertFalse(p2.classifier["stochastic"])
-        self.assertFalse(p2().classifier["stochastic"])
+        self.assertFalse(axl.Classifiers["stochastic"](p2()))
 
         p2 = NoisyTransformer(0.3)(axl.Cooperator)
-        self.assertTrue(p2.classifier["stochastic"])
-        self.assertTrue(p2().classifier["stochastic"])
+        self.assertTrue(axl.Classifiers["stochastic"](p2()))
 
         p2 = NoisyTransformer(0)(axl.Random)
-        self.assertTrue(p2.classifier["stochastic"])
-        self.assertTrue(p2().classifier["stochastic"])
+        self.assertTrue(axl.Classifiers["stochastic"](p2()))
 
         p2 = NoisyTransformer(1)(axl.Random)
-        self.assertTrue(p2.classifier["stochastic"])
-        self.assertTrue(p2().classifier["stochastic"])
+        self.assertTrue(axl.Classifiers["stochastic"](p2()))
 
     def test_forgiving(self):
         """Tests that the forgiving transformer flips some defections."""
         random.seed(10)
         p1 = ForgiverTransformer(0.5)(axl.Alternator)()
-        self.assertTrue(p1.classifier["stochastic"])
+        self.assertTrue(axl.Classifiers["stochastic"](p1))
         p2 = axl.Defector()
         for _ in range(10):
             p1.play(p2)
         self.assertEqual(p1.history, [C, D, C, C, D, C, C, D, C, D])
 
         p1 = ForgiverTransformer(0)(axl.Alternator)()
-        self.assertFalse(p1.classifier["stochastic"])
+        self.assertFalse(axl.Classifiers["stochastic"](p1))
 
         p1 = ForgiverTransformer(1)(axl.Alternator)()
-        self.assertFalse(p1.classifier["stochastic"])
+        self.assertFalse(axl.Classifiers["stochastic"](p1))
 
     def test_initial_transformer(self):
         """Tests the InitialTransformer."""
         p1 = axl.Cooperator()
-        self.assertEqual(p1.classifier["memory_depth"], 0)
+        self.assertEqual(axl.Classifiers["memory_depth"](p1), 0)
         p2 = InitialTransformer([D, D])(axl.Cooperator)()
-        self.assertEqual(p2.classifier["memory_depth"], 2)
+        self.assertEqual(axl.Classifiers["memory_depth"](p2), 2)
         for _ in range(5):
             p1.play(p2)
         self.assertEqual(p2.history, [D, D, C, C, C])
@@ -405,16 +386,16 @@ class TestTransformers(unittest.TestCase):
         self.assertEqual(p2.history, [D, D, C, D, C])
 
         p3 = InitialTransformer([D, D])(axl.Adaptive)()
-        self.assertEqual(p3.classifier["memory_depth"], float("inf"))
+        self.assertEqual(axl.Classifiers["memory_depth"](p3), float("inf"))
 
     def test_final_transformer(self):
         """Tests the FinalTransformer when tournament length is known."""
         # Final play transformer
         p1 = axl.Cooperator()
         p2 = FinalTransformer([D, D, D])(axl.Cooperator)()
-        self.assertEqual(p2.classifier["makes_use_of"], set(["length"]))
-        self.assertEqual(p2.classifier["memory_depth"], 3)
-        self.assertEqual(axl.Cooperator.classifier["makes_use_of"], set([]))
+        self.assertEqual(axl.Classifiers["makes_use_of"](p2), set(["length"]))
+        self.assertEqual(axl.Classifiers["memory_depth"](p2), 3)
+        self.assertEqual(axl.Classifiers["makes_use_of"](axl.Cooperator()), set([]))
 
         p2.match_attributes["length"] = 6
         for _ in range(8):
@@ -422,7 +403,7 @@ class TestTransformers(unittest.TestCase):
         self.assertEqual(p2.history, [C, C, C, D, D, D, C, C])
 
         p3 = FinalTransformer([D, D])(axl.Adaptive)()
-        self.assertEqual(p3.classifier["memory_depth"], float("inf"))
+        self.assertEqual(axl.Classifiers["memory_depth"](p3), float("inf"))
 
     def test_final_transformer2(self):
         """Tests the FinalTransformer when tournament length is not known."""
@@ -535,7 +516,7 @@ class TestTransformers(unittest.TestCase):
         """Tests the MixedTransformer."""
         probability = 1
         MD = MixedTransformer(probability, axl.Cooperator)(axl.Defector)
-        self.assertFalse(MD.classifier["stochastic"])
+        self.assertFalse(axl.Classifiers["stochastic"](MD()))
 
         p1 = MD()
         p2 = axl.Cooperator()
@@ -545,7 +526,7 @@ class TestTransformers(unittest.TestCase):
 
         probability = 0
         MD = MixedTransformer(probability, axl.Cooperator)(axl.Defector)
-        self.assertFalse(MD.classifier["stochastic"])
+        self.assertFalse(axl.Classifiers["stochastic"](MD()))
 
         p1 = MD()
         p2 = axl.Cooperator()
@@ -559,7 +540,7 @@ class TestTransformers(unittest.TestCase):
         probability = [0.3, 0.2, 0]
         strategies = [axl.TitForTat, axl.Grudger, axl.Defector]
         MD = MixedTransformer(probability, strategies)(axl.Cooperator)
-        self.assertTrue(MD.classifier["stochastic"])
+        self.assertTrue(axl.Classifiers["stochastic"](MD()))
 
         p1 = MD()
         # Against a cooperator we see that we only cooperate
@@ -572,7 +553,7 @@ class TestTransformers(unittest.TestCase):
         probability = (0, 0, 1)  # Note can also pass tuple
         strategies = [axl.TitForTat, axl.Grudger, axl.Defector]
         MD = MixedTransformer(probability, strategies)(axl.Cooperator)
-        self.assertFalse(MD.classifier["stochastic"])
+        self.assertFalse(axl.Classifiers["stochastic"](MD()))
 
         p1 = MD()
         # Against a cooperator we see that we only defect

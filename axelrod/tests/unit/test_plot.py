@@ -1,19 +1,21 @@
 import unittest
 
 import tempfile
-
 import matplotlib
 import matplotlib.pyplot as plt
+import pathlib
 
 from numpy import mean
 
 import axelrod as axl
+from axelrod.load_data_ import axl_filename
 
 
 class TestPlot(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.filename = "test_outputs/test_results.csv"
+        path = pathlib.Path("test_outputs/test_results.csv")
+        cls.filename = axl_filename(path)
 
         cls.players = [axl.Alternator(), axl.TitForTat(), axl.Defector()]
         cls.repetitions = 3

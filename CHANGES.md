@@ -1,3 +1,32 @@
+# v4.9.0, 2020-04-07
+
+New strategies, new classifier system and internal improvements/fixes.
+
+- Cleanup the tests:
+  https://github.com/Axelrod-Python/Axelrod/pull/1308
+- Create function to handle internal file paths:
+  https://github.com/Axelrod-Python/Axelrod/pull/1307
+- Fix bug in Result set:
+  https://github.com/Axelrod-Python/Axelrod/pull/1305
+- Improve and expand LR Player's docstring
+  https://github.com/Axelrod-Python/Axelrod/pull/1303
+- New strategy classifier mechanism:
+  https://github.com/Axelrod-Python/Axelrod/pull/1300
+- Add new Gradual strategy:
+  https://github.com/Axelrod-Python/Axelrod/pull/1299
+- Add missing author to docs bibliography:
+  https://github.com/Axelrod-Python/Axelrod/pull/1295
+- Suppress numpy warnings:
+  https://github.com/Axelrod-Python/Axelrod/pull/1292
+- Fix documentation:
+  https://github.com/Axelrod-Python/Axelrod/pull/1291
+- Fix FirstByDowning:
+  https://github.com/Axelrod-Python/Axelrod/pull/1285
+- Add citations:
+  https://github.com/Axelrod-Python/Axelrod/pull/1281
+
+https://github.com/Axelrod-Python/Axelrod/compare/v4.9.0...v4.8.0
+
 # v4.8.0, 2019-12-16
 
 Reimplementation of first tournament strategies, rename of second tournament

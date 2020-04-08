@@ -1,11 +1,106 @@
 """Tests for the classification."""
 
+import os
 import unittest
+from typing import Any, Text
+import warnings
+import yaml
 
 import axelrod as axl
+from axelrod.classifier import (
+    Classifier,
+    Classifiers,
+    _Classifiers,
+    memory_depth,
+    rebuild_classifier_table,
+)
+from axelrod.player import Player
+
+
+class TitForTatWithEmptyClassifier(Player):
+    """
+    Same name as TitForTat, but with empty classifier.
+    """
+
+    # Classifiers are looked up by name, so only the name matters.
+    name = "Tit For Tat"
+    classifier = {}
+
+
+class TitForTatWithNonTrivialInitialzer(Player):
+    """
+    Same name as TitForTat, but with empty classifier.
+    """
+
+    def __init__(self, x: Any):
+        pass  # pragma: no cover
+
+    # Classifiers are looked up by name, so only the name matters.
+    name = "Tit For Tat"
+    classifier = {}
 
 
 class TestClassification(unittest.TestCase):
+    def setUp(self) -> None:
+        # Ignore warnings about classifiers running on instances
+        warnings.simplefilter("ignore", category=UserWarning)
+
+    def tearDown(self) -> None:
+        warnings.simplefilter("default", category=UserWarning)
+
+    def test_classifier_build(self):
+        dirname = os.path.dirname(__file__)
+        test_path = os.path.join(dirname, "../../../test_outputs/classifier_test.yaml")
+
+        # Just returns the name of the player.  For testing.
+        name_classifier = Classifier[Text]("name", lambda player: player.name)
+        rebuild_classifier_table(
+            classifiers=[name_classifier],
+            players=[axl.Cooperator, axl.Defector],
+            path=test_path,
+        )
+
+        filename = os.path.join("../..", test_path)
+        with open(filename, "r") as f:
+            all_player_dicts = yaml.load(f, Loader=yaml.FullLoader)
+
+        self.assertDictEqual(
+            all_player_dicts,
+            {"Cooperator": {"name": "Cooperator"}, "Defector": {"name": "Defector"}},
+        )
+
+    def test_singletonity_of_classifiers_class(self):
+        classifiers_1 = _Classifiers()
+        classifiers_2 = _Classifiers()
+
+        self.assertIs(classifiers_1, classifiers_2)
+
+    def test_get_name_from_classifier(self):
+        # Should be able to take a string or a Classifier instance.
+        self.assertEqual(Classifiers["memory_depth"](axl.TitForTat()), 1)
+        self.assertEqual(Classifiers[memory_depth](axl.TitForTat()), 1)
+
+    def test_classifier_works_on_non_instances(self):
+        warnings.simplefilter("default", category=UserWarning)
+        with warnings.catch_warnings(record=True) as w:
+            self.assertEqual(Classifiers["memory_depth"](axl.TitForTat), 1)
+            self.assertEquals(len(w), 1)
+
+    def test_key_error_on_uknown_classifier(self):
+        with self.assertRaises(KeyError):
+            Classifiers["invalid_key"](axl.TitForTat)
+
+    def test_will_lookup_key_in_dict(self):
+        self.assertEqual(Classifiers["memory_depth"](TitForTatWithEmptyClassifier), 1)
+
+    def test_will_lookup_key_for_classes_that_cant_init(self):
+        with self.assertRaises(Exception) as exptn:
+            Classifiers["memory_depth"](TitForTatWithNonTrivialInitialzer)
+        self.assertEqual(
+            str(exptn.exception),
+            "Passed player class doesn't have a trivial initializer.",
+        )
+
     def test_known_classifiers(self):
         # A set of dimensions that are known to have been fully applied
         known_keys = [
@@ -19,7 +114,7 @@ class TestClassification(unittest.TestCase):
 
         for s in axl.all_strategies:
             s = s()
-            self.assertTrue(None not in [s.classifier[key] for key in known_keys])
+            self.assertTrue(None not in [Classifiers[key](s) for key in known_keys])
 
     def test_multiple_instances(self):
         """Certain instances of classes of strategies will have different
@@ -90,13 +185,13 @@ class TestClassification(unittest.TestCase):
         ]
 
         for strategy in known_cheaters:
-            self.assertFalse(axl.obey_axelrod(strategy()), msg=strategy)
+            self.assertFalse(axl.Classifiers.obey_axelrod(strategy()), msg=strategy)
 
         for strategy in known_basic:
-            self.assertTrue(axl.obey_axelrod(strategy()), msg=strategy)
+            self.assertTrue(axl.Classifiers.obey_axelrod(strategy()), msg=strategy)
 
         for strategy in known_ordinary:
-            self.assertTrue(axl.obey_axelrod(strategy()), msg=strategy)
+            self.assertTrue(axl.Classifiers.obey_axelrod(strategy()), msg=strategy)
 
     def test_is_basic(self):
         """A test that verifies if the is_basic function works correctly"""
@@ -132,13 +227,13 @@ class TestClassification(unittest.TestCase):
         ]
 
         for strategy in known_cheaters:
-            self.assertFalse(axl.is_basic(strategy()), msg=strategy)
+            self.assertFalse(axl.Classifiers.is_basic(strategy()), msg=strategy)
 
         for strategy in known_basic:
-            self.assertTrue(axl.is_basic(strategy()), msg=strategy)
+            self.assertTrue(axl.Classifiers.is_basic(strategy()), msg=strategy)
 
         for strategy in known_ordinary:
-            self.assertFalse(axl.is_basic(strategy()), msg=strategy)
+            self.assertFalse(axl.Classifiers.is_basic(strategy()), msg=strategy)
 
 
 def str_reps(xs):
@@ -147,6 +242,14 @@ def str_reps(xs):
 
 
 class TestStrategies(unittest.TestCase):
+    def setUp(self) -> None:
+        # Ignore warnings about classifiers running on instances.  We want to
+        # allow this for some of the map functions.
+        warnings.simplefilter("ignore", category=UserWarning)
+
+    def tearDown(self) -> None:
+        warnings.simplefilter("default", category=UserWarning)
+
     def test_strategy_list(self):
         for strategy_list in [
             "all_strategies",
@@ -219,7 +322,7 @@ class TestStrategies(unittest.TestCase):
             str_reps(long_run_time_strategies), str_reps(axl.long_run_time_strategies)
         )
         self.assertTrue(
-            all(s().classifier["long_run_time"] for s in axl.long_run_time_strategies)
+            all(map(Classifiers["long_run_time"], axl.long_run_time_strategies))
         )
 
     def test_short_run_strategies(self):
@@ -231,7 +334,7 @@ class TestStrategies(unittest.TestCase):
             str_reps(short_run_time_strategies), str_reps(axl.short_run_time_strategies)
         )
         self.assertFalse(
-            any(s().classifier["long_run_time"] for s in axl.short_run_time_strategies)
+            any(map(Classifiers["long_run_time"], axl.short_run_time_strategies))
         )
 
     def test_meta_inclusion(self):

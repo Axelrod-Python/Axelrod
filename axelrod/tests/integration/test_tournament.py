@@ -1,12 +1,15 @@
 import unittest
 
 import filecmp
+import pathlib
 
 import axelrod as axl
+from axelrod.load_data_ import axl_filename
 from axelrod.strategy_transformers import FinalTransformer
 from axelrod.tests.property import tournaments
 
 from hypothesis import given, settings
+
 
 class TestTournament(unittest.TestCase):
     @classmethod
@@ -32,20 +35,23 @@ class TestTournament(unittest.TestCase):
         ]
         cls.expected_outcome.sort()
 
-    @given(tournaments(
-        strategies=axl.short_run_time_strategies,
-        min_size=10,
-        max_size=30,
-        min_turns=2,
-        max_turns=210,
-        min_repetitions=1,
-        max_repetitions=4,
-    ))
+    @given(
+        tournaments(
+            strategies=axl.short_run_time_strategies,
+            min_size=10,
+            max_size=30,
+            min_turns=2,
+            max_turns=210,
+            min_repetitions=1,
+            max_repetitions=4,
+        )
+    )
     @settings(max_examples=1)
     def test_big_tournaments(self, tournament):
         """A test to check that tournament runs with a sample of non-cheating
         strategies."""
-        filename = "test_outputs/test_tournament.csv"
+        path = pathlib.Path("test_outputs/test_tournament.csv")
+        filename = axl_filename(path)
         self.assertIsNone(
             tournament.play(progress_bar=False, filename=filename, build_results=False)
         )
@@ -79,7 +85,7 @@ class TestTournament(unittest.TestCase):
         deterministic_players = [
             s()
             for s in axl.short_run_time_strategies
-            if not s().classifier["stochastic"]
+            if not axl.Classifiers["stochastic"](s())
         ]
         files = []
         for _ in range(2):
@@ -90,7 +96,8 @@ class TestTournament(unittest.TestCase):
                 turns=2,
                 repetitions=2,
             )
-            files.append("test_outputs/stochastic_tournament_{}.csv".format(_))
+            path = pathlib.Path("test_outputs/stochastic_tournament_{}.csv".format(_))
+            files.append(axl_filename(path))
             tournament.play(progress_bar=False, filename=files[-1], build_results=False)
         self.assertTrue(filecmp.cmp(files[0], files[1]))
 
@@ -104,7 +111,7 @@ class TestTournament(unittest.TestCase):
             stochastic_players = [
                 s()
                 for s in axl.short_run_time_strategies
-                if s().classifier["stochastic"]
+                if axl.Classifiers["stochastic"](s())
             ]
             tournament = axl.Tournament(
                 name="test",
@@ -113,7 +120,8 @@ class TestTournament(unittest.TestCase):
                 turns=2,
                 repetitions=2,
             )
-            files.append("test_outputs/stochastic_tournament_{}.csv".format(_))
+            path = pathlib.Path("test_outputs/stochastic_tournament_{}.csv".format(_))
+            files.append(axl_filename(path))
             tournament.play(progress_bar=False, filename=files[-1], build_results=False)
         self.assertTrue(filecmp.cmp(files[0], files[1]))
 

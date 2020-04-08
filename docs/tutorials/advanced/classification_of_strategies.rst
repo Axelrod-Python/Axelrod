@@ -28,13 +28,24 @@ Note that instances of the class also have this classifier::
     >>> s.classifier == expected_dictionary
     True
 
-and that we can retrieve individual entries from that :code:`classifier` dictionary::
+The instance starts with a copy of the class's classifier dictionary, but is
+allowed to change this classifier dictionary at any point, and many
+strategies do so upon initialization.
 
-    >>> s = axl.TitForTat
-    >>> s.classifier['memory_depth']
+In addition to the classifier dictionary, each classifier is defined with
+some logic that maps classifier definitions to values.  To learn the
+classification of a strategy, we first look in the strategy's classifier
+dictionary, then if the key is not present, then we refer to this logic.
+This logic must be defined for a class, and not specific instances.
+
+To lookup the classifier of a strategy, using the classifier dict, or the
+strategy's logic as default, we use :code:`Classifiers[<classifier>](
+<strategy>)`::
+
+    >>> from axelrod import Classifiers
+    >>> Classifiers['memory_depth'](axl.TitForTat)
     1
-    >>> s = axl.Random
-    >>> s.classifier['stochastic']
+    >>> Classifiers['stochastic'](axl.Random())
     True
 
 We can use this classification to generate sets of strategies according to
@@ -103,12 +114,12 @@ Some strategies have been classified as having a particularly long run time::
     18
 
 Strategies that :code:`manipulate_source`, :code:`manipulate_state`
-and/or :code:`inspect_source` return :code:`False` for the :code:`obey_axelrod`
-function::
+and/or :code:`inspect_source` return :code:`False` for the
+:code:`Classifier.obey_axelrod` function::
 
     >>> s = axl.MindBender()
-    >>> axl.obey_axelrod(s)
+    >>> axl.Classifiers.obey_axelrod(s)
     False
     >>> s = axl.TitForTat()
-    >>> axl.obey_axelrod(s)
+    >>> axl.Classifiers.obey_axelrod(s)
     True

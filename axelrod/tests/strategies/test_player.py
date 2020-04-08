@@ -15,7 +15,9 @@ from hypothesis.strategies import integers, sampled_from
 C, D = axl.Action.C, axl.Action.D
 
 short_run_time_short_mem = [
-    s for s in axl.short_run_time_strategies if s().classifier["memory_depth"] <= 10
+    s
+    for s in axl.short_run_time_strategies
+    if axl.Classifiers["memory_depth"](s()) <= 10
 ]
 
 
@@ -52,7 +54,6 @@ class ParameterisedTestPlayer(axl.Player):
 
 
 class TestPlayerClass(unittest.TestCase):
-
     name = "Player"
     player = axl.Player
     classifier = {"stochastic": False}
@@ -370,7 +371,8 @@ class TestPlayer(unittest.TestCase):
             player = self.player()
             self.assertEqual(len(player.history), 0)
             self.assertEqual(
-                player.match_attributes, {"length": -1, "game": axl.DefaultGame, "noise": 0}
+                player.match_attributes,
+                {"length": -1, "game": axl.DefaultGame, "noise": 0},
             )
             self.assertEqual(player.cooperations, 0)
             self.assertEqual(player.defections, 0)
@@ -503,13 +505,20 @@ class TestPlayer(unittest.TestCase):
         """
         Test that the memory depth is indeed an upper bound.
         """
+
+        def get_memory_depth_or_zero(player):
+            # Some of the test strategies have no entry in the classifiers
+            # table, so there isn't logic to load default value of zero.
+            memory = axl.Classifiers["memory_depth"](player)
+            return memory if memory else 0
+
         player = self.player()
-        memory = player.classifier["memory_depth"]
+        memory = get_memory_depth_or_zero(player)
         if memory < float("inf"):
             for strategy in strategies:
                 player.reset()
                 opponent = strategy()
-                max_memory = max(memory, opponent.classifier["memory_depth"])
+                max_memory = max(memory, get_memory_depth_or_zero(opponent))
                 self.assertTrue(
                     test_memory(
                         player=player,
@@ -519,7 +528,8 @@ class TestPlayer(unittest.TestCase):
                         memory_length=max_memory,
                     ),
                     msg="{} failed for seed={} and opponent={}".format(
-                        player.name, seed, opponent),
+                        player.name, seed, opponent
+                    ),
                 )
 
     def versus_test(
@@ -605,10 +615,10 @@ class TestPlayer(unittest.TestCase):
         )
         for key in TestOpponent.classifier:
             self.assertEqual(
-                player.classifier[key],
+                axl.Classifiers[key](player),
                 self.expected_classifier[key],
                 msg="%s - Behaviour: %s != Expected Behaviour: %s"
-                % (key, player.classifier[key], self.expected_classifier[key]),
+                % (key, axl.Classifiers[key](player), self.expected_classifier[key]),
             )
 
 

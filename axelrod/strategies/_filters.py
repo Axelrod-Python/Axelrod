@@ -1,6 +1,8 @@
 import operator
 from collections import namedtuple
 
+from axelrod import Classifiers
+
 
 def passes_operator_filter(player, classifier_key, value, operator):
     """
@@ -43,7 +45,7 @@ def passes_operator_filter(player, classifier_key, value, operator):
         True if the value from the strategy's classifier dictionary matches
         the value and operator passed to the function.
     """
-    classifier_value = player.classifier[classifier_key]
+    classifier_value = Classifiers[classifier_key](player)
     return operator(classifier_value, value)
 
 
@@ -85,7 +87,7 @@ def passes_in_list_filter(player, classifier_key, value):
     """
     result = True
     for entry in value:
-        if entry not in player.classifier[classifier_key]:
+        if entry not in Classifiers[classifier_key](player):
             result = False
     return result
 

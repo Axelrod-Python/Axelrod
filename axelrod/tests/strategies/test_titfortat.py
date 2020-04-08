@@ -10,7 +10,7 @@ from axelrod.tests.property import strategy_lists
 from hypothesis import given
 from hypothesis.strategies import integers
 
-from .test_player import TestMatch, TestPlayer
+from .test_player import TestPlayer
 
 C, D = axl.Action.C, axl.Action.D
 
@@ -71,7 +71,6 @@ class TestTitForTat(TestPlayer):
 
 
 class TestTitFor2Tats(TestPlayer):
-
     name = "Tit For 2 Tats"
     player = axl.TitFor2Tats
     expected_classifier = {
@@ -106,7 +105,6 @@ class TestTitFor2Tats(TestPlayer):
 
 
 class TestTwoTitsForTat(TestPlayer):
-
     name = "Two Tits For Tat"
     player = axl.TwoTitsForTat
     expected_classifier = {
@@ -132,7 +130,6 @@ class TestTwoTitsForTat(TestPlayer):
 
 
 class TestDynamicTwoTitsForTat(TestPlayer):
-
     name = "Dynamic Two Tits For Tat"
     player = axl.DynamicTwoTitsForTat
     expected_classifier = {
@@ -162,7 +159,6 @@ class TestDynamicTwoTitsForTat(TestPlayer):
 
 
 class TestBully(TestPlayer):
-
     name = "Bully"
     player = axl.Bully
     expected_classifier = {
@@ -187,7 +183,6 @@ class TestBully(TestPlayer):
 
 
 class TestSneakyTitForTat(TestPlayer):
-
     name = "Sneaky Tit For Tat"
     player = axl.SneakyTitForTat
     expected_classifier = {
@@ -210,7 +205,6 @@ class TestSneakyTitForTat(TestPlayer):
 
 
 class TestSuspiciousTitForTat(TestPlayer):
-
     name = "Suspicious Tit For Tat"
     player = axl.SuspiciousTitForTat
     expected_classifier = {
@@ -236,7 +230,6 @@ class TestSuspiciousTitForTat(TestPlayer):
 
 
 class TestAntiTitForTat(TestPlayer):
-
     name = "Anti Tit For Tat"
     player = axl.AntiTitForTat
     expected_classifier = {
@@ -254,7 +247,6 @@ class TestAntiTitForTat(TestPlayer):
 
 
 class TestHardTitForTat(TestPlayer):
-
     name = "Hard Tit For Tat"
     player = axl.HardTitForTat
     expected_classifier = {
@@ -279,7 +271,6 @@ class TestHardTitForTat(TestPlayer):
 
 
 class TestHardTitFor2Tats(TestPlayer):
-
     name = "Hard Tit For 2 Tats"
     player = axl.HardTitFor2Tats
     expected_classifier = {
@@ -299,7 +290,6 @@ class TestHardTitFor2Tats(TestPlayer):
 
 
 class TestOmegaTFT(TestPlayer):
-
     name = "Omega TFT: 3, 8"
     player = axl.OmegaTFT
 
@@ -325,7 +315,6 @@ class TestOmegaTFT(TestPlayer):
 
 
 class TestGradual(TestPlayer):
-
     name = "Gradual"
     player = axl.Gradual
     expected_classifier = {
@@ -345,10 +334,7 @@ class TestGradual(TestPlayer):
         self.versus_test(
             opponent,
             expected_actions=actions,
-            attrs={
-                "calm_count": 0,
-                "punish_count": 0,
-            },
+            attrs={"calm_count": 0, "punish_count": 0,},
         )
 
         opponent = axl.MockPlayer(actions=[D])
@@ -356,10 +342,7 @@ class TestGradual(TestPlayer):
         self.versus_test(
             opponent,
             expected_actions=actions,
-            attrs={
-                "calm_count": 0,
-                "punish_count": 0,
-            },
+            attrs={"calm_count": 0, "punish_count": 0,},
         )
 
         opponent = axl.MockPlayer(actions=[D, C])
@@ -367,10 +350,7 @@ class TestGradual(TestPlayer):
         self.versus_test(
             opponent,
             expected_actions=actions,
-            attrs={
-                "calm_count": 2,
-                "punish_count": 0,
-            },
+            attrs={"calm_count": 2, "punish_count": 0,},
         )
 
         opponent = axl.MockPlayer(actions=[D, C, C])
@@ -378,10 +358,7 @@ class TestGradual(TestPlayer):
         self.versus_test(
             opponent,
             expected_actions=actions,
-            attrs={
-                "calm_count": 1,
-                "punish_count": 0,
-            },
+            attrs={"calm_count": 1, "punish_count": 0,},
         )
 
         opponent = axl.MockPlayer(actions=[D, C, D, C])
@@ -389,10 +366,7 @@ class TestGradual(TestPlayer):
         self.versus_test(
             opponent,
             expected_actions=actions,
-            attrs={
-                "calm_count": 0,
-                "punish_count": 0,
-            },
+            attrs={"calm_count": 0, "punish_count": 0,},
         )
 
         opponent = axl.MockPlayer(actions=[D, C, D, C, C])
@@ -400,10 +374,7 @@ class TestGradual(TestPlayer):
         self.versus_test(
             opponent,
             expected_actions=actions,
-            attrs={
-                "calm_count": 0,
-                "punish_count": 0,
-            },
+            attrs={"calm_count": 0, "punish_count": 0,},
         )
 
         opponent = axl.MockPlayer(actions=[D, C, D, C, C, C])
@@ -411,10 +382,7 @@ class TestGradual(TestPlayer):
         self.versus_test(
             opponent,
             expected_actions=actions,
-            attrs={
-                "calm_count": 0,
-                "punish_count": 0,
-            },
+            attrs={"calm_count": 0, "punish_count": 0,},
         )
 
         opponent = axl.MockPlayer(actions=[D, C, D, C, C, C, D, C])
@@ -422,10 +390,7 @@ class TestGradual(TestPlayer):
         self.versus_test(
             opponent,
             expected_actions=actions,
-            attrs={
-                "calm_count": 2,
-                "punish_count": 2,
-            },
+            attrs={"calm_count": 2, "punish_count": 2,},
         )
 
         opponent = axl.MockPlayer(actions=[D, C, D, C, C, D, D, D])
@@ -433,72 +398,68 @@ class TestGradual(TestPlayer):
         self.versus_test(
             opponent,
             expected_actions=actions,
-            attrs={
-                "calm_count": 2,
-                "punish_count": 1,
-            },
+            attrs={"calm_count": 2, "punish_count": 1,},
         )
 
         opponent = axl.Defector()
         actions = [
-                (C, D),
-                (D, D), # 1 defection as a response to the 1 defection by opponent
-                (C, D),
-                (C, D),
-                (D, D), # starts defecting after a total of 4 defections by the opponent
-                (D, D),
-                (D, D),
-                (D, D), # 4 defections
-                (C, D),
-                (C, D),
-                (D, D), # Start defecting after a total of 10 defections by the opponent
-                (D, D),
-                (D, D),
-                (D, D),
-                (D, D),
-                (D, D),
-                (D, D),
-                (D, D),
-                (D, D),
-                (D, D),  # 10 defections
-                (C, D),
-                (C, D),
-                (D, D), # starts defecting after 22 defections by the opponent
-                (D, D),
-                (D, D),
-                (D, D),
-                (D, D),
-                (D, D),
-                (D, D),
-                (D, D),
-                (D, D),
-                (D, D),
-                (D, D),
-                (D, D),
-                (D, D),
-                (D, D),
-                (D, D),
-                (D, D),
-                (D, D),
-                (D, D),
-                (D, D),
-                (D, D),
-                (D, D),
-                (D, D), # 22 defections
-                (C, D),
-                (C, D),
-                (D, D),
-                (D, D),
-                (D, D),
-                (D, D),
+            (C, D),
+            (D, D),  # 1 defection as a response to the 1 defection by opponent
+            (C, D),
+            (C, D),
+            (D, D),
+            # starts defecting after a total of 4 defections by the opponent
+            (D, D),
+            (D, D),
+            (D, D),  # 4 defections
+            (C, D),
+            (C, D),
+            (D, D),
+            # Start defecting after a total of 10 defections by the opponent
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),  # 10 defections
+            (C, D),
+            (C, D),
+            (D, D),  # starts defecting after 22 defections by the opponent
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),  # 22 defections
+            (C, D),
+            (C, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, D),
         ]
         self.versus_test(
             opponent,
             expected_actions=actions,
-            attrs={
-                "calm_count": 2,
-                "punish_count": 42,
-            },
+            attrs={"calm_count": 2, "punish_count": 42,},
         )
 
     def test_specific_set_of_results(self):
@@ -510,45 +471,44 @@ class TestGradual(TestPlayer):
         to a memory one player that start by defecting and only cooperates if
         both players cooperated in the previous round.
         """
-        mistrust_with_bug = axl.MemoryOnePlayer(
-                initial=D,
-                four_vector=(1, 0, 0, 0),
-                )
+        mistrust_with_bug = axl.MemoryOnePlayer(initial=D, four_vector=(1, 0, 0, 0),)
         players = [
-               self.player(),
-               axl.TitForTat(),
-               axl.GoByMajority(),
-               axl.Grudger(),
-               axl.WinStayLoseShift(),
-               axl.Prober(),
-               axl.Defector(),
-               mistrust_with_bug,
-               axl.Cooperator(),
-               axl.CyclerCCD(),
-               axl.CyclerDDC(),
+            self.player(),
+            axl.TitForTat(),
+            axl.GoByMajority(),
+            axl.Grudger(),
+            axl.WinStayLoseShift(),
+            axl.Prober(),
+            axl.Defector(),
+            mistrust_with_bug,
+            axl.Cooperator(),
+            axl.CyclerCCD(),
+            axl.CyclerDDC(),
         ]
         axl.seed(1)
         tournament = axl.Tournament(players, turns=1000, repetitions=1)
         results = tournament.play(progress_bar=False)
-        scores = [round(average_score_per_turn * 1000, 1)
-                  for average_score_per_turn in results.payoff_matrix[0]]
+        scores = [
+            round(average_score_per_turn * 1000, 1)
+            for average_score_per_turn in results.payoff_matrix[0]
+        ]
         expected_scores = [
-                3000.0,
-                3000.0,
-                3000.0,
-                3000.0,
-                3000.0,
-                2999.0,
-                983.0,
-                983.0,
-                3000.0,
-                3596.0,
-                2302.0,
-                ]
+            3000.0,
+            3000.0,
+            3000.0,
+            3000.0,
+            3000.0,
+            2999.0,
+            983.0,
+            983.0,
+            3000.0,
+            3596.0,
+            2302.0,
+        ]
         self.assertEqual(scores, expected_scores)
 
-class TestOriginalGradual(TestPlayer):
 
+class TestOriginalGradual(TestPlayer):
     name = "Original Gradual"
     player = axl.OriginalGradual
     expected_classifier = {
@@ -694,45 +654,47 @@ class TestOriginalGradual(TestPlayer):
         See https://github.com/Axelrod-Python/Axelrod/issues/1294 for another
         discussion of this.
         """
-        players = [axl.Cooperator(),
-                   axl.Defector(),
-                   axl.Random(),
-                   axl.TitForTat(),
-                   axl.Grudger(),
-                   axl.CyclerDDC(),
-                   axl.CyclerCCD(),
-                   axl.GoByMajority(),
-                   axl.SuspiciousTitForTat(),
-                   axl.Prober(),
-                   self.player(),
-                   axl.WinStayLoseShift(),
-                   ]
+        players = [
+            axl.Cooperator(),
+            axl.Defector(),
+            axl.Random(),
+            axl.TitForTat(),
+            axl.Grudger(),
+            axl.CyclerDDC(),
+            axl.CyclerCCD(),
+            axl.GoByMajority(),
+            axl.SuspiciousTitForTat(),
+            axl.Prober(),
+            self.player(),
+            axl.WinStayLoseShift(),
+        ]
 
         axl.seed(1)
         turns = 1000
         tournament = axl.Tournament(players, turns=turns, repetitions=1)
         results = tournament.play(progress_bar=False)
-        scores = [round(average_score_per_turn * 1000, 1)
-                  for average_score_per_turn in results.payoff_matrix[-2]]
+        scores = [
+            round(average_score_per_turn * 1000, 1)
+            for average_score_per_turn in results.payoff_matrix[-2]
+        ]
         expected_scores = [
-                    3000.0,
-                    915.0,
-                    2763.0,
-                    3000.0,
-                    3000.0,
-                    2219.0,
-                    3472.0,
-                    3000.0,
-                    2996.0,
-                    2999.0,
-                    3000.0,
-                    3000.0,
-                ]
+            3000.0,
+            915.0,
+            2763.0,
+            3000.0,
+            3000.0,
+            2219.0,
+            3472.0,
+            3000.0,
+            2996.0,
+            2999.0,
+            3000.0,
+            3000.0,
+        ]
         self.assertEqual(scores, expected_scores)
 
 
 class TestContriteTitForTat(TestPlayer):
-
     name = "Contrite Tit For Tat"
     player = axl.ContriteTitForTat
     expected_classifier = {
@@ -745,7 +707,7 @@ class TestContriteTitForTat(TestPlayer):
     }
 
     deterministic_strategies = [
-        s for s in axl.strategies if not s().classifier["stochastic"]
+        s for s in axl.strategies if not axl.Classifiers["stochastic"](s())
     ]
 
     def test_init(self):
@@ -802,7 +764,6 @@ class TestContriteTitForTat(TestPlayer):
 
 
 class TestAdaptiveTitForTat(TestPlayer):
-
     name = "Adaptive Tit For Tat: 0.5"
     player = axl.AdaptiveTitForTat
     expected_classifier = {
@@ -858,7 +819,6 @@ class TestSpitefulTitForTat(TestPlayer):
 
 
 class TestSlowTitForTwoTats2(TestPlayer):
-
     name = "Slow Tit For Two Tats 2"
     player = axl.SlowTitForTwoTats2
     expected_classifier = {
@@ -1054,9 +1014,7 @@ class TestNTitsForMTats(TestPlayer):
         )
         actions = [(C, D), (D, D), (D, D)]
         self.versus_test(
-            opponent=axl.Defector(),
-            expected_actions=actions,
-            init_kwargs=init_kwargs,
+            opponent=axl.Defector(), expected_actions=actions, init_kwargs=init_kwargs,
         )
 
         # Cooperator test_strategy
@@ -1096,9 +1054,9 @@ class TestNTitsForMTats(TestPlayer):
         self.versus_test(opponent=opponent, expected_actions=actions)
 
     def test_varying_memory_depth(self):
-        self.assertEqual(self.player(1, 1).classifier["memory_depth"], 1)
-        self.assertEqual(self.player(0, 3).classifier["memory_depth"], 3)
-        self.assertEqual(self.player(5, 3).classifier["memory_depth"], 5)
+        self.assertEqual(axl.Classifiers["memory_depth"](self.player(1, 1)), 1)
+        self.assertEqual(axl.Classifiers["memory_depth"](self.player(0, 3)), 3)
+        self.assertEqual(axl.Classifiers["memory_depth"](self.player(5, 3)), 5)
 
 
 class TestMichaelos(TestPlayer):
@@ -1118,7 +1076,6 @@ class TestMichaelos(TestPlayer):
     }
 
     def test_strategy(self):
-
         actions = [(C, C), (C, C), (C, C), (D, C)]
         self.versus_test(
             axl.Cooperator(),
@@ -1207,9 +1164,7 @@ class TestRandomTitForTat(TestPlayer):
         )
 
         actions = [(C, D), (D, D), (D, D)]
-        self.versus_test(
-            axl.Defector(), expected_actions=actions, init_kwargs={"p": 0}
-        )
+        self.versus_test(axl.Defector(), expected_actions=actions, init_kwargs={"p": 0})
 
         actions = [(C, C), (C, C), (D, C), (C, C)]
         self.versus_test(
@@ -1217,9 +1172,7 @@ class TestRandomTitForTat(TestPlayer):
         )
 
         actions = [(C, D), (D, D), (C, D), (D, D)]
-        self.versus_test(
-            axl.Defector(), expected_actions=actions, init_kwargs={"p": 1}
-        )
+        self.versus_test(axl.Defector(), expected_actions=actions, init_kwargs={"p": 1})
 
         actions = [(C, C), (C, C), (D, C), (C, C), (D, C), (C, C)]
         self.versus_test(axl.Cooperator(), expected_actions=actions, seed=2)
@@ -1236,4 +1189,4 @@ class TestRandomTitForTat(TestPlayer):
         """
         for p in [0, 1]:
             player = axl.RandomTitForTat(p=p)
-            self.assertFalse(player.classifier["stochastic"])
+            self.assertFalse(axl.Classifiers["stochastic"](player))

@@ -1,13 +1,13 @@
 import random
 
-from axelrod.action import Action
-from axelrod.player import Player, obey_axelrod
-from axelrod.strategies import TitForTat
-from axelrod.strategy_transformers import NiceTransformer
-
 import numpy as np
 from numpy.random import choice
 
+from axelrod.action import Action
+from axelrod.classifier import Classifiers
+from axelrod.player import Player
+from axelrod.strategies import TitForTat
+from axelrod.strategy_transformers import NiceTransformer
 from ._strategies import all_strategies
 from .hunter import (
     AlternatorHunter,
@@ -20,7 +20,7 @@ from .hunter import (
 )
 
 # Needs to be computed manually to prevent circular dependency
-ordinary_strategies = [s for s in all_strategies if obey_axelrod(s)]
+ordinary_strategies = [s for s in all_strategies if Classifiers.obey_axelrod(s())]
 
 C, D = Action.C, Action.D
 
@@ -69,10 +69,10 @@ class MetaPlayer(Player):
             "manipulates_source",
             "manipulates_state",
         ]:
-            self.classifier[key] = any(t.classifier[key] for t in self.team)
+            self.classifier[key] = any(map(Classifiers[key], self.team))
 
         for t in self.team:
-            self.classifier["makes_use_of"].update(t.classifier["makes_use_of"])
+            self.classifier["makes_use_of"].update(Classifiers["makes_use_of"](t))
 
         self._last_results = None
 
@@ -332,7 +332,7 @@ class MetaMajorityMemoryOne(MetaMajority):
     name = "Meta Majority Memory One"
 
     def __init__(self):
-        team = [s for s in ordinary_strategies if s().classifier["memory_depth"] <= 1]
+        team = [s for s in ordinary_strategies if Classifiers["memory_depth"](s()) <= 1]
         super().__init__(team=team)
         self.classifier["long_run_time"] = False
 
@@ -351,7 +351,7 @@ class MetaMajorityFiniteMemory(MetaMajority):
         team = [
             s
             for s in ordinary_strategies
-            if s().classifier["memory_depth"] < float("inf")
+            if Classifiers["memory_depth"](s()) < float("inf")
         ]
         super().__init__(team=team)
 
@@ -370,7 +370,7 @@ class MetaMajorityLongMemory(MetaMajority):
         team = [
             s
             for s in ordinary_strategies
-            if s().classifier["memory_depth"] == float("inf")
+            if Classifiers["memory_depth"](s()) == float("inf")
         ]
         super().__init__(team=team)
 
@@ -386,7 +386,7 @@ class MetaWinnerMemoryOne(MetaWinner):
     name = "Meta Winner Memory One"
 
     def __init__(self):
-        team = [s for s in ordinary_strategies if s().classifier["memory_depth"] <= 1]
+        team = [s for s in ordinary_strategies if Classifiers["memory_depth"](s()) <= 1]
         super().__init__(team=team)
         self.classifier["long_run_time"] = False
 
@@ -405,7 +405,7 @@ class MetaWinnerFiniteMemory(MetaWinner):
         team = [
             s
             for s in ordinary_strategies
-            if s().classifier["memory_depth"] < float("inf")
+            if Classifiers["memory_depth"](s()) < float("inf")
         ]
         super().__init__(team=team)
 
@@ -424,7 +424,7 @@ class MetaWinnerLongMemory(MetaWinner):
         team = [
             s
             for s in ordinary_strategies
-            if s().classifier["memory_depth"] == float("inf")
+            if Classifiers["memory_depth"](s()) == float("inf")
         ]
         super().__init__(team=team)
 
@@ -440,7 +440,7 @@ class MetaWinnerDeterministic(MetaWinner):
     name = "Meta Winner Deterministic"
 
     def __init__(self):
-        team = [s for s in ordinary_strategies if not s().classifier["stochastic"]]
+        team = [s for s in ordinary_strategies if not Classifiers["stochastic"](s())]
         super().__init__(team=team)
         self.classifier["stochastic"] = False
 
@@ -456,7 +456,7 @@ class MetaWinnerStochastic(MetaWinner):
     name = "Meta Winner Stochastic"
 
     def __init__(self):
-        team = [s for s in ordinary_strategies if s().classifier["stochastic"]]
+        team = [s for s in ordinary_strategies if Classifiers["stochastic"](s())]
         super().__init__(team=team)
 
 
@@ -512,7 +512,7 @@ class NMWEDeterministic(NiceMetaWinnerEnsemble):
     name = "NMWE Deterministic"
 
     def __init__(self):
-        team = [s for s in ordinary_strategies if not s().classifier["stochastic"]]
+        team = [s for s in ordinary_strategies if not Classifiers["stochastic"](s())]
         super().__init__(team=team)
         self.classifier["stochastic"] = True
 
@@ -528,7 +528,7 @@ class NMWEStochastic(NiceMetaWinnerEnsemble):
     name = "NMWE Stochastic"
 
     def __init__(self):
-        team = [s for s in ordinary_strategies if s().classifier["stochastic"]]
+        team = [s for s in ordinary_strategies if Classifiers["stochastic"](s())]
         super().__init__(team=team)
 
 
@@ -546,7 +546,7 @@ class NMWEFiniteMemory(NiceMetaWinnerEnsemble):
         team = [
             s
             for s in ordinary_strategies
-            if s().classifier["memory_depth"] < float("inf")
+            if Classifiers["memory_depth"](s()) < float("inf")
         ]
         super().__init__(team=team)
 
@@ -565,7 +565,7 @@ class NMWELongMemory(NiceMetaWinnerEnsemble):
         team = [
             s
             for s in ordinary_strategies
-            if s().classifier["memory_depth"] == float("inf")
+            if Classifiers["memory_depth"](s()) == float("inf")
         ]
         super().__init__(team=team)
 
@@ -581,7 +581,7 @@ class NMWEMemoryOne(NiceMetaWinnerEnsemble):
     name = "NMWE Memory One"
 
     def __init__(self):
-        team = [s for s in ordinary_strategies if s().classifier["memory_depth"] <= 1]
+        team = [s for s in ordinary_strategies if Classifiers["memory_depth"](s()) <= 1]
         super().__init__(team=team)
         self.classifier["long_run_time"] = False
 
@@ -627,7 +627,10 @@ class MemoryDecay(MetaPlayer):
         start_strategy_duration: int = 15,
     ):
         super().__init__(team=[start_strategy])
+        # This strategy is stochastic even if none of the team is.  The
+        # MetaPlayer initializer will set stochastic to be False in that case.
         self.classifier["stochastic"] = True
+
         self.p_memory_delete = p_memory_delete
         self.p_memory_alter = p_memory_alter
         self.loss_value = loss_value

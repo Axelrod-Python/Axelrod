@@ -43,4 +43,4 @@ class TestRandom(TestPlayer):
         """Test classification when p is 0 or 1"""
         for p in [0, 1]:
             player = axl.Random(p=p)
-            self.assertFalse(player.classifier["stochastic"])
+            self.assertFalse(axl.Classifiers["stochastic"](player))
