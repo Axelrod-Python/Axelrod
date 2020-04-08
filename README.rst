@@ -131,8 +131,10 @@ contributors <https://github.com/Axelrod-Python/Axelrod/graphs/contributors>`_.
 The Core developers of the project are:
 
 - `drvinceknight <https://github.com/drvinceknight>`_
+- `gaffney2010 <https://github.com/gaffney2010>`_
 - `marcharper <https://github.com/marcharper>`_
 - `meatballs <https://github.com/meatballs>`_
+- `nikoleta-v3 <https://github.com/Nikoleta-v3>`_
 
 .. |Join the chat at https://gitter.im/Axelrod-Python/Axelrod| image:: https://badges.gitter.im/Join%20Chat.svg
    :target: https://gitter.im/Axelrod-Python/Axelrod?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
