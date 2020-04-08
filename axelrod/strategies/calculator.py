@@ -36,7 +36,8 @@ class Calculator(Player):
     def strategy(self, opponent: Player) -> Action:
         turn = len(self.history)
         if turn > 0:
-            self.joss_instance.history.append(self.history[-1], opponent.history[-1])
+            self.joss_instance.history.append(self.history[-1],
+                                              opponent.history[-1])
         if turn == 20:
             self.cycle = detect_cycle(opponent.history)
             return self.extended_strategy(opponent)

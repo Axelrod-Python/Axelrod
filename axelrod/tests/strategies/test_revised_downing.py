@@ -4,7 +4,6 @@ from .test_player import TestPlayer
 
 C, D = axl.Action.C, axl.Action.D
 
-
 class TestRevisedDowning(TestPlayer):
 
     name = "Revised Downing"

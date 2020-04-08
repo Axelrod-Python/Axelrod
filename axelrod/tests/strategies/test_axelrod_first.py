@@ -168,7 +168,9 @@ class TestFirstByGraaskamp(TestPlayer):
 
         # Against defector
         actions = [(C, D)] + [(D, D)] * 55  # 56 turns
-        self.versus_test(axl.Defector(), expected_actions=actions, attrs=expected_attrs)
+        self.versus_test(
+            axl.Defector(), expected_actions=actions, attrs=expected_attrs
+        )
 
         # Against cooperator
         actions = [(C, C)] * 50 + [(D, C)] + [(C, C)] * 5
@@ -567,11 +569,8 @@ class TestFirstByTidemanAndChieruzzi(TestPlayer):
         # Cooperator Test does noot defect if game length is unknown
         opponent = axl.Cooperator()
         actions = [(C, C), (C, C), (C, C), (C, C)]
-        self.versus_test(
-            opponent,
-            expected_actions=actions,
-            match_attributes={"length": float("inf")},
-        )
+        self.versus_test(opponent, expected_actions=actions,
+                match_attributes={"length": float("inf")})
 
         # Defector Test
         opponent = axl.Defector()

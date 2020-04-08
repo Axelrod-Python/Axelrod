@@ -155,7 +155,8 @@ def attached_complete_graphs(length, loops=True, directed=False):
     for cluster in range(2):
         for i in range(length):
             for j in range(i + 1, length):
-                edges.append(("{}:{}".format(cluster, i), "{}:{}".format(cluster, j)))
+                edges.append(("{}:{}".format(cluster, i),
+                              "{}:{}".format(cluster, j)))
     # Attach at one node
     edges.append(("0:0", "1:0"))
     graph = Graph(directed=directed, edges=edges)

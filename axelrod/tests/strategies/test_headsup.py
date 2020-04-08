@@ -54,7 +54,11 @@ class TestZDGTFT2vsBully(TestMatch):
 
     def test_rounds(self):
         self.versus_test(
-            axl.ZDGTFT2(), axl.Bully(), [C, D, D, C, C, C], [D, D, C, C, D, D], seed=2,
+            axl.ZDGTFT2(),
+            axl.Bully(),
+            [C, D, D, C, C, C],
+            [D, D, C, C, D, D],
+            seed=2,
         )
 
 
@@ -76,7 +80,10 @@ class FoolMeOncevsBully(TestMatch):
 
     def test_rounds(self):
         self.versus_test(
-            axl.FoolMeOnce(), axl.Bully(), [C, C, D, D, D, D], [D, D, D, C, C, C],
+            axl.FoolMeOnce(),
+            axl.Bully(),
+            [C, C, D, D, D, D],
+            [D, D, D, C, C, C],
         )
 
 
@@ -94,7 +101,10 @@ class GrudgervsSTFT(TestMatch):
 
     def test_rounds(self):
         self.versus_test(
-            axl.Grudger(), axl.SuspiciousTitForTat(), [C] + [D] * 9, [D, C] + [D] * 8,
+            axl.Grudger(),
+            axl.SuspiciousTitForTat(),
+            [C] + [D] * 9,
+            [D, C] + [D] * 8,
         )
 
 
@@ -103,5 +113,8 @@ class TestWSLSvsBully(TestMatch):
 
     def test_rounds(self):
         self.versus_test(
-            axl.WinStayLoseShift(), axl.Bully(), [C, D, C, C, D], [D, D, C, D, D],
+            axl.WinStayLoseShift(),
+            axl.Bully(),
+            [C, D, C, C, D],
+            [D, D, C, D, D],
         )

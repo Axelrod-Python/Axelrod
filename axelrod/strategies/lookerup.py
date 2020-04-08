@@ -6,11 +6,7 @@ import numpy.random as random
 from numpy.random import choice
 
 from axelrod.action import Action, actions_to_str, str_to_actions
-from axelrod.evolvable_player import (
-    EvolvablePlayer,
-    InsufficientParametersError,
-    crossover_dictionaries,
-)
+from axelrod.evolvable_player import EvolvablePlayer, InsufficientParametersError, crossover_dictionaries
 from axelrod.player import Player
 
 
@@ -323,7 +319,7 @@ class LookerUp(Player):
         lookup_dict: dict = None,
         initial_actions: tuple = None,
         pattern: Any = None,  # pattern is str or tuple of Action's.
-        parameters: Plays = None,
+        parameters: Plays = None
     ) -> None:
 
         super().__init__()
@@ -408,15 +404,9 @@ class EvolvableLookerUp(LookerUp, EvolvablePlayer):
         initial_actions: tuple = None,
         pattern: Any = None,  # pattern is str or tuple of Action's.
         parameters: Plays = None,
-        mutation_probability: float = None,
+        mutation_probability: float = None
     ) -> None:
-        (
-            lookup_dict,
-            initial_actions,
-            pattern,
-            parameters,
-            mutation_probability,
-        ) = self._normalize_parameters(
+        lookup_dict, initial_actions, pattern, parameters, mutation_probability = self._normalize_parameters(
             lookup_dict, initial_actions, pattern, parameters, mutation_probability
         )
         LookerUp.__init__(
@@ -437,24 +427,14 @@ class EvolvableLookerUp(LookerUp, EvolvablePlayer):
         )
 
     @classmethod
-    def _normalize_parameters(
-        cls,
-        lookup_dict=None,
-        initial_actions=None,
-        pattern=None,
-        parameters=None,
-        mutation_probability=None,
-    ):
+    def _normalize_parameters(cls, lookup_dict=None, initial_actions=None, pattern=None, parameters=None,
+                              mutation_probability=None):
         if lookup_dict and initial_actions:
             # Compute the associated pattern and parameters
             # Map the table keys to namedTuple Plays
             lookup_table = cls._get_lookup_table(lookup_dict, pattern, parameters)
             lookup_dict = lookup_table.dictionary
-            parameters = (
-                lookup_table.player_depth,
-                lookup_table.op_depth,
-                lookup_table.op_openings_depth,
-            )
+            parameters = (lookup_table.player_depth, lookup_table.op_depth, lookup_table.op_openings_depth)
             pattern = tuple(v for k, v in sorted(lookup_dict.items()))
         elif pattern and parameters and initial_actions:
             # Compute the associated lookup table
@@ -470,9 +450,7 @@ class EvolvableLookerUp(LookerUp, EvolvablePlayer):
                 num_actions = max([plays, op_plays, op_start_plays])
                 initial_actions = tuple([choice((C, D)) for _ in range(num_actions)])
         else:
-            raise InsufficientParametersError(
-                "Insufficient Parameters to instantiate EvolvableLookerUp"
-            )
+            raise InsufficientParametersError("Insufficient Parameters to instantiate EvolvableLookerUp")
         # Normalize pattern
         if isinstance(pattern, str):
             pattern = str_to_actions(pattern)
@@ -480,7 +458,7 @@ class EvolvableLookerUp(LookerUp, EvolvablePlayer):
         if mutation_probability is None:
             plays, op_plays, op_start_plays = parameters
             keys = create_lookup_table_keys(plays, op_plays, op_start_plays)
-            mutation_probability = 2.0 / len(keys)
+            mutation_probability = 2. / len(keys)
         return lookup_dict, initial_actions, pattern, parameters, mutation_probability
 
     @classmethod
@@ -517,7 +495,8 @@ class EvolvableLookerUp(LookerUp, EvolvablePlayer):
             if r < self.mutation_probability:
                 initial_actions[i] = initial_actions[i].flip()
         return self.create_new(
-            lookup_dict=lookup_dict, initial_actions=tuple(initial_actions),
+            lookup_dict=lookup_dict,
+            initial_actions=tuple(initial_actions),
         )
 
     def crossover(self, other):

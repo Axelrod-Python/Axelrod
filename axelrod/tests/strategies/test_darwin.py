@@ -45,7 +45,9 @@ class TestDarwin(TestPlayer):
         p1.reset()
 
         self.versus_test(
-            axl.Cooperator(), expected_actions=[(C, C)] * 5, attrs={"genome": [C] * 5},
+            axl.Cooperator(),
+            expected_actions=[(C, C)] * 5,
+            attrs={"genome": [C] * 5},
         )
 
         expected_genome = [D] * 4 + [C]
@@ -67,7 +69,9 @@ class TestDarwin(TestPlayer):
         )
 
         self.versus_test(
-            axl.MindReader(), expected_actions=[(C, D)] * 2, attrs={"genome": [D, C]},
+            axl.MindReader(),
+            expected_actions=[(C, D)] * 2,
+            attrs={"genome": [D, C]},
         )
 
     def test_reset_history_and_attributes(self):

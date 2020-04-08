@@ -37,7 +37,9 @@ class TestEcosystem(unittest.TestCase):
         self.assertEqual(list(set(pops[0])), [0.25])
 
     def test_non_default_population_sizes(self):
-        eco = axl.Ecosystem(self.res_cooperators, population=[0.7, 0.25, 0.03, 0.02])
+        eco = axl.Ecosystem(
+            self.res_cooperators, population=[0.7, 0.25, 0.03, 0.02]
+        )
         pops = eco.population_sizes
         self.assertEqual(eco.num_players, 4)
         self.assertEqual(len(pops), 1)

@@ -70,7 +70,9 @@ class TestMatch(unittest.TestCase):
         self.assertEqual(match.noise, 0)
         self.assertEqual(match.game.RPST(), (3, 1, 0, 5))
 
-        self.assertEqual(match.players[0].match_attributes["length"], axl.DEFAULT_TURNS)
+        self.assertEqual(
+            match.players[0].match_attributes["length"], axl.DEFAULT_TURNS
+        )
         self.assertEqual(match._cache, {})
 
     def test_example_prob_end(self):
@@ -95,7 +97,9 @@ class TestMatch(unittest.TestCase):
     def test_non_default_attributes(self, turns, game):
         p1, p2 = axl.Cooperator(), axl.Cooperator()
         match_attributes = {"length": 500, "game": game, "noise": 0.5}
-        match = axl.Match((p1, p2), turns, game=game, match_attributes=match_attributes)
+        match = axl.Match(
+            (p1, p2), turns, game=game, match_attributes=match_attributes
+        )
         self.assertEqual(match.players[0].match_attributes["length"], 500)
         self.assertEqual(match.players[0].match_attributes["noise"], 0.5)
 
@@ -158,7 +162,9 @@ class TestMatch(unittest.TestCase):
         match = axl.Match(players, 3, deterministic_cache=cache)
         expected_result = [(C, D), (C, D), (C, D)]
         self.assertEqual(match.play(), expected_result)
-        self.assertEqual(cache[(axl.Cooperator(), axl.Defector())], expected_result)
+        self.assertEqual(
+            cache[(axl.Cooperator(), axl.Defector())], expected_result
+        )
 
         # a deliberately incorrect result so we can tell it came from the cache
         expected_result = [(C, C), (D, D), (D, C), (C, C), (C, D)]
@@ -182,7 +188,8 @@ class TestMatch(unittest.TestCase):
         self.assertEqual(match.play(), expected_result_5_turn)
         # The cache should now hold the 5-turn result..
         self.assertEqual(
-            cache[(axl.Cooperator(), axl.Defector())], expected_result_5_turn
+            cache[(axl.Cooperator(), axl.Defector())],
+            expected_result_5_turn
         )
 
     def test_cache_doesnt_shrink(self):
@@ -201,7 +208,8 @@ class TestMatch(unittest.TestCase):
         self.assertEqual(match.play(), expected_result_3_turn)
         # The cache should still hold the 5.
         self.assertEqual(
-            cache[(axl.Cooperator(), axl.Defector())], expected_result_5_turn
+            cache[(axl.Cooperator(), axl.Defector())],
+            expected_result_5_turn
         )
 
     def test_scores(self):

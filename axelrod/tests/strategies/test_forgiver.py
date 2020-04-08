@@ -28,7 +28,7 @@ class TestForgiver(TestPlayer):
         self.versus_test(axl.Defector(), expected_actions=[(C, D)] + [(D, D)] * 10)
 
     def test_cooperates_if_opponent_defections_is_ten_pct_and_defects_if_opponent_defections_gt_ten_pct(
-        self,
+        self
     ):
         final_action_lowers_defections_to_ten_percent = [D] + [C] * 9
         expected = [(C, D)] + [(D, C)] * 9
@@ -97,5 +97,6 @@ class TestForgivingTitForTat(TestPlayer):
         maintain_ten_pct = defections_at_ten_pct + ([C] * 9 + [D]) * 3
         now_cooperates = tft + ([(C, C)] * 9 + [(C, D)]) * 3
         self.versus_test(
-            axl.MockPlayer(actions=maintain_ten_pct), expected_actions=now_cooperates,
+            axl.MockPlayer(actions=maintain_ten_pct),
+            expected_actions=now_cooperates,
         )

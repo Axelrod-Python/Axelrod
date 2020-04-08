@@ -8,6 +8,7 @@ from numpy.testing import assert_array_almost_equal
 from axelrod.eigen import _normalise, principal_eigenvector
 
 
+
 class FunctionCases(unittest.TestCase):
     def test_identity_matrices(self):
         for size in range(2, 6):

@@ -35,7 +35,9 @@ class TestCalculator(TestPlayer):
         self.versus_test(
             axl.Alternator(), expected_actions=twenty_test_actions, seed=seed
         )
-        self.versus_test(axl.Alternator(), expected_actions=expected_actions, seed=seed)
+        self.versus_test(
+            axl.Alternator(), expected_actions=expected_actions, seed=seed
+        )
 
     def test_twenty_rounds_joss_then_tit_for_tat_for_non_cyclers(self):
         """Uses axelrod.strategies.axelrod_first.Joss strategy for first 20 rounds"""

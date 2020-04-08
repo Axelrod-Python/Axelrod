@@ -151,5 +151,7 @@ class TestWorseAndWorse3(TestPlayer):
         # stochastic behaviour, given a seed
         actions = [(C, C), (C, D), (C, C), (D, D), (C, C), (D, C)]
         self.versus_test(
-            axl.MockPlayer(actions=[C, D, C, D, C]), expected_actions=actions, seed=8,
+            axl.MockPlayer(actions=[C, D, C, D, C]),
+            expected_actions=actions,
+            seed=8,
         )

@@ -98,7 +98,7 @@ class TestGetMemoryFromTransitions(unittest.TestCase):
             (1, C, 2, C),
             (1, D, 0, D),
             (2, C, 0, C),
-            (2, D, 2, D),
+            (2, D, 2, D)
         )
 
         trans_dict = self.transitions_to_dict(transitions)
@@ -271,7 +271,9 @@ class TestGetMemoryFromTransitions(unittest.TestCase):
         )
 
         trans_dict = self.transitions_to_dict(transitions)
-        self.assertEqual(get_memory_from_transitions(trans_dict, initial_state=1), 2)
+        self.assertEqual(
+            get_memory_from_transitions(trans_dict, initial_state=1), 2
+        )
 
     def test_transient_state(self):
         """Test a setup where we a transient state (no incoming transitions)
@@ -295,9 +297,13 @@ class TestGetMemoryFromTransitions(unittest.TestCase):
 
         trans_dict = self.transitions_to_dict(transitions)
         # If starting in state 4, then treat like Cooperator
-        self.assertEqual(get_memory_from_transitions(trans_dict, initial_state=4), 0)
+        self.assertEqual(
+            get_memory_from_transitions(trans_dict, initial_state=4), 0
+        )
         # Start in state 1, then a Fortress3.
-        self.assertEqual(get_memory_from_transitions(trans_dict, initial_state=1), 2)
+        self.assertEqual(
+            get_memory_from_transitions(trans_dict, initial_state=1), 2
+        )
 
     def test_infinite_memory_transient_state(self):
         """A transient state at 0, which goes into either a Cooperator or a TFT.
@@ -316,10 +322,13 @@ class TestGetMemoryFromTransitions(unittest.TestCase):
 
         trans_dict = self.transitions_to_dict(transitions)
         self.assertEqual(
-            get_memory_from_transitions(trans_dict, initial_state=0), float("inf"),
+            get_memory_from_transitions(trans_dict, initial_state=0),
+            float("inf"),
         )
 
-        self.assertEqual(get_memory_from_transitions(trans_dict, initial_state=2), 1)
+        self.assertEqual(
+            get_memory_from_transitions(trans_dict, initial_state=2), 1
+        )
 
     def test_evolved_fsm_4(self):
         """This should be infinite memory because the C/D self-loop at state 2
@@ -338,3 +347,4 @@ class TestGetMemoryFromTransitions(unittest.TestCase):
 
         trans_dict = self.transitions_to_dict(transitions)
         self.assertEqual(get_memory_from_transitions(trans_dict), float("inf"))
+

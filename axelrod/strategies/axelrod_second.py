@@ -61,7 +61,6 @@ class SecondByChampion(Player):
                 return D
         return C
 
-
 class SecondByEatherley(Player):
     """
     Strategy submitted to Axelrod's second tournament by Graham Eatherley.
@@ -2127,7 +2126,6 @@ class SecondByAppold(Player):
 
         # Calculate the probability that the opponent cooperated last turn given
         # what we know two turns ago.
-        prob_coop = (
-            self.opp_c_after_x[us_two_turns_ago] / self.total_num_of_x[us_two_turns_ago]
-        )
+        prob_coop = self.opp_c_after_x[us_two_turns_ago] / self.total_num_of_x[
+            us_two_turns_ago]
         return random_choice(prob_coop)

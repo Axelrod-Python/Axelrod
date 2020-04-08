@@ -37,7 +37,9 @@ class TestZDExtortion(TestPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (D, C), (D, D), (D, C), (D, D)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=3)
+        self.versus_test(
+            opponent=axl.Alternator(), expected_actions=actions, seed=3
+        )
 
         actions = [(C, D), (D, C), (D, D), (D, C), (D, D), (D, C)]
         self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=6)
@@ -68,10 +70,14 @@ class TestZDExtort2(TestPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (D, D), (D, C), (D, D), (D, C), (C, D)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=2)
+        self.versus_test(
+            opponent=axl.Alternator(), expected_actions=actions, seed=2
+        )
 
         actions = [(C, C), (C, D), (C, C), (C, D), (D, C), (C, D)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=31)
+        self.versus_test(
+            opponent=axl.Alternator(), expected_actions=actions, seed=31
+        )
 
         actions = [(C, D), (D, C), (D, D), (D, C), (C, D), (C, C)]
         self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=2)
@@ -105,7 +111,9 @@ class TestZDExtort2v2(TestPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (D, D), (D, C), (D, D), (D, C), (C, D)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=2)
+        self.versus_test(
+            opponent=axl.Alternator(), expected_actions=actions, seed=2
+        )
 
         actions = [(C, D), (D, C), (D, D), (D, C), (D, D), (D, C)]
         self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=5)
@@ -136,7 +144,9 @@ class TestZDExtort3(TestPlayer):
     def test_strategy(self):
         actions = [(C, C), (C, D), (D, C), (D, D), (D, C), (D, D)]
 
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=3)
+        self.versus_test(
+            opponent=axl.Alternator(), expected_actions=actions, seed=3
+        )
 
         actions = [(C, D), (D, C), (D, D), (D, C), (D, D), (D, C)]
 
@@ -163,7 +173,9 @@ class TestZDExtort4(TestPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (D, D), (D, C), (D, D), (D, C), (C, D)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=2)
+        self.versus_test(
+            opponent=axl.Alternator(), expected_actions=actions, seed=2
+        )
 
         actions = [(C, D), (D, C), (D, D), (D, C), (D, D), (D, C)]
         self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=5)
@@ -190,10 +202,14 @@ class TestZDGen2(TestPlayer):
     def test_strategy(self):
 
         actions = [(C, C), (C, D), (D, C), (D, D), (C, C), (C, D)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=2)
+        self.versus_test(
+            opponent=axl.Alternator(), expected_actions=actions, seed=2
+        )
 
         actions = [(C, C), (C, D), (C, C), (C, D), (C, C), (C, D)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=31)
+        self.versus_test(
+            opponent=axl.Alternator(), expected_actions=actions, seed=31
+        )
 
         actions = [(C, D), (D, C), (D, D), (C, C), (C, D), (C, C)]
         self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=2)
@@ -226,10 +242,14 @@ class TestZDGTFT2(TestPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (C, D)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=2)
+        self.versus_test(
+            opponent=axl.Alternator(), expected_actions=actions, seed=2
+        )
 
         actions = [(C, C), (C, D), (C, C), (C, D), (C, C), (C, D)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=31)
+        self.versus_test(
+            opponent=axl.Alternator(), expected_actions=actions, seed=31
+        )
 
         actions = [(C, D), (D, C), (C, D), (D, C), (C, D), (C, C)]
         self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=2)
@@ -258,7 +278,9 @@ class TestZDMischief(TestPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (D, D), (D, C), (D, D), (D, C), (C, D)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=2)
+        self.versus_test(
+            opponent=axl.Alternator(), expected_actions=actions, seed=2
+        )
 
         actions = [(C, D), (D, C), (D, D), (D, C), (D, D), (D, C)]
         self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=5)
@@ -289,7 +311,9 @@ class TestZDSet2(TestPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (D, D), (D, C), (C, D), (C, C), (D, D)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=2)
+        self.versus_test(
+            opponent=axl.Alternator(), expected_actions=actions, seed=2
+        )
 
         actions = [(C, D), (D, C), (D, D), (D, C), (D, D), (D, C)]
         self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=5)

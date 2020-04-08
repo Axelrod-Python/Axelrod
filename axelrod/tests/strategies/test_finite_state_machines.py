@@ -7,11 +7,7 @@ import random
 import axelrod as axl
 from axelrod.compute_finite_state_machine_memory import get_memory_from_transitions
 from axelrod.evolvable_player import InsufficientParametersError
-from axelrod.strategies.finite_state_machines import (
-    EvolvableFSMPlayer,
-    FSMPlayer,
-    SimpleFSM,
-)
+from axelrod.strategies.finite_state_machines import EvolvableFSMPlayer, FSMPlayer, SimpleFSM
 
 from .test_player import TestPlayer
 from .test_evolvable_player import PartialClass, TestEvolvablePlayer
@@ -165,7 +161,9 @@ class TestSampleFSMPlayer(TestPlayer):
         }
         expected = [(C, C), (C, D), (D, C), (D, D)] * 3
         self.versus_test(
-            axl.Alternator(), expected_actions=expected, init_kwargs=wsls_init_kwargs,
+            axl.Alternator(),
+            expected_actions=expected,
+            init_kwargs=wsls_init_kwargs,
         )
 
 
@@ -214,7 +212,8 @@ class TestFSMPlayer(TestPlayer):
             )
 
         self.versus_test(
-            axl.MockPlayer(actions=opponent_actions), expected_actions=expected_actions,
+            axl.MockPlayer(actions=opponent_actions),
+            expected_actions=expected_actions,
         )
 
     def verify_against_finite_state_machine(
@@ -279,10 +278,7 @@ class TestFSMPlayer(TestPlayer):
         Test the memory depth using implemented algorithm
         """
         transitions = self.player().fsm._state_transitions
-        self.assertEqual(
-            get_memory_from_transitions(transitions),
-            self.expected_classifier["memory_depth"],
-        )
+        self.assertEqual(get_memory_from_transitions(transitions), self.expected_classifier["memory_depth"])
 
 
 class TestFortress3(TestFSMPlayer):
@@ -1053,18 +1049,21 @@ class TestEvolvableFSMPlayer(unittest.TestCase):
 
     def test_normalized_parameters(self):
         self.assertRaises(
-            InsufficientParametersError, self.player_class._normalize_parameters
+            InsufficientParametersError,
+            self.player_class._normalize_parameters
         )
         self.assertRaises(
             InsufficientParametersError,
             self.player_class._normalize_parameters,
-            transitions=[[0, C, 1, D], [0, D, 0, D], [1, C, 1, C], [1, D, 1, D]],
+            transitions=[[0, C, 1, D], [0, D, 0, D], [1, C, 1, C], [1, D, 1, D]]
         )
 
     def test_init(self):
         transitions = [[0, C, 1, D], [0, D, 0, D], [1, C, 1, C], [1, D, 1, D]]
         player = axl.EvolvableFSMPlayer(
-            transitions=transitions, initial_action=D, initial_state=1
+            transitions=transitions,
+            initial_action=D,
+            initial_state=1
         )
         self.assertEqual(player.num_states, 2)
         self.assertEqual(player.fsm.transitions(), transitions)
@@ -1115,7 +1114,7 @@ class TestEvolvableFSMPlayer4(TestEvolvablePlayer):
     init_parameters = {
         "transitions": ((1, C, 1, C), (1, D, 2, D), (2, C, 2, D), (2, D, 1, C)),
         "initial_state": 1,
-        "initial_action": C,
+        "initial_action": C
     }
 
 
@@ -1124,8 +1123,7 @@ EvolvableFSMPlayerWithDefault = PartialClass(
     EvolvableFSMPlayer,
     transitions=((1, C, 1, C), (1, D, 1, D)),
     initial_state=1,
-    initial_action=C,
-)
+    initial_action=C)
 
 
 class EvolvableFSMAsFSM(TestFSMPlayer):

@@ -45,7 +45,9 @@ class TestBackStabber(TestPlayer):
         )
         actions = [(C, C)] * 10 + [(D, C), (D, C)]
         self.versus_test(
-            axl.Cooperator(), expected_actions=actions, match_attributes={"length": 12},
+            axl.Cooperator(),
+            expected_actions=actions,
+            match_attributes={"length": 12},
         )
         # Test that exceeds tournament length.
         actions = [(C, C)] * 198 + [(D, C), (D, C), (C, C), (C, C)]
@@ -57,7 +59,9 @@ class TestBackStabber(TestPlayer):
         # But only if the tournament is known.
         actions = [(C, C)] * 202
         self.versus_test(
-            axl.Cooperator(), expected_actions=actions, match_attributes={"length": -1},
+            axl.Cooperator(),
+            expected_actions=actions,
+            match_attributes={"length": -1},
         )
 
 

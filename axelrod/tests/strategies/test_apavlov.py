@@ -37,7 +37,9 @@ class TestAPavlov2006(TestPlayer):
 
         actions = [(C, D)] + [(D, D)] * 6
         self.versus_test(
-            axl.Defector(), expected_actions=actions, attrs={"opponent_class": "ALLD"},
+            axl.Defector(),
+            expected_actions=actions,
+            attrs={"opponent_class": "ALLD"},
         )
 
         opponent = axl.MockPlayer(actions=[D, C, D, C, D, C])
@@ -107,7 +109,9 @@ class TestAPavlov2011(TestPlayer):
 
         actions = [(C, D)] + [(D, D)] * 9
         self.versus_test(
-            axl.Defector(), expected_actions=actions, attrs={"opponent_class": "ALLD"},
+            axl.Defector(),
+            expected_actions=actions,
+            attrs={"opponent_class": "ALLD"},
         )
 
         opponent = axl.MockPlayer(actions=[C, D, D, D, D, D, D])

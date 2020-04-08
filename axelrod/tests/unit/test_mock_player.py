@@ -17,3 +17,4 @@ class TestMockPlayer(unittest.TestCase):
         p2 = axl.Player()
         for action in actions:
             self.assertEqual(action, m.strategy(p2))
+
