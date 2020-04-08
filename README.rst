@@ -1,14 +1,11 @@
-.. image:: https://coveralls.io/repos/github/Axelrod-Python/Axelrod/badge.svg?branch=master
-    :target: https://coveralls.io/github/Axelrod-Python/Axelrod?branch=master
-
 .. image:: https://img.shields.io/pypi/v/Axelrod.svg
     :target: https://pypi.python.org/pypi/Axelrod
 
-.. image:: https://travis-ci.org/Axelrod-Python/Axelrod.svg?branch=packaging
-    :target: https://travis-ci.org/Axelrod-Python/Axelrod
-
 .. image:: https://zenodo.org/badge/19509/Axelrod-Python/Axelrod.svg
     :target: https://zenodo.org/badge/latestdoi/19509/Axelrod-Python/Axelrod
+
+.. image:: https://github.com/Axelrod-Python/Axelrod/workflows/CI/badge.svg
+    :target: https://github.com/Axelrod-Python/Axelrod/actions
 
 |Join the chat at https://gitter.im/Axelrod-Python/Axelrod|
 
@@ -74,7 +71,7 @@ a peer reviewed paper introducing the library (22 authors).
 Installation
 ------------
 
-The library requires Python 3.5 or greater.
+The library requires Python 3.6 or greater.
 
 The simplest way to install is::
 
