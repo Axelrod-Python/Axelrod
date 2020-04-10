@@ -54,6 +54,9 @@ jobs:
     - name: Check that all strategies are indexed
       run: |
         python run_strategy_indexer.py
+    - name: Check format
+      run: |
+        python -m black -l 80 . --check
     - name: Check that installs
       run: |
         python setup.py install
