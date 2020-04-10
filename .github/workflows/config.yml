@@ -39,6 +39,7 @@ jobs:
         python -m pip install coverage
         python -m pip install hypothesis==3.2
         python -m pip install mypy
+        python -m pip install black
     - name: Run tests
       run: |
         coverage run --source=axelrod -m unittest discover
