@@ -30,11 +30,11 @@ class TestRevisedDowning(TestPlayer):
         self.versus_test(opponent, expected_actions=actions)
 
         opponent = axl.MockPlayer(actions=[D, D, C])
-        actions = [(C, D), (C, D), (D, C), (D, D)]
+        actions = [(C, D), (C, D), (D, C), (C, D)]
         self.versus_test(opponent, expected_actions=actions)
 
         opponent = axl.MockPlayer(actions=[C, C, D, D, C, C])
-        actions = [(C, C), (C, C), (C, D), (C, D), (D, C), (D, C), (D, C)]
+        actions = [(C, C), (C, C), (C, D), (C, D), (D, C), (C, C), (D, C)]
         self.versus_test(opponent, expected_actions=actions)
 
         opponent = axl.MockPlayer(actions=[C, C, C, C, D, D])

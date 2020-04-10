@@ -52,7 +52,7 @@ class RevisedDowning(Player):
 
         # Update various counts
         if round_number > 2:
-            if self.history[-1] == D:
+            if self.history[-2] == D:
                 if opponent.history[-1] == C:
                     self.nice2 += 1
                 self.total_D += 1
