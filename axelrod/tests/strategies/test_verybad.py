@@ -23,9 +23,7 @@ class TestVeryBad(TestPlayer):
     def test_strategy(self):
         # axelrod.Defector -
         #   cooperates for the first three, defects for the rest P(C) < .5
-        self.versus_test(
-            axl.Defector(), expected_actions=([(C, D)] * 3 + [(D, D)] * 7)
-        )
+        self.versus_test(axl.Defector(), expected_actions=([(C, D)] * 3 + [(D, D)] * 7))
 
         # axelrod.Cooperator -
         #   cooperate for all, P(C) == 1

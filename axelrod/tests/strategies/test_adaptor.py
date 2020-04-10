@@ -25,15 +25,11 @@ class TestAdaptorBrief(TestPlayer):
     def test_strategy(self):
         # No error.
         actions = [(C, C), (C, C), (C, C), (C, C)]
-        self.versus_test(
-            opponent=axl.AdaptorBrief(), expected_actions=actions, seed=0
-        )
+        self.versus_test(opponent=axl.AdaptorBrief(), expected_actions=actions, seed=0)
 
         # Error corrected.
         actions = [(C, C), (C, D), (D, C), (C, C)]
-        self.versus_test(
-            opponent=axl.AdaptorBrief(), expected_actions=actions, seed=22
-        )
+        self.versus_test(opponent=axl.AdaptorBrief(), expected_actions=actions, seed=22)
 
         # Error corrected, example 2
         actions = [(D, C), (C, D), (D, C), (C, D), (C, C)]
@@ -43,15 +39,11 @@ class TestAdaptorBrief(TestPlayer):
 
         # Versus Cooperator
         actions = [(C, C)] * 8
-        self.versus_test(
-            opponent=axl.Cooperator(), expected_actions=actions, seed=0
-        )
+        self.versus_test(opponent=axl.Cooperator(), expected_actions=actions, seed=0)
 
         # Versus Defector
         actions = [(C, D), (D, D), (D, D), (D, D), (D, D), (D, D), (D, D)]
-        self.versus_test(
-            opponent=axl.Defector(), expected_actions=actions, seed=0
-        )
+        self.versus_test(opponent=axl.Defector(), expected_actions=actions, seed=0)
 
 
 class TestAdaptorLong(TestPlayer):
@@ -70,24 +62,16 @@ class TestAdaptorLong(TestPlayer):
     def test_strategy(self):
         # No error.
         actions = [(C, C), (C, C), (C, C), (C, C)]
-        self.versus_test(
-            opponent=axl.AdaptorLong(), expected_actions=actions, seed=0
-        )
+        self.versus_test(opponent=axl.AdaptorLong(), expected_actions=actions, seed=0)
 
         # Error corrected.
         actions = [(C, C), (C, D), (D, D), (C, C), (C, C)]
-        self.versus_test(
-            opponent=axl.AdaptorLong(), expected_actions=actions, seed=22
-        )
+        self.versus_test(opponent=axl.AdaptorLong(), expected_actions=actions, seed=22)
 
         # Versus Cooperator
         actions = [(C, C)] * 8
-        self.versus_test(
-            opponent=axl.Cooperator(), expected_actions=actions, seed=0
-        )
+        self.versus_test(opponent=axl.Cooperator(), expected_actions=actions, seed=0)
 
         # Versus Defector
         actions = [(C, D), (D, D), (C, D), (D, D), (D, D), (C, D), (D, D)]
-        self.versus_test(
-            opponent=axl.Defector(), expected_actions=actions, seed=0
-        )
+        self.versus_test(opponent=axl.Defector(), expected_actions=actions, seed=0)

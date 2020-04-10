@@ -84,8 +84,7 @@ class TestHistory(unittest.TestCase):
         self.assertEqual(flipped_history, [D, C, D, C, D])
         self.assertEqual(flipped_history.cooperations, 2)
         self.assertEqual(flipped_history.defections, 3)
-        self.assertEqual(flipped_history.state_distribution,
-                         new_distribution)
+        self.assertEqual(flipped_history.state_distribution, new_distribution)
 
         # Flip operation is idempotent
         flipped_flipped_history = flipped_history.flip_plays()
@@ -95,7 +94,6 @@ class TestHistory(unittest.TestCase):
 
 
 class TestLimitedHistory(unittest.TestCase):
-
     def test_memory_depth(self):
         h = LimitedHistory(memory_depth=3)
         h.append(C, C)
@@ -106,8 +104,9 @@ class TestLimitedHistory(unittest.TestCase):
         self.assertEqual(len(h), 3)
         self.assertEqual(h.cooperations, 2)
         self.assertEqual(h.defections, 1)
-        self.assertEqual(h.state_distribution,
-                         Counter({(C, C): 1, (D, D): 1, (C, D): 1}))
+        self.assertEqual(
+            h.state_distribution, Counter({(C, C): 1, (D, D): 1, (C, D): 1})
+        )
         h.append(D, C)
         self.assertEqual(len(h), 3)
         self.assertEqual(h._plays, [D, C, D])
@@ -115,5 +114,5 @@ class TestLimitedHistory(unittest.TestCase):
         self.assertEqual(h.cooperations, 1)
         self.assertEqual(h.defections, 2)
         self.assertEqual(
-            h.state_distribution,
-            Counter({(D, D): 1, (C, D): 1, (D, C): 1, (C, C): 0}))
+            h.state_distribution, Counter({(D, D): 1, (C, D): 1, (D, C): 1, (C, C): 0})
+        )
