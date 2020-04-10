@@ -58,6 +58,9 @@ jobs:
       run: |
         python -m pip install pylint
         python -m pylint --disable=all --enable=unused-import axelrod/strategies/_strategies.py
+    - name: Check format
+      run: |
+        python -m black -l 80 . --check
     - name: Check that installs
       run: |
         python setup.py install
