@@ -12,8 +12,11 @@ The project follows the following guidelines:
    <https://www.python.org/dev/peps/pep-0008/>`_ which includes **using
    descriptive variable names**.
 3. Code Format: Use the `Black formatter <https://github.com/ambv/black>`_ to format
-    all code  and the `isort utility <https://github.com/timothycrosley/isort>`_ to
-    sort import statements.
+   all code  and the `isort utility <https://github.com/timothycrosley/isort>`_ to
+   sort import statements.  You can run black on all code with::
+
+    $ python -m black -l 80 .
+
 4. Commits: Please try to use commit messages that give a meaningful history
    for anyone using git's log features. Try to use messages that complete sentence,
    "This commit will..." There is some excellent guidance on the subject
