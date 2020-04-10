@@ -114,5 +114,6 @@ class TestLimitedHistory(unittest.TestCase):
         self.assertEqual(h.cooperations, 1)
         self.assertEqual(h.defections, 2)
         self.assertEqual(
-            h.state_distribution, Counter({(D, D): 1, (C, D): 1, (D, C): 1, (C, C): 0})
+            h.state_distribution,
+            Counter({(D, D): 1, (C, D): 1, (D, C): 1, (C, C): 0}),
         )

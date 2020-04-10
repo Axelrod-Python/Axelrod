@@ -194,7 +194,28 @@ class TestProber4(TestPlayer):
         "manipulates_source": False,
         "manipulates_state": False,
     }
-    initial_sequence = [C, C, D, C, D, D, D, C, C, D, C, D, C, C, D, C, D, D, C, D]
+    initial_sequence = [
+        C,
+        C,
+        D,
+        C,
+        D,
+        D,
+        D,
+        C,
+        C,
+        D,
+        C,
+        D,
+        C,
+        C,
+        D,
+        C,
+        D,
+        D,
+        C,
+        D,
+    ]
 
     def test_strategy(self):
         # Starts by playing CCDCDDDCCDCDCCDCDDCD.
@@ -214,7 +235,9 @@ class TestProber4(TestPlayer):
         for history in provocative_histories:
             opponent = axl.MockPlayer(history + [C] * 5)
             actions = list(zip(self.initial_sequence, history)) + [(D, C)] * 5
-            self.versus_test(opponent=opponent, expected_actions=actions, attrs=attrs)
+            self.versus_test(
+                opponent=opponent, expected_actions=actions, attrs=attrs
+            )
 
         # Otherwise cooperates for 5 rounds and plays TfT afterwards
         unprovocative_histories = [
@@ -230,7 +253,9 @@ class TestProber4(TestPlayer):
             opponent = axl.MockPlayer(history + [D] * 5 + [C, C])
             actions = list(zip(self.initial_sequence, history)) + [(C, D)] * 5
             actions += [(D, C), (C, C)]
-            self.versus_test(opponent=opponent, expected_actions=actions, attrs=attrs)
+            self.versus_test(
+                opponent=opponent, expected_actions=actions, attrs=attrs
+            )
 
 
 class TestHardProber(TestPlayer):
@@ -288,21 +313,29 @@ class TestNaiveProber(TestPlayer):
     def test_random_defection(self):
         # Unprovoked defection with small probability
         actions = [(C, C), (D, C), (D, C), (C, C), (C, C)]
-        self.versus_test(opponent=axl.Cooperator(), expected_actions=actions, seed=2)
+        self.versus_test(
+            opponent=axl.Cooperator(), expected_actions=actions, seed=2
+        )
 
         actions = [(C, C), (C, C), (C, C), (C, C), (D, C)]
-        self.versus_test(opponent=axl.Cooperator(), expected_actions=actions, seed=5)
+        self.versus_test(
+            opponent=axl.Cooperator(), expected_actions=actions, seed=5
+        )
 
         # Always defect when p is 1
         actions = [(C, C), (D, C), (D, C), (D, C), (D, C)]
         self.versus_test(
-            opponent=axl.Cooperator(), expected_actions=actions, init_kwargs={"p": 1},
+            opponent=axl.Cooperator(),
+            expected_actions=actions,
+            init_kwargs={"p": 1},
         )
 
     def test_reduction_to_TFT(self):
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
         self.versus_test(
-            opponent=axl.Alternator(), expected_actions=actions, init_kwargs={"p": 0},
+            opponent=axl.Alternator(),
+            expected_actions=actions,
+            init_kwargs={"p": 0},
         )
 
 
@@ -324,7 +357,9 @@ class TestRemorsefulProber(TestPlayer):
         # Always retaliate a defection
         actions = [(C, D)] + [(D, D)] * 10
         self.versus_test(
-            opponent=axl.Defector(), expected_actions=actions, attrs={"probing": False},
+            opponent=axl.Defector(),
+            expected_actions=actions,
+            attrs={"probing": False},
         )
 
     def test_random_defection(self):

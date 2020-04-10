@@ -87,13 +87,16 @@ class MemoryTwoPlayer(Player):
             )
 
         states = [
-            (hist[:2], hist[2:]) for hist in list(itertools.product((C, D), repeat=4))
+            (hist[:2], hist[2:])
+            for hist in list(itertools.product((C, D), repeat=4))
         ]
 
         self._sixteen_vector = dict(
             zip(states, sixteen_vector)
         )  # type: Dict[tuple, float]
-        self.classifier["stochastic"] = any(0 < x < 1 for x in set(sixteen_vector))
+        self.classifier["stochastic"] = any(
+            0 < x < 1 for x in set(sixteen_vector)
+        )
 
     def strategy(self, opponent: Player) -> Action:
         if len(opponent.history) <= 1:
@@ -232,7 +235,11 @@ class MEM2(Player):
 
     def __init__(self) -> None:
         super().__init__()
-        self.players = {"TFT": TitForTat(), "TFTT": TitFor2Tats(), "ALLD": Defector()}
+        self.players = {
+            "TFT": TitForTat(),
+            "TFTT": TitFor2Tats(),
+            "ALLD": Defector(),
+        }
         self.play_as = "TFT"
         self.shift_counter = 3
         self.alld_counter = 0

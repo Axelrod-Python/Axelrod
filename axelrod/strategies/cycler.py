@@ -125,7 +125,9 @@ class EvolvableCycler(Cycler, EvolvablePlayer):
         self.mutation_potency = mutation_potency
 
     @classmethod
-    def _normalize_parameters(cls, cycle=None, cycle_length=None) -> Tuple[str, int]:
+    def _normalize_parameters(
+        cls, cycle=None, cycle_length=None
+    ) -> Tuple[str, int]:
         """Compute other parameters from those that may be missing, to ensure proper cloning."""
         if not cycle:
             if not cycle_length:
@@ -141,7 +143,9 @@ class EvolvableCycler(Cycler, EvolvablePlayer):
         """
         Generate a sequence of random moves
         """
-        return actions_to_str(random.choice(actions) for _ in range(cycle_length))
+        return actions_to_str(
+            random.choice(actions) for _ in range(cycle_length)
+        )
 
     def mutate(self) -> EvolvablePlayer:
         """
@@ -165,7 +169,9 @@ class EvolvableCycler(Cycler, EvolvablePlayer):
         Creates and returns a new Player instance with a single crossover point.
         """
         if other.__class__ != self.__class__:
-            raise TypeError("Crossover must be between the same player classes.")
+            raise TypeError(
+                "Crossover must be between the same player classes."
+            )
         cycle_list = crossover_lists(self.cycle, other.cycle)
         cycle = "".join(cycle_list)
         cycle, _ = self._normalize_parameters(cycle)

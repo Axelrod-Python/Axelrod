@@ -44,14 +44,26 @@ class TestShortMem(TestPlayer):
         )
 
         # If neither of the above conditions are met, apply TitForTat
-        actions = [(C, D)] * 5 + [(C, C)] * 6 + [(C, D), (D, D), (D, D), (D, C), (C, C)]
+        actions = (
+            [(C, D)] * 5
+            + [(C, C)] * 6
+            + [(C, D), (D, D), (D, D), (D, C), (C, C)]
+        )
         self.versus_test(
-            opponent=axl.MockPlayer(actions=[D] * 5 + [C] * 6 + [D, D, D, C, C]),
+            opponent=axl.MockPlayer(
+                actions=[D] * 5 + [C] * 6 + [D, D, D, C, C]
+            ),
             expected_actions=actions,
         )
 
-        actions = [(C, C)] * 5 + [(C, D)] * 6 + [(D, C), (C, C), (C, C), (C, D), (D, D)]
+        actions = (
+            [(C, C)] * 5
+            + [(C, D)] * 6
+            + [(D, C), (C, C), (C, C), (C, D), (D, D)]
+        )
         self.versus_test(
-            opponent=axl.MockPlayer(actions=[C] * 5 + [D] * 6 + [C, C, C, D, D]),
+            opponent=axl.MockPlayer(
+                actions=[C] * 5 + [D] * 6 + [C, C, C, D, D]
+            ),
             expected_actions=actions,
         )

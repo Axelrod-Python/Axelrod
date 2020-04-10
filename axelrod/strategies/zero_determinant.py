@@ -152,7 +152,9 @@ class ZDExtort2v2(LRPlayer):
 
     name = "ZD-Extort-2 v2"
 
-    def __init__(self, phi: float = 1 / 8, s: float = 0.5, l: float = 1) -> None:
+    def __init__(
+        self, phi: float = 1 / 8, s: float = 0.5, l: float = 1
+    ) -> None:
         super().__init__(phi, s, l)
 
 
@@ -169,7 +171,9 @@ class ZDExtort3(LRPlayer):
 
     name = "ZD-Extort3"
 
-    def __init__(self, phi: float = 3 / 26, s: float = 1 / 3, l: float = 1) -> None:
+    def __init__(
+        self, phi: float = 3 / 26, s: float = 1 / 3, l: float = 1
+    ) -> None:
         super().__init__(phi, s, l)
 
 
@@ -186,7 +190,9 @@ class ZDExtort4(LRPlayer):
 
     name = "ZD-Extort-4"
 
-    def __init__(self, phi: float = 4 / 17, s: float = 0.25, l: float = 1) -> None:
+    def __init__(
+        self, phi: float = 4 / 17, s: float = 0.25, l: float = 1
+    ) -> None:
         super().__init__(phi, s, l)
 
 
@@ -201,7 +207,9 @@ class ZDGen2(LRPlayer):
 
     name = "ZD-GEN-2"
 
-    def __init__(self, phi: float = 1 / 8, s: float = 0.5, l: float = 3) -> None:
+    def __init__(
+        self, phi: float = 1 / 8, s: float = 0.5, l: float = 3
+    ) -> None:
         super().__init__(phi, s, l)
 
 
@@ -252,5 +260,7 @@ class ZDSet2(LRPlayer):
 
     name = "ZD-SET-2"
 
-    def __init__(self, phi: float = 1 / 4, s: float = 0.0, l: float = 2) -> None:
+    def __init__(
+        self, phi: float = 1 / 4, s: float = 0.0, l: float = 2
+    ) -> None:
         super().__init__(phi, s, l)

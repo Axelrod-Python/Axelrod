@@ -41,7 +41,9 @@ class TestMetaPlayer(TestPlayer):
 
         for t in player.team:
             try:
-                classifier["makes_use_of"].update(axl.Classifiers["make_use_of"](t))
+                classifier["makes_use_of"].update(
+                    axl.Classifiers["make_use_of"](t)
+                )
             except KeyError:
                 pass
 
@@ -329,7 +331,9 @@ class TestMetaHunterAggressive(TestMetaPlayer):
         opponent = axl.MockPlayer([C] * 100 + [D])
         actions = [(C, C)] * 100 + [(C, D), (D, C)]
         self.versus_test(
-            opponent=opponent, expected_actions=actions, init_kwargs={"team": team}
+            opponent=opponent,
+            expected_actions=actions,
+            init_kwargs={"team": team},
         )
 
 
@@ -384,10 +388,14 @@ class TestMetaMajorityLongMemory(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=0)
+        self.versus_test(
+            opponent=axl.Alternator(), expected_actions=actions, seed=0
+        )
 
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=1)
+        self.versus_test(
+            opponent=axl.Alternator(), expected_actions=actions, seed=1
+        )
 
 
 class TestMetaWinnerMemoryOne(TestMetaPlayer):
@@ -507,7 +515,12 @@ class TestMetaMixer(TestMetaPlayer):
         )
 
         team.append(axl.Defector)
-        distribution = [0.2, 0.5, 0.3, 0]  # If add a defector but does not occur
+        distribution = [
+            0.2,
+            0.5,
+            0.3,
+            0,
+        ]  # If add a defector but does not occur
         self.versus_test(
             opponent=axl.Cooperator(),
             expected_actions=actions,
@@ -569,7 +582,9 @@ class TestNMWEStochastic(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (C, C), (C, D), (D, C)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=20)
+        self.versus_test(
+            opponent=axl.Alternator(), expected_actions=actions, seed=20
+        )
 
 
 class TestNMWEFiniteMemory(TestMetaPlayer):
@@ -605,7 +620,9 @@ class TestNMWELongMemory(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (C, C), (D, D), (D, C)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=10)
+        self.versus_test(
+            opponent=axl.Alternator(), expected_actions=actions, seed=10
+        )
 
 
 class TestNMWEMemoryOne(TestMetaPlayer):

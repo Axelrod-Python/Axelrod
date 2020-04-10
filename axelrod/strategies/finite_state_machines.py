@@ -42,7 +42,9 @@ class SimpleFSM(object):
         self._raise_error_for_bad_input()
 
     def _raise_error_for_bad_input(self):
-        callable_states = set(pair[0] for pair in self._state_transitions.values())
+        callable_states = set(
+            pair[0] for pair in self._state_transitions.values()
+        )
         callable_states.add(self._state)
         for state in callable_states:
             self._raise_error_for_bad_state(state)
@@ -70,7 +72,9 @@ class SimpleFSM(object):
         return self._state_transitions.copy()
 
     def transitions(self) -> list:
-        return [[x[0], x[1], y[0], y[1]] for x, y in self._state_transitions.items()]
+        return [
+            [x[0], x[1], y[0], y[1]] for x, y in self._state_transitions.items()
+        ]
 
     def move(self, opponent_action: Action) -> Action:
         """Computes the response move and changes state."""
@@ -202,7 +206,9 @@ class EvolvableFSMPlayer(FSMPlayer, EvolvablePlayer):
                 raise InsufficientParametersError(
                     "Insufficient Parameters to instantiate EvolvableFSMPlayer"
                 )
-            transitions, initial_state, initial_action = cls.random_params(num_states)
+            transitions, initial_state, initial_action = cls.random_params(
+                num_states
+            )
         transitions = cls.normalize_transitions(transitions)
         num_states = len(transitions) // 2
         return transitions, initial_state, initial_action, num_states
@@ -278,7 +284,9 @@ class EvolvableFSMPlayer(FSMPlayer, EvolvablePlayer):
 
     def crossover(self, other):
         if other.__class__ != self.__class__:
-            raise TypeError("Crossover must be between the same player classes.")
+            raise TypeError(
+                "Crossover must be between the same player classes."
+            )
         transitions = self.crossover_rows(
             self.fsm.transitions(), other.fsm.transitions()
         )
@@ -311,7 +319,9 @@ class EvolvableFSMPlayer(FSMPlayer, EvolvablePlayer):
             itertools.product(range(num_states), [C, D])
         ):
             next_action = C if round(actions[i]) == 0 else D
-            transitions.append([initial_state, action, next_states[i], next_action])
+            transitions.append(
+                [initial_state, action, next_states[i], next_action]
+            )
         transitions = self.normalize_transitions(transitions)
         self.fsm = SimpleFSM(transitions, self.initial_state)
         self.overwrite_init_kwargs(
@@ -361,7 +371,9 @@ class Fortress3(FSMPlayer):
             (3, D, 1, D),
         )
 
-        super().__init__(transitions=transitions, initial_state=1, initial_action=D)
+        super().__init__(
+            transitions=transitions, initial_state=1, initial_action=D
+        )
 
 
 class Fortress4(FSMPlayer):
@@ -400,7 +412,9 @@ class Fortress4(FSMPlayer):
             (4, D, 1, D),
         )
 
-        super().__init__(transitions=transitions, initial_state=1, initial_action=D)
+        super().__init__(
+            transitions=transitions, initial_state=1, initial_action=D
+        )
 
 
 class Predator(FSMPlayer):
@@ -446,7 +460,9 @@ class Predator(FSMPlayer):
             (8, D, 6, D),
         )
 
-        super().__init__(transitions=transitions, initial_state=0, initial_action=C)
+        super().__init__(
+            transitions=transitions, initial_state=0, initial_action=C
+        )
 
 
 class Pun1(FSMPlayer):
@@ -471,7 +487,9 @@ class Pun1(FSMPlayer):
     def __init__(self) -> None:
         transitions = ((1, C, 2, C), (1, D, 2, C), (2, C, 1, C), (2, D, 1, D))
 
-        super().__init__(transitions=transitions, initial_state=1, initial_action=D)
+        super().__init__(
+            transitions=transitions, initial_state=1, initial_action=D
+        )
 
 
 class Raider(FSMPlayer):
@@ -507,7 +525,9 @@ class Raider(FSMPlayer):
             (3, D, 1, C),
         )
 
-        super().__init__(transitions=transitions, initial_state=0, initial_action=D)
+        super().__init__(
+            transitions=transitions, initial_state=0, initial_action=D
+        )
 
 
 class Ripoff(FSMPlayer):
@@ -540,7 +560,9 @@ class Ripoff(FSMPlayer):
             (3, D, 3, D),
         )
 
-        super().__init__(transitions=transitions, initial_state=1, initial_action=D)
+        super().__init__(
+            transitions=transitions, initial_state=1, initial_action=D
+        )
 
 
 class UsuallyCooperates(FSMPlayer):
@@ -566,7 +588,9 @@ class UsuallyCooperates(FSMPlayer):
     def __init__(self) -> None:
         transitions = ((1, C, 1, C), (1, D, 2, C), (2, C, 1, D), (2, D, 1, C))
 
-        super().__init__(transitions=transitions, initial_state=1, initial_action=C)
+        super().__init__(
+            transitions=transitions, initial_state=1, initial_action=C
+        )
 
 
 class UsuallyDefects(FSMPlayer):
@@ -592,7 +616,9 @@ class UsuallyDefects(FSMPlayer):
     def __init__(self) -> None:
         transitions = ((1, C, 2, D), (1, D, 1, D), (2, C, 1, D), (2, D, 1, C))
 
-        super().__init__(transitions=transitions, initial_state=1, initial_action=D)
+        super().__init__(
+            transitions=transitions, initial_state=1, initial_action=D
+        )
 
 
 class SolutionB1(FSMPlayer):
@@ -625,7 +651,9 @@ class SolutionB1(FSMPlayer):
             (3, D, 3, C),
         )
 
-        super().__init__(transitions=transitions, initial_state=1, initial_action=D)
+        super().__init__(
+            transitions=transitions, initial_state=1, initial_action=D
+        )
 
 
 class SolutionB5(FSMPlayer):
@@ -665,7 +693,9 @@ class SolutionB5(FSMPlayer):
             (6, D, 5, D),
         )
 
-        super().__init__(transitions=transitions, initial_state=1, initial_action=D)
+        super().__init__(
+            transitions=transitions, initial_state=1, initial_action=D
+        )
 
 
 class Thumper(FSMPlayer):
@@ -691,7 +721,9 @@ class Thumper(FSMPlayer):
     def __init__(self) -> None:
         transitions = ((1, C, 1, C), (1, D, 2, D), (2, C, 1, D), (2, D, 1, D))
 
-        super().__init__(transitions=transitions, initial_state=1, initial_action=C)
+        super().__init__(
+            transitions=transitions, initial_state=1, initial_action=C
+        )
 
 
 class EvolvedFSM4(FSMPlayer):
@@ -726,7 +758,9 @@ class EvolvedFSM4(FSMPlayer):
             (3, D, 1, D),
         )
 
-        super().__init__(transitions=transitions, initial_state=0, initial_action=C)
+        super().__init__(
+            transitions=transitions, initial_state=0, initial_action=C
+        )
 
 
 class EvolvedFSM16(FSMPlayer):
@@ -782,7 +816,9 @@ class EvolvedFSM16(FSMPlayer):
             (15, D, 2, C),
         )
 
-        super().__init__(transitions=transitions, initial_state=0, initial_action=C)
+        super().__init__(
+            transitions=transitions, initial_state=0, initial_action=C
+        )
 
 
 class EvolvedFSM16Noise05(FSMPlayer):
@@ -838,7 +874,9 @@ class EvolvedFSM16Noise05(FSMPlayer):
             (15, D, 11, C),
         )
 
-        super().__init__(transitions=transitions, initial_state=0, initial_action=C)
+        super().__init__(
+            transitions=transitions, initial_state=0, initial_action=C
+        )
 
 
 # Strategies trained with Moran process objectives
@@ -900,7 +938,9 @@ class TF1(FSMPlayer):
             (15, D, 5, C),
         )
 
-        super().__init__(transitions=transitions, initial_state=0, initial_action=C)
+        super().__init__(
+            transitions=transitions, initial_state=0, initial_action=C
+        )
 
 
 class TF2(FSMPlayer):
@@ -955,7 +995,9 @@ class TF2(FSMPlayer):
             (15, D, 11, D),
         )
 
-        super().__init__(transitions=transitions, initial_state=0, initial_action=C)
+        super().__init__(
+            transitions=transitions, initial_state=0, initial_action=C
+        )
 
 
 class TF3(FSMPlayer):
@@ -998,4 +1040,6 @@ class TF3(FSMPlayer):
             (7, D, 5, C),
         )
 
-        super().__init__(transitions=transitions, initial_state=0, initial_action=C)
+        super().__init__(
+            transitions=transitions, initial_state=0, initial_action=C
+        )

@@ -31,11 +31,18 @@ class TestCalculator(TestPlayer):
             twenty_alternator_actions, flip_indices
         )
 
-        expected_actions = twenty_test_actions + [(D, C), (D, D), (D, C), (D, D)]
+        expected_actions = twenty_test_actions + [
+            (D, C),
+            (D, D),
+            (D, C),
+            (D, D),
+        ]
         self.versus_test(
             axl.Alternator(), expected_actions=twenty_test_actions, seed=seed
         )
-        self.versus_test(axl.Alternator(), expected_actions=expected_actions, seed=seed)
+        self.versus_test(
+            axl.Alternator(), expected_actions=expected_actions, seed=seed
+        )
 
     def test_twenty_rounds_joss_then_tit_for_tat_for_non_cyclers(self):
         """Uses axelrod.strategies.axelrod_first.Joss strategy for first 20 rounds"""
@@ -80,7 +87,9 @@ class TestCalculator(TestPlayer):
             (D, C),
         ]
 
-        opponent_actions = twenty_non_cyclical_actions + subsequent_opponent_actions
+        opponent_actions = (
+            twenty_non_cyclical_actions + subsequent_opponent_actions
+        )
         test_actions = twenty_test_actions + subsequent_test_actions
         self.versus_test(
             axl.MockPlayer(actions=twenty_non_cyclical_actions),
@@ -96,7 +105,9 @@ class TestCalculator(TestPlayer):
     def test_edge_case_calculator_sees_cycles_of_size_ten(self):
         seed = 3
         ten_length_cycle = [C, D, C, C, D, C, C, C, D, C]
-        self.assertEqual(detect_cycle((ten_length_cycle * 2)), tuple(ten_length_cycle))
+        self.assertEqual(
+            detect_cycle((ten_length_cycle * 2)), tuple(ten_length_cycle)
+        )
 
         ten_cycle_twenty_rounds = get_joss_strategy_actions(
             ten_length_cycle * 2, indices_to_flip=[16]
@@ -120,7 +131,9 @@ class TestCalculator(TestPlayer):
         )
 
         opponent_actions = twenty_rounds_of_eleven_len_cycle[:-1] + [D] + [C, D]
-        self.assertEqual(detect_cycle(opponent_actions), tuple(eleven_length_cycle))
+        self.assertEqual(
+            detect_cycle(opponent_actions), tuple(eleven_length_cycle)
+        )
 
         uses_tit_for_tat_after_twenty_rounds = twenty_rounds + [(D, C), (C, D)]
         self.versus_test(
@@ -140,13 +153,19 @@ class TestCalculator(TestPlayer):
 
         self.assertEqual(get_joss_strategy_actions(opponent, []), without_flip)
         self.assertEqual(
-            get_joss_strategy_actions(opponent, flip_never_occurs_at_index_zero),
+            get_joss_strategy_actions(
+                opponent, flip_never_occurs_at_index_zero
+            ),
             without_flip,
         )
-        self.assertEqual(get_joss_strategy_actions(opponent, flip_indices), with_flip)
+        self.assertEqual(
+            get_joss_strategy_actions(opponent, flip_indices), with_flip
+        )
 
 
-def get_joss_strategy_actions(opponent_moves: list, indices_to_flip: list) -> list:
+def get_joss_strategy_actions(
+    opponent_moves: list, indices_to_flip: list
+) -> list:
     """
     Takes a list of opponent moves and returns a tuple list of [(Joss moves, opponent moves)].
     "indices_to_flip" are the indices where Joss differs from it's expected TitForTat.

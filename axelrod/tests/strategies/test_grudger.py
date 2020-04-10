@@ -258,11 +258,31 @@ class TestGeneralSoftGrudger(TestPlayer):
         """Test strategy with multiple initial parameters"""
 
         # Testing default parameters of n=1, d=4, c=2 (same as Soft Grudger)
-        actions = [(C, D), (D, D), (D, C), (D, C), (D, D), (C, D), (C, C), (C, C)]
-        self.versus_test(axl.MockPlayer(actions=[D, D, C, C]), expected_actions=actions)
+        actions = [
+            (C, D),
+            (D, D),
+            (D, C),
+            (D, C),
+            (D, D),
+            (C, D),
+            (C, C),
+            (C, C),
+        ]
+        self.versus_test(
+            axl.MockPlayer(actions=[D, D, C, C]), expected_actions=actions
+        )
 
         # Testing n=2, d=4, c=2
-        actions = [(C, D), (C, D), (D, C), (D, C), (D, D), (D, D), (C, C), (C, C)]
+        actions = [
+            (C, D),
+            (C, D),
+            (D, C),
+            (D, C),
+            (D, D),
+            (D, D),
+            (C, C),
+            (C, C),
+        ]
         self.versus_test(
             axl.MockPlayer(actions=[D, D, C, C]),
             expected_actions=actions,
@@ -270,7 +290,16 @@ class TestGeneralSoftGrudger(TestPlayer):
         )
 
         # Testing n=1, d=1, c=1
-        actions = [(C, D), (D, D), (C, C), (C, C), (C, D), (D, D), (C, C), (C, C)]
+        actions = [
+            (C, D),
+            (D, D),
+            (C, C),
+            (C, C),
+            (C, D),
+            (D, D),
+            (C, C),
+            (C, C),
+        ]
         self.versus_test(
             axl.MockPlayer(actions=[D, D, C, C]),
             expected_actions=actions,

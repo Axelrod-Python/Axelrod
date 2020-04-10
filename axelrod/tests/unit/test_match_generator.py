@@ -149,7 +149,9 @@ class TestMatchGenerator(unittest.TestCase):
         self.assertEqual(match_params["game"], test_game)
         self.assertEqual(match_params["prob_end"], None)
         self.assertEqual(match_params["noise"], 0)
-        self.assertEqual(match_params["match_attributes"], {"length": float("inf")})
+        self.assertEqual(
+            match_params["match_attributes"], {"length": float("inf")}
+        )
 
         # Check that can build a match
         players = [axl.Cooperator(), axl.Defector()]
@@ -178,7 +180,9 @@ class TestMatchGenerator(unittest.TestCase):
             (i, j, repetitions) for i in range(5) for j in range(i, 5)
         ]
 
-        self.assertEqual(sorted(match_definitions), sorted(expected_match_definitions))
+        self.assertEqual(
+            sorted(match_definitions), sorted(expected_match_definitions)
+        )
 
     @given(repetitions=integers(min_value=1, max_value=test_repetitions))
     @settings(max_examples=5)
@@ -199,7 +203,9 @@ class TestMatchGenerator(unittest.TestCase):
         ]
         expected_match_definitions = [(i, j, repetitions) for i, j in cycle]
 
-        self.assertEqual(sorted(match_definitions), sorted(expected_match_definitions))
+        self.assertEqual(
+            sorted(match_definitions), sorted(expected_match_definitions)
+        )
 
     def test_len(self):
         turns = 5

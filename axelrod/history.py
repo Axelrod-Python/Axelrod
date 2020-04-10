@@ -82,7 +82,9 @@ class History(object):
         if isinstance(other, list):
             return self._plays == other
         elif isinstance(other, History):
-            return self._plays == other._plays and self._coplays == other._coplays
+            return (
+                self._plays == other._plays and self._coplays == other._coplays
+            )
         raise TypeError("Cannot compare types.")
 
     def __getitem__(self, key):

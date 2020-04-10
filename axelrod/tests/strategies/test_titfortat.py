@@ -386,7 +386,16 @@ class TestGradual(TestPlayer):
         )
 
         opponent = axl.MockPlayer(actions=[D, C, D, C, C, C, D, C])
-        actions = [(C, D), (D, C), (C, D), (C, C), (C, C), (C, C), (C, D), (D, C)]
+        actions = [
+            (C, D),
+            (D, C),
+            (C, D),
+            (C, C),
+            (C, C),
+            (C, C),
+            (C, D),
+            (D, C),
+        ]
         self.versus_test(
             opponent,
             expected_actions=actions,
@@ -394,7 +403,16 @@ class TestGradual(TestPlayer):
         )
 
         opponent = axl.MockPlayer(actions=[D, C, D, C, C, D, D, D])
-        actions = [(C, D), (D, C), (C, D), (C, C), (C, C), (C, D), (D, D), (D, D)]
+        actions = [
+            (C, D),
+            (D, C),
+            (C, D),
+            (C, C),
+            (C, C),
+            (C, D),
+            (D, D),
+            (D, D),
+        ]
         self.versus_test(
             opponent,
             expected_actions=actions,
@@ -471,7 +489,9 @@ class TestGradual(TestPlayer):
         to a memory one player that start by defecting and only cooperates if
         both players cooperated in the previous round.
         """
-        mistrust_with_bug = axl.MemoryOnePlayer(initial=D, four_vector=(1, 0, 0, 0),)
+        mistrust_with_bug = axl.MemoryOnePlayer(
+            initial=D, four_vector=(1, 0, 0, 0),
+        )
         players = [
             self.player(),
             axl.TitForTat(),
@@ -615,7 +635,16 @@ class TestOriginalGradual(TestPlayer):
         )
 
         opponent = axl.MockPlayer(actions=[D, C, D, C, C, C, D, C])
-        actions = [(C, D), (D, C), (C, D), (C, C), (C, C), (C, C), (C, D), (D, C)]
+        actions = [
+            (C, D),
+            (D, C),
+            (C, D),
+            (C, C),
+            (C, C),
+            (C, C),
+            (C, D),
+            (D, C),
+        ]
         self.versus_test(
             opponent,
             expected_actions=actions,
@@ -628,7 +657,16 @@ class TestOriginalGradual(TestPlayer):
         )
 
         opponent = axl.MockPlayer(actions=[D, C, D, C, C, D, D, D])
-        actions = [(C, D), (D, C), (C, D), (C, C), (C, C), (C, D), (D, D), (D, D)]
+        actions = [
+            (C, D),
+            (D, C),
+            (C, D),
+            (C, C),
+            (C, C),
+            (C, D),
+            (D, D),
+            (D, D),
+        ]
         self.versus_test(
             opponent,
             expected_actions=actions,
@@ -716,7 +754,9 @@ class TestContriteTitForTat(TestPlayer):
         self.assertEqual(ctft._recorded_history, [])
 
     @given(
-        strategies=strategy_lists(strategies=deterministic_strategies, max_size=1),
+        strategies=strategy_lists(
+            strategies=deterministic_strategies, max_size=1
+        ),
         turns=integers(min_value=1, max_value=20),
     )
     def test_is_tit_for_tat_with_no_noise(self, strategies, turns):
@@ -907,7 +947,9 @@ class TestEugineNier(TestPlayer):
     def test_strategy(self):
         actions = [(C, C), (C, C), (C, C), (D, C)]
         self.versus_test(
-            axl.Cooperator(), expected_actions=actions, attrs={"is_defector": False}
+            axl.Cooperator(),
+            expected_actions=actions,
+            attrs={"is_defector": False},
         )
 
         actions = [(C, C), (C, C), (C, C), (C, C)]
@@ -921,7 +963,9 @@ class TestEugineNier(TestPlayer):
         # Plays TfT and defects in last round
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (D, D)]
         self.versus_test(
-            axl.Alternator(), expected_actions=actions, attrs={"is_defector": False}
+            axl.Alternator(),
+            expected_actions=actions,
+            attrs={"is_defector": False},
         )
 
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (C, D)]
@@ -934,7 +978,16 @@ class TestEugineNier(TestPlayer):
 
         # Becomes defector after 5 defections
         opponent = axl.MockPlayer(actions=[D, C, D, D, D, D, C, C])
-        actions = [(C, D), (D, C), (C, D), (D, D), (D, D), (D, D), (D, C), (D, C)]
+        actions = [
+            (C, D),
+            (D, C),
+            (C, D),
+            (D, D),
+            (D, D),
+            (D, D),
+            (D, C),
+            (D, C),
+        ]
         self.versus_test(opponent, expected_actions=actions)
 
 
@@ -982,30 +1035,44 @@ class TestNTitsForMTats(TestPlayer):
         )
         actions = [(C, D), (D, D), (D, C), (C, C), (C, D)]
         self.versus_test(
-            axl.Random(), expected_actions=actions, seed=0, init_kwargs=init_kwargs
+            axl.Random(),
+            expected_actions=actions,
+            seed=0,
+            init_kwargs=init_kwargs,
         )
         actions = [(C, C), (C, D), (D, D), (D, C)]
         self.versus_test(
-            axl.Random(), expected_actions=actions, seed=1, init_kwargs=init_kwargs
+            axl.Random(),
+            expected_actions=actions,
+            seed=1,
+            init_kwargs=init_kwargs,
         )
         opponent = axl.MockPlayer(actions=[C, D])
         actions = [(C, C), (C, D), (D, C), (C, D)]
-        self.versus_test(opponent, expected_actions=actions, init_kwargs=init_kwargs)
+        self.versus_test(
+            opponent, expected_actions=actions, init_kwargs=init_kwargs
+        )
         opponent = axl.MockPlayer(actions=[C, C, D, D, C, D])
         actions = [(C, C), (C, C), (C, D), (D, D), (D, C), (C, D)]
-        self.versus_test(opponent, expected_actions=actions, init_kwargs=init_kwargs)
+        self.versus_test(
+            opponent, expected_actions=actions, init_kwargs=init_kwargs
+        )
 
         # TitFor2Tats test_strategy
         init_kwargs = {"N": 1, "M": 2}
         opponent = axl.MockPlayer(actions=[D, D, D, C, C])
         actions = [(C, D), (C, D), (D, D), (D, C), (C, C), (C, D)]
-        self.versus_test(opponent, expected_actions=actions, init_kwargs=init_kwargs)
+        self.versus_test(
+            opponent, expected_actions=actions, init_kwargs=init_kwargs
+        )
 
         # TwoTitsForTat test_strategy
         init_kwargs = {"N": 2, "M": 1}
         opponent = axl.MockPlayer(actions=[D, C, C, D, C])
         actions = [(C, D), (D, C), (D, C), (C, D), (D, C)]
-        self.versus_test(opponent, expected_actions=actions, init_kwargs=init_kwargs)
+        self.versus_test(
+            opponent, expected_actions=actions, init_kwargs=init_kwargs
+        )
         actions = [(C, C), (C, C)]
         self.versus_test(
             opponent=axl.Cooperator(),
@@ -1014,7 +1081,9 @@ class TestNTitsForMTats(TestPlayer):
         )
         actions = [(C, D), (D, D), (D, D)]
         self.versus_test(
-            opponent=axl.Defector(), expected_actions=actions, init_kwargs=init_kwargs,
+            opponent=axl.Defector(),
+            expected_actions=actions,
+            init_kwargs=init_kwargs,
         )
 
         # Cooperator test_strategy
@@ -1164,7 +1233,9 @@ class TestRandomTitForTat(TestPlayer):
         )
 
         actions = [(C, D), (D, D), (D, D)]
-        self.versus_test(axl.Defector(), expected_actions=actions, init_kwargs={"p": 0})
+        self.versus_test(
+            axl.Defector(), expected_actions=actions, init_kwargs={"p": 0}
+        )
 
         actions = [(C, C), (C, C), (D, C), (C, C)]
         self.versus_test(
@@ -1172,7 +1243,9 @@ class TestRandomTitForTat(TestPlayer):
         )
 
         actions = [(C, D), (D, D), (C, D), (D, D)]
-        self.versus_test(axl.Defector(), expected_actions=actions, init_kwargs={"p": 1})
+        self.versus_test(
+            axl.Defector(), expected_actions=actions, init_kwargs={"p": 1}
+        )
 
         actions = [(C, C), (C, C), (D, C), (C, C), (D, C), (C, C)]
         self.versus_test(axl.Cooperator(), expected_actions=actions, seed=2)

@@ -132,7 +132,10 @@ class TestEvolvableANN3(TestEvolvablePlayer):
 
 # Substitute EvolvableANN as a regular EvolvedANN5.
 EvolvableANNPlayerWithDefault = PartialClass(
-    axl.EvolvableANN, num_features=num_features, num_hidden=num_hidden, weights=weights
+    axl.EvolvableANN,
+    num_features=num_features,
+    num_hidden=num_hidden,
+    weights=weights,
 )
 
 

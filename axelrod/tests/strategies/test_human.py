@@ -28,7 +28,9 @@ class TestActionValidator(TestCase):
             ActionValidator().validate(test_document)
 
         test_document = TestDocument("E")
-        self.assertRaises(ValidationError, ActionValidator().validate, test_document)
+        self.assertRaises(
+            ValidationError, ActionValidator().validate, test_document
+        )
 
 
 class TestHumanClass(TestPlayer):

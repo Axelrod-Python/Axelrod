@@ -54,9 +54,13 @@ class TestTransformers(unittest.TestCase):
         args = decorator.args
         kwargs = decorator.kwargs.copy()
 
-        new_decorator = DecoratorReBuilder()(factory_args, args, kwargs, new_prefix)
+        new_decorator = DecoratorReBuilder()(
+            factory_args, args, kwargs, new_prefix
+        )
 
-        self.assertEqual(decorator(axl.Cooperator)(), new_decorator(axl.Cooperator)())
+        self.assertEqual(
+            decorator(axl.Cooperator)(), new_decorator(axl.Cooperator)()
+        )
 
     def test_StrategyReBuilder_declared_class_with_name_prefix(self):
         player = CanNotPickle()
@@ -158,9 +162,15 @@ class TestTransformers(unittest.TestCase):
             str(InitialTransformer([D, D, C])(axl.Alternator)()),
             "Initial Alternator: [D, D, C]",
         )
-        self.assertEqual(str(FlipTransformer()(axl.Random)(0.1)), "Flipped Random: 0.1")
         self.assertEqual(
-            str(MixedTransformer(0.3, (axl.Alternator, axl.Bully))(axl.Random)(0.1)),
+            str(FlipTransformer()(axl.Random)(0.1)), "Flipped Random: 0.1"
+        )
+        self.assertEqual(
+            str(
+                MixedTransformer(0.3, (axl.Alternator, axl.Bully))(axl.Random)(
+                    0.1
+                )
+            ),
             "Mutated Random: 0.1: 0.3, ['Alternator', 'Bully']",
         )
 
@@ -395,7 +405,9 @@ class TestTransformers(unittest.TestCase):
         p2 = FinalTransformer([D, D, D])(axl.Cooperator)()
         self.assertEqual(axl.Classifiers["makes_use_of"](p2), set(["length"]))
         self.assertEqual(axl.Classifiers["memory_depth"](p2), 3)
-        self.assertEqual(axl.Classifiers["makes_use_of"](axl.Cooperator()), set([]))
+        self.assertEqual(
+            axl.Classifiers["makes_use_of"](axl.Cooperator()), set([])
+        )
 
         p2.match_attributes["length"] = 6
         for _ in range(8):
@@ -432,7 +444,9 @@ class TestTransformers(unittest.TestCase):
             p1.play(p2)
         self.assertEqual(p1.history, [D, D, C, C, C, C, D, D])
 
-        cls1 = FinalTransformer([D, D])(InitialTransformer([D, D])(axl.Cooperator))
+        cls1 = FinalTransformer([D, D])(
+            InitialTransformer([D, D])(axl.Cooperator)
+        )
         p1 = cls1()
         p2 = axl.Cooperator()
         p1.match_attributes["length"] = 8
@@ -575,7 +589,9 @@ class TestTransformers(unittest.TestCase):
         # Now let's use the transformer to break the deadlock to achieve
         # Mutual cooperation
         p1 = axl.TitForTat()
-        p2 = DeadlockBreakingTransformer()(InitialTransformer([D])(axl.TitForTat))()
+        p2 = DeadlockBreakingTransformer()(
+            InitialTransformer([D])(axl.TitForTat)
+        )()
         for _ in range(4):
             p1.play(p2)
         self.assertEqual(p1.history, [C, D, C, C])

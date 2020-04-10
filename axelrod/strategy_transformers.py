@@ -27,7 +27,9 @@ C, D = Action.C, Action.D
 # Alternator.
 
 
-def StrategyTransformerFactory(strategy_wrapper, name_prefix=None, reclassifier=None):
+def StrategyTransformerFactory(
+    strategy_wrapper, name_prefix=None, reclassifier=None
+):
     """Modify an existing strategy dynamically by wrapping the strategy
     method with the argument `strategy_wrapper`.
 
@@ -232,7 +234,11 @@ class DecoratorReBuilder(object):
     """
 
     def __call__(
-        self, factory_args: tuple, args: tuple, kwargs: dict, instance_name_prefix: str
+        self,
+        factory_args: tuple,
+        args: tuple,
+        kwargs: dict,
+        instance_name_prefix: str,
     ) -> Any:
 
         decorator_class = StrategyTransformerFactory(*factory_args)
@@ -246,7 +252,9 @@ class StrategyReBuilder(object):
     that could not normally be pickled.
     """
 
-    def __call__(self, decorators: list, import_name: str, module_name: str) -> Player:
+    def __call__(
+        self, decorators: list, import_name: str, module_name: str
+    ) -> Player:
 
         module_ = import_module(module_name)
         import_class = getattr(module_, import_name)
@@ -275,7 +283,9 @@ def compose_transformers(t1, t2):
     return Composition()
 
 
-def generic_strategy_wrapper(player, opponent, proposed_action, *args, **kwargs):
+def generic_strategy_wrapper(
+    player, opponent, proposed_action, *args, **kwargs
+):
     """
     Strategy wrapper functions should be of the following form.
 
@@ -307,7 +317,9 @@ def flip_wrapper(player, opponent, action):
     return action.flip()
 
 
-FlipTransformer = StrategyTransformerFactory(flip_wrapper, name_prefix="Flipped")
+FlipTransformer = StrategyTransformerFactory(
+    flip_wrapper, name_prefix="Flipped"
+)
 
 
 def dual_wrapper(player, opponent: Player, proposed_action: Action) -> Action:
@@ -377,7 +389,9 @@ def forgiver_reclassifier(original_classifier, p):
 
 
 ForgiverTransformer = StrategyTransformerFactory(
-    forgiver_wrapper, name_prefix="Forgiving", reclassifier=forgiver_reclassifier
+    forgiver_wrapper,
+    name_prefix="Forgiving",
+    reclassifier=forgiver_reclassifier,
 )
 
 
@@ -495,14 +509,18 @@ def grudge_wrapper(player, opponent, action, grudges):
     return action
 
 
-GrudgeTransformer = StrategyTransformerFactory(grudge_wrapper, name_prefix="Grudging")
+GrudgeTransformer = StrategyTransformerFactory(
+    grudge_wrapper, name_prefix="Grudging"
+)
 
 
 def apology_wrapper(player, opponent, action, myseq, opseq):
     length = len(myseq)
     if len(player.history) < length:
         return action
-    if (myseq == player.history[-length:]) and (opseq == opponent.history[-length:]):
+    if (myseq == player.history[-length:]) and (
+        opseq == opponent.history[-length:]
+    ):
         return C
     return action
 

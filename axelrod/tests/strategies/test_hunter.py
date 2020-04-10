@@ -93,12 +93,16 @@ class TestAlternatorHunter(TestPlayer):
     def test_strategy(self):
         actions = [(C, C), (C, D)] * 3 + [(D, C), (D, D)] * 5
         self.versus_test(
-            opponent=axl.Alternator(), expected_actions=actions, attrs={"is_alt": True},
+            opponent=axl.Alternator(),
+            expected_actions=actions,
+            attrs={"is_alt": True},
         )
 
         actions = [(C, D)] * 14
         self.versus_test(
-            opponent=axl.Defector(), expected_actions=actions, attrs={"is_alt": False},
+            opponent=axl.Defector(),
+            expected_actions=actions,
+            attrs={"is_alt": False},
         )
 
     def test_reset_attr(self):

@@ -33,11 +33,15 @@ class TestRandom(TestPlayer):
 
         opponent = axl.MockPlayer()
         actions = [(D, C), (D, C), (D, C)]
-        self.versus_test(opponent, expected_actions=actions, init_kwargs={"p": 0})
+        self.versus_test(
+            opponent, expected_actions=actions, init_kwargs={"p": 0}
+        )
 
         opponent = axl.MockPlayer()
         actions = [(C, C), (C, C), (C, C)]
-        self.versus_test(opponent, expected_actions=actions, init_kwargs={"p": 1})
+        self.versus_test(
+            opponent, expected_actions=actions, init_kwargs={"p": 1}
+        )
 
     def test_deterministic_classification(self):
         """Test classification when p is 0 or 1"""

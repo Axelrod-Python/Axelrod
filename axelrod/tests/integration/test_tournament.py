@@ -53,7 +53,9 @@ class TestTournament(unittest.TestCase):
         path = pathlib.Path("test_outputs/test_tournament.csv")
         filename = axl_filename(path)
         self.assertIsNone(
-            tournament.play(progress_bar=False, filename=filename, build_results=False)
+            tournament.play(
+                progress_bar=False, filename=filename, build_results=False
+            )
         )
 
     def test_serial_play(self):
@@ -96,9 +98,13 @@ class TestTournament(unittest.TestCase):
                 turns=2,
                 repetitions=2,
             )
-            path = pathlib.Path("test_outputs/stochastic_tournament_{}.csv".format(_))
+            path = pathlib.Path(
+                "test_outputs/stochastic_tournament_{}.csv".format(_)
+            )
             files.append(axl_filename(path))
-            tournament.play(progress_bar=False, filename=files[-1], build_results=False)
+            tournament.play(
+                progress_bar=False, filename=files[-1], build_results=False
+            )
         self.assertTrue(filecmp.cmp(files[0], files[1]))
 
     def test_repeat_tournament_stochastic(self):
@@ -120,9 +126,13 @@ class TestTournament(unittest.TestCase):
                 turns=2,
                 repetitions=2,
             )
-            path = pathlib.Path("test_outputs/stochastic_tournament_{}.csv".format(_))
+            path = pathlib.Path(
+                "test_outputs/stochastic_tournament_{}.csv".format(_)
+            )
             files.append(axl_filename(path))
-            tournament.play(progress_bar=False, filename=files[-1], build_results=False)
+            tournament.play(
+                progress_bar=False, filename=files[-1], build_results=False
+            )
         self.assertTrue(filecmp.cmp(files[0], files[1]))
 
 

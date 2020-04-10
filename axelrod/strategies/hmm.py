@@ -62,7 +62,11 @@ class SimpleHMM(object):
     """
 
     def __init__(
-        self, transitions_C, transitions_D, emission_probabilities, initial_state
+        self,
+        transitions_C,
+        transitions_D,
+        emission_probabilities,
+        initial_state,
     ) -> None:
         """
         Params
@@ -352,9 +356,15 @@ class EvolvableHMMPlayer(HMMPlayer, EvolvablePlayer):
 
     def crossover(self, other):
         if other.__class__ != self.__class__:
-            raise TypeError("Crossover must be between the same player classes.")
-        transitions_C = crossover_lists(self.hmm.transitions_C, other.hmm.transitions_C)
-        transitions_D = crossover_lists(self.hmm.transitions_D, other.hmm.transitions_D)
+            raise TypeError(
+                "Crossover must be between the same player classes."
+            )
+        transitions_C = crossover_lists(
+            self.hmm.transitions_C, other.hmm.transitions_C
+        )
+        transitions_D = crossover_lists(
+            self.hmm.transitions_D, other.hmm.transitions_D
+        )
         emission_probabilities = crossover_lists(
             self.hmm.emission_probabilities, other.hmm.emission_probabilities
         )

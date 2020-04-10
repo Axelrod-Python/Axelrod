@@ -45,7 +45,9 @@ class TestBackStabber(TestPlayer):
         )
         actions = [(C, C)] * 10 + [(D, C), (D, C)]
         self.versus_test(
-            axl.Cooperator(), expected_actions=actions, match_attributes={"length": 12},
+            axl.Cooperator(),
+            expected_actions=actions,
+            match_attributes={"length": 12},
         )
         # Test that exceeds tournament length.
         actions = [(C, C)] * 198 + [(D, C), (D, C), (C, C), (C, C)]
@@ -57,7 +59,9 @@ class TestBackStabber(TestPlayer):
         # But only if the tournament is known.
         actions = [(C, C)] * 202
         self.versus_test(
-            axl.Cooperator(), expected_actions=actions, match_attributes={"length": -1},
+            axl.Cooperator(),
+            expected_actions=actions,
+            match_attributes={"length": -1},
         )
 
 
@@ -113,9 +117,13 @@ class TestDoubleCrosser(TestBackStabber):
 
     def test_starting_defect_keeps_alt_strategy_from_triggering(self):
         opponent_actions_suffix = [C, D, C, D, D] + 3 * [C]
-        expected_actions_suffix = [(C, C), (C, D), (C, C), (C, D), (C, D)] + 3 * [
-            (D, C)
-        ]
+        expected_actions_suffix = [
+            (C, C),
+            (C, D),
+            (C, C),
+            (C, D),
+            (C, D),
+        ] + 3 * [(D, C)]
 
         defects_on_first = [D] + [C] * 6
         defects_on_first_actions = [(C, D)] + [(C, C)] * 6

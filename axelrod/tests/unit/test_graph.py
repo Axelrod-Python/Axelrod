@@ -40,8 +40,12 @@ class TestGraph(unittest.TestCase):
         self.assertEqual(str(g), "<Graph: [[1, 2], [2, 3]]>")
 
         self.assertEqual(g._edges, [(1, 2), (2, 1), (2, 3), (3, 2)])
-        self.assert_out_mapping(g, {1: {2: None}, 2: {1: None, 3: None}, 3: {2: None}})
-        self.assert_in_mapping(g, {1: {2: None}, 2: {1: None, 3: None}, 3: {2: None}})
+        self.assert_out_mapping(
+            g, {1: {2: None}, 2: {1: None, 3: None}, 3: {2: None}}
+        )
+        self.assert_in_mapping(
+            g, {1: {2: None}, 2: {1: None, 3: None}, 3: {2: None}}
+        )
 
     def test_undirected_graph_with_vertices_and_weighted_edges(self):
         g = axl.graph.Graph(edges=[[1, 2, 10], [2, 3, 5]])
@@ -92,7 +96,11 @@ class TestGraph(unittest.TestCase):
         g.add_loops()
         self.assertEqual(
             list(sorted(g._edges)),
-            list(sorted([("a", "b"), ("b", "a"), ("c", "c"), ("a", "a"), ("b", "b")])),
+            list(
+                sorted(
+                    [("a", "b"), ("b", "a"), ("c", "c"), ("a", "a"), ("b", "b")]
+                )
+            ),
         )
 
 
@@ -148,9 +156,19 @@ class TestCycle(unittest.TestCase):
         edges = [(0, 1), (1, 0), (1, 2), (2, 1), (2, 3), (3, 2), (3, 0), (0, 3)]
         self.assertEqual(g.vertices, [0, 1, 2, 3])
         self.assertEqual(g.edges, edges)
-        for vertex, neighbors in [(0, (1, 3)), (1, (0, 2)), (2, (1, 3)), (3, (0, 2))]:
+        for vertex, neighbors in [
+            (0, (1, 3)),
+            (1, (0, 2)),
+            (2, (1, 3)),
+            (3, (0, 2)),
+        ]:
             self.assertEqual(set(g.out_vertices(vertex)), set(neighbors))
-        for vertex, neighbors in [(0, (1, 3)), (1, (0, 2)), (2, (1, 3)), (3, (0, 2))]:
+        for vertex, neighbors in [
+            (0, (1, 3)),
+            (1, (0, 2)),
+            (2, (1, 3)),
+            (3, (0, 2)),
+        ]:
             self.assertEqual(set(g.in_vertices(vertex)), set(neighbors))
 
 
@@ -211,7 +229,17 @@ class TestComplete(unittest.TestCase):
     def test_size_3_with_loops(self):
         g = axl.graph.complete_graph(3, loops=True)
         self.assertEqual(g.vertices, [0, 1, 2])
-        edges = [(0, 1), (1, 0), (0, 2), (2, 0), (1, 2), (2, 1), (0, 0), (1, 1), (2, 2)]
+        edges = [
+            (0, 1),
+            (1, 0),
+            (0, 2),
+            (2, 0),
+            (1, 2),
+            (2, 1),
+            (0, 0),
+            (1, 1),
+            (2, 2),
+        ]
         self.assertEqual(g.edges, edges)
         self.assertEqual(g.directed, False)
 

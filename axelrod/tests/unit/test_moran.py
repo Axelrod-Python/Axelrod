@@ -23,16 +23,21 @@ class TestMoranProcess(unittest.TestCase):
         self.assertEqual(mp.noise, 0)
         self.assertEqual(mp.initial_players, players)
         self.assertEqual(mp.players, list(players))
-        self.assertEqual(mp.populations, [Counter({"Cooperator": 1, "Defector": 1})])
+        self.assertEqual(
+            mp.populations, [Counter({"Cooperator": 1, "Defector": 1})]
+        )
         self.assertIsNone(mp.winning_strategy_name)
         self.assertEqual(mp.mutation_rate, 0)
         self.assertEqual(mp.mode, "bd")
         self.assertEqual(mp.deterministic_cache, axl.DeterministicCache())
         self.assertEqual(
-            mp.mutation_targets, {"Cooperator": [players[1]], "Defector": [players[0]]}
+            mp.mutation_targets,
+            {"Cooperator": [players[1]], "Defector": [players[0]]},
         )
         self.assertEqual(mp.interaction_graph._edges, [(0, 1), (1, 0)])
-        self.assertEqual(mp.reproduction_graph._edges, [(0, 1), (1, 0), (0, 0), (1, 1)])
+        self.assertEqual(
+            mp.reproduction_graph._edges, [(0, 1), (1, 0), (0, 0), (1, 1)]
+        )
         self.assertEqual(mp.fitness_transformation, None)
         self.assertEqual(mp.locations, [0, 1])
         self.assertEqual(mp.index, {0: 0, 1: 1})
@@ -221,8 +226,12 @@ class TestMoranProcess(unittest.TestCase):
     def test_two_players_with_mutation(self):
         p1, p2 = axl.Cooperator(), axl.Defector()
         axl.seed(5)
-        mp = axl.MoranProcess((p1, p2), mutation_rate=0.2, stop_on_fixation=False)
-        self.assertDictEqual(mp.mutation_targets, {str(p1): [p2], str(p2): [p1]})
+        mp = axl.MoranProcess(
+            (p1, p2), mutation_rate=0.2, stop_on_fixation=False
+        )
+        self.assertDictEqual(
+            mp.mutation_targets, {str(p1): [p2], str(p2): [p1]}
+        )
         # Test that mutation causes the population to alternate between
         # fixations
         counters = [
@@ -259,7 +268,9 @@ class TestMoranProcess(unittest.TestCase):
         p2 = axl.Random()
         p3 = axl.Defector()
         players = [p1, p2, p3]
-        mp = axl.MoranProcess(players, mutation_rate=0.2, stop_on_fixation=False)
+        mp = axl.MoranProcess(
+            players, mutation_rate=0.2, stop_on_fixation=False
+        )
         self.assertDictEqual(
             mp.mutation_targets,
             {str(p1): [p3, p2], str(p2): [p1, p3], str(p3): [p1, p2]},
@@ -383,7 +394,9 @@ class TestMoranProcess(unittest.TestCase):
     def test_atomic_mutation_fsm(self):
         axl.seed(12)
         players = [
-            axl.EvolvableFSMPlayer(num_states=2, initial_state=1, initial_action=C)
+            axl.EvolvableFSMPlayer(
+                num_states=2, initial_state=1, initial_action=C
+            )
             for _ in range(5)
         ]
         mp = axl.MoranProcess(players, turns=10, mutation_method="atomic")
@@ -398,22 +411,30 @@ class TestMoranProcess(unittest.TestCase):
     def test_atomic_mutation_cycler(self):
         axl.seed(10)
         cycle_length = 5
-        players = [axl.EvolvableCycler(cycle_length=cycle_length) for _ in range(5)]
+        players = [
+            axl.EvolvableCycler(cycle_length=cycle_length) for _ in range(5)
+        ]
         mp = axl.MoranProcess(players, turns=10, mutation_method="atomic")
         population = mp.play()
-        self.assertEqual(mp.winning_strategy_name, "EvolvableCycler: CDCDD, 5, 0.2, 1")
+        self.assertEqual(
+            mp.winning_strategy_name, "EvolvableCycler: CDCDD, 5, 0.2, 1"
+        )
         self.assertEqual(len(mp.populations), 19)
         self.assertTrue(mp.fixated)
 
     def test_mutation_method_exceptions(self):
         axl.seed(10)
         cycle_length = 5
-        players = [axl.EvolvableCycler(cycle_length=cycle_length) for _ in range(5)]
+        players = [
+            axl.EvolvableCycler(cycle_length=cycle_length) for _ in range(5)
+        ]
         with self.assertRaises(ValueError):
             axl.MoranProcess(players, turns=10, mutation_method="random")
 
         axl.seed(0)
-        players = [axl.Cycler(cycle="CD" * random.randint(2, 10)) for _ in range(10)]
+        players = [
+            axl.Cycler(cycle="CD" * random.randint(2, 10)) for _ in range(10)
+        ]
 
         mp = axl.MoranProcess(players, turns=10, mutation_method="atomic")
         with self.assertRaises(TypeError):

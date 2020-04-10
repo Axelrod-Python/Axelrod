@@ -37,10 +37,14 @@ class FunctionCases(unittest.TestCase):
         )
         self.assertAlmostEqual(evalue, 3)
         assert_array_almost_equal(evector, numpy.dot(mat, evector) / evalue)
-        assert_array_almost_equal(evector, _normalise(numpy.array([0.5, 0.5, 1])))
+        assert_array_almost_equal(
+            evector, _normalise(numpy.array([0.5, 0.5, 1]))
+        )
 
     def test_4x4_matrix(self):
-        mat = numpy.array([[2, 0, 0, 0], [1, 2, 0, 0], [0, 1, 3, 0], [0, 0, 1, 3]])
+        mat = numpy.array(
+            [[2, 0, 0, 0], [1, 2, 0, 0], [0, 1, 3, 0], [0, 0, 1, 3]]
+        )
         evector, evalue = principal_eigenvector(
             mat, maximum_iterations=None, max_error=1e-10
         )

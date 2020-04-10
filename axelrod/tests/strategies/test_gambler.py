@@ -131,20 +131,26 @@ class TestPSOGambler1_1_1(TestPlayer):
         seed = 2
         opponent = [D] * 3 + [C] * 10
         expected = [(C, D), (D, D), (D, D)] + [(C, C)] * 10
-        self.versus_test(axl.MockPlayer(opponent), expected_actions=expected, seed=seed)
+        self.versus_test(
+            axl.MockPlayer(opponent), expected_actions=expected, seed=seed
+        )
 
     def test_defect_forever(self):
         seed = 2
         opponent_actions = [C] + [D] + [C] * 10
         expected = [(C, C), (C, D)] + [(D, C)] * 10
         self.versus_test(
-            axl.MockPlayer(opponent_actions), expected_actions=expected, seed=seed
+            axl.MockPlayer(opponent_actions),
+            expected_actions=expected,
+            seed=seed,
         )
 
         opponent_actions = [D] + [C] * 10
         expected = [(C, D)] + [(D, C)] * 10
         self.versus_test(
-            axl.MockPlayer(opponent_actions), expected_actions=expected, seed=seed
+            axl.MockPlayer(opponent_actions),
+            expected_actions=expected,
+            seed=seed,
         )
 
 
@@ -376,7 +382,9 @@ class TestPSOGambler2_2_2_Noise05(TestPlayer):
         new_seed = 1
         expected[4] = (C, C)
         expected[6] = (D, C)
-        self.versus_test(axl.Alternator(), expected_actions=expected, seed=new_seed)
+        self.versus_test(
+            axl.Alternator(), expected_actions=expected, seed=new_seed
+        )
 
     def test_vs_DCDDC(self):
         opponent_actions = [D, C, D, D, C]
@@ -394,13 +402,17 @@ class TestPSOGambler2_2_2_Noise05(TestPlayer):
             (C, D),
         ]
         self.versus_test(
-            axl.MockPlayer(opponent_actions), expected_actions=expected, seed=seed
+            axl.MockPlayer(opponent_actions),
+            expected_actions=expected,
+            seed=seed,
         )
 
         new_seed = 3
         expected[8] = (D, D)
         self.versus_test(
-            axl.MockPlayer(opponent_actions), expected_actions=expected, seed=new_seed,
+            axl.MockPlayer(opponent_actions),
+            expected_actions=expected,
+            seed=new_seed,
         )
 
         new_seed = 2
@@ -489,16 +501,22 @@ class TestZDMem2(TestPlayer):
 
         new_seed = 1
         expected = [(C, C), (C, D), (C, C), (D, D), (D, C), (C, D), (D, C)]
-        self.versus_test(axl.Alternator(), expected_actions=expected, seed=new_seed)
+        self.versus_test(
+            axl.Alternator(), expected_actions=expected, seed=new_seed
+        )
 
 
 class TestEvolvableGambler(unittest.TestCase):
     def test_receive_vector(self):
         plays, op_plays, op_start_plays = 1, 1, 1
-        player = axl.EvolvableGambler(parameters=(plays, op_plays, op_start_plays))
+        player = axl.EvolvableGambler(
+            parameters=(plays, op_plays, op_start_plays)
+        )
 
         self.assertRaises(
-            AttributeError, axl.EvolvableGambler.__getattribute__, *[player, "vector"]
+            AttributeError,
+            axl.EvolvableGambler.__getattribute__,
+            *[player, "vector"]
         )
 
         vector = [random.random() for _ in range(8)]
@@ -507,19 +525,25 @@ class TestEvolvableGambler(unittest.TestCase):
 
     def test_vector_to_instance(self):
         plays, op_plays, op_start_plays = 1, 1, 1
-        player = axl.EvolvableGambler(parameters=(plays, op_plays, op_start_plays))
+        player = axl.EvolvableGambler(
+            parameters=(plays, op_plays, op_start_plays)
+        )
 
         vector = [random.random() for _ in range(8)]
         player.receive_vector(vector)
         keys = create_lookup_table_keys(
-            player_depth=plays, op_depth=op_plays, op_openings_depth=op_start_plays
+            player_depth=plays,
+            op_depth=op_plays,
+            op_openings_depth=op_start_plays,
         )
         action_dict = dict(zip(keys, vector))
         self.assertEqual(player._lookup.dictionary, action_dict)
 
     def test_create_vector_bounds(self):
         plays, op_plays, op_start_plays = 1, 1, 1
-        player = axl.EvolvableGambler(parameters=(plays, op_plays, op_start_plays))
+        player = axl.EvolvableGambler(
+            parameters=(plays, op_plays, op_start_plays)
+        )
         lb, ub = player.create_vector_bounds()
         self.assertIsInstance(lb, list)
         self.assertIsInstance(ub, list)

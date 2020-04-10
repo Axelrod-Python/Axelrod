@@ -97,7 +97,9 @@ class TestBasicCycler(TestPlayer):
     def test_cycler_works_as_expected(self):
         expected = [(C, D), (D, D), (D, D), (C, D)] * 2
         self.versus_test(
-            axl.Defector(), expected_actions=expected, init_kwargs={"cycle": "CDDC"}
+            axl.Defector(),
+            expected_actions=expected,
+            init_kwargs={"cycle": "CDDC"},
         )
 
     def test_cycle_raises_value_error_on_bad_cycle_str(self):
@@ -168,7 +170,8 @@ class TestEvolvableCycler(unittest.TestCase):
 
         cycle = "C" * random.randint(0, 20) + "D" * random.randint(0, 20)
         self.assertEqual(
-            self.player_class._normalize_parameters(cycle=cycle), (cycle, len(cycle))
+            self.player_class._normalize_parameters(cycle=cycle),
+            (cycle, len(cycle)),
         )
 
         cycle_length = random.randint(1, 20)

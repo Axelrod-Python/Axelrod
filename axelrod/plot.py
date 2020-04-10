@@ -97,7 +97,9 @@ class Plot(object):
         # Sort wins by median
         wins = self.result_set.wins
         medians = map(median, wins)
-        medians = sorted([(m, i) for (i, m) in enumerate(medians)], reverse=True)
+        medians = sorted(
+            [(m, i) for (i, m) in enumerate(medians)], reverse=True
+        )
         # Reorder and grab names
         wins = [wins[x[-1]] for x in medians]
         ranked_names = [str(self.players[x[-1]]) for x in medians]
@@ -324,7 +326,9 @@ class Plot(object):
             pbar = tqdm.tqdm(total=total, desc="Obtaining plots")
 
         for method, name in plots:
-            f = getattr(self, method)(title="{} - {}".format(title_prefix, name))
+            f = getattr(self, method)(
+                title="{} - {}".format(title_prefix, name)
+            )
             path = pathlib.Path("{}_{}.{}".format(prefix, method, filetype))
             f.savefig(axl_filename(path))
             plt.close(f)

@@ -27,7 +27,10 @@ class DefectorHunter(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
-        if len(self.history) >= 4 and len(opponent.history) == opponent.defections:
+        if (
+            len(self.history) >= 4
+            and len(opponent.history) == opponent.defections
+        ):
             return D
         return C
 
@@ -52,7 +55,10 @@ class CooperatorHunter(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
-        if len(self.history) >= 4 and len(opponent.history) == opponent.cooperations:
+        if (
+            len(self.history) >= 4
+            and len(opponent.history) == opponent.cooperations
+        ):
             return D
         return C
 
@@ -250,6 +256,8 @@ class RandomHunter(Player):
                 probabilities.append(self.countCC / self.cooperations)
             if self.defections > 5:
                 probabilities.append(self.countDD / self.defections)
-            if probabilities and all([abs(p - 0.5) < 0.25 for p in probabilities]):
+            if probabilities and all(
+                [abs(p - 0.5) < 0.25 for p in probabilities]
+            ):
                 return D
         return C

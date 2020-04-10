@@ -201,7 +201,9 @@ class TestEvolvedHMM5vsCooperator(TestMatch):
 
 class TestEvolvedHMM5vsDefector(TestMatch):
     def test_rounds(self):
-        self.versus_test(axl.EvolvedHMM5(), axl.Defector(), [C, C, D], [D, D, D])
+        self.versus_test(
+            axl.EvolvedHMM5(), axl.Defector(), [C, C, D], [D, D, D]
+        )
 
 
 class TestEvolvableHMMPlayer(unittest.TestCase):

@@ -45,7 +45,24 @@ class TestGenericPlayerTwo(unittest.TestCase):
         )
     )
     p4 = MemoryTwoPlayer(
-        sixteen_vector=(0.1, 0, 0.2, 0, 0.3, 0, 0.4, 0, 0.5, 0, 0.6, 0, 0.7, 0, 0.8, 0)
+        sixteen_vector=(
+            0.1,
+            0,
+            0.2,
+            0,
+            0.3,
+            0,
+            0.4,
+            0,
+            0.5,
+            0,
+            0.6,
+            0,
+            0.7,
+            0,
+            0.8,
+            0,
+        )
     )
 
     def test_name(self):
@@ -141,9 +158,7 @@ class TestMemoryTwoPlayer(unittest.TestCase):
 
 
 class TestMemoryStochastic(TestPlayer):
-    name = (
-        "Generic Memory Two Player: (1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1): C"
-    )
+    name = "Generic Memory Two Player: (1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1): C"
     player = axl.MemoryTwoPlayer
     expected_classifier = {
         "memory_depth": 2,  # Memory-two Sixteen-Vector
@@ -217,7 +232,9 @@ class TestAON2(TestPlayer):
 
         # tests states 3, 5 and 12
         actions = [(C, D), (C, C), (D, C), (D, D), (D, D), (C, D)]
-        self.versus_test(opponent=axl.SuspiciousTitForTat(), expected_actions=actions)
+        self.versus_test(
+            opponent=axl.SuspiciousTitForTat(), expected_actions=actions
+        )
 
         # tests state 1
         actions = [(C, C), (C, C), (C, C), (C, C)]
@@ -250,12 +267,15 @@ class TestDelayedAON1(TestPlayer):
         # tests states 1, 4 and 8
         actions = [(C, D), (C, D), (D, D), (C, C), (C, C), (C, D)]
         self.versus_test(
-            opponent=axl.Cycler(["D", "D", "D", "C", "C"]), expected_actions=actions
+            opponent=axl.Cycler(["D", "D", "D", "C", "C"]),
+            expected_actions=actions,
         )
 
         # tests states 3, 5
         actions = [(C, D), (C, C), (D, C), (D, D), (C, D)]
-        self.versus_test(opponent=axl.SuspiciousTitForTat(), expected_actions=actions)
+        self.versus_test(
+            opponent=axl.SuspiciousTitForTat(), expected_actions=actions
+        )
 
 
 class TestMEM2(TestPlayer):

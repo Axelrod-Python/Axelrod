@@ -59,12 +59,18 @@ class Classifier(Generic[T]):
 
 
 stochastic = Classifier[bool]("stochastic", lambda _: False)
-memory_depth = Classifier[Union[float, int]]("memory_depth", lambda _: float("inf"))
+memory_depth = Classifier[Union[float, int]](
+    "memory_depth", lambda _: float("inf")
+)
 makes_use_of = Classifier[Optional[Set[Text]]]("makes_use_of", lambda _: None)
 long_run_time = Classifier[bool]("long_run_time", lambda _: False)
 inspects_source = Classifier[Optional[bool]]("inspects_source", lambda _: None)
-manipulates_source = Classifier[Optional[bool]]("manipulates_source", lambda _: None)
-manipulates_state = Classifier[Optional[bool]]("manipulates_state", lambda _: None)
+manipulates_source = Classifier[Optional[bool]](
+    "manipulates_source", lambda _: None
+)
+manipulates_state = Classifier[Optional[bool]](
+    "manipulates_state", lambda _: None
+)
 
 # Should list all known classifiers.
 all_classifiers = [

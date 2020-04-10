@@ -72,15 +72,39 @@ class TestResultSet(unittest.TestCase):
 
         # Recalculating to deal with numeric imprecision
         cls.expected_payoff_matrix = [
-            [0, mean([13 / 5 for _ in range(3)]), mean([2 / 5 for _ in range(3)])],
-            [mean([13 / 5 for _ in range(3)]), 0, mean([4 / 5 for _ in range(3)])],
-            [mean([17 / 5 for _ in range(3)]), mean([9 / 5 for _ in range(3)]), 0],
+            [
+                0,
+                mean([13 / 5 for _ in range(3)]),
+                mean([2 / 5 for _ in range(3)]),
+            ],
+            [
+                mean([13 / 5 for _ in range(3)]),
+                0,
+                mean([4 / 5 for _ in range(3)]),
+            ],
+            [
+                mean([17 / 5 for _ in range(3)]),
+                mean([9 / 5 for _ in range(3)]),
+                0,
+            ],
         ]
 
         cls.expected_payoff_stddevs = [
-            [0, std([13 / 5 for _ in range(3)]), std([2 / 5 for _ in range(3)])],
-            [std([13 / 5 for _ in range(3)]), 0, std([4 / 5 for _ in range(3)])],
-            [std([17 / 5 for _ in range(3)]), std([9 / 5 for _ in range(3)]), 0],
+            [
+                0,
+                std([13 / 5 for _ in range(3)]),
+                std([2 / 5 for _ in range(3)]),
+            ],
+            [
+                std([13 / 5 for _ in range(3)]),
+                0,
+                std([4 / 5 for _ in range(3)]),
+            ],
+            [
+                std([17 / 5 for _ in range(3)]),
+                std([9 / 5 for _ in range(3)]),
+                0,
+            ],
         ]
 
         cls.expected_cooperation = [[0, 9, 9], [9, 0, 3], [0, 0, 0]]
@@ -89,8 +113,16 @@ class TestResultSet(unittest.TestCase):
         cls.expected_initial_cooperation_rate = [1, 1, 0]
 
         cls.expected_normalised_cooperation = [
-            [0, mean([3 / 5 for _ in range(3)]), mean([3 / 5 for _ in range(3)])],
-            [mean([3 / 5 for _ in range(3)]), 0, mean([1 / 5 for _ in range(3)])],
+            [
+                0,
+                mean([3 / 5 for _ in range(3)]),
+                mean([3 / 5 for _ in range(3)]),
+            ],
+            [
+                mean([3 / 5 for _ in range(3)]),
+                0,
+                mean([1 / 5 for _ in range(3)]),
+            ],
             [0, 0, 0],
         ]
 
@@ -177,7 +209,11 @@ class TestResultSet(unittest.TestCase):
 
         cls.expected_good_partner_rating = [1.0, 1.0, 0]
 
-        cls.expected_eigenjesus_rating = [0.5547001962252291, 0.8320502943378436, 0.0]
+        cls.expected_eigenjesus_rating = [
+            0.5547001962252291,
+            0.8320502943378436,
+            0.0,
+        ]
 
         cls.expected_eigenmoses_rating = [
             -0.4578520302117101,
@@ -338,7 +374,9 @@ class TestResultSet(unittest.TestCase):
         for i, row in enumerate(rs.score_diffs):
             for j, col in enumerate(row):
                 for k, score in enumerate(col):
-                    self.assertAlmostEqual(score, self.expected_score_diffs[i][j][k])
+                    self.assertAlmostEqual(
+                        score, self.expected_score_diffs[i][j][k]
+                    )
 
     def test_payoff_diffs_means(self):
         rs = axl.ResultSet(
@@ -348,7 +386,9 @@ class TestResultSet(unittest.TestCase):
         self.assertEqual(len(rs.payoff_diffs_means), rs.num_players)
         for i, row in enumerate(rs.payoff_diffs_means):
             for j, col in enumerate(row):
-                self.assertAlmostEqual(col, self.expected_payoff_diffs_means[i][j])
+                self.assertAlmostEqual(
+                    col, self.expected_payoff_diffs_means[i][j]
+                )
 
     def test_payoff_stddevs(self):
         rs = axl.ResultSet(
@@ -373,7 +413,8 @@ class TestResultSet(unittest.TestCase):
         self.assertIsInstance(rs.initial_cooperation_count, list)
         self.assertEqual(len(rs.initial_cooperation_count), rs.num_players)
         self.assertEqual(
-            rs.initial_cooperation_count, self.expected_initial_cooperation_count
+            rs.initial_cooperation_count,
+            self.expected_initial_cooperation_count,
         )
 
     def test_normalised_cooperation(self):
@@ -384,7 +425,9 @@ class TestResultSet(unittest.TestCase):
         self.assertEqual(len(rs.normalised_cooperation), rs.num_players)
         for i, row in enumerate(rs.normalised_cooperation):
             for j, col in enumerate(row):
-                self.assertAlmostEqual(col, self.expected_normalised_cooperation[i][j])
+                self.assertAlmostEqual(
+                    col, self.expected_normalised_cooperation[i][j]
+                )
 
     def test_initial_cooperation_rate(self):
         rs = axl.ResultSet(
@@ -402,7 +445,9 @@ class TestResultSet(unittest.TestCase):
         )
         self.assertIsInstance(rs.state_distribution, list)
         self.assertEqual(len(rs.state_distribution), rs.num_players)
-        self.assertEqual(rs.state_distribution, self.expected_state_distribution)
+        self.assertEqual(
+            rs.state_distribution, self.expected_state_distribution
+        )
 
     def test_state_normalised_distribution(self):
         rs = axl.ResultSet(
@@ -447,7 +492,9 @@ class TestResultSet(unittest.TestCase):
         self.assertEqual(len(rs.vengeful_cooperation), rs.num_players)
         for i, row in enumerate(rs.vengeful_cooperation):
             for j, col in enumerate(row):
-                self.assertAlmostEqual(col, self.expected_vengeful_cooperation[i][j])
+                self.assertAlmostEqual(
+                    col, self.expected_vengeful_cooperation[i][j]
+                )
 
     def test_cooperating_rating(self):
         rs = axl.ResultSet(
@@ -455,7 +502,9 @@ class TestResultSet(unittest.TestCase):
         )
         self.assertIsInstance(rs.cooperating_rating, list)
         self.assertEqual(len(rs.cooperating_rating), rs.num_players)
-        self.assertEqual(rs.cooperating_rating, self.expected_cooperating_rating)
+        self.assertEqual(
+            rs.cooperating_rating, self.expected_cooperating_rating
+        )
 
     def test_good_partner_matrix(self):
         rs = axl.ResultSet(
@@ -463,7 +512,9 @@ class TestResultSet(unittest.TestCase):
         )
         self.assertIsInstance(rs.good_partner_matrix, list)
         self.assertEqual(len(rs.good_partner_matrix), rs.num_players)
-        self.assertEqual(rs.good_partner_matrix, self.expected_good_partner_matrix)
+        self.assertEqual(
+            rs.good_partner_matrix, self.expected_good_partner_matrix
+        )
 
     def test_good_partner_rating(self):
         rs = axl.ResultSet(
@@ -471,7 +522,9 @@ class TestResultSet(unittest.TestCase):
         )
         self.assertIsInstance(rs.good_partner_rating, list)
         self.assertEqual(len(rs.good_partner_rating), rs.num_players)
-        self.assertEqual(rs.good_partner_rating, self.expected_good_partner_rating)
+        self.assertEqual(
+            rs.good_partner_rating, self.expected_good_partner_rating
+        )
 
     def test_eigenjesus_rating(self):
         rs = axl.ResultSet(
@@ -504,7 +557,10 @@ class TestResultSet(unittest.TestCase):
     def test_equality(self):
         rs_sets = [
             axl.ResultSet(
-                self.filename, self.players, self.repetitions, progress_bar=False
+                self.filename,
+                self.players,
+                self.repetitions,
+                progress_bar=False,
             )
             for _ in range(2)
         ]
@@ -534,25 +590,34 @@ class TestResultSet(unittest.TestCase):
             [float(player.Median_score) for player in sd], ranked_median_scores
         )
 
-        ranked_cooperation_rating = [rs.cooperating_rating[i] for i in rs.ranking]
+        ranked_cooperation_rating = [
+            rs.cooperating_rating[i] for i in rs.ranking
+        ]
         self.assertEqual(
             [float(player.Cooperation_rating) for player in sd],
             ranked_cooperation_rating,
         )
 
         ranked_median_wins = [nanmedian(rs.wins[i]) for i in rs.ranking]
-        self.assertEqual([float(player.Wins) for player in sd], ranked_median_wins)
+        self.assertEqual(
+            [float(player.Wins) for player in sd], ranked_median_wins
+        )
 
         ranked_initial_coop_rates = [
             self.expected_initial_cooperation_rate[i] for i in rs.ranking
         ]
         self.assertEqual(
-            [float(player.Initial_C_rate) for player in sd], ranked_initial_coop_rates
+            [float(player.Initial_C_rate) for player in sd],
+            ranked_initial_coop_rates,
         )
 
         for player in sd:
             self.assertEqual(
-                player.CC_rate + player.CD_rate + player.DC_rate + player.DD_rate, 1
+                player.CC_rate
+                + player.CD_rate
+                + player.DC_rate
+                + player.DD_rate,
+                1,
             )
             for rate in [
                 player.CC_to_C_rate,
@@ -729,13 +794,21 @@ class TestResultSetSpatialStructure(TestResultSet):
 
         # Recalculating to deal with numeric imprecision
         cls.expected_payoff_matrix = [
-            [0, mean([13 / 5 for _ in range(3)]), mean([2 / 5 for _ in range(3)])],
+            [
+                0,
+                mean([13 / 5 for _ in range(3)]),
+                mean([2 / 5 for _ in range(3)]),
+            ],
             [mean([13 / 5 for _ in range(3)]), 0, 0],
             [mean([17 / 5 for _ in range(3)]), 0, 0],
         ]
 
         cls.expected_payoff_stddevs = [
-            [0, std([13 / 5 for _ in range(3)]), std([2 / 5 for _ in range(3)])],
+            [
+                0,
+                std([13 / 5 for _ in range(3)]),
+                std([2 / 5 for _ in range(3)]),
+            ],
             [std([13 / 5 for _ in range(3)]), 0, 0],
             [std([17 / 5 for _ in range(3)]), 0, 0],
         ]
@@ -743,7 +816,11 @@ class TestResultSetSpatialStructure(TestResultSet):
         cls.expected_cooperation = [[0, 9, 9], [9, 0, 0], [0, 0, 0]]
 
         cls.expected_normalised_cooperation = [
-            [0, mean([3 / 5 for _ in range(3)]), mean([3 / 5 for _ in range(3)])],
+            [
+                0,
+                mean([3 / 5 for _ in range(3)]),
+                mean([3 / 5 for _ in range(3)]),
+            ],
             [mean([3 / 5 for _ in range(3)]), 0, 0],
             [0, 0, 0],
         ]
@@ -762,7 +839,11 @@ class TestResultSetSpatialStructure(TestResultSet):
 
         cls.expected_good_partner_rating = [1.0, 1.0, 0.0]
 
-        cls.expected_eigenjesus_rating = [0.447213595499958, 0.894427190999916, 0.0]
+        cls.expected_eigenjesus_rating = [
+            0.447213595499958,
+            0.894427190999916,
+            0.0,
+        ]
 
         cls.expected_eigenmoses_rating = [
             -0.32929277996907086,
@@ -786,7 +867,11 @@ class TestResultSetSpatialStructure(TestResultSet):
                 Counter({(C, C): 0.2, (C, D): 0.4, (D, C): 0.4}),
                 Counter({(C, D): 0.6, (D, D): 0.4}),
             ],
-            [Counter({(C, C): 0.2, (C, D): 0.4, (D, C): 0.4}), Counter(), Counter()],
+            [
+                Counter({(C, C): 0.2, (C, D): 0.4, (D, C): 0.4}),
+                Counter(),
+                Counter(),
+            ],
             [Counter({(D, C): 0.6, (D, D): 0.4}), Counter(), Counter()],
         ]
 
@@ -815,7 +900,11 @@ class TestResultSetSpatialStructure(TestResultSet):
                 Counter(),
                 Counter(),
             ],
-            [Counter({((D, C), D): 1.0, ((D, D), D): 1.0}), Counter(), Counter()],
+            [
+                Counter({((D, C), D): 1.0, ((D, D), D): 1.0}),
+                Counter(),
+                Counter(),
+            ],
         ]
 
     def test_match_lengths(self):
@@ -872,7 +961,8 @@ class TestResultSetSpatialStructureTwo(TestResultSetSpatialStructure):
         cls.edges = [(0, 1), (2, 3)]
 
         cls.expected_match_lengths = [
-            [[0, 5, 0, 0], [5, 0, 0, 0], [0, 0, 0, 5], [0, 0, 5, 0]] for _ in range(3)
+            [[0, 5, 0, 0], [5, 0, 0, 0], [0, 0, 0, 5], [0, 0, 5, 0]]
+            for _ in range(3)
         ]
 
         cls.expected_scores = [
@@ -914,10 +1004,30 @@ class TestResultSetSpatialStructureTwo(TestResultSetSpatialStructure):
         ]
 
         cls.expected_score_diffs = [
-            [[0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0]],
-            [[0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0]],
-            [[0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [5.0, 5.0, 5.0]],
-            [[0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [-5.0, -5.0, -5.0], [0.0, 0.0, 0.0]],
+            [
+                [0.0, 0.0, 0.0],
+                [0.0, 0.0, 0.0],
+                [0.0, 0.0, 0.0],
+                [0.0, 0.0, 0.0],
+            ],
+            [
+                [0.0, 0.0, 0.0],
+                [0.0, 0.0, 0.0],
+                [0.0, 0.0, 0.0],
+                [0.0, 0.0, 0.0],
+            ],
+            [
+                [0.0, 0.0, 0.0],
+                [0.0, 0.0, 0.0],
+                [0.0, 0.0, 0.0],
+                [5.0, 5.0, 5.0],
+            ],
+            [
+                [0.0, 0.0, 0.0],
+                [0.0, 0.0, 0.0],
+                [-5.0, -5.0, -5.0],
+                [0.0, 0.0, 0.0],
+            ],
         ]
 
         cls.expected_payoff_diffs_means = [
@@ -1074,14 +1184,17 @@ class TestResultSetSpatialStructureThree(TestResultSetSpatialStructure):
         cls.edges = [(0, 0), (1, 1), (2, 2), (3, 3)]
 
         cls.expected_match_lengths = [
-            [[5, 0, 0, 0], [0, 5, 0, 0], [0, 0, 5, 0], [0, 0, 0, 5]] for _ in range(3)
+            [[5, 0, 0, 0], [0, 5, 0, 0], [0, 0, 5, 0], [0, 0, 0, 5]]
+            for _ in range(3)
         ]
 
         cls.expected_scores = [[0 for _ in range(3)] for _ in range(4)]
 
         cls.expected_wins = [[0 for _ in range(3)] for _ in range(4)]
 
-        cls.expected_normalised_scores = [[0 for _ in range(3)] for i in range(4)]
+        cls.expected_normalised_scores = [
+            [0 for _ in range(3)] for i in range(4)
+        ]
 
         cls.expected_ranking = [0, 1, 2, 3]
 
@@ -1109,7 +1222,9 @@ class TestResultSetSpatialStructureThree(TestResultSetSpatialStructure):
             [[0.0 for _ in range(3)] for _ in range(4)] for _ in range(4)
         ]
 
-        cls.expected_payoff_diffs_means = [[0.0 for _ in range(4)] for _ in range(4)]
+        cls.expected_payoff_diffs_means = [
+            [0.0 for _ in range(4)] for _ in range(4)
+        ]
 
         # Recalculating to deal with numeric imprecision
         cls.expected_payoff_matrix = [
@@ -1150,7 +1265,9 @@ class TestResultSetSpatialStructureThree(TestResultSetSpatialStructure):
 
         cls.expected_cooperating_rating = [0.0 for _ in range(4)]
 
-        cls.expected_good_partner_matrix = [[0.0 for _ in range(4)] for _ in range(4)]
+        cls.expected_good_partner_matrix = [
+            [0.0 for _ in range(4)] for _ in range(4)
+        ]
 
         cls.expected_good_partner_rating = [0.0 for _ in range(4)]
 
@@ -1218,7 +1335,9 @@ class TestSummary(unittest.TestCase):
     """Separate test to check that summary always builds without failures"""
 
     @given(
-        tournament=tournaments(min_size=2, max_size=5, max_turns=5, max_repetitions=3)
+        tournament=tournaments(
+            min_size=2, max_size=5, max_turns=5, max_repetitions=3
+        )
     )
     @settings(max_examples=5)
     def test_summarise_without_failure(self, tournament):
@@ -1229,7 +1348,11 @@ class TestSummary(unittest.TestCase):
         for player in sd:
             # round for numerical error
             total_rate = round(
-                player.CC_rate + player.CD_rate + player.DC_rate + player.DD_rate, 3
+                player.CC_rate
+                + player.CD_rate
+                + player.DC_rate
+                + player.DD_rate,
+                3,
             )
             self.assertTrue(total_rate in [0, 1])
             self.assertTrue(0 <= player.Initial_C_rate <= 1)
@@ -1241,9 +1364,13 @@ class TestCreateCounterDict(unittest.TestCase):
     def test_basic_use(self):
         key_map = {"Col 1": "Var 1", "Col 2": "Var 2"}
         df = pd.DataFrame(
-            {"Col 1": [10, 20, 30], "Col 2": [1, 2, 0]}, index=[[5, 6, 7], [1, 2, 3]]
+            {"Col 1": [10, 20, 30], "Col 2": [1, 2, 0]},
+            index=[[5, 6, 7], [1, 2, 3]],
         )
         self.assertEqual(
-            create_counter_dict(df, 6, 2, key_map), Counter({"Var 1": 20, "Var 2": 2})
+            create_counter_dict(df, 6, 2, key_map),
+            Counter({"Var 1": 20, "Var 2": 2}),
         )
-        self.assertEqual(create_counter_dict(df, 7, 3, key_map), Counter({"Var 1": 30}))
+        self.assertEqual(
+            create_counter_dict(df, 7, 3, key_map), Counter({"Var 1": 30})
+        )

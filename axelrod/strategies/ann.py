@@ -114,7 +114,10 @@ def compute_features(player: Player, opponent: Player) -> List[int]:
 
 
 def activate(
-    bias: List[float], hidden: List[float], output: List[float], inputs: List[int]
+    bias: List[float],
+    hidden: List[float],
+    output: List[float],
+    inputs: List[int],
 ) -> float:
     """
     Compute the output of the neural network:
@@ -245,7 +248,10 @@ class EvolvableANN(ANN, EvolvablePlayer):
             num_features, num_hidden, weights, mutation_probability
         )
         ANN.__init__(
-            self, num_features=num_features, num_hidden=num_hidden, weights=weights
+            self,
+            num_features=num_features,
+            num_hidden=num_hidden,
+            weights=weights,
         )
         EvolvablePlayer.__init__(self)
         self.mutation_probability = mutation_probability
@@ -259,7 +265,11 @@ class EvolvableANN(ANN, EvolvablePlayer):
 
     @classmethod
     def _normalize_parameters(
-        cls, num_features=None, num_hidden=None, weights=None, mutation_probability=None
+        cls,
+        num_features=None,
+        num_hidden=None,
+        weights=None,
+        mutation_probability=None,
     ):
         if not (num_features and num_hidden):
             raise InsufficientParametersError(
@@ -274,7 +284,11 @@ class EvolvableANN(ANN, EvolvablePlayer):
 
     @staticmethod
     def mutate_weights(
-        weights, num_features, num_hidden, mutation_probability, mutation_distance
+        weights,
+        num_features,
+        num_hidden,
+        mutation_probability,
+        mutation_distance,
     ):
         size = num_weights(num_features, num_hidden)
         randoms = random.random(size)
@@ -296,7 +310,9 @@ class EvolvableANN(ANN, EvolvablePlayer):
 
     def crossover(self, other):
         if other.__class__ != self.__class__:
-            raise TypeError("Crossover must be between the same player classes.")
+            raise TypeError(
+                "Crossover must be between the same player classes."
+            )
         weights = crossover_lists(self.weights, other.weights)
         return self.create_new(weights=weights)
 

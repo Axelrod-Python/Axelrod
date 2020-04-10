@@ -438,7 +438,9 @@ class FirstByGraaskamp(Player):
 
         # Check if opponent plays randomly, if so, defect for the rest of the game
         p_value = chisquare([opponent.cooperations, opponent.defections]).pvalue
-        self.opponent_is_random = (p_value >= self.alpha) or self.opponent_is_random
+        self.opponent_is_random = (
+            p_value >= self.alpha
+        ) or self.opponent_is_random
 
         if self.opponent_is_random:
             return D
@@ -455,11 +457,15 @@ class FirstByGraaskamp(Player):
             return C
 
         if self.next_random_defection_turn is None:
-            self.next_random_defection_turn = random.randint(5, 15) + len(self.history)
+            self.next_random_defection_turn = random.randint(5, 15) + len(
+                self.history
+            )
 
         if len(self.history) == self.next_random_defection_turn:
             # resample the next defection turn
-            self.next_random_defection_turn = random.randint(5, 15) + len(self.history)
+            self.next_random_defection_turn = random.randint(5, 15) + len(
+                self.history
+            )
             return D
         return C
 
@@ -644,7 +650,9 @@ class FirstByNydegger(Player):
             else:
                 # TFT
                 return D if opponent.history[-1] == D else C
-        A = self.score_history(self.history[-3:], opponent.history[-3:], self.score_map)
+        A = self.score_history(
+            self.history[-3:], opponent.history[-3:], self.score_map
+        )
         if A in self.As:
             return D
         return C
@@ -895,7 +903,9 @@ class FirstBySteinAndRapoport(Player):
             return opponent.history[-1]
 
         if round_number % 15 == 0:
-            p_value = chisquare([opponent.cooperations, opponent.defections]).pvalue
+            p_value = chisquare(
+                [opponent.cooperations, opponent.defections]
+            ).pvalue
             self.opponent_is_random = p_value >= self.alpha
 
         if self.opponent_is_random:

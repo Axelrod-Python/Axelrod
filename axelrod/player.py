@@ -72,7 +72,9 @@ class Player(object):
         if self.__repr__() != other.__repr__():
             return False
 
-        for attribute in set(list(self.__dict__.keys()) + list(other.__dict__.keys())):
+        for attribute in set(
+            list(self.__dict__.keys()) + list(other.__dict__.keys())
+        ):
 
             value = getattr(self, attribute, None)
             other_value = getattr(other, attribute, None)
@@ -86,14 +88,20 @@ class Player(object):
             ):
                 # Split the original generator so it is not touched
                 generator, original_value = itertools.tee(value)
-                other_generator, original_other_value = itertools.tee(other_value)
+                other_generator, original_other_value = itertools.tee(
+                    other_value
+                )
 
                 if isinstance(value, types.GeneratorType):
                     setattr(self, attribute, (ele for ele in original_value))
-                    setattr(other, attribute, (ele for ele in original_other_value))
+                    setattr(
+                        other, attribute, (ele for ele in original_other_value)
+                    )
                 else:
                     setattr(self, attribute, itertools.cycle(original_value))
-                    setattr(other, attribute, itertools.cycle(original_other_value))
+                    setattr(
+                        other, attribute, itertools.cycle(original_other_value)
+                    )
 
                 for _ in range(200):
                     try:
@@ -128,7 +136,9 @@ class Player(object):
         Appends the `__init__` parameters to the strategy's name."""
         name = self.name
         prefix = ": "
-        gen = (value for value in self.init_kwargs.values() if value is not None)
+        gen = (
+            value for value in self.init_kwargs.values() if value is not None
+        )
         for value in gen:
             try:
                 if issubclass(value, Player):

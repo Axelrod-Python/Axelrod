@@ -172,7 +172,12 @@ from .prober import (
     Prober4,
     RemorsefulProber,
 )
-from .punisher import InversePunisher, LevelPunisher, Punisher, TrickyLevelPunisher
+from .punisher import (
+    InversePunisher,
+    LevelPunisher,
+    Punisher,
+    TrickyLevelPunisher,
+)
 from .qlearner import (
     ArrogantQLearner,
     CautiousQLearner,

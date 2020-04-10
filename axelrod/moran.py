@@ -132,7 +132,9 @@ class MoranProcess(object):
         if m in ["atomic", "transition"]:
             self.mutation_method = m
         else:
-            raise ValueError("Invalid mutation method {}".format(mutation_method))
+            raise ValueError(
+                "Invalid mutation method {}".format(mutation_method)
+            )
         assert (mutation_rate >= 0) and (mutation_rate <= 1)
         assert (noise >= 0) and (noise <= 1)
         mode = mode.lower()
@@ -152,7 +154,9 @@ class MoranProcess(object):
             d[str(p)] = p
         mutation_targets = dict()
         for key in sorted(keys):
-            mutation_targets[key] = [v for (k, v) in sorted(d.items()) if k != key]
+            mutation_targets[key] = [
+                v for (k, v) in sorted(d.items()) if k != key
+            ]
         self.mutation_targets = mutation_targets
 
         if interaction_graph is None:
@@ -171,7 +175,9 @@ class MoranProcess(object):
         self.fitness_transformation = fitness_transformation
         # Map players to graph vertices
         self.locations = sorted(interaction_graph.vertices)
-        self.index = dict(zip(sorted(interaction_graph.vertices), range(len(players))))
+        self.index = dict(
+            zip(sorted(interaction_graph.vertices), range(len(players)))
+        )
         self.fixated = self.fixation_check()
 
     def set_players(self) -> None:
@@ -232,7 +238,9 @@ class MoranProcess(object):
             # Select locally
             # index is not None in this case
             vertex = random.choice(
-                sorted(self.reproduction_graph.out_vertices(self.locations[index]))
+                sorted(
+                    self.reproduction_graph.out_vertices(self.locations[index])
+                )
             )
             i = self.index[vertex]
         return i
@@ -478,7 +486,10 @@ class ApproximateMoranProcess(MoranProcess):
     """
 
     def __init__(
-        self, players: List[Player], cached_outcomes: dict, mutation_rate: float = 0
+        self,
+        players: List[Player],
+        cached_outcomes: dict,
+        mutation_rate: float = 0,
     ) -> None:
         """
         Parameters
@@ -513,7 +524,9 @@ class ApproximateMoranProcess(MoranProcess):
         scores = [0] * N
         for i in range(N):
             for j in range(i + 1, N):
-                player_names = tuple([str(self.players[i]), str(self.players[j])])
+                player_names = tuple(
+                    [str(self.players[i]), str(self.players[j])]
+                )
 
                 cached_score = self._get_scores_from_cache(player_names)
                 scores[i] += cached_score[0]

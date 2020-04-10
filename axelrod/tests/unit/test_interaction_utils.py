@@ -64,16 +64,21 @@ class TestMatch(unittest.TestCase):
 
     def test_compute_winner_index(self):
         for inter, winner in zip(self.interactions, self.winners):
-            self.assertEqual(winner, axl.interaction_utils.compute_winner_index(inter))
+            self.assertEqual(
+                winner, axl.interaction_utils.compute_winner_index(inter)
+            )
 
     def test_compute_cooperations(self):
         for inter, coop in zip(self.interactions, self.cooperations):
-            self.assertEqual(coop, axl.interaction_utils.compute_cooperations(inter))
+            self.assertEqual(
+                coop, axl.interaction_utils.compute_cooperations(inter)
+            )
 
     def test_compute_normalised_cooperations(self):
         for inter, coop in zip(self.interactions, self.normalised_cooperations):
             self.assertEqual(
-                coop, axl.interaction_utils.compute_normalised_cooperation(inter)
+                coop,
+                axl.interaction_utils.compute_normalised_cooperation(inter),
             )
 
     def test_compute_state_distribution(self):
@@ -83,15 +88,25 @@ class TestMatch(unittest.TestCase):
             )
 
     def test_compute_normalised_state_distribution(self):
-        for inter, dist in zip(self.interactions, self.normalised_state_distribution):
+        for inter, dist in zip(
+            self.interactions, self.normalised_state_distribution
+        ):
             self.assertEqual(
-                dist, axl.interaction_utils.compute_normalised_state_distribution(inter)
+                dist,
+                axl.interaction_utils.compute_normalised_state_distribution(
+                    inter
+                ),
             )
 
     def test_compute_state_to_action_distribution(self):
-        for inter, dist in zip(self.interactions, self.state_to_action_distribution):
+        for inter, dist in zip(
+            self.interactions, self.state_to_action_distribution
+        ):
             self.assertEqual(
-                dist, axl.interaction_utils.compute_state_to_action_distribution(inter)
+                dist,
+                axl.interaction_utils.compute_state_to_action_distribution(
+                    inter
+                ),
             )
         inter = [(C, D), (D, C), (C, D), (D, C), (D, D), (C, C), (C, D)]
         expected_dist = [
@@ -104,7 +119,9 @@ class TestMatch(unittest.TestCase):
                     ((D, D), C): 1,
                 }
             ),
-            Counter({((C, C), D): 1, ((C, D), C): 2, ((D, C), D): 2, ((D, D), C): 1}),
+            Counter(
+                {((C, C), D): 1, ((C, D), C): 2, ((D, C), D): 2, ((D, D), C): 1}
+            ),
         ]
 
         self.assertEqual(
@@ -133,7 +150,9 @@ class TestMatch(unittest.TestCase):
                     ((D, D), C): 1,
                 }
             ),
-            Counter({((C, C), D): 1, ((C, D), C): 1, ((D, C), D): 1, ((D, D), C): 1}),
+            Counter(
+                {((C, C), D): 1, ((C, D), C): 1, ((D, C), D): 1, ((D, D), C): 1}
+            ),
         ]
         self.assertEqual(
             expected_dist,
@@ -144,7 +163,9 @@ class TestMatch(unittest.TestCase):
 
     def test_compute_sparklines(self):
         for inter, spark in zip(self.interactions, self.sparklines):
-            self.assertEqual(spark, axl.interaction_utils.compute_sparklines(inter))
+            self.assertEqual(
+                spark, axl.interaction_utils.compute_sparklines(inter)
+            )
 
     def test_read_interactions_from_file(self):
         tmp_file = tempfile.NamedTemporaryFile(mode="w", delete=False)

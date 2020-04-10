@@ -27,7 +27,9 @@ class TestInverse(TestPlayer):
         self.versus_test(axl.Cooperator(), expected_actions=[(C, C)])
 
         # Tests that if opponent has played all D then player chooses D.
-        self.versus_test(axl.Defector(), expected_actions=[(C, D)] + [(D, D)] * 9)
+        self.versus_test(
+            axl.Defector(), expected_actions=[(C, D)] + [(D, D)] * 9
+        )
 
         expected_actions = [
             (C, D),

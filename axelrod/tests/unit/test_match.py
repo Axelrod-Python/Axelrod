@@ -39,7 +39,9 @@ class TestMatch(unittest.TestCase):
         self.assertEqual(match.noise, 0)
         self.assertEqual(match.game.RPST(), game.RPST())
 
-        self.assertEqual(match.players[0].match_attributes["length"], float("inf"))
+        self.assertEqual(
+            match.players[0].match_attributes["length"], float("inf")
+        )
         self.assertEqual(match._cache, {})
 
     @given(
@@ -57,7 +59,9 @@ class TestMatch(unittest.TestCase):
         self.assertEqual(match.noise, 0)
         self.assertEqual(match.game.RPST(), game.RPST())
 
-        self.assertEqual(match.players[0].match_attributes["length"], float("inf"))
+        self.assertEqual(
+            match.players[0].match_attributes["length"], float("inf")
+        )
         self.assertEqual(match._cache, {})
 
     def test_default_init(self):
@@ -70,7 +74,9 @@ class TestMatch(unittest.TestCase):
         self.assertEqual(match.noise, 0)
         self.assertEqual(match.game.RPST(), (3, 1, 0, 5))
 
-        self.assertEqual(match.players[0].match_attributes["length"], axl.DEFAULT_TURNS)
+        self.assertEqual(
+            match.players[0].match_attributes["length"], axl.DEFAULT_TURNS
+        )
         self.assertEqual(match._cache, {})
 
     def test_example_prob_end(self):
@@ -83,7 +89,9 @@ class TestMatch(unittest.TestCase):
         expected_lengths = [3, 1, 5]
         for seed, expected_length in zip(range(3), expected_lengths):
             axl.seed(seed)
-            self.assertEqual(match.players[0].match_attributes["length"], float("inf"))
+            self.assertEqual(
+                match.players[0].match_attributes["length"], float("inf")
+            )
             self.assertEqual(len(match.play()), expected_length)
             self.assertEqual(match.noise, 0)
             self.assertEqual(match.game.RPST(), (3, 1, 0, 5))
@@ -95,7 +103,9 @@ class TestMatch(unittest.TestCase):
     def test_non_default_attributes(self, turns, game):
         p1, p2 = axl.Cooperator(), axl.Cooperator()
         match_attributes = {"length": 500, "game": game, "noise": 0.5}
-        match = axl.Match((p1, p2), turns, game=game, match_attributes=match_attributes)
+        match = axl.Match(
+            (p1, p2), turns, game=game, match_attributes=match_attributes
+        )
         self.assertEqual(match.players[0].match_attributes["length"], 500)
         self.assertEqual(match.players[0].match_attributes["noise"], 0.5)
 
@@ -158,7 +168,9 @@ class TestMatch(unittest.TestCase):
         match = axl.Match(players, 3, deterministic_cache=cache)
         expected_result = [(C, D), (C, D), (C, D)]
         self.assertEqual(match.play(), expected_result)
-        self.assertEqual(cache[(axl.Cooperator(), axl.Defector())], expected_result)
+        self.assertEqual(
+            cache[(axl.Cooperator(), axl.Defector())], expected_result
+        )
 
         # a deliberately incorrect result so we can tell it came from the cache
         expected_result = [(C, C), (D, D), (D, C), (C, C), (C, D)]
