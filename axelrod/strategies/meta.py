@@ -38,7 +38,6 @@ class MetaPlayer(Player):
     classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": True,
-        "makes_use_of": set(),
         "long_run_time": True,
         "inspects_source": False,
         "manipulates_source": False,
@@ -229,7 +228,6 @@ class MetaHunter(MetaPlayer):
     classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -283,7 +281,6 @@ class MetaHunterAggressive(MetaPlayer):
     classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -485,7 +482,6 @@ class MetaMixer(MetaPlayer):
     classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": True,
-        "makes_use_of": set(),
         "long_run_time": True,
         "inspects_source": False,
         "manipulates_source": False,
@@ -610,7 +606,6 @@ class MemoryDecay(MetaPlayer):
         "memory_depth": float("inf"),
         "long_run_time": False,
         "stochastic": True,
-        "makes_use_of": set(),
         "inspects_source": False,
         "manipulates_source": False,
         "manipulates_state": False,

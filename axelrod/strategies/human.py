@@ -54,7 +54,6 @@ class Human(Player):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
-        "makes_use_of": set(["length", "game"]),
         "long_run_time": True,
         "inspects_source": True,
         "manipulates_source": False,

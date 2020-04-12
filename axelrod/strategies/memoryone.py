@@ -28,7 +28,6 @@ class MemoryOnePlayer(Player):
     classifier = {
         "memory_depth": 1,  # Memory-one Four-Vector
         "stochastic": True,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -110,7 +109,6 @@ class WinStayLoseShift(MemoryOnePlayer):
     classifier = {
         "memory_depth": 1,  # Memory-one Four-Vector
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -135,7 +133,6 @@ class WinShiftLoseStay(MemoryOnePlayer):
     classifier = {
         "memory_depth": 1,  # Memory-one Four-Vector
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -162,7 +159,6 @@ class GTFT(MemoryOnePlayer):
     classifier = {
         "memory_depth": 1,  # Memory-one Four-Vector
         "stochastic": True,
-        "makes_use_of": set(["game"]),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -312,7 +308,6 @@ class ALLCorALLD(Player):
     classifier = {
         "memory_depth": 1,  # Memory-one Four-Vector (1, 1, 0, 0)
         "stochastic": True,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,

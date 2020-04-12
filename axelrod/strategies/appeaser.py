@@ -19,7 +19,6 @@ class Appeaser(Player):
     classifier = {
         "memory_depth": float("inf"),  # Depends on internal memory.
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,

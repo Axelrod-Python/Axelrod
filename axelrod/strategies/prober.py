@@ -28,7 +28,6 @@ class CollectiveStrategy(Player):
     classifier = {
         "stochastic": False,
         "memory_depth": float("inf"),  # Long memory
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -63,7 +62,6 @@ class Detective(Player):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -101,7 +99,6 @@ class Prober(Player):
     classifier = {
         "stochastic": False,
         "memory_depth": float("inf"),  # Long memory
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -138,7 +135,6 @@ class Prober2(Player):
     classifier = {
         "stochastic": False,
         "memory_depth": float("inf"),  # Long memory
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -175,7 +171,6 @@ class Prober3(Player):
     classifier = {
         "stochastic": False,
         "memory_depth": float("inf"),  # Long memory
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -213,7 +208,6 @@ class Prober4(Player):
     classifier = {
         "stochastic": False,
         "memory_depth": float("inf"),
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -284,7 +278,6 @@ class HardProber(Player):
     classifier = {
         "stochastic": False,
         "memory_depth": float("inf"),  # Long memory
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -322,7 +315,6 @@ class NaiveProber(Player):
     classifier = {
         "memory_depth": 1,
         "stochastic": True,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -374,7 +366,6 @@ class RemorsefulProber(NaiveProber):
     classifier = {
         "memory_depth": 2,  # It remembers if its previous move was random
         "stochastic": True,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,

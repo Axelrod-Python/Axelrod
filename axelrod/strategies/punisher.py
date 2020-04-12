@@ -22,7 +22,6 @@ class Punisher(Player):
     classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -77,7 +76,6 @@ class InversePunisher(Player):
     classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -128,7 +126,6 @@ class LevelPunisher(Player):
     classifier = {
         "memory_depth": float("inf"),  # Long Memory
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -161,7 +158,6 @@ class TrickyLevelPunisher(Player):
     classifier = {
         "memory_depth": float("inf"),  # Long Memory
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
