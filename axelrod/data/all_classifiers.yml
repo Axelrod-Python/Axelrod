@@ -1,7 +1,7 @@
 $\phi$:
   inspects_source: false
   long_run_time: false
-  makes_use_of: &id001 !!set {}
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -9,7 +9,7 @@ $\phi$:
 $\pi$:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id001
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -17,7 +17,7 @@ $\pi$:
 $e$:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id001
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -41,8 +41,7 @@ AON2:
 Adaptive:
   inspects_source: false
   long_run_time: false
-  makes_use_of: !!set
-    game: null
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -74,7 +73,7 @@ Adaptive Tit For Tat:
 AdaptorBrief:
   inspects_source: false
   long_run_time: false
-  makes_use_of: &id002 !!set {}
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -82,7 +81,7 @@ AdaptorBrief:
 AdaptorLong:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id002
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -147,8 +146,7 @@ Appeaser:
 Arrogant QLearner:
   inspects_source: false
   long_run_time: false
-  makes_use_of: &id003 !!set
-    game: null
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -189,8 +187,7 @@ Bully:
 Bush Mosteller:
   inspects_source: false
   long_run_time: false
-  makes_use_of: !!set
-    game: null
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -206,7 +203,7 @@ Calculator:
 Cautious QLearner:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id003
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -246,7 +243,7 @@ Cooperator Hunter:
 Cycle Hunter:
   inspects_source: false
   long_run_time: false
-  makes_use_of: &id005 !!set {}
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -254,7 +251,7 @@ Cycle Hunter:
 Cycler CCCCCD:
   inspects_source: false
   long_run_time: false
-  makes_use_of: &id004 !!set {}
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: 5
@@ -262,7 +259,7 @@ Cycler CCCCCD:
 Cycler CCCD:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id004
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: 3
@@ -270,7 +267,7 @@ Cycler CCCD:
 Cycler CCCDCD:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id004
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: 5
@@ -278,7 +275,7 @@ Cycler CCCDCD:
 Cycler CCD:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id004
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: 2
@@ -286,7 +283,7 @@ Cycler CCD:
 Cycler DC:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id004
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: 1
@@ -294,7 +291,7 @@ Cycler DC:
 Cycler DDC:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id004
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: 2
@@ -408,7 +405,7 @@ EugineNier:
 Eventual Cycle Hunter:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id005
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -416,7 +413,7 @@ Eventual Cycle Hunter:
 Evolved ANN:
   inspects_source: false
   long_run_time: false
-  makes_use_of: &id006 !!set {}
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -424,7 +421,7 @@ Evolved ANN:
 Evolved ANN 5:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id006
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -432,7 +429,7 @@ Evolved ANN 5:
 Evolved ANN 5 Noise 05:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id006
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -472,7 +469,7 @@ Evolved HMM 5:
 EvolvedLookerUp1_1_1:
   inspects_source: false
   long_run_time: false
-  makes_use_of: &id007 !!set {}
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -480,7 +477,7 @@ EvolvedLookerUp1_1_1:
 EvolvedLookerUp2_2_2:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id007
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -488,7 +485,7 @@ EvolvedLookerUp2_2_2:
 Firm But Fair:
   inspects_source: false
   long_run_time: false
-  makes_use_of: &id008 !!set {}
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: 1
@@ -512,8 +509,7 @@ First by Davis:
 First by Downing:
   inspects_source: false
   long_run_time: false
-  makes_use_of: !!set
-    game: null
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -545,7 +541,7 @@ First by Grofman:
 First by Joss:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id008
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: 1
@@ -579,7 +575,6 @@ First by Tideman and Chieruzzi:
   inspects_source: false
   long_run_time: false
   makes_use_of: !!set
-    game: null
     length: null
   manipulates_source: false
   manipulates_state: false
@@ -652,8 +647,7 @@ Fortress4:
 GTFT:
   inspects_source: false
   long_run_time: false
-  makes_use_of: !!set
-    game: null
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: 1
@@ -693,7 +687,7 @@ General Soft Grudger:
 Go By Majority:
   inspects_source: false
   long_run_time: false
-  makes_use_of: &id009 !!set {}
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -701,7 +695,7 @@ Go By Majority:
 Go By Majority 10:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id009
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: 10
@@ -709,7 +703,7 @@ Go By Majority 10:
 Go By Majority 20:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id009
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: 20
@@ -717,7 +711,7 @@ Go By Majority 20:
 Go By Majority 40:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id009
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: 40
@@ -725,7 +719,7 @@ Go By Majority 40:
 Go By Majority 5:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id009
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: 5
@@ -781,7 +775,7 @@ Handshake:
 Hard Go By Majority:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id009
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -789,7 +783,7 @@ Hard Go By Majority:
 Hard Go By Majority 10:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id009
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: 10
@@ -797,7 +791,7 @@ Hard Go By Majority 10:
 Hard Go By Majority 20:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id009
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: 20
@@ -805,7 +799,7 @@ Hard Go By Majority 20:
 Hard Go By Majority 40:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id009
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: 40
@@ -813,7 +807,7 @@ Hard Go By Majority 40:
 Hard Go By Majority 5:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id009
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: 5
@@ -845,7 +839,7 @@ Hard Tit For Tat:
 Hesitant QLearner:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id003
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -877,8 +871,7 @@ Inverse Punisher:
 Knowledgeable Worse and Worse:
   inspects_source: false
   long_run_time: false
-  makes_use_of: !!set
-    length: null
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -894,7 +887,7 @@ Level Punisher:
 Limited Retaliate:
   inspects_source: false
   long_run_time: false
-  makes_use_of: &id010 !!set {}
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -902,7 +895,7 @@ Limited Retaliate:
 Limited Retaliate 2:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id010
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -910,7 +903,7 @@ Limited Retaliate 2:
 Limited Retaliate 3:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id010
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -958,7 +951,7 @@ Meta Hunter Aggressive:
 Meta Majority:
   inspects_source: false
   long_run_time: true
-  makes_use_of: &id011 !!set {}
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -966,7 +959,7 @@ Meta Majority:
 Meta Majority Finite Memory:
   inspects_source: false
   long_run_time: true
-  makes_use_of: *id011
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -974,7 +967,7 @@ Meta Majority Finite Memory:
 Meta Majority Long Memory:
   inspects_source: false
   long_run_time: true
-  makes_use_of: *id011
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -982,7 +975,7 @@ Meta Majority Long Memory:
 Meta Majority Memory One:
   inspects_source: false
   long_run_time: true
-  makes_use_of: *id011
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -990,7 +983,7 @@ Meta Majority Memory One:
 Meta Minority:
   inspects_source: false
   long_run_time: true
-  makes_use_of: *id011
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1006,7 +999,7 @@ Meta Mixer:
 Meta Winner:
   inspects_source: false
   long_run_time: true
-  makes_use_of: *id011
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1014,7 +1007,7 @@ Meta Winner:
 Meta Winner Deterministic:
   inspects_source: false
   long_run_time: true
-  makes_use_of: *id011
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1022,7 +1015,7 @@ Meta Winner Deterministic:
 Meta Winner Ensemble:
   inspects_source: false
   long_run_time: true
-  makes_use_of: *id011
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1030,7 +1023,7 @@ Meta Winner Ensemble:
 Meta Winner Finite Memory:
   inspects_source: false
   long_run_time: true
-  makes_use_of: *id011
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1038,7 +1031,7 @@ Meta Winner Finite Memory:
 Meta Winner Long Memory:
   inspects_source: false
   long_run_time: true
-  makes_use_of: *id011
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1046,7 +1039,7 @@ Meta Winner Long Memory:
 Meta Winner Memory One:
   inspects_source: false
   long_run_time: true
-  makes_use_of: *id011
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1054,7 +1047,7 @@ Meta Winner Memory One:
 Meta Winner Stochastic:
   inspects_source: false
   long_run_time: true
-  makes_use_of: *id011
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1119,7 +1112,7 @@ N Tit(s) For M Tat(s):
 NMWE Deterministic:
   inspects_source: false
   long_run_time: true
-  makes_use_of: &id012 !!set {}
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1127,7 +1120,7 @@ NMWE Deterministic:
 NMWE Finite Memory:
   inspects_source: false
   long_run_time: true
-  makes_use_of: *id012
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1135,7 +1128,7 @@ NMWE Finite Memory:
 NMWE Long Memory:
   inspects_source: false
   long_run_time: true
-  makes_use_of: *id012
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1143,7 +1136,7 @@ NMWE Long Memory:
 NMWE Memory One:
   inspects_source: false
   long_run_time: true
-  makes_use_of: *id012
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1151,7 +1144,7 @@ NMWE Memory One:
 NMWE Stochastic:
   inspects_source: false
   long_run_time: true
-  makes_use_of: *id012
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1191,7 +1184,7 @@ Nice Meta Winner:
 Nice Meta Winner Ensemble:
   inspects_source: false
   long_run_time: true
-  makes_use_of: *id012
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1223,7 +1216,7 @@ Opposite Grudger:
 PSO Gambler 1_1_1:
   inspects_source: false
   long_run_time: false
-  makes_use_of: &id013 !!set {}
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1231,7 +1224,7 @@ PSO Gambler 1_1_1:
 PSO Gambler 2_2_2:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id013
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1239,7 +1232,7 @@ PSO Gambler 2_2_2:
 PSO Gambler 2_2_2 Noise 05:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id013
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1247,7 +1240,7 @@ PSO Gambler 2_2_2 Noise 05:
 PSO Gambler Mem1:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id013
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1367,7 +1360,7 @@ Resurrection:
 Retaliate:
   inspects_source: false
   long_run_time: false
-  makes_use_of: &id014 !!set {}
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1375,7 +1368,7 @@ Retaliate:
 Retaliate 2:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id014
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1383,7 +1376,7 @@ Retaliate 2:
 Retaliate 3:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id014
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1407,7 +1400,7 @@ Ripoff:
 Risky QLearner:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id003
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1487,8 +1480,7 @@ Second by Gladstein:
 Second by GraaskampKatzen:
   inspects_source: false
   long_run_time: false
-  makes_use_of: !!set
-    game: null
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1544,11 +1536,7 @@ Second by RichardHufford:
 Second by Rowsam:
   inspects_source: false
   long_run_time: false
-  makes_use_of: !!set
-    a: null
-    e: null
-    g: null
-    m: null
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1564,8 +1552,7 @@ Second by Tester:
 Second by Tideman and Chieruzzi:
   inspects_source: false
   long_run_time: false
-  makes_use_of: !!set
-    game: null
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1573,8 +1560,7 @@ Second by Tideman and Chieruzzi:
 Second by Tranquilizer:
   inspects_source: false
   long_run_time: false
-  makes_use_of: !!set
-    game: null
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1654,7 +1640,7 @@ Soft Grudger:
 Soft Joss:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id008
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: 1
@@ -1687,7 +1673,6 @@ Stalker:
   inspects_source: false
   long_run_time: false
   makes_use_of: !!set
-    game: null
     length: null
   manipulates_source: false
   manipulates_state: false
@@ -1696,7 +1681,7 @@ Stalker:
 Stochastic Cooperator:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id008
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: 1
@@ -1704,7 +1689,7 @@ Stochastic Cooperator:
 Stochastic WSLS:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id008
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: 1
@@ -1864,7 +1849,7 @@ Win-Stay Lose-Shift:
 Winner12:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id007
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1872,7 +1857,7 @@ Winner12:
 Winner21:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id007
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1904,8 +1889,7 @@ Worse and Worse 3:
 ZD-Extort-2:
   inspects_source: false
   long_run_time: false
-  makes_use_of: &id015 !!set
-    game: null
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: 1
@@ -1913,7 +1897,7 @@ ZD-Extort-2:
 ZD-Extort-2 v2:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id015
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: 1
@@ -1921,7 +1905,7 @@ ZD-Extort-2 v2:
 ZD-Extort-4:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id015
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: 1
@@ -1929,7 +1913,7 @@ ZD-Extort-4:
 ZD-Extort3:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id015
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: 1
@@ -1937,7 +1921,7 @@ ZD-Extort3:
 ZD-Extortion:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id015
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: 1
@@ -1945,7 +1929,7 @@ ZD-Extortion:
 ZD-GEN-2:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id015
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: 1
@@ -1953,7 +1937,7 @@ ZD-GEN-2:
 ZD-GTFT-2:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id015
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: 1
@@ -1969,7 +1953,7 @@ ZD-Mem2:
 ZD-Mischief:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id015
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: 1
@@ -1977,7 +1961,7 @@ ZD-Mischief:
 ZD-SET-2:
   inspects_source: false
   long_run_time: false
-  makes_use_of: *id015
+  makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
   memory_depth: 1
