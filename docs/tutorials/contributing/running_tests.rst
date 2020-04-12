@@ -4,6 +4,10 @@ Running tests
 Basic test runners
 ------------------
 
+Before running tests, you should have hypothesis 3.2 installed::
+
+    $ pip install hypothesis==3.2
+
 The project has an extensive test suite which is run each time a new
 contribution is made to the repository.  If you want to check that all the tests
 pass before you submit a pull request you can run the tests yourself::
