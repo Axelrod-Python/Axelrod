@@ -956,7 +956,6 @@ class TestNTitsForMTats(TestPlayer):
     }
 
     expected_class_classifier = copy.copy(expected_classifier)
-    expected_class_classifier["memory_depth"] = float("inf")
 
     def test_strategy(self):
         # TitForTat test_strategy

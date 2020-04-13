@@ -200,7 +200,6 @@ class TestLookerUp(TestPlayer):
     }
 
     expected_class_classifier = copy.copy(expected_classifier)
-    expected_class_classifier["memory_depth"] = float("inf")
 
     def test_default_init(self):
         player = self.player()
@@ -545,7 +544,6 @@ class TestWinner12(TestPlayer):
     }
 
     expected_class_classifier = copy.copy(expected_classifier)
-    expected_class_classifier["memory_depth"] = float("inf")
 
     def test_new_data(self):
         original_data = {
@@ -588,7 +586,6 @@ class TestWinner21(TestPlayer):
     }
 
     expected_class_classifier = copy.copy(expected_classifier)
-    expected_class_classifier["memory_depth"] = float("inf")
 
     def test_new_data(self):
         original_data = {

@@ -93,10 +93,12 @@ class TestPlayerClass(unittest.TestCase):
         match = axl.Match((player1, player2), turns=5)
         _ = match.play()
         self.assertEqual(
-            player1.state_distribution, {(C, C): 1, (C, D): 2, (D, C): 1, (D, D): 1}
+            player1.state_distribution,
+            {(C, C): 1, (C, D): 2, (D, C): 1, (D, D): 1},
         )
         self.assertEqual(
-            player2.state_distribution, {(C, C): 1, (C, D): 1, (D, C): 2, (D, D): 1}
+            player2.state_distribution,
+            {(C, C): 1, (C, D): 1, (D, C): 2, (D, D): 1},
         )
 
     def test_noisy_play(self):
@@ -129,7 +131,9 @@ class TestPlayerClass(unittest.TestCase):
             player.history = []
 
     def test_strategy(self):
-        self.assertRaises(NotImplementedError, self.player().strategy, self.player())
+        self.assertRaises(
+            NotImplementedError, self.player().strategy, self.player()
+        )
 
     def test_clone(self):
         """Tests player cloning."""
@@ -345,7 +349,9 @@ class TestPlayerClass(unittest.TestCase):
         # Test that passing an unknown keyword argument or a spare one raises
         # an error.
         self.assertRaises(TypeError, ParameterisedTestPlayer, arg_test3="test")
-        self.assertRaises(TypeError, ParameterisedTestPlayer, "other", "other", "other")
+        self.assertRaises(
+            TypeError, ParameterisedTestPlayer, "other", "other", "other"
+        )
 
 
 class TestOpponent(axl.Player):
@@ -496,7 +502,9 @@ class TestPlayer(unittest.TestCase):
             self.assertEqual(player1.history, player2.history)
 
     @given(
-        strategies=strategy_lists(max_size=5, strategies=short_run_time_short_mem),
+        strategies=strategy_lists(
+            max_size=5, strategies=short_run_time_short_mem
+        ),
         seed=integers(min_value=1, max_value=200),
         turns=integers(min_value=1, max_value=200),
     )
@@ -544,10 +552,8 @@ class TestPlayer(unittest.TestCase):
     ):
         """
         Tests a sequence of outcomes for two given players.
-
         Parameters:
         -----------
-
         opponent: Player or list
             An instance of a player OR a sequence of actions. If a sequence of
             actions is passed, a Mock Player is created that cycles over that
@@ -605,20 +611,30 @@ class TestPlayer(unittest.TestCase):
         # specified
         if expected_class_classifier is None:
             expected_class_classifier = player.classifier
-        self.assertEqual(expected_class_classifier, self.player.classifier)
+        actual_class_classifier = {
+            c: axl.Classifiers[c](player)
+            for c in expected_class_classifier.keys()
+        }
+        self.assertEqual(expected_class_classifier, actual_class_classifier)
 
         self.assertTrue(
-            "memory_depth" in player.classifier, msg="memory_depth not in classifier"
+            "memory_depth" in player.classifier,
+            msg="memory_depth not in classifier",
         )
         self.assertTrue(
-            "stochastic" in player.classifier, msg="stochastic not in classifier"
+            "stochastic" in player.classifier,
+            msg="stochastic not in classifier",
         )
         for key in TestOpponent.classifier:
             self.assertEqual(
                 axl.Classifiers[key](player),
                 self.expected_classifier[key],
                 msg="%s - Behaviour: %s != Expected Behaviour: %s"
-                % (key, axl.Classifiers[key](player), self.expected_classifier[key]),
+                    % (
+                        key,
+                        axl.Classifiers[key](player),
+                        self.expected_classifier[key],
+                    ),
             )
 
 
