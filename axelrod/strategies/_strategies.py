@@ -340,7 +340,6 @@ all_strategies = [
     EvolvedLookerUp2_2_2,
     FirmButFair,
     FirstByAnonymous,
-    FirstByDavis,
     FirstByDowning,
     FirstByFeld,
     FirstByGraaskamp,
