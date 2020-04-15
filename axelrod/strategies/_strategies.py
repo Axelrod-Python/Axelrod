@@ -1,7 +1,29 @@
+"""
+This file imports all the strategies in to the base name space. Note that some
+of the imports are imports of classes that make generic classes available to
+users. In these cases the imports are done separately so that they can be
+annotated as to avoid some static testing. For example:
+
+    from .memoryone import (
+        GTFT,
+        ALLCorALLD,
+        FirmButFair,
+        SoftJoss,
+        StochasticCooperator,
+        StochasticWSLS,
+        WinShiftLoseStay,
+        WinStayLoseShift,
+    )
+    from .memoryone import ( # pylint: disable=unused-import
+        ReactivePlayer,
+        MemoryOnePlayer
+    )
+"""
 from .adaptive import Adaptive
 from .adaptor import AdaptorBrief, AdaptorLong
 from .alternator import Alternator
-from .ann import ANN, EvolvableANN, EvolvedANN, EvolvedANN5, EvolvedANNNoise05
+from .ann import EvolvedANN, EvolvedANN5, EvolvedANNNoise05
+from .ann import ANN, EvolvableANN  # pylint: disable=unused-import
 from .apavlov import APavlov2006, APavlov2011
 from .appeaser import Appeaser
 from .averagecopier import AverageCopier, NiceAverageCopier
@@ -52,15 +74,14 @@ from .calculator import Calculator
 from .cooperator import Cooperator, TrickyCooperator
 from .cycler import (
     AntiCycler,
-    Cycler,
     CyclerCCCCCD,
     CyclerCCCD,
     CyclerCCCDCD,
     CyclerCCD,
     CyclerDC,
     CyclerDDC,
-    EvolvableCycler,
 )
+from .cycler import Cycler, EvolvableCycler  # pylint: disable=unused-import
 from .darwin import Darwin
 from .dbs import DBS
 from .defector import Defector, TrickyDefector
@@ -69,13 +90,11 @@ from .finite_state_machines import (
     TF1,
     TF2,
     TF3,
-    EvolvableFSMPlayer,
     EvolvedFSM4,
     EvolvedFSM16,
     EvolvedFSM16Noise05,
     Fortress3,
     Fortress4,
-    FSMPlayer,
     Predator,
     Pun1,
     Raider,
@@ -86,16 +105,19 @@ from .finite_state_machines import (
     SolutionB5,
     Thumper,
 )
+from .finite_state_machines import (  # pylint: disable=unused-import
+    EvolvableFSMPlayer,
+    FSMPlayer,
+)
 from .forgiver import Forgiver, ForgivingTitForTat
 from .gambler import (
-    EvolvableGambler,
-    Gambler,
     PSOGambler1_1_1,
     PSOGambler2_2_2,
     PSOGambler2_2_2_Noise05,
     PSOGamblerMem1,
     ZDMem2,
 )
+from .gambler import EvolvableGambler, Gambler  # pylint: disable=unused-import
 from .geller import Geller, GellerCooperator, GellerDefector
 from .gobymajority import (
     GoByMajority,
@@ -122,8 +144,9 @@ from .grudger import (
 )
 from .grumpy import Grumpy
 from .handshake import Handshake
-from .hmm import EvolvedHMM5, EvolvableHMMPlayer, HMMPlayer
-from .human import Human
+from .hmm import EvolvedHMM5
+from .hmm import EvolvableHMMPlayer, HMMPlayer  # pylint: disable=unused-import
+from .human import Human  # pylint: disable=unused-import
 from .hunter import (
     AlternatorHunter,
     CooperatorHunter,
@@ -135,27 +158,35 @@ from .hunter import (
 )
 from .inverse import Inverse
 from .lookerup import (
-    EvolvableLookerUp,
     EvolvedLookerUp1_1_1,
     EvolvedLookerUp2_2_2,
-    LookerUp,
     Winner12,
     Winner21,
 )
+from .lookerup import (  # pylint: disable=unused-import
+    EvolvableLookerUp,
+    LookerUp,
+)
+
 from .mathematicalconstants import Golden, Pi, e
 from .memoryone import (
     GTFT,
     ALLCorALLD,
     FirmButFair,
-    MemoryOnePlayer,
-    ReactivePlayer,
     SoftJoss,
     StochasticCooperator,
     StochasticWSLS,
     WinShiftLoseStay,
     WinStayLoseShift,
 )
-from .memorytwo import AON2, MEM2, DelayedAON1, MemoryTwoPlayer
+from .memoryone import (  # pylint: disable=unused-import
+    ReactivePlayer,
+    MemoryOnePlayer,
+)
+
+from .memorytwo import AON2, MEM2, DelayedAON1
+from .memorytwo import MemoryTwoPlayer  # pylint: disable=unused-import
+
 from .mindcontrol import MindBender, MindController, MindWarper
 from .mindreader import MindReader, MirrorMindReader, ProtectedMindReader
 from .mutual import Desperate, Hopeless, Willing
@@ -172,7 +203,12 @@ from .prober import (
     Prober4,
     RemorsefulProber,
 )
-from .punisher import InversePunisher, LevelPunisher, Punisher, TrickyLevelPunisher
+from .punisher import (
+    InversePunisher,
+    LevelPunisher,
+    Punisher,
+    TrickyLevelPunisher,
+)
 from .qlearner import (
     ArrogantQLearner,
     CautiousQLearner,
@@ -191,7 +227,11 @@ from .retaliate import (
 )
 from .revised_downing import RevisedDowning
 from .selfsteem import SelfSteem
-from .sequence_player import SequencePlayer, ThueMorse, ThueMorseInverse
+from .sequence_player import (  # pylint: disable=unused-import
+    SequencePlayer,
+    ThueMorse,
+    ThueMorseInverse,
+)
 from .shortmem import ShortMem
 from .stalker import Stalker
 from .titfortat import (
@@ -241,35 +281,29 @@ from .zero_determinant import (
 
 
 all_strategies = [
+    ALLCorALLD,
+    AON2,
+    APavlov2006,
+    APavlov2011,
     Adaptive,
     AdaptiveTitForTat,
     AdaptorBrief,
     AdaptorLong,
     Aggravater,
     Alexei,
-    ALLCorALLD,
     Alternator,
     AlternatorHunter,
     AntiCycler,
     AntiTitForTat,
-    AON2,
-    APavlov2006,
-    APavlov2011,
     Appeaser,
-    SecondByAppold,
     ArrogantQLearner,
     AverageCopier,
     BackStabber,
     BetterAndBetter,
-    SecondByBlack,
-    SecondByBorufsen,
     Bully,
     BushMosteller,
     Calculator,
     CautiousQLearner,
-    SecondByCave,
-    SecondByChampion,
-    SecondByColbert,
     CollectiveStrategy,
     ContriteTitForTat,
     Cooperator,
@@ -277,37 +311,46 @@ all_strategies = [
     CycleHunter,
     CyclerCCCCCD,
     CyclerCCCD,
+    CyclerCCCDCD,
     CyclerCCD,
     CyclerDC,
     CyclerDDC,
-    CyclerCCCDCD,
-    Darwin,
-    FirstByDavis,
-    FirstByAnonymous,
     DBS,
+    Darwin,
     Defector,
     DefectorHunter,
-    Desperate,
     DelayedAON1,
+    Desperate,
     Detective,
     DoubleCrosser,
-    Doubler,
     DoubleResurrection,
+    Doubler,
+    DynamicTwoTitsForTat,
     EasyGo,
-    SecondByEatherley,
     EugineNier,
     EventualCycleHunter,
     EvolvedANN,
     EvolvedANN5,
     EvolvedANNNoise05,
-    EvolvedFSM4,
     EvolvedFSM16,
     EvolvedFSM16Noise05,
+    EvolvedFSM4,
+    EvolvedHMM5,
     EvolvedLookerUp1_1_1,
     EvolvedLookerUp2_2_2,
-    EvolvedHMM5,
-    FirstByFeld,
     FirmButFair,
+    FirstByAnonymous,
+    FirstByDavis,
+    FirstByDowning,
+    FirstByFeld,
+    FirstByGraaskamp,
+    FirstByGrofman,
+    FirstByJoss,
+    FirstByNydegger,
+    FirstByShubik,
+    FirstBySteinAndRapoport,
+    FirstByTidemanAndChieruzzi,
+    FirstByTullock,
     FoolMeOnce,
     ForgetfulFoolMeOnce,
     ForgetfulGrudger,
@@ -320,19 +363,14 @@ all_strategies = [
     GellerCooperator,
     GellerDefector,
     GeneralSoftGrudger,
-    SecondByGetzler,
-    SecondByGladstein,
     GoByMajority,
     GoByMajority10,
     GoByMajority20,
     GoByMajority40,
     GoByMajority5,
     Golden,
-    FirstByGraaskamp,
-    SecondByGraaskampKatzen,
     Gradual,
     GradualKiller,
-    FirstByGrofman,
     Grudger,
     GrudgerAlternator,
     Grumpy,
@@ -345,39 +383,35 @@ all_strategies = [
     HardProber,
     HardTitFor2Tats,
     HardTitForTat,
-    SecondByHarrington,
     HesitantQLearner,
     Hopeless,
     Inverse,
     InversePunisher,
-    FirstByJoss,
-    SecondByKluepfel,
     KnowledgeableWorseAndWorse,
     LevelPunisher,
-    SecondByLeyvraz,
     LimitedRetaliate,
     LimitedRetaliate2,
     LimitedRetaliate3,
-    MathConstantHunter,
-    NaiveProber,
     MEM2,
+    MathConstantHunter,
     Michaelos,
-    SecondByMikkelson,
     MindBender,
     MindController,
     MindReader,
     MindWarper,
     MirrorMindReader,
-    RevisedDowning,
-    SecondByGrofman,
-    SecondByTidemanAndChieruzzi,
+    NTitsForMTats,
+    NaiveProber,
     Negation,
     NiceAverageCopier,
-    NTitsForMTats,
-    FirstByNydegger,
     OmegaTFT,
     OnceBitten,
     OppositeGrudger,
+    OriginalGradual,
+    PSOGambler1_1_1,
+    PSOGambler2_2_2,
+    PSOGambler2_2_2_Noise05,
+    PSOGamblerMem1,
     Pi,
     Predator,
     Prober,
@@ -386,10 +420,6 @@ all_strategies = [
     Prober4,
     ProtectedMindReader,
     Pun1,
-    PSOGambler1_1_1,
-    PSOGambler2_2_2,
-    PSOGambler2_2_2_Noise05,
-    PSOGamblerMem1,
     Punisher,
     Raider,
     Random,
@@ -400,14 +430,35 @@ all_strategies = [
     Retaliate,
     Retaliate2,
     Retaliate3,
-    FirstByDowning,
-    SecondByRichardHufford,
+    RevisedDowning,
     Ripoff,
     RiskyQLearner,
+    SecondByAppold,
+    SecondByBlack,
+    SecondByBorufsen,
+    SecondByCave,
+    SecondByChampion,
+    SecondByColbert,
+    SecondByEatherley,
+    SecondByGetzler,
+    SecondByGladstein,
+    SecondByGraaskampKatzen,
+    SecondByGrofman,
+    SecondByHarrington,
+    SecondByKluepfel,
+    SecondByLeyvraz,
+    SecondByMikkelson,
+    SecondByRichardHufford,
     SecondByRowsam,
+    SecondByTester,
+    SecondByTidemanAndChieruzzi,
+    SecondByTranquilizer,
+    SecondByWeiner,
+    SecondByWhite,
+    SecondByWmAdams,
+    SecondByYamachi,
     SelfSteem,
     ShortMem,
-    FirstByShubik,
     SlowTitForTwoTats2,
     SneakyTitForTat,
     SoftGrudger,
@@ -416,51 +467,41 @@ all_strategies = [
     SolutionB5,
     SpitefulTitForTat,
     Stalker,
-    FirstBySteinAndRapoport,
     StochasticCooperator,
     StochasticWSLS,
     SuspiciousTitForTat,
-    SecondByTester,
     TF1,
     TF2,
     TF3,
     ThueMorse,
     ThueMorseInverse,
     Thumper,
-    FirstByTidemanAndChieruzzi,
-    TitForTat,
     TitFor2Tats,
-    SecondByTranquilizer,
+    TitForTat,
     TrickyCooperator,
     TrickyDefector,
     TrickyLevelPunisher,
-    FirstByTullock,
     TwoTitsForTat,
     UsuallyCooperates,
     UsuallyDefects,
     VeryBad,
-    SecondByWeiner,
-    SecondByWhite,
     Willing,
-    Winner12,
-    Winner21,
     WinShiftLoseStay,
     WinStayLoseShift,
-    SecondByWmAdams,
+    Winner12,
+    Winner21,
     WorseAndWorse,
     WorseAndWorse2,
     WorseAndWorse3,
-    SecondByYamachi,
-    ZDExtortion,
     ZDExtort2,
-    ZDExtort3,
     ZDExtort2v2,
+    ZDExtort3,
     ZDExtort4,
+    ZDExtortion,
     ZDGTFT2,
     ZDGen2,
     ZDMem2,
     ZDMischief,
     ZDSet2,
     e,
-    DynamicTwoTitsForTat,
 ]

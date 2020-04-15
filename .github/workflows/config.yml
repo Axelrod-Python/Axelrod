@@ -34,26 +34,28 @@ jobs:
         python -m pip install docutils==0.12
         python -m pip install mock
         cd docs; make clean; make html; cd ..;
-    - name: Install testing dependencies
+    - name: Run tests
       run: |
         python -m pip install coverage
         python -m pip install hypothesis==3.2
-        python -m pip install mypy
-    - name: Run tests
-      run: |
         coverage run --source=axelrod -m unittest discover
     - name: Report coverage
       run: |
         coverage report -m --fail-under=100
-    - name: Run doctest
+    - name: Run doctests
       run: |
         python doctests.py
     - name: Run static type checker
       run: |
+        python -m pip install mypy
         python run_mypy.py
     - name: Check that all strategies are indexed
       run: |
         python run_strategy_indexer.py
+    - name: Check that strategies are added to axelrod.all_strategies
+      run: |
+        python -m pip install pylint
+        python -m pylint --disable=all --enable=unused-import axelrod/strategies/_strategies.py
     - name: Check that installs
       run: |
         python setup.py install

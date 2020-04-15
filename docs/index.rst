@@ -49,6 +49,12 @@ validity and reproducibility of results!
 Quick start
 -----------
 
+Count the number of available players::
+
+    >>> import axelrod as axl
+    >>> len(axl.strategies)
+    236
+
 Create matches between two players::
 
     >>> import axelrod as axl
