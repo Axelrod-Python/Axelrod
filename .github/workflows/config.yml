@@ -27,37 +27,37 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         python -m pip install -r requirements.txt
-    #- name: Check that documentation builds
-      #run: |
-        #python -m pip install sphinx
-        #python -m pip install sphinx_rtd_theme
-        #python -m pip install docutils==0.12
-        #python -m pip install mock
-        #cd docs; make clean; make html; cd ..;
-    #- name: Run tests
-      #run: |
-        #python -m pip install coverage
-        #python -m pip install hypothesis==3.2
-        #coverage run --source=axelrod -m unittest discover
-    #- name: Report coverage
-      #run: |
-        #coverage report -m --fail-under=100
-    #- name: Run doctests
-      #run: |
-        #python doctests.py
-    #- name: Run static type checker
-      #run: |
-        #python -m pip install mypy
-        #python run_mypy.py
-    #- name: Check that all strategies are indexed
-      #run: |
-        #python run_strategy_indexer.py
+    - name: Check that documentation builds
+      run: |
+        python -m pip install sphinx
+        python -m pip install sphinx_rtd_theme
+        python -m pip install docutils==0.12
+        python -m pip install mock
+        cd docs; make clean; make html; cd ..;
+    - name: Run tests
+      run: |
+        python -m pip install coverage
+        python -m pip install hypothesis==3.2
+        coverage run --source=axelrod -m unittest discover
+    - name: Report coverage
+      run: |
+        coverage report -m --fail-under=100
+    - name: Run doctests
+      run: |
+        python doctests.py
+    - name: Run static type checker
+      run: |
+        python -m pip install mypy
+        python run_mypy.py
+    - name: Check that all strategies are indexed
+      run: |
+        python run_strategy_indexer.py
     - name: Check that strategies are added to axelrod.all_strategies
       run: |
         python -m pip install pylint
         python -m pylint --disable=all --enable=unused-import axelrod/strategies/_strategies.py
-    #- name: Check that installs
-      #run: |
-        #python setup.py install
-        #cd ..
-        #python -c "import axelrod"
+    - name: Check that installs
+      run: |
+        python setup.py install
+        cd ..
+        python -c "import axelrod"
