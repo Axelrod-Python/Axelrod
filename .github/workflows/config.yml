@@ -39,6 +39,7 @@ jobs:
         python -m pip install coverage
         python -m pip install hypothesis==3.2
         python -m pip install mypy
+        python -m pip install pylint
     - name: Run tests
       run: |
         coverage run --source=axelrod -m unittest discover
@@ -54,6 +55,9 @@ jobs:
     - name: Check that all strategies are indexed
       run: |
         python run_strategy_indexer.py
+    - name: Check that strategies are added to axl.all_strategies
+      run: |
+        python -m pylint --disable=all --enable=unused-import axelrod/strategies/_strategies.py
     - name: Check that installs
       run: |
         python setup.py install
