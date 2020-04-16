@@ -145,7 +145,7 @@ class TestMirrorMindReader(TestPlayer):
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
-        "makes_use_of": {"game"},
+        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": True,  # reading and copying the source of the component
         "manipulates_source": True,  # changing own source dynamically
