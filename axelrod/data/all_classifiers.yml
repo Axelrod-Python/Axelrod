@@ -1087,7 +1087,8 @@ Mind Controller:
 Mind Reader:
   inspects_source: true
   long_run_time: false
-  makes_use_of: !!set {}
+  makes_use_of: !!set
+    game: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1295,7 +1296,8 @@ Prober 4:
 Protected Mind Reader:
   inspects_source: true
   long_run_time: false
-  makes_use_of: !!set {}
+  makes_use_of: !!set
+    game: null
   manipulates_source: true
   manipulates_state: false
   memory_depth: .inf
