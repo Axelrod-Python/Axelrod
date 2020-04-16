@@ -91,7 +91,7 @@ class MirrorMindReader(ProtectedMindReader):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
-        "makes_use_of": {"game"},
+        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": True,  # Reads and copies the source of the opponent
         "manipulates_source": True,  # Changes own source dynamically
