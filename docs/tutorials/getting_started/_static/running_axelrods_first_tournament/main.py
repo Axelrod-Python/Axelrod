@@ -12,7 +12,7 @@ number_of_strategies = len(
     first_tournament_participants_ordered_by_reported_rank
 )
 axl.seed(0)
-tournament = axl.Tournament(
+tournament = axl.IpdTournament(
     players=first_tournament_participants_ordered_by_reported_rank,
     turns=200,
     repetitions=5,
