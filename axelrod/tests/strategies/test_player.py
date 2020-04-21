@@ -2,6 +2,8 @@ import unittest
 import itertools
 import pickle
 import types
+import warnings
+
 import numpy as np
 
 from hypothesis import given, settings
@@ -452,45 +454,34 @@ class TestPlayer(unittest.TestCase):
         clone = player.clone()
         self.assertEqual(player, clone)
 
-    def test_reproducibility_of_play(self):
-        player = self.player()
-        player_clone = player.clone()
-        coplayer = axl.Random(0.5)
-        coplayer_clone = coplayer.clone()
-        m1 = axl.Match((player, coplayer), turns=10, seed=10)
-        m2 = axl.Match((player_clone, coplayer_clone), turns=10, seed=10)
-        m1.play()
-        m2.play()
-        self.assertEqual(m1.result, m2.result)
-
-    @given(seed=integers(min_value=1, max_value=20000000))
-    @settings(max_examples=1)
-    def test_clone(self, seed):
+    @given(seed=integers(min_value=1, max_value=20000000),
+           turns=integers(min_value=5, max_value=10),
+           noise=integers(min_value=0, max_value=10))
+    @settings(max_examples=1, deadline=None)
+    def test_clone_reproducible_play(self, seed, turns, noise):
         # Test that the cloned player produces identical play
-        player1 = self.player()
-        if player1.name in ["Darwin", "Human"]:
+        player = self.player()
+        if player.name in ["Darwin", "Human"]:
             # Known exceptions
             return
-        player2 = player1.clone()
-        self.assertEqual(len(player2.history), 0)
-        self.assertEqual(player2.cooperations, 0)
-        self.assertEqual(player2.defections, 0)
-        self.assertEqual(player2.state_distribution, {})
-        self.assertEqual(player2.classifier, player1.classifier)
-        self.assertEqual(player2.match_attributes, player1.match_attributes)
 
-        turns = 5
         for op in [
             axl.Cooperator(),
             axl.Defector(),
             axl.TitForTat(),
             axl.Random(p=0.5),
         ]:
-            for p in [player1, player2]:
-                m = axl.Match((p, op), turns=turns, reset=True, seed=seed)
-                m.play()
-            self.assertEqual(len(player1.history), turns)
-            self.assertEqual(player1.history, player2.history)
+            player = self.player()
+            player_clone = player.clone()
+            op = op.clone()
+            op_clone = op.clone()
+            m1 = axl.Match((player, op), turns=turns, seed=seed, noise=noise/100.)
+            m2 = axl.Match((player_clone, op_clone), turns=turns, seed=seed, noise=noise/100.)
+            m1.play()
+            m2.play()
+            self.assertEqual(m1.result, m2.result)
+            self.assertEqual(player, player_clone)
+            self.assertEqual(op, op_clone)
 
     @given(
         strategies=strategy_lists(
@@ -582,6 +573,10 @@ class TestPlayer(unittest.TestCase):
             match_attributes=match_attributes,
             seed=seed
         )
+        if match._stochastic and (seed is None):
+            warnings.warn(
+                "Test Match in TestPlayer.versus_test is stochastic "
+                "but no random seed was given.")
         self.assertEqual(match.play(), expected_actions)
 
         if attrs:
@@ -645,8 +640,12 @@ class TestMatch(unittest.TestCase):
             raise ValueError("Mismatched History lengths.")
         turns = len(expected_actions1)
         match = axl.Match((player1, player2), turns=turns, noise=noise, seed=seed)
-        match.play()
-        self.assertEqual(match.result, list(zip(expected_actions1, expected_actions2)))
+        if match._stochastic and (seed is None):
+            warnings.warn(
+                "Test Match in TestMatch.versus_test is stochastic "
+                "but no random seed was given.")
+        result = match.play()
+        self.assertEqual(result, list(zip(expected_actions1, expected_actions2)))
 
     def test_versus_with_incorrect_history_lengths(self):
         """Test the error raised by versus_test if expected actions do not

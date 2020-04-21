@@ -180,20 +180,20 @@ class TestEvolvableCycler(unittest.TestCase):
     def test_crossover_even_length(self):
         cycle1 = "C" * 6
         cycle2 = "D" * 6
-        cross_cycle = "CCCDDD"
+        cross_cycle = "CCCCCD"
 
-        player1 = self.player_class(cycle=cycle1, seed=3)
-        player2 = self.player_class(cycle=cycle2)
+        player1 = self.player_class(cycle=cycle1, seed=4)
+        player2 = self.player_class(cycle=cycle2, seed=5)
         crossed = player1.crossover(player2)
         self.assertEqual(cross_cycle, crossed.cycle)
 
     def test_crossover_odd_length(self):
         cycle1 = "C" * 7
         cycle2 = "D" * 7
-        cross_cycle = "CCCDDDD"
+        cross_cycle = "CCDDDDD"
 
-        player1 = self.player_class(cycle=cycle1, seed=5)
-        player2 = self.player_class(cycle=cycle2)
+        player1 = self.player_class(cycle=cycle1, seed=6)
+        player2 = self.player_class(cycle=cycle2, seed=7)
         crossed = player1.crossover(player2)
         self.assertEqual(cross_cycle, crossed.cycle)
 

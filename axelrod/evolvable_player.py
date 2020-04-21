@@ -22,6 +22,7 @@ class EvolvablePlayer(Player):
 
     def __init__(self, seed=None):
         super().__init__()
+        # if set_seed:
         self.set_seed(seed=seed)
 
     def overwrite_init_kwargs(self, **kwargs):

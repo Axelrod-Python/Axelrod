@@ -482,8 +482,7 @@ class TestGradual(TestPlayer):
             axl.CyclerCCD(),
             axl.CyclerDDC(),
         ]
-        axl.seed(1)
-        tournament = axl.Tournament(players, turns=1000, repetitions=1)
+        tournament = axl.Tournament(players, turns=1000, repetitions=1, seed=1)
         results = tournament.play(progress_bar=False)
         scores = [
             round(average_score_per_turn * 1000, 1)
@@ -666,9 +665,8 @@ class TestOriginalGradual(TestPlayer):
             axl.WinStayLoseShift(),
         ]
 
-        axl.seed(1)
         turns = 1000
-        tournament = axl.Tournament(players, turns=turns, repetitions=1)
+        tournament = axl.Tournament(players, turns=turns, repetitions=1, seed=1)
         results = tournament.play(progress_bar=False)
         scores = [
             round(average_score_per_turn * 1000, 1)
@@ -677,7 +675,7 @@ class TestOriginalGradual(TestPlayer):
         expected_scores = [
             3000.0,
             915.0,
-            2763.0,
+            2756.0,
             3000.0,
             3000.0,
             2219.0,
@@ -740,21 +738,24 @@ class TestContriteTitForTat(TestPlayer):
         self.assertEqual(opponent.history, [C])
 
         # After noise: is contrite
-        player.play(opponent)
+        match = axl.Match((player, opponent), turns=2, noise=0.9, seed=9)
+        match.play()
         self.assertEqual(player.history, [D, C])
         self.assertEqual(player._recorded_history, [C, C])
         self.assertEqual(opponent.history, [C, D])
         self.assertTrue(player.contrite)
 
         # Cooperates and no longer contrite
-        player.play(opponent)
+        match = axl.Match((player, opponent), turns=3, noise=0.9, seed=9)
+        match.play()
         self.assertEqual(player.history, [D, C, C])
         self.assertEqual(player._recorded_history, [C, C, C])
         self.assertEqual(opponent.history, [C, D, D])
         self.assertFalse(player.contrite)
 
         # Goes back to playing tft
-        player.play(opponent)
+        match = axl.Match((player, opponent), turns=4, noise=0.9, seed=9)
+        match.play()
         self.assertEqual(player.history, [D, C, C, D])
         self.assertEqual(player._recorded_history, [C, C, C, D])
         self.assertEqual(opponent.history, [C, D, D, D])

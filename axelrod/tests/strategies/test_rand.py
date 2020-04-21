@@ -28,7 +28,7 @@ class TestRandom(TestPlayer):
         self.versus_test(opponent, expected_actions=actions, seed=1)
 
         opponent = axl.MockPlayer()
-        actions = [(D, C), (D, C), (C, C)]
+        actions = [(D, C), (C, C), (D, C)]
         self.versus_test(opponent, expected_actions=actions, seed=2)
 
         opponent = axl.MockPlayer()

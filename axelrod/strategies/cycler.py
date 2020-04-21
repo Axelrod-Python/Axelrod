@@ -111,11 +111,9 @@ class EvolvableCycler(Cycler, EvolvablePlayer):
         mutation_potency: int = 1,
         seed: int = None
     ) -> None:
-        self.set_seed(seed=seed)
+        EvolvablePlayer.__init__(self, seed=seed)
         cycle, cycle_length = self._normalize_parameters(cycle, cycle_length)
-        # The following __init__ sets self.cycle = cycle
         Cycler.__init__(self, cycle=cycle)
-        EvolvablePlayer.__init__(self)
         # Overwrite init_kwargs in the case that we generated a new cycle from cycle_length
         self.overwrite_init_kwargs(
             cycle=cycle,
@@ -162,7 +160,7 @@ class EvolvableCycler(Cycler, EvolvablePlayer):
         cycle_list = crossover_lists(self.cycle, other.cycle, self._random)
         cycle = "".join(cycle_list)
         cycle, _ = self._normalize_parameters(cycle)
-        return self.create_new(cycle=cycle)
+        return self.create_new(cycle=cycle, seed=self._random.random_seed_int())
 
 
 class CyclerDC(Cycler):

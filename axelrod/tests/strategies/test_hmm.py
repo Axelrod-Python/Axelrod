@@ -187,7 +187,7 @@ class TestEvolvedHMM5(TestPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (D, C), (D, D), (D, C)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=2)
 
 
 class TestEvolvedHMM5vsCooperator(TestMatch):

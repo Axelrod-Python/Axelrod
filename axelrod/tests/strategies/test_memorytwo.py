@@ -153,7 +153,7 @@ class TestMemoryStochastic(TestPlayer):
     }
 
     def test_strategy(self):
-        rng = axelrod.RandomGenerator(seed=7888)
+        rng = axl.RandomGenerator(seed=7888)
         vector = [rng.random() for _ in range(16)]
 
         actions = [(C, C), (C, C), (D, D), (C, C), (D, C), (D, D), (D, C)]

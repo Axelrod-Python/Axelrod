@@ -67,7 +67,7 @@ class TestGeller(TestPlayer):
         self.versus_test(axl.Darwin(), expected_actions=[(C, C), (C, C), (C, C)], seed=3)
 
         self.versus_test(
-            axelrod.MindReader(), expected_actions=[(D, D), (D, D), (D, D)], seed=1
+            axl.MindReader(), expected_actions=[(D, D), (D, D), (D, D)], seed=1
         )
 
 
