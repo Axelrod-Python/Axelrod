@@ -1,14 +1,10 @@
 """Tests for the random functions."""
+from collections import Counter
 import unittest
 
-import random
-
-from collections import Counter
-
-import numpy
-from axelrod import Action, BulkRandomGenerator, Pdf, RandomGenerator
-
 import axelrod as axl
+from axelrod import BulkRandomGenerator, Pdf, RandomGenerator
+
 
 C, D = axl.Action.C, axl.Action.D
 

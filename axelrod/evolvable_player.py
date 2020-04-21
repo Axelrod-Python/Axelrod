@@ -1,5 +1,4 @@
 import base64
-import copy
 from pickle import dumps, loads
 from typing import Dict, List
 from .player import Player

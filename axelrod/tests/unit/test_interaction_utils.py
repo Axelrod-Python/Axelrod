@@ -1,6 +1,6 @@
-import unittest
-import tempfile
 from collections import Counter
+import tempfile
+import unittest
 
 import axelrod as axl
 

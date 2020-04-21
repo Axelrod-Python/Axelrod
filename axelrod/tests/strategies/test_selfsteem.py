@@ -1,7 +1,5 @@
 """Tests for the SelfSteem strategy."""
 
-import random
-
 import axelrod as axl
 
 from .test_player import TestPlayer

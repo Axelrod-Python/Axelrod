@@ -1,8 +1,9 @@
-import unittest
-import itertools
-import random
 from collections import Counter
+import itertools
+import unittest
+
 import matplotlib.pyplot as plt
+
 import axelrod as axl
 from axelrod import MoranProcess
 from axelrod.tests.property import strategy_lists
@@ -12,6 +13,7 @@ from hypothesis.strategies import integers
 
 
 C, D = axl.Action.C, axl.Action.D
+random = axl.RandomGenerator()
 
 
 class TestMoranProcess(unittest.TestCase):

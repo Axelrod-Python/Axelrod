@@ -1,11 +1,10 @@
-import unittest
-import csv
 from collections import Counter
-
-import pandas as pd
-from dask.dataframe.core import DataFrame
-from numpy import mean, nanmedian, std
+import csv
 import pathlib
+import unittest
+
+from numpy import mean, nanmedian, std
+import pandas as pd
 
 import axelrod as axl
 from axelrod.load_data_ import axl_filename

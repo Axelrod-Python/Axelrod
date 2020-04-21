@@ -6,7 +6,7 @@ from axelrod.action import Action
 from axelrod import Classifiers
 from axelrod.game import Game
 from axelrod.random_ import RandomGenerator
-from .deterministic_cache import DeterministicCache
+from axelrod.deterministic_cache import DeterministicCache
 
 C, D = Action.C, Action.D
 

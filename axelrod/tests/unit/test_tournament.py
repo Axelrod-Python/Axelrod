@@ -1,14 +1,15 @@
 """Tests for the main tournament class."""
-import unittest
-from unittest.mock import MagicMock, patch
 
 import io
 import logging
+from multiprocessing import Queue, cpu_count
 import os
 import pathlib
 import pickle
+import unittest
+from unittest.mock import MagicMock, patch
 import warnings
-from multiprocessing import Queue, cpu_count
+
 
 from hypothesis import example, given, settings
 from hypothesis.strategies import floats, integers

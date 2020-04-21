@@ -7,10 +7,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 from axelrod import EvolvablePlayer, DEFAULT_TURNS, Game, Player
 
-from .deterministic_cache import DeterministicCache
-from .graph import Graph, complete_graph
-from .match import Match
-from .random_ import RandomGenerator, BulkRandomGenerator
+from axelrod.deterministic_cache import DeterministicCache
+from axelrod.graph import Graph, complete_graph
+from axelrod.match import Match
+from axelrod.random_ import RandomGenerator, BulkRandomGenerator
 
 
 class MoranProcess(object):

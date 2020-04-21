@@ -1,10 +1,9 @@
+import pathlib
+import tempfile
 import unittest
 
-import tempfile
 import matplotlib
 import matplotlib.pyplot as plt
-import pathlib
-
 from numpy import mean
 
 import axelrod as axl

@@ -1,11 +1,10 @@
-import unittest
 import pickle
-import random
+import unittest
 
 import axelrod as axl
 
 C, D = axl.Action.C, axl.Action.D
-
+random = axl.RandomGenerator()
 
 # A set of classes to test pickling.
 

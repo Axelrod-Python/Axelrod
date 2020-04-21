@@ -1,10 +1,7 @@
 """Test for the Gambler strategy. Most tests come from the LookerUp test suite.
 """
-import unittest
-
 import copy
-
-import random
+import unittest
 
 import axelrod as axl
 from axelrod.load_data_ import load_pso_tables
@@ -17,7 +14,7 @@ from .test_evolvable_player import PartialClass, TestEvolvablePlayer
 
 tables = load_pso_tables("pso_gambler.csv", directory="data")
 C, D = axl.Action.C, axl.Action.D
-
+random = axl.RandomGenerator()
 
 class TestGambler(TestPlayer):
 

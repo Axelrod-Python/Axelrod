@@ -1,7 +1,6 @@
 """Tests for the Cycler strategies."""
 import unittest
 import itertools
-import random
 
 import axelrod as axl
 from axelrod._strategy_utils import detect_cycle
@@ -12,6 +11,7 @@ from .test_player import TestPlayer
 from .test_evolvable_player import PartialClass, TestEvolvablePlayer
 
 C, D = Action.C, Action.D
+random = axl.RandomGenerator()
 
 
 class TestAntiCycler(TestPlayer):

@@ -1,8 +1,5 @@
 """Tests for Finite State Machine Strategies."""
-
 import unittest
-
-import random
 
 import axelrod as axl
 from axelrod.compute_finite_state_machine_memory import get_memory_from_transitions
@@ -13,7 +10,7 @@ from .test_player import TestPlayer
 from .test_evolvable_player import PartialClass, TestEvolvablePlayer
 
 C, D = axl.Action.C, axl.Action.D
-
+random = axl.RandomGenerator()
 
 class TestSimpleFSM(unittest.TestCase):
     def setUp(self):

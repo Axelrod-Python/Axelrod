@@ -1,6 +1,6 @@
 """Tests for the Mindreader strategy."""
 
-import axl as axl
+import axelrod as axl
 from axelrod._strategy_utils import simulate_match
 
 from .test_player import TestPlayer

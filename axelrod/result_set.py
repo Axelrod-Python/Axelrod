@@ -5,11 +5,10 @@ from multiprocessing import cpu_count
 from typing import List
 import warnings
 
-import numpy as np
-import tqdm
-
 import dask as da
 import dask.dataframe as dd
+import numpy as np
+import tqdm
 
 from axelrod.action import Action
 from . import eigen

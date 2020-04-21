@@ -1,10 +1,7 @@
 """Test for the Looker Up strategy."""
 
-import unittest
-
 import copy
-
-import random
+import unittest
 
 import axelrod as axl
 from axelrod.action import str_to_actions
@@ -20,7 +17,7 @@ from .test_evolvable_player import PartialClass, TestEvolvablePlayer
 from .test_player import TestPlayer
 
 C, D = axl.Action.C, axl.Action.D
-
+random = axl.RandomGenerator()
 
 class TestLookupTable(unittest.TestCase):
     lookup_dict = {

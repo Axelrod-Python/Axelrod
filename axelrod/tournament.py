@@ -7,8 +7,9 @@ from multiprocessing import Process, Queue, cpu_count
 from tempfile import mkstemp
 from typing import List, Optional, Tuple
 
-import axelrod.interaction_utils as iu
 import tqdm
+
+import axelrod.interaction_utils as iu
 from axelrod import DEFAULT_TURNS
 from axelrod.action import Action, actions_to_str
 from axelrod.player import Player

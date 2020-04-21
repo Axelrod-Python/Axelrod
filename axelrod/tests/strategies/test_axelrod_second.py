@@ -1,11 +1,6 @@
 """Tests for the Second Axelrod strategies."""
 
-import random
-
 import axelrod as axl
-
-import numpy as np
-
 from .test_player import TestPlayer
 
 C, D = axl.Action.C, axl.Action.D
@@ -1155,9 +1150,8 @@ class TestHarrington(TestPlayer):
         ]
         # Enter defect mode.
         expected_actions += [(D, C)]
-        random.seed(10)
         player = self.player()
-        match = axl.Match((player, axl.Random()), turns=len(expected_actions))
+        match = axl.Match((player, axl.Random()), turns=len(expected_actions), seed=10)
         # The history matrix will be [[0, 2], [5, 6], [3, 6], [4, 2]]
         actions = match.play()
         self.assertEqual(actions, expected_actions)

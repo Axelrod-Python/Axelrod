@@ -2,7 +2,6 @@ import unittest
 import warnings
 
 import axelrod as axl
-from axelrod import filtered_strategies, short_run_time_strategies
 from axelrod.tests.property import strategy_lists
 
 from hypothesis import example, given, settings
