@@ -29,13 +29,13 @@ class TestAdaptorBrief(TestPlayer):
         # Error corrected.
         actions = [(C, C), (C, D), (D, C), (C, C)]
         self.versus_test(
-            opponent=axl.AdaptorBrief(), expected_actions=actions, seed=22
+            opponent=axl.AdaptorBrief(), expected_actions=actions, seed=245
         )
 
         # Error corrected, example 2
         actions = [(D, C), (C, D), (D, C), (C, D), (C, C)]
         self.versus_test(
-            opponent=axl.AdaptorBrief(), expected_actions=actions, seed=925
+            opponent=axl.AdaptorBrief(), expected_actions=actions, seed=7935
         )
 
         # Versus Cooperator
@@ -74,7 +74,7 @@ class TestAdaptorLong(TestPlayer):
         # Error corrected.
         actions = [(C, C), (C, D), (D, D), (C, C), (C, C)]
         self.versus_test(
-            opponent=axl.AdaptorLong(), expected_actions=actions, seed=22
+            opponent=axl.AdaptorLong(), expected_actions=actions, seed=305
         )
 
         # Versus Cooperator

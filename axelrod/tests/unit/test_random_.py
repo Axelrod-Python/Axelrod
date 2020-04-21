@@ -11,13 +11,15 @@ C, D = axl.Action.C, axl.Action.D
 
 class TestRandomGenerator(unittest.TestCase):
     def test_return_values(self):
-        random = RandomGenerator()
-        self.assertEqual(random.random_choice(1), C)
-        self.assertEqual(random.random_choice(0), D)
+        # The seed doesn't matter for p=0 or p=1
+        for seed in range(10):
+            random = RandomGenerator(seed=seed)
+            self.assertEqual(random.random_choice(1), C)
+            self.assertEqual(random.random_choice(0), D)
         random.seed(1)
-        self.assertEqual(random.random_choice(), C)
-        random.seed(2)
-        self.assertEqual(random.random_choice(), D)
+        self.assertEqual(random.random_choice(0.5), C)
+        random.seed(3)
+        self.assertEqual(random.random_choice(0.5), D)
 
     def test_seed_not_offset_by_deterministic_call(self):
         """Test that when called with p = 0 or 1, the random seed is not

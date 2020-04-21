@@ -745,15 +745,8 @@ class FirstByTullock(Player):
     }
 
     def __init__(self) -> None:
-        """
-        Parameters
-        ----------
-        rounds_to_cooperate: int
-           The number of rounds to cooperate initially
-        """
         super().__init__()
         self._rounds_to_cooperate = 11
-        self.memory_depth = self._rounds_to_cooperate
 
     def strategy(self, opponent: Player) -> Action:
         if len(self.history) < self._rounds_to_cooperate:

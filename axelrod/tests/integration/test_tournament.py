@@ -164,7 +164,7 @@ class TestProbEndTournament(unittest.TestCase):
         p2 = axl.Cooperator()
         p3 = axl.Cooperator()
         players = [p1, p2, p3]
-        tournament = axelrod.Tournament(players, prob_end=0.5, repetitions=2, seed=3)
+        tournament = axl.Tournament(players, prob_end=0.5, repetitions=2, seed=3)
         results = tournament.play(progress_bar=False)
         # Check that match length are different across the repetitions
         self.assertNotEqual(results.match_lengths[0], results.match_lengths[1])

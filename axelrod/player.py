@@ -3,6 +3,7 @@ import inspect
 import itertools
 import types
 from typing import Any, Dict
+import warnings
 
 import numpy as np
 
@@ -121,7 +122,9 @@ class Player(object):
     def set_seed(self, seed=None):
         """Set a random seed for the player's random number generator."""
         if seed is None:
-            # Warning: using global seed
+            warnings.warn(
+                "Initializing player with seed from Axelrod module random number generator."
+                " Results may not be seed reproducible.")
             self._seed = _module_random.random_seed_int()
         else:
             self._seed = seed

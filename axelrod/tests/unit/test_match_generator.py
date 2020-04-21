@@ -184,7 +184,7 @@ class TestMatchGenerator(unittest.TestCase):
            seed=integers(min_value=1, max_value=4294967295),)
     @settings(max_examples=5)
     def test_seeding_equality(self, repetitions, seed):
-        rr1 = axelrod.MatchGenerator(
+        rr1 = axl.MatchGenerator(
             players=self.players,
             turns=test_turns,
             game=test_game,
@@ -192,7 +192,7 @@ class TestMatchGenerator(unittest.TestCase):
             seed=seed
         )
         chunks1 = list(rr1.build_match_chunks())
-        rr2 = axelrod.MatchGenerator(
+        rr2 = axl.MatchGenerator(
             players=self.players,
             turns=test_turns,
             game=test_game,
@@ -203,7 +203,7 @@ class TestMatchGenerator(unittest.TestCase):
         self.assertEqual(chunks1, chunks2)
 
     def test_seeding_inequality(self, repetitions=10):
-        rr1 = axelrod.MatchGenerator(
+        rr1 = axl.MatchGenerator(
             players=self.players,
             turns=test_turns,
             game=test_game,
@@ -211,7 +211,7 @@ class TestMatchGenerator(unittest.TestCase):
             seed=0
         )
         chunks1 = list(rr1.build_match_chunks())
-        rr2 = axelrod.MatchGenerator(
+        rr2 = axl.MatchGenerator(
             players=self.players,
             turns=test_turns,
             game=test_game,

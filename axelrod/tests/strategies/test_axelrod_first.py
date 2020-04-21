@@ -127,10 +127,10 @@ class TestFirstByFeld(TestPlayer):
             self.assertEqual(player._cooperation_probability(), player._end_coop_prob)
 
     def test_strategy(self):
-        actions = [(C, C)] * 41 + [(D, C)]
+        actions = [(C, C)] * 13 + [(D, C)]
         self.versus_test(axl.Cooperator(), expected_actions=actions, seed=1)
 
-        actions = [(C, C)] * 16 + [(D, C)]
+        actions = [(C, C)] * 11 + [(D, C)]
         self.versus_test(axl.Cooperator(), expected_actions=actions, seed=2)
 
         actions = [(C, D)] + [(D, D)] * 20
@@ -163,19 +163,19 @@ class TestFirstByGraaskamp(TestPlayer):
         actions += [(D, C)]  # 51 turns
         actions += [(C, D), (D, C)] * 2 + [(C, D)]  # 56 turns
         self.versus_test(
-            axl.Alternator(), expected_actions=actions, attrs=expected_attrs
+            axl.Alternator(), expected_actions=actions, attrs=expected_attrs, seed=0
         )
 
         # Against defector
         actions = [(C, D)] + [(D, D)] * 55  # 56 turns
         self.versus_test(
-            axl.Defector(), expected_actions=actions, attrs=expected_attrs
+            axl.Defector(), expected_actions=actions, attrs=expected_attrs, seed=0
         )
 
         # Against cooperator
         actions = [(C, C)] * 50 + [(D, C)] + [(C, C)] * 5
         self.versus_test(
-            axl.Cooperator(), expected_actions=actions, attrs=expected_attrs
+            axl.Cooperator(), expected_actions=actions, attrs=expected_attrs, seed=0
         )
 
         # Test recognition of random player
@@ -185,12 +185,12 @@ class TestFirstByGraaskamp(TestPlayer):
         }
         actions = [(C, C)] * 50 + [(D, C)] + [(C, C)] * 5  # 56 turns
         self.versus_test(
-            axl.Cooperator(), expected_actions=actions, attrs=expected_attrs
+            axl.Cooperator(), expected_actions=actions, attrs=expected_attrs, seed=1
         )
-        expected_attrs = {"opponent_is_random": False, "next_random_defection_turn": 68}
+        expected_attrs = {"opponent_is_random": False, "next_random_defection_turn": 63}
         actions += [(C, C)]  # 57 turns
         self.versus_test(
-            axl.Cooperator(), expected_actions=actions, attrs=expected_attrs
+            axl.Cooperator(), expected_actions=actions, attrs=expected_attrs, seed=8
         )
 
         expected_attrs = {
@@ -202,11 +202,11 @@ class TestFirstByGraaskamp(TestPlayer):
         actions += [(C, D), (D, C)] * 3  # 57 turns
         actions += [(D, D)]
         self.versus_test(
-            axl.Alternator(), expected_actions=actions, attrs=expected_attrs
+            axl.Alternator(), expected_actions=actions, attrs=expected_attrs, seed=3
         )
         actions += [(D, C), (D, D)] * 5
         self.versus_test(
-            axl.Alternator(), expected_actions=actions, attrs=expected_attrs
+            axl.Alternator(), expected_actions=actions, attrs=expected_attrs, seed=4
         )
 
         # Test versus TfT
@@ -222,16 +222,16 @@ class TestFirstByGraaskamp(TestPlayer):
         )
 
         # Test random defections
-        expected_attrs = {"opponent_is_random": False, "next_random_defection_turn": 78}
-        actions = [(C, C)] * 50 + [(D, C)] + [(C, C)] * 16 + [(D, C)] + [(C, C)]
+        expected_attrs = {"opponent_is_random": False, "next_random_defection_turn": 76}
+        actions = [(C, C)] * 50 + [(D, C)] + [(C, C)] * 15 + [(D, C)] + [(C, C)]
         self.versus_test(
             axl.Cooperator(), expected_actions=actions, seed=0, attrs=expected_attrs
         )
 
-        expected_attrs = {"opponent_is_random": False, "next_random_defection_turn": 77}
-        actions = [(C, C)] * 50 + [(D, C)] + [(C, C)] * 12 + [(D, C)] + [(C, C)]
+        expected_attrs = {"opponent_is_random": False, "next_random_defection_turn": 79}
+        actions = [(C, C)] * 50 + [(D, C)] + [(C, C)] * 14 + [(D, C)] + [(C, C)]
         self.versus_test(
-            axl.Cooperator(), expected_actions=actions, seed=1, attrs=expected_attrs
+            axl.Cooperator(), expected_actions=actions, seed=5, attrs=expected_attrs
         )
 
 
@@ -251,17 +251,17 @@ class TestFirstByGrofman(TestPlayer):
 
     def test_strategy(self):
         actions = [(C, C)] * 7
-        self.versus_test(axl.Cooperator(), expected_actions=actions)
+        self.versus_test(axl.Cooperator(), expected_actions=actions, seed=0)
 
         actions = [(C, C), (C, D), (D, C)]
-        self.versus_test(axl.Alternator(), expected_actions=actions)
+        self.versus_test(axl.Alternator(), expected_actions=actions, seed=0)
 
         opponent = axl.MockPlayer(actions=[D] * 8)
-        actions = [(C, D), (C, D), (D, D), (C, D), (D, D), (C, D), (C, D), (D, D)]
+        actions = [(C, D), (C, D), (D, D), (C, D), (D, D), (C, D), (D, D), (C, D)]
         self.versus_test(opponent, expected_actions=actions, seed=1)
 
         opponent = axl.MockPlayer(actions=[D] * 8)
-        actions = [(C, D), (D, D), (C, D), (D, D), (C, D), (C, D), (C, D), (D, D)]
+        actions = [(C, D), (D, D), (C, D), (D, D), (C, D), (D, D), (C, D), (C, D)]
         self.versus_test(opponent, expected_actions=actions, seed=2)
 
 
@@ -284,10 +284,10 @@ class TestFirstByJoss(TestPlayer):
         test_four_vector(self, expected_dictionary)
 
     def test_strategy(self):
-        actions = [(C, C), (C, C), (C, C), (C, C)]
+        actions = [(C, C), (C, C), (C, C), (D, C)]
         self.versus_test(axl.Cooperator(), expected_actions=actions, seed=1)
 
-        actions = [(C, C), (D, C), (D, C), (C, C)]
+        actions = [(C, C), (C, C), (C, C), (C, C)]
         self.versus_test(axl.Cooperator(), expected_actions=actions, seed=2)
 
         actions = [(C, D), (D, D), (D, D), (D, D)]
@@ -424,21 +424,9 @@ class TestFirstByTullock(TestPlayer):
         self.versus_test(opponent, expected_actions=actions)
 
         # Test beyond 10 rounds
-        opponent = axl.MockPlayer(actions=[D] * 5 + [C] * 6)
-        actions = [(C, D)] * 5 + [(C, C)] * 6 + [(D, D)] * 4
+        opponent = axl.MockPlayer(actions=[D] * 5 + [C] * 5 + [C, D] * 5)
+        actions = [(C, D)] * 5 + [(C, C)] * 6 + [(D, D)] + [(D, C), (C, D), (C, C)]
         self.versus_test(opponent, expected_actions=actions, seed=20)
-
-        opponent = axl.MockPlayer(actions=[D] * 5 + [C] * 6)
-        actions = [(C, D)] * 5 + [(C, C)] * 6 + [(C, D), (D, D), (D, D), (C, D)]
-        self.versus_test(opponent, expected_actions=actions, seed=1)
-
-        opponent = axl.MockPlayer(actions=[C] * 9 + [D] * 2)
-        actions = [(C, C)] * 9 + [(C, D)] * 2 + [(C, C), (D, C), (D, C), (C, C)]
-        self.versus_test(opponent, expected_actions=actions, seed=1)
-
-        opponent = axl.MockPlayer(actions=[C] * 9 + [D] * 2)
-        actions = [(C, C)] * 9 + [(C, D)] * 2 + [(D, C), (D, C), (C, C), (C, C)]
-        self.versus_test(opponent, expected_actions=actions, seed=2)
 
 
 class TestFirstByAnonymous(TestPlayer):
@@ -456,10 +444,10 @@ class TestFirstByAnonymous(TestPlayer):
     }
 
     def test_strategy(self):
-        actions = [(D, C), (C, C), (C, C), (D, C), (C, C), (C, C)]
+        actions = [(D, C), (C, C), (C, C), (C, C), (D, C), (C, C)]
         self.versus_test(axl.Cooperator(), expected_actions=actions, seed=1)
 
-        actions = [(C, C), (C, C), (D, C), (C, C), (C, C), (D, C)]
+        actions = [(D, C), (D, C), (D, C), (C, C), (D, C), (D, C)]
         self.versus_test(axl.Cooperator(), expected_actions=actions, seed=10)
 
 

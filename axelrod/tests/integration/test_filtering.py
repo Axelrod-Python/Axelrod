@@ -21,6 +21,7 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
     def tearDown(self) -> None:
         warnings.simplefilter("default", category=UserWarning)
 
+    @settings(deadline=None)
     @given(strategies=strategy_lists(min_size=20, max_size=20))
     def test_boolean_filtering(self, strategies):
 

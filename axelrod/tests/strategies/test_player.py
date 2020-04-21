@@ -10,11 +10,8 @@ from hypothesis.strategies import integers, sampled_from
 import axelrod as axl
 from axelrod.tests.property import strategy_lists
 
-
 C, D = axl.Action.C, axl.Action.D
-
 random = axl.RandomGenerator()
-
 short_run_time_short_mem = [
     s
     for s in axl.short_run_time_strategies
@@ -487,7 +484,7 @@ class TestPlayer(unittest.TestCase):
             axl.Cooperator(),
             axl.Defector(),
             axl.TitForTat(),
-            axl.Random(p=r),
+            axl.Random(p=0.5),
         ]:
             for p in [player1, player2]:
                 m = axl.Match((p, op), turns=turns, reset=True, seed=seed)
@@ -687,7 +684,6 @@ def test_memory(player, opponent, memory_length, seed=0, turns=10):
     opponent.reset()
     player._history = axl.LimitedHistory(memory_length)
     opponent._history = axl.LimitedHistory(memory_length)
-    axl.seed(seed)
     match = axl.Match((player, opponent), turns=turns, reset=False, seed=seed)
     limited_plays = [p[0] for p in match.play()]
 

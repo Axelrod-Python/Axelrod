@@ -45,7 +45,7 @@ class TestAverageCopier(TestPlayer):
             (C, D),
             (C, C),
             (D, D),
-            (D, C),
+            (C, C),
             (C, D),
         ]
         self.versus_test(axl.Alternator(), expected_actions=actions, seed=1)
@@ -53,11 +53,11 @@ class TestAverageCopier(TestPlayer):
         actions = [
             (D, C),
             (C, D),
-            (D, C),
+            (C, C),
             (C, D),
             (C, C),
             (D, D),
-            (D, C),
+            (C, C),
             (D, D),
             (C, C),
             (D, D),
@@ -73,9 +73,9 @@ class TestAverageCopier(TestPlayer):
             (D, D),
             (C, D),
             (D, C),
-            (D, C),
+            (C, C),
             (D, D),
-            (D, D),
+            (C, D),
         ]
         self.versus_test(opponent, expected_actions=actions, seed=1)
 
@@ -85,12 +85,12 @@ class TestAverageCopier(TestPlayer):
             (C, C),
             (C, C),
             (C, D),
-            (D, D),
+            (C, D),
             (C, D),
             (C, C),
             (D, C),
-            (D, C),
-            (D, D),
+            (C, C),
+            (C, D),
         ]
         self.versus_test(opponent, expected_actions=actions, seed=2)
 
@@ -126,10 +126,10 @@ class TestNiceAverageCopier(TestPlayer):
             (D, D),
             (D, C),
             (C, D),
-            (C, C),
+            (D, C),
             (C, D),
             (D, C),
-            (D, D),
+            (C, D),
         ]
         self.versus_test(axl.Alternator(), expected_actions=actions, seed=1)
 
@@ -137,11 +137,11 @@ class TestNiceAverageCopier(TestPlayer):
             (C, C),
             (C, D),
             (D, C),
-            (D, D),
-            (C, C),
             (C, D),
             (D, C),
-            (D, D),
+            (C, D),
+            (D, C),
+            (C, D),
             (D, C),
             (C, D),
         ]
@@ -155,7 +155,7 @@ class TestNiceAverageCopier(TestPlayer):
             (C, D),
             (D, D),
             (D, D),
-            (C, C),
+            (D, C),
             (D, C),
             (C, D),
             (D, D),
@@ -168,11 +168,11 @@ class TestNiceAverageCopier(TestPlayer):
             (C, C),
             (C, C),
             (C, D),
-            (D, D),
-            (D, D),
-            (C, C),
+            (C, D),
+            (C, D),
+            (D, C),
             (C, C),
             (D, C),
-            (D, D),
+            (C, D),
         ]
         self.versus_test(opponent, expected_actions=actions, seed=2)

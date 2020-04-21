@@ -254,7 +254,7 @@ class TestPickle(unittest.TestCase):
         self.assertEqual(results, [(C, C), (C, C), (D, D)])
 
     def test_pickling_all_strategies(self):
-        for s in random.sample(axl.strategies, 50):
+        for s in random.choice(axl.strategies, 50):
             with self.subTest(strategy=s.name):
                 self.assert_original_equals_pickled(s())
 
