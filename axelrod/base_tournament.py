@@ -1,8 +1,8 @@
 from typing import List, Tuple
 
 import axelrod as axl
-from axelrod.player import BasePlayer
-from axelrod.game import BaseGame
+from axelrod.base_player import BasePlayer
+from axelrod.base_game import BaseGame
 
 
 class BaseTournament(object):

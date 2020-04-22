@@ -1,8 +1,8 @@
 from typing import Dict, List, Tuple, Union
 
 import axelrod as axl
-from axelrod.game import BaseGame
-from axelrod.player import BasePlayer
+from axelrod.base_game import BaseGame
+from axelrod.base_player import BasePlayer
 
 Score = Union[int, float]
 
