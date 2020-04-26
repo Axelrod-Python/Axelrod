@@ -58,7 +58,7 @@ class Player(axl.IpdPlayer):
         # methods.
         return self._player.play(opponent, noise, strategy_holder=self)
 
-    def clone(self) -> 'Player':
+    def clone(self) -> "Player":
         """Clones the player without history, reapplying configuration
         parameters as necessary."""
 
@@ -74,8 +74,9 @@ class Player(axl.IpdPlayer):
     def reset(self):
         self._player.reset()
 
-    def set_match_attributes(self, length: int = -1, game: 'Game' = None,
-                             noise: float = 0) -> None:
+    def set_match_attributes(
+        self, length: int = -1, game: "Game" = None, noise: float = 0
+    ) -> None:
         self._player.set_match_attributes(length, game, noise)
 
     def update_history(self, play: axl.Action, coplay: axl.Action) -> None:
@@ -121,7 +122,7 @@ class Player(axl.IpdPlayer):
     def state_distribution(self):
         return self._player.state_distribution
 
-    def __eq__(self, other: 'Player') -> bool:
+    def __eq__(self, other: "Player") -> bool:
         if not isinstance(other, Player):
             return False
         return self._player == other._player
@@ -148,7 +149,7 @@ class Game(object):
     def __repr__(self) -> str:
         return repr(self._game)
 
-    def __eq__(self, other: 'Game') -> bool:
+    def __eq__(self, other: "Game") -> bool:
         if not isinstance(other, Game):
             return False
         return self._game == other._game

@@ -53,7 +53,9 @@ test_prob_end = 0.5
 test_edges = [(0, 1), (1, 2), (3, 4)]
 
 deterministic_strategies = [
-    s for s in axl.short_run_time_strategies if not axl.Classifiers["stochastic"](s())
+    s
+    for s in axl.short_run_time_strategies
+    if not axl.Classifiers["stochastic"](s())
 ]
 
 short_run_time_short_mem = [
@@ -64,14 +66,14 @@ short_run_time_short_mem = [
 
 # Classifiers for TitForTat
 _test_classifier = {
-        "memory_depth": 1,  # Four-Vector = (1.,0.,1.,0.)
-        "stochastic": False,
-        "makes_use_of": set(),
-        "long_run_time": False,
-        "inspects_source": False,
-        "manipulates_source": False,
-        "manipulates_state": False,
-    }
+    "memory_depth": 1,  # Four-Vector = (1.,0.,1.,0.)
+    "stochastic": False,
+    "makes_use_of": set(),
+    "long_run_time": False,
+    "inspects_source": False,
+    "manipulates_source": False,
+    "manipulates_state": False,
+}
 
 
 class RecordedTQDM(tqdm):
@@ -172,7 +174,6 @@ class TestGame(unittest.TestCase):
         self.assertDictEqual(game.scores, expected_scores)
 
 
-
 class TestMatch(unittest.TestCase):
     @given(turns=integers(min_value=1, max_value=200), game=games())
     @example(turns=5, game=axl.DefaultGame)
@@ -200,7 +201,9 @@ class TestMatch(unittest.TestCase):
         self.assertEqual(match.noise, 0)
         self.assertEqual(match.game.RPST(), game.RPST())
 
-        self.assertEqual(match.players[0].match_attributes["length"], float("inf"))
+        self.assertEqual(
+            match.players[0].match_attributes["length"], float("inf")
+        )
         self.assertEqual(match._cache, {})
 
     @given(
@@ -218,7 +221,9 @@ class TestMatch(unittest.TestCase):
         self.assertEqual(match.noise, 0)
         self.assertEqual(match.game.RPST(), game.RPST())
 
-        self.assertEqual(match.players[0].match_attributes["length"], float("inf"))
+        self.assertEqual(
+            match.players[0].match_attributes["length"], float("inf")
+        )
         self.assertEqual(match._cache, {})
 
     def test_default_init(self):
@@ -246,7 +251,9 @@ class TestMatch(unittest.TestCase):
         expected_lengths = [3, 1, 5]
         for seed, expected_length in zip(range(3), expected_lengths):
             axl.seed(seed)
-            self.assertEqual(match.players[0].match_attributes["length"], float("inf"))
+            self.assertEqual(
+                match.players[0].match_attributes["length"], float("inf")
+            )
             self.assertEqual(len(match.play()), expected_length)
             self.assertEqual(match.noise, 0)
             self.assertEqual(match.game.RPST(), (3, 1, 0, 5))
@@ -349,8 +356,7 @@ class TestMatch(unittest.TestCase):
         self.assertEqual(match.play(), expected_result_5_turn)
         # The cache should now hold the 5-turn result..
         self.assertEqual(
-            cache[(axl.Cooperator(), axl.Defector())],
-            expected_result_5_turn
+            cache[(axl.Cooperator(), axl.Defector())], expected_result_5_turn
         )
 
     def test_cache_doesnt_shrink(self):
@@ -369,8 +375,7 @@ class TestMatch(unittest.TestCase):
         self.assertEqual(match.play(), expected_result_3_turn)
         # The cache should still hold the 5.
         self.assertEqual(
-            cache[(axl.Cooperator(), axl.Defector())],
-            expected_result_5_turn
+            cache[(axl.Cooperator(), axl.Defector())], expected_result_5_turn
         )
 
     def test_scores(self):
@@ -623,7 +628,9 @@ class TestTournament(unittest.TestCase):
             noise=0.2,
         )
         self.assertEqual(len(tournament.players), len(test_strategies))
-        self.assertIsInstance(tournament.players[0].match_attributes["game"], axl.IpdGame)
+        self.assertIsInstance(
+            tournament.players[0].match_attributes["game"], axl.IpdGame
+        )
         self.assertEqual(tournament.game.score((C, C)), (3, 3))
         self.assertEqual(tournament.turns, self.test_turns)
         self.assertEqual(tournament.repetitions, 10)
@@ -639,7 +646,9 @@ class TestTournament(unittest.TestCase):
         )
         mg = tournament.match_generator
         match_params = mg.build_single_match_params()
-        self.assertEqual(match_params["match_attributes"], {"length": float("inf")})
+        self.assertEqual(
+            match_params["match_attributes"], {"length": float("inf")}
+        )
 
     def test_warning(self):
         tournament = axl.Tournament(
@@ -738,7 +747,10 @@ class TestTournament(unittest.TestCase):
 
     def test_get_file_object_with_filename(self):
         self.test_tournament.filename = self.filename
-        file_object, writer = self.test_tournament._tournament._get_file_objects()
+        (
+            file_object,
+            writer,
+        ) = self.test_tournament._tournament._get_file_objects()
         self.assertIsInstance(file_object, io.TextIOWrapper)
         self.assertEqual(writer.__class__.__name__, "writer")
         file_object.close()
@@ -790,7 +802,11 @@ class TestTournament(unittest.TestCase):
         # Test that a non default game is passed to the result set
         game = axl.Game(p=-1, r=-1, s=-1, t=-1)
         tournament = axl.Tournament(
-            name=self.test_name, players=self.players, game=game, turns=1, repetitions=1
+            name=self.test_name,
+            players=self.players,
+            game=game,
+            turns=1,
+            repetitions=1,
         )
         results = tournament.play(progress_bar=False)
         self.assertLessEqual(np.max(results.scores), 0)
@@ -924,7 +940,9 @@ class TestTournament(unittest.TestCase):
     # these two examples were identified by hypothesis.
     @example(
         tournament=axl.Tournament(
-            players=[axl.BackStabber(), axl.MindReader()], turns=2, repetitions=1,
+            players=[axl.BackStabber(), axl.MindReader()],
+            turns=2,
+            repetitions=1,
         )
     )
     @example(
@@ -1001,7 +1019,9 @@ class TestTournament(unittest.TestCase):
         self.assertTrue(tournament._tournament._run_serial())
 
         # Get the calls made to write_interactions
-        calls = tournament._tournament._write_interactions_to_file.call_args_list
+        calls = (
+            tournament._tournament._write_interactions_to_file.call_args_list
+        )
         self.assertEqual(len(calls), 15)
 
     def test_run_parallel(self):
@@ -1024,13 +1044,17 @@ class TestTournament(unittest.TestCase):
         # pickled exactly once. Windows multi-processing must pickle this Mock
         # exactly once during testing.
         pickled = pickle.loads(pickle.dumps(tournament))
-        self.assertIsInstance(pickled._tournament._write_interactions_to_file, MagicMock)
+        self.assertIsInstance(
+            pickled._tournament._write_interactions_to_file, MagicMock
+        )
         self.assertRaises(pickle.PicklingError, pickle.dumps, pickled)
 
         self.assertTrue(tournament._tournament._run_parallel())
 
         # Get the calls made to write_interactions
-        calls = tournament._tournament._write_interactions_to_file.call_args_list
+        calls = (
+            tournament._tournament._write_interactions_to_file.call_args_list
+        )
         self.assertEqual(len(calls), 15)
 
     def test_n_workers(self):
@@ -1043,7 +1067,9 @@ class TestTournament(unittest.TestCase):
             turns=axl.DEFAULT_TURNS,
             repetitions=self.test_repetitions,
         )
-        self.assertEqual(tournament._tournament._n_workers(processes=1), max_processes)
+        self.assertEqual(
+            tournament._tournament._n_workers(processes=1), max_processes
+        )
 
         tournament = axl.Tournament(
             name=self.test_name,
@@ -1053,10 +1079,13 @@ class TestTournament(unittest.TestCase):
             repetitions=self.test_repetitions,
         )
         self.assertEqual(
-            tournament._tournament._n_workers(processes=max_processes + 2), max_processes
+            tournament._tournament._n_workers(processes=max_processes + 2),
+            max_processes,
         )
 
-    @unittest.skipIf(cpu_count() < 2, "not supported on single processor machines")
+    @unittest.skipIf(
+        cpu_count() < 2, "not supported on single processor machines"
+    )
     def test_2_workers(self):
         # This is a separate test with a skip condition because we
         # cannot guarantee that the tests will always run on a machine
@@ -1140,7 +1169,9 @@ class TestTournament(unittest.TestCase):
             repetitions=self.test_repetitions,
         )
 
-        tournament._tournament._calculate_results = MagicMock(name="_calculate_results")
+        tournament._tournament._calculate_results = MagicMock(
+            name="_calculate_results"
+        )
         # Mocking this as it is called by play
         self.assertIsNone(
             tournament.play(
@@ -1229,7 +1260,9 @@ class TestTournament(unittest.TestCase):
         )
 
         # Get the calls made to write_interactions
-        calls = tournament._tournament._write_interactions_to_file.call_args_list
+        calls = (
+            tournament._tournament._write_interactions_to_file.call_args_list
+        )
         self.assertEqual(len(calls), 15)
 
     def test_write_to_csv_with_results(self):
@@ -1254,9 +1287,13 @@ class TestTournament(unittest.TestCase):
             turns=2,
             repetitions=2,
         )
-        tournament.play(filename=self.filename, progress_bar=False, build_results=False)
+        tournament.play(
+            filename=self.filename, progress_bar=False, build_results=False
+        )
         df = pd.read_csv(self.filename)
-        path = pathlib.Path("test_outputs/expected_test_tournament_no_results.csv")
+        path = pathlib.Path(
+            "test_outputs/expected_test_tournament_no_results.csv"
+        )
         expected_df = pd.read_csv(axl_filename(path))
         self.assertTrue(df.equals(expected_df))
 
@@ -1292,13 +1329,20 @@ class TestTournament(unittest.TestCase):
 
     def test_match_generator_setter(self):
         expected_match_generator_turns = 123
-        self.test_tournament.match_generator.turns = expected_match_generator_turns
-        self.assertEqual(self.test_tournament.match_generator.turns, expected_match_generator_turns)
+        self.test_tournament.match_generator.turns = (
+            expected_match_generator_turns
+        )
+        self.assertEqual(
+            self.test_tournament.match_generator.turns,
+            expected_match_generator_turns,
+        )
 
     def test_num_interactions_setter(self):
         expected_num_interactions = 123
         self.test_tournament.num_interactions = expected_num_interactions
-        self.assertEqual(self.test_tournament.num_interactions, expected_num_interactions)
+        self.assertEqual(
+            self.test_tournament.num_interactions, expected_num_interactions
+        )
 
     def test_use_progress_bar_setter(self):
         expected_use_progress_bar = False
@@ -1328,7 +1372,9 @@ class TestProbEndTournament(unittest.TestCase):
             prob_end=self.test_prob_end,
             noise=0.2,
         )
-        self.assertEqual(tournament.match_generator.prob_end, tournament.prob_end)
+        self.assertEqual(
+            tournament.match_generator.prob_end, tournament.prob_end
+        )
         self.assertEqual(len(tournament.players), len(test_strategies))
         self.assertEqual(tournament.game.score((C, C)), (3, 3))
         self.assertIsNone(tournament.turns)
@@ -1362,12 +1408,16 @@ class TestProbEndTournament(unittest.TestCase):
     # these two examples were identified by hypothesis.
     @example(
         tournament=axl.Tournament(
-            players=[axl.BackStabber(), axl.MindReader()], prob_end=0.2, repetitions=1,
+            players=[axl.BackStabber(), axl.MindReader()],
+            prob_end=0.2,
+            repetitions=1,
         )
     )
     @example(
         tournament=axl.Tournament(
-            players=[axl.ThueMorse(), axl.MindReader()], prob_end=0.2, repetitions=1,
+            players=[axl.ThueMorse(), axl.MindReader()],
+            prob_end=0.2,
+            repetitions=1,
         )
     )
     def test_property_serial_play(self, tournament):
@@ -1429,7 +1479,9 @@ class TestSpatialTournament(unittest.TestCase):
         seed=integers(min_value=0, max_value=4294967295),
     )
     @settings(max_examples=5)
-    def test_complete_tournament(self, strategies, turns, repetitions, noise, seed):
+    def test_complete_tournament(
+        self, strategies, turns, repetitions, noise, seed
+    ):
         """
         A test to check that a spatial tournament on the complete multigraph
         gives the same results as the round robin.
@@ -1448,7 +1500,11 @@ class TestSpatialTournament(unittest.TestCase):
         )
         # create a complete spatial tournament
         spatial_tournament = axl.Tournament(
-            players, repetitions=repetitions, turns=turns, noise=noise, edges=edges
+            players,
+            repetitions=repetitions,
+            turns=turns,
+            noise=noise,
+            edges=edges,
         )
 
         axl.seed(seed)
@@ -1459,16 +1515,23 @@ class TestSpatialTournament(unittest.TestCase):
         self.assertEqual(results.ranked_names, spatial_results.ranked_names)
         self.assertEqual(results.num_players, spatial_results.num_players)
         self.assertEqual(results.repetitions, spatial_results.repetitions)
-        self.assertEqual(results.payoff_diffs_means, spatial_results.payoff_diffs_means)
+        self.assertEqual(
+            results.payoff_diffs_means, spatial_results.payoff_diffs_means
+        )
         self.assertEqual(results.payoff_matrix, spatial_results.payoff_matrix)
         self.assertEqual(results.payoff_stddevs, spatial_results.payoff_stddevs)
         self.assertEqual(results.payoffs, spatial_results.payoffs)
-        self.assertEqual(results.cooperating_rating, spatial_results.cooperating_rating)
+        self.assertEqual(
+            results.cooperating_rating, spatial_results.cooperating_rating
+        )
         self.assertEqual(results.cooperation, spatial_results.cooperation)
         self.assertEqual(
-            results.normalised_cooperation, spatial_results.normalised_cooperation
+            results.normalised_cooperation,
+            spatial_results.normalised_cooperation,
         )
-        self.assertEqual(results.normalised_scores, spatial_results.normalised_scores)
+        self.assertEqual(
+            results.normalised_scores, spatial_results.normalised_scores
+        )
         self.assertEqual(
             results.good_partner_matrix, spatial_results.good_partner_matrix
         )
@@ -1488,7 +1551,12 @@ class TestSpatialTournament(unittest.TestCase):
         edges = [(0, 2), (0, 3), (1, 2), (1, 3)]
         tournament = axl.Tournament(players, edges=edges)
         results = tournament.play(progress_bar=False)
-        expected_ranked_names = ["Cooperator", "Tit For Tat", "Grudger", "Defector"]
+        expected_ranked_names = [
+            "Cooperator",
+            "Tit For Tat",
+            "Grudger",
+            "Defector",
+        ]
         self.assertEqual(results.ranked_names, expected_ranked_names)
 
         # Check that this tournament runs with noise
@@ -1553,13 +1621,17 @@ class TestProbEndingSpatialTournament(unittest.TestCase):
         players = [s() for s in strategies]
 
         # create a prob end round robin tournament
-        tournament = axl.Tournament(players, prob_end=prob_end, repetitions=reps)
+        tournament = axl.Tournament(
+            players, prob_end=prob_end, repetitions=reps
+        )
         axl.seed(seed)
         results = tournament.play(progress_bar=False)
 
         # create a complete spatial tournament
         # edges
-        edges = [(i, j) for i in range(len(players)) for j in range(i, len(players))]
+        edges = [
+            (i, j) for i in range(len(players)) for j in range(i, len(players))
+        ]
 
         spatial_tournament = axl.Tournament(
             players, prob_end=prob_end, repetitions=reps, edges=edges
@@ -1599,7 +1671,9 @@ class TestProbEndingSpatialTournament(unittest.TestCase):
         one_turn_results = tournament.play(progress_bar=False)
         self.assertEqual(prob_end_results.scores, one_turn_results.scores)
         self.assertEqual(prob_end_results.wins, one_turn_results.wins)
-        self.assertEqual(prob_end_results.cooperation, one_turn_results.cooperation)
+        self.assertEqual(
+            prob_end_results.cooperation, one_turn_results.cooperation
+        )
 
 
 class TestHelperFunctions(unittest.TestCase):
