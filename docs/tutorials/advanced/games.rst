@@ -5,7 +5,7 @@ As described in :ref:`play_contexts` the default game used for the Prisoner's
 Dilemma is given by::
 
     >>> import axelrod as axl
-    >>> pd = axl.game.Game()
+    >>> pd = axl.Game()
     >>> pd
     Axelrod game: (R,P,S,T) = (3, 1, 0, 5)
     >>> pd.RPST()
@@ -27,7 +27,7 @@ These :code:`Game` objects are used to score :ref:`matches <creating_matches>`,
 It is possible to run a matches, tournaments and Moran processes with a
 different game. For example here is the game of chicken::
 
-    >>> chicken = axl.game.Game(r=0, s=-1, t=1, p=-10)
+    >>> chicken = axl.Game(r=0, s=-1, t=1, p=-10)
     >>> chicken
     Axelrod game: (R,P,S,T) = (0, -10, -1, 1)
     >>> chicken.RPST()

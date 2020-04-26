@@ -18,10 +18,10 @@ that summarises the results of the tournament::
     >>> summary = results.summarise()
     >>> import pprint
     >>> pprint.pprint(summary)
-    [Player(Rank=0, Name='Defector', Median_score=2.6..., Cooperation_rating=0.0, Wins=3.0, Initial_C_rate=0.0, CC_rate=...),
-     Player(Rank=1, Name='Tit For Tat', Median_score=2.3..., Cooperation_rating=0..., Wins=0.0, Initial_C_rate=1.0, CC_rate=...),
-     Player(Rank=2, Name='Grudger', Median_score=2.3..., Cooperation_rating=0..., Wins=0.0, Initial_C_rate=1.0, CC_rate=...),
-     Player(Rank=3, Name='Cooperator', Median_score=2.0..., Cooperation_rating=1.0, Wins=0.0, Initial_C_rate=1.0, CC_rate=...)]
+    [IpdPlayer(Rank=0, Name='Defector', Median_score=2.6..., Cooperation_rating=0.0, Wins=3.0, Initial_C_rate=0.0, CC_rate=...),
+     IpdPlayer(Rank=1, Name='Tit For Tat', Median_score=2.3..., Cooperation_rating=0..., Wins=0.0, Initial_C_rate=1.0, CC_rate=...),
+     IpdPlayer(Rank=2, Name='Grudger', Median_score=2.3..., Cooperation_rating=0..., Wins=0.0, Initial_C_rate=1.0, CC_rate=...),
+     IpdPlayer(Rank=3, Name='Cooperator', Median_score=2.0..., Cooperation_rating=1.0, Wins=0.0, Initial_C_rate=1.0, CC_rate=...)]
 
 It is also possible to write this data directly to a csv file using the
 `write_summary` method::
