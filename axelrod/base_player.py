@@ -1,9 +1,11 @@
+import inspect
 from typing import Optional, Tuple
 
 import axelrod as axl
 
 
 class BasePlayer(object):
+
     def __init__(self):
         pass
 

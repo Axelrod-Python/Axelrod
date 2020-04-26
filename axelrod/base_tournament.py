@@ -57,7 +57,7 @@ class BaseTournament(object):
         filename: str = None,
         processes: int = None,
         progress_bar: bool = True,
-    ) -> axl.ResultSet:
+    ) -> 'ResultSet':
         """
         Plays the tournament and passes the results to the ResultSet class
 

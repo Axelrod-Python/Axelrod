@@ -1,7 +1,7 @@
 import os
 
 from axelrod import all_strategies
-from axelrod.ipd.classifier import all_classifiers, rebuild_classifier_table
+from axelrod.classifier import all_classifiers, rebuild_classifier_table
 
 if __name__ == "__main__":
     # Change to relative path inside axelrod folder
