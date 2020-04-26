@@ -1,0 +1,1986 @@
+$\phi$:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: &id001 !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+$\pi$:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id001
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+$e$:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id001
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+ALLCorALLD:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 1
+  stochastic: true
+AON2:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 2
+  stochastic: false
+Adaptive:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set
+    game: null
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Adaptive Pavlov 2006:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Adaptive Pavlov 2011:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Adaptive Tit For Tat:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+AdaptorBrief:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: &id002 !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+AdaptorLong:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id002
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Aggravater:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Alexei:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set
+    length: null
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Alternator:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 1
+  stochastic: false
+Alternator Hunter:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Anti Tit For Tat:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 1
+  stochastic: false
+AntiCycler:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Appeaser:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Arrogant QLearner:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: &id003 !!set
+    game: null
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Average Copier:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+BackStabber:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set
+    length: null
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Better and Better:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Bully:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 1
+  stochastic: false
+Bush Mosteller:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set
+    game: null
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Calculator:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Cautious QLearner:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id003
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+CollectiveStrategy:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Contrite Tit For Tat:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 3
+  stochastic: false
+Cooperator:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 0
+  stochastic: false
+Cooperator Hunter:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Cycle Hunter:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: &id005 !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Cycler CCCCCD:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: &id004 !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 5
+  stochastic: false
+Cycler CCCD:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id004
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 3
+  stochastic: false
+Cycler CCCDCD:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id004
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 5
+  stochastic: false
+Cycler CCD:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id004
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 2
+  stochastic: false
+Cycler DC:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id004
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 1
+  stochastic: false
+Cycler DDC:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id004
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 2
+  stochastic: false
+DBS:
+  inspects_source: false
+  long_run_time: true
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Darwin:
+  inspects_source: true
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: true
+  memory_depth: .inf
+  stochastic: false
+Defector:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 0
+  stochastic: false
+Defector Hunter:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Delayed AON1:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 2
+  stochastic: false
+Desperate:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 1
+  stochastic: true
+Detective:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+DoubleCrosser:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set
+    length: null
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+DoubleResurrection:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 5
+  stochastic: false
+Doubler:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Dynamic Two Tits For Tat:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+EasyGo:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+EugineNier:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set
+    length: null
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Eventual Cycle Hunter:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id005
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Evolved ANN:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: &id006 !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Evolved ANN 5:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id006
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Evolved ANN 5 Noise 05:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id006
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Evolved FSM 16:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Evolved FSM 16 Noise 05:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Evolved FSM 4:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Evolved HMM 5:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 5
+  stochastic: true
+EvolvedLookerUp1_1_1:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: &id007 !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+EvolvedLookerUp2_2_2:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id007
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Firm But Fair:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: &id008 !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 1
+  stochastic: true
+First by Anonymous:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 0
+  stochastic: true
+First by Davis:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+First by Downing:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set
+    game: null
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+First by Feld:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 200
+  stochastic: true
+First by Graaskamp:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+First by Grofman:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 1
+  stochastic: true
+First by Joss:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id008
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 1
+  stochastic: true
+First by Nydegger:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 3
+  stochastic: false
+First by Shubik:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+First by Stein and Rapoport:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set
+    length: null
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+First by Tideman and Chieruzzi:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set
+    game: null
+    length: null
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+First by Tullock:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Fool Me Once:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Forgetful Fool Me Once:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Forgetful Grudger:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 10
+  stochastic: false
+Forgiver:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Forgiving Tit For Tat:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Fortress3:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 2
+  stochastic: false
+Fortress4:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 3
+  stochastic: false
+GTFT:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set
+    game: null
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 1
+  stochastic: true
+Geller:
+  inspects_source: true
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Geller Cooperator:
+  inspects_source: true
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Geller Defector:
+  inspects_source: true
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+General Soft Grudger:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Go By Majority:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: &id009 !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Go By Majority 10:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id009
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 10
+  stochastic: false
+Go By Majority 20:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id009
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 20
+  stochastic: false
+Go By Majority 40:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id009
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 40
+  stochastic: false
+Go By Majority 5:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id009
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 5
+  stochastic: false
+Gradual:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Gradual Killer:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Grudger:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+GrudgerAlternator:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Grumpy:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Handshake:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Hard Go By Majority:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id009
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Hard Go By Majority 10:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id009
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 10
+  stochastic: false
+Hard Go By Majority 20:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id009
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 20
+  stochastic: false
+Hard Go By Majority 40:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id009
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 40
+  stochastic: false
+Hard Go By Majority 5:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id009
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 5
+  stochastic: false
+Hard Prober:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Hard Tit For 2 Tats:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 3
+  stochastic: false
+Hard Tit For Tat:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 3
+  stochastic: false
+Hesitant QLearner:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id003
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Hopeless:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 1
+  stochastic: true
+Inverse:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Inverse Punisher:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Knowledgeable Worse and Worse:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set
+    length: null
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Level Punisher:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Limited Retaliate:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: &id010 !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Limited Retaliate 2:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id010
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Limited Retaliate 3:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id010
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+MEM2:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Math Constant Hunter:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Memory Decay:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Meta Hunter:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Meta Hunter Aggressive:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Meta Majority:
+  inspects_source: false
+  long_run_time: true
+  makes_use_of: &id011 !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Meta Majority Finite Memory:
+  inspects_source: false
+  long_run_time: true
+  makes_use_of: *id011
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Meta Majority Long Memory:
+  inspects_source: false
+  long_run_time: true
+  makes_use_of: *id011
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Meta Majority Memory One:
+  inspects_source: false
+  long_run_time: true
+  makes_use_of: *id011
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Meta Minority:
+  inspects_source: false
+  long_run_time: true
+  makes_use_of: *id011
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Meta Mixer:
+  inspects_source: false
+  long_run_time: true
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Meta Winner:
+  inspects_source: false
+  long_run_time: true
+  makes_use_of: *id011
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Meta Winner Deterministic:
+  inspects_source: false
+  long_run_time: true
+  makes_use_of: *id011
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Meta Winner Ensemble:
+  inspects_source: false
+  long_run_time: true
+  makes_use_of: *id011
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Meta Winner Finite Memory:
+  inspects_source: false
+  long_run_time: true
+  makes_use_of: *id011
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Meta Winner Long Memory:
+  inspects_source: false
+  long_run_time: true
+  makes_use_of: *id011
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Meta Winner Memory One:
+  inspects_source: false
+  long_run_time: true
+  makes_use_of: *id011
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Meta Winner Stochastic:
+  inspects_source: false
+  long_run_time: true
+  makes_use_of: *id011
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Michaelos:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set
+    length: null
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Mind Bender:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: true
+  manipulates_state: false
+  memory_depth: -10
+  stochastic: false
+Mind Controller:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: true
+  manipulates_state: false
+  memory_depth: -10
+  stochastic: false
+Mind Reader:
+  inspects_source: true
+  long_run_time: false
+  makes_use_of: !!set
+    game: null
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Mind Warper:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: true
+  manipulates_state: false
+  memory_depth: -10
+  stochastic: false
+Mirror Mind Reader:
+  inspects_source: true
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: true
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+N Tit(s) For M Tat(s):
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+NMWE Deterministic:
+  inspects_source: false
+  long_run_time: true
+  makes_use_of: &id012 !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+NMWE Finite Memory:
+  inspects_source: false
+  long_run_time: true
+  makes_use_of: *id012
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+NMWE Long Memory:
+  inspects_source: false
+  long_run_time: true
+  makes_use_of: *id012
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+NMWE Memory One:
+  inspects_source: false
+  long_run_time: true
+  makes_use_of: *id012
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+NMWE Stochastic:
+  inspects_source: false
+  long_run_time: true
+  makes_use_of: *id012
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Naive Prober:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 1
+  stochastic: true
+Negation:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 1
+  stochastic: true
+Nice Average Copier:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Nice Meta Winner:
+  inspects_source: false
+  long_run_time: true
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Nice Meta Winner Ensemble:
+  inspects_source: false
+  long_run_time: true
+  makes_use_of: *id012
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Omega TFT:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Once Bitten:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 12
+  stochastic: false
+Opposite Grudger:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+PSO Gambler 1_1_1:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: &id013 !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+PSO Gambler 2_2_2:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id013
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+PSO Gambler 2_2_2 Noise 05:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id013
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+PSO Gambler Mem1:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id013
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Predator:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Prober:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Prober 2:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Prober 3:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Prober 4:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Protected Mind Reader:
+  inspects_source: true
+  long_run_time: false
+  makes_use_of: !!set
+    game: null
+  manipulates_source: true
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Pun1:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Punisher:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Raider:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Random:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 0
+  stochastic: true
+Random Hunter:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Random Tit for Tat:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 1
+  stochastic: true
+Remorseful Prober:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 2
+  stochastic: true
+Resurrection:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 5
+  stochastic: false
+Retaliate:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: &id014 !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Retaliate 2:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id014
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Retaliate 3:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id014
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Revised Downing:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Ripoff:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 3
+  stochastic: false
+Risky QLearner:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id003
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Second by Appold:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Second by Black:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 5
+  stochastic: true
+Second by Borufsen:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Second by Cave:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Second by Champion:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Second by Colbert:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 4
+  stochastic: false
+Second by Eatherley:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Second by Getzler:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Second by Gladstein:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Second by GraaskampKatzen:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set
+    game: null
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Second by Grofman:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 8
+  stochastic: false
+Second by Harrington:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Second by Kluepfel:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Second by Leyvraz:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 3
+  stochastic: true
+Second by Mikkelson:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Second by RichardHufford:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Second by Rowsam:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set
+    a: null
+    e: null
+    g: null
+    m: null
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Second by Tester:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Second by Tideman and Chieruzzi:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set
+    game: null
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Second by Tranquilizer:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set
+    game: null
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Second by Weiner:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Second by White:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Second by WmAdams:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Second by Yamachi:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+SelfSteem:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+ShortMem:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Slow Tit For Two Tats 2:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 2
+  stochastic: false
+Sneaky Tit For Tat:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Soft Grudger:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 6
+  stochastic: false
+Soft Joss:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id008
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 1
+  stochastic: true
+SolutionB1:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 2
+  stochastic: false
+SolutionB5:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Spiteful Tit For Tat:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Stalker:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set
+    game: null
+    length: null
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Stochastic Cooperator:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id008
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 1
+  stochastic: true
+Stochastic WSLS:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id008
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 1
+  stochastic: true
+Suspicious Tit For Tat:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 1
+  stochastic: false
+TF1:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+TF2:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+TF3:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+ThueMorse:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+ThueMorseInverse:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Thumper:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Tit For 2 Tats:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 2
+  stochastic: false
+Tit For Tat:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 1
+  stochastic: false
+Tricky Cooperator:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 10
+  stochastic: false
+Tricky Defector:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Tricky Level Punisher:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Two Tits For Tat:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 2
+  stochastic: false
+UsuallyCooperates:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+UsuallyDefects:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+VeryBad:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Willing:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 1
+  stochastic: true
+Win-Shift Lose-Stay:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 1
+  stochastic: false
+Win-Stay Lose-Shift:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 1
+  stochastic: false
+Winner12:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id007
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Winner21:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id007
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
+Worse and Worse:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Worse and Worse 2:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+Worse and Worse 3:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
+ZD-Extort-2:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: &id015 !!set
+    game: null
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 1
+  stochastic: true
+ZD-Extort-2 v2:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id015
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 1
+  stochastic: true
+ZD-Extort-4:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id015
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 1
+  stochastic: true
+ZD-Extort3:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id015
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 1
+  stochastic: true
+ZD-Extortion:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id015
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 1
+  stochastic: true
+ZD-GEN-2:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id015
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 1
+  stochastic: true
+ZD-GTFT-2:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id015
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 1
+  stochastic: true
+ZD-Mem2:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 2
+  stochastic: true
+ZD-Mischief:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id015
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 1
+  stochastic: true
+ZD-SET-2:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: *id015
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 1
+  stochastic: true
