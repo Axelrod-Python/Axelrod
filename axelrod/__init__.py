@@ -22,3 +22,4 @@ from axelrod.tournament import Tournament
 from axelrod.result_set import ResultSet
 from axelrod.ecosystem import Ecosystem
 from axelrod.fingerprint import AshlockFingerprint, TransitiveFingerprint
+import axelrod.ultimatum as ultimatum
