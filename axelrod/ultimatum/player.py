@@ -16,7 +16,7 @@ class PlayerPosition(Enum):
 
 @attr.s
 class Outcome(object):
-    position: "UltimatumPlayer" = attr.ib()
+    position: PlayerPosition = attr.ib()
     offer: float = attr.ib()
     decision: bool = attr.ib()
     scores: Tuple[float, float] = attr.ib()
@@ -44,6 +44,13 @@ class UltimatumPlayer(object):
     def consider(self, offer: float) -> bool:
         """Decision rule for whether to accept the offer."""
         raise NotImplementedError
+
+    def last_offer(self) -> Optional[Outcome]:
+        """Look for most recent Outcome in which this player was the offerer.
+        Returns None if no such Outcome exists."""
+        for hist in reversed(self.history):
+            if hist.position == PlayerPosition.OFFERER:
+                return hist
 
     def play(
         self, coplayer: "UltimatumPlayer", noise: Optional[float] = None
@@ -76,9 +83,28 @@ class UltimatumPlayer(object):
         return outcome, coplayer_outcome
 
 
-class SimpleThresholdPlayer(UltimatumPlayer):
+class ConsiderThresholdPlayer(object):
+    """Creates the consider function of an ultimatum player that only accepts
+    offer in the provided thresholds."""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.lower_threshold, self.upper_threshold = None, None
+
+    def set_thresholds(self, lower: float, upper: float = 1.0) -> None:
+        self.lower_threshold, self.upper_threshold = lower, upper
+
+    def consider(self, offer: float) -> bool:
+        assert self.lower_threshold is not None
+        return self.lower_threshold <= offer <= self.upper_threshold
+
+
+class SimpleThresholdPlayer(ConsiderThresholdPlayer, UltimatumPlayer):
     """A simple Ultimatum game player with a fixed acceptance threshold and
-    offer proportion."""
+    offer proportion.
+
+    Source: Axelrod library
+    """
 
     name = "Simple Threshold Player"
 
@@ -87,7 +113,7 @@ class SimpleThresholdPlayer(UltimatumPlayer):
     ):
         super().__init__()
         self.offer_proportion = offer_proportion
-        self.lower_threshold = lower_threshold
+        self.set_thresholds(lower_threshold)
 
     def __repr__(self) -> str:
         return "SimpleThresholdPlayer ({} | {})".format(
@@ -97,13 +123,13 @@ class SimpleThresholdPlayer(UltimatumPlayer):
     def offer(self) -> float:
         return self.offer_proportion
 
-    def consider(self, offer: float) -> bool:
-        return offer >= self.lower_threshold
 
-
-class AcceptanceThresholdPlayer(UltimatumPlayer):
+class AcceptanceThresholdPlayer(ConsiderThresholdPlayer, UltimatumPlayer):
     """A simple Ultimatum game player with fixed acceptance thresholds (upper
-    and lower) and a fixed offer proportion."""
+    and lower) and a fixed offer proportion.
+
+    Source: Axelrod library
+    """
 
     name = "Acceptance Threshold Player"
 
@@ -113,9 +139,9 @@ class AcceptanceThresholdPlayer(UltimatumPlayer):
         lower_threshold: float = 0.5,
         upper_threshold: float = 0.5,
     ):
+        super().__init__()
         self.offer_proportion = offer_proportion
-        self.lower_threshold = lower_threshold
-        self.upper_threshold = upper_threshold
+        self.set_thresholds(lower_threshold, upper_threshold)
 
     def __repr__(self) -> str:
         return "AcceptanceThresholdPlayer ({} | [{}, {}])".format(
@@ -125,15 +151,13 @@ class AcceptanceThresholdPlayer(UltimatumPlayer):
     def offer(self) -> float:
         return self.offer_proportion
 
-    def consider(self, offer: float) -> bool:
-        return (offer >= self.lower_threshold) and (
-            offer <= self.upper_threshold
-        )
 
-
-class DoubleThresholdsPlayer(UltimatumPlayer):
+class DoubleThresholdsPlayer(ConsiderThresholdPlayer, UltimatumPlayer):
     """A simple Ultimatum game player with fixed acceptance thresholds (upper
-    and lower) and a fixed offer proportion."""
+    and lower) and a fixed offer proportion.
+
+    Source: Axelrod library
+    """
 
     name = "Double Thresholds Player"
 
@@ -146,10 +170,10 @@ class DoubleThresholdsPlayer(UltimatumPlayer):
         lower_accept: float = 0.4,
         upper_accept: float = 0.6,
     ):
+        super().__init__()
         self.lower_offer = lower_offer
         self.upper_offer = upper_offer
-        self.lower_accept = lower_accept
-        self.upper_accept = upper_accept
+        self.set_thresholds(lower_accept, upper_accept)
         self.offer_distribution = stats.uniform(
             loc=lower_offer, scale=upper_offer - lower_offer
         )
@@ -164,20 +188,20 @@ class DoubleThresholdsPlayer(UltimatumPlayer):
         return "DoubleThresholdsPlayer ({}, {} | [{}, {}])".format(
             self.lower_offer,
             self.upper_offer,
-            self.lower_accept,
-            self.upper_accept,
+            self.init_kwargs["lower_accept"],
+            self.init_kwargs["upper_accept"],
         )
 
     def offer(self) -> float:
         # print(self.lower_offer, self.upper_offer)
         return self.offer_distribution.rvs()
 
-    def consider(self, offer: float) -> bool:
-        return (offer >= self.lower_accept) and (offer <= self.upper_accept)
-
 
 class DistributionPlayer(UltimatumPlayer):
-    """A stochastic player of the ultimatum game."""
+    """A stochastic player of the ultimatum game.
+
+    Source: Axelrod library
+    """
 
     name = "Distribution Player"
 
@@ -188,6 +212,7 @@ class DistributionPlayer(UltimatumPlayer):
             stats.distributions.rv_continuous
         ] = None,
     ):
+        super().__init__()
         if not offer_distribution:
             offer_distribution = stats.norm(0.5, 0.1)  # pragma: no cover
         if not acceptance_distribution:
@@ -203,3 +228,35 @@ class DistributionPlayer(UltimatumPlayer):
 
     def consider(self, offer: float) -> bool:
         return self.acceptance_distribution.rvs() <= offer
+
+
+class BinarySearchOfferPlayer(ConsiderThresholdPlayer, UltimatumPlayer):
+    """Adjusts offers in a binary search fashion to try to find a lowest-
+    acceptable offer.  Considers offers similar to DoubleThresholdsPlayer.
+
+    Source: Axelrod library
+    """
+
+    name = "Binary Search Offers Player"
+
+    def __init__(
+        self, lower_threshold: float = 0.5, upper_threshold: float = 1.0,
+    ):
+        super().__init__()
+        self.set_thresholds(lower_threshold, upper_threshold)
+        self.offer_size = 0.5
+        self.step_size = 0.25
+
+    def __repr__(self) -> str:
+        return "BinarySearchOfferPlayer [{}, {}]".format(
+            self.lower_threshold, self.upper_threshold
+        )
+
+    def offer(self) -> float:
+        last_offer = self.last_offer()
+        if last_offer is not None:
+            # If prior offer was accepted offer less; otherwise more
+            delta = self.step_size * (-1 if last_offer.decision else 1)
+            self.offer_size += delta
+            self.step_size *= 0.5
+        return self.offer_size

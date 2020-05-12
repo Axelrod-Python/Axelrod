@@ -7,6 +7,7 @@ from scipy import stats
 
 from axelrod.ultimatum import (
     AcceptanceThresholdPlayer,
+    BinarySearchOfferPlayer,
     DistributionPlayer,
     DoubleThresholdsPlayer,
     SimpleThresholdPlayer,
@@ -145,3 +146,45 @@ class TestDistributionPlayer(unittest.TestCase):
     def test_repr(self):
         player = DistributionPlayer(MockRVContinuous(), MockRVContinuous())
         self.assertEqual(str(player), "DistributionThresholdPlayer")
+
+
+class TestBinarySearchOfferPlayer(unittest.TestCase):
+    def test_consider(self):
+        player = BinarySearchOfferPlayer(0.4, 0.6)
+        self.assertFalse(player.consider(0.39))
+        self.assertTrue(player.consider(0.4))
+        self.assertTrue(player.consider(0.5))
+        self.assertTrue(player.consider(0.6))
+        self.assertFalse(player.consider(0.61))
+
+    def test_offer(self):
+        player = BinarySearchOfferPlayer(0.4, 0.6)
+        never_accepts = SimpleThresholdPlayer(0.5, 1.0)
+        player.play(never_accepts)
+        self.assertAlmostEqual(player.offer_size, 1.0 / 2)
+        player.play(never_accepts)
+        self.assertAlmostEqual(player.offer_size, 3.0 / 4)
+        player.play(never_accepts)
+        self.assertAlmostEqual(player.offer_size, 7.0 / 8)
+
+        player = BinarySearchOfferPlayer(0.4, 0.6)
+        always_accepts = SimpleThresholdPlayer(0.5, 0.0)
+        player.play(always_accepts)
+        self.assertAlmostEqual(player.offer_size, 1.0 / 2)
+        player.play(always_accepts)
+        self.assertAlmostEqual(player.offer_size, 1.0 / 4)
+        player.play(always_accepts)
+        self.assertAlmostEqual(player.offer_size, 1.0 / 8)
+
+        player = BinarySearchOfferPlayer(0.4, 0.6)
+        accepts_one_third = SimpleThresholdPlayer(0.5, 0.33)
+        player.play(accepts_one_third)
+        self.assertAlmostEqual(player.offer_size, 1.0 / 2)
+        player.play(accepts_one_third)
+        self.assertAlmostEqual(player.offer_size, 1.0 / 4)
+        player.play(accepts_one_third)
+        self.assertAlmostEqual(player.offer_size, 3.0 / 8)
+
+    def test_repr(self):
+        player = BinarySearchOfferPlayer(0.4, 0.6)
+        self.assertEqual(str(player), "BinarySearchOfferPlayer [0.4, 0.6]")
