@@ -46,6 +46,8 @@ class UltimatumPlayer(object):
         raise NotImplementedError
 
     def last_offer(self) -> Optional[Outcome]:
+        """Look for most recent Outcome in which this player was the offerer.
+        Returns None if no such Outcome exists."""
         for hist in reversed(self.history):
             if hist.position == PlayerPosition.OFFERER:
                 return hist
