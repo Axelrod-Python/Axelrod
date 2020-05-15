@@ -89,19 +89,6 @@ class UltimatumPlayer(object):
         """Decision rule for whether to accept the offer."""
         raise NotImplementedError
 
-    def symmetric_play(
-        self, coplayer: "UltimatumPlayer", noise: Optional[float] = None
-    ) -> Tuple[Tuple[Outcome, Outcome], Tuple[Outcome, Outcome]]:
-        """Play two games agianst the passed coplayer.  In the first, this
-        player will be the offerer and the coplayer will be the decider.  In
-        the second, the roles will be switched."""
-        player_outcome_1, coplayer_outcome_1 = self.play(coplayer, noise=noise)
-        coplayer_outcome_2, player_outcome_2 = coplayer.play(self, noise=noise)
-        return (
-            (player_outcome_1, player_outcome_2),
-            (coplayer_outcome_1, coplayer_outcome_2),
-        )
-
     def play(
         self, coplayer: "UltimatumPlayer", noise: Optional[float] = None
     ) -> Tuple[Outcome, Outcome]:

@@ -48,20 +48,6 @@ class TestPlay(unittest.TestCase):
         result = coplayer.play(player)
         np.testing.assert_almost_equal(result[0].scores, (0.0, 0.0))
 
-    def test_symmetric_play(self):
-        # Two accepts
-        player = SimpleThresholdPlayer(0.6, 0.4)
-        coplayer = SimpleThresholdPlayer(0.5, 0.5)
-        result = player.symmetric_play(coplayer)
-        np.testing.assert_almost_equal(result[0][0].scores, (0.4, 0.6))
-        np.testing.assert_almost_equal(result[0][1].scores, (0.5, 0.5))
-
-        # Two rejects
-        player = SimpleThresholdPlayer(0.4, 0.6)
-        result = player.symmetric_play(coplayer)
-        np.testing.assert_almost_equal(result[0][0].scores, (0.0, 0.0))
-        np.testing.assert_almost_equal(result[0][0].scores, (0.0, 0.0))
-
         # Check history
         self.assertEqual(len(coplayer.history), 4)
         self.assertEqual(coplayer.history[0].decision, True)
