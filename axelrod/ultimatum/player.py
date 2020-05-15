@@ -89,13 +89,6 @@ class UltimatumPlayer(object):
         """Decision rule for whether to accept the offer."""
         raise NotImplementedError
 
-    def last_offer(self) -> Optional[Outcome]:
-        """Look for most recent Outcome in which this player was the offerer.
-        Returns None if no such Outcome exists."""
-        for hist in reversed(self.history):
-            if hist.position == PlayerPosition.OFFERER:
-                return hist
-
     def symmetric_play(
         self, coplayer: "UltimatumPlayer", noise: Optional[float] = None
     ) -> Tuple[Tuple[Outcome, Outcome], Tuple[Outcome, Outcome]]:
