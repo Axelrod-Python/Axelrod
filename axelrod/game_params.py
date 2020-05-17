@@ -102,7 +102,7 @@ def symm2p_play_round(
         params.player_positions[Symm2pPosition.POS_1],
         params.player_positions[Symm2pPosition.POS_2],
     )
-    action_1, action_2 = player_1.play(player_2)
+    action_1, action_2 = player_1.play(player_2, noise=noise)
     actions = {
         Symm2pPosition.POS_1: action_1,
         Symm2pPosition.POS_2: action_2,
