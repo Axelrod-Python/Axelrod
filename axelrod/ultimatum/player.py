@@ -2,8 +2,9 @@
 Ultimatum Game.
 """
 
+from collections import abc
 from enum import Enum
-from typing import Optional, Tuple
+from typing import List, Optional, Tuple
 
 import attr
 from scipy import stats
@@ -22,6 +23,49 @@ class Outcome(object):
     scores: Tuple[float, float] = attr.ib()
 
 
+class History(abc.Sequence):
+    """A history class for ultimatum player.
+
+    Attributes
+    ----------
+    _history: List[Outcome]
+        Outcome history for all previous rounds of play.
+    _offer_history: List[Outcome]
+        Outcome history for previous rounds of play in which the player was the
+        offerer.
+    _decide_history: List[Outcome]
+        Outcome history for previous rounds of play in which the player was the
+        decider.
+    """
+    def __init__(self):
+        self._history: List[Outcome] = list()
+        self._offer_history: List[Outcome] = list()
+        self._decide_history: List[Outcome] = list()
+
+    def append(self, outcome: Outcome) -> None:
+        """Append the given outcome to the history list, and to a sublist based
+        on position of the outcome."""
+        self._history.append(outcome)
+        if outcome.position == PlayerPosition.OFFERER:
+            self._offer_history.append(outcome)
+        if outcome.position == PlayerPosition.DECIDER:
+            self._decide_history.append(outcome)
+
+    def __getitem__(self, index):
+        return self._history[index]
+
+    def __len__(self) -> int:
+        return len(self._history)
+
+    @property
+    def offers(self) -> List[Outcome]:
+        return self._offer_history
+
+    @property
+    def decisions(self) -> List[Outcome]:
+        return self._decide_history
+
+
 class UltimatumPlayer(object):
     """A generic abstract player of the ultimatum game."""
 
@@ -31,10 +75,10 @@ class UltimatumPlayer(object):
     classifier = dict(stochastic=True)
 
     def __init__(self):
-        self.history = []
+        self.history = History()
 
     def reset(self) -> None:
-        self.history = []
+        self.history = History()
 
     def offer(self) -> float:
         """Returns a value between 0 and 1 for the proportion offered to the
@@ -44,13 +88,6 @@ class UltimatumPlayer(object):
     def consider(self, offer: float) -> bool:
         """Decision rule for whether to accept the offer."""
         raise NotImplementedError
-
-    def last_offer(self) -> Optional[Outcome]:
-        """Look for most recent Outcome in which this player was the offerer.
-        Returns None if no such Outcome exists."""
-        for hist in reversed(self.history):
-            if hist.position == PlayerPosition.OFFERER:
-                return hist
 
     def play(
         self, coplayer: "UltimatumPlayer", noise: Optional[float] = None
@@ -253,10 +290,12 @@ class BinarySearchOfferPlayer(ConsiderThresholdPlayer, UltimatumPlayer):
         )
 
     def offer(self) -> float:
-        last_offer = self.last_offer()
-        if last_offer is not None:
+        if self.history.offers:
             # If prior offer was accepted offer less; otherwise more
-            delta = self.step_size * (-1 if last_offer.decision else 1)
+            delta = self.step_size * (
+                -1 if self.history.offers[-1].decision else 1
+            )
             self.offer_size += delta
             self.step_size *= 0.5
+
         return self.offer_size

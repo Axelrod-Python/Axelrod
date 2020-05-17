@@ -34,6 +34,36 @@ class TestBaseUltimatumPlayer(unittest.TestCase):
         self.assertEqual(len(player2.history), 1)
 
 
+class TestPlay(unittest.TestCase):
+    def test_play(self):
+        player = SimpleThresholdPlayer(0.6, 0.4)
+        coplayer = SimpleThresholdPlayer(0.5, 0.5)
+        result = player.play(coplayer)
+        np.testing.assert_almost_equal(result[0].scores, (0.4, 0.6))
+        result = coplayer.play(player)
+        np.testing.assert_almost_equal(result[0].scores, (0.5, 0.5))
+        player = SimpleThresholdPlayer(0.4, 0.6)
+        result = player.play(coplayer)
+        np.testing.assert_almost_equal(result[0].scores, (0.0, 0.0))
+        result = coplayer.play(player)
+        np.testing.assert_almost_equal(result[0].scores, (0.0, 0.0))
+
+        # Check history
+        self.assertEqual(len(coplayer.history), 4)
+        self.assertEqual(coplayer.history[0].decision, True)
+        self.assertEqual(coplayer.history[1].decision, True)
+        self.assertEqual(coplayer.history[2].decision, False)
+        self.assertEqual(coplayer.history[3].decision, False)
+
+        self.assertEqual(len(coplayer.history.offers), 2)
+        self.assertEqual(coplayer.history.offers[0].decision, True)
+        self.assertEqual(coplayer.history.offers[1].decision, False)
+
+        self.assertEqual(len(coplayer.history.decisions), 2)
+        self.assertEqual(coplayer.history.decisions[0].decision, True)
+        self.assertEqual(coplayer.history.decisions[1].decision, False)
+
+
 class TestSimpleThresholdPlayer(unittest.TestCase):
     def test_consider(self):
         player = SimpleThresholdPlayer(0.6, 0.4)
@@ -92,21 +122,6 @@ class TestDoubleThresholdsPlayer(unittest.TestCase):
         self.assertEqual(
             str(player), "DoubleThresholdsPlayer (0.4, 0.6 | [0.4, 0.6])"
         )
-
-
-class TestPlay(unittest.TestCase):
-    def test_result(self):
-        player = SimpleThresholdPlayer(0.6, 0.4)
-        coplayer = SimpleThresholdPlayer(0.5, 0.5)
-        result = player.play(coplayer)
-        np.testing.assert_almost_equal(result[0].scores, (0.4, 0.6))
-        result = coplayer.play(player)
-        np.testing.assert_almost_equal(result[0].scores, (0.5, 0.5))
-        player = SimpleThresholdPlayer(0.4, 0.6)
-        result = player.play(coplayer)
-        np.testing.assert_almost_equal(result[0].scores, (0.0, 0.0))
-        result = coplayer.play(player)
-        np.testing.assert_almost_equal(result[0].scores, (0.0, 0.0))
 
 
 class MockRVContinuous(stats.distributions.rv_continuous):
