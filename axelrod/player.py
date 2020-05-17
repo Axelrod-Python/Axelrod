@@ -2,7 +2,7 @@ import copy
 import inspect
 import itertools
 import types
-from typing import Any, Dict
+from typing import Any, Dict, Text
 
 import numpy as np
 
@@ -12,6 +12,8 @@ from axelrod.history import History
 from axelrod.random_ import random_flip
 
 C, D = Action.C, Action.D
+
+PlayerName = Text
 
 
 def simultaneous_play(player, coplayer, noise=0):
@@ -31,7 +33,7 @@ class Player(object):
     This is an abstract base class, not intended to be used directly.
     """
 
-    name = "Player"
+    name: PlayerName = "Player"
     classifier = {}  # type: Dict[str, Any]
 
     def __new__(cls, *args, **kwargs):

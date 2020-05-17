@@ -3,24 +3,16 @@ Ultimatum Game.
 """
 
 from collections import abc
-from enum import Enum
 from typing import List, Optional, Tuple
 
-import attr
 from scipy import stats
 
+from axelrod.game_params import Outcome, Position
 
-class PlayerPosition(Enum):
+
+class UltimatumPosition(Position):
     OFFERER = 1
     DECIDER = 2
-
-
-@attr.s
-class Outcome(object):
-    position: PlayerPosition = attr.ib()
-    offer: float = attr.ib()
-    decision: bool = attr.ib()
-    scores: Tuple[float, float] = attr.ib()
 
 
 class History(abc.Sequence):
@@ -37,18 +29,19 @@ class History(abc.Sequence):
         Outcome history for previous rounds of play in which the player was the
         decider.
     """
+
     def __init__(self):
         self._history: List[Outcome] = list()
         self._offer_history: List[Outcome] = list()
         self._decide_history: List[Outcome] = list()
 
     def append(self, outcome: Outcome) -> None:
-        """Append the given outcome to the history list, and to a sublist based
-        on position of the outcome."""
+        """Append the given Outcome to the history list, and to a sublist based
+        on position of the Outcome."""
         self._history.append(outcome)
-        if outcome.position == PlayerPosition.OFFERER:
+        if outcome.position == UltimatumPosition.OFFERER:
             self._offer_history.append(outcome)
-        if outcome.position == PlayerPosition.DECIDER:
+        if outcome.position == UltimatumPosition.DECIDER:
             self._decide_history.append(outcome)
 
     def __getitem__(self, index):
@@ -103,17 +96,20 @@ class UltimatumPlayer(object):
             scores = 1.0 - offer, offer
         else:
             scores = 0.0, 0.0
+
+        actions = {
+            UltimatumPosition.OFFERER: offer,
+            UltimatumPosition.DECIDER: decision,
+        }
+        scores = {
+            UltimatumPosition.OFFERER: scores[0],
+            UltimatumPosition.DECIDER: scores[1],
+        }
         outcome = Outcome(
-            position=PlayerPosition.OFFERER,
-            offer=offer,
-            decision=decision,
-            scores=scores,
+            position=UltimatumPosition.OFFERER, actions=actions, scores=scores,
         )
         coplayer_outcome = Outcome(
-            position=PlayerPosition.DECIDER,
-            offer=offer,
-            decision=decision,
-            scores=list(reversed(scores)),
+            position=UltimatumPosition.DECIDER, actions=actions, scores=scores,
         )
         self.history.append(outcome)
         coplayer.history.append(coplayer_outcome)
@@ -293,7 +289,9 @@ class BinarySearchOfferPlayer(ConsiderThresholdPlayer, UltimatumPlayer):
         if self.history.offers:
             # If prior offer was accepted offer less; otherwise more
             delta = self.step_size * (
-                -1 if self.history.offers[-1].decision else 1
+                -1
+                if self.history.offers[-1].actions[UltimatumPosition.DECIDER]
+                else 1
             )
             self.offer_size += delta
             self.step_size *= 0.5
