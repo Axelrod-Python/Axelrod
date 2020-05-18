@@ -2,10 +2,11 @@ import random
 from math import ceil, log
 
 import axelrod.interaction_utils as iu
+from axelrod import Classifiers
 from axelrod import DEFAULT_TURNS
 from axelrod.action import Action
-from axelrod import Classifiers
 from axelrod.game import Game
+from axelrod.game_params import ipd_params
 from .deterministic_cache import DeterministicCache
 
 C, D = Action.C, Action.D
@@ -30,6 +31,7 @@ class Match(object):
         noise=0,
         match_attributes=None,
         reset=True,
+        game_params=ipd_params
     ):
         """
         Parameters
@@ -52,6 +54,9 @@ class Match(object):
             but these can be overridden if desired.
         reset : bool
             Whether to reset players or not
+        game_params: GameParams
+            Contains rules for generating a new parameters for each round, and
+            to play a round.
         """
 
         defaults = {
@@ -87,6 +92,8 @@ class Match(object):
 
         self.players = list(players)
         self.reset = reset
+
+        self.game_params = game_params
 
     @property
     def players(self):
@@ -156,9 +163,9 @@ class Match(object):
                     p.reset()
                 p.set_match_attributes(**self.match_attributes)
             result = []
-            for _ in range(turns):
-                plays = self.players[0].play(self.players[1], self.noise)
-                result.append(plays)
+            for play_params in self.game_params.generate_play_params(self.players, turns):
+                outcome = self.game_params.play_round(play_params, self.game, self.noise)
+                result.append(self.game_params.result(outcome))
 
             if self._cache_update_required:
                 self._cache[cache_key] = result
