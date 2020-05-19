@@ -120,10 +120,6 @@ class ConsiderThresholdPlayer(object):
     """Creates the consider function of an ultimatum player that only accepts
     offer in the provided thresholds."""
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.lower_threshold, self.upper_threshold = None, None
-
     def set_thresholds(self, lower: float, upper: float = 1.0) -> None:
         self.lower_threshold, self.upper_threshold = lower, upper
 
@@ -132,7 +128,20 @@ class ConsiderThresholdPlayer(object):
         return self.lower_threshold <= offer <= self.upper_threshold
 
 
-class SimpleThresholdPlayer(ConsiderThresholdPlayer, UltimatumPlayer):
+class ConstantOfferPlayer(object):
+    """Creates the consider function of an ultimatum player that only accepts
+    offer in the provided thresholds."""
+
+    def set_offer_proportion(self, offer_proportion: float) -> None:
+        self.offer_proportion = offer_proportion
+
+    def offer(self) -> float:
+        return self.offer_proportion
+
+
+class SimpleThresholdPlayer(
+    ConsiderThresholdPlayer, ConstantOfferPlayer, UltimatumPlayer
+):
     """A simple Ultimatum game player with a fixed acceptance threshold and
     offer proportion.
 
@@ -145,19 +154,18 @@ class SimpleThresholdPlayer(ConsiderThresholdPlayer, UltimatumPlayer):
         self, offer_proportion: float = 0.5, lower_threshold: float = 0.5
     ):
         super().__init__()
-        self.offer_proportion = offer_proportion
         self.set_thresholds(lower_threshold)
+        self.set_offer_proportion(offer_proportion)
 
     def __repr__(self) -> str:
         return "SimpleThresholdPlayer ({} | {})".format(
             self.offer_proportion, self.lower_threshold
         )
 
-    def offer(self) -> float:
-        return self.offer_proportion
 
-
-class AcceptanceThresholdPlayer(ConsiderThresholdPlayer, UltimatumPlayer):
+class AcceptanceThresholdPlayer(
+    ConsiderThresholdPlayer, ConstantOfferPlayer, UltimatumPlayer
+):
     """A simple Ultimatum game player with fixed acceptance thresholds (upper
     and lower) and a fixed offer proportion.
 
@@ -173,16 +181,13 @@ class AcceptanceThresholdPlayer(ConsiderThresholdPlayer, UltimatumPlayer):
         upper_threshold: float = 0.5,
     ):
         super().__init__()
-        self.offer_proportion = offer_proportion
+        self.set_offer_proportion(offer_proportion)
         self.set_thresholds(lower_threshold, upper_threshold)
 
     def __repr__(self) -> str:
         return "AcceptanceThresholdPlayer ({} | [{}, {}])".format(
             self.offer_proportion, self.lower_threshold, self.upper_threshold
         )
-
-    def offer(self) -> float:
-        return self.offer_proportion
 
 
 class DoubleThresholdsPlayer(ConsiderThresholdPlayer, UltimatumPlayer):
@@ -297,3 +302,103 @@ class BinarySearchOfferPlayer(ConsiderThresholdPlayer, UltimatumPlayer):
             self.step_size *= 0.5
 
         return self.offer_size
+
+
+class TitForTatOfferPlayer(ConsiderThresholdPlayer, UltimatumPlayer):
+    """Extend to an opponent the last offer they extended to this player.
+    Considers offers similar to DoubleThresholdsPlayer.
+
+    Source: Axelrod library
+    """
+
+    name = "TitForTat Offer Player"
+
+    def __init__(
+        self,
+        default_offer: float = 0.5,
+        lower_threshold: float = 0.5,
+        upper_threshold: float = 1.0,
+    ):
+        super().__init__()
+        self.default_offer = default_offer
+        self.set_thresholds(lower_threshold, upper_threshold)
+
+    def __repr__(self) -> str:
+        return "TitForTatOfferPlayer ({} | [{}, {}])".format(
+            self.default_offer, self.lower_threshold, self.upper_threshold
+        )
+
+    def offer(self) -> float:
+        if self.history.decisions:
+            return self.history.decisions[-1].actions[UltimatumPosition.OFFERER]
+        return self.default_offer
+
+
+class TitForTatDecisionPlayer(ConstantOfferPlayer, UltimatumPlayer):
+    """Accept an offer from an opponent only if the opponent accepted your last
+    offer.  Makes offers at a constant level, similar to similar to
+    SimpleThresholdPlayer.
+
+    Source: Axelrod library
+    """
+
+    name = "TitForTat Decision Player"
+
+    def __init__(
+        self, offer_proportion: float = 0.5, default_acceptance: bool = True
+    ):
+        super().__init__()
+        self.set_offer_proportion(offer_proportion)
+        self.default_acceptance = default_acceptance
+
+    def __repr__(self) -> str:
+        return "TitForTatDecisionPlayer ({}, {})".format(
+            self.offer_proportion, self.default_acceptance
+        )
+
+    def consider(self, offer: float) -> bool:
+        if self.history.offers:
+            return self.history.offers[-1].actions[UltimatumPosition.DECIDER]
+        return self.default_acceptance
+
+
+class RejectionLiftPlayer(ConstantOfferPlayer, UltimatumPlayer):
+    """Rejects first two offers.  After assumes that last increase in response
+    to a rejection will be the next increase in response to rejection.  Then
+    calculates cost-benefit of another rejection, discounting future play.
+    Makes offers at a constant level, similar to similar to
+    SimpleThresholdPlayer.
+
+    Source: Axelrod library
+    """
+
+    name = "Rejection-Lift Player"
+
+    def __init__(self, offer_proportion: float = 0.5, discount: float = 0.9):
+        super().__init__()
+        self.set_offer_proportion(offer_proportion)
+        self.discount = discount
+        self.future_weight = self.discount / (1.0 - self.discount)
+
+    def __repr__(self) -> str:
+        return "RejectionLiftPlayer ({}, {})".format(
+            self.offer_proportion, self.discount
+        )
+
+    def _get_lift(self) -> float:
+        response = None
+        for h in reversed(self.history.decisions):
+            if response is not None:
+                if not h.actions[UltimatumPosition.DECIDER]:
+                    return response - h.actions[UltimatumPosition.OFFERER]
+            response = h.actions[UltimatumPosition.OFFERER]
+
+    def consider(self, offer: float) -> bool:
+        if len(self.history.decisions) < 2:
+            return False
+
+        # Cost/benefit of rejecting here.
+        cost = offer
+        benefit = self._get_lift() * self.future_weight
+
+        return benefit < cost
