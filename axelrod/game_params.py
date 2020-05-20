@@ -26,6 +26,7 @@ class PlayParams(object):
     player_positions : Dict[Position, Player]
         Specifies the player that's going to play each of the positions.
     """
+
     player_positions: Dict[Position, Player] = attr.ib()
 
 
@@ -35,17 +36,21 @@ class Outcome(object):
 
     Attributes
     ----------
-    position : Position
-        ...
     actions : Dict[Position, Any]
         The chosen action for each player, keyed by the player's position.
     scores : Dict[Position, Score]
         The resulting score for the player, keyed by the player's position.
+    position : Position
+        An Outcome object will contain info about each position's action and
+        score, but may also have a perspective indicating a single position.
+        For example, when Outcome is stored to a player's history, position
+        indicates which position that player played as on that turn.
     """
-    position: Position = attr.ib()
+
     # TODO: Change Any to Action, creating an ultimatum action.
     actions: Dict[Position, Any] = attr.ib()
     scores: Dict[Position, Score] = attr.ib()
+    position: Optional[Position] = attr.ib(default=None)
 
 
 @attr.s
@@ -67,6 +72,7 @@ class GameParams(object):
         Translates an Outcome object to a result that the match's play method
         returns.  By default, this is a pass-through.
     """
+
     generate_play_params: Callable[
         [List[Player], int], Generator[PlayParams, None, None]
     ] = attr.ib()
@@ -79,6 +85,7 @@ class Symm2pPosition(Position):
 
     "Symmetric" means that the positions are interchangeable.
     """
+
     POS_1 = 1
     POS_2 = 2
 
@@ -95,25 +102,32 @@ def symm2p_generate_play_params(
         yield PlayParams(player_positions=player_positions)
 
 
+def x_plays_y_round(
+    x: Position,
+    y: Position,
+    params: PlayParams,
+    game: Game,
+    noise: Optional[float] = None,
+) -> Outcome:
+    """Calls play on player in position x, with the player in position y
+    passed in."""
+    player_1, player_2 = (
+        params.player_positions[x],
+        params.player_positions[y],
+    )
+    action_1, action_2 = player_1.play(player_2, noise=noise)
+    actions = {x: action_1, y: action_2}
+    score_1, score_2 = game.score((action_1, action_2))
+    scores = {x: score_1, y: score_2}
+    return Outcome(actions=actions, scores=scores)
+
+
 def symm2p_play_round(
     params: PlayParams, game: Game, noise: Optional[float] = None
 ) -> Outcome:
-    player_1, player_2 = (
-        params.player_positions[Symm2pPosition.POS_1],
-        params.player_positions[Symm2pPosition.POS_2],
-    )
-    action_1, action_2 = player_1.play(player_2, noise=noise)
-    actions = {
-        Symm2pPosition.POS_1: action_1,
-        Symm2pPosition.POS_2: action_2,
-    }
-    score_1, score_2 = game.score((action_1, action_2))
-    scores = {
-        Symm2pPosition.POS_1: score_1,
-        Symm2pPosition.POS_2: score_2,
-    }
-    return Outcome(
-        position=Symm2pPosition.POS_1, actions=actions, scores=scores
+    # Either order is fine for a symmetric player
+    return x_plays_y_round(
+        Symm2pPosition.POS_1, Symm2pPosition.POS_2, params, game, noise=noise
     )
 
 
