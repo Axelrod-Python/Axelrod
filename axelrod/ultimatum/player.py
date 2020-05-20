@@ -104,10 +104,10 @@ class UltimatumPlayer(object):
             UltimatumPosition.DECIDER: scores[1],
         }
         outcome = Outcome(
-            position=UltimatumPosition.OFFERER, actions=actions, scores=scores,
+            actions=actions, scores=scores, position=UltimatumPosition.OFFERER
         )
         coplayer_outcome = Outcome(
-            position=UltimatumPosition.DECIDER, actions=actions, scores=scores,
+            actions=actions, scores=scores, position=UltimatumPosition.DECIDER
         )
         self.history.append(outcome)
         coplayer.history.append(coplayer_outcome)

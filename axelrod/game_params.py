@@ -35,20 +35,20 @@ class Outcome(object):
 
     Attributes
     ----------
+    actions : Dict[Position, Any]
+        The chosen action for each player, keyed by the player's position.
+    scores : Dict[Position, Score]
+        The resulting score for the player, keyed by the player's position.
     position : Position
         An Outcome object will contain info about each position's action and
         score, but may also have a perspective indicating a single position.
         For example, when Outcome is stored to a player's history, position
         indicates which position that player played as on that turn.
-    actions : Dict[Position, Any]
-        The chosen action for each player, keyed by the player's position.
-    scores : Dict[Position, Score]
-        The resulting score for the player, keyed by the player's position.
     """
-    position: Optional[Position] = attr.ib()
     # TODO: Change Any to Action, creating an ultimatum action.
     actions: Dict[Position, Any] = attr.ib()
     scores: Dict[Position, Score] = attr.ib()
+    position: Optional[Position] = attr.ib(default=None)
 
 
 @attr.s
@@ -115,9 +115,7 @@ def symm2p_play_round(
         Symm2pPosition.POS_1: score_1,
         Symm2pPosition.POS_2: score_2,
     }
-    return Outcome(
-        position=Symm2pPosition.POS_1, actions=actions, scores=scores
-    )
+    return Outcome(actions=actions, scores=scores)
 
 
 def ipd_result(outcome: Outcome) -> Tuple[Action, Action]:
