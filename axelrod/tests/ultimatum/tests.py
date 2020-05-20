@@ -10,7 +10,10 @@ from axelrod.ultimatum import (
     BinarySearchOfferPlayer,
     DistributionPlayer,
     DoubleThresholdsPlayer,
+    RejectionLiftPlayer,
     SimpleThresholdPlayer,
+    TitForTatDecisionPlayer,
+    TitForTatOfferPlayer,
     UltimatumPlayer,
     UltimatumPosition,
 )
@@ -40,18 +43,34 @@ class TestPlay(unittest.TestCase):
         player = SimpleThresholdPlayer(0.6, 0.4)
         coplayer = SimpleThresholdPlayer(0.5, 0.5)
         result = player.play(coplayer)
-        np.testing.assert_almost_equal(result[0].scores[UltimatumPosition.OFFERER], 0.4)
-        np.testing.assert_almost_equal(result[0].scores[UltimatumPosition.DECIDER], 0.6)
+        np.testing.assert_almost_equal(
+            result[0].scores[UltimatumPosition.OFFERER], 0.4
+        )
+        np.testing.assert_almost_equal(
+            result[0].scores[UltimatumPosition.DECIDER], 0.6
+        )
         result = coplayer.play(player)
-        np.testing.assert_almost_equal(result[0].scores[UltimatumPosition.OFFERER], 0.5)
-        np.testing.assert_almost_equal(result[0].scores[UltimatumPosition.DECIDER], 0.5)
+        np.testing.assert_almost_equal(
+            result[0].scores[UltimatumPosition.OFFERER], 0.5
+        )
+        np.testing.assert_almost_equal(
+            result[0].scores[UltimatumPosition.DECIDER], 0.5
+        )
         player = SimpleThresholdPlayer(0.4, 0.6)
         result = player.play(coplayer)
-        np.testing.assert_almost_equal(result[0].scores[UltimatumPosition.OFFERER], 0.0)
-        np.testing.assert_almost_equal(result[0].scores[UltimatumPosition.DECIDER], 0.0)
+        np.testing.assert_almost_equal(
+            result[0].scores[UltimatumPosition.OFFERER], 0.0
+        )
+        np.testing.assert_almost_equal(
+            result[0].scores[UltimatumPosition.DECIDER], 0.0
+        )
         result = coplayer.play(player)
-        np.testing.assert_almost_equal(result[0].scores[UltimatumPosition.OFFERER], 0.0)
-        np.testing.assert_almost_equal(result[0].scores[UltimatumPosition.DECIDER], 0.0)
+        np.testing.assert_almost_equal(
+            result[0].scores[UltimatumPosition.OFFERER], 0.0
+        )
+        np.testing.assert_almost_equal(
+            result[0].scores[UltimatumPosition.DECIDER], 0.0
+        )
 
         # Check history
         self.assertEqual(len(coplayer.history), 4)
@@ -226,3 +245,80 @@ class TestBinarySearchOfferPlayer(unittest.TestCase):
     def test_repr(self):
         player = BinarySearchOfferPlayer(0.4, 0.6)
         self.assertEqual(str(player), "BinarySearchOfferPlayer [0.4, 0.6]")
+
+
+class TestTitForTatOfferPlayer(unittest.TestCase):
+    def test_offer(self):
+        player = TitForTatOfferPlayer(default_offer=0.5)
+        coplayer = SimpleThresholdPlayer(offer_proportion=0.2)
+        player.play(coplayer)
+        self.assertAlmostEqual(
+            player.history[-1].actions[UltimatumPosition.OFFERER], 0.5
+        )  # Default offer
+        coplayer.play(player)  # Plays 0.2
+        player.play(coplayer)
+        self.assertAlmostEqual(
+            player.history[-1].actions[UltimatumPosition.OFFERER], 0.2
+        )  # Imitates coplayer's offer
+
+    def test_repr(self):
+        player = TitForTatOfferPlayer(0.4, 0.6, 0.8)
+        self.assertEqual(str(player), "TitForTatOfferPlayer (0.4 | [0.6, 0.8])")
+
+
+class TestTitForTatDecisionPlayer(unittest.TestCase):
+    def test_offer(self):
+        player = TitForTatDecisionPlayer(default_acceptance=True)
+        never_accepts = SimpleThresholdPlayer(0.5, 1.0)
+        never_accepts.play(player)
+        self.assertTrue(
+            player.history[-1].actions[UltimatumPosition.DECIDER]
+        )  # Default decision
+        player.play(never_accepts)  # Rejects decisions
+        never_accepts.play(player)
+        self.assertFalse(
+            player.history[-1].actions[UltimatumPosition.DECIDER]
+        )  # Imitate's coplayer decision
+
+    def test_repr(self):
+        player = TitForTatDecisionPlayer(0.9, False)
+        self.assertEqual(str(player), "TitForTatDecisionPlayer (0.9, False)")
+
+
+class TestRejectionLiftPlayer(unittest.TestCase):
+    def test_offer(self):
+        player = RejectionLiftPlayer()
+        binary_search_player = BinarySearchOfferPlayer()
+
+        # Weight all future turns with a total of weight 9.0.  When playing
+        # against the binary player should accept when (n-1)/n > 9/n, which
+        # happens for the first time when n=16.
+        self.assertAlmostEqual(player.future_weight, 9.0)
+
+        # Reject first two offers
+        binary_search_player.play(player)
+        self.assertFalse(player.history[-1].actions[UltimatumPosition.DECIDER])
+        binary_search_player.play(player)
+        self.assertFalse(player.history[-1].actions[UltimatumPosition.DECIDER])
+
+        # Lift is estimated at 1/4
+        binary_search_player.play(player)
+        self.assertFalse(player.history[-1].actions[UltimatumPosition.DECIDER])
+
+        # Lift is estimated at 1/8
+        binary_search_player.play(player)
+        self.assertFalse(player.history[-1].actions[UltimatumPosition.DECIDER])
+
+        # Lift is estimated at 1/16.  Accept.
+        binary_search_player.play(player)
+        self.assertTrue(player.history[-1].actions[UltimatumPosition.DECIDER])
+
+        # Continue accepting from here on.
+        binary_search_player.play(player)
+        self.assertTrue(player.history[-1].actions[UltimatumPosition.DECIDER])
+        binary_search_player.play(player)
+        self.assertTrue(player.history[-1].actions[UltimatumPosition.DECIDER])
+
+    def test_repr(self):
+        player = RejectionLiftPlayer(0.9, False)
+        self.assertEqual(str(player), "RejectionLiftPlayer (0.9, False)")
