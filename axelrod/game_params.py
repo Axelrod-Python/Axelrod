@@ -36,13 +36,16 @@ class Outcome(object):
     Attributes
     ----------
     position : Position
-        ...
+        An Outcome object will contain info about each position's action and
+        score, but may also have a perspective indicating a single position.
+        For example, when Outcome is stored to a player's history, position
+        indicates which position that player played as on that turn.
     actions : Dict[Position, Any]
         The chosen action for each player, keyed by the player's position.
     scores : Dict[Position, Score]
         The resulting score for the player, keyed by the player's position.
     """
-    position: Position = attr.ib()
+    position: Optional[Position] = attr.ib()
     # TODO: Change Any to Action, creating an ultimatum action.
     actions: Dict[Position, Any] = attr.ib()
     scores: Dict[Position, Score] = attr.ib()
