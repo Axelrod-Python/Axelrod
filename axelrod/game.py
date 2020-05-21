@@ -1,13 +1,14 @@
 from typing import Tuple, Union
 
 from axelrod import Action
+from .prototypes import BaseScorer
 
 C, D = Action.C, Action.D
 
 Score = Union[int, float]
 
 
-class Game(object):
+class Game(BaseScorer):
     """Container for the game matrix and scoring logic.
 
     Attributes
@@ -18,7 +19,7 @@ class Game(object):
 
     def __init__(self, r: Score = 3, s: Score = 0, t: Score = 5, p: Score = 1) -> None:
         """Create a new game object.
-        
+
         Parameters
         ----------
         r: int or float

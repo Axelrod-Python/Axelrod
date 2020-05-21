@@ -6,7 +6,7 @@ from axelrod import Classifiers
 from axelrod import DEFAULT_TURNS
 from axelrod.action import Action
 from axelrod.game import Game
-from axelrod.game_params import ipd_params
+from axelrod.ipd_params import ipd_params
 from .deterministic_cache import DeterministicCache
 
 C, D = Action.C, Action.D
