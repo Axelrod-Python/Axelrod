@@ -11,9 +11,9 @@ Score = Union[float, int]
 
 class BasePlayer(object):
     def strategy(self, opponent: "BasePlayer") -> Action:
-        raise NotImplementedError()
+        raise NotImplementedError()  # pragma: no cover
 
 
 class BaseScorer(object):
     def score(self, actions: Tuple[Action, ...]) -> Tuple[Score, ...]:
-        raise NotImplementedError()
+        raise NotImplementedError()  # pragma: no cover
