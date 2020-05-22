@@ -1,7 +1,7 @@
 import unittest
 
 import axelrod as axl
-from axelrod.game_params import Outcome
+from axelrod.prototypes import Outcome
 from axelrod.ultimatum.game import UltimatumScorer
 from axelrod.ultimatum.game_params import ultimatum_alternating_params
 from axelrod.ultimatum.player import UltimatumPosition

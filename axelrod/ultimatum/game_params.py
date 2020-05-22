@@ -1,7 +1,7 @@
 from typing import Any, Generator, List, Optional, Tuple
 
-from axelrod.prototypes import BaseScorer
-from axelrod.game_params import GameParams, Outcome, PlayParams, x_plays_y_round
+from axelrod.game_params import GameParams, PlayParams, x_plays_y_round
+from axelrod.prototypes import BaseScorer, Outcome
 from .player import UltimatumPlayer, UltimatumPosition
 
 

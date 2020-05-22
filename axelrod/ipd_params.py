@@ -3,7 +3,8 @@
 from typing import Tuple
 
 from .action import Action
-from .game_params import GameParams, Outcome, Symm2pPosition, symm2p_generate_play_params, symm2p_play_round
+from .game_params import GameParams, Symm2pPosition, symm2p_generate_play_params, symm2p_play_round
+from .prototypes import Outcome
 
 
 def ipd_result(outcome: Outcome) -> Tuple[Action, Action]:

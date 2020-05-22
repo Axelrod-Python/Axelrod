@@ -5,8 +5,8 @@ Ultimatum Game.
 from collections import abc
 from typing import List, Optional, Tuple
 
-from axelrod.game_params import Outcome, Position
-from axelrod.prototypes import BasePlayer
+from axelrod.game_params import Position
+from axelrod.prototypes import BasePlayer, Outcome
 
 
 class UltimatumPosition(Position):
