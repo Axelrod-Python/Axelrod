@@ -6,6 +6,8 @@ This is used for type annotations and deriving functions.
 from enum import Enum
 from typing import Tuple, Union
 
+import attr
+
 from .action import Action
 
 Position = Enum
