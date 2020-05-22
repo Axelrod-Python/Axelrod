@@ -4,17 +4,19 @@ The GameParams class defines all everything a program should need to understand
 a game (e.g. IPD or ultimatum).
 """
 
-from enum import Enum
-from typing import Any, Callable, Dict, Generator, List, Optional, Tuple, Union
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    Generator,
+    List,
+    Optional,
+    Text,
+)
 
 import attr
 
-from axelrod.action import Action
-from axelrod.game import Game
-from axelrod.player import Player, PlayerName
-
-Position = Enum
-Score = Union[float, int]
+from .prototypes import BasePlayer, BaseScorer, Position, Score
 
 
 @attr.s
@@ -27,7 +29,7 @@ class PlayParams(object):
         Specifies the player that's going to play each of the positions.
     """
 
-    player_positions: Dict[Position, Player] = attr.ib()
+    player_positions: Dict[Position, BasePlayer] = attr.ib()
 
 
 @attr.s
@@ -59,8 +61,10 @@ class GameParams(object):
 
     Attributes
     ----------
+    game_type : Text
+        Unique name for the type of game (IPD, Ultimatum, etc.)
     generate_play_params : Callable[
-        [List[Player], int], Generator[PlayParams, None, None]
+        [List[BasePlayer], int], Generator[PlayParams, None, None]
     ]
         A function that takes a list of players and an integer representing the
         number of turns, yields PlayParams for rounds of play for as long as a
@@ -73,10 +77,11 @@ class GameParams(object):
         returns.  By default, this is a pass-through.
     """
 
+    game_type: Text = attr.ib()
     generate_play_params: Callable[
-        [List[Player], int], Generator[PlayParams, None, None]
+        [List[BasePlayer], int], Generator[PlayParams, None, None]
     ] = attr.ib()
-    play_round: Callable[[PlayParams, Game], Outcome] = attr.ib()
+    play_round: Callable[[PlayParams, BaseScorer], Outcome] = attr.ib()
     result: Callable[[Outcome], Any] = attr.ib(default=lambda x: x)
 
 
@@ -91,7 +96,7 @@ class Symm2pPosition(Position):
 
 
 def symm2p_generate_play_params(
-    players: List[Player], rounds: int
+    players: List[BasePlayer], rounds: int
 ) -> Generator[PlayParams, None, None]:
     assert len(players) == 2
     player_positions = {
@@ -106,7 +111,7 @@ def x_plays_y_round(
     x: Position,
     y: Position,
     params: PlayParams,
-    game: Game,
+    scorer: BaseScorer,
     noise: Optional[float] = None,
 ) -> Outcome:
     """Calls play on player in position x, with the player in position y
@@ -116,30 +121,15 @@ def x_plays_y_round(
         params.player_positions[y],
     )
     action_1, action_2 = player_1.play(player_2, noise=noise)
-    actions = {x: action_1, y: action_2}
-    score_1, score_2 = game.score((action_1, action_2))
+    score_1, score_2 = scorer.score((action_1, action_2))
     scores = {x: score_1, y: score_2}
-    return Outcome(actions=actions, scores=scores)
+    return Outcome(actions={x: action_1, y: action_2}, scores=scores)
 
 
 def symm2p_play_round(
-    params: PlayParams, game: Game, noise: Optional[float] = None
+    params: PlayParams, scorer: BaseScorer, noise: Optional[float] = None
 ) -> Outcome:
     # Either order is fine for a symmetric player
     return x_plays_y_round(
-        Symm2pPosition.POS_1, Symm2pPosition.POS_2, params, game, noise=noise
+        Symm2pPosition.POS_1, Symm2pPosition.POS_2, params, scorer, noise=noise
     )
-
-
-def ipd_result(outcome: Outcome) -> Tuple[Action, Action]:
-    return (
-        outcome.actions[Symm2pPosition.POS_1],
-        outcome.actions[Symm2pPosition.POS_2],
-    )
-
-
-ipd_params = GameParams(
-    generate_play_params=symm2p_generate_play_params,
-    play_round=symm2p_play_round,
-    result=ipd_result,
-)
