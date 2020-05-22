@@ -1,3 +1,10 @@
+"""Implements two GameParams for Ultimatum:  One for matches where the players
+alternate roles, and one for matches where the players keep roles.
+
+In both cases, playing a round involves having the Offerer extend an offer to
+the Decider.
+"""
+
 from typing import Any, Generator, List, Optional, Tuple
 
 from axelrod.game_params import GameParams, PlayParams, x_plays_y_round
@@ -18,8 +25,12 @@ def ultimatum_alternating_turns(
     for _ in range(rounds):
         yield PlayParams(player_positions=player_positions)
         player_positions = {
-            UltimatumPosition.OFFERER: player_positions[UltimatumPosition.DECIDER],
-            UltimatumPosition.DECIDER: player_positions[UltimatumPosition.OFFERER],
+            UltimatumPosition.OFFERER: player_positions[
+                UltimatumPosition.DECIDER
+            ],
+            UltimatumPosition.DECIDER: player_positions[
+                UltimatumPosition.OFFERER
+            ],
         }
 
 
@@ -39,6 +50,7 @@ def ultimatum_static_turns(
 def ultimatum_play_round(
     params: PlayParams, game: BaseScorer, noise: Optional[float] = None
 ) -> Outcome:
+    # TODO(5.0): There is a probably a cleaner way to implement.
     def outcomes_to_actions(
         outcome_1: Outcome, outcome_2: Outcome
     ) -> Tuple[Any]:

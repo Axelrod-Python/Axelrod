@@ -8,6 +8,7 @@ C, D = Action.C, Action.D
 Score = Union[int, float]
 
 
+# TODO(5.0): Consider making Game a part of the GameParams
 class Game(BaseScorer):
     """Container for the game matrix and scoring logic.
 

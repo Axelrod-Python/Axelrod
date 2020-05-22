@@ -1,6 +1,4 @@
-"""
-Implements strategies for ultimatum.
-"""
+"""Implements strategies for ultimatum."""
 
 from typing import Optional
 

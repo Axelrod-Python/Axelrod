@@ -26,7 +26,7 @@ class TestUltimatumMatch(unittest.TestCase):
         stingy = SimpleThresholdPlayer(0.0)
 
         # TODO(5.0): Hack to keep deterministic cache from running.  Doesn't
-        # work with ultimatum yet.
+        #  work with ultimatum yet.
         generous.classifier["stochastic"] = True
 
         match = axl.Match(
@@ -37,7 +37,7 @@ class TestUltimatumMatch(unittest.TestCase):
         )
 
         # TODO(5.0): Other match functions for reporting don't work.  List of
-        # Outcomes is hard to parse.
+        #  Outcomes is hard to parse.
         self.assertListEqual(
             match.play(),
             [

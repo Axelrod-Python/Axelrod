@@ -1,7 +1,26 @@
 """Implements GameParams and other classes.
 
 The GameParams class defines all everything a program should need to understand
-a game (e.g. IPD or ultimatum).
+how to play a game.  This class includes:
+
+ -  game_type: A name specifying the game type (e.g. IPD or Ultimatum)
+ -  generate_play_params: A function that takes a list of players and an integer
+    representing the number of turns, yields PlayParams for rounds of play for
+    as long as a match should last.
+ -  play_round: A function that given a PlayParams and a Game object will play a
+    single round of the game, and returns the Outcome object.
+ -  result : A function that translates an Outcome object to a result that the
+    match's play method returns.  By default, this is a pass-through.
+
+GameParams gets passed into Match, Tournament, and Moran processes, so a
+canonical instance of this class should get defined for each new game type.
+However some game types may have more than one GameParams.  For example,
+Ultimatum may generate rounds by keeping roles the same or by alternating roles;
+so Ultimatum has two distinct GameParams.
+
+Additionally includes some generic functionality for generate_play_params and
+for play_round, that can be shared among any "symmetric" 2-player game.
+("Symmetric" means that the roles are all the same, as with IPD.)
 """
 
 from typing import (
@@ -56,6 +75,8 @@ class GameParams(object):
     """
 
     game_type: Text = attr.ib()
+    # TODO(5.0): This should be called generate_round, since the user won't know
+    #  what PlayParams are.
     generate_play_params: Callable[
         [List[BasePlayer], int], Generator[PlayParams, None, None]
     ] = attr.ib()
@@ -63,6 +84,8 @@ class GameParams(object):
     result: Callable[[Outcome], Any] = attr.ib(default=lambda x: x)
 
 
+# TODO(5.0): Consider moving these Symm2p functions to a new file, and update
+#  file-level docstrings.
 class Symm2pPosition(Position):
     """A position enum for symmetric 2-player games.
 

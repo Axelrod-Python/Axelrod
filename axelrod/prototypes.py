@@ -1,4 +1,7 @@
-"""Prototypes for the various game components."""
+"""Prototypes for the various game components.
+
+This is used for type annotations and deriving functions.
+"""
 
 from enum import Enum
 from typing import Tuple, Union
@@ -9,13 +12,19 @@ Position = Enum
 Score = Union[float, int]
 
 
+# TODO(5.0): Explore what functions should be shared for all players / all
+#  scorers.
 class BasePlayer(object):
-    def strategy(self, opponent: "BasePlayer") -> Action:
-        raise NotImplementedError()  # pragma: no cover
+    """A player for any game.  No gauranteed functionality."""
+    pass
 
 
 class BaseScorer(object):
+    """Scorer function for any game.  Should at least include a score
+    function."""
     def score(self, actions: Tuple[Action, ...]) -> Tuple[Score, ...]:
+        """Taking player actions in some understood order, returns the scores
+        in this round for the player taking that action (in the same order)."""
         raise NotImplementedError()  # pragma: no cover
 
 
