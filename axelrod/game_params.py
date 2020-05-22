@@ -50,7 +50,7 @@ class Outcome(object):
         indicates which position that player played as on that turn.
     """
 
-    # TODO: Change Any to Action, creating an ultimatum action.
+    # TODO(5.0): Change Any to Action, creating an ultimatum action.
     actions: Dict[Position, Any] = attr.ib()
     scores: Dict[Position, Score] = attr.ib()
     position: Optional[Position] = attr.ib(default=None)
