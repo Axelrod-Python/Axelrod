@@ -14,3 +14,4 @@ Contents:
    all_strategies.rst
    bibliography.rst
    glossary.rst
+   adding_games.rst
