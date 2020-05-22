@@ -47,6 +47,7 @@ class SimpleThresholdPlayer(
     """
 
     name = "Simple Threshold Player"
+    classifier = dict(stochastic=False)
 
     def __init__(
         self, offer_proportion: float = 0.5, lower_threshold: float = 0.5
@@ -71,6 +72,7 @@ class AcceptanceThresholdPlayer(
     """
 
     name = "Acceptance Threshold Player"
+    classifier = dict(stochastic=False)
 
     def __init__(
         self,
@@ -96,8 +98,7 @@ class DoubleThresholdsPlayer(ConsiderThresholdPlayer, UltimatumPlayer):
     """
 
     name = "Double Thresholds Player"
-
-    classifier = dict(stochastic=True)
+    classifier = dict(stochastic=False)
 
     def __init__(
         self,
@@ -140,6 +141,7 @@ class DistributionPlayer(UltimatumPlayer):
     """
 
     name = "Distribution Player"
+    classifier = dict(stochastic=True)
 
     def __init__(
         self,
@@ -174,6 +176,7 @@ class BinarySearchOfferPlayer(ConsiderThresholdPlayer, UltimatumPlayer):
     """
 
     name = "Binary Search Offers Player"
+    classifier = dict(stochastic=False)
 
     def __init__(
         self, lower_threshold: float = 0.5, upper_threshold: float = 1.0,
@@ -210,6 +213,7 @@ class TitForTatOfferPlayer(ConsiderThresholdPlayer, UltimatumPlayer):
     """
 
     name = "TitForTat Offer Player"
+    classifier = dict(stochastic=False)
 
     def __init__(
         self,
@@ -241,6 +245,7 @@ class TitForTatDecisionPlayer(ConstantOfferPlayer, UltimatumPlayer):
     """
 
     name = "TitForTat Decision Player"
+    classifier = dict(stochastic=False)
 
     def __init__(
         self, offer_proportion: float = 0.5, default_acceptance: bool = True
@@ -271,6 +276,7 @@ class RejectionLiftPlayer(ConstantOfferPlayer, UltimatumPlayer):
     """
 
     name = "Rejection-Lift Player"
+    classifier = dict(stochastic=False)
 
     def __init__(self, offer_proportion: float = 0.5, discount: float = 0.9):
         super().__init__()
