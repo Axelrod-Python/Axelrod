@@ -12,6 +12,7 @@ from typing import (
     List,
     Optional,
     Text,
+    Tuple
 )
 
 import attr
@@ -112,18 +113,26 @@ def x_plays_y_round(
     y: Position,
     params: PlayParams,
     scorer: BaseScorer,
+    outcomes_to_actions: Optional[
+        Callable[[Outcome, Outcome], Tuple[Any, Any]]
+    ] = None,
     noise: Optional[float] = None,
 ) -> Outcome:
     """Calls play on player in position x, with the player in position y
     passed in."""
+    if not outcomes_to_actions:
+        def outcomes_to_actions(x, y):
+            return x, y
+
     player_1, player_2 = (
         params.player_positions[x],
         params.player_positions[y],
     )
-    action_1, action_2 = player_1.play(player_2, noise=noise)
-    score_1, score_2 = scorer.score((action_1, action_2))
+    outcome_1, outcome_2 = player_1.play(player_2, noise=noise)
+    actions = outcomes_to_actions(outcome_1, outcome_2)
+    score_1, score_2 = scorer.score(actions)
     scores = {x: score_1, y: score_2}
-    return Outcome(actions={x: action_1, y: action_2}, scores=scores)
+    return Outcome(actions={x: actions[0], y: actions[1]}, scores=scores)
 
 
 def symm2p_play_round(

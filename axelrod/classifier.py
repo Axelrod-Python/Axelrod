@@ -15,6 +15,7 @@ import warnings
 import yaml
 
 from axelrod.player import Player
+from axelrod.prototypes import BasePlayer
 
 ALL_CLASSIFIERS_PATH = "data/all_classifiers.yml"
 
@@ -187,7 +188,7 @@ class _Classifiers(object):
 
             # If the passed player is not an instance, then try to initialize an
             # instance without arguments.
-            if not isinstance(player, Player):
+            if not isinstance(player, BasePlayer):
                 try:
                     player = player()
                     warnings.warn(

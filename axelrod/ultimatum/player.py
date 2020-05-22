@@ -81,6 +81,9 @@ class UltimatumPlayer(BasePlayer):
         """Decision rule for whether to accept the offer."""
         raise NotImplementedError
 
+    def set_match_attributes(self, **match_attributes):
+        pass
+
     def play(
         self, coplayer: "UltimatumPlayer", noise: Optional[float] = None
     ) -> Tuple[Outcome, Outcome]:
