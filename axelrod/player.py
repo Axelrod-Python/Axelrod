@@ -9,6 +9,7 @@ import numpy as np
 from axelrod.action import Action
 from axelrod.game import DefaultGame
 from axelrod.history import History
+from axelrod.prototypes import BasePlayer
 from axelrod.random_ import random_flip
 
 C, D = Action.C, Action.D
@@ -27,7 +28,7 @@ def simultaneous_play(player, coplayer, noise=0):
     return s1, s2
 
 
-class Player(object):
+class Player(BasePlayer):
     """A class for a player in the tournament.
 
     This is an abstract base class, not intended to be used directly.

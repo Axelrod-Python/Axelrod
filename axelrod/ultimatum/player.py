@@ -6,6 +6,7 @@ from collections import abc
 from typing import List, Optional, Tuple
 
 from axelrod.game_params import Outcome, Position
+from axelrod.prototypes import BasePlayer
 
 
 class UltimatumPosition(Position):
@@ -57,7 +58,7 @@ class History(abc.Sequence):
         return self._decide_history
 
 
-class UltimatumPlayer(object):
+class UltimatumPlayer(BasePlayer):
     """A generic abstract player of the ultimatum game."""
 
     name = "Ultimatum Player"
