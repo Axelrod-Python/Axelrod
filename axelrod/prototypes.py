@@ -4,7 +4,7 @@ This is used for type annotations and deriving functions.
 """
 
 from enum import Enum
-from typing import Tuple, Union
+from typing import Any, Dict, Optional, Tuple, Union
 
 import attr
 
