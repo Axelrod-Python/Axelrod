@@ -318,7 +318,7 @@ class TestPickle(unittest.TestCase):
         player = MyCooperator()
         class_names = [class_.__name__ for class_ in MyCooperator.mro()]
         self.assertEqual(
-            class_names, ["FlippedMyCooperator", "MyCooperator", "Player", "object"]
+            class_names, ["FlippedMyCooperator", "MyCooperator", "Player", "BasePlayer", "object"]
         )
 
         self.assert_original_equals_pickled(player)
@@ -334,6 +334,7 @@ class TestPickle(unittest.TestCase):
                 "FlippedCooperator",
                 "Cooperator",
                 "Player",
+                "BasePlayer",
                 "object",
             ],
         )
@@ -351,6 +352,7 @@ class TestPickle(unittest.TestCase):
                 "FlippedMyDefector",
                 "MyDefector",
                 "Player",
+                "BasePlayer",
                 "object",
             ],
         )
