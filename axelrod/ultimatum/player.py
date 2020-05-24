@@ -1,11 +1,23 @@
-"""
-Ultimatum Game.
+"""Define player for Ultimatum game
+
+The Ultimatum game involves two players.  The first player chooses how to split
+1.0 point, offering some portion to the other player.  The second player decides
+if they accept or reject the offer.  If the offer is accepted, then the second
+player gets the offered amount, and the first player gets the remainder of the
+1.0 point.  If the offer is rejected, then neither player gets any points.
+
+The game has two roles or Positions, an Offerer and a Decider.  Every
+UltimatumPlayer needs to have a strategy for how to offer and how to decide.
+
+This file also defines a history class which contains functionality for looking
+up only offer history and only decision history.
 """
 
 from collections import abc
 from typing import List, Optional, Tuple
 
-from axelrod.game_params import Outcome, Position
+from axelrod.game_params import Position
+from axelrod.prototypes import BasePlayer, Outcome
 
 
 class UltimatumPosition(Position):
@@ -13,6 +25,8 @@ class UltimatumPosition(Position):
     DECIDER = 2
 
 
+# TODO(5.0): History and Outcomes have proven to not be that user-friendly.
+#  Explore different APIs.
 class History(abc.Sequence):
     """A history class for ultimatum player.
 
@@ -57,7 +71,7 @@ class History(abc.Sequence):
         return self._decide_history
 
 
-class UltimatumPlayer(object):
+class UltimatumPlayer(BasePlayer):
     """A generic abstract player of the ultimatum game."""
 
     name = "Ultimatum Player"
@@ -77,8 +91,12 @@ class UltimatumPlayer(object):
         raise NotImplementedError
 
     def consider(self, offer: float) -> bool:
-        """Decision rule for whether to accept the offer."""
+        """Decision rule for whether to accept the offer.  True means accept,
+        and false means reject."""
         raise NotImplementedError
+
+    def set_match_attributes(self, **match_attributes):
+        pass
 
     def play(
         self, coplayer: "UltimatumPlayer", noise: Optional[float] = None
