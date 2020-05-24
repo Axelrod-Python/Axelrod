@@ -17,7 +17,7 @@ Score = Union[float, int]
 # TODO(5.0): Explore what functions should be shared for all players / all
 #  scorers.
 class BasePlayer(object):
-    """A player for any game.  No gauranteed functionality."""
+    """A player for any game.  No guaranteed functionality."""
     pass
 
 
