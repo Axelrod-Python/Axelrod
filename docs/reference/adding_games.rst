@@ -21,6 +21,11 @@ Then you need to build the following objects within that folder:
   should have class variables of name (a text field specific to a strategy), and
   classifiers dict, which should at least include a "stochastic" key with a
   boolean value indicating if the strategy includes any random components.
+
+    - If the a basic sequence of Outcomes is insufficient, derive from
+      BaseHistory, and make _build_history in the player class initialize an
+      instance of this new history.
+
 - Specific strategies, inheriting from your player class.
 - A scorer class which inherits from BaseScorer and implements the score method,
   which returns the Scores resulting from a tuple of Actions.

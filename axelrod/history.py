@@ -1,19 +1,28 @@
-from collections import Counter
+from collections import abc, Counter
+from typing import List
 
 from axelrod.action import Action, actions_to_str
+from .game_params import Symm2pPosition
+from .prototypes import BaseHistory, Outcome
 
 C, D = Action.C, Action.D
+POS_1, POS_2 = Symm2pPosition.POS_1, Symm2pPosition.POS_2
 
 
-class History(object):
+class History(BaseHistory):
     """
     History class to track the history of play and metadata including
     the number of cooperations and defections, and if available, the
     opponents plays and the state distribution of the history of play.
+
+    Extends BaseHisory with extra counts and functionality.
     """
 
+    # TODO(5.0): Deprecate non-default behavior.  Only used for testing, I think
     def __init__(self, plays=None, coplays=None):
         """
+        If plays or coplays are set, then extend our sequence.
+
         Parameters
         ----------
         plays:
@@ -21,9 +30,8 @@ class History(object):
         coplays:
             An ordered iterable of the actions of the coplayer (aka opponent).
         """
+        super().__init__()
         self._plays = []
-        # Coplays is tracked mainly for computation of the state distribution
-        # when cloning or dualing.
         self._coplays = []
         self._actions = Counter()
         self._state_distribution = Counter()
@@ -33,6 +41,9 @@ class History(object):
     def append(self, play, coplay):
         """Appends a new (play, coplay) pair an updates metadata for
         number of cooperations and defections, and the state distribution."""
+        outcome = Outcome(actions={POS_1: play, POS_2: coplay}, position=POS_1)
+        super().append(outcome)
+
         self._plays.append(play)
         self._actions[play] += 1
         self._coplays.append(coplay)
@@ -49,14 +60,13 @@ class History(object):
 
     def extend(self, plays, coplays):
         """A function that emulates list.extend."""
-        # We could repeatedly call self.append but this is more efficient.
-        self._plays.extend(plays)
-        self._actions.update(plays)
-        self._coplays.extend(coplays)
-        self._state_distribution.update(zip(plays, coplays))
+        # TODO(5.0): Make more efficient?
+        for play, coplay in zip(plays, coplays):
+            self.append(play, coplay)
 
     def reset(self):
         """Clears all data in the History object."""
+        self._history.clear()
         self._plays.clear()
         self._coplays.clear()
         self._actions.clear()
@@ -82,7 +92,7 @@ class History(object):
         if isinstance(other, list):
             return self._plays == other
         elif isinstance(other, History):
-            return self._plays == other._plays and self._coplays == other._coplays
+            return self._history == other._history
         raise TypeError("Cannot compare types.")
 
     def __getitem__(self, key):
@@ -92,14 +102,11 @@ class History(object):
     def __str__(self):
         return actions_to_str(self._plays)
 
-    def __list__(self):
-        return self._plays
-
     def __len__(self):
         return len(self._plays)
 
     def __repr__(self):
-        return repr(self.__list__())
+        return repr(self._plays)
 
 
 class LimitedHistory(History):
@@ -121,13 +128,10 @@ class LimitedHistory(History):
     def append(self, play, coplay):
         """Appends a new (play, coplay) pair an updates metadata for
         number of cooperations and defections, and the state distribution."""
+        super().append(play, coplay)
 
-        self._plays.append(play)
-        self._actions[play] += 1
-        if coplay:
-            self._coplays.append(coplay)
-            self._state_distribution[(play, coplay)] += 1
-        if len(self._plays) > self.memory_depth:
+        if len(self._history) > self.memory_depth:
+            self._history.pop(0)
             first_play, first_coplay = self._plays.pop(0), self._coplays.pop(0)
             self._actions[first_play] -= 1
             self._state_distribution[(first_play, first_coplay)] -= 1

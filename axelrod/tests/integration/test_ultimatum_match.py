@@ -4,23 +4,10 @@ import axelrod as axl
 from axelrod.prototypes import Outcome
 from axelrod.ultimatum.game import UltimatumScorer
 from axelrod.ultimatum.game_params import ultimatum_alternating_params
-from axelrod.ultimatum.player import UltimatumPosition
-from axelrod.ultimatum.strategies import SimpleThresholdPlayer
+from axelrod.ultimatum import SimpleThresholdPlayer, UltimatumPosition
 
 
 class TestUltimatumMatch(unittest.TestCase):
-    def _build_outcome(self, offer, decision, offer_score, decision_score):
-        return Outcome(
-            actions={
-                UltimatumPosition.OFFERER: offer,
-                UltimatumPosition.DECIDER: decision,
-            },
-            scores={
-                UltimatumPosition.OFFERER: offer_score,
-                UltimatumPosition.DECIDER: decision_score,
-            },
-        )
-
     def test_match_of_simple_threshold_players(self):
         generous = SimpleThresholdPlayer(1.0)
         stingy = SimpleThresholdPlayer(0.0)
@@ -36,12 +23,22 @@ class TestUltimatumMatch(unittest.TestCase):
             game_params=ultimatum_alternating_params,
         )
 
+        results = match.play()
+
         # TODO(5.0): Other match functions for reporting don't work.  List of
         #  Outcomes is hard to parse.
-        self.assertListEqual(
-            match.play(),
-            [
-                self._build_outcome(1.0, True, 0.0, 1.0),
-                self._build_outcome(0.0, False, 0.0, 0.0),
-            ],
-        )
+        for i in [0, 1]:
+            self.assertDictEqual(
+                results[0][i].actions,
+                {
+                    UltimatumPosition.OFFERER: 1.0,
+                    UltimatumPosition.DECIDER: True,
+                },
+            )
+            self.assertDictEqual(
+                results[1][i].actions,
+                {
+                    UltimatumPosition.OFFERER: 0.0,
+                    UltimatumPosition.DECIDER: False,
+                },
+            )

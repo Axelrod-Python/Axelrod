@@ -1,11 +1,11 @@
-from typing import Tuple, Union
+from typing import Dict, Tuple
 
 from axelrod import Action
-from .prototypes import BaseScorer
+from .game_params import Symm2pPosition
+from .prototypes import BaseScorer, Position, Score
 
 C, D = Action.C, Action.D
-
-Score = Union[int, float]
+POS_1, POS_2 = Symm2pPosition.POS_1, Symm2pPosition.POS_2
 
 
 # TODO(5.0): Consider making Game a part of the GameParams
@@ -18,7 +18,9 @@ class Game(BaseScorer):
         The numerical score attribute to all combinations of action pairs.
     """
 
-    def __init__(self, r: Score = 3, s: Score = 0, t: Score = 5, p: Score = 1) -> None:
+    def __init__(
+        self, r: Score = 3, s: Score = 0, t: Score = 5, p: Score = 1
+    ) -> None:
         """Create a new game object.
 
         Parameters
@@ -32,7 +34,12 @@ class Game(BaseScorer):
         p: int or float
             Score obtained by both player for mutual defection.
         """
-        self.scores = {(C, C): (r, r), (D, D): (p, p), (C, D): (s, t), (D, C): (t, s)}
+        self.scores = {
+            (C, C): (r, r),
+            (D, D): (p, p),
+            (C, D): (s, t),
+            (D, C): (t, s),
+        }
 
     def RPST(self) -> Tuple[Score, Score, Score, Score]:
         """Returns game matrix values in Press and Dyson notation."""
@@ -43,18 +50,6 @@ class Game(BaseScorer):
         return R, P, S, T
 
     def score(self, pair: Tuple[Action, Action]) -> Tuple[Score, Score]:
-        """Returns the appropriate score for a decision pair.
-
-        Parameters
-        ----------
-        pair: tuple(Action, Action)
-            A pair actions for two players, for example (C, C).
-
-        Returns
-        -------
-        tuple of int or float
-            Scores for two player resulting from their actions.
-        """
         return self.scores[pair]
 
     def __repr__(self) -> str:

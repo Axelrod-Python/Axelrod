@@ -23,20 +23,19 @@ for play_round, that can be shared among any "symmetric" 2-player game.
 ("Symmetric" means that the roles are all the same, as with IPD.)
 """
 
-from typing import (
-    Any,
-    Callable,
-    Dict,
-    Generator,
-    List,
-    Optional,
-    Text,
-    Tuple
-)
+from typing import Any, Callable, Dict, Generator, List, Optional, Text, Tuple
 
 import attr
 
-from .prototypes import BasePlayer, BaseScorer, Outcome, Position
+from .prototypes import (
+    BaseAction,
+    BasePlayer,
+    BaseScorer,
+    BaseHistory,
+    Outcome,
+    Position,
+)
+from .random_ import random_flip
 
 
 @attr.s
@@ -52,6 +51,9 @@ class PlayParams(object):
     player_positions: Dict[Position, BasePlayer] = attr.ib()
 
 
+# TODO(5.0): The components that are only used for Players should maybe be made
+#  native to that class.  Otherwise Player doesn't need to be derived for each
+#  game type.
 @attr.s
 class GameParams(object):
     """Parameters describing a game type (like IPD or ultimatum).
@@ -60,27 +62,44 @@ class GameParams(object):
     ----------
     game_type : Text
         Unique name for the type of game (IPD, Ultimatum, etc.)
+    history_factory : Callable[[], BaseHistory]
+        Returns a default history of the appropriate derived class.
     generate_play_params : Callable[
         [List[BasePlayer], int], Generator[PlayParams, None, None]
     ]
         A function that takes a list of players and an integer representing the
         number of turns, yields PlayParams for rounds of play for as long as a
         match should last.
-    play_round : Callable[[PlayParams, Game], Outcome]
+    play_round : Callable[[PlayParams, Optional[Game]], Outcome]
         A function that given a PlayParams and a Game object will play a single
         round of the game, and returns the Outcome object.
+    get_actions : Callable[
+        [PlayParams, Optional[float]], Dict[Position, BaseAction]
+    ]
+        From players/positions and noise, get the action that each player would
+        play.
     result : Callable[[Outcome], Any]
         Translates an Outcome object to a result that the match's play method
         returns.  By default, this is a pass-through.
     """
 
     game_type: Text = attr.ib()
+    history_factory: Callable[[], BaseHistory] = attr.ib()
     # TODO(5.0): This should be called generate_round, since the user won't know
     #  what PlayParams are.
     generate_play_params: Callable[
         [List[BasePlayer], int], Generator[PlayParams, None, None]
     ] = attr.ib()
-    play_round: Callable[[PlayParams, BaseScorer], Outcome] = attr.ib()
+    # TODO(5.0): Play round calls play on Player, which in turn calls
+    #  get_actions; there must be a better way.
+    play_round: Callable[
+        [PlayParams, Optional[BaseScorer], Optional[float]], Outcome
+    ] = attr.ib()
+    # TODO(5.0): Should the return value be a type? (Should PlayParams be?) Can
+    #  use this as an element in Outcome.
+    get_actions: Callable[
+        [PlayParams, Optional[float]], Dict[Position, BaseAction]
+    ] = attr.ib()
     result: Callable[[Outcome], Any] = attr.ib(default=lambda x: x)
 
 
@@ -108,11 +127,25 @@ def symm2p_generate_play_params(
         yield PlayParams(player_positions=player_positions)
 
 
+def symm2p_get_actions(
+    params: PlayParams, noise: Optional[float] = None
+) -> Dict[Position, BaseAction]:
+    player, coplayer = (
+        params.player_positions[Symm2pPosition.POS_1],
+        params.player_positions[Symm2pPosition.POS_2],
+    )
+    s1, s2 = player.strategy(coplayer), coplayer.strategy(player)
+    if noise:
+        s1 = random_flip(s1, noise)
+        s2 = random_flip(s2, noise)
+    return {Symm2pPosition.POS_1: s1, Symm2pPosition.POS_2: s2}
+
+
 def x_plays_y_round(
     x: Position,
     y: Position,
     params: PlayParams,
-    scorer: BaseScorer,
+    scorer: Optional[BaseScorer] = None,
     outcomes_to_actions: Optional[
         Callable[[Outcome, Outcome], Tuple[Any, Any]]
     ] = None,
@@ -130,15 +163,23 @@ def x_plays_y_round(
     )
     outcome_1, outcome_2 = player_1.play(player_2, noise=noise)
     actions = outcomes_to_actions(outcome_1, outcome_2)
-    score_1, score_2 = scorer.score(actions)
-    scores = {x: score_1, y: score_2}
+    scores = None
+    if scorer:
+        score_1, score_2 = scorer.score(actions)
+        scores = {x: score_1, y: score_2}
     return Outcome(actions={x: actions[0], y: actions[1]}, scores=scores)
 
 
 def symm2p_play_round(
-    params: PlayParams, scorer: BaseScorer, noise: Optional[float] = None
+    params: PlayParams,
+    scorer: Optional[BaseScorer] = None,
+    noise: Optional[float] = None,
 ) -> Outcome:
     # Either order is fine for a symmetric player
     return x_plays_y_round(
-        Symm2pPosition.POS_1, Symm2pPosition.POS_2, params, scorer, noise=noise
+        Symm2pPosition.POS_1,
+        Symm2pPosition.POS_2,
+        params,
+        scorer=scorer,
+        noise=noise,
     )

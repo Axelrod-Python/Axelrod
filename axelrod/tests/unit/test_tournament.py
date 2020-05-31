@@ -2,11 +2,11 @@
 import unittest
 from unittest.mock import MagicMock, patch
 
+import dill
 import io
 import logging
 import os
 import pathlib
-import pickle
 import warnings
 from multiprocessing import Queue, cpu_count
 
@@ -511,9 +511,9 @@ class TestTournament(unittest.TestCase):
         # For test coverage purposes. This confirms PickleableMock can be
         # pickled exactly once. Windows multi-processing must pickle this Mock
         # exactly once during testing.
-        pickled = pickle.loads(pickle.dumps(tournament))
+        pickled = dill.loads(dill.dumps(tournament))
         self.assertIsInstance(pickled._write_interactions_to_file, MagicMock)
-        self.assertRaises(pickle.PicklingError, pickle.dumps, pickled)
+        self.assertRaises(dill.PicklingError, dill.dumps, pickled)
 
         self.assertTrue(tournament._run_parallel())
 

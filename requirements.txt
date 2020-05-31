@@ -2,6 +2,7 @@ attrs>=19.3.0
 cloudpickle>=0.2.1
 fsspec>=0.4.3
 dask>=2.3.0
+dill
 matplotlib>=2.0.0
 numpy>=1.9.2
 pandas>=0.18.1

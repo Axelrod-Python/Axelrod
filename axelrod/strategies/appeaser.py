@@ -35,4 +35,5 @@ class Appeaser(Player):
                     return D
                 else:
                     return C
+
         return self.history[-1]

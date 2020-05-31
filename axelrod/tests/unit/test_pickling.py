@@ -1,5 +1,5 @@
 import unittest
-import pickle
+import dill
 import random
 
 import axelrod as axl
@@ -204,7 +204,7 @@ transformer_instances = [
 
 class TestPickle(unittest.TestCase):
     def assert_equals_instance_from_pickling(self, original_instance):
-        clone = pickle.loads(pickle.dumps(original_instance))
+        clone = dill.loads(dill.dumps(original_instance))
         self.assertEqual(clone, original_instance)
 
     def assert_original_equals_pickled(self, player_, turns=10):
@@ -212,7 +212,7 @@ class TestPickle(unittest.TestCase):
         for opponent_class in opponents:
             # Check that player and copy play the same way.
             player = player_.clone()
-            clone = pickle.loads(pickle.dumps(player))
+            clone = dill.loads(dill.dumps(player))
             clone = clone.clone()
 
             opponent_1 = opponent_class()
@@ -252,7 +252,7 @@ class TestPickle(unittest.TestCase):
 
     def test_final_transformer_called(self):
         player = axl.Alexei()
-        copy = pickle.loads(pickle.dumps(player))
+        copy = dill.loads(dill.dumps(player))
         match = axl.Match((player, copy), turns=3)
         results = match.play()
         self.assertEqual(results, [(C, C), (C, C), (D, D)])
@@ -367,13 +367,9 @@ class TestPickle(unittest.TestCase):
         class LocalCooperator(axl.Cooperator):
             pass
 
-        un_transformed = LocalCooperator()
-
-        self.assertRaises(AttributeError, pickle.dumps, un_transformed)
-
         player = axl.strategy_transformers.FlipTransformer()(LocalCooperator)()
-        pickled = pickle.dumps(player)
-        self.assertRaises(AttributeError, pickle.loads, pickled)
+        pickled = dill.dumps(player)
+        self.assertRaises(AttributeError, dill.loads, pickled)
 
     def test_with_various_name_prefixes(self):
         no_prefix = Flip()

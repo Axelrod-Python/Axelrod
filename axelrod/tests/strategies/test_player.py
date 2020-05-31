@@ -1,4 +1,5 @@
 import unittest
+import dill
 import itertools
 import pickle
 import random
@@ -6,19 +7,34 @@ import types
 import numpy as np
 
 import axelrod as axl
-from axelrod.player import simultaneous_play
+from axelrod.game_params import Symm2pPosition
+from axelrod.prototypes import Outcome
+from axelrod.random_ import random_flip
 from axelrod.tests.property import strategy_lists
 
 from hypothesis import given, settings
 from hypothesis.strategies import integers, sampled_from
 
 C, D = axl.Action.C, axl.Action.D
+POS_1, POS_2 = Symm2pPosition.POS_1, Symm2pPosition.POS_2
 
 short_run_time_short_mem = [
     s
     for s in axl.short_run_time_strategies
     if axl.Classifiers["memory_depth"](s()) <= 10
 ]
+
+
+def simultaneous_play(player, coplayer, noise=0):
+    """This pits two players against each other."""
+    s1, s2 = player.strategy(coplayer), coplayer.strategy(player)
+    outcome = Outcome(actions={POS_1: s1, POS_2: s2})
+    outcome.position = POS_1
+    player.update_outcome_history(outcome)
+    outcome_2 = Outcome(actions={POS_1: s1, POS_2: s2})
+    outcome_2.position = POS_2
+    coplayer.update_outcome_history(outcome)
+    return s1, s2
 
 
 # Generic strategy functions for testing
@@ -419,8 +435,8 @@ class TestPlayer(unittest.TestCase):
             for _ in range(10):
                 simultaneous_play(player, op)
         self.assertEqual(p1, p2)
-        p1 = pickle.loads(pickle.dumps(p1))
-        p2 = pickle.loads(pickle.dumps(p2))
+        p1 = dill.loads(dill.dumps(p1))
+        p2 = dill.loads(dill.dumps(p2))
         self.assertEqual(p1, p2)
 
     @given(
@@ -440,7 +456,7 @@ class TestPlayer(unittest.TestCase):
     @settings(max_examples=1)
     def test_equality_of_pickle_clone(self, seed, opponent):
         p1 = self.player()
-        p2 = pickle.loads(pickle.dumps(p1))
+        p2 = dill.loads(dill.dumps(p1))
         self.equality_of_players_test(p1, p2, seed, opponent)
 
     def test_reset_history_and_attributes(self):

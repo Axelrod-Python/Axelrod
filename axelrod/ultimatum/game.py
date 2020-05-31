@@ -1,6 +1,7 @@
-from typing import Tuple
+from typing import Any, Dict, Tuple
 
 from axelrod.prototypes import BaseScorer, Score
+from .position import UltimatumPosition
 
 
 class UltimatumScorer(BaseScorer):
@@ -8,8 +9,7 @@ class UltimatumScorer(BaseScorer):
         super().__init__()
 
     def score(self, offer_decision: Tuple) -> Tuple[Score, Score]:
-        """Given offer and decision, returns the score to the offerer and
-        decider, resp."""
+        """Expects actions as offer first, then decision."""
         offer, decision = offer_decision
         if decision:
             return 1.0 - offer, offer

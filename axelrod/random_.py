@@ -1,9 +1,11 @@
+from enum import Enum
 import random
 
 import numpy as np
 from numpy.random import choice
 
 from axelrod.action import Action
+from .prototypes import BaseAction
 
 C, D = Action.C, Action.D
 
@@ -41,12 +43,13 @@ def random_choice(p: float = 0.5) -> Action:
     return D
 
 
-def random_flip(action: Action, threshold: float) -> Action:
-    """
-    Return flipped action with probability `threshold`
+def random_flip(action: BaseAction, threshold: float) -> Action:
+    """Return flipped action with probability `threshold`
+
+    If action is not an Action (IPD action), then just return the passed action
+    with probability 100%.
 
     No random sample is carried out if threshold is 0 or 1.
-
     Parameters
     ----------
     action:
@@ -58,7 +61,8 @@ def random_flip(action: Action, threshold: float) -> Action:
     -------
     axelrod.Action
     """
-    if random_choice(threshold) == C:
+    # TODO(5.0): Make this work for non-IPD.
+    if isinstance(action, Action) and random_choice(threshold) == C:
         return action.flip()
     return action
 

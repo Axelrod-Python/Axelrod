@@ -8,24 +8,12 @@ import numpy as np
 
 from axelrod.action import Action
 from axelrod.game import DefaultGame
-from axelrod.history import History
-from axelrod.prototypes import BasePlayer
-from axelrod.random_ import random_flip
+from .game_params import Symm2pPosition
+from .ipd_params import ipd_params
+from axelrod.prototypes import BasePlayer, PlayerName
 
 C, D = Action.C, Action.D
-
-PlayerName = Text
-
-
-def simultaneous_play(player, coplayer, noise=0):
-    """This pits two players against each other."""
-    s1, s2 = player.strategy(coplayer), coplayer.strategy(player)
-    if noise:
-        s1 = random_flip(s1, noise)
-        s2 = random_flip(s2, noise)
-    player.update_history(s1, s2)
-    coplayer.update_history(s2, s1)
-    return s1, s2
+POS_1, POS_2 = Symm2pPosition.POS_1, Symm2pPosition.POS_2
 
 
 class Player(BasePlayer):
@@ -64,9 +52,9 @@ class Player(BasePlayer):
 
     def __init__(self):
         """Initiates an empty history."""
-        self._history = History()
-        self.classifier = copy.deepcopy(self.classifier)
         self.set_match_attributes()
+        self.game_params = ipd_params
+        super().__init__()
 
     def __eq__(self, other):
         """
@@ -75,7 +63,12 @@ class Player(BasePlayer):
         if self.__repr__() != other.__repr__():
             return False
 
-        for attribute in set(list(self.__dict__.keys()) + list(other.__dict__.keys())):
+        for attribute in set(
+            list(self.__dict__.keys()) + list(other.__dict__.keys())
+        ):
+            # TODO(5.0): Should we check this some how?
+            if attribute == "game_params":
+                continue
 
             value = getattr(self, attribute, None)
             other_value = getattr(other, attribute, None)
@@ -89,14 +82,20 @@ class Player(BasePlayer):
             ):
                 # Split the original generator so it is not touched
                 generator, original_value = itertools.tee(value)
-                other_generator, original_other_value = itertools.tee(other_value)
+                other_generator, original_other_value = itertools.tee(
+                    other_value
+                )
 
                 if isinstance(value, types.GeneratorType):
                     setattr(self, attribute, (ele for ele in original_value))
-                    setattr(other, attribute, (ele for ele in original_other_value))
+                    setattr(
+                        other, attribute, (ele for ele in original_other_value)
+                    )
                 else:
                     setattr(self, attribute, itertools.cycle(original_value))
-                    setattr(other, attribute, itertools.cycle(original_other_value))
+                    setattr(
+                        other, attribute, itertools.cycle(original_other_value)
+                    )
 
                 for _ in range(200):
                     try:
@@ -131,7 +130,9 @@ class Player(BasePlayer):
         Appends the `__init__` parameters to the strategy's name."""
         name = self.name
         prefix = ": "
-        gen = (value for value in self.init_kwargs.values() if value is not None)
+        gen = (
+            value for value in self.init_kwargs.values() if value is not None
+        )
         for value in gen:
             try:
                 if issubclass(value, Player):
@@ -143,16 +144,13 @@ class Player(BasePlayer):
         return name
 
     def __getstate__(self):
-        """Used for pickling. Override if Player contains unpickleable attributes."""
+        """Used for pickling. Override if Player contains unpickleable
+        attributes."""
         return self.__dict__
 
     def strategy(self, opponent):
         """This is a placeholder strategy."""
         raise NotImplementedError()
-
-    def play(self, opponent, noise=0):
-        """This pits two players against each other."""
-        return simultaneous_play(self, opponent, noise)
 
     def clone(self):
         """Clones the player without history, reapplying configuration
@@ -178,11 +176,12 @@ class Player(BasePlayer):
         self.__init__(**self.init_kwargs)
 
     def update_history(self, play, coplay):
-        self.history.append(play, coplay)
+        # This is a new signature than the BasePlayer's update_history method.
+        self._history.append(play, coplay)
 
-    @property
-    def history(self):
-        return self._history
+    def update_outcome_history(self, outcome):
+        # This needs to redirect to update_history in case that gets overloaded.
+        self.update_history(outcome.play(), outcome.coplay())
 
     # Properties maintained for legacy API, can refactor to self.history.X
     # in 5.0.0 to reduce function call overhead.

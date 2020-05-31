@@ -4,7 +4,8 @@ from typing import Optional
 
 from scipy import stats
 
-from .player import UltimatumPlayer, UltimatumPosition
+from .player import UltimatumPlayer
+from .position import UltimatumPosition
 
 
 class ConsiderThresholdPlayer(object):

@@ -10,6 +10,8 @@ from enum import Enum
 from functools import total_ordering
 from typing import Iterable
 
+from .prototypes import BaseAction
+
 
 class UnknownActionError(ValueError):
     """Error indicating an unknown action was used."""

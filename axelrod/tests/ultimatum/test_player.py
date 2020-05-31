@@ -33,32 +33,32 @@ class TestPlay(unittest.TestCase):
         coplayer = SimpleThresholdPlayer(0.5, 0.5)
         result = player.play(coplayer)
         np.testing.assert_almost_equal(
-            result[0].scores[UltimatumPosition.OFFERER], 0.4
+            result[0].actions[UltimatumPosition.OFFERER], 0.6
         )
         np.testing.assert_almost_equal(
-            result[0].scores[UltimatumPosition.DECIDER], 0.6
+            result[0].actions[UltimatumPosition.DECIDER], True
         )
         result = coplayer.play(player)
         np.testing.assert_almost_equal(
-            result[0].scores[UltimatumPosition.OFFERER], 0.5
+            result[0].actions[UltimatumPosition.OFFERER], 0.5
         )
         np.testing.assert_almost_equal(
-            result[0].scores[UltimatumPosition.DECIDER], 0.5
+            result[0].actions[UltimatumPosition.DECIDER], True
         )
         player = SimpleThresholdPlayer(0.4, 0.6)
         result = player.play(coplayer)
         np.testing.assert_almost_equal(
-            result[0].scores[UltimatumPosition.OFFERER], 0.0
+            result[0].actions[UltimatumPosition.OFFERER], 0.4
         )
         np.testing.assert_almost_equal(
-            result[0].scores[UltimatumPosition.DECIDER], 0.0
+            result[0].actions[UltimatumPosition.DECIDER], False
         )
         result = coplayer.play(player)
         np.testing.assert_almost_equal(
-            result[0].scores[UltimatumPosition.OFFERER], 0.0
+            result[0].actions[UltimatumPosition.OFFERER], 0.5
         )
         np.testing.assert_almost_equal(
-            result[0].scores[UltimatumPosition.DECIDER], 0.0
+            result[0].actions[UltimatumPosition.DECIDER], False
         )
 
         # Check history

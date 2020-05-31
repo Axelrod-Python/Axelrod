@@ -13,77 +13,23 @@ This file also defines a history class which contains functionality for looking
 up only offer history and only decision history.
 """
 
-from collections import abc
-from typing import List, Optional, Tuple
-
-from axelrod.game_params import Position
-from axelrod.prototypes import BasePlayer, Outcome
-
-
-class UltimatumPosition(Position):
-    OFFERER = 1
-    DECIDER = 2
-
-
-# TODO(5.0): History and Outcomes have proven to not be that user-friendly.
-#  Explore different APIs.
-class History(abc.Sequence):
-    """A history class for ultimatum player.
-
-    Attributes
-    ----------
-    _history: List[Outcome]
-        Outcome history for all previous rounds of play.
-    _offer_history: List[Outcome]
-        Outcome history for previous rounds of play in which the player was the
-        offerer.
-    _decide_history: List[Outcome]
-        Outcome history for previous rounds of play in which the player was the
-        decider.
-    """
-
-    def __init__(self):
-        self._history: List[Outcome] = list()
-        self._offer_history: List[Outcome] = list()
-        self._decide_history: List[Outcome] = list()
-
-    def append(self, outcome: Outcome) -> None:
-        """Append the given Outcome to the history list, and to a sublist based
-        on position of the Outcome."""
-        self._history.append(outcome)
-        if outcome.position == UltimatumPosition.OFFERER:
-            self._offer_history.append(outcome)
-        if outcome.position == UltimatumPosition.DECIDER:
-            self._decide_history.append(outcome)
-
-    def __getitem__(self, index):
-        return self._history[index]
-
-    def __len__(self) -> int:
-        return len(self._history)
-
-    @property
-    def offers(self) -> List[Outcome]:
-        return self._offer_history
-
-    @property
-    def decisions(self) -> List[Outcome]:
-        return self._decide_history
+from axelrod.prototypes import BasePlayer
+from .game_params import ultimatum_static_params
 
 
 class UltimatumPlayer(BasePlayer):
     """A generic abstract player of the ultimatum game."""
 
     name = "Ultimatum Player"
-
-    # Possibly not always true, but set for now to prevent caching
-    classifier = dict(stochastic=True)
+    classifier = dict(stochastic=False)
 
     def __init__(self):
-        self.history = History()
-
-    def reset(self) -> None:
-        self.history = History()
+        # TODO(5.0): Between the two ultimatum game_params, the only difference
+        #  is after the first round is generated.  Maybe we want to separate
+        #  this from the rest of the game_params, in order to have a canonical
+        #  game_params for the game type.
+        self.game_params = ultimatum_static_params
+        super().__init__()
 
     def offer(self) -> float:
         """Returns a value between 0 and 1 for the proportion offered to the
@@ -97,36 +43,3 @@ class UltimatumPlayer(BasePlayer):
 
     def set_match_attributes(self, **match_attributes):
         pass
-
-    def play(
-        self, coplayer: "UltimatumPlayer", noise: Optional[float] = None
-    ) -> Tuple[Outcome, Outcome]:
-        """Play a game with this player as the offerer and the passed coplayer
-        as the decider.  Appends Outcomes with offer decision and scores to the
-        player's and coplayer's history, and returns."""
-        offer = self.offer()
-        decision = coplayer.consider(offer)
-        # If the offer is accepted, return the split. Otherwise both players
-        # receive nothing.
-        if decision:
-            scores = 1.0 - offer, offer
-        else:
-            scores = 0.0, 0.0
-
-        actions = {
-            UltimatumPosition.OFFERER: offer,
-            UltimatumPosition.DECIDER: decision,
-        }
-        scores = {
-            UltimatumPosition.OFFERER: scores[0],
-            UltimatumPosition.DECIDER: scores[1],
-        }
-        outcome = Outcome(
-            actions=actions, scores=scores, position=UltimatumPosition.OFFERER
-        )
-        coplayer_outcome = Outcome(
-            actions=actions, scores=scores, position=UltimatumPosition.DECIDER
-        )
-        self.history.append(outcome)
-        coplayer.history.append(coplayer_outcome)
-        return outcome, coplayer_outcome
