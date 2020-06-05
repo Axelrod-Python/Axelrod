@@ -73,8 +73,6 @@ class MemoryOnePlayer(Player):
             warnings.warn("Memory one player is set to default (1, 0, 0, 1).")
 
         self.set_four_vector(four_vector)
-        if self.name == "Generic Memory One Player":
-            self.name = "%s: %s" % (self.name, four_vector)
 
     def set_four_vector(self, four_vector: Tuple[float, float, float, float]):
         if not all(0 <= p <= 1 for p in four_vector):
@@ -340,4 +338,3 @@ class ReactivePlayer(MemoryOnePlayer):
     def __init__(self, probabilities: Tuple[float, float]) -> None:
         four_vector = (*probabilities, *probabilities)
         super().__init__(four_vector)
-        self.name = "%s: %s" % (self.name, probabilities)
