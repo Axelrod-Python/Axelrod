@@ -21,8 +21,8 @@
 # Any issue numbers created by this hook (or entered manually in the correct)
 # format will now be clickable links in the log view.
 
-import sys
 import re
+import sys
 from subprocess import check_output
 
 # By default, the hook will check to see if the branch name starts with

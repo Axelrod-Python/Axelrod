@@ -5,7 +5,6 @@ import types
 from typing import Any, Dict
 
 import numpy as np
-
 from axelrod.action import Action
 from axelrod.game import DefaultGame
 from axelrod.history import History

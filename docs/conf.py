@@ -12,9 +12,11 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys
 import os
+import sys
 
+# Import the library (for automodule)
+import axelrod
 import mock
 
 MOCK_MODULES = [
@@ -52,8 +54,6 @@ for mod_name in MOCK_MODULES:
 # Adds absolute path to axelrod module
 sys.path.insert(0, os.path.abspath("../"))  # Adding path to module
 
-# Import the library (for automodule)
-import axelrod
 
 # -- General configuration ------------------------------------------------
 

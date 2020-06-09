@@ -1,7 +1,7 @@
 """Tests for Hidden Markov Model Strategies."""
 
-import unittest
 import random
+import unittest
 
 import axelrod as axl
 from axelrod.evolvable_player import InsufficientParametersError
@@ -12,8 +12,9 @@ from axelrod.strategies.hmm import (
     is_stochastic_matrix,
     random_vector,
 )
-from .test_player import TestMatch, TestPlayer
+
 from .test_evolvable_player import PartialClass, TestEvolvablePlayer
+from .test_player import TestMatch, TestPlayer
 
 C, D = axl.Action.C, axl.Action.D
 

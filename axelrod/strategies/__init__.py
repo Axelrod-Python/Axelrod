@@ -1,37 +1,37 @@
 from ..classifier import Classifiers
-from ._strategies import *
 from ._filters import passes_filterset
-
-# `from ._strategies import *` import the collection `strategies`
-# Now import the Meta strategies. This cannot be done in _strategies
-# because it creates circular dependencies
-
+from ._strategies import *
 from .meta import (
     MemoryDecay,
     MetaHunter,
     MetaHunterAggressive,
-    MetaPlayer,
     MetaMajority,
-    MetaMajorityMemoryOne,
     MetaMajorityFiniteMemory,
     MetaMajorityLongMemory,
+    MetaMajorityMemoryOne,
     MetaMinority,
     MetaMixer,
+    MetaPlayer,
     MetaWinner,
     MetaWinnerDeterministic,
     MetaWinnerEnsemble,
-    MetaWinnerMemoryOne,
     MetaWinnerFiniteMemory,
     MetaWinnerLongMemory,
+    MetaWinnerMemoryOne,
     MetaWinnerStochastic,
+    NiceMetaWinner,
+    NiceMetaWinnerEnsemble,
     NMWEDeterministic,
     NMWEFiniteMemory,
     NMWELongMemory,
     NMWEMemoryOne,
     NMWEStochastic,
-    NiceMetaWinner,
-    NiceMetaWinnerEnsemble,
 )
+
+# `from ._strategies import *` import the collection `strategies`
+# Now import the Meta strategies. This cannot be done in _strategies
+# because it creates circular dependencies
+
 
 all_strategies += [
     MemoryDecay,

@@ -1,15 +1,15 @@
 """Tests for the Cycler strategies."""
-import unittest
 import itertools
 import random
+import unittest
 
 import axelrod as axl
 from axelrod._strategy_utils import detect_cycle
 from axelrod.action import Action, str_to_actions
 from axelrod.evolvable_player import InsufficientParametersError
 
-from .test_player import TestPlayer
 from .test_evolvable_player import PartialClass, TestEvolvablePlayer
+from .test_player import TestPlayer
 
 C, D = Action.C, Action.D
 

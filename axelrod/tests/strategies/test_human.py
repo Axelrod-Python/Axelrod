@@ -1,7 +1,6 @@
+from os import linesep
 from unittest import TestCase
 from unittest.mock import patch
-
-from os import linesep
 
 import axelrod as axl
 from axelrod.strategies.human import ActionValidator, Human
