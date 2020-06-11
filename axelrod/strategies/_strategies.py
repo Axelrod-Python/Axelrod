@@ -18,6 +18,7 @@ annotated as to avoid some static testing. For example:
         ReactivePlayer,
         MemoryOnePlayer
     )
+    isort:skip_file
 """
 from .adaptive import Adaptive
 from .adaptor import AdaptorBrief, AdaptorLong

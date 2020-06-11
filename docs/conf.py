@@ -1,3 +1,4 @@
+# isort:skip_file
 # -*- coding: utf-8 -*-
 #
 # Axelrod documentation build configuration file, created by
