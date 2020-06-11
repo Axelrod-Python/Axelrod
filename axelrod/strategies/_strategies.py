@@ -18,34 +18,29 @@ annotated as to avoid some static testing. For example:
         ReactivePlayer,
         MemoryOnePlayer
     )
-    isort:skip_file
+    # isort:skip_file
 """
 from .adaptive import Adaptive
 from .adaptor import AdaptorBrief, AdaptorLong
 from .alternator import Alternator
-from .ann import (  # pylint: disable=unused-import
-    ANN,
-    EvolvableANN,
-    EvolvedANN,
-    EvolvedANN5,
-    EvolvedANNNoise05,
-)
+from .ann import EvolvedANN, EvolvedANN5, EvolvedANNNoise05
+from .ann import ANN, EvolvableANN  # pylint: disable=unused-import
 from .apavlov import APavlov2006, APavlov2011
 from .appeaser import Appeaser
 from .averagecopier import AverageCopier, NiceAverageCopier
 from .axelrod_first import (
-    FirstByAnonymous,
     FirstByDavis,
-    FirstByDowning,
     FirstByFeld,
     FirstByGraaskamp,
     FirstByGrofman,
     FirstByJoss,
     FirstByNydegger,
+    FirstByDowning,
     FirstByShubik,
     FirstBySteinAndRapoport,
     FirstByTidemanAndChieruzzi,
     FirstByTullock,
+    FirstByAnonymous,
 )
 from .axelrod_second import (
     SecondByAppold,
@@ -58,15 +53,15 @@ from .axelrod_second import (
     SecondByGetzler,
     SecondByGladstein,
     SecondByGraaskampKatzen,
-    SecondByGrofman,
     SecondByHarrington,
     SecondByKluepfel,
     SecondByLeyvraz,
     SecondByMikkelson,
+    SecondByGrofman,
+    SecondByTidemanAndChieruzzi,
     SecondByRichardHufford,
     SecondByRowsam,
     SecondByTester,
-    SecondByTidemanAndChieruzzi,
     SecondByTranquilizer,
     SecondByWeiner,
     SecondByWhite,
@@ -78,52 +73,52 @@ from .better_and_better import BetterAndBetter
 from .bush_mosteller import BushMosteller
 from .calculator import Calculator
 from .cooperator import Cooperator, TrickyCooperator
-from .cycler import AntiCycler  # pylint: disable=unused-import
 from .cycler import (
-    Cycler,
+    AntiCycler,
     CyclerCCCCCD,
     CyclerCCCD,
     CyclerCCCDCD,
     CyclerCCD,
     CyclerDC,
     CyclerDDC,
-    EvolvableCycler,
 )
+from .cycler import Cycler, EvolvableCycler  # pylint: disable=unused-import
 from .darwin import Darwin
 from .dbs import DBS
 from .defector import Defector, TrickyDefector
 from .doubler import Doubler
-from .finite_state_machines import (  # pylint: disable=unused-import
+from .finite_state_machines import (
     TF1,
     TF2,
     TF3,
-    EvolvableFSMPlayer,
     EvolvedFSM4,
     EvolvedFSM16,
     EvolvedFSM16Noise05,
     Fortress3,
     Fortress4,
-    FSMPlayer,
     Predator,
     Pun1,
     Raider,
     Ripoff,
+    UsuallyCooperates,
+    UsuallyDefects,
     SolutionB1,
     SolutionB5,
     Thumper,
-    UsuallyCooperates,
-    UsuallyDefects,
+)
+from .finite_state_machines import (  # pylint: disable=unused-import
+    EvolvableFSMPlayer,
+    FSMPlayer,
 )
 from .forgiver import Forgiver, ForgivingTitForTat
-from .gambler import EvolvableGambler  # pylint: disable=unused-import
 from .gambler import (
-    Gambler,
     PSOGambler1_1_1,
     PSOGambler2_2_2,
     PSOGambler2_2_2_Noise05,
     PSOGamblerMem1,
     ZDMem2,
 )
+from .gambler import EvolvableGambler, Gambler  # pylint: disable=unused-import
 from .geller import Geller, GellerCooperator, GellerDefector
 from .gobymajority import (
     GoByMajority,
@@ -150,8 +145,8 @@ from .grudger import (
 )
 from .grumpy import Grumpy
 from .handshake import Handshake
-from .hmm import EvolvableHMMPlayer  # pylint: disable=unused-import
-from .hmm import EvolvedHMM5, HMMPlayer
+from .hmm import EvolvedHMM5
+from .hmm import EvolvableHMMPlayer, HMMPlayer  # pylint: disable=unused-import
 from .human import Human  # pylint: disable=unused-import
 from .hunter import (
     AlternatorHunter,
@@ -163,29 +158,36 @@ from .hunter import (
     RandomHunter,
 )
 from .inverse import Inverse
-from .lookerup import EvolvableLookerUp  # pylint: disable=unused-import
 from .lookerup import (
     EvolvedLookerUp1_1_1,
     EvolvedLookerUp2_2_2,
-    LookerUp,
     Winner12,
     Winner21,
 )
+from .lookerup import (  # pylint: disable=unused-import
+    EvolvableLookerUp,
+    LookerUp,
+)
+
 from .mathematicalconstants import Golden, Pi, e
-from .memoryone import (  # pylint: disable=unused-import
+from .memoryone import (
     GTFT,
     ALLCorALLD,
     FirmButFair,
-    MemoryOnePlayer,
-    ReactivePlayer,
     SoftJoss,
     StochasticCooperator,
     StochasticWSLS,
     WinShiftLoseStay,
     WinStayLoseShift,
 )
-from .memorytwo import MemoryTwoPlayer  # pylint: disable=unused-import
+from .memoryone import (  # pylint: disable=unused-import
+    ReactivePlayer,
+    MemoryOnePlayer,
+)
+
 from .memorytwo import AON2, MEM2, DelayedAON1
+from .memorytwo import MemoryTwoPlayer  # pylint: disable=unused-import
+
 from .mindcontrol import MindBender, MindController, MindWarper
 from .mindreader import MindReader, MirrorMindReader, ProtectedMindReader
 from .mutual import Desperate, Hopeless, Willing
@@ -202,7 +204,12 @@ from .prober import (
     Prober4,
     RemorsefulProber,
 )
-from .punisher import InversePunisher, LevelPunisher, Punisher, TrickyLevelPunisher
+from .punisher import (
+    InversePunisher,
+    LevelPunisher,
+    Punisher,
+    TrickyLevelPunisher,
+)
 from .qlearner import (
     ArrogantQLearner,
     CautiousQLearner,
@@ -221,8 +228,11 @@ from .retaliate import (
 )
 from .revised_downing import RevisedDowning
 from .selfsteem import SelfSteem
-from .sequence_player import SequencePlayer  # pylint: disable=unused-import
-from .sequence_player import ThueMorse, ThueMorseInverse
+from .sequence_player import (  # pylint: disable=unused-import
+    SequencePlayer,
+    ThueMorse,
+    ThueMorseInverse,
+)
 from .shortmem import ShortMem
 from .stalker import Stalker
 from .titfortat import (
