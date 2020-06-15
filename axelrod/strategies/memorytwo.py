@@ -2,7 +2,7 @@
 
 import itertools
 import warnings
-from typing import Dict, Tuple
+from typing import Dict, Optional, Tuple
 
 from axelrod.action import Action
 from axelrod.player import Player
@@ -54,7 +54,7 @@ class MemoryTwoPlayer(Player):
     }
 
     def __init__(
-        self, sixteen_vector: Tuple[float, ...] = None, initial: Action = C
+        self, sixteen_vector: Tuple[float, ...] = None, initial: Optional[Action] = None
     ) -> None:
         """
         Parameters
@@ -66,6 +66,8 @@ class MemoryTwoPlayer(Player):
             The initial 2 moves
         """
         super().__init__()
+        if initial is None:
+            initial = C
         self._initial = initial
         self.set_initial_sixteen_vector(sixteen_vector)
 
@@ -75,8 +77,6 @@ class MemoryTwoPlayer(Player):
             warnings.warn("Memory two player is set to default, Cooperator.")
 
         self.set_sixteen_vector(sixteen_vector)
-        if self.name == "Generic Memory Two Player":
-            self.name = "%s: %s" % (self.name, sixteen_vector)
 
     def set_sixteen_vector(self, sixteen_vector: Tuple):
         if not all(0 <= p <= 1 for p in sixteen_vector):

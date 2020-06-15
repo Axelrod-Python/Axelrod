@@ -35,7 +35,6 @@ class TestGambler(TestPlayer):
     }
 
     expected_class_classifier = copy.copy(expected_classifier)
-    expected_class_classifier["memory_depth"] = float("inf")
 
     def test_strategy(self):
         tft_table = {((), (D,), ()): 0, ((), (C,), ()): 1}
@@ -71,7 +70,6 @@ class TestPSOGamblerMem1(TestPlayer):
         "manipulates_state": False,
     }
     expected_class_classifier = copy.copy(expected_classifier)
-    expected_class_classifier["memory_depth"] = float("inf")
 
     def test_new_data(self):
         original_data = {
