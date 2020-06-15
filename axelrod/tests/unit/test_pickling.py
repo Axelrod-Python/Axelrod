@@ -1,6 +1,6 @@
-import unittest
 import pickle
 import random
+import unittest
 
 import axelrod as axl
 

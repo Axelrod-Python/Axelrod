@@ -1,9 +1,8 @@
 import random
 
 import numpy as np
-from numpy.random import choice
-
 from axelrod.action import Action
+from numpy.random import choice
 
 C, D = Action.C, Action.D
 

@@ -347,4 +347,3 @@ class TestGetMemoryFromTransitions(unittest.TestCase):
 
         trans_dict = self.transitions_to_dict(transitions)
         self.assertEqual(get_memory_from_transitions(trans_dict), float("inf"))
-

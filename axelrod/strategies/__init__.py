@@ -1,3 +1,4 @@
+# isort:skip_file
 from ..classifier import Classifiers
 from ._strategies import *
 from ._filters import passes_filterset

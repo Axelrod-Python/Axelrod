@@ -10,7 +10,6 @@ from axelrod.tests.property import (
     strategy_lists,
     tournaments,
 )
-
 from hypothesis import given, settings
 
 stochastic_strategies = [s for s in axl.strategies if axl.Classifiers["stochastic"](s())]

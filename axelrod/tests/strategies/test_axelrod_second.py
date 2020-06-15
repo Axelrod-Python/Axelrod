@@ -3,7 +3,6 @@
 import random
 
 import axelrod as axl
-
 import numpy as np
 
 from .test_player import TestPlayer
@@ -2031,5 +2030,3 @@ class TestAppold(TestPlayer):
                    (C, C),
                    (D, C)]
         self.versus_test(axl.Random(0.5), expected_actions=actions, seed=7)
-
-
