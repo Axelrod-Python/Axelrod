@@ -563,9 +563,6 @@ class TestPlayer(unittest.TestCase):
             Any noise to be passed to a match
         seed: int
             The random seed to be used
-        length: int
-            The length of the game. If `opponent` is a sequence of actions then
-            the length is taken to be the length of the sequence.
         match_attributes: dict
             The match attributes to be passed to the players.  For example,
             `{length:-1}` implies that the players do not know the length of the
@@ -577,27 +574,22 @@ class TestPlayer(unittest.TestCase):
             A dictionary of keyword arguments to instantiate player with
         """
 
-        turns = len(expected_actions)
         if init_kwargs is None:
             init_kwargs = dict()
 
-        if seed is not None:
-            axl.seed(seed)
-
         player = self.player(**init_kwargs)
 
-        match = axl.Match(
-            (player, opponent),
-            turns=turns,
+        test_match = TestMatch()
+        test_match.versus_test(
+            player,
+            opponent,
+            [x for (x, y) in expected_actions],
+            [y for (x, y) in expected_actions],
             noise=noise,
-            match_attributes=match_attributes,
+            seed=seed,
+            attrs=attrs,
+            match_attributes=match_attributes
         )
-        self.assertEqual(match.play(), expected_actions)
-
-        if attrs:
-            player = match.players[0]
-            for attr, value in attrs.items():
-                self.assertEqual(getattr(player, attr), value)
 
     def classifier_test(self, expected_class_classifier=None):
         """Test that the keys in the expected_classifier dictionary give the
@@ -649,26 +641,35 @@ class TestMatch(unittest.TestCase):
         expected_actions2,
         noise=None,
         seed=None,
+        match_attributes=None,
+        attrs=None
     ):
         """Tests a sequence of outcomes for two given players."""
-        if len(expected_actions1) != len(expected_actions2):
-            raise ValueError("Mismatched History lengths.")
-        if seed:
+        if seed is not None:
             axl.seed(seed)
+        if len(expected_actions1) != len(expected_actions2):
+            raise ValueError("Mismatched Expected History in TestMatch.")
         turns = len(expected_actions1)
-        match = axl.Match((player1, player2), turns=turns, noise=noise)
+
+        match = axl.Match(
+            (player1, player2), turns=turns, noise=noise,
+            match_attributes=match_attributes)
         match.play()
-        # Test expected sequence of play.
-        for i, (outcome1, outcome2) in enumerate(
-            zip(expected_actions1, expected_actions2)
-        ):
-            player1.play(player2)
-            self.assertEqual(player1.history[i], outcome1)
-            self.assertEqual(player2.history[i], outcome2)
+
+        # Test expected sequence of plays from the match is as expected.
+        for (play, expected_play) in zip(player1.history, expected_actions1):
+            self.assertEqual(play, expected_play)
+        for (play, expected_play) in zip(player2.history, expected_actions2):
+            self.assertEqual(play, expected_play)
+
+        # Test final player attributes are as expected
+        if attrs:
+            for attr, value in attrs.items():
+                self.assertEqual(getattr(player1, attr), value)
 
     def test_versus_with_incorrect_history_lengths(self):
         """Test the error raised by versus_test if expected actions do not
-        match up"""
+        match up."""
         with self.assertRaises(ValueError):
             p1, p2 = axl.Cooperator(), axl.Cooperator()
             actions1 = [C, C]
