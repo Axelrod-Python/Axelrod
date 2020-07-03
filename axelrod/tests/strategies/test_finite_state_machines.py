@@ -4,13 +4,18 @@ import unittest
 import axelrod as axl
 from axelrod.compute_finite_state_machine_memory import get_memory_from_transitions
 from axelrod.evolvable_player import InsufficientParametersError
-from axelrod.strategies.finite_state_machines import EvolvableFSMPlayer, FSMPlayer, SimpleFSM
+from axelrod.strategies.finite_state_machines import (
+    EvolvableFSMPlayer,
+    FSMPlayer,
+    SimpleFSM,
+)
 
-from .test_player import TestPlayer
 from .test_evolvable_player import PartialClass, TestEvolvablePlayer
+from .test_player import TestPlayer
 
 C, D = axl.Action.C, axl.Action.D
 random = axl.RandomGenerator()
+
 
 class TestSimpleFSM(unittest.TestCase):
     def setUp(self):

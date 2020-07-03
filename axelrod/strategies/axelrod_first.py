@@ -13,7 +13,7 @@ These descriptions are not always clear and/or precise and when assumptions have
 been made they are explained in the strategy docstrings.
 """
 
-from typing import Dict, List, Tuple, Optional
+from typing import Dict, List, Optional, Tuple
 
 from axelrod.action import Action
 from axelrod.player import Player

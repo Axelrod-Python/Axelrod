@@ -2025,5 +2025,3 @@ class TestAppold(TestPlayer):
                    (C, C),
                    (D, C)]
         self.versus_test(axl.Random(0.5), expected_actions=actions, seed=7)
-
-

@@ -4,7 +4,6 @@ A module for creating hypothesis based strategies for property based testing
 import itertools
 
 import axelrod as axl
-
 from hypothesis.strategies import composite, floats, integers, lists, sampled_from
 
 

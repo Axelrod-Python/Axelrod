@@ -1,11 +1,11 @@
-import unittest
 import itertools
 import pickle
 import types
 import warnings
 
-import numpy as np
+import unittest
 
+import numpy as np
 from hypothesis import given, settings
 from hypothesis.strategies import integers, sampled_from
 

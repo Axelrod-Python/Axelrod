@@ -1,10 +1,14 @@
 from typing import List, Tuple
+
 import numpy as np
 from axelrod.action import Action
+from axelrod.evolvable_player import (
+    EvolvablePlayer,
+    InsufficientParametersError,
+    crossover_lists,
+)
 from axelrod.load_data_ import load_weights
-from axelrod.evolvable_player import EvolvablePlayer, InsufficientParametersError, crossover_lists
 from axelrod.player import Player
-
 
 C, D = Action.C, Action.D
 nn_weights = load_weights()
@@ -346,4 +350,3 @@ class EvolvedANNNoise05(ANN):
             num_features=num_features,
             num_hidden=num_hidden,
             weights=weights)
-

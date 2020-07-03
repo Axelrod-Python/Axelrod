@@ -13,6 +13,7 @@ from axelrod.strategies.lookerup import (
     create_lookup_table_keys,
     make_keys_into_plays,
 )
+
 from .test_evolvable_player import PartialClass, TestEvolvablePlayer
 from .test_player import TestPlayer
 

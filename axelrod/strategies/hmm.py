@@ -1,6 +1,12 @@
 from axelrod.action import Action
-from axelrod.evolvable_player import EvolvablePlayer, InsufficientParametersError, copy_lists, crossover_lists
+from axelrod.evolvable_player import (
+    EvolvablePlayer,
+    InsufficientParametersError,
+    copy_lists,
+    crossover_lists,
+)
 from axelrod.player import Player
+
 
 C, D = Action.C, Action.D
 

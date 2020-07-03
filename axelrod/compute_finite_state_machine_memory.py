@@ -1,6 +1,7 @@
-from axelrod.action import Action
 from collections import defaultdict, namedtuple
-from typing import DefaultDict, Iterator, Dict, Tuple, Set, List
+from typing import DefaultDict, Dict, Iterator, List, Set, Tuple
+
+from axelrod.action import Action
 
 C, D = Action.C, Action.D
 
@@ -263,4 +264,3 @@ def get_memory_from_transitions(
     if len(next_action_set) == 1:
         return 0
     return 1
-

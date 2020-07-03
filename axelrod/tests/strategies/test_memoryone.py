@@ -10,25 +10,6 @@ from .test_player import TestPlayer, test_four_vector
 C, D = axl.Action.C, axl.Action.D
 
 
-class TestGenericPlayerOne(unittest.TestCase):
-    """A class to test the naming and classification of generic memory one
-    players."""
-
-    p1 = axl.MemoryOnePlayer(four_vector=(0, 0, 0, 0))
-    p2 = axl.MemoryOnePlayer(four_vector=(1, 0, 1, 0))
-    p3 = axl.MemoryOnePlayer(four_vector=(1, 0.5, 1, 0.5))
-
-    def test_name(self):
-        self.assertEqual(self.p1.name, "Generic Memory One Player: (0, 0, 0, 0)")
-        self.assertEqual(self.p2.name, "Generic Memory One Player: (1, 0, 1, 0)")
-        self.assertEqual(self.p3.name, "Generic Memory One Player: (1, 0.5, 1, 0.5)")
-
-    def test_stochastic_classification(self):
-        self.assertFalse(axl.Classifiers["stochastic"](self.p1))
-        self.assertFalse(axl.Classifiers["stochastic"](self.p2))
-        self.assertTrue(axl.Classifiers["stochastic"](self.p3))
-
-
 class TestWinStayLoseShift(TestPlayer):
 
     name = "Win-Stay Lose-Shift: C"
@@ -292,11 +273,6 @@ class TestGenericReactiveStrategy(unittest.TestCase):
     p2 = axl.ReactivePlayer(probabilities=(1, 0))
     p3 = axl.ReactivePlayer(probabilities=(1, 0.5))
 
-    def test_name(self):
-        self.assertEqual(self.p1.name, "Reactive Player: (0, 0)")
-        self.assertEqual(self.p2.name, "Reactive Player: (1, 0)")
-        self.assertEqual(self.p3.name, "Reactive Player: (1, 0.5)")
-
     def test_four_vector(self):
         self.assertEqual(
             self.p1._four_vector, {(C, D): 0.0, (D, C): 0.0, (C, C): 0.0, (D, D): 0.0}
@@ -307,11 +283,6 @@ class TestGenericReactiveStrategy(unittest.TestCase):
         self.assertEqual(
             self.p3._four_vector, {(C, D): 0.5, (D, C): 1.0, (C, C): 1.0, (D, D): 0.5}
         )
-
-    def test_stochastic_classification(self):
-        self.assertFalse(axl.Classifiers["stochastic"](self.p1))
-        self.assertFalse(axl.Classifiers["stochastic"](self.p2))
-        self.assertTrue(axl.Classifiers["stochastic"](self.p3))
 
     def test_subclass(self):
         self.assertIsInstance(self.p1, MemoryOnePlayer)

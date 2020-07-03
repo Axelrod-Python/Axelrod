@@ -11,67 +11,6 @@ from .test_player import TestPlayer
 C, D = axl.Action.C, axl.Action.D
 
 
-class TestGenericPlayerTwo(unittest.TestCase):
-    """A class to test the naming and classification of generic memory two
-    players."""
-
-    p1 = MemoryTwoPlayer(
-        sixteen_vector=(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-    )
-    p2 = MemoryTwoPlayer(
-        sixteen_vector=(1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0)
-    )
-    p3 = MemoryTwoPlayer(
-        sixteen_vector=(
-            0.5,
-            0.5,
-            0.5,
-            0.5,
-            0.5,
-            0.5,
-            0.5,
-            0.5,
-            0.5,
-            0.5,
-            0.5,
-            0.5,
-            0.5,
-            0.5,
-            0.5,
-            0.5,
-        )
-    )
-    p4 = MemoryTwoPlayer(
-        sixteen_vector=(0.1, 0, 0.2, 0, 0.3, 0, 0.4, 0, 0.5, 0, 0.6, 0, 0.7, 0, 0.8, 0)
-    )
-
-    def test_name(self):
-        self.assertEqual(
-            self.p1.name,
-            "Generic Memory Two Player: (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)",
-        )
-        self.assertEqual(
-            self.p2.name,
-            "Generic Memory Two Player: (1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0)",
-        )
-        self.assertEqual(
-            self.p3.name,
-            "Generic Memory Two Player: (0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5)",
-        )
-        self.assertEqual(
-            self.p4.name,
-            "Generic Memory Two Player: (0.1, 0, 0.2, 0, 0.3, 0, 0.4, 0, 0.5, 0, 0.6, 0, 0.7, 0, 0.8, 0)",
-        )
-
-    def test_deterministic_classification(self):
-        self.assertFalse(axl.Classifiers["stochastic"](self.p1))
-        self.assertFalse(axl.Classifiers["stochastic"](self.p2))
-
-    def test_stochastic_classification(self):
-        self.assertTrue(axl.Classifiers["stochastic"](self.p3))
-        self.assertTrue(axl.Classifiers["stochastic"](self.p4))
-
-
 class TestMemoryTwoPlayer(unittest.TestCase):
     def test_default_if_four_vector_not_set(self):
         player = MemoryTwoPlayer()
@@ -139,7 +78,7 @@ class TestMemoryTwoPlayer(unittest.TestCase):
 
 class TestMemoryStochastic(TestPlayer):
     name = (
-        "Generic Memory Two Player: (1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1): C"
+        "Generic Memory Two Player"
     )
     player = axl.MemoryTwoPlayer
     expected_classifier = {

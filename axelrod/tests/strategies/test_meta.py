@@ -1,11 +1,10 @@
 """Tests for the various Meta strategies."""
 
 import axelrod as axl
-
-from .test_player import TestPlayer
-
 from hypothesis import given, settings
 from hypothesis.strategies import integers
+
+from .test_player import TestPlayer
 
 C, D = axl.Action.C, axl.Action.D
 

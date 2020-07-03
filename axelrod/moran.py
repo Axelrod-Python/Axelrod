@@ -5,7 +5,7 @@ from typing import Callable, List, Optional, Set, Tuple
 
 import matplotlib.pyplot as plt
 import numpy as np
-from axelrod import EvolvablePlayer, DEFAULT_TURNS, Game, Player
+from axelrod import DEFAULT_TURNS, EvolvablePlayer, Game, Player
 
 from axelrod.deterministic_cache import DeterministicCache
 from axelrod.graph import Graph, complete_graph

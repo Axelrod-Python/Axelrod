@@ -3,9 +3,17 @@ import unittest
 
 import axelrod as axl
 from axelrod.evolvable_player import InsufficientParametersError
-from axelrod.strategies.hmm import EvolvableHMMPlayer, HMMPlayer, SimpleHMM, is_stochastic_matrix
-from .test_player import TestMatch, TestPlayer
+from axelrod.strategies.hmm import (
+    EvolvableHMMPlayer,
+    HMMPlayer,
+    SimpleHMM,
+    is_stochastic_matrix,
+    random_vector,
+)
+
+>>>>>>> upstream
 from .test_evolvable_player import PartialClass, TestEvolvablePlayer
+from .test_player import TestMatch, TestPlayer
 
 C, D = axl.Action.C, axl.Action.D
 

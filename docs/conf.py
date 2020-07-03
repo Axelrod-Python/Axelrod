@@ -1,3 +1,4 @@
+# isort:skip_file
 # -*- coding: utf-8 -*-
 #
 # Axelrod documentation build configuration file, created by
@@ -12,8 +13,8 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys
 import os
+import sys
 
 import mock
 

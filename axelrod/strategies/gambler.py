@@ -6,11 +6,17 @@ For the original see:
 """
 from typing import Any
 
-from axelrod.action import Action
+from axelrod.action import Action, actions_to_str, str_to_actions
 from axelrod.load_data_ import load_pso_tables
 from axelrod.player import Player
 
-from .lookerup import EvolvableLookerUp, LookupTable, LookerUp, Plays, create_lookup_table_keys
+from .lookerup import (
+    EvolvableLookerUp,
+    LookerUp,
+    LookupTable,
+    Plays,
+    create_lookup_table_keys,
+)
 
 C, D = Action.C, Action.D
 tables = load_pso_tables("pso_gambler.csv", directory="data")

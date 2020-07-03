@@ -2,7 +2,6 @@ import unittest
 
 import axelrod as axl
 from axelrod.match_generator import graph_is_connected
-
 from hypothesis import example, given, settings
 from hypothesis.strategies import integers
 

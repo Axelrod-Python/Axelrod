@@ -8,8 +8,8 @@ import matplotlib.transforms as transforms
 from numpy import arange, median, nan_to_num
 import tqdm
 
-from .result_set import ResultSet
 from .load_data_ import axl_filename
+from .result_set import ResultSet
 
 titleType = List[str]
 namesType = List[str]

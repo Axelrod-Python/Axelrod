@@ -1,8 +1,14 @@
 import itertools
-from typing import Any, Sequence, Tuple
+from typing import Any, List, Sequence, Tuple, Union
+
 from axelrod.action import Action
-from axelrod.evolvable_player import EvolvablePlayer, InsufficientParametersError, copy_lists
+from axelrod.evolvable_player import (
+    EvolvablePlayer,
+    InsufficientParametersError,
+    copy_lists,
+)
 from axelrod.player import Player
+
 
 C, D = Action.C, Action.D
 actions = (C, D)

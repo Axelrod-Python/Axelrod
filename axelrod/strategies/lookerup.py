@@ -3,7 +3,11 @@ from itertools import product
 from typing import Any, TypeVar
 
 from axelrod.action import Action, actions_to_str, str_to_actions
-from axelrod.evolvable_player import EvolvablePlayer, InsufficientParametersError, crossover_dictionaries
+from axelrod.evolvable_player import (
+    EvolvablePlayer,
+    InsufficientParametersError,
+    crossover_dictionaries,
+)
 from axelrod.player import Player
 
 

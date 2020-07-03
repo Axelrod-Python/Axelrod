@@ -1,11 +1,11 @@
-import matplotlib.pyplot
 import os
 import pathlib
-from tempfile import mkstemp
 import unittest
+from tempfile import mkstemp
 from unittest.mock import patch
 
 from hypothesis import given, settings
+import matplotlib.pyplot
 import numpy as np
 
 import axelrod as axl

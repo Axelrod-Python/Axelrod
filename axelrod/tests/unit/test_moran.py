@@ -1,15 +1,14 @@
-from collections import Counter
 import itertools
 import unittest
+from collections import Counter
 
+from hypothesis import example, given, settings
+from hypothesis.strategies import integers
 import matplotlib.pyplot as plt
 
 import axelrod as axl
 from axelrod import MoranProcess
 from axelrod.tests.property import strategy_lists
-
-from hypothesis import example, given, settings
-from hypothesis.strategies import integers
 
 
 C, D = axl.Action.C, axl.Action.D

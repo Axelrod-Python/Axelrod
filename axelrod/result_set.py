@@ -1,9 +1,9 @@
-from collections import Counter, namedtuple
 import csv
 import itertools
+import warnings
+from collections import Counter, namedtuple
 from multiprocessing import cpu_count
 from typing import List
-import warnings
 
 import dask as da
 import dask.dataframe as dd

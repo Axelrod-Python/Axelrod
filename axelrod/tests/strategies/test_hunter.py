@@ -1,5 +1,4 @@
 """Tests for the Hunter strategy."""
-
 import unittest
 
 import axelrod as axl

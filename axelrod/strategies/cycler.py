@@ -3,7 +3,11 @@ import itertools
 from typing import List, Tuple
 
 from axelrod.action import Action, actions_to_str, str_to_actions
-from axelrod.evolvable_player import EvolvablePlayer, InsufficientParametersError, crossover_lists
+from axelrod.evolvable_player import (
+    EvolvablePlayer,
+    InsufficientParametersError,
+    crossover_lists,
+)
 from axelrod.player import Player
 
 C, D = Action.C, Action.D

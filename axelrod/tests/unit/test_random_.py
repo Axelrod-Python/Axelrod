@@ -5,7 +5,6 @@ import unittest
 import axelrod as axl
 from axelrod import BulkRandomGenerator, Pdf, RandomGenerator
 
-
 C, D = axl.Action.C, axl.Action.D
 
 
