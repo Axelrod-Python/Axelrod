@@ -10,6 +10,8 @@ from axelrod.random_ import random_choice, random_flip, seed, Pdf
 from axelrod.plot import Plot
 from axelrod.game import DefaultGame, Game
 from axelrod.history import History, LimitedHistory
+from axelrod.data_classes import PlayerConfig
+from axelrod.yaml import log_kwargs, load_matches
 from axelrod.player import Player
 from axelrod.classifier import Classifiers
 from axelrod.evolvable_player import EvolvablePlayer

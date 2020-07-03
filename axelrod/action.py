@@ -8,7 +8,7 @@ C, D = Action.C, Action.D
 
 from enum import Enum
 from functools import total_ordering
-from typing import Iterable
+from typing import Iterable, Tuple
 
 
 class UnknownActionError(ValueError):
@@ -70,7 +70,7 @@ class Action(Enum):
         raise UnknownActionError('Character must be "C" or "D".')
 
 
-def str_to_actions(actions: str) -> tuple:
+def str_to_actions(actions: str) -> Tuple[Action, ...]:
     """Converts a string to a tuple of actions.
 
     Parameters

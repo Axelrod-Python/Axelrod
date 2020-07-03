@@ -7,7 +7,9 @@ import unittest
 import axelrod as axl
 import numpy as np
 from axelrod.player import simultaneous_play
-from axelrod.tests.property import strategy_lists
+from axelrod.tests.property import
+from axelrod.yaml import log_kwargs
+
 from hypothesis import given, settings
 from hypothesis.strategies import integers, sampled_from
 
@@ -633,6 +635,7 @@ class TestMatch(unittest.TestCase):
     """Test class for heads up play between two given players. Plays an
     axelrod match between the two players."""
 
+    @log_kwargs
     def versus_test(
         self,
         player1,
