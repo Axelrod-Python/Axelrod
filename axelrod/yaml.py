@@ -40,14 +40,24 @@ def build_match_spec(player_name, coplayer_name, player_actions, coplayer_action
 
 def log_kwargs(func):
     def wrapper(*args, **kwargs):
-        stream = open('test_matches.yaml', 'a')
+        try:
+            noise = kwargs["noise"]
+        except KeyError:
+            noise = None
+        try:
+            seed = kwargs["seed"]
+        except KeyError:
+            seed = None
+
         spec = build_match_spec(str(args[1].__class__.__name__), str(args[2].__class__.__name__),
                                 actions_to_str(args[-2]), actions_to_str(args[-1]),
-                                noise=kwargs["noise"], seed=kwargs["seed"],
+                                noise=noise, seed=seed,
                                 player_init_kwargs=args[1].init_kwargs,
                                 coplayer_init_kwargs=args[2].init_kwargs)
+        stream = open(filename, 'a')
         stream.write("---\n")
         yaml.dump(asdict(spec), stream)
+        stream.close()
         return func(*args, **kwargs)
     return wrapper
 
