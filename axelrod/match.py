@@ -67,8 +67,7 @@ class Match(object):
         self.result = []
         self.noise = noise
 
-        self.seed = seed
-        self._random = RandomGenerator(seed=self.seed)
+        self.set_seed(seed)
 
         if game is None:
             self.game = Game()
@@ -92,6 +91,10 @@ class Match(object):
 
         self.players = list(players)
         self.reset = reset
+
+    def set_seed(self, seed):
+        self.seed = seed
+        self._random = RandomGenerator(seed=self.seed)
 
     @property
     def players(self):
