@@ -1,13 +1,12 @@
-import unittest
 import itertools
 import random
+import unittest
 from collections import Counter
-import matplotlib.pyplot as plt
 
 import axelrod as axl
+import matplotlib.pyplot as plt
 from axelrod.moran import fitness_proportionate_selection
 from axelrod.tests.property import strategy_lists
-
 from hypothesis import example, given, settings
 
 C, D = axl.Action.C, axl.Action.D

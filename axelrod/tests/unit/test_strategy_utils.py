@@ -11,7 +11,6 @@ from axelrod._strategy_utils import (
     simulate_match,
     thue_morse_generator,
 )
-
 from hypothesis import given, settings
 from hypothesis.strategies import integers, lists, sampled_from
 

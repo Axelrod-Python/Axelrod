@@ -1,19 +1,16 @@
 """Test for the Gambler strategy. Most tests come from the LookerUp test suite.
 """
-import unittest
-
 import copy
-
 import random
+import unittest
 
 import axelrod as axl
 from axelrod.load_data_ import load_pso_tables
 from axelrod.strategies.lookerup import create_lookup_table_keys
 
+from .test_evolvable_player import PartialClass, TestEvolvablePlayer
 from .test_lookerup import convert_original_to_current
 from .test_player import TestPlayer
-from .test_evolvable_player import PartialClass, TestEvolvablePlayer
-
 
 tables = load_pso_tables("pso_gambler.csv", directory="data")
 C, D = axl.Action.C, axl.Action.D

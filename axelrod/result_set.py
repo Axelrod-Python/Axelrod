@@ -1,16 +1,15 @@
-from collections import Counter, namedtuple
 import csv
 import itertools
+import warnings
+from collections import Counter, namedtuple
 from multiprocessing import cpu_count
 from typing import List
-import warnings
-
-import numpy as np
-import tqdm
-from axelrod.action import Action
 
 import dask as da
 import dask.dataframe as dd
+import numpy as np
+import tqdm
+from axelrod.action import Action
 
 from . import eigen
 

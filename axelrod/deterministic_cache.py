@@ -17,6 +17,7 @@ from collections import UserDict
 from typing import List, Tuple
 
 from axelrod import Classifiers
+
 from .action import Action
 from .player import Player
 

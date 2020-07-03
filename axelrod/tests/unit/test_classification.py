@@ -2,11 +2,11 @@
 
 import os
 import unittest
-from typing import Any, Text
 import warnings
-import yaml
+from typing import Any, Text
 
 import axelrod as axl
+import yaml
 from axelrod.classifier import (
     Classifier,
     Classifiers,

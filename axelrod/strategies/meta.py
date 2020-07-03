@@ -1,13 +1,13 @@
 import random
 
 import numpy as np
-from numpy.random import choice
-
 from axelrod.action import Action
 from axelrod.classifier import Classifiers
 from axelrod.player import Player
 from axelrod.strategies import TitForTat
 from axelrod.strategy_transformers import NiceTransformer
+from numpy.random import choice
+
 from ._strategies import all_strategies
 from .hunter import (
     AlternatorHunter,
