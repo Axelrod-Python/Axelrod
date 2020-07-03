@@ -12,6 +12,8 @@ filename = "test_matches.yaml"
 
 
 def build_player_spec(name, init_kwargs=None):
+    if name == "MockPlayer":
+        init_kwargs["actions"] = actions_to_str(init_kwargs["actions"])
     return PlayerConfig(name=name, init_kwargs=dict(init_kwargs))
 
 
@@ -30,7 +32,7 @@ def build_match_spec(player_name, coplayer_name, player_actions, coplayer_action
                      player_init_kwargs=None, coplayer_init_kwargs=None, attr=None):
     return MatchConfig(
         player=build_player_spec(player_name, init_kwargs=player_init_kwargs.copy()),
-        coplayer=build_player_spec(coplayer_name,init_kwargs=coplayer_init_kwargs.copy()),
+        coplayer=build_player_spec(coplayer_name, init_kwargs=coplayer_init_kwargs.copy()),
         match_parameters=build_match_parameters_spec(noise=noise, seed=seed),
         expected_outcome=build_expected_spec(player_actions, coplayer_actions, attr=attr)
     )
