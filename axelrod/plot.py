@@ -1,12 +1,12 @@
-from distutils.version import LooseVersion
 import pathlib
+from distutils.version import LooseVersion
 from typing import List, Union
 
 import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.transforms as transforms
-from numpy import arange, median, nan_to_num
 import tqdm
+from numpy import arange, median, nan_to_num
 
 from .load_data_ import axl_filename
 from .result_set import ResultSet

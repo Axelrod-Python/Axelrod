@@ -7,7 +7,6 @@ from axelrod.evolvable_player import (
 )
 from axelrod.player import Player
 
-
 C, D = Action.C, Action.D
 
 

@@ -1,6 +1,6 @@
-from collections import Counter
 import tempfile
 import unittest
+from collections import Counter
 
 import axelrod as axl
 

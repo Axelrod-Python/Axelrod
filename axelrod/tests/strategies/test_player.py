@@ -1,16 +1,14 @@
 import itertools
 import pickle
 import types
+import unittest
 import warnings
 
-import unittest
-
+import axelrod as axl
 import numpy as np
+from axelrod.tests.property import strategy_lists
 from hypothesis import given, settings
 from hypothesis.strategies import integers, sampled_from
-
-import axelrod as axl
-from axelrod.tests.property import strategy_lists
 
 C, D = axl.Action.C, axl.Action.D
 random = axl.RandomGenerator()

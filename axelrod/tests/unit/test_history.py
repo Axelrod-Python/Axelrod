@@ -1,5 +1,5 @@
-from collections import Counter
 import unittest
+from collections import Counter
 
 import axelrod as axl
 from axelrod.history import History, LimitedHistory

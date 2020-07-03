@@ -1,6 +1,6 @@
 import numpy as np
-from numpy.random import RandomState
 from axelrod.action import Action
+from numpy.random import RandomState
 
 C, D = Action.C, Action.D
 

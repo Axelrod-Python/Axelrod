@@ -1,5 +1,4 @@
 import numpy as np
-
 from axelrod.action import Action
 from axelrod.classifier import Classifiers
 from axelrod.player import Player

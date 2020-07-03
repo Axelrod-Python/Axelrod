@@ -2,11 +2,10 @@ import copy
 import inspect
 import itertools
 import types
-from typing import Any, Dict
 import warnings
+from typing import Any, Dict
 
 import numpy as np
-
 from axelrod import _module_random
 from axelrod.action import Action
 from axelrod.game import DefaultGame

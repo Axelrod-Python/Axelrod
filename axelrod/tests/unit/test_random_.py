@@ -1,6 +1,6 @@
 """Tests for the random functions."""
-from collections import Counter
 import unittest
+from collections import Counter
 
 import axelrod as axl
 from axelrod import BulkRandomGenerator, Pdf, RandomGenerator

@@ -11,9 +11,10 @@ from axelrod.strategies.hmm import (
     random_vector,
 )
 
->>>>>>> upstream
 from .test_evolvable_player import PartialClass, TestEvolvablePlayer
 from .test_player import TestMatch, TestPlayer
+
+>>>>>>> upstream
 
 C, D = axl.Action.C, axl.Action.D
 
