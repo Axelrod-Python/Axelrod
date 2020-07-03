@@ -7,7 +7,7 @@ import unittest
 import axelrod as axl
 import numpy as np
 from axelrod.player import simultaneous_play
-from axelrod.tests.property strategy_lists
+from axelrod.tests.property import strategy_lists
 from axelrod.yaml import log_kwargs
 
 from hypothesis import given, settings
