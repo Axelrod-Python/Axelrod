@@ -37,13 +37,15 @@ class TestEvolvedANN(TestPlayer):
         "manipulates_state": False,
     }
 
-    def test_strategy(self):
+    def test_strategy_versus_cooperator(self):
         actions = [(C, C)] * 5
         self.versus_test(axl.Cooperator(), expected_actions=actions)
 
+    def test_strategy_versus_defector(self):
         actions = [(C, D)] + [(D, D)] * 5
         self.versus_test(axl.Defector(), expected_actions=actions)
 
+    def test_strategy_versus_tft(self):
         actions = [(C, C)] * 5
         self.versus_test(axl.TitForTat(), expected_actions=actions)
 
@@ -62,10 +64,11 @@ class TestEvolvedANN5(TestPlayer):
         "manipulates_state": False,
     }
 
-    def test_strategy(self):
+    def test_strategy_versus_cooperator(self):
         actions = [(C, C)] * 5
         self.versus_test(axl.Cooperator(), expected_actions=actions)
 
+    def test_strategy_versus_defector(self):
         actions = [(C, D)] + [(D, D)] * 4
         self.versus_test(axl.Defector(), expected_actions=actions)
 
@@ -84,10 +87,11 @@ class TestEvolvedANNNoise05(TestPlayer):
         "manipulates_state": False,
     }
 
-    def test_strategy(self):
+    def test_strategy_versus_cooperator(self):
         actions = [(C, C)] * 5
         self.versus_test(axl.Cooperator(), expected_actions=actions)
 
+    def test_strategy_versus_defector(self):
         actions = [(C, D), (D, D), (D, D)]
         self.versus_test(axl.Defector(), expected_actions=actions)
 
