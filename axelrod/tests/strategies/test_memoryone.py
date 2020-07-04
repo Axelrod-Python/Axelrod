@@ -68,8 +68,9 @@ class TestGTFT(TestPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=0)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=2)
 
+    def test_strategy2(self):
         actions = [(C, C), (C, D), (C, C), (C, D), (D, C)]
         self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=1)
 
@@ -104,13 +105,14 @@ class TestFirmButFair(TestPlayer):
         test_four_vector(self, expected_dictionary)
 
     def test_strategy(self):
-
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
         self.versus_test(opponent=axl.Alternator(), expected_actions=actions)
 
+    def test_strategy2(self):
         actions = [(C, D), (D, D), (D, D), (D, D), (C, D)]
-        self.versus_test(opponent=axl.Defector(), expected_actions=actions, seed=0)
+        self.versus_test(opponent=axl.Defector(), expected_actions=actions, seed=10)
 
+    def test_strategy3(self):
         actions = [(C, D), (D, D), (C, D), (D, D), (D, D)]
         self.versus_test(opponent=axl.Defector(), expected_actions=actions, seed=1)
 
@@ -140,16 +142,19 @@ class TestStochasticCooperator(TestPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (D, D), (C, C), (C, D), (C, C), (D, D)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=15)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=113)
 
+    def test_strategy2(self):
         actions = [(C, C), (C, D), (D, C), (D, D), (C, C), (C, D)]
         self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=1)
 
+    def test_strategy3(self):
         actions = [(C, C), (C, D), (D, C), (D, D), (D, C), (D, D)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=3)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=5)
 
+    def test_strategy4(self):
         actions = [(C, C), (C, D), (D, C), (D, D), (D, C), (C, D)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=13)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=12)
 
 
 class TestStochasticWSLS(TestPlayer):
@@ -168,16 +173,19 @@ class TestStochasticWSLS(TestPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (D, D), (C, C), (C, D), (D, C), (D, D)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=2)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=50)
 
+    def test_strategy2(self):
         actions = [(C, C), (C, D), (D, C), (D, D), (C, C), (C, D)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=31)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=1)
 
+    def test_strategy3(self):
         actions = [(C, D), (D, C), (D, D), (C, C), (C, D), (D, C)]
         self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=2)
 
+    def test_strategy4(self):
         actions = [(C, D), (C, C), (C, D), (D, C), (D, D), (C, C)]
-        self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=31)
+        self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=23)
 
     def test_four_vector(self):
         player = self.player()
@@ -239,6 +247,7 @@ class TestSoftJoss(TestPlayer):
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (C, D)]
         self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=2)
 
+    def test_strategy2(self):
         actions = [(C, D), (D, C), (C, D), (D, C), (C, D), (D, C)]
         self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=5)
 
@@ -260,6 +269,8 @@ class TestALLCorALLD(TestPlayer):
     def test_strategy(self):
         actions = [(D, C)] * 10
         self.versus_test(opponent=axl.Cooperator(), expected_actions=actions, seed=0)
+
+    def test_strategy2(self):
         actions = [(C, C)] * 10
         self.versus_test(opponent=axl.Cooperator(), expected_actions=actions, seed=1)
 
