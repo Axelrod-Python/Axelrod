@@ -461,7 +461,7 @@ class TestPlayer(unittest.TestCase):
     def test_clone_reproducible_play(self, seed, turns, noise):
         # Test that the cloned player produces identical play
         player = self.player()
-        if player.name in ["Darwin", "Human"]:
+        if player.name in ["Darwin", "Human", "Mind Bender", "Mind Controller", "Mind Warper"]:
             # Known exceptions
             return
 
@@ -526,6 +526,7 @@ class TestPlayer(unittest.TestCase):
         self,
         opponent,
         expected_actions,
+        turns=None,
         noise=None,
         seed=None,
         match_attributes=None,
@@ -568,6 +569,7 @@ class TestPlayer(unittest.TestCase):
             opponent,
             [x for (x, y) in expected_actions],
             [y for (x, y) in expected_actions],
+            turns=turns,
             noise=noise,
             seed=seed,
             attrs=attrs,
@@ -623,6 +625,7 @@ class TestMatch(unittest.TestCase):
         player2,
         expected_actions1,
         expected_actions2,
+        turns=None,
         noise=None,
         seed=None,
         match_attributes=None,
@@ -631,7 +634,8 @@ class TestMatch(unittest.TestCase):
         """Tests a sequence of outcomes for two given players."""
         if len(expected_actions1) != len(expected_actions2):
             raise ValueError("Mismatched Expected History in TestMatch.")
-        turns = len(expected_actions1)
+        if not turns:
+            turns = len(expected_actions1)
 
         match = axl.Match(
             (player1, player2), turns=turns, noise=noise, seed=seed,
