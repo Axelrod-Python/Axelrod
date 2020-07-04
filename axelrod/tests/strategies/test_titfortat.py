@@ -50,7 +50,7 @@ class TestTitForTat(TestPlayer):
 
         # We can also test against random strategies
         actions = [(C, D), (D, C), (C, C), (C, D), (D, D)]
-        self.versus_test(axl.Random(), expected_actions=actions, seed=0)
+        self.versus_test(axl.Random(), expected_actions=actions, seed=37)
 
         actions = [(C, C), (C, C), (C, C), (C, C)]
         self.versus_test(axl.Random(), expected_actions=actions, seed=1)
@@ -722,43 +722,34 @@ class TestContriteTitForTat(TestPlayer):
         m2 = axl.Match((player, opponent), turns)
         self.assertEqual(m1.play(), m2.play())
 
-    def test_strategy_with_noise(self):
-        player = self.player()
-        opponent = axl.Defector()
-        match = axl.Match((player, opponent), turns=1, seed=9)
-        match.play()
-        self.assertEqual(player.history[-1], C)
-        self.assertEqual(player._recorded_history, [C])
+    def test_strategy_with_noise1(self):
+        self.versus_test(axl.Defector(), [(C, D)], turns=1, seed=9,
+                         attrs={"_recorded_history": [C]})
 
-        match = axl.Match((player, opponent), turns=1, noise=0.9, seed=9)
-        match.play()
-        self.assertEqual(player.history, [D])
-        self.assertEqual(player._recorded_history, [C])
-        self.assertEqual(opponent.history, [C])
+    def test_strategy_with_noise2(self):
+        self.versus_test(axl.Defector(), [(D, C)], turns=1, noise=0.5, seed=11,
+                         attrs={"_recorded_history": [C]})
 
+    def test_strategy_with_noise3(self):
         # After noise: is contrite
-        match = axl.Match((player, opponent), turns=2, noise=0.9, seed=9)
-        match.play()
-        self.assertEqual(player.history, [D, C])
-        self.assertEqual(player._recorded_history, [C, C])
-        self.assertEqual(opponent.history, [C, D])
-        self.assertTrue(player.contrite)
+        actions = list(zip([D, C], [C, D]))
+        self.versus_test(axl.Defector(), actions, turns=2, noise=0.5, seed=37,
+                         attrs={"_recorded_history": [C, C],
+                                "contrite": True})
 
+    def test_strategy_with_noise4(self):
         # Cooperates and no longer contrite
-        match = axl.Match((player, opponent), turns=3, noise=0.9, seed=9)
-        match.play()
-        self.assertEqual(player.history, [D, C, C])
-        self.assertEqual(player._recorded_history, [C, C, C])
-        self.assertEqual(opponent.history, [C, D, D])
-        self.assertFalse(player.contrite)
+        actions = list(zip([D, C, C], [C, D, D]))
+        self.versus_test(axl.Defector(), actions, turns=3, noise=0.5, seed=151,
+                         attrs={"_recorded_history": [C, C, C],
+                                "contrite": False})
 
-        # Goes back to playing tft
-        match = axl.Match((player, opponent), turns=4, noise=0.9, seed=9)
-        match.play()
-        self.assertEqual(player.history, [D, C, C, D])
-        self.assertEqual(player._recorded_history, [C, C, C, D])
-        self.assertEqual(opponent.history, [C, D, D, D])
-        self.assertFalse(player.contrite)
+    def test_strategy_with_noise5(self):
+        # Defects and no longer contrite
+        actions = list(zip([D, C, C, D], [C, D, D, D]))
+        self.versus_test(axl.Defector(), actions, turns=4, noise=0.5, seed=259,
+                         attrs={"_recorded_history": [C, C, C, D],
+                                "contrite": False})
 
 
 class TestAdaptiveTitForTat(TestPlayer):
@@ -979,7 +970,7 @@ class TestNTitsForMTats(TestPlayer):
         )
         actions = [(C, D), (D, C), (C, C), (C, D), (D, D)]
         self.versus_test(
-            axl.Random(), expected_actions=actions, seed=0, init_kwargs=init_kwargs
+            axl.Random(), expected_actions=actions, seed=37, init_kwargs=init_kwargs
         )
         actions = [(C, D), (D, C), (C, D), (D, D)]
         self.versus_test(
@@ -1078,7 +1069,7 @@ class TestMichaelos(TestPlayer):
             axl.Cooperator(),
             expected_actions=actions,
             attrs={"is_defector": False},
-            seed=2,
+            seed=1,
         )
 
         actions = [(C, C), (C, C), (C, C), (C, C)]
@@ -1087,7 +1078,7 @@ class TestMichaelos(TestPlayer):
             expected_actions=actions,
             attrs={"is_defector": False},
             match_attributes={"length": float("inf")},
-            seed=2,
+            seed=1,
         )
 
         actions = [(C, D), (D, D), (D, D), (D, D)]
@@ -1095,7 +1086,7 @@ class TestMichaelos(TestPlayer):
             axl.Defector(),
             expected_actions=actions,
             attrs={"is_defector": False},
-            seed=2,
+            seed=1,
         )
 
         actions = [(C, D), (D, D), (D, D), (D, D)]
@@ -1104,7 +1095,7 @@ class TestMichaelos(TestPlayer):
             expected_actions=actions,
             attrs={"is_defector": False},
             match_attributes={"length": float("inf")},
-            seed=2,
+            seed=1,
         )
 
         # Chance of becoming a defector is 50% after (D, C) occurs.
@@ -1113,7 +1104,7 @@ class TestMichaelos(TestPlayer):
             axl.Alternator(),
             expected_actions=actions,
             attrs={"is_defector": False},
-            seed=3,
+            seed=1,
         )
 
         actions = [(C, C), (C, D), (D, C), (D, D), (D, C), (D, D), (D, C)]
