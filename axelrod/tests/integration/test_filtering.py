@@ -50,7 +50,7 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
         memory_depth=float("inf"),
         strategies=axl.short_run_time_strategies,
     )
-    @settings(max_examples=5)
+    @settings(max_examples=5, deadline=None)
     def test_memory_depth_filtering(
         self, min_memory_depth, max_memory_depth, memory_depth, strategies
     ):

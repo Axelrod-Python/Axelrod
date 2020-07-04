@@ -1218,7 +1218,7 @@ class TestSummary(unittest.TestCase):
     @given(
         tournament=tournaments(min_size=2, max_size=5, max_turns=5, max_repetitions=3)
     )
-    @settings(max_examples=5)
+    @settings(max_examples=5, deadline=None)
     def test_summarise_without_failure(self, tournament):
         results = tournament.play(progress_bar=False)
         sd = results.summarise()
