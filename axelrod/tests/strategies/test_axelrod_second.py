@@ -50,30 +50,31 @@ class TestEatherley(TestPlayer):
         "manipulates_state": False,
     }
 
-    def test_strategy(self):
+    def test_reciprocate_cooperation(self):
         # Test cooperate after opponent cooperates
         actions = [(C, C)] * 5
         self.versus_test(axl.Cooperator(), expected_actions=actions)
 
+    def test_defect_again_defector(self):
         # If opponent only defects then probability of cooperating is 0.
         actions = [(C, D), (D, D), (D, D), (D, D), (D, D)]
         self.versus_test(axl.Defector(), expected_actions=actions)
 
-    def test_stocastic_response1(self):
+    def test_stochastic_response1(self):
         # Stochastic response to defect
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
         self.versus_test(axl.Alternator(), expected_actions=actions, seed=10)
 
-    def test_stocastic_response2(self):
+    def test_stochastic_response2(self):
         actions = [(C, C), (C, D), (C, C), (C, D), (D, C)]
         self.versus_test(axl.Alternator(), expected_actions=actions, seed=1)
 
-    def test_stocastic_response3(self):
+    def test_stochastic_response3(self):
         opponent = axl.MockPlayer(actions=[D, C, C, D])
         actions = [(C, D), (D, C), (C, C), (C, D), (C, D)]
         self.versus_test(opponent, expected_actions=actions, seed=1)
 
-    def test_stocastic_response4(self):
+    def test_stochastic_response4(self):
         opponent = axl.MockPlayer(actions=[D, C, C, D])
         actions = [(C, D), (D, C), (C, C), (C, D), (D, D)]
         self.versus_test(opponent, expected_actions=actions, seed=2)
@@ -169,8 +170,8 @@ class TestTranquilizer(TestPlayer):
         "manipulates_state": False,
     }
 
-    def test_init(self):
-        # test for initalised variables
+    def test_initialised_variables(self):
+        # test for initialised variables
         player = axl.SecondByTranquilizer()
         self.assertEqual(player.num_turns_after_good_defection, 0)
         self.assertEqual(player.opponent_consecutive_defections, 0)
@@ -546,10 +547,11 @@ class TestKluepfel(TestPlayer):
         "manipulates_state": False,
     }
 
-    def test_strategy(self):
+    def test_cooperates_with_cooperator(self):
         actions = [(C, C)] * 100  # Cooperate forever
         self.versus_test(axl.Cooperator(), expected_actions=actions)
 
+    def test_versus_alternator(self):
         # Since never two in a row, will respond in kind with 70% if
         # coop and 60% otherwise, after first couple
         actions = [
@@ -563,71 +565,21 @@ class TestKluepfel(TestPlayer):
         ]
         self.versus_test(axl.Alternator(), expected_actions=actions, seed=36)
 
-    def test_strategy2(self):
+    def test_versus_alternator2(self):
         actions = [(C, C), (C, D), (C, C), (D, D), (D, C), (C, D)]
         self.versus_test(axl.Alternator(), expected_actions=actions, seed=10)
 
-    def test_strategy3(self):
+    def test_versus_alternator3(self):
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (C, D), (C, C)]
         self.versus_test(axl.Alternator(), expected_actions=actions, seed=3)
 
-    def test_strategy4(self):
+    def test_detect_random(self):
         # Now we have to test the detect-random logic, which doesn't pick up
-        # until after 26 turns.  So we need a big sample.
-        actions = [
-            (C, D),
-            (D, D),
-            (D, D),
-            (D, D),
-            (D, D),
-            (D, C),
-            (C, C),
-            (C, D),
-            (C, C),
-            (D, D),
-            (D, C),
-            (C, C),
-            (C, D),
-            (D, D),
-            (C, D),
-            (D, D),
-            (D, C),
-            (C, C),
-            (D, C),
-            (C, C),
-            (C, D),
-            (D, D),
-            (D, C),
-            (C, D),
-            (D, C),
-            (C, C),
-            (C, D),
-            # Success detect random opponent for remaining turns.
-            (D, D),
-            (D, D),
-            (D, D),
-            (D, C),
-            (D, D),
-            (D, C),
-            (D, D),
-            (D, C),
-            (D, D),
-            (D, C),
-            (D, C),
-            (D, D),
-            (D, D),
-            (D, C),
-            (D, C),
-            (D, C),
-            (D, C),
-            (D, D),
-            (D, C),
-            (D, C),
-            (D, C),
-            (D, C),
-            (D, D),
-        ]
-        self.versus_test(axl.Random(0.5), expected_actions=actions, seed=10)
+        # until after 26 turns.
+        match = axl.Match((self.player(), axl.Random(0.5)), turns=40, seed=15)
+        result = match.play()
+        player_history = [turn[0] for turn in result]
+        self.assertEqual(player_history[27:], [D] * 13)
 
 
 class TestBorufsen(TestPlayer):
@@ -693,111 +645,54 @@ class TestCave(TestPlayer):
         "manipulates_state": False,
     }
 
-    def test_strategy(self):
+    def test_cooperate_against_cooperator(self):
+        """Strategy always cooperates if the opponent has always cooperated."""
         actions = [(C, C)] * 100
-        self.versus_test(axl.Cooperator(), expected_actions=actions)
+        self.versus_test(axl.Cooperator(), expected_actions=actions, seed=1)
 
-        # It will take until turn 18 to respond decide to respond D->D
-        actions = [(C, D)]
-        actions += [
-            (C, D),
-            (D, D),
-            (D, D),
-            (C, D),
-            (C, D),
-            (C, D),
-            (D, D),
-            (D, D),
-            (C, D),
-            (C, D),
-            (D, D),
-            (C, D),
-            (D, D),
-            (C, D),
-            (C, D),
-            (D, D),
-            (C, D),
-        ]  # Randomly choose
-        actions += [(D, D)] * 30  # Defect
-        self.versus_test(axl.Defector(), expected_actions=actions, seed=1)
+    def test_stochastic_behavior(self):
+        """Test random responses on turns 1 through 17."""
+        # Use an explicit match because the random behavior in turns 1 through 17
+        # makes finding seeds reproducibly difficult.
+        match = axl.Match((axl.SecondByCave(), axl.Alternator()), turns=30, seed=1)
+        match.play()
+        player_history = [round[0] for round in match.result]
+        self.assertTrue(C in player_history[1:17])
+        self.assertTrue(D in player_history[1:17])
 
-    def test_strategy2(self):
-        # Highly-defective opponent
-        # It will take until turn 20 to respond decide to repond D to C
+    def test_serial_defection_against_defector(self):
+        """Against defector, it will take until turn 18 to respond decide
+        to respond D->D."""
+        # Use an explicit match because the random behavior in turns 1 through 17
+        # makes finding seeds reproducibly difficult.
+        match = axl.Match((axl.SecondByCave(), axl.Defector()), turns=30, seed=1)
+        result = match.play()
+        self.assertEqual(result[0], (C, D))
+        self.assertEqual(result[18:], [(D, D)] * 12)
+
+    def test_serial_defection_against_mostly_defector(self):
+        """Against a mostly defecting strategy, it will take until turn 20 to
+        respond decide to respond D->D, with a cooperation in between."""
+        # Use an explicit match because the random behavior in turns 1 through 17
+        # makes finding seeds reproducibly difficult.
         opponent_actions = [D] * 17 + [C, C, C, C]
         almost_defector = axl.MockPlayer(actions=opponent_actions)
+        match = axl.Match((axl.SecondByCave(), almost_defector), turns=21, seed=1)
+        result = match.play()
+        self.assertEqual(result[0], (C, D))
+        self.assertEqual(result[-3], (C, C))
+        self.assertEqual(result[-2:], [(D, C), (D, C)])
 
-        actions = [(C, D)]
-        actions += [
-            (C, D),
-            (D, D),
-            (D, D),
-            (C, D),
-            (C, D),
-            (C, D),
-            (D, D),
-            (D, D),
-            (C, D),
-            (C, D),
-            (D, D),
-            (C, D),
-            (D, D),
-            (C, D),
-            (C, D),
-            (D, D),
-            (C, C),
-        ]  # Randomly choose
-        actions += [(C, C)]  # Coop for a minute
-        actions += [(D, C), (D, C)]
-        self.versus_test(almost_defector, expected_actions=actions, seed=1)
-
-    def test_strategy3(self):
-        # Here it will take until turn 40 to detect random and defect
-        actions = [(C, C)]
-        actions += [
-            (C, D),
-            (D, C),
-            (C, D),
-            (D, C),
-            (C, D),
-            (C, C),
-            (C, D),
-            (C, C),
-            (C, D),
-            (D, C),
-            (C, D),
-            (D, C),
-            (C, D),
-            (D, C),
-            (C, D),
-            (C, C),
-            (C, D),
-            (D, C),
-            (C, D),
-            (D, C),
-            (C, D),
-            (D, C),
-            (C, D),
-            (C, C),
-            (C, D),
-            (C, C),
-            (C, D),
-            (C, C),
-            (C, D),
-            (D, C),
-            (C, D),
-            (D, C),
-            (C, D),
-            (D, C),
-            (C, D),
-        ]  # Randomly choose
-        actions += [
-            (D, C),
-            (C, D),
-            (D, C),
-        ]  # 17 D have come, so tit for tat for a while
-        actions += [(D, D), (D, C)] * 100  # Random finally detected
-        self.versus_test(axl.Alternator(), expected_actions=actions, seed=114940)
+    def test_versus_alternator(self):
+        """Against Altenator, it will take until turn 40 to detect
+        random and defect."""
+        # Use an explicit match because the random behavior in turns 1 through 17
+        # makes finding seeds reproducibly difficult.
+        match = axl.Match((axl.SecondByCave(), axl.Alternator()), turns=100, seed=1)
+        result = match.play()
+        self.assertEqual(result[0], (C, C))
+        self.assertEqual(result[37: 40], [(C, D), (D, C), (D, D)])
+        self.assertEqual(result[40:], [(D, C), (D, D)] * 30)
 
 
 class TestWmAdams(TestPlayer):
@@ -1005,7 +900,7 @@ class TestHarrington(TestPlayer):
         "manipulates_state": False,
     }
 
-    def test_strategy(self):
+    def test_fair_weather_flag(self):
         # Build an opponent that will cooperate the first 36 turns and
         # defect on the 37th turn
         opponent_actions = [C] * 36 + [D] + [C] * 100
@@ -1016,7 +911,7 @@ class TestHarrington(TestPlayer):
             Defect37, expected_actions=actions, attrs={"mode": "Fair-weather"}
         )
 
-    def test_strategy2(self):
+    def test_exit_fair_weather(self):
         # Defect on 37th turn to activate Fair-weather, then later defect to
         # exit Fair-weather
         opponent_actions = [C] * 36 + [D] + [C] * 100 + [D] + [C] * 4
@@ -1029,7 +924,7 @@ class TestHarrington(TestPlayer):
             Defect37_big, expected_actions=actions, seed=10, attrs={"mode": "Normal"}
         )
 
-    def test_strategy3(self):
+    def test_exit_fair_weather2(self):
         actions = [(C, C)] * 36 + [(D, D)] + [(C, C)] * 100
         actions += [(C, D)]
         # Immediately exit Fair-weather
@@ -1040,7 +935,7 @@ class TestHarrington(TestPlayer):
             Defect37_big, expected_actions=actions, seed=1, attrs={"mode": "Normal"}
         )
 
-    def test_strategy4(self):
+    def test_non_fair_weather(self):
         # Opponent defects on 1st turn
         opponent_actions = [D] + [C] * 46
         Defect1 = axl.MockPlayer(actions=opponent_actions)
@@ -1055,7 +950,7 @@ class TestHarrington(TestPlayer):
         actions += [(D, C), (C, C), (C, C)]
         self.versus_test(Defect1, expected_actions=actions, seed=19)
 
-    def test_strategy5(self):
+    def test_turn37_defection(self):
         # Defection on turn 37 by opponent doesn't have an effect here
         opponent_actions = [D] + [C] * 35 + [D] + [C] * 10
         Defect1_37 = axl.MockPlayer(actions=opponent_actions)
@@ -1066,7 +961,7 @@ class TestHarrington(TestPlayer):
         actions += [(D, C), (C, C), (C, C)]
         self.versus_test(Defect1_37, expected_actions=actions, seed=19)
 
-    def test_strategy6(self):
+    def test_turn38_defection(self):
         # However a defect on turn 38 would be considered a burn.
         opponent_actions = [D] + [C] * 36 + [D] + [C] * 9
         Defect1_38 = axl.MockPlayer(actions=opponent_actions)
@@ -1080,7 +975,7 @@ class TestHarrington(TestPlayer):
             Defect1_38, expected_actions=actions, seed=2, attrs={"burned": True}
         )
 
-    def test_strategy7(self):
+    def test_parity_flags(self):
         # Use alternator to test parity flags.
         actions = [(C, C), (C, D)]
         # Even streak is set to 2, one for the opponent's defect and one for
@@ -1102,6 +997,7 @@ class TestHarrington(TestPlayer):
         actions += [(C, D), (D, C), (C, D), (D, C), (C, D), (C, C)]
         self.versus_test(axl.Alternator(), expected_actions=actions, seed=10)
 
+    def test_parity_limit_shortening(self):
         # Test for parity limit shortening.
         opponent_actions = [D, C] * 1000
         AsyncAlternator = axl.MockPlayer(actions=opponent_actions)
@@ -1117,9 +1013,11 @@ class TestHarrington(TestPlayer):
         # Now hit the limit sooner
         actions += [(C, D), (D, C), (C, D), (C, C)] * 5
         self.versus_test(
-            AsyncAlternator, expected_actions=actions, attrs={"parity_limit": 3}
+            AsyncAlternator, expected_actions=actions, attrs={"parity_limit": 3},
+            seed=10
         )
 
+    def test_detect_streak(self):
         # Use a Defector to test the 20-defect streak
         actions = [(C, D), (D, D), (D, D), (D, D), (D, D)]
         # Now the two parity flags are used
@@ -1136,57 +1034,21 @@ class TestHarrington(TestPlayer):
             axl.Defector(),
             expected_actions=actions,
             attrs={"recorded_defects": 119},
+            seed=10
         )
 
-    def test_strategy8(self):
-        # Detect random
-        expected_actions = [
-            (C, D),
-            (D, C),
-            (C, D),
-            (D, C),
-            (C, D),
-            (C, D),
-            (D, D),
-            (D, C),
-            (C, D),
-            (D, C),
-            (C, C),
-            (C, D),
-            (D, D),
-            (D, C),
-            (C, D),
-            (D, D),
-            (D, C),
-            (C, C),
-            (C, D),
-            (D, C),
-            (C, D),
-            (D, D),
-            (D, C),
-            (C, D),
-            (D, D),
-            (D, D),
-            (C, D),
-            (D, C),
-            (C, C),
-        ]
-        # Enter defect mode.
-        expected_actions += [(D, C)]
+    def test_detect_random(self):
+        """Tests that detect_random() is triggered on a Random opponent and
+        that the strategy defects thereafter."""
+        match = axl.Match((axl.SecondByHarrington(), axl.Random()), seed=10,
+                          turns=31)
+        match.play()
+        player = match.players[0]
+        # Check that detect_random(30) is True.
+        self.assertTrue(player.detect_random(30))
+        self.assertTrue(player.calculate_chi_squared(31) < 3)
 
-        self.versus_test(axl.Random(), expected_actions=expected_actions,
-                         turns=len(expected_actions), seed=10)
-
-        player = self.player()
-        match = axl.Match((player, axl.Random()), turns=len(expected_actions), seed=10)
-        # The history matrix will be [[0, 2], [5, 6], [3, 6], [4, 2]]
-        actions = match.play()
-        self.assertEqual(actions, expected_actions)
-        self.assertAlmostEqual(
-            player.calculate_chi_squared(len(expected_actions)), 2.395, places=3
-        )
-
-    def test_strategy9(self):
+    def test_exit_defect_mode(self):
         # Come back out of defect mode
         opponent_actions = [
             D,
@@ -1460,62 +1322,23 @@ class TestWhite(TestPlayer):
         "manipulates_state": False,
     }
 
-    def test_strategy(self):
+    def test_cooperates_with_cooperator(self):
         actions = [(C, C)] * 30
         self.versus_test(axl.Cooperator(), expected_actions=actions)
 
+    def test_defects_on_turn_10_against_defector(self):
         actions = [(C, D)] * 10 + [(D, D)] * 20
         self.versus_test(axl.Defector(), expected_actions=actions)
 
-    def test_strategy2(self):
-        actions = [
-            (C, D),
-            (C, D),
-            (C, C),
-            (C, C),
-            (C, C),
-            (C, D),
-            (C, C),
-            (C, D),
-            (C, C),
-            (C, D),
-            (C, C),
-            (C, D),
-            (C, D),
-            (D, C),
-            (C, D),
-            (D, D),
-            (D, C),
-            (C, D),
-            (D, D),
-            (D, C),
-        ]
-        self.versus_test(axl.Random(0.5), expected_actions=actions, seed=6)
+    def test_defection_logic_triggered(self):
+        actions = [(C, D), (C, D), (C, C), (C, D), (C, D), (C, C), (C, D), (C, D),
+                   (C, C), (C, D), (D, D), (D, C), (C, D), (D, D), (D, C), (C, D),
+                   (D, D), (D, C), (C, D), (D, D)]
+        self.versus_test(axl.CyclerDDC(), expected_actions=actions)
 
-    def test_strategy3(self):
-        actions = [
-            (C, C),
-            (C, D),
-            (C, D),
-            (C, C),
-            (C, C),
-            (C, C),
-            (C, C),
-            (C, D),
-            (C, D),
-            (C, D),
-            (C, D),
-            (D, D),
-            (D, C),
-            (C, C),
-            (C, C),
-            (C, D),
-            (C, C),
-            (C, D),
-            (C, C),
-            (C, D),
-        ]
-        self.versus_test(axl.Random(0.5), expected_actions=actions, seed=12)
+    def test_defection_logic_not_triggered(self):
+        actions = [(C, C), (C, D)] * 10
+        self.versus_test(axl.Alternator(), expected_actions=actions, seed=12)
 
 
 class TestBlack(TestPlayer):
@@ -1959,12 +1782,82 @@ class TestAppold(TestPlayer):
         "manipulates_state": False,
     }
 
-    def test_strategy(self):
-        # Should cooperate 100% of the time with the cooperator
+    def test_cooperate_against_cooperating_opponent(self):
+        """Strategy should cooperate 100% of the time with a fully cooperating opponent."""
         actions = [(C, C)] * 100
-        self.versus_test(axl.Cooperator(), expected_actions=actions)
+        self.versus_test(axl.Cooperator(), expected_actions=actions,
+                         attrs={
+                             "first_opp_def": False,
+                             "total_num_of_x": {C: 99, D: 1},
+                             "opp_c_after_x": {C: 99, D: 1}
+                         })
 
-    def test_strategy2(self):
+    def test_cooperate_on_first_four_turns(self):
+        """Strategy will cooperate on the first four turns regardless of opponent."""
+        # Hypothesis opportunity: choose random opponent
+        player_expected_actions = [C, C, C, C]
+        coplayer_expected_actions = [D, D, D, D]
+        expected_actions = list(zip(player_expected_actions, coplayer_expected_actions))
+        self.versus_test(axl.Defector(), turns=4, expected_actions=expected_actions,
+                         attrs={
+                             "first_opp_def": False,
+                             "total_num_of_x": {C: 3, D: 1},
+                             "opp_c_after_x": {C: 0, D: 1}
+                         })
+
+    def test_fifth_move_cooperate(self):
+        """Strategy will cooperate on a fifth move defection and set first_opp_def."""
+        player_expected_actions = [C, C, C, C, C, C]
+        coplayer_expected_actions = [C, C, C, C, D, C]
+        coplayer = axl.MockPlayer(actions=coplayer_expected_actions)
+        expected_actions = list(zip(player_expected_actions, coplayer_expected_actions))
+        self.versus_test(coplayer, turns=6, expected_actions=expected_actions,
+                         attrs={
+                             "first_opp_def": True,
+                             "total_num_of_x": {C: 5, D: 1},
+                             "opp_c_after_x": {C: 4, D: 1}
+                         })
+
+    def test_sixth_move_cooperate(self):
+        """Strategy will cooperate on a sixth move defection if it is the first."""
+        player_expected_actions = [C, C, C, C, C, C, C]
+        coplayer_expected_actions = [C, C, C, C, C, D, C]
+        coplayer = axl.MockPlayer(actions=coplayer_expected_actions)
+        expected_actions = list(zip(player_expected_actions, coplayer_expected_actions))
+        self.versus_test(coplayer, turns=7, expected_actions=expected_actions, seed=1,
+                         attrs={
+                             "first_opp_def": True,
+                             "total_num_of_x": {C: 6, D: 1},
+                             "opp_c_after_x": {C: 5, D: 1}
+                         })
+
+    def test_sixth_move_defect(self):
+        """Strategy will defect on a sixth move defection if it is not the first."""
+        player_expected_actions = [C, C, C, C, C, C, D]
+        coplayer_expected_actions = [C, C, C, C, D, D, C]
+        coplayer = axl.MockPlayer(actions=coplayer_expected_actions)
+        expected_actions = list(zip(player_expected_actions, coplayer_expected_actions))
+        self.versus_test(coplayer, turns=7, expected_actions=expected_actions, seed=10,
+                         attrs={
+                             "first_opp_def": True,
+                             "total_num_of_x": {C: 6, D: 1},
+                             "opp_c_after_x": {C: 4, D: 1}
+                         })
+
+    def test_later_single_defection_forgiveness(self):
+        # An opponent who defects after a long time, then tries cooperating
+        opponent_actions = [C] * 30 + [D] + [C] * 10
+        MostlyCooperates = axl.MockPlayer(actions=opponent_actions)
+        # Cooperate always at first
+        actions = [(C, C)] * 30
+        # The opponent defects once
+        actions += [(C, D)]
+        # But we forgive it (and record it).
+        actions += [(C, C)] * 10
+        self.versus_test(MostlyCooperates, expected_actions=actions, seed=1,
+                         attrs={"first_opp_def": True})
+
+    def test_stochastic_behavior(self):
         opponent = axl.Defector()
         # Cooperate always the first 4 turns
         actions = [(C, D)] * 4
@@ -1989,84 +1882,6 @@ class TestAppold(TestPlayer):
                     (C, D),
                     (C, D),
                     (D, D),
-                    (D, D),
-                    (D, D),
-                    (D, D),
-                    (D, D),
-                    (C, D),
-                    (D, D),
-                    (D, D),
-                    (D, D),
-                    (D, D),
-                    (D, D),
-                    (D, D),
-                    (C, D),
-                    (C, D),
-                    (D, D),
-                    (D, D)]
-        self.versus_test(opponent, expected_actions=actions, seed=1,
+        ]
+        self.versus_test(opponent, expected_actions=actions, seed=1018,
                          attrs={"first_opp_def": True})
-
-    def test_strategy3(self):
-        # An opponent who defects for a long time, then tries cooperating
-        opponent_actions = [C] * 30 + [D] + [C] * 10
-        MostlyCooperates = axl.MockPlayer(actions=opponent_actions)
-        # Cooperate always at first
-        actions = [(C, C)] * 30
-        # The opponent defects once
-        actions += [(C, D)]
-        # But we forgive it.
-        actions += [(C, C)] * 10
-        self.versus_test(MostlyCooperates, expected_actions=actions)
-
-        opponent = axl.CyclerDC()
-        # First three opponent actions get counted as reactions to C.  Fourth
-        # action will get counted on next turn.
-        actions = [(C, D), (C, C), (C, D), (C, C)]
-        self.versus_test(opponent, expected_actions=actions,
-                         attrs={"opp_c_after_x": {C: 1, D: 1},
-                                "total_num_of_x": {C: 3, D: 1}})
-        # Will cooperate 50% of the time
-        actions += [(C, D)]
-        self.versus_test(opponent, expected_actions=actions,
-                         attrs={"opp_c_after_x": {C: 2, D: 1},
-                                "total_num_of_x": {C: 4, D: 1},
-                                "first_opp_def": False}, seed=1)
-        # Always cooperate, because we forgive the first defect
-        actions += [(C, C)]
-        self.versus_test(opponent, expected_actions=actions,
-                         attrs={"first_opp_def": True}, seed=1)
-
-    def test_strategy4(self):
-        # Against a random opponent, will respond mostly randomly too.
-        actions = [(C, C),
-                   (C, C),
-                   (C, D),
-                   (C, C),
-                   (C, C),
-                   (C, D),
-                   (C, C),
-                   (C, C),
-                   (C, C),
-                   (D, C),
-                   (C, D),
-                   (D, D),
-                   (C, D),
-                   (C, D),
-                   (C, C),
-                   (C, C),
-                   (D, C),
-                   (C, D),
-                   (D, D),
-                   (C, C),
-                   (C, D),
-                   (C, C),
-                   (C, C),
-                   (C, D),
-                   (D, C),
-                   (C, D),
-                   (D, D),
-                   (C, D),
-                   (C, C),
-                   (D, C)]
-        self.versus_test(axl.Random(0.5), expected_actions=actions, seed=7)
