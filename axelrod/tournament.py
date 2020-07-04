@@ -71,6 +71,7 @@ class Tournament(object):
         self.players = players
         self.repetitions = repetitions
         self.edges = edges
+        self.seed = seed
 
         if turns is None and prob_end is None:
             turns = DEFAULT_TURNS
@@ -86,7 +87,7 @@ class Tournament(object):
             noise=self.noise,
             edges=edges,
             match_attributes=match_attributes,
-            seed=seed
+            seed=self.seed
         )
         self._logger = logging.getLogger(__name__)
 

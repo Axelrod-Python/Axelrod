@@ -59,11 +59,10 @@ As anticipated not all players interact with each other.
 
 It is also possible to create a probabilistic ending spatial tournament::
 
-    >>> prob_end_spatial_tournament = axl.Tournament(players, edges=edges, prob_end=.1, repetitions=1)
-    >>> axl.seed(0)
+    >>> prob_end_spatial_tournament = axl.Tournament(players, edges=edges, prob_end=.1, repetitions=1, seed=10)
     >>> prob_end_results = prob_end_spatial_tournament.play()
 
 We see that the match lengths are no longer all equal::
 
     >>> prob_end_results.match_lengths
-    [[[0, 0, 18.0, 14.0], [0, 0, 6.0, 3.0], [18.0, 6.0, 0, 0], [14.0, 3.0, 0, 0]]]
+    [[[0, 0, 20.0, 1.0], [0, 0, 46.0, 13.0], [20.0, 46.0, 0, 0], [1.0, 13.0, 0, 0]]]

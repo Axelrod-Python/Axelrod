@@ -19,19 +19,19 @@ the cache is built by passing counter objects of outcomes::
 
 Now let us create an Approximate Moran Process::
 
-    >>> axl.seed(3)
     >>> players = [axl.Defector(), axl.Random(), axl.Random()]
-    >>> amp = axl.ApproximateMoranProcess(players, cached_outcomes)
+    >>> amp = axl.ApproximateMoranProcess(players, cached_outcomes, seed=5)
     >>> results = amp.play()
     >>> amp.population_distribution()
     Counter({'Random: 0.5': 3})
 
-We see that, for this random seed, the :code:`Random: 0.5` won this Moran
-process. This is not what happens in a standard Moran process where the
+Note that by nature of being an approximation, it's possible that the results of an
+`ApproximateMoranProcess` may not always match the results of a standard `MoranProcess`,
+even for the same random seed. We see that, for this random seed, the :code:`Random: 0.5`
+won this Moran process. This is not what happens in a standard Moran process where the
 :code:`Random: 0.5` player will not win::
 
-    >>> axl.seed(3)
-    >>> amp = axl.MoranProcess(players)
-    >>> results = amp.play()
-    >>> amp.population_distribution()
+    >>> mp = axl.MoranProcess(players, seed=2)
+    >>> results = mp.play()
+    >>> mp.population_distribution()
     Counter({'Defector': 3})

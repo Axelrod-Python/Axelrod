@@ -86,6 +86,8 @@ class MoranProcess(object):
             or based on the player's mutation method, if present ("atomic").
         stop_on_fixation:
             A bool indicating if the process should stop on fixation
+        seed: int
+            A random seed for reproducibility
         """
         self.turns = turns
         self.prob_end = prob_end
@@ -476,7 +478,8 @@ class ApproximateMoranProcess(MoranProcess):
     """
 
     def __init__(
-        self, players: List[Player], cached_outcomes: dict, mutation_rate: float = 0
+        self, players: List[Player], cached_outcomes: dict, mutation_rate: float = 0,
+        seed: Optional[int] = None
     ) -> None:
         """
         Parameters
@@ -494,6 +497,7 @@ class ApproximateMoranProcess(MoranProcess):
             noise=0,
             deterministic_cache=None,
             mutation_rate=mutation_rate,
+            seed=seed
         )
         self.cached_outcomes = cached_outcomes
 
@@ -512,7 +516,6 @@ class ApproximateMoranProcess(MoranProcess):
         for i in range(N):
             for j in range(i + 1, N):
                 player_names = tuple([str(self.players[i]), str(self.players[j])])
-
                 cached_score = self._get_scores_from_cache(player_names)
                 scores[i] += cached_score[0]
                 scores[j] += cached_score[1]
