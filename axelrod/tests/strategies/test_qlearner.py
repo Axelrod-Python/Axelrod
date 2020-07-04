@@ -32,7 +32,7 @@ class TestRiskyQLearner(TestPlayer):
         self.versus_test(
             opponent=axl.Cooperator(),
             expected_actions=actions,
-            seed=5,
+            seed=32,
             attrs={
                 "Qs": {
                     "": {C: 0, D: 0.9},
@@ -66,7 +66,7 @@ class TestArrogantQLearner(TestPlayer):
         self.versus_test(
             opponent=axl.Cooperator(),
             expected_actions=actions,
-            seed=5,
+            seed=32,
             attrs={
                 "Qs": {
                     "": {C: 0, D: 0.9},
@@ -100,7 +100,7 @@ class TestHesitantQLearner(TestPlayer):
         self.versus_test(
             opponent=axl.Defector(),
             expected_actions=actions,
-            seed=5,
+            seed=32,
             attrs={
                 "Qs": {
                     "": {C: 0, D: 0.1},
@@ -134,7 +134,7 @@ class TestCautiousQLearner(TestPlayer):
         self.versus_test(
             opponent=axl.Defector(),
             expected_actions=actions,
-            seed=5,
+            seed=32,
             attrs={
                 "Qs": {
                     "": {C: 0, D: 0.1},
