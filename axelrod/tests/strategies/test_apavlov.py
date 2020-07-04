@@ -111,7 +111,7 @@ class TestAPavlov2011(TestPlayer):
         "manipulates_state": False,
     }
 
-    def test_strategy_versus_cooperator(self):
+    def test_strategy_cooperator(self):
         actions = [(C, C)] * 8
         self.versus_test(
             axl.Cooperator(),
@@ -119,7 +119,7 @@ class TestAPavlov2011(TestPlayer):
             attrs={"opponent_class": "Cooperative"},
         )
 
-    def test_strategy_versus_defector(self):
+    def test_strategy_defector(self):
         actions = [(C, D)] + [(D, D)] * 9
         self.versus_test(
             axl.Defector(),
@@ -127,21 +127,21 @@ class TestAPavlov2011(TestPlayer):
             attrs={"opponent_class": "ALLD"},
         )
 
-    def test_strategy_versus_defector2(self):
+    def test_strategy_defector2(self):
         opponent = axl.MockPlayer(actions=[C, D, D, D, D, D, D])
         actions = [(C, C), (C, D)] + [(D, D)] * 5 + [(D, C)]
         self.versus_test(
             opponent, expected_actions=actions, attrs={"opponent_class": "ALLD"}
         )
 
-    def test_strategy_versus_defector3(self):
+    def test_strategy_defector3(self):
         opponent = axl.MockPlayer(actions=[C, C, D, D, D, D, D])
         actions = [(C, C), (C, C), (C, D)] + [(D, D)] * 4 + [(D, C)]
         self.versus_test(
             opponent, expected_actions=actions, attrs={"opponent_class": "ALLD"}
         )
 
-    def test_strategy_versus_defector4(self):
+    def test_strategy_defector4(self):
         opponent = axl.MockPlayer(actions=[C, D, D, C, D, D, D])
         actions = [(C, C), (C, D), (D, D), (D, C), (C, D), (D, D), (D, D), (D, C)]
         self.versus_test(
@@ -155,28 +155,28 @@ class TestAPavlov2011(TestPlayer):
             opponent, expected_actions=actions, attrs={"opponent_class": "STFT"}
         )
 
-    def test_strategy_versus_stft2(self):
+    def test_strategy_stft2(self):
         opponent = axl.MockPlayer(actions=[C, D, C, D, C, D, D])
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (C, D), (C, D), (D, C)]
         self.versus_test(
             opponent, expected_actions=actions, attrs={"opponent_class": "STFT"}
         )
 
-    def test_strategy_versus_stft3(self):
+    def test_strategy_stft3(self):
         opponent = axl.MockPlayer(actions=[D, D, D, C, C, C, C])
         actions = [(C, D), (D, D), (D, D), (D, C), (C, C), (C, C), (C, C), (C, D)]
         self.versus_test(
             opponent, expected_actions=actions, attrs={"opponent_class": "STFT"}
         )
 
-    def test_strategy_versus_random(self):
+    def test_strategy_random(self):
         opponent = axl.MockPlayer(actions=[C, C, C, C, D, D])
         actions = [(C, C), (C, C), (C, C), (C, C), (C, D), (D, D), (D, C), (D, C)]
         self.versus_test(
             opponent, expected_actions=actions, attrs={"opponent_class": "Random"}
         )
 
-    def test_strategy_versus_random2(self):
+    def test_strategy_random2(self):
         opponent = axl.MockPlayer(actions=[D, D, C, C, C, C])
         actions = [(C, D), (D, D), (D, C), (C, C), (C, C), (C, C), (D, D), (D, D)]
         self.versus_test(
