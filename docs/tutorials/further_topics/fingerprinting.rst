@@ -23,11 +23,10 @@ Here is how to create a fingerprint of :code:`WinStayLoseShift` using
 :code:`TitForTat` as a probe::
 
     >>> import axelrod as axl
-    >>> axl.seed(0)  # Fingerprinting is a random process
     >>> strategy = axl.WinStayLoseShift
     >>> probe = axl.TitForTat
     >>> af = axl.AshlockFingerprint(strategy, probe)
-    >>> data = af.fingerprint(turns=10, repetitions=2, step=0.2)
+    >>> data = af.fingerprint(turns=10, repetitions=2, step=0.2, seed=1)
     >>> data
     {...
     >>> data[(0, 0)]
@@ -70,15 +69,14 @@ Note that it is also possible to pass a player instance to be fingerprinted
 and/or as a probe.
 This allows for the fingerprinting of parametrized strategies::
 
-    >>> axl.seed(0)
     >>> player = axl.Random(p=.1)
     >>> probe = axl.GTFT(p=.9)
     >>> af = axl.AshlockFingerprint(player, probe)
-    >>> data = af.fingerprint(turns=10, repetitions=2, step=0.2)
+    >>> data = af.fingerprint(turns=10, repetitions=2, step=0.2, seed=2)
     >>> data
     {...
     >>> data[(0, 0)]
-    4.4...
+    4.1
 
 Transitive Fingerprint
 -----------------------
@@ -91,10 +89,9 @@ By default the set of opponents consists of :code:`50` Random players that
 cooperate with increasing probability. This is how to obtain the transitive
 fingerprint for :code:`TitForTat`::
 
-     >>> axl.seed(0)
      >>> player = axl.TitForTat()
      >>> tf = axl.TransitiveFingerprint(player)
-     >>> data = tf.fingerprint(turns=40)
+     >>> data = tf.fingerprint(turns=40, seed=3)
 
 The data produced is a :code:`numpy` array showing the cooperation rate against
 a given opponent (row) in a given turn (column)::
@@ -113,10 +110,9 @@ It is also possible to visualise the fingerprint::
 
 It is also possible to fingerprint against a given set of opponents::
 
-     >>> axl.seed(1)
      >>> opponents = [s() for s in axl.demo_strategies]
      >>> tf = axl.TransitiveFingerprint(player, opponents=opponents)
-     >>> data = tf.fingerprint(turns=5, repetitions=10)
+     >>> data = tf.fingerprint(turns=5, repetitions=10, seed=4)
 
 The name of the opponents can be displayed in the plot::
 

@@ -303,6 +303,8 @@ class AshlockFingerprint(object):
             if None, will auto-generate a filename.
         progress_bar : bool
             Whether or not to create a progress bar which will be updated
+        seed : int, optional
+            Random seed for reproducibility
 
         Returns
         ----------
@@ -430,6 +432,7 @@ class TransitiveFingerprint(object):
         processes: int = None,
         filename: str = None,
         progress_bar: bool = True,
+        seed: int = None
     ) -> np.array:
         """Creates a spatial tournament to run the necessary matches to obtain
         fingerprint data.
@@ -476,6 +479,7 @@ class TransitiveFingerprint(object):
             turns=turns,
             noise=noise,
             repetitions=repetitions,
+            seed=seed
         )
         tournament.play(
             filename=filename,

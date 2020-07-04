@@ -75,3 +75,7 @@ Moran Process
 
 Similarly, a Moran process is essentially another type of tournament. The library's implementation
 will propagate child seeds to each match to ensure reproducibility.
+
+
+Fingerprints
+------------
