@@ -749,8 +749,8 @@ class SecondByCave(Player):
     - turn > 29 and percent defects > 0.65
     - turn > 19 and percent defects > 0.79
 
-    Otherwise, respond to cooperation with cooperation.  And respond to defcts
-    with either a defect (if opponent has defected at least 18 times) or with
+    Otherwise, respond to cooperation with cooperation.  And respond to defections
+    with either a defectection (if opponent has defected at least 18 times) or with
     a random (50/50) choice.  [Cooperate on first.]
 
     Names:
@@ -1546,8 +1546,8 @@ class SecondByWhite(Player):
     Strategy submitted to Axelrod's second tournament by Edward C White (K72R)
     and came in thirteenth in that tournament.
 
-    * If the opponent Cooperated last turn or in the first ten turns, then
-      Cooperate.
+    * Cooperate in the first ten turns
+    * If the opponent Cooperated last turn then Cooperate.
     * Otherwise Defect if and only if:
         floor(log(turn)) * opponent Defections >= turn
 

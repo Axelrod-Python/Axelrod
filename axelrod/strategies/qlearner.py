@@ -41,7 +41,7 @@ class RiskyQLearner(Player):
 
         super().__init__()
 
-        # Set this explicitely, since the constructor of super will not pick it up
+        # Set this explicitly, since the constructor of super will not pick it up
         # for any subclasses that do not override methods using random calls.
         self.classifier["stochastic"] = True
 

@@ -182,7 +182,7 @@ class MetaWinner(MetaPlayer):
         self._update_scores(coplay)
 
     def meta_strategy(self, results, opponent):
-        # Choice an action based on the collection of scores
+        # Choose an action based on the collection of scores
         bestscore = max(self.scores)
         beststrategies = [
             i for (i, score) in enumerate(self.scores) if score == bestscore
