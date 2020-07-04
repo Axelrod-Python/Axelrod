@@ -8,13 +8,11 @@ from axelrod.strategies.hmm import (
     HMMPlayer,
     SimpleHMM,
     is_stochastic_matrix,
-    random_vector,
 )
 
 from .test_evolvable_player import PartialClass, TestEvolvablePlayer
 from .test_player import TestMatch, TestPlayer
 
->>>>>>> upstream
 
 C, D = axl.Action.C, axl.Action.D
 
