@@ -21,23 +21,31 @@ class TestFirstByDavis(TestPlayer):
         "manipulates_state": False,
     }
 
-    def test_strategy(self):
-        # Cooperates for the first ten rounds
+    def test_cooperate_first_ten_rounds1(self):
+        """Cooperates for the first ten rounds."""
         actions = [(C, C)] * 10
         self.versus_test(axl.Cooperator(), expected_actions=actions)
 
+    def test_cooperate_first_ten_rounds2(self):
+        """Cooperates for the first ten rounds."""
         actions = [(C, D)] * 10
         self.versus_test(axl.Defector(), expected_actions=actions)
 
+    def test_cooperate_first_ten_rounds3(self):
+        """Cooperates for the first ten rounds."""
         actions = [(C, C), (C, D)] * 5
         self.versus_test(axl.Alternator(), expected_actions=actions)
 
-        # If opponent defects at any point then the player will defect forever
-        # (after 10 rounds)
+    def test_retaliation_after_ten_rounds1(self):
+        """If opponent defects at any point then the player will defect forever
+        (after 10 rounds)"""
         opponent = axl.MockPlayer(actions=[C] * 10 + [D])
         actions = [(C, C)] * 10 + [(C, D), (D, C)]
         self.versus_test(opponent, expected_actions=actions)
 
+    def test_retaliation_after_ten_rounds2(self):
+        """If opponent defects at any point then the player will defect forever
+        (after 10 rounds)"""
         opponent = axl.MockPlayer(actions=[C] * 15 + [D])
         actions = [(C, C)] * 15 + [(C, D), (D, C)]
         self.versus_test(opponent, expected_actions=actions)
@@ -57,13 +65,15 @@ class TestFirstByDowning(TestPlayer):
         "manipulates_state": False,
     }
 
-    def test_strategy(self):
+    def test_defect_first_two_rounds1(self):
         actions = [(D, C), (D, C), (C, C)]
         self.versus_test(axl.Cooperator(), expected_actions=actions)
 
+    def test_defect_first_two_rounds2(self):
         actions = [(D, D), (D, D), (D, D)]
         self.versus_test(axl.Defector(), expected_actions=actions)
 
+    def test_strategy(self):
         opponent = axl.MockPlayer(actions=[D, C, C])
         actions = [(D, D), (D, C), (D, C), (D, D)]
         self.versus_test(opponent, expected_actions=actions)
@@ -126,13 +136,16 @@ class TestFirstByFeld(TestPlayer):
             match.play()
             self.assertEqual(player._cooperation_probability(), player._end_coop_prob)
 
-    def test_strategy(self):
+    def test_stochastic_behavior(self):
         actions = [(C, C)] * 13 + [(D, C)]
         self.versus_test(axl.Cooperator(), expected_actions=actions, seed=1)
 
+    def test_stochastic_behavior2(self):
         actions = [(C, C)] * 11 + [(D, C)]
         self.versus_test(axl.Cooperator(), expected_actions=actions, seed=2)
 
+    def test_against_defector(self):
+        """Behavior is deterministic since opponent always defects."""
         actions = [(C, D)] + [(D, D)] * 20
         self.versus_test(axl.Defector(), expected_actions=actions)
 
@@ -283,18 +296,17 @@ class TestFirstByJoss(TestPlayer):
         expected_dictionary = {(C, C): 0.9, (C, D): 0, (D, C): 0.9, (D, D): 0}
         test_four_vector(self, expected_dictionary)
 
-    def test_strategy(self):
+    def test_stochastic_behavior(self):
         actions = [(C, C), (C, C), (C, C), (D, C)]
         self.versus_test(axl.Cooperator(), expected_actions=actions, seed=1)
 
+    def test_stochastic_behavior2(self):
         actions = [(C, C), (C, C), (C, C), (C, C)]
         self.versus_test(axl.Cooperator(), expected_actions=actions, seed=2)
 
+    def test_stochastic_behavior3(self):
         actions = [(C, D), (D, D), (D, D), (D, D)]
         self.versus_test(axl.Defector(), expected_actions=actions, seed=1)
-
-        actions = [(C, D), (D, D), (D, D), (D, D)]
-        self.versus_test(axl.Defector(), expected_actions=actions, seed=2)
 
 
 class TestFirstByNydegger(TestPlayer):
@@ -443,10 +455,11 @@ class TestFirstByAnonymous(TestPlayer):
         "manipulates_state": False,
     }
 
-    def test_strategy(self):
+    def test_stochastic_behavior(self):
         actions = [(D, C), (C, C), (C, C), (C, C), (D, C), (C, C)]
         self.versus_test(axl.Cooperator(), expected_actions=actions, seed=1)
 
+    def test_stochastic_behavior2(self):
         actions = [(D, C), (D, C), (D, C), (C, C), (D, C), (D, C)]
         self.versus_test(axl.Cooperator(), expected_actions=actions, seed=10)
 
