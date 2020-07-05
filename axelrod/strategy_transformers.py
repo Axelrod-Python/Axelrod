@@ -135,7 +135,7 @@ def StrategyTransformerFactory(
                 classifier = original_classifier
             classifier_makes_use_of = makes_use_of(PlayerClass)
             classifier_makes_use_of.update(
-                method_makes_use_of(strategy_wrapper))
+                makes_use_of_variant(strategy_wrapper))
             classifier["makes_use_of"] = classifier_makes_use_of
 
             # Define the new __repr__ method to add the wrapper arguments
