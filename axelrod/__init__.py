@@ -1,3 +1,4 @@
+# isort:skip_file
 DEFAULT_TURNS = 200
 
 # The order of imports matters!

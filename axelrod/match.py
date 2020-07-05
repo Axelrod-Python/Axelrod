@@ -2,10 +2,10 @@ import random
 from math import ceil, log
 
 import axelrod.interaction_utils as iu
-from axelrod import DEFAULT_TURNS
+from axelrod import DEFAULT_TURNS, Classifiers
 from axelrod.action import Action
-from axelrod import Classifiers
 from axelrod.game import Game
+
 from .deterministic_cache import DeterministicCache
 
 C, D = Action.C, Action.D

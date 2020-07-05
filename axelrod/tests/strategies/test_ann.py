@@ -6,9 +6,8 @@ from axelrod.evolvable_player import InsufficientParametersError
 from axelrod.load_data_ import load_weights
 from axelrod.strategies.ann import split_weights
 
-from .test_player import TestPlayer
 from .test_evolvable_player import PartialClass, TestEvolvablePlayer
-
+from .test_player import TestPlayer
 
 C, D = axl.Action.C, axl.Action.D
 nn_weights = load_weights()

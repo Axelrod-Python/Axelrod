@@ -14,7 +14,7 @@ been made they are explained in the strategy docstrings.
 """
 
 import random
-from typing import Dict, List, Tuple, Optional
+from typing import Dict, List, Optional, Tuple
 
 from axelrod.action import Action
 from axelrod.player import Player

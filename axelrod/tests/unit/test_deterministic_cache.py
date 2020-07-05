@@ -1,7 +1,7 @@
-import unittest
 import os
 import pathlib
 import pickle
+import unittest
 
 import axelrod as axl
 from axelrod.load_data_ import axl_filename

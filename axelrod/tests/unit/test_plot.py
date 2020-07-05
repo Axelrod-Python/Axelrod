@@ -1,14 +1,12 @@
+import pathlib
+import tempfile
 import unittest
 
-import tempfile
+import axelrod as axl
 import matplotlib
 import matplotlib.pyplot as plt
-import pathlib
-
-from numpy import mean
-
-import axelrod as axl
 from axelrod.load_data_ import axl_filename
+from numpy import mean
 
 
 class TestPlot(unittest.TestCase):

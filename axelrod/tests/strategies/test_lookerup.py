@@ -1,10 +1,8 @@
 """Test for the Looker Up strategy."""
 
-import unittest
-
 import copy
-
 import random
+import unittest
 
 import axelrod as axl
 from axelrod.action import str_to_actions
@@ -16,6 +14,7 @@ from axelrod.strategies.lookerup import (
     create_lookup_table_keys,
     make_keys_into_plays,
 )
+
 from .test_evolvable_player import PartialClass, TestEvolvablePlayer
 from .test_player import TestPlayer
 
