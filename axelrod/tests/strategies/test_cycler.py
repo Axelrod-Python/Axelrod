@@ -156,25 +156,28 @@ class TestEvolvableCycler(unittest.TestCase):
         # Must specify at least one of cycle or cycle_length
         self.assertRaises(
             InsufficientParametersError,
-            self.player_class
+            self.player_class,
+            seed=1,  # to prevent warning for unset seed
         )
         self.assertRaises(
             InsufficientParametersError,
             self.player_class,
-            cycle=""
+            cycle="",
+            seed=1,  # to prevent warning for unset seed
         )
         self.assertRaises(
             InsufficientParametersError,
             self.player_class,
-            cycle_length=0
+            cycle_length=0,
+            seed=1,  # to prevent warning for unset seed
         )
 
         cycle = "C" * random.randint(0, 20) + "D" * random.randint(0, 20)
-        self.assertEqual(self.player_class(cycle=cycle)._normalize_parameters(cycle=cycle),
+        self.assertEqual(self.player_class(cycle=cycle, seed=1)._normalize_parameters(cycle=cycle),
                          (cycle, len(cycle)))
 
         cycle_length = random.randint(1, 20)
-        random_cycle, cycle_length2 = self.player_class(cycle=cycle)._normalize_parameters(cycle_length=cycle_length)
+        random_cycle, cycle_length2 = self.player_class(cycle=cycle, seed=1)._normalize_parameters(cycle_length=cycle_length)
         self.assertEqual(len(random_cycle), cycle_length)
         self.assertEqual(cycle_length, cycle_length2)
 
@@ -183,18 +186,18 @@ class TestEvolvableCycler(unittest.TestCase):
         cycle2 = "D" * 6
         cross_cycle = "CCCCCD"
 
-        player1 = self.player_class(cycle=cycle1, seed=4)
-        player2 = self.player_class(cycle=cycle2, seed=5)
+        player1 = self.player_class(cycle=cycle1, seed=1)
+        player2 = self.player_class(cycle=cycle2, seed=2)
         crossed = player1.crossover(player2)
         self.assertEqual(cross_cycle, crossed.cycle)
 
     def test_crossover_odd_length(self):
         cycle1 = "C" * 7
         cycle2 = "D" * 7
-        cross_cycle = "CCDDDDD"
+        cross_cycle = "CCCCCDD"
 
-        player1 = self.player_class(cycle=cycle1, seed=6)
-        player2 = self.player_class(cycle=cycle2, seed=7)
+        player1 = self.player_class(cycle=cycle1, seed=1)
+        player2 = self.player_class(cycle=cycle2, seed=2)
         crossed = player1.crossover(player2)
         self.assertEqual(cross_cycle, crossed.cycle)
 

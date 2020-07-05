@@ -666,18 +666,21 @@ class TestEvolvableLookerUp(unittest.TestCase):
 
         self.assertRaises(
             InsufficientParametersError,
-            self.player_class
+            self.player_class,
+            seed=1
         )
         self.assertRaises(
             InsufficientParametersError,
             self.player_class,
             pattern=pattern,
             initial_actions=initial_actions,
+            seed=1
         )
         self.assertRaises(
             InsufficientParametersError,
             self.player_class,
             lookup_dict=lookup_dict,
+            seed=1
         )
 
 

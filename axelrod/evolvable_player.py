@@ -11,6 +11,18 @@ class InsufficientParametersError(Exception):
         super().__init__(*args)
 
 
+class SeedNotGivenError(Exception):
+    """Error indicating that a required seed was not supplied."""
+    def __init__(self, *args):
+        super().__init__(*args)
+
+
+# class SeedNullingError(Exception):
+#     """Error indicating that a required seed was not supplied."""
+#     def __init__(self, *args):
+#         super().__init__(*args)
+
+
 class EvolvablePlayer(Player):
     """A class for a player that can evolve, for use in the Moran process or with reinforcement learning algorithms.
 
@@ -21,9 +33,16 @@ class EvolvablePlayer(Player):
     parent_class = Player
     parent_kwargs = []  # type: List[str]
 
+    # Parameter seed is actually required.
     def __init__(self, seed=None):
+        # if seed is None:
+        #     raise SeedNotGivenError(seed)
+            # # Was the seed already set?
+            # if (not hasattr(self, "_seed")) or (hasattr(self, "_seed") and self._seed==None):
+            #     raise SeedNotGivenError()
+            # raise SeedNullingError()
+        # else:
         super().__init__()
-        # if set_seed:
         self.set_seed(seed=seed)
 
     def overwrite_init_kwargs(self, **kwargs):

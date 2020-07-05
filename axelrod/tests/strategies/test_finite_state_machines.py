@@ -1052,12 +1052,14 @@ class TestEvolvableFSMPlayer(unittest.TestCase):
     def test_normalized_parameters(self):
         self.assertRaises(
             InsufficientParametersError,
-            self.player_class
+            self.player_class,
+            seed=1,  # To prevent exception from unset seed.
         )
         self.assertRaises(
             InsufficientParametersError,
             self.player_class,
-            transitions=[[0, C, 1, D], [0, D, 0, D], [1, C, 1, C], [1, D, 1, D]]
+            transitions=[[0, C, 1, D], [0, D, 0, D], [1, C, 1, C], [1, D, 1, D]],
+            seed=1,  # To prevent exception from unset seed.
         )
 
     def test_init(self):
@@ -1065,7 +1067,8 @@ class TestEvolvableFSMPlayer(unittest.TestCase):
         player = axl.EvolvableFSMPlayer(
             transitions=transitions,
             initial_action=D,
-            initial_state=1
+            initial_state=1,
+            seed=1,  # To prevent exception from unset seed.
         )
         self.assertEqual(player.num_states, 2)
         self.assertEqual(player.fsm.transitions(), transitions)
@@ -1075,7 +1078,7 @@ class TestEvolvableFSMPlayer(unittest.TestCase):
     def test_vector_to_instance(self):
         num_states = 4
         vector = [random.random() for _ in range(num_states * 4 + 1)]
-        player = axl.EvolvableFSMPlayer(num_states=num_states)
+        player = axl.EvolvableFSMPlayer(num_states=num_states, seed=1)
         player.receive_vector(vector)
         self.assertIsInstance(player, axl.EvolvableFSMPlayer)
 
@@ -1086,7 +1089,7 @@ class TestEvolvableFSMPlayer(unittest.TestCase):
 
     def test_create_vector_bounds(self):
         num_states = 4
-        player = axl.EvolvableFSMPlayer(num_states=num_states)
+        player = axl.EvolvableFSMPlayer(num_states=num_states, seed=1)
         lb, ub = player.create_vector_bounds()
         self.assertEqual(lb, [0] * (4 * num_states + 1))
         self.assertEqual(ub, [1] * (4 * num_states + 1))

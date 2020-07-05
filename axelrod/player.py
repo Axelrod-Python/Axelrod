@@ -54,7 +54,6 @@ class Player(object):
         self._history = History()
         self.classifier = copy.deepcopy(self.classifier)
         self.set_match_attributes()
-        # self.set_seed(seed=self._seed)
 
     def __eq__(self, other):
         """
@@ -118,13 +117,14 @@ class Player(object):
         self.match_attributes = {"length": length, "game": game, "noise": noise}
         self.receive_match_attributes()
 
-    def set_seed(self, seed=None):
+    def set_seed(self, seed):
         """Set a random seed for the player's random number generator."""
         if seed is None:
             warnings.warn(
                 "Initializing player with seed from Axelrod module random number generator."
                 " Results may not be seed reproducible.")
             self._seed = _module_random.random_seed_int()
+            # raise Exception()
         else:
             self._seed = seed
         self._random = RandomGenerator(seed=self._seed)
@@ -164,7 +164,6 @@ class Player(object):
         cls = self.__class__
         new_player = cls(**self.init_kwargs)
         new_player.match_attributes = copy.copy(self.match_attributes)
-        # new_player.set_seed(self._seed)
         return new_player
 
     def reset(self):

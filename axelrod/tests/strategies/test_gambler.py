@@ -524,7 +524,7 @@ class TestEvolvableGambler(unittest.TestCase):
     def test_receive_vector(self):
         plays, op_plays, op_start_plays = 1, 1, 1
         player = axl.EvolvableGambler(
-            parameters=(plays, op_plays, op_start_plays))
+            parameters=(plays, op_plays, op_start_plays), seed=1)
 
         self.assertRaises(AttributeError, axl.EvolvableGambler.__getattribute__,
                           *[player, 'vector'])
@@ -536,7 +536,7 @@ class TestEvolvableGambler(unittest.TestCase):
     def test_vector_to_instance(self):
         plays, op_plays, op_start_plays = 1, 1, 1
         player = axl.EvolvableGambler(
-            parameters=(plays, op_plays, op_start_plays))
+            parameters=(plays, op_plays, op_start_plays), seed=1)
 
         vector = [random.random() for _ in range(8)]
         player.receive_vector(vector)
@@ -548,7 +548,7 @@ class TestEvolvableGambler(unittest.TestCase):
     def test_create_vector_bounds(self):
         plays, op_plays, op_start_plays = 1, 1, 1
         player = axl.EvolvableGambler(
-            parameters=(plays, op_plays, op_start_plays))
+            parameters=(plays, op_plays, op_start_plays), seed=1)
         lb, ub = player.create_vector_bounds()
         self.assertIsInstance(lb, list)
         self.assertIsInstance(ub, list)

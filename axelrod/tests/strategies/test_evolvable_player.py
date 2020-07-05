@@ -12,6 +12,14 @@ C, D = Action.C, Action.D
 
 def PartialClass(cls, **kwargs):
     class PartialedClass(cls):
+        # Set a seed to avoid undefined behavior in tests.
+        try:
+            seed = kwargs["seed"]
+        except KeyError:
+            kwargs["seed"] = 1
+        else:
+            if seed is None:
+                kwargs["seed"] = 1
         __init__ = functools.partialmethod(
             cls.__init__, **kwargs)
 
@@ -21,7 +29,7 @@ def PartialClass(cls, **kwargs):
 class EvolvableTestOpponent(axl.EvolvablePlayer):
     name = "EvolvableTestOpponent"
 
-    def __init__(self, value=None, seed=None):
+    def __init__(self, value=None, seed=1):
         super().__init__(seed=seed)
         if value:
             self.value = value
@@ -51,9 +59,12 @@ class TestEvolvablePlayer(TestPlayer):
     parent_class = None
     init_parameters = dict()
 
-    def player(self, seed=None):
+    def player(self, seed=1):
+        if seed is None:
+            raise Exception()
         params = self.init_parameters.copy()
-        params["seed"] = seed
+        if "seed" not in params:
+            params["seed"] = seed
         return self.player_class(**params)
 
     def test_repr(self):
@@ -74,8 +85,8 @@ class TestEvolvablePlayer(TestPlayer):
         """Test that randomization on initialization produces different strategies."""
         if self.init_parameters:
             return
-        player1 = self.player(seed=0)
-        player2 = self.player(seed=0)
+        player1 = self.player(seed=1)
+        player2 = self.player(seed=1)
         self.assertEqual(player1, player2)
 
         for seed_ in range(2, 20):
@@ -100,14 +111,14 @@ class TestEvolvablePlayer(TestPlayer):
 
     def test_mutate_and_clone(self):
         """Test that mutated players clone properly."""
-        player = self.player(seed=0)
+        player = self.player(seed=1)
         mutant = player.clone().mutate()
         clone = mutant.clone()
         self.assertEqual(clone, mutant)
 
     def test_crossover(self):
         """Test that crossover produces different strategies."""
-        rng = axl.RandomGenerator(seed=0)
+        rng = axl.RandomGenerator(seed=1)
         for _ in range(20):
             players = []
             for _ in range(2):
@@ -130,7 +141,7 @@ class TestEvolvablePlayer(TestPlayer):
 
     def test_serialization(self):
         """Serializing and deserializing should return the original player."""
-        player = self.player(seed=0)
+        player = self.player(seed=1)
         serialized = player.serialize_parameters()
         deserialized_player = player.__class__.deserialize_parameters(serialized)
         self.assertEqual(player, deserialized_player)
@@ -138,7 +149,7 @@ class TestEvolvablePlayer(TestPlayer):
 
     def test_serialization_csv(self):
         """Serializing and deserializing should return the original player."""
-        player = self.player(seed=0)
+        player = self.player(seed=1)
         serialized = player.serialize_parameters()
         s = "0, 1, {}, 3".format(serialized)
         s2 = s.split(',')[2]
@@ -146,15 +157,15 @@ class TestEvolvablePlayer(TestPlayer):
         self.assertEqual(player, deserialized_player)
         self.assertEqual(deserialized_player, deserialized_player.clone())
 
-    def behavior_test(self, player1, player2):
+    def behavior_test(self, player1, player2, seed=7):
         """Test that the evolvable player plays the same as its (nonevolvable) parent class."""
         for opponent_class in [axl.Random, axl.TitForTat, axl.Alternator]:
             opponent = opponent_class()
-            match = axl.Match((player1.clone(), opponent), seed=7)
+            match = axl.Match((player1.clone(), opponent), seed=seed)
             results1 = match.play()
 
             opponent = opponent_class()
-            match = axl.Match((player2.clone(), opponent), seed=7)
+            match = axl.Match((player2.clone(), opponent), seed=seed)
             results2 = match.play()
 
             self.assertEqual(results1, results2)
@@ -164,7 +175,7 @@ class TestEvolvablePlayer(TestPlayer):
         if not self.parent_class:
             return
 
-        player = self.player_class(**self.init_parameters)
+        player = self.player()
         init_kwargs = {k: player.init_kwargs[k] for k in self.parent_kwargs}
         parent_player = self.parent_class(**init_kwargs)
         self.behavior_test(player, parent_player)
@@ -185,11 +196,11 @@ class TestUtilityFunctions(unittest.TestCase):
         list1 = [[0, C, 1, D], [0, D, 0, D], [1, C, 1, C], [1, D, 1, D]]
         list2 = [[0, D, 1, C], [0, C, 0, C], [1, D, 1, D], [1, C, 1, C]]
 
-        rng = axl.RandomGenerator(seed=100)
+        rng = axl.RandomGenerator(seed=5)
         crossed = crossover_lists(list1, list2, rng)
         self.assertEqual(crossed, list1[:3] + list2[3:])
 
-        rng = axl.RandomGenerator(seed=101)
+        rng = axl.RandomGenerator(seed=1)
         crossed = crossover_lists(list1, list2, rng)
         self.assertEqual(crossed, list1[:1] + list2[1:])
 
@@ -197,10 +208,10 @@ class TestUtilityFunctions(unittest.TestCase):
         dict1 = {'1': 1, '2': 2, '3': 3}
         dict2 = {'1': 'a', '2': 'b', '3': 'c'}
 
-        rng = axl.RandomGenerator(seed=100)
+        rng = axl.RandomGenerator(seed=1)
         crossed = crossover_dictionaries(dict1, dict2, rng)
         self.assertEqual(crossed, {'1': 1, '2': 'b', '3': 'c'})
 
-        rng = axl.RandomGenerator(seed=101)
+        rng = axl.RandomGenerator(seed=2)
         crossed = crossover_dictionaries(dict1, dict2, rng)
         self.assertEqual(crossed, dict2)

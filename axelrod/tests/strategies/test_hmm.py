@@ -220,7 +220,8 @@ class TestEvolvableHMMPlayer(unittest.TestCase):
 
         self.assertRaises(
             InsufficientParametersError,
-            self.player_class
+            self.player_class,
+            seed=1
         )
         self.assertRaises(
             InsufficientParametersError,
@@ -228,7 +229,8 @@ class TestEvolvableHMMPlayer(unittest.TestCase):
             transitions_C=transitions_C,
             transitions_D=transitions_D,
             emission_probabilities=emission_probabilities,
-            initial_state=None
+            initial_state=None,
+            seed=1
         )
         self.assertRaises(
             InsufficientParametersError,
@@ -236,13 +238,15 @@ class TestEvolvableHMMPlayer(unittest.TestCase):
             transitions_C=transitions_C,
             transitions_D=transitions_D,
             emission_probabilities=emission_probabilities,
-            initial_action=None
+            initial_action=None,
+            seed=1
         )
         self.assertRaises(
             InsufficientParametersError,
             self.player_class,
             initial_state=initial_state,
             initial_action=initial_action,
+            seed=1
         )
 
     def test_vector_to_instance(self):
@@ -253,7 +257,7 @@ class TestEvolvableHMMPlayer(unittest.TestCase):
             vector.extend(list(rng.random_vector(num_states)))
         for _ in range(num_states + 1):
             vector.append(rng.random())
-        player = self.player_class(num_states=num_states)
+        player = self.player_class(num_states=num_states, seed=1)
         player.receive_vector(vector=vector)
         self.assertIsInstance(player, self.player_class)
 
@@ -261,7 +265,7 @@ class TestEvolvableHMMPlayer(unittest.TestCase):
         num_states = 4
         size = 2 * num_states ** 2 + num_states + 1
 
-        player = self.player_class(num_states=num_states)
+        player = self.player_class(num_states=num_states, seed=1)
         lb, ub = player.create_vector_bounds()
 
         self.assertIsInstance(lb, list)

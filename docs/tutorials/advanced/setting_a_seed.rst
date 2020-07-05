@@ -74,8 +74,11 @@ Moran Process
 -------------
 
 Similarly, a Moran process is essentially another type of tournament. The library's implementation
-will propagate child seeds to each match to ensure reproducibility.
+will propagate child seeds to each match to ensure reproducibility. See also the documentation on
+:code:`EvolvablePlayers`.
 
 
 Fingerprints
 ------------
+Since fingerprint generation depends on tournaments, fingerprints can also be given a seed for
+reproducibility.

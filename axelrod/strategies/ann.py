@@ -197,7 +197,7 @@ class ANN(Player):
         self, num_features: int, num_hidden: int,
         weights: List[float] = None
     ) -> None:
-        super().__init__()
+        Player.__init__(self)
         self.num_features = num_features
         self.num_hidden = num_hidden
         self._process_weights(weights, num_features, num_hidden)
@@ -234,14 +234,13 @@ class EvolvableANN(ANN, EvolvablePlayer):
         mutation_distance: int = 5,
         seed: int = None
     ) -> None:
-        self.set_seed(seed=seed)
+        EvolvablePlayer.__init__(self, seed=seed)
         num_features, num_hidden, weights, mutation_probability = self._normalize_parameters(
             num_features, num_hidden, weights, mutation_probability)
         ANN.__init__(self,
                      num_features=num_features,
                      num_hidden=num_hidden,
                      weights=weights)
-        EvolvablePlayer.__init__(self)
         self.mutation_probability = mutation_probability
         self.mutation_distance = mutation_distance
         self.overwrite_init_kwargs(

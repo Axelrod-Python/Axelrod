@@ -68,9 +68,9 @@ class EvolvableGambler(Gambler, EvolvableLookerUp):
             initial_actions=initial_actions,
             pattern=pattern,
             parameters=parameters,
-            mutation_probability=mutation_probability
+            mutation_probability=mutation_probability,
+            seed=seed
         )
-        self.set_seed(seed=seed)
         self.pattern = list(self.pattern)
         Gambler.__init__(
             self,

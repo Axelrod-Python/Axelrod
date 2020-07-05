@@ -88,7 +88,7 @@ class Cycler(Player):
         Alternator is equivalent to Cycler("CD")
 
         """
-        super().__init__()
+        Player.__init__(self)
         self.cycle = cycle
         self.set_cycle(cycle=cycle)
 

@@ -115,7 +115,8 @@ class FSMPlayer(Player):
         initial_state: int = 1,
         initial_action: Action = C
     ) -> None:
-        super().__init__()
+        # super().__init__()
+        Player.__init__(self)
         self.initial_state = initial_state
         self.initial_action = initial_action
         self.fsm = SimpleFSM(transitions, initial_state)
@@ -153,7 +154,7 @@ class EvolvableFSMPlayer(FSMPlayer, EvolvablePlayer):
     ) -> None:
         """If transitions, initial_state, and initial_action are None
         then generate random parameters using num_states."""
-        self.set_seed(seed=seed)
+        EvolvablePlayer.__init__(self, seed=seed)
         transitions, initial_state, initial_action, num_states = self._normalize_parameters(
             transitions, initial_state, initial_action, num_states)
         FSMPlayer.__init__(
@@ -161,7 +162,7 @@ class EvolvableFSMPlayer(FSMPlayer, EvolvablePlayer):
             transitions=transitions,
             initial_state=initial_state,
             initial_action=initial_action)
-        EvolvablePlayer.__init__(self)
+        # EvolvablePlayer.__init__(self)
         self.mutation_probability = mutation_probability
         self.overwrite_init_kwargs(
             transitions=transitions,

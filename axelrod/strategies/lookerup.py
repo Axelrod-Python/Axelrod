@@ -322,7 +322,7 @@ class LookerUp(Player):
         parameters: Plays = None
     ) -> None:
 
-        super().__init__()
+        Player.__init__(self)
         self.parameters = parameters
         self.pattern = pattern
         self._lookup = self._get_lookup_table(lookup_dict, pattern, parameters)
@@ -407,7 +407,7 @@ class EvolvableLookerUp(LookerUp, EvolvablePlayer):
         mutation_probability: float = None,
         seed: int = None
     ) -> None:
-        self.set_seed(seed=seed)
+        EvolvablePlayer.__init__(self, seed=seed)
         lookup_dict, initial_actions, pattern, parameters, mutation_probability = self._normalize_parameters(
             lookup_dict, initial_actions, pattern, parameters, mutation_probability
         )
@@ -418,7 +418,6 @@ class EvolvableLookerUp(LookerUp, EvolvablePlayer):
             pattern=pattern,
             parameters=parameters,
         )
-        EvolvablePlayer.__init__(self)
         self.mutation_probability = mutation_probability
         self.overwrite_init_kwargs(
             lookup_dict=lookup_dict,

@@ -439,7 +439,7 @@ class GraphMoranProcess(unittest.TestCase):
     def test_cycle(self):
         """A cycle should sometimes produce different results vs. the default
         case."""
-        seeds = [(1, True), (8, False)]
+        seeds = [(1, True), (10, False)]
         players = []
         N = 6
         graph = axl.graph.cycle(N)
@@ -459,7 +459,7 @@ class GraphMoranProcess(unittest.TestCase):
     def test_asymmetry(self):
         """Asymmetry in interaction and reproduction should sometimes
         produce different results."""
-        seeds = [(1, True), (21, False)]
+        seeds = [(1, True), (20, False)]
         players = []
         N = 6
         graph1 = axl.graph.cycle(N)
@@ -486,7 +486,7 @@ class GraphMoranProcess(unittest.TestCase):
     def test_cycle_death_birth(self):
         """Test that death-birth can have different outcomes in the graph
         case."""
-        seeds = [(1, True), (5, False)]
+        seeds = [(1, True), (6, False)]
         players = []
         N = 6
         graph = axl.graph.cycle(N)

@@ -103,12 +103,14 @@ class TestEvolvableANN(unittest.TestCase):
     def test_normalized_parameters(self):
         self.assertRaises(
             InsufficientParametersError,
-            self.player_class(3, 3)._normalize_parameters,
+            self.player_class(3, 3, seed=1)._normalize_parameters,
+            # To prevent exception from unset seed.
         )
         self.assertRaises(
             InsufficientParametersError,
-            self.player_class(3, 3)._normalize_parameters,
-            weights=nn_weights["Evolved ANN 5"][2]
+            self.player_class(3, 3, seed=1)._normalize_parameters,
+            weights=nn_weights["Evolved ANN 5"][2],
+            # To prevent exception from unset seed.
         )
 
 

@@ -149,7 +149,7 @@ class HMMPlayer(Player):
         initial_state=0,
         initial_action=C
     ) -> None:
-        super().__init__()
+        Player.__init__(self)
         if not transitions_C:
             transitions_C = [[1]]
             transitions_D = [[1]]
@@ -211,7 +211,7 @@ class EvolvableHMMPlayer(HMMPlayer, EvolvablePlayer):
         mutation_probability=None,
         seed: int = None
     ) -> None:
-        self.set_seed(seed=seed)
+        EvolvablePlayer.__init__(self, seed=seed)
         transitions_C, transitions_D, emission_probabilities, initial_state, initial_action, num_states, mutation_probability = self._normalize_parameters(
             transitions_C, transitions_D, emission_probabilities, initial_state, initial_action, num_states, mutation_probability)
         self.mutation_probability = mutation_probability
@@ -222,7 +222,6 @@ class EvolvableHMMPlayer(HMMPlayer, EvolvablePlayer):
                            initial_state=initial_state,
                            initial_action=initial_action)
         self.hmm._random = self._random
-        EvolvablePlayer.__init__(self)
         self.overwrite_init_kwargs(
             transitions_C=transitions_C,
             transitions_D=transitions_D,
