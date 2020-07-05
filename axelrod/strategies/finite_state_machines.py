@@ -1,6 +1,6 @@
 import itertools
 from random import randrange
-from typing import Any, List, Sequence, Tuple, Union
+from typing import Any, Dict, List, Sequence, Text, Tuple, Union
 
 import numpy.random as random
 from axelrod.action import Action
@@ -102,7 +102,7 @@ class FSMPlayer(Player):
 
     name = "FSM Player"
 
-    classifier = {
+    classifier: Dict[Text, Any] = {
         "memory_depth": 1,
         "stochastic": False,
         "long_run_time": False,
