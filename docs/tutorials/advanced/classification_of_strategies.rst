@@ -43,7 +43,7 @@ strategy's logic as default, we use :code:`Classifiers[<classifier>](
 <strategy>)`::
 
     >>> from axelrod import Classifiers
-    >>> Classifiers['memory_depth'](axl.TitForTat)
+    >>> Classifiers['memory_depth'](axl.TitForTat())
     1
     >>> Classifiers['stochastic'](axl.Random())
     True
