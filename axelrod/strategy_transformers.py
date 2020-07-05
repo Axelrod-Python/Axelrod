@@ -5,16 +5,16 @@ strategy.
 See the various Meta strategies for another type of transformation.
 """
 
-from collections import Iterable
 import copy
 import inspect
-from importlib import import_module
 import random
+from collections import Iterable
+from importlib import import_module
 from typing import Any
 
+from axelrod.strategies.sequence_player import SequencePlayer
 from numpy.random import choice
 
-from axelrod.strategies.sequence_player import SequencePlayer
 from .action import Action
 from .makes_use_of import *
 from .player import Player

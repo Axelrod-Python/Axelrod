@@ -71,4 +71,3 @@ class RevisedDowning(Player):
         else:
             move = D
         return move
-

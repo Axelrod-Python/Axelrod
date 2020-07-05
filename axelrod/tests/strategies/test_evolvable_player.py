@@ -1,10 +1,11 @@
-import unittest
 import functools
 import random
+import unittest
 
 import axelrod as axl
 from axelrod.action import Action
-from axelrod.evolvable_player import copy_lists, crossover_lists, crossover_dictionaries
+from axelrod.evolvable_player import copy_lists, crossover_dictionaries, crossover_lists
+
 from .test_player import TestPlayer
 
 C, D = Action.C, Action.D
@@ -210,4 +211,3 @@ class TestUtilityFunctions(unittest.TestCase):
         axl.seed(1)
         crossed = crossover_dictionaries(dict1, dict2)
         self.assertEqual(crossed, dict2)
-

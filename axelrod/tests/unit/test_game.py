@@ -2,7 +2,6 @@ import unittest
 
 import axelrod as axl
 from axelrod.tests.property import games
-
 from hypothesis import given, settings
 from hypothesis.strategies import integers
 

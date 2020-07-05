@@ -1,8 +1,7 @@
 """Tests for the Hunter strategy."""
 
-import unittest
-
 import random
+import unittest
 
 import axelrod as axl
 from axelrod.strategies.hunter import detect_cycle

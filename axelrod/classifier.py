@@ -1,4 +1,5 @@
 import os
+import warnings
 from typing import (
     Any,
     Callable,
@@ -11,11 +12,10 @@ from typing import (
     TypeVar,
     Union,
 )
-import warnings
-import yaml
 
 from axelrod.makes_use_of import makes_use_of
 from axelrod.player import Player
+import yaml
 
 ALL_CLASSIFIERS_PATH = "data/all_classifiers.yml"
 

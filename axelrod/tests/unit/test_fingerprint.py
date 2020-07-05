@@ -1,20 +1,17 @@
+import os
+import pathlib
 import unittest
+from tempfile import mkstemp
 from unittest.mock import patch
 
-import os
-from tempfile import mkstemp
+import axelrod as axl
 import matplotlib.pyplot
 import numpy as np
-import pathlib
-
-import axelrod as axl
 from axelrod.fingerprint import AshlockFingerprint, Point, TransitiveFingerprint
 from axelrod.load_data_ import axl_filename
 from axelrod.strategy_transformers import DualTransformer, JossAnnTransformer
 from axelrod.tests.property import strategy_lists
-
 from hypothesis import given, settings
-
 
 C, D = axl.Action.C, axl.Action.D
 

@@ -1,9 +1,7 @@
 """Tests for the Memorytwo strategies."""
 
-import unittest
-
 import random
-
+import unittest
 import warnings
 
 import axelrod as axl

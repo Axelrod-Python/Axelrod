@@ -3,10 +3,8 @@
 import unittest
 
 import numpy
-from numpy.testing import assert_array_almost_equal
-
 from axelrod.eigen import _normalise, principal_eigenvector
-
+from numpy.testing import assert_array_almost_equal
 
 
 class FunctionCases(unittest.TestCase):

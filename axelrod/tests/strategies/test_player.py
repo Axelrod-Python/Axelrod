@@ -1,14 +1,13 @@
-import unittest
 import itertools
 import pickle
 import random
 import types
-import numpy as np
+import unittest
 
 import axelrod as axl
+import numpy as np
 from axelrod.player import simultaneous_play
 from axelrod.tests.property import strategy_lists
-
 from hypothesis import given, settings
 from hypothesis.strategies import integers, sampled_from
 
