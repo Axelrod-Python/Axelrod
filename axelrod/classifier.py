@@ -84,6 +84,8 @@ all_classifiers = [
     manipulates_state,
 ]
 
+all_classifiers_map = {c.name: c.classify_player for c in all_classifiers}
+
 
 def rebuild_classifier_table(
     classifiers: List[Classifier],
@@ -216,7 +218,13 @@ class _Classifiers(object):
                 return player.classifier[key]
 
             # Try to find the name in the all_player_dicts, read from disk.
-            return try_lookup()
+            lookup = try_lookup()
+            if lookup is not None:
+                return lookup
+
+            # If we can't find it, then return a function that calculates fresh.
+            global all_classifiers_map
+            return all_classifiers_map[key](player)
 
         return classify_player_for_this_classifier
 

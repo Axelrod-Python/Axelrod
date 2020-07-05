@@ -41,7 +41,8 @@ AON2:
 Adaptive:
   inspects_source: false
   long_run_time: false
-  makes_use_of: !!set {}
+  makes_use_of: !!set
+    game: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -146,7 +147,8 @@ Appeaser:
 Arrogant QLearner:
   inspects_source: false
   long_run_time: false
-  makes_use_of: !!set {}
+  makes_use_of: !!set
+    game: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -187,7 +189,8 @@ Bully:
 Bush Mosteller:
   inspects_source: false
   long_run_time: false
-  makes_use_of: !!set {}
+  makes_use_of: !!set
+    game: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -203,7 +206,8 @@ Calculator:
 Cautious QLearner:
   inspects_source: false
   long_run_time: false
-  makes_use_of: !!set {}
+  makes_use_of: !!set
+    game: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -307,7 +311,8 @@ DBS:
 Darwin:
   inspects_source: true
   long_run_time: false
-  makes_use_of: !!set {}
+  makes_use_of: !!set
+    game: null
   manipulates_source: false
   manipulates_state: true
   memory_depth: .inf
@@ -509,7 +514,8 @@ First by Davis:
 First by Downing:
   inspects_source: false
   long_run_time: false
-  makes_use_of: !!set {}
+  makes_use_of: !!set
+    game: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -575,6 +581,7 @@ First by Tideman and Chieruzzi:
   inspects_source: false
   long_run_time: false
   makes_use_of: !!set
+    game: null
     length: null
   manipulates_source: false
   manipulates_state: false
@@ -647,7 +654,8 @@ Fortress4:
 GTFT:
   inspects_source: false
   long_run_time: false
-  makes_use_of: !!set {}
+  makes_use_of: !!set
+    game: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: 1
@@ -839,7 +847,8 @@ Hard Tit For Tat:
 Hesitant QLearner:
   inspects_source: false
   long_run_time: false
-  makes_use_of: !!set {}
+  makes_use_of: !!set
+    game: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -871,7 +880,8 @@ Inverse Punisher:
 Knowledgeable Worse and Worse:
   inspects_source: false
   long_run_time: false
-  makes_use_of: !!set {}
+  makes_use_of: !!set
+    length: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -999,7 +1009,8 @@ Meta Mixer:
 Meta Winner:
   inspects_source: false
   long_run_time: true
-  makes_use_of: !!set {}
+  makes_use_of: !!set
+    game: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1007,7 +1018,8 @@ Meta Winner:
 Meta Winner Deterministic:
   inspects_source: false
   long_run_time: true
-  makes_use_of: !!set {}
+  makes_use_of: !!set
+    game: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1015,7 +1027,8 @@ Meta Winner Deterministic:
 Meta Winner Ensemble:
   inspects_source: false
   long_run_time: true
-  makes_use_of: !!set {}
+  makes_use_of: !!set
+    game: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1023,7 +1036,8 @@ Meta Winner Ensemble:
 Meta Winner Finite Memory:
   inspects_source: false
   long_run_time: true
-  makes_use_of: !!set {}
+  makes_use_of: !!set
+    game: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1031,7 +1045,8 @@ Meta Winner Finite Memory:
 Meta Winner Long Memory:
   inspects_source: false
   long_run_time: true
-  makes_use_of: !!set {}
+  makes_use_of: !!set
+    game: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1039,7 +1054,8 @@ Meta Winner Long Memory:
 Meta Winner Memory One:
   inspects_source: false
   long_run_time: true
-  makes_use_of: !!set {}
+  makes_use_of: !!set
+    game: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1047,7 +1063,8 @@ Meta Winner Memory One:
 Meta Winner Stochastic:
   inspects_source: false
   long_run_time: true
-  makes_use_of: !!set {}
+  makes_use_of: !!set
+    game: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1113,7 +1130,8 @@ N Tit(s) For M Tat(s):
 NMWE Deterministic:
   inspects_source: false
   long_run_time: true
-  makes_use_of: !!set {}
+  makes_use_of: &id001 !!set
+    game: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1121,7 +1139,7 @@ NMWE Deterministic:
 NMWE Finite Memory:
   inspects_source: false
   long_run_time: true
-  makes_use_of: !!set {}
+  makes_use_of: *id001
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1129,7 +1147,7 @@ NMWE Finite Memory:
 NMWE Long Memory:
   inspects_source: false
   long_run_time: true
-  makes_use_of: !!set {}
+  makes_use_of: *id001
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1137,7 +1155,7 @@ NMWE Long Memory:
 NMWE Memory One:
   inspects_source: false
   long_run_time: true
-  makes_use_of: !!set {}
+  makes_use_of: *id001
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1145,7 +1163,7 @@ NMWE Memory One:
 NMWE Stochastic:
   inspects_source: false
   long_run_time: true
-  makes_use_of: !!set {}
+  makes_use_of: *id001
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1177,7 +1195,8 @@ Nice Average Copier:
 Nice Meta Winner:
   inspects_source: false
   long_run_time: true
-  makes_use_of: !!set {}
+  makes_use_of: !!set
+    game: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1185,7 +1204,7 @@ Nice Meta Winner:
 Nice Meta Winner Ensemble:
   inspects_source: false
   long_run_time: true
-  makes_use_of: !!set {}
+  makes_use_of: *id001
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1410,7 +1429,8 @@ Ripoff:
 Risky QLearner:
   inspects_source: false
   long_run_time: false
-  makes_use_of: !!set {}
+  makes_use_of: !!set
+    game: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1490,7 +1510,8 @@ Second by Gladstein:
 Second by GraaskampKatzen:
   inspects_source: false
   long_run_time: false
-  makes_use_of: !!set {}
+  makes_use_of: !!set
+    game: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1546,7 +1567,8 @@ Second by RichardHufford:
 Second by Rowsam:
   inspects_source: false
   long_run_time: false
-  makes_use_of: !!set {}
+  makes_use_of: !!set
+    game: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1562,7 +1584,8 @@ Second by Tester:
 Second by Tideman and Chieruzzi:
   inspects_source: false
   long_run_time: false
-  makes_use_of: !!set {}
+  makes_use_of: !!set
+    game: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1683,6 +1706,7 @@ Stalker:
   inspects_source: false
   long_run_time: false
   makes_use_of: !!set
+    game: null
     length: null
   manipulates_source: false
   manipulates_state: false
@@ -1899,7 +1923,8 @@ Worse and Worse 3:
 ZD-Extort-2:
   inspects_source: false
   long_run_time: false
-  makes_use_of: !!set {}
+  makes_use_of: !!set
+    game: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: 1
@@ -1907,7 +1932,8 @@ ZD-Extort-2:
 ZD-Extort-2 v2:
   inspects_source: false
   long_run_time: false
-  makes_use_of: !!set {}
+  makes_use_of: !!set
+    game: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: 1
@@ -1915,7 +1941,8 @@ ZD-Extort-2 v2:
 ZD-Extort-4:
   inspects_source: false
   long_run_time: false
-  makes_use_of: !!set {}
+  makes_use_of: !!set
+    game: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: 1
@@ -1923,7 +1950,8 @@ ZD-Extort-4:
 ZD-Extort3:
   inspects_source: false
   long_run_time: false
-  makes_use_of: !!set {}
+  makes_use_of: !!set
+    game: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: 1
@@ -1931,7 +1959,8 @@ ZD-Extort3:
 ZD-Extortion:
   inspects_source: false
   long_run_time: false
-  makes_use_of: !!set {}
+  makes_use_of: !!set
+    game: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: 1
@@ -1939,7 +1968,8 @@ ZD-Extortion:
 ZD-GEN-2:
   inspects_source: false
   long_run_time: false
-  makes_use_of: !!set {}
+  makes_use_of: !!set
+    game: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: 1
@@ -1947,7 +1977,8 @@ ZD-GEN-2:
 ZD-GTFT-2:
   inspects_source: false
   long_run_time: false
-  makes_use_of: !!set {}
+  makes_use_of: !!set
+    game: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: 1
@@ -1963,7 +1994,8 @@ ZD-Mem2:
 ZD-Mischief:
   inspects_source: false
   long_run_time: false
-  makes_use_of: !!set {}
+  makes_use_of: !!set
+    game: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: 1
@@ -1971,7 +2003,8 @@ ZD-Mischief:
 ZD-SET-2:
   inspects_source: false
   long_run_time: false
-  makes_use_of: !!set {}
+  makes_use_of: !!set
+    game: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: 1

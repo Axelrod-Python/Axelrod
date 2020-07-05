@@ -16,7 +16,7 @@ from numpy.random import choice
 
 from axelrod.strategies.sequence_player import SequencePlayer
 from .action import Action
-from .makes_use_of import method_makes_use_of
+from .makes_use_of import *
 from .player import Player
 from .random_ import random_choice
 
@@ -133,11 +133,10 @@ def StrategyTransformerFactory(
                 classifier = reclassifier(original_classifier, *args, **kwargs)
             else:
                 classifier = original_classifier
-            strategy_wrapper_uses = method_makes_use_of(strategy_wrapper)
-            if "makes_use_of" in classifier:
-                classifier["makes_use_of"].update(strategy_wrapper_uses)
-            elif strategy_wrapper_uses:
-                classifier["makes_use_of"] = strategy_wrapper_uses
+            classifier_makes_use_of = makes_use_of(PlayerClass)
+            classifier_makes_use_of.update(
+                method_makes_use_of(strategy_wrapper))
+            classifier["makes_use_of"] = classifier_makes_use_of
 
             # Define the new __repr__ method to add the wrapper arguments
             # at the end of the name

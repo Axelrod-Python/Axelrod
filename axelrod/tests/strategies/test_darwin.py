@@ -14,7 +14,7 @@ class TestDarwin(TestPlayer):
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
-        "makes_use_of": set(),
+        "makes_use_of": {"game"},
         "long_run_time": False,
         "inspects_source": True,
         "manipulates_source": False,
