@@ -88,11 +88,18 @@ class BasePlayer(object):
             raise RuntimeError(  # pragma: no cover
                 "game_params must be set before initializing parent."
             )
-        self._history = self.game_params.history_factory()
+        self._history = self.history_factory()
         self.classifier = copy.deepcopy(self.classifier)
 
+    def history_factory(self):
+        """Generates a history class.
+
+        Must be overwritten for each derived Player class.
+        """
+        return BaseHistory()
+
     def reset(self) -> None:
-        self._history = self.game_params.history_factory()
+        self._history = self.history_factory()
 
     def update_outcome_history(self, outcome):
         """Updates history using an outcome."""

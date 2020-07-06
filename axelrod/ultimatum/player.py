@@ -15,6 +15,7 @@ up only offer history and only decision history.
 
 from axelrod.prototypes import BasePlayer
 from .game_params import ultimatum_static_params
+from .history import UltimatumHistory
 
 
 class UltimatumPlayer(BasePlayer):
@@ -22,6 +23,9 @@ class UltimatumPlayer(BasePlayer):
 
     name = "Ultimatum Player"
     classifier = dict(stochastic=False)
+
+    def history_factory(self):
+        return UltimatumHistory()
 
     def __init__(self):
         # TODO(5.0): Between the two ultimatum game_params, the only difference

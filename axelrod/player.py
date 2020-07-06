@@ -9,6 +9,7 @@ import numpy as np
 from axelrod.action import Action
 from axelrod.game import DefaultGame
 from .game_params import Symm2pPosition
+from .history import History
 from .ipd_params import ipd_params
 from axelrod.prototypes import BasePlayer, PlayerName
 
@@ -24,6 +25,9 @@ class Player(BasePlayer):
 
     name: PlayerName = "Player"
     classifier = {}  # type: Dict[str, Any]
+
+    def history_factory(self):
+        return History()
 
     def __new__(cls, *args, **kwargs):
         """Caches arguments for Player cloning."""

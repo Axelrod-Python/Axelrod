@@ -29,7 +29,6 @@ def ipd_result(outcome: Outcome) -> Tuple[Action, Action]:
 
 ipd_params = GameParams(
     game_type="IPD",
-    history_factory=lambda: History(),
     generate_play_params=symm2p_generate_play_params,
     play_round=symm2p_play_round,
     get_actions=symm2p_get_actions,

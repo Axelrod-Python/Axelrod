@@ -100,7 +100,6 @@ def ultimatum_result(outcome: Outcome) -> Tuple[Outcome, Outcome]:
 
 ultimatum_alternating_params = GameParams(
     game_type="Ultimatum",
-    history_factory=lambda: UltimatumHistory(),
     generate_play_params=ultimatum_alternating_turns,
     play_round=ultimatum_play_round,
     get_actions=ultimatum_get_actions,
@@ -110,7 +109,6 @@ ultimatum_alternating_params = GameParams(
 
 ultimatum_static_params = GameParams(
     game_type="Ultimatum",
-    history_factory=lambda: UltimatumHistory(),
     generate_play_params=ultimatum_static_turns,
     play_round=ultimatum_play_round,
     get_actions=ultimatum_get_actions,

@@ -31,7 +31,6 @@ from .prototypes import (
     BaseAction,
     BasePlayer,
     BaseScorer,
-    BaseHistory,
     Outcome,
     Position,
 )
@@ -62,8 +61,6 @@ class GameParams(object):
     ----------
     game_type : Text
         Unique name for the type of game (IPD, Ultimatum, etc.)
-    history_factory : Callable[[], BaseHistory]
-        Returns a default history of the appropriate derived class.
     generate_play_params : Callable[
         [List[BasePlayer], int], Generator[PlayParams, None, None]
     ]
@@ -84,7 +81,6 @@ class GameParams(object):
     """
 
     game_type: Text = attr.ib()
-    history_factory: Callable[[], BaseHistory] = attr.ib()
     # TODO(5.0): This should be called generate_round, since the user won't know
     #  what PlayParams are.
     generate_play_params: Callable[
