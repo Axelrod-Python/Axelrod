@@ -531,18 +531,19 @@ def mixed_wrapper(player, opponent, action, probability, m_player):
         m_player = [m_player]
         probability = [probability]
 
-    # If a probability distribution, players is passed
-    if isinstance(probability, Iterable) and isinstance(
-        m_player, Iterable
-    ):
-        mutate_prob = sum(probability)  # Prob of mutation
-        if mutate_prob > 0:
-            # Distribution of choice of mutation:
-            normalised_prob = [prob / mutate_prob for prob in probability]
-            if player._random.random() < mutate_prob:
-                p = player._random.choice(list(m_player), p=normalised_prob)()
-                p._history = player._history
-                return p.strategy(opponent)
+    mutate_prob = sum(probability)  # Prob of mutation
+    if mutate_prob > 0:
+        # Distribution of choice of mutation:
+        normalised_prob = [prob / mutate_prob for prob in probability]
+        # Check if the strategy is deterministic. If so, avoid use of
+        # self._random, since it may not be present on the host strategy.
+        if 1 in probability:  # If all probability  given to one player
+            p = m_player[probability.index(1)]
+            return p.strategy(opponent)
+        elif player._random.random() < mutate_prob:
+            p = player._random.choice(list(m_player), p=normalised_prob)()
+            p._history = player._history
+            return p.strategy(opponent)
 
     return action
 
@@ -603,6 +604,12 @@ def joss_ann_wrapper(player, opponent, proposed_action, probability):
     remaining_probability = max(0, 1 - probability[0] - probability[1])
     probability += (remaining_probability,)
     options = [C, D, proposed_action]
+
+    # Avoid use of self._random if strategy is actually deterministic.
+    if 1 in probability:  # If all probability  given to one player
+        option = options[probability.index(1)]
+        return option
+
     action = player._random.choice(options, p=probability)
     return action
 
