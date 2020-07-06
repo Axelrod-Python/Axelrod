@@ -96,7 +96,7 @@ class BasePlayer(object):
 
         Must be overwritten for each derived Player class.
         """
-        return BaseHistory()
+        return BaseHistory()  # pragma: no cover
 
     def reset(self) -> None:
         self._history = self.history_factory()
