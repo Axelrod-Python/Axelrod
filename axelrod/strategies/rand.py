@@ -2,6 +2,17 @@ from axelrod.action import Action
 from axelrod.player import Player
 
 
+C, D = Action.C, Action.D
+
+
+def cooperate(*args):
+    return C
+
+
+def defect(*args):
+    return D
+
+
 class Random(Player):
     """A player who randomly chooses between cooperating and defecting.
 
@@ -40,6 +51,20 @@ class Random(Player):
         self.p = p
         if p in [0, 1]:
             self.classifier["stochastic"] = False
+        # Avoid calls to _random, if strategy is deterministic
+        # by overwriting the strategy function.
+        if p == 0:
+            self.strategy = self.cooperate
+        if p == 1:
+            self.strategy = self.defect
+
+    @classmethod
+    def cooperate(cls, opponent: Player) -> Action:
+        return C
+
+    @classmethod
+    def defect(cls, opponent: Player) -> Action:
+        return D
 
     def strategy(self, opponent: Player) -> Action:
         return self._random.random_choice(self.p)
