@@ -618,7 +618,6 @@ class TestMatch(unittest.TestCase):
     """Test class for heads up play between two given players. Plays an
     axelrod match between the two players."""
 
-    @log_kwargs
     def versus_test(
         self,
         player1,
@@ -652,6 +651,22 @@ class TestMatch(unittest.TestCase):
         if attrs:
             for attr, value in attrs.items():
                 self.assertEqual(getattr(player1, attr), value)
+
+    def search_seeds(self, *args, **kwargs):
+        """Search for a seed that will pass the test. To use to find a new seed
+        for a versus_test, change self.versus_test to self.search_seeds
+        within a TestPlayer or TestMatch class.
+        """
+        for seed in range(1, 100000):
+            try:
+                kwargs["seed"] = seed
+                self.versus_test(*args, **kwargs)
+            except AssertionError:
+                continue
+            else:
+                print(seed)
+                return seed
+        return None
 
     def test_versus_with_incorrect_history_lengths(self):
         """Test the error raised by versus_test if expected actions do not
