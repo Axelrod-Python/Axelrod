@@ -1,6 +1,7 @@
 """Tests for the various Meta strategies."""
 
 import axelrod as axl
+from axelrod.classifier import Classifiers
 from hypothesis import given, settings
 from hypothesis.strategies import integers
 
@@ -491,6 +492,32 @@ class TestMetaMixer(TestMetaPlayer):
         "memory_depth": float("inf"),
         "stochastic": True,
     }
+
+    def test_stochasticity(self):
+        # If the distribution is deterministic, the strategy may be deterministic.
+        team = [axl.TitForTat, axl.Cooperator, axl.Grudger]
+        distribution = [1, 0, 0]
+        player = self.player(team=team, distribution=distribution)
+        self.assertFalse(Classifiers["stochastic"](player))
+
+        team = [axl.Random, axl.Cooperator, axl.Grudger]
+        distribution = [1, 0, 0]
+        player = self.player(team=team, distribution=distribution)
+        self.assertTrue(Classifiers["stochastic"](player))
+
+        # If the team has only one player, the strategy may be deterministic.
+        team = [axl.TitForTat]
+        player = self.player(team=team)
+        self.assertFalse(Classifiers["stochastic"](player))
+
+        team = [axl.Random]
+        player = self.player(team=team)
+        self.assertTrue(Classifiers["stochastic"](player))
+
+        # Stochastic if the distribution isn't degenerate.
+        team = [axl.TitForTat, axl.Cooperator, axl.Grudger]
+        distribution = [0.2, 0.5, 0.3]
+        self.assertTrue(Classifiers["stochastic"](player))
 
     def test_strategy(self):
         team = [axl.TitForTat, axl.Cooperator, axl.Grudger]

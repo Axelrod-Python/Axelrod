@@ -496,11 +496,41 @@ class MetaMixer(MetaPlayer):
     }
 
     def __init__(self, team=None, distribution=None):
-        self.distribution = distribution
         super().__init__(team=team)
+        if distribution and len(set(distribution)) > 1:
+            self.classifier["stochastic"] = True
+        if len(self.team) == 1:
+            self.classifier["stochastic"] = Classifiers["stochastic"](self.team[0])
+            # Overwrite strategy to avoid use of _random. This will ignore self.meta_strategy.
+            self.index = 0
+            self.strategy = self.index_strategy
+            return
+        # Check if the distribution has only one non-zero value. If so, the strategy may be
+        # deterministic, and we can avoid _random.
+        self.distribution = distribution
+        if distribution:
+            total = sum(distribution)
+            if total == 0:
+                return
+            distribution = np.array(distribution) / total
+            if 1 in distribution:
+                self.index = list(distribution).index(1)
+                # It's potentially deterministic.
+                self.classifier["stochastic"] = Classifiers["stochastic"](self.team[self.index])
+                # Overwrite strategy to avoid use of _random. This will ignore self.meta_strategy.
+                self.strategy = self.index_strategy
+
+    def index_strategy(self, opponent):
+        """When the team effectively has a single player, only use that strategy."""
+        results = [C] * len(self.team)
+        player = self.team[self.index]
+        action = player.strategy(opponent)
+        results[self.index] = action
+        self._last_results = results
+        return action
 
     def meta_strategy(self, results, opponent):
-        """Using the numpy.random choice function to sample with weights"""
+        """Using the _random.choice function to sample with weights."""
         return self._random.choice(results, p=self.distribution)
 
 
