@@ -5,14 +5,6 @@ from axelrod.player import Player
 C, D = Action.C, Action.D
 
 
-def cooperate(*args):
-    return C
-
-
-def defect(*args):
-    return D
-
-
 class Random(Player):
     """A player who randomly chooses between cooperating and defecting.
 
