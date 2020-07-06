@@ -198,7 +198,7 @@ NiceMetaWinner = NiceTransformer()(MetaWinner)
 class MetaWinnerEnsemble(MetaWinner):
     """A variant of MetaWinner that chooses one of the top scoring strategies
     at random against each opponent. Note this strategy is always stochastic
-    regardless of the team.
+    regardless of the team, if team larger than 1, and the players are distinct.
 
     Names:
 
@@ -207,13 +207,28 @@ class MetaWinnerEnsemble(MetaWinner):
 
     name = "Meta Winner Ensemble"
 
+    def __init__(self, team=None):
+        super().__init__(team=team)
+        if len(self.team) > 1:
+            self.classifier["stochastic"] = True
+            self.singular = False
+        else:
+            self.singular = True
+        if team and len(set(team)) == 1:
+            self.classifier["stochastic"] = Classifiers["stochastic"](team[0]())
+            self.singular = True
+
     def meta_strategy(self, results, opponent):
+        # If the team consists of identical players, just take the first result.
+        if self.singular:
+            return results[0]
         # Sort by score
         scores = [(score, i) for (i, score) in enumerate(self.scores)]
         # Choose one of the best scorers at random
         scores.sort(reverse=True)
         prop = max(1, int(len(scores) * 0.08))
-        index = self._random.choice([i for (s, i) in scores[:prop]])
+        best_scorers = [i for (s, i) in scores[:prop]]
+        index = self._random.choice(best_scorers)
         return results[index]
 
 

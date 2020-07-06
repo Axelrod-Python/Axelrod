@@ -146,6 +146,33 @@ class TestMetaMinority(TestMetaPlayer):
         self.assertEqual(P1.strategy(P2), C)
 
 
+class TestMetaWinnerEnsemble(TestMetaPlayer):
+    name = "Meta Winner Ensemble"
+    player = axl.MetaWinnerEnsemble
+
+    def test_stochasticity(self):
+        # One player teams may be stochastic or not
+        team = [axl.Cooperator]
+        player = axl.MetaWinnerEnsemble(team=team)
+        self.assertFalse(Classifiers["stochastic"](player))
+
+        team = [axl.Random]
+        player = axl.MetaWinnerEnsemble(team=team)
+        self.assertTrue(Classifiers["stochastic"](player))
+
+        # Multiplayer teams without repetition are always stochastic
+        team = [axl.Cooperator, axl.Defector]
+        player = axl.MetaWinnerEnsemble(team=team)
+        self.assertTrue(Classifiers["stochastic"](player))
+
+        # If the players are all identical, a multiplayer
+        # team might is in fact deterministic, even though random values
+        # are being drawn.
+        team = [axl.Cooperator, axl.Cooperator]
+        player = axl.MetaWinnerEnsemble(team=team)
+        self.assertFalse(Classifiers["stochastic"](player))
+
+
 class TestNiceMetaWinner(TestMetaPlayer):
     name = "Nice Meta Winner"
     player = axl.NiceMetaWinner
@@ -208,6 +235,7 @@ class TestNiceMetaWinnerEnsemble(TestMetaPlayer):
         "manipulates_source": False,
         "manipulates_state": False,
     }
+
 
     def test_strategy(self):
         actions = [(C, C)] * 8
