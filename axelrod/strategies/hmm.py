@@ -111,11 +111,21 @@ class SimpleHMM(object):
         """
         num_states = len(self.emission_probabilities)
         if opponent_action == C:
-            next_state = self._random.choice(num_states, 1, p=self.transitions_C[self.state])
+            if 1 in self.transitions_C[self.state]:
+                next_state = [self.transitions_C[self.state].index(1)]
+            else:
+                next_state = self._random.choice(num_states, 1, p=self.transitions_C[self.state])
         else:
-            next_state = self._random.choice(num_states, 1, p=self.transitions_D[self.state])
+            if 1 in self.transitions_D[self.state]:
+                next_state = [self.transitions_D[self.state].index(1)]
+            else:
+                next_state = self._random.choice(num_states, 1, p=self.transitions_D[self.state])
         self.state = next_state[0]
         p = self.emission_probabilities[self.state]
+        if p == 1:
+            return D
+        if p == 0:
+            return C
         action = self._random.random_choice(p)
         return action
 
