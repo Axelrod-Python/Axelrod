@@ -214,12 +214,15 @@ class MetaWinnerEnsemble(MetaWinner):
             self.singular = False
         else:
             self.singular = True
+        # If the team has repeated identical members, then it reduces to a singular team
+        # and it may not actually be stochastic.
         if team and len(set(team)) == 1:
             self.classifier["stochastic"] = Classifiers["stochastic"](team[0]())
             self.singular = True
 
     def meta_strategy(self, results, opponent):
         # If the team consists of identical players, just take the first result.
+        # This prevents an unnecessary call to _random below.
         if self.singular:
             return results[0]
         # Sort by score
