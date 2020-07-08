@@ -347,6 +347,10 @@ class NaiveProber(Player):
         if opponent.history[-1] == D:
             return D
         # Otherwise cooperate, defect with probability 1 - self.p
+        if self.p == 0:
+            return C
+        if self.p == 1:
+            return D
         choice = self._random.random_choice(1 - self.p)
         return choice
 
@@ -395,7 +399,10 @@ class RemorsefulProber(NaiveProber):
             return D
 
         # Otherwise cooperate with probability 1 - self.p
-        if self._random.random() < 1 - self.p:
+        if self.p == 1:
+            self.probing = True
+            return D
+        elif self.p == 0 or self._random.random() < 1 - self.p:
             self.probing = False
             return C
 
