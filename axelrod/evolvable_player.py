@@ -17,12 +17,6 @@ class SeedNotGivenError(Exception):
         super().__init__(*args)
 
 
-# class SeedNullingError(Exception):
-#     """Error indicating that a required seed was not supplied."""
-#     def __init__(self, *args):
-#         super().__init__(*args)
-
-
 class EvolvablePlayer(Player):
     """A class for a player that can evolve, for use in the Moran process or with reinforcement learning algorithms.
 
@@ -35,13 +29,6 @@ class EvolvablePlayer(Player):
 
     # Parameter seed is actually required.
     def __init__(self, seed=None):
-        # if seed is None:
-        #     raise SeedNotGivenError(seed)
-            # # Was the seed already set?
-            # if (not hasattr(self, "_seed")) or (hasattr(self, "_seed") and self._seed==None):
-            #     raise SeedNotGivenError()
-            # raise SeedNullingError()
-        # else:
         super().__init__()
         self.set_seed(seed=seed)
 
@@ -54,6 +41,9 @@ class EvolvablePlayer(Player):
         """Creates a new variant with parameters overwritten by kwargs."""
         init_kwargs = self.init_kwargs.copy()
         init_kwargs.update(kwargs)
+        # Propagate seed forward for reproducibility.
+        if "seed" not in kwargs:
+            init_kwargs["seed"] = self._random.random_seed_int()
         return self.__class__(**init_kwargs)
 
     # Serialization and deserialization. You may overwrite to obtain more human readable serializations
