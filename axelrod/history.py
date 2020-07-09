@@ -108,15 +108,20 @@ class LimitedHistory(History):
     depth.
     """
 
-    def __init__(self, memory_depth):
+    def __init__(self, memory_depth, plays=None, coplays=None):
         """
         Parameters
         ----------
         memory_depth, int:
             length of history to retain
         """
-        super().__init__()
+        super().__init__(plays=plays, coplays=coplays)
         self.memory_depth = memory_depth
+
+    def flip_plays(self):
+        """Creates a flipped plays history for use with DualTransformer."""
+        flipped_plays = [action.flip() for action in self._plays]
+        return self.__class__(self.memory_depth, plays=flipped_plays, coplays=self._coplays)
 
     def append(self, play, coplay):
         """Appends a new (play, coplay) pair an updates metadata for
