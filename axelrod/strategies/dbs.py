@@ -25,7 +25,6 @@ class DBS(Player):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": True,
         "inspects_source": False,
         "manipulates_source": False,

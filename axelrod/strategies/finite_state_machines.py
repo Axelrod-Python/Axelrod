@@ -1,6 +1,6 @@
 import itertools
 from random import randrange
-from typing import Any, List, Sequence, Tuple, Union
+from typing import Any, Dict, List, Sequence, Text, Tuple, Union
 
 import numpy.random as random
 from axelrod.action import Action
@@ -102,10 +102,9 @@ class FSMPlayer(Player):
 
     name = "FSM Player"
 
-    classifier = {
+    classifier: Dict[Text, Any] = {
         "memory_depth": 1,
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -138,7 +137,6 @@ class EvolvableFSMPlayer(FSMPlayer, EvolvablePlayer):
     classifier = {
         "memory_depth": 1,
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -316,7 +314,6 @@ class Fortress3(FSMPlayer):
     classifier = {
         "memory_depth": 2,
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -355,7 +352,6 @@ class Fortress4(FSMPlayer):
     classifier = {
         "memory_depth": 3,
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -393,7 +389,6 @@ class Predator(FSMPlayer):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -439,7 +434,6 @@ class Pun1(FSMPlayer):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -468,7 +462,6 @@ class Raider(FSMPlayer):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -505,7 +498,6 @@ class Ripoff(FSMPlayer):
     classifier = {
         "memory_depth": 3,
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -540,7 +532,6 @@ class UsuallyCooperates(FSMPlayer):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -568,7 +559,6 @@ class UsuallyDefects(FSMPlayer):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -596,7 +586,6 @@ class SolutionB1(FSMPlayer):
     classifier = {
         "memory_depth": 2,
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -632,7 +621,6 @@ class SolutionB5(FSMPlayer):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -673,7 +661,6 @@ class Thumper(FSMPlayer):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -701,7 +688,6 @@ class EvolvedFSM4(FSMPlayer):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -739,7 +725,6 @@ class EvolvedFSM16(FSMPlayer):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -797,7 +782,6 @@ class EvolvedFSM16Noise05(FSMPlayer):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -857,7 +841,6 @@ class TF1(FSMPlayer):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -918,7 +901,6 @@ class TF2(FSMPlayer):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -975,7 +957,6 @@ class TF3(FSMPlayer):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,

@@ -12,7 +12,6 @@ Here is the :code:`classifier` for the :code:`Cooperator` strategy::
     >>> import axelrod as axl
     >>> expected_dictionary = {
     ...    'manipulates_state': False,
-    ...    'makes_use_of': set([]),
     ...    'long_run_time': False,
     ...    'stochastic': False,
     ...    'manipulates_source': False,

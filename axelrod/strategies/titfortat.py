@@ -29,7 +29,6 @@ class TitForTat(Player):
     classifier = {
         "memory_depth": 1,  # Four-Vector = (1.,0.,1.,0.)
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -65,7 +64,6 @@ class TitFor2Tats(Player):
     classifier = {
         "memory_depth": 2,  # Long memory, memory-2
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -90,7 +88,6 @@ class TwoTitsForTat(Player):
     classifier = {
         "memory_depth": 2,  # Long memory, memory-2
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -119,7 +116,6 @@ class DynamicTwoTitsForTat(Player):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -156,7 +152,6 @@ class Bully(Player):
     classifier = {
         "memory_depth": 1,  # Four-Vector = (0, 1, 0, 1)
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -180,7 +175,6 @@ class SneakyTitForTat(Player):
     classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -210,7 +204,6 @@ class SuspiciousTitForTat(Player):
     classifier = {
         "memory_depth": 1,  # Four-Vector = (1.,0.,1.,0.)
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -236,7 +229,6 @@ class AntiTitForTat(Player):
     classifier = {
         "memory_depth": 1,  # Four-Vector = (1.,0.,1.,0.)
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -260,7 +252,6 @@ class HardTitForTat(Player):
     classifier = {
         "memory_depth": 3,  # memory-three
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -292,7 +283,6 @@ class HardTitFor2Tats(Player):
     classifier = {
         "memory_depth": 3,  # memory-three
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -327,7 +317,6 @@ class OmegaTFT(Player):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -408,7 +397,6 @@ class OriginalGradual(Player):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -476,7 +464,6 @@ class Gradual(Player):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -526,7 +513,6 @@ class ContriteTitForTat(Player):
     classifier = {
         "memory_depth": 3,
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -593,7 +579,6 @@ class AdaptiveTitForTat(Player):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -637,7 +622,6 @@ class SpitefulTitForTat(Player):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -679,7 +663,6 @@ class SlowTitForTwoTats2(Player):
     classifier = {
         "memory_depth": 2,
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -714,7 +697,6 @@ class Alexei(Player):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
-        "makes_use_of": {"length"},
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -745,7 +727,6 @@ class EugineNier(Player):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
-        "makes_use_of": {"length"},
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -782,7 +763,6 @@ class NTitsForMTats(Player):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -840,7 +820,6 @@ class Michaelos(Player):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
-        "makes_use_of": {"length"},
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -884,7 +863,6 @@ class RandomTitForTat(Player):
     classifier = {
         "memory_depth": 1,
         "stochastic": True,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,

@@ -119,6 +119,7 @@ docker-compose.yml
 # Mypy files
 .mypy_cache/
 
+test_outputs/classifier_test.yaml
 test_outputs/stochastic_tournament_0.csv
 test_outputs/stochastic_tournament_1.csv
 test_outputs/test_fingerprint.csv

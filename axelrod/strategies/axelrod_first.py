@@ -47,7 +47,6 @@ class FirstByDavis(Player):
     classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -236,7 +235,6 @@ class FirstByDowning(Player):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
-        "makes_use_of": {"game"},
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -311,7 +309,6 @@ class FirstByFeld(Player):
     classifier = {
         "memory_depth": 200,  # Varies actually, eventually becomes depth 1
         "stochastic": True,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -403,7 +400,6 @@ class FirstByGraaskamp(Player):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -479,7 +475,6 @@ class FirstByGrofman(Player):
     classifier = {
         "memory_depth": 1,
         "stochastic": True,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -580,7 +575,6 @@ class FirstByNydegger(Player):
     classifier = {
         "memory_depth": 3,
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -667,7 +661,6 @@ class FirstByShubik(Player):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -738,7 +731,6 @@ class FirstByTullock(Player):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -794,7 +786,6 @@ class FirstByAnonymous(Player):
     classifier = {
         "memory_depth": 0,
         "stochastic": True,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -839,7 +830,6 @@ class FirstBySteinAndRapoport(Player):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
-        "makes_use_of": {"length"},
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -927,7 +917,6 @@ class FirstByTidemanAndChieruzzi(Player):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
-        "makes_use_of": {"game", "length"},
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,

@@ -24,9 +24,6 @@ class TestWinStayLoseShift(TestPlayer):
         "manipulates_state": False,
     }
 
-    def test_class_classification(self):
-        self.assertEqual(self.player.classifier, self.expected_classifier)
-
     def test_strategy(self):
         # Check that switches if does not get best payoff.
         actions = [(C, C), (C, D), (D, C), (D, D), (C, C)]

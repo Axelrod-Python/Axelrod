@@ -47,7 +47,6 @@ class MemoryTwoPlayer(Player):
     classifier = {
         "memory_depth": 2,
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -151,7 +150,6 @@ class AON2(MemoryTwoPlayer):
     classifier = {
         "memory_depth": 2,
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -194,7 +192,6 @@ class DelayedAON1(MemoryTwoPlayer):
     classifier = {
         "memory_depth": 2,
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -224,7 +221,6 @@ class MEM2(Player):
         "memory_depth": float("inf"),
         "long_run_time": False,
         "stochastic": False,
-        "makes_use_of": set(),
         "inspects_source": False,
         "manipulates_source": False,
         "manipulates_state": False,

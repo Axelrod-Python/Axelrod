@@ -18,7 +18,6 @@ class Cooperator(Player):
     classifier = {
         "memory_depth": 0,
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -43,7 +42,6 @@ class TrickyCooperator(Player):
     classifier = {
         "memory_depth": 10,
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
