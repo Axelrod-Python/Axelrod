@@ -1,8 +1,9 @@
 import axelrod as axl
 from axelrod.strategy_transformers import *
 from axelrod.tests.strategies.test_cooperator import TestCooperator
+from axelrod.tests.strategies.test_defector import TestDefector
 from axelrod.tests.strategies.test_titfortat import TestTitForTat
-from axelrod.tests.strategies.test_player import TestMatch
+from axelrod.tests.strategies.test_player import TestMatch, TestPlayer
 
 C, D = axl.Action.C, axl.Action.D
 
@@ -499,6 +500,20 @@ class TestJossAnnTransformer(TestMatch):
         self.assertFalse(axl.Classifiers["stochastic"](p1))
         self.versus_test(p1, p2, [D] * 5, [C] * 5)
 
+    def test_deterministic_match_override(self):
+        """Tests the JossAnn transformer."""
+        probability = (1, 0)
+        p1 = JossAnnTransformer(probability)(axl.Random)()
+        self.assertFalse(axl.Classifiers["stochastic"](p1))
+        p2 = axl.Cooperator()
+        self.versus_test(p1, p2, [C] * 5, [C] * 5)
+
+        probability = (0, 1)
+        p1 = JossAnnTransformer(probability)(axl.Random)()
+        self.assertFalse(axl.Classifiers["stochastic"](p1))
+        p2 = axl.Cooperator()
+        self.versus_test(p1, p2, [D] * 5, [C] * 5)
+
     def test_stochastic1(self):
         probability = (0.3, 0.3)
         p1 = JossAnnTransformer(probability)(axl.TitForTat)()
@@ -532,7 +547,7 @@ class TestJossAnnTransformer(TestMatch):
 
         probability = (0, 0)
         p1 = JossAnnTransformer(probability)(axl.TitForTat)
-        self.assertFalse(axl.Classifiers["stochastic"](p1()))
+        self.assertTrue(axl.Classifiers["stochastic"](p1()))
 
         probability = (0, 0)
         p1 = JossAnnTransformer(probability)(axl.Random)
@@ -669,12 +684,65 @@ class TestRetailiateUntilApologyTransformer(TestMatch):
         self.versus_test(p1, p2, [C, C, D, D, C], [C, D, D, C, C], seed=35)
 
 
-class TestRUAisTFT(TestTitForTat):
-    # This runs the 7 TFT tests when unittest is invoked
+# Run the standard Player tests on some specifically transformed players
+
+class TestNullInitialTransformedCooperator(TestPlayer):
+    player = InitialTransformer([])(axl.Cooperator)
+    name = "Initial Cooperator: []"
+    expected_classifier = {
+        "memory_depth": 0,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+
+class TestInitialTransformedCooperator(TestPlayer):
+    player = InitialTransformer([D, D])(axl.Cooperator)
+    name = "Initial Cooperator: [D, D]"
+    expected_classifier = {
+        "memory_depth": 2,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+
+class TestFinalTransformedCooperator(TestPlayer):
+    player = FinalTransformer([D, D, D])(axl.Cooperator)
+    name = "Final Cooperator: [D, D, D]"
+    expected_classifier = {
+        "memory_depth": 3,
+        "stochastic": False,
+        "makes_use_of": {"length"},
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+
+class TestInitialFinalTransformedCooperator(TestPlayer):
+    player = InitialTransformer([D, D])(FinalTransformer([D, D, D])(axl.Cooperator))
+    name = "Initial Final Cooperator: [D, D, D]: [D, D]"
+    expected_classifier = {
+        "memory_depth": 3,
+        "stochastic": False,
+        "makes_use_of": {"length"},
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+
+class TestRUACooperatorisTFT(TestTitForTat):
     player = RetaliateUntilApologyTransformer()(axl.Cooperator)
     name = "RUA Cooperator"
     expected_classifier = {
-        "memory_depth": 0,  # really 1
+        "memory_depth": 1,
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -688,3 +756,166 @@ class TestFlipDefector(TestCooperator):
     # Test that FlipTransformer(Defector) == Cooperator
     name = "Flipped Defector"
     player = FlipTransformer()(axl.Defector)
+    expected_classifier = {
+        "memory_depth": 0,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+
+class TestNoisyNullCooperator(TestCooperator):
+    name = "Noisy Cooperator: 0"
+    player = NoisyTransformer(0)(axl.Cooperator)
+    expected_classifier = {
+        "memory_depth": 0,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+
+class TestFullNoisyCooperatorIsDefector(TestDefector):
+    name = "Noisy Cooperator: 1"
+    player = NoisyTransformer(1)(axl.Cooperator)
+    expected_classifier = {
+        "memory_depth": 0,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+
+class TestNullForgivingCooperator(TestDefector):
+    name = "Forgiving Defector: 0"
+    player = ForgiverTransformer(0)(axl.Defector)
+    expected_classifier = {
+        "memory_depth": 0,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+
+class TestFullForgivingCooperatorIsDefector(TestCooperator):
+    name = "Forgiving Defector: 1"
+    player = ForgiverTransformer(1)(axl.Defector)
+    expected_classifier = {
+        "memory_depth": 0,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+
+class TestMixed0(TestDefector):
+    name = "Mutated Defector: 0, <class 'axelrod.strategies.cooperator.Cooperator'>"
+    player = MixedTransformer(0, axl.Cooperator)(axl.Defector)
+    expected_classifier = {
+        "memory_depth": 0,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+
+class TestMixed1(TestDefector):
+    name = "Mutated Cooperator: 1, <class 'axelrod.strategies.defector.Defector'>"
+    player = MixedTransformer(1, axl.Defector)(axl.Cooperator)
+    expected_classifier = {
+        "memory_depth": 0,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+
+class TestIdentityDualTransformer(TestPlayer):
+    name = "Dual Cooperator"
+    player = IdentityTransformer()(DualTransformer()(axl.Cooperator))
+    expected_classifier = {
+        "memory_depth": 0,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+
+class TestFlippedDualTransformer(TestPlayer):
+    name = "Flipped Dual Cooperator"
+    player = FlipTransformer()(DualTransformer()(axl.Cooperator))
+    expected_classifier = {
+        "memory_depth": 0,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+
+class TestIdentityDualTransformer(TestPlayer):
+    name = "Dual Cooperator"
+    player = IdentityTransformer()(DualTransformer()(axl.Cooperator))
+    expected_classifier = {
+        "memory_depth": 0,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+
+class TestDualJossAnn(TestPlayer):
+    name = "Dual Joss-Ann Alternator: (0.2, 0.3)"
+    player = DualTransformer()(JossAnnTransformer((0.2, 0.3))(axl.Alternator))
+    expected_classifier = {
+        "memory_depth": 1,
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+
+class TestJossAnnDual(TestPlayer):
+    name = "Joss-Ann Dual Alternator: (0.2, 0.3)"
+    player = JossAnnTransformer((0.2, 0.3))(DualTransformer()(axl.Alternator))
+    expected_classifier = {
+        "memory_depth": 1,
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }

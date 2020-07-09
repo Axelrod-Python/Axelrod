@@ -5,9 +5,7 @@ strategy.
 See the various Meta strategies for another type of transformation.
 """
 
-import copy
 import inspect
-from collections import Iterable
 from importlib import import_module
 from typing import Any
 
@@ -84,30 +82,55 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None, reclassifier=
                 del kwargs["name_prefix"]
             except KeyError:
                 pass
-            try:
-                del kwargs["reclassifier"]
-            except KeyError:
-                pass
+
+            # Since a strategy can be transformed multiple times, we need to build up an
+            # array of the reclassifiers. These will be dynamically added to the new class
+            # below.
+            reclassifiers = PlayerClass._reclassifiers.copy()
+            if reclassifier is not None:
+                reclassifiers.append((reclassifier, args, kwargs))
 
             # Define the new strategy method, wrapping the existing method
             # with `strategy_wrapper`
+            # Here we build up the strategy function in parts to avoid unnecessary repeated
+            # auxiliary function calls. For example, is_strategy_static uses inspect
+            # which can be slow, so we don't want to call it more than needed.
+
+            # First handle the case where the strategy method is static.
+            if is_strategy_static(PlayerClass):
+                def inner_strategy(self, opponent):
+                    return PlayerClass.strategy(opponent)
+            else:
+                def inner_strategy(self, opponent):
+                    return PlayerClass.strategy(self, opponent)
+
+            # For the dual wrapper, we flip the history before and after the transform.
+            if strategy_wrapper == dual_wrapper:
+                def dual_inner_strategy(self, opponent):
+                    """The dual wrapper requires flipping the history. It may be more efficient
+                    to use a custom History class that tracks a flipped history and swaps labels."""
+                    self._history = self.history.flip_plays()
+                    proposed_action = inner_strategy(self, opponent)
+                    self._history = self.history.flip_plays()
+                    return proposed_action
+                outer_strategy = dual_inner_strategy
+            # For the JossAnn transformer, we want to avoid calling the wrapped strategy,
+            # in the cases where it is unnecessary, to avoid affecting stochasticity.
+            elif strategy_wrapper == joss_ann_wrapper:
+                def joss_ann_inner_strategy(self, opponent):
+                    if not self.classifier["stochastic"]:
+                        proposed_action = C
+                    else:
+                        proposed_action = inner_strategy(self, opponent)
+                    return proposed_action
+                outer_strategy = joss_ann_inner_strategy
+            else:
+                outer_strategy = inner_strategy
+
+            # Apply the wrapper
             def strategy(self, opponent):
-                if strategy_wrapper == dual_wrapper:
-                    # dual_wrapper figures out strategy as if the Player had
-                    # played the opposite actions of its current history.
-                    self._history = self.history.flip_plays()
+                proposed_action = outer_strategy(self, opponent)
 
-                if is_strategy_static(PlayerClass):
-                    proposed_action = PlayerClass.strategy(opponent)
-                else:
-                    proposed_action = PlayerClass.strategy(self, opponent)
-
-                if strategy_wrapper == dual_wrapper:
-                    # After dual_wrapper calls the strategy, it returns
-                    # the Player to its original state.
-                    self._history = self.history.flip_plays()
-
-                # Apply the wrapper
                 return strategy_wrapper(
                     self, opponent, proposed_action, *args, **kwargs
                 )
@@ -121,12 +144,6 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None, reclassifier=
                 new_class_name = "".join([name_prefix, PlayerClass.__name__])
                 # Modify the Player name (class variable inherited from Player)
                 name = " ".join([name_prefix, PlayerClass.name])
-
-            original_classifier = copy.deepcopy(PlayerClass.classifier)  # Copy
-            if reclassifier is not None:
-                classifier = reclassifier(original_classifier, *args, **kwargs)
-            else:
-                classifier = original_classifier
 
             # Define the new __repr__ method to add the wrapper arguments
             # at the end of the name
@@ -185,9 +202,9 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None, reclassifier=
                     "decorator": self,
                     "__repr__": __repr__,
                     "__module__": PlayerClass.__module__,
-                    "classifier": classifier,
                     "__doc__": PlayerClass.__doc__,
                     "__reduce__": reduce_for_decorated_class,
+                    "_reclassifiers": reclassifiers,
                 },
             )
 
@@ -231,7 +248,6 @@ class DecoratorReBuilder(object):
     def __call__(
         self, factory_args: tuple, args: tuple, kwargs: dict, instance_name_prefix: str
     ) -> Any:
-
         decorator_class = StrategyTransformerFactory(*factory_args)
         kwargs["name_prefix"] = instance_name_prefix
         return decorator_class(*args, **kwargs)
@@ -340,6 +356,10 @@ DualTransformer = StrategyTransformerFactory(dual_wrapper, name_prefix="Dual")
 
 def noisy_wrapper(player, opponent, action, noise=0.05):
     """Flips the player's actions with probability: `noise`."""
+    if noise == 0:
+        return action
+    if noise == 1:
+        return action.flip()
     r = player._random.random()
     if r < noise:
         return action.flip()
@@ -362,6 +382,10 @@ def forgiver_wrapper(player, opponent, action, p):
     """If a strategy wants to defect, flip to cooperate with the given
     probability."""
     if action == D:
+        if p == 0:
+            return D
+        if p == 1:
+            return C
         return player._random.random_choice(p)
     return C
 
@@ -606,7 +630,8 @@ def joss_ann_wrapper(player, opponent, proposed_action, probability):
     options = [C, D, proposed_action]
 
     # Avoid use of self._random if strategy is actually deterministic.
-    if 1 in probability:  # If all probability  given to one player
+    # if any(0 < x < 1 for x in probability) or not all(x == 0 for x in probability):
+    if 1 in probability:
         option = options[probability.index(1)]
         return option
 
@@ -624,7 +649,7 @@ def jossann_reclassifier(original_classifier, probability):
 
     if probability in [(1, 0), (0, 1)]:
         original_classifier["stochastic"] = False
-    elif sum(probability) != 0:
+    else:
         original_classifier["stochastic"] = True
 
     return original_classifier
@@ -655,8 +680,16 @@ class RetaliationWrapper(object):
             return D
 
 
+def retailiation_reclassifier(original_classifier, retaliations):
+    if retaliations > 0:
+        original_classifier["memory_depth"] = max(
+            retaliations, original_classifier["memory_depth"])
+    return original_classifier
+
+
 RetaliationTransformer = StrategyTransformerFactory(
-    RetaliationWrapper(), name_prefix="Retaliating"
+    RetaliationWrapper(), name_prefix="Retaliating",
+    reclassifier=retailiation_reclassifier
 )
 
 
@@ -666,18 +699,19 @@ class RetaliationUntilApologyWrapper(object):
 
     def __call__(self, player, opponent, action):
         if len(player.history) == 0:
-            self.is_retaliating = False
             return action
         if opponent.history[-1] == D:
-            self.is_retaliating = True
-        if self.is_retaliating:
-            if opponent.history[-1] == C:
-                self.is_retaliating = False
-                return C
             return D
         return action
 
 
+def rua_reclassifier(original_classifier):
+    original_classifier["memory_depth"] = max(
+        1, original_classifier["memory_depth"])
+    return original_classifier
+
+
 RetaliateUntilApologyTransformer = StrategyTransformerFactory(
-    RetaliationUntilApologyWrapper(), name_prefix="RUA"
+    RetaliationUntilApologyWrapper(), name_prefix="RUA",
+    reclassifier=rua_reclassifier
 )

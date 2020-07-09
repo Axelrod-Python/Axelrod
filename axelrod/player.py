@@ -15,7 +15,16 @@ from axelrod.random_ import RandomGenerator
 C, D = Action.C, Action.D
 
 
-class Player(object):
+class PostInitCaller(type):
+    """Metaclass to be able to handle post __init__ tasks."""
+    def __call__(cls, *args, **kwargs):
+        obj = type.__call__(cls, *args, **kwargs)
+        obj._post_init()
+        obj._post_transform()
+        return obj
+
+
+class Player(object, metaclass=PostInitCaller):
     """A class for a player in the tournament.
 
     This is an abstract base class, not intended to be used directly.
@@ -23,6 +32,7 @@ class Player(object):
 
     name = "Player"
     classifier = {}  # type: Dict[str, Any]
+    _reclassifiers = []
 
     def __new__(cls, *args, **kwargs):
         """Caches arguments for Player cloning."""
@@ -50,10 +60,22 @@ class Player(object):
         return boundargs.arguments
 
     def __init__(self):
-        """Initiates an empty history."""
+        """Initial class setup."""
         self._history = History()
         self.classifier = copy.deepcopy(self.classifier)
         self.set_match_attributes()
+
+    def _post_init(self):
+        """Post initialization tasks such as reclassifying the strategy."""
+        pass
+
+    def _post_transform(self):
+        """Overwrite this function if you need to do a post-transform, post-init
+        modification."""
+        # Reclassify strategy post __init__, if needed.
+        for (reclassifier, args, kwargs) in self._reclassifiers:
+            self.classifier = reclassifier(self.classifier, *args, **kwargs)
+        pass
 
     def __eq__(self, other):
         """
@@ -124,7 +146,6 @@ class Player(object):
                 "Initializing player with seed from Axelrod module random number generator."
                 " Results may not be seed reproducible.")
             self._seed = _module_random.random_seed_int()
-            # raise Exception()
         else:
             self._seed = seed
         self._random = RandomGenerator(seed=self._seed)
