@@ -41,14 +41,19 @@ class Random(Player):
         """
         super().__init__()
         self.p = p
-        if p in [0, 1]:
+
+    def strategy(self, opponent: Player) -> Action:
+        return self._random.random_choice(self.p)
+
+    def _post_init(self):
+        if self.p in [0, 1]:
             self.classifier["stochastic"] = False
         # Avoid calls to _random, if strategy is deterministic
         # by overwriting the strategy function.
-        if p == 0:
-            self.strategy = self.cooperate
-        if p == 1:
+        if self.p <= 0:
             self.strategy = self.defect
+        if self.p >= 1:
+            self.strategy = self.cooperate
 
     @classmethod
     def cooperate(cls, opponent: Player) -> Action:
@@ -58,5 +63,3 @@ class Random(Player):
     def defect(cls, opponent: Player) -> Action:
         return D
 
-    def strategy(self, opponent: Player) -> Action:
-        return self._random.random_choice(self.p)
