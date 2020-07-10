@@ -17,7 +17,7 @@ class DBS(Player):
 
     Names
 
-    - Desired Belief Strategy: [Au2006]_
+    - Derived Belief Strategy: [Au2006]_
     """
 
     # These are various properties for the strategy
