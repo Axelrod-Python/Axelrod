@@ -89,20 +89,6 @@ class MoranProcess(object):
         seed: int
             A random seed for reproducibility
         """
-        self.turns = turns
-        self.prob_end = prob_end
-        self.game = game
-        self.noise = noise
-        self.initial_players = players  # save initial population
-        self.players = []  # type: List
-        self.populations = []  # type: List
-        self.set_players()
-        self.score_history = []  # type: List
-        self.winning_strategy_name = None  # type: Optional[str]
-        self.mutation_rate = mutation_rate
-        self.stop_on_fixation = stop_on_fixation
-        self._random = RandomGenerator(seed=seed)
-        self._bulk_random = BulkRandomGenerator(self._random.random_seed_int())
         m = mutation_method.lower()
         if m in ["atomic", "transition"]:
             self.mutation_method = m
@@ -117,6 +103,20 @@ class MoranProcess(object):
             self.deterministic_cache = deterministic_cache
         else:
             self.deterministic_cache = DeterministicCache()
+        self.turns = turns
+        self.prob_end = prob_end
+        self.game = game
+        self.noise = noise
+        self.initial_players = players  # save initial population
+        self.players = []  # type: List
+        self.populations = []  # type: List
+        self.score_history = []  # type: List
+        self.winning_strategy_name = None  # type: Optional[str]
+        self.mutation_rate = mutation_rate
+        self.stop_on_fixation = stop_on_fixation
+        self._random = RandomGenerator(seed=seed)
+        self._bulk_random = BulkRandomGenerator(self._random.random_seed_int())
+        self.set_players()
         # Build the set of mutation targets
         # Determine the number of unique types (players)
         keys = set([str(p) for p in players])
@@ -150,11 +150,17 @@ class MoranProcess(object):
         self.fixated = self.fixation_check()
 
     def set_players(self) -> None:
-        """Copy the initial players into the first population."""
+        """Copy the initial players into the first population, setting seeds as needed."""
         self.players = []
         for player in self.initial_players:
-            player.reset()
-            self.players.append(player)
+            if (self.mutation_method == "atomic") and issubclass(player.__class__, EvolvablePlayer):
+                # For reproducibility, we generate random seeds for evolvable players.
+                seed = next(self._bulk_random)
+                new_player = player.create_new(seed=seed)
+                self.players.append(new_player)
+            else:
+                player.reset()
+                self.players.append(player)
         self.populations = [self.population_distribution()]
 
     def fitness_proportionate_selection(self,
@@ -500,6 +506,14 @@ class ApproximateMoranProcess(MoranProcess):
             seed=seed
         )
         self.cached_outcomes = cached_outcomes
+
+    def set_players(self) -> None:
+        """Copy the initial players into the first population."""
+        self.players = []
+        for player in self.initial_players:
+            player.reset()
+            self.players.append(player)
+        self.populations = [self.population_distribution()]
 
     def score_all(self) -> List:
         """Plays the next round of the process. Every player is paired up
