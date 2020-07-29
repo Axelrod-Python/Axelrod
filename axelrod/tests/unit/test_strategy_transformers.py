@@ -624,7 +624,7 @@ class TestNoisyTransformer(TestMatch):
         p1 = axl.Cooperator()
         p2 = NoisyTransformer(0.5)(axl.Cooperator)()
         self.assertTrue(axl.Classifiers["stochastic"](p2))
-        self.versus_test(p1, p2, [C] * 10, [C, C, C, C, C, C, D, D, C, C], seed=344)
+        self.versus_test(p1, p2, [C] * 10, [D, C, C, D, C, D, C, D, D, C], seed=1)
 
     def test_noisy_transformation_stochastic(self):
         """Depending on the value of the noise parameter, the strategy may become stochastic
@@ -681,7 +681,7 @@ class TestRetailiateUntilApologyTransformer(TestMatch):
         TFT = RetaliateUntilApologyTransformer()(axl.Cooperator)
         p1 = TFT()
         p2 = axl.Random()
-        self.versus_test(p1, p2, [C, C, D, D, C], [C, D, D, C, C], seed=35)
+        self.versus_test(p1, p2, [C, C, D, D, C], [C, D, D, C, D], seed=1)
 
 
 # Run the standard Player tests on some specifically transformed players
