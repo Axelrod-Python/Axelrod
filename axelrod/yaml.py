@@ -86,8 +86,13 @@ def log_kwargs(func):
                 player_attributes=player_attributes)
         )
         stream = open(filename, 'a')
-        stream.write("---\n")
-        yaml.dump(asdict(test_config), stream)
+        try:
+            stream.write("---\n")
+            yaml.dump(asdict(test_config), stream)
+        except TypeError:
+            # Some players, like transformed players, don't serialize
+            # well
+            pass
         stream.close()
         return func(*args, **kwargs)
     return wrapper
@@ -96,7 +101,14 @@ def log_kwargs(func):
 def load_matches():
     stream = open(filename, 'r')
     matches = yaml.load_all(stream, Loader=yaml.Loader)
-    return [from_dict(data_class=TestMatchConfig, data=match, config=Config(
-        type_hooks={Tuple[Action, ...]: str_to_actions})) for match in matches]
+    deserialized = []
+    for match in matches:
+        try:
+            m = from_dict(data_class=TestMatchConfig, data=match, config=Config(
+                type_hooks={Tuple[Action, ...]: str_to_actions}))
+            deserialized.append(m)
+        except TypeError:
+            continue
+    return deserialized
 
 
