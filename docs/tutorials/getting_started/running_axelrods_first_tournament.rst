@@ -59,19 +59,22 @@ The results object contains the ranked names::
     First by Grofman
     First by Shubik
     Tit For Tat
-    First by Tideman and Chieruzzi: (D, D)
     First by Nydegger
+    First by Tideman and Chieruzzi: (D, D)
     Grudger
     First by Davis: 10
     First by Graaskamp: 0.05
     First by Downing
     First by Feld: 1.0, 0.5, 200
-    Random: 0.5
     First by Tullock
     First by Joss: 0.9
     First by Anonymous
+    Random: 0.5
 
-We see that `TitForTat` does not in fact win this tournament.
+We see that `TitForTat` does not in fact win this tournament. `TitForTat` typically does not
+win, possibly because our implementations differ from the original strategies as their code
+is not available.
+
 We can plot the reported rank (from [Axelrod1980]_) versus the reproduced one::
 
     >>> import matplotlib.pyplot as plt
@@ -147,13 +150,13 @@ Other outcomes
 --------------
 
 If we run the tournament with other seeds, the results are different. For
-example, with `796` Tit For Tat wins::
+example, with `1408` Tit For Tat wins::
 
     >>> tournament = axl.Tournament(
     ...      players=first_tournament_participants_ordered_by_reported_rank,
     ...      turns=200,
     ...      repetitions=5,
-    ...      seed=796,
+    ...      seed=1408,
     ... )
     >>> results = tournament.play()
     >>> for name in results.ranked_names:
@@ -169,19 +172,19 @@ example, with `796` Tit For Tat wins::
     First by Graaskamp: 0.05
     First by Downing
     First by Feld: 1.0, 0.5, 200
-    First by Joss: 0.9
     First by Tullock
+    First by Joss: 0.9
     First by Anonymous
     Random: 0.5
 
 
-With `208` the strategy submitted by Grofman wins::
+With `136` the strategy submitted by Grofman wins::
 
     >>> tournament = axl.Tournament(
     ...      players=first_tournament_participants_ordered_by_reported_rank,
     ...      turns=200,
     ...      repetitions=5,
-    ...      seed=208
+    ...      seed=136
     ... )
     >>> results = tournament.play()
     >>> for name in results.ranked_names:
@@ -192,14 +195,13 @@ With `208` the strategy submitted by Grofman wins::
     First by Shubik
     First by Tideman and Chieruzzi: (D, D)
     First by Nydegger
-    First by Davis: 10
     Grudger
-    First by Graaskamp: 0.05
+    First by Davis: 10
     First by Downing
+    First by Graaskamp: 0.05
     First by Feld: 1.0, 0.5, 200
-    First by Tullock
     First by Joss: 0.9
-    First by Anonymous
+    First by Tullock
     Random: 0.5
-
+    First by Anonymous
 
