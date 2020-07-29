@@ -71,6 +71,20 @@ class SimpleHMM(object):
         self.transitions_D = transitions_D
         self.emission_probabilities = emission_probabilities
         self.state = initial_state
+        self._cache_C = dict()
+        self._cache_D = dict()
+        self._cache_deterministic_transitions()
+
+    def _cache_deterministic_transitions(self):
+        """Cache deterministic transitions to avoid unnecessary random draws."""
+        # If 1 is in the transition vector, it's deterministic. Just pick it out.
+        # By caching we avoid repeated searches.
+        for state in range(len(self.transitions_C)):
+            if 1 in self.transitions_C[state]:
+                self._cache_C[state] = self.transitions_C[state].index(1)
+        for state in range(len(self.transitions_D)):
+            if 1 in self.transitions_D[state]:
+                self._cache_D[state] = self.transitions_D[state].index(1)
 
     def is_well_formed(self) -> bool:
         """
@@ -109,22 +123,26 @@ class SimpleHMM(object):
             opponent_action: Axelrod.Action
                 The opponent's last action.
         """
-        num_states = len(self.emission_probabilities)
+        # Choose next state.
         if opponent_action == C:
-            if 1 in self.transitions_C[self.state]:
-                next_state = [self.transitions_C[self.state].index(1)]
-            else:
-                next_state = self._random.choice(num_states, 1, p=self.transitions_C[self.state])
+            try:
+                next_state = self._cache_C[self.state]
+            except KeyError:
+                num_states = len(self.emission_probabilities)
+                next_state = self._random.choice(num_states, 1, p=self.transitions_C[self.state])[0]
         else:
-            if 1 in self.transitions_D[self.state]:
-                next_state = [self.transitions_D[self.state].index(1)]
-            else:
-                next_state = self._random.choice(num_states, 1, p=self.transitions_D[self.state])
-        self.state = next_state[0]
+            try:
+                next_state = self._cache_D[self.state]
+            except KeyError:
+                num_states = len(self.emission_probabilities)
+                next_state = self._random.choice(num_states, 1, p=self.transitions_D[self.state])[0]
+
+        self.state = next_state
+        # Choose action to emit.
         p = self.emission_probabilities[self.state]
-        if p == 1:
-            return D
         if p == 0:
+            return D
+        if p == 1:
             return C
         action = self._random.random_choice(p)
         return action
