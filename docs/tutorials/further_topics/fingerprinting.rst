@@ -76,7 +76,7 @@ This allows for the fingerprinting of parametrized strategies::
     >>> data
     {...
     >>> data[(0, 0)]
-    4.1
+    3.75
 
 Transitive Fingerprint
 -----------------------
