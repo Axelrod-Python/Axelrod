@@ -16,6 +16,8 @@ def strategy_lists(
 
     Parameters
     ----------
+    strategies : List(axl.Player)
+        The set of strategies to draw from
     min_size : integer
         The minimum number of strategies to include
     max_size : integer
@@ -82,6 +84,8 @@ def tournaments(
 
     Parameters
     ----------
+    strategies : List(axl.Player)
+        The set of strategies to draw from
     min_size : integer
         The minimum number of strategies to include
     max_size : integer
@@ -93,6 +97,8 @@ def tournaments(
     min_noise : float
         The minimum noise value
     min_noise : float
+        The minimum noise value
+    max_noise : float
         The maximum noise value
     min_repetitions : integer
         The minimum number of repetitions
@@ -130,6 +136,8 @@ def prob_end_tournaments(
 
     Parameters
     ----------
+    strategies : List(axl.Player)
+        The set of strategies to draw from
     min_size : integer
         The minimum number of strategies to include
     max_size : integer
@@ -181,6 +189,8 @@ def spatial_tournaments(
 
     Parameters
     ----------
+    strategies : List(axl.Player)
+        The set of strategies to draw from
     min_size : integer
         The minimum number of strategies to include
     max_size : integer
@@ -248,6 +258,8 @@ def prob_end_spatial_tournaments(
 
     Parameters
     ----------
+    strategies : List(axl.Player)
+        The set of strategies to draw from
     min_size : integer
         The minimum number of strategies to include
     max_size : integer
