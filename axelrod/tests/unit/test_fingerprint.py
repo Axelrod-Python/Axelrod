@@ -246,7 +246,7 @@ class TestFingerprint(unittest.TestCase):
         af = AshlockFingerprint(axl.Cooperator())
         af.fingerprint(turns=5, repetitions=3, step=0.5, progress_bar=False, seed=0)
 
-        reshaped_data = np.array([[0.0, 0.0, 0.0], [1.4, 1.8, 1.2], [3.0, 3.0, 3.0]])
+        reshaped_data = np.array([[0.0, 0.0, 0.0], [1., 2., 1.6], [3.0, 3.0, 3.0]])
         plotted_data = af.plot().gca().images[0].get_array()
         np.testing.assert_allclose(plotted_data, reshaped_data)
 
@@ -268,32 +268,33 @@ class TestFingerprint(unittest.TestCase):
 
     def test_wsls_fingerprint(self):
         test_data = {
-            Point(x=0.0, y=0.0): 3.000,
-            Point(x=0.0, y=0.25): 1.740,
-            Point(x=0.0, y=0.5): 1.300,
-            Point(x=0.0, y=0.75): 0.900,
-            Point(x=0.0, y=1.0): 0.500,
-            Point(x=0.25, y=0.0): 3.000,
-            Point(x=0.25, y=0.25): 2.250,
-            Point(x=0.25, y=0.5): 1.990,
-            Point(x=0.25, y=0.75): 1.250,
-            Point(x=0.25, y=1.0): 0.670,
-            Point(x=0.5, y=0.0): 3.000,
-            Point(x=0.5, y=0.25): 2.700,
-            Point(x=0.5, y=0.5): 2.420,
-            Point(x=0.5, y=0.75): 1.700,
-            Point(x=0.5, y=1.0): 0.950,
-            Point(x=0.75, y=0.0): 3.000,
-            Point(x=0.75, y=0.25): 2.920,
-            Point(x=0.75, y=0.5): 3.000,
-            Point(x=0.75, y=0.75): 2.770,
-            Point(x=0.75, y=1.0): 1.100,
-            Point(x=1.0, y=0.0): 3.000,
-            Point(x=1.0, y=0.25): 4.800,
-            Point(x=1.0, y=0.5): 3.860,
-            Point(x=1.0, y=0.75): 4.380,
-            Point(x=1.0, y=1.0): 1.300,
+            Point(x=0.0, y=0.0): 3.0,
+            Point(x=0.0, y=0.25): 1.83,
+            Point(x=0.0, y=0.5): 1.12,
+            Point(x=0.0, y=0.75): 1.04,
+            Point(x=0.0, y=1.0): 0.5,
+            Point(x=0.25, y=0.0): 3.0,
+            Point(x=0.25, y=0.25): 2.12,
+            Point(x=0.25, y=0.5): 2.17,
+            Point(x=0.25, y=0.75): 1.33,
+            Point(x=0.25, y=1.0): 0.77,
+            Point(x=0.5, y=0.0): 3.0,
+            Point(x=0.5, y=0.25): 2.9299999999999997,
+            Point(x=0.5, y=0.5): 2.3600000000000003,
+            Point(x=0.5, y=0.75): 1.74,
+            Point(x=0.5, y=1.0): 1.05,
+            Point(x=0.75, y=0.0): 3.0,
+            Point(x=0.75, y=0.25): 2.52,
+            Point(x=0.75, y=0.5): 2.79,
+            Point(x=0.75, y=0.75): 2.41,
+            Point(x=0.75, y=1.0): 1.2,
+            Point(x=1.0, y=0.0): 3.0,
+            Point(x=1.0, y=0.25): 4.86,
+            Point(x=1.0, y=0.5): 4.36,
+            Point(x=1.0, y=0.75): 4.05,
+            Point(x=1.0, y=1.0): 1.3
         }
+
         af = axl.AshlockFingerprint(axl.WinStayLoseShift(), axl.TitForTat)
         data = af.fingerprint(turns=50, repetitions=2, step=0.25, progress_bar=False,
                               seed=0)
@@ -303,31 +304,31 @@ class TestFingerprint(unittest.TestCase):
 
     def test_tft_fingerprint(self):
         test_data = {
-            Point(x=0.0, y=0.0): 3.000,
-            Point(x=0.0, y=0.25): 1.100,
-            Point(x=0.0, y=0.5): 1.070,
-            Point(x=0.0, y=0.75): 0.980,
-            Point(x=0.0, y=1.0): 0.980,
-            Point(x=0.25, y=0.0): 3.000,
-            Point(x=0.25, y=0.25): 2.250,
-            Point(x=0.25, y=0.5): 1.880,
-            Point(x=0.25, y=0.75): 1.640,
-            Point(x=0.25, y=1.0): 1.460,
-            Point(x=0.5, y=0.0): 3.000,
-            Point(x=0.5, y=0.25): 2.540,
-            Point(x=0.5, y=0.5): 2.330,
-            Point(x=0.5, y=0.75): 2.100,
-            Point(x=0.5, y=1.0): 1.830,
-            Point(x=0.75, y=0.0): 3.000,
-            Point(x=0.75, y=0.25): 2.780,
-            Point(x=0.75, y=0.5): 2.520,
-            Point(x=0.75, y=0.75): 2.250,
-            Point(x=0.75, y=1.0): 1.980,
-            Point(x=1.0, y=0.0): 3.000,
-            Point(x=1.0, y=0.25): 2.770,
-            Point(x=1.0, y=0.5): 2.460,
-            Point(x=1.0, y=0.75): 2.360,
-            Point(x=1.0, y=1.0): 2.180,
+            Point(x=0.0, y=0.0): 3.0,
+            Point(x=0.0, y=0.25): 1.21,
+            Point(x=0.0, y=0.5): 1.01,
+            Point(x=0.0, y=0.75): 1.04,
+            Point(x=0.0, y=1.0): 0.98,
+            Point(x=0.25, y=0.0): 3.0,
+            Point(x=0.25, y=0.25): 2.01,
+            Point(x=0.25, y=0.5): 2.05,
+            Point(x=0.25, y=0.75): 1.71,
+            Point(x=0.25, y=1.0): 1.52,
+            Point(x=0.5, y=0.0): 3.0,
+            Point(x=0.5, y=0.25): 2.6500000000000004,
+            Point(x=0.5, y=0.5): 2.36,
+            Point(x=0.5, y=0.75): 2.1100000000000003,
+            Point(x=0.5, y=1.0): 1.8900000000000001,
+            Point(x=0.75, y=0.0): 3.0,
+            Point(x=0.75, y=0.25): 2.57,
+            Point(x=0.75, y=0.5): 2.51,
+            Point(x=0.75, y=0.75): 2.13,
+            Point(x=0.75, y=1.0): 2.12,
+            Point(x=1.0, y=0.0): 3.0,
+            Point(x=1.0, y=0.25): 2.68,
+            Point(x=1.0, y=0.5): 2.51,
+            Point(x=1.0, y=0.75): 2.41,
+            Point(x=1.0, y=1.0): 2.18
         }
 
         af = axl.AshlockFingerprint(axl.TitForTat(), axl.TitForTat)
@@ -339,31 +340,31 @@ class TestFingerprint(unittest.TestCase):
 
     def test_majority_fingerprint(self):
         test_data = {
-            Point(x=0.0, y=0.0): 3.000,
-            Point(x=0.0, y=0.25): 1.630,
-            Point(x=0.0, y=0.5): 1.070,
-            Point(x=0.0, y=0.75): 0.980,
-            Point(x=0.0, y=1.0): 0.980,
-            Point(x=0.25, y=0.0): 3.000,
-            Point(x=0.25, y=0.25): 2.100,
-            Point(x=0.25, y=0.5): 1.840,
-            Point(x=0.25, y=0.75): 1.880,
-            Point(x=0.25, y=1.0): 1.700,
-            Point(x=0.5, y=0.0): 3.000,
-            Point(x=0.5, y=0.25): 2.310,
-            Point(x=0.5, y=0.5): 2.270,
-            Point(x=0.5, y=0.75): 2.670,
-            Point(x=0.5, y=1.0): 2.580,
-            Point(x=0.75, y=0.0): 3.000,
-            Point(x=0.75, y=0.25): 2.440,
-            Point(x=0.75, y=0.5): 1.880,
-            Point(x=0.75, y=0.75): 2.030,
-            Point(x=0.75, y=1.0): 2.540,
-            Point(x=1.0, y=0.0): 3.000,
-            Point(x=1.0, y=0.25): 2.370,
-            Point(x=1.0, y=0.5): 1.920,
-            Point(x=1.0, y=0.75): 2.070,
-            Point(x=1.0, y=1.0): 2.260,
+            Point(x=0.0, y=0.0): 3.0,
+            Point(x=0.0, y=0.25): 1.6,
+            Point(x=0.0, y=0.5): 1.01,
+            Point(x=0.0, y=0.75): 1.04,
+            Point(x=0.0, y=1.0): 0.98,
+            Point(x=0.25, y=0.0): 3.0,
+            Point(x=0.25, y=0.25): 2.12,
+            Point(x=0.25, y=0.5): 1.81,
+            Point(x=0.25, y=0.75): 2.06,
+            Point(x=0.25, y=1.0): 1.86,
+            Point(x=0.5, y=0.0): 3.0,
+            Point(x=0.5, y=0.25): 2.4299999999999997,
+            Point(x=0.5, y=0.5): 2.37,
+            Point(x=0.5, y=0.75): 2.74,
+            Point(x=0.5, y=1.0): 2.68,
+            Point(x=0.75, y=0.0): 3.0,
+            Point(x=0.75, y=0.25): 2.4299999999999997,
+            Point(x=0.75, y=0.5): 1.8399999999999999,
+            Point(x=0.75, y=0.75): 2.34,
+            Point(x=0.75, y=1.0): 2.46,
+            Point(x=1.0, y=0.0): 3.0,
+            Point(x=1.0, y=0.25): 2.12,
+            Point(x=1.0, y=0.5): 1.8599999999999999,
+            Point(x=1.0, y=0.75): 2.0300000000000002,
+            Point(x=1.0, y=1.0): 2.26
         }
 
         af = axl.AshlockFingerprint(axl.GoByMajority, axl.TitForTat)
@@ -381,18 +382,6 @@ class TestFingerprint(unittest.TestCase):
         with any two given strategies or instances
         """
         strategy, probe = strategy_pair
-        af = AshlockFingerprint(strategy, probe)
-        data = af.fingerprint(turns=2, repetitions=2, step=0.5, progress_bar=False)
-        self.assertIsInstance(data, dict)
-
-        af = AshlockFingerprint(strategy(), probe)
-        data = af.fingerprint(turns=2, repetitions=2, step=0.5, progress_bar=False)
-        self.assertIsInstance(data, dict)
-
-        af = AshlockFingerprint(strategy, probe())
-        data = af.fingerprint(turns=2, repetitions=2, step=0.5, progress_bar=False)
-        self.assertIsInstance(data, dict)
-
         af = AshlockFingerprint(strategy(), probe())
         data = af.fingerprint(turns=2, repetitions=2, step=0.5, progress_bar=False)
         self.assertIsInstance(data, dict)
