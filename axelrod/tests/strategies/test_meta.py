@@ -621,7 +621,7 @@ class TestNMWEStochastic(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=20)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=16)
 
 
 class TestNMWEFiniteMemory(TestMetaPlayer):
