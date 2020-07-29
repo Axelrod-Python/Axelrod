@@ -29,16 +29,9 @@ class TestTitForTat(TestPlayer):
         "manipulates_state": False,
     }
 
-    def test_strategy(self):
-        # Play against opponents
+    def test_vs_alternator(self):
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
         self.versus_test(axl.Alternator(), expected_actions=actions)
-
-        actions = [(C, C), (C, C), (C, C), (C, C), (C, C)]
-        self.versus_test(axl.Cooperator(), expected_actions=actions)
-
-        actions = [(C, D), (D, D), (D, D), (D, D), (D, D)]
-        self.versus_test(axl.Defector(), expected_actions=actions)
 
         # This behaviour is independent of knowledge of the Match length
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
@@ -48,13 +41,24 @@ class TestTitForTat(TestPlayer):
             match_attributes={"length": float("inf")},
         )
 
+    def test_vs_cooperator(self):
+        actions = [(C, C), (C, C), (C, C), (C, C), (C, C)]
+        self.versus_test(axl.Cooperator(), expected_actions=actions)
+
+    def test_vs_defector(self):
+        actions = [(C, D), (D, D), (D, D), (D, D), (D, D)]
+        self.versus_test(axl.Defector(), expected_actions=actions)
+
+    def test_vs_random(self):
         # We can also test against random strategies
         actions = [(C, D), (D, C), (C, C), (C, D), (D, D)]
-        self.versus_test(axl.Random(), expected_actions=actions, seed=37)
+        self.versus_test(axl.Random(), expected_actions=actions, seed=17)
 
+    def test_vs_random2(self):
         actions = [(C, C), (C, C), (C, C), (C, C)]
-        self.versus_test(axl.Random(), expected_actions=actions, seed=1)
+        self.versus_test(axl.Random(), expected_actions=actions, seed=3)
 
+    def test_vs_mock_players(self):
         #  If you would like to test against a sequence of moves you should use
         #  a MockPlayer
         opponent = axl.MockPlayer(actions=[C, D])
@@ -733,21 +737,21 @@ class TestContriteTitForTat(TestPlayer):
     def test_strategy_with_noise3(self):
         # After noise: is contrite
         actions = list(zip([D, C], [C, D]))
-        self.versus_test(axl.Defector(), actions, turns=2, noise=0.5, seed=37,
+        self.versus_test(axl.Defector(), actions, turns=2, noise=0.5, seed=49,
                          attrs={"_recorded_history": [C, C],
                                 "contrite": True})
 
     def test_strategy_with_noise4(self):
         # Cooperates and no longer contrite
         actions = list(zip([D, C, C], [C, D, D]))
-        self.versus_test(axl.Defector(), actions, turns=3, noise=0.5, seed=151,
+        self.versus_test(axl.Defector(), actions, turns=3, noise=0.5, seed=49,
                          attrs={"_recorded_history": [C, C, C],
                                 "contrite": False})
 
     def test_strategy_with_noise5(self):
         # Defects and no longer contrite
         actions = list(zip([D, C, C, D], [C, D, D, D]))
-        self.versus_test(axl.Defector(), actions, turns=4, noise=0.5, seed=259,
+        self.versus_test(axl.Defector(), actions, turns=4, noise=0.5, seed=158,
                          attrs={"_recorded_history": [C, C, C, D],
                                 "contrite": False})
 
@@ -947,42 +951,6 @@ class TestNTitsForMTats(TestPlayer):
     expected_class_classifier = copy.copy(expected_classifier)
 
     def test_strategy(self):
-        # TitForTat test_strategy
-        init_kwargs = {"N": 1, "M": 1}
-        actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
-        self.versus_test(
-            axl.Alternator(), expected_actions=actions, init_kwargs=init_kwargs
-        )
-        actions = [(C, C), (C, C), (C, C), (C, C), (C, C)]
-        self.versus_test(
-            axl.Cooperator(), expected_actions=actions, init_kwargs=init_kwargs
-        )
-        actions = [(C, D), (D, D), (D, D), (D, D), (D, D)]
-        self.versus_test(
-            axl.Defector(), expected_actions=actions, init_kwargs=init_kwargs
-        )
-        actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
-        self.versus_test(
-            axl.Alternator(),
-            expected_actions=actions,
-            match_attributes={"length": float("inf")},
-            init_kwargs=init_kwargs,
-        )
-        actions = [(C, D), (D, C), (C, C), (C, D), (D, D)]
-        self.versus_test(
-            axl.Random(), expected_actions=actions, seed=37, init_kwargs=init_kwargs
-        )
-        actions = [(C, D), (D, C), (C, D), (D, D)]
-        self.versus_test(
-            axl.Random(), expected_actions=actions, seed=2, init_kwargs=init_kwargs
-        )
-        opponent = axl.MockPlayer(actions=[C, D])
-        actions = [(C, C), (C, D), (D, C), (C, D)]
-        self.versus_test(opponent, expected_actions=actions, init_kwargs=init_kwargs)
-        opponent = axl.MockPlayer(actions=[C, C, D, D, C, D])
-        actions = [(C, C), (C, C), (C, D), (D, D), (D, C), (C, D)]
-        self.versus_test(opponent, expected_actions=actions, init_kwargs=init_kwargs)
-
         # TitFor2Tats test_strategy
         init_kwargs = {"N": 1, "M": 2}
         opponent = axl.MockPlayer(actions=[D, D, D, C, C])
@@ -1045,6 +1013,51 @@ class TestNTitsForMTats(TestPlayer):
         self.assertEqual(axl.Classifiers["memory_depth"](self.player(1, 1)), 1)
         self.assertEqual(axl.Classifiers["memory_depth"](self.player(0, 3)), 3)
         self.assertEqual(axl.Classifiers["memory_depth"](self.player(5, 3)), 5)
+
+
+class Test1TitsFor1TatsIsTFT(TestTitForTat):
+    """Tests that for N = 1 = M, all the TFT tests are passed."""
+    name = "N Tit(s) For M Tat(s): 1, 1"
+    player = lambda x: axl.NTitsForMTats(1, 1)
+    expected_classifier = {
+        "memory_depth": 1,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+
+class Test1TitsFor2TatsIsTF2T(TestTitFor2Tats):
+    """Tests that for N = 1 = M, all the TFT tests are passed."""
+    name = "N Tit(s) For M Tat(s): 1, 2"
+    player = lambda x: axl.NTitsForMTats(1, 2)
+    expected_classifier = {
+        "memory_depth": 2,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+
+class Test2TitsFor1TatsIsT2FT(TestTwoTitsForTat):
+    """Tests that for N = 1 = M, all the TFT tests are passed."""
+    name = "N Tit(s) For M Tat(s): 2, 1"
+    player = lambda x: axl.NTitsForMTats(2, 1)
+    expected_classifier = {
+        "memory_depth": 2,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
 
 
 class TestMichaelos(TestPlayer):
