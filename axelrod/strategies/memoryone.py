@@ -10,6 +10,38 @@ from axelrod.player import Player
 C, D = Action.C, Action.D
 
 
+class WinStayLoseShift(Player):
+    """
+    Win-Stay Lose-Shift, also called Pavlov.
+
+    Names:
+
+    - Win Stay Lose Shift: [Nowak1993]_
+    - WSLS: [Stewart2012]_
+    - Pavlov: [Kraines1989]_
+    """
+
+    name = "Win-Stay Lose-Shift"
+    classifier = {
+        "memory_depth": 1,  # Memory-one Four-Vector
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+    def strategy(self, opponent: Player) -> Action:
+        if not self.history:
+            return C
+        # React to the opponent's last move
+        last_round = (self.history[-1], opponent.history[-1])
+        if last_round == (C, C) or last_round == (D, D):
+            return C
+        return D
+
+
 class MemoryOnePlayer(Player):
     """
     Uses a four-vector for strategies based on the last round of play,
@@ -40,8 +72,7 @@ class MemoryOnePlayer(Player):
         """
         Parameters
         ----------
-
-        fourvector: list or tuple of floats of length 4
+        four_vector: list or tuple of floats of length 4
             The response probabilities to the preceding round of play
             ( P(C|CC), P(C|CD), P(C|DC), P(C|DD) )
         initial: C or D
@@ -52,7 +83,7 @@ class MemoryOnePlayer(Player):
 
         Alternator is equivalent to MemoryOnePlayer((0, 0, 1, 1), C)
         Cooperator is equivalent to MemoryOnePlayer((1, 1, 1, 1), C)
-        Defector   is equivalent to MemoryOnePlayer((0, 0, 0, 0), C)
+        Defector   is equivalent to MemoryOnePlayer((0, 0, 0, 0), D)
         Random     is equivalent to MemoryOnePlayer((0.5, 0.5, 0.5, 0.5))
         (with a random choice for the initial state)
         TitForTat  is equivalent to MemoryOnePlayer((1, 0, 1, 0), C)
@@ -79,9 +110,14 @@ class MemoryOnePlayer(Player):
                 "An element in the probability vector, {}, is not "
                 "between 0 and 1.".format(str(four_vector))
             )
-
         self._four_vector = dict(zip([(C, C), (C, D), (D, C), (D, D)], four_vector))
-        self.classifier["stochastic"] = any(0 < x < 1 for x in set(four_vector))
+
+    def _post_init(self):
+        # Adjust classifiers
+        values = set(self._four_vector.values())
+        self.classifier["stochastic"] = any(0 < x < 1 for x in values)
+        if all(x == 0 for x in values) or all(x == 1 for x in values):
+            self.classifier["memory_depth"] = 0
 
     def strategy(self, opponent: Player) -> Action:
         if len(opponent.history) == 0:
@@ -93,34 +129,6 @@ class MemoryOnePlayer(Player):
             return self._random.random_choice(p)
         except AttributeError:
             return D if p == 0 else C
-
-
-class WinStayLoseShift(MemoryOnePlayer):
-    """
-    Win-Stay Lose-Shift, also called Pavlov.
-
-    Names:
-
-    - Win Stay Lose Shift: [Nowak1993]_
-    - WSLS: [Stewart2012]_
-    - Pavlov: [Kraines1989]_
-    """
-
-    name = "Win-Stay Lose-Shift"
-    classifier = {
-        "memory_depth": 1,  # Memory-one Four-Vector
-        "stochastic": False,
-        "makes_use_of": set(),
-        "long_run_time": False,
-        "inspects_source": False,
-        "manipulates_source": False,
-        "manipulates_state": False,
-    }
-
-    def __init__(self, initial: Action = C) -> None:
-        four_vector = (1, 0, 0, 1)
-        super().__init__(four_vector)
-        self._initial = initial
 
 
 class WinShiftLoseStay(MemoryOnePlayer):

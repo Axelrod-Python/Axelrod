@@ -6,13 +6,17 @@ import axelrod as axl
 from axelrod.strategies.memoryone import MemoryOnePlayer
 
 from .test_player import TestPlayer, test_four_vector
+from .test_alternator import TestAlternator
+from .test_cooperator import TestCooperator
+from .test_defector import TestDefector
+from .test_titfortat import TestTitForTat
 
 C, D = axl.Action.C, axl.Action.D
 
 
 class TestWinStayLoseShift(TestPlayer):
 
-    name = "Win-Stay Lose-Shift: C"
+    name = "Win-Stay Lose-Shift"
     player = axl.WinStayLoseShift
     expected_classifier = {
         "memory_depth": 1,
@@ -24,11 +28,8 @@ class TestWinStayLoseShift(TestPlayer):
         "manipulates_state": False,
     }
 
-    def test_class_classification(self):
-        self.assertEqual(self.player.classifier, self.expected_classifier)
-
     def test_strategy(self):
-        # Check that switches if does not get best payoff.
+        # Check that player switches if does not get best payoff.
         actions = [(C, C), (C, D), (D, C), (D, D), (C, C)]
         self.versus_test(opponent=axl.Alternator(), expected_actions=actions)
 
@@ -299,3 +300,78 @@ class TestGenericReactiveStrategy(unittest.TestCase):
         self.assertIsInstance(self.p1, MemoryOnePlayer)
         self.assertIsInstance(self.p2, MemoryOnePlayer)
         self.assertIsInstance(self.p3, MemoryOnePlayer)
+
+
+class TestMemoryOneAlternator(TestAlternator):
+    """Alternator is equivalent to MemoryOnePlayer((0, 0, 1, 1), C)"""
+    name = "Generic Memory One Player: (0, 0, 1, 1), C"
+    player = lambda x: axl.MemoryOnePlayer(four_vector=(0, 0, 1, 1))
+    expected_classifier = {
+        "memory_depth": 1,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+
+class TestMemoryOneCooperator(TestCooperator):
+    """Cooperator is equivalent to MemoryOnePlayer((1, 1, 1, 1), C)"""
+    name = "Generic Memory One Player: (1, 1, 1, 1), C"
+    player = lambda x: axl.MemoryOnePlayer(four_vector=(1, 1, 1, 1))
+    expected_classifier = {
+        "memory_depth": 0,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+
+class TestMemoryOneDefector(TestDefector):
+    """Defector is equivalent to MemoryOnePlayer((0, 0, 0, 0), D)"""
+    name = "Generic Memory One Player: (0, 0, 0, 0), D"
+    player = lambda x: axl.MemoryOnePlayer(four_vector=(0, 0, 0, 0), initial=D)
+    expected_classifier = {
+        "memory_depth": 0,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+
+class TestMemoryOneTitForTat(TestTitForTat):
+    """TitForTat is equivalent to MemoryOnePlayer((1, 0, 1, 0), C)"""
+    name = "Generic Memory One Player: (1, 0, 1, 0), C"
+    player = lambda x: axl.MemoryOnePlayer(four_vector=(1, 0, 1, 0))
+    expected_classifier = {
+        "memory_depth": 1,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+
+class TestMemoryOneWSLS(TestWinStayLoseShift):
+    """WinStayLoseShift is equivalent to MemoryOnePlayer((1, 0, 0, 1), C)"""
+    name = "Generic Memory One Player: (1, 0, 0, 1), C"
+    player = lambda x: axl.MemoryOnePlayer(four_vector=(1, 0, 0, 1))
+    expected_classifier = {
+        "memory_depth": 1,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
