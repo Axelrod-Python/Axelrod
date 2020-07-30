@@ -54,6 +54,8 @@ class EvolvableTestOpponent(axl.EvolvablePlayer):
 
 
 class TestEvolvablePlayer(TestPlayer):
+    """Additional tests for EvolvablePlayers, in addition to the many tests
+    inherited from TestPlayer."""
 
     player_class = EvolvableTestOpponent
     parent_class = None
@@ -89,7 +91,7 @@ class TestEvolvablePlayer(TestPlayer):
         player2 = self.player(seed=1)
         self.assertEqual(player1, player2)
 
-        for seed_ in range(2, 20):
+        for seed_ in range(2, 200):
             player2 = self.player(seed=seed_)
             if player1 != player2:
                 return
@@ -183,6 +185,25 @@ class TestEvolvablePlayer(TestPlayer):
         serialized = player.serialize_parameters()
         deserialized_player = player.__class__.deserialize_parameters(serialized)
         self.behavior_test(deserialized_player, parent_player)
+
+    def test_seed_propagation(self):
+        """Tests that _create_new should typically alter the random seed."""
+        player = self.player(seed=1)
+        for _ in range(100):
+            player = player.create_new()
+            if player._seed != 1:
+                return
+
+        # Should never get here unless a change breaks the test, so don't include in coverage.
+        self.assertFalse(True)  # pragma: no cover
+
+    def test_seed_preservation(self):
+        """Tests that method function clone preserves the random seed. The seed
+        is intentionally not checked by Player.__eq__ so an explicit extra test
+        is needed."""
+        player = self.player(seed=1)
+        clone = player.clone()
+        self.assertEqual(player._seed, clone._seed)
 
 
 class TestUtilityFunctions(unittest.TestCase):

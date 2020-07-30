@@ -11,12 +11,6 @@ class InsufficientParametersError(Exception):
         super().__init__(*args)
 
 
-class SeedNotGivenError(Exception):
-    """Error indicating that a required seed was not supplied."""
-    def __init__(self, *args):
-        super().__init__(*args)
-
-
 class EvolvablePlayer(Player):
     """A class for a player that can evolve, for use in the Moran process or with reinforcement learning algorithms.
 
@@ -27,8 +21,9 @@ class EvolvablePlayer(Player):
     parent_class = Player
     parent_kwargs = []  # type: List[str]
 
-    # Parameter seed is actually required.
     def __init__(self, seed=None):
+        # Parameter seed is required for reproducibility. Player will throw
+        # a warning to the user otherwise.
         super().__init__()
         self.set_seed(seed=seed)
 
@@ -38,7 +33,9 @@ class EvolvablePlayer(Player):
             self.init_kwargs[k] = v
 
     def create_new(self, **kwargs):
-        """Creates a new variant with parameters overwritten by kwargs."""
+        """Creates a new variant with parameters overwritten by kwargs. This differs from
+        cloning the Player because it propagates a seed forward, and is intended to be
+        used in my the mutation and crossover methods."""
         init_kwargs = self.init_kwargs.copy()
         init_kwargs.update(kwargs)
         # Propagate seed forward for reproducibility.
