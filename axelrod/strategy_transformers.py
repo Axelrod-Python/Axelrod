@@ -683,7 +683,16 @@ def jossann_reclassifier(original_classifier, probability):
     if probability in [(1, 0), (0, 1)]:
         # In this case the player's strategy is never actually called,
         # so even if it were stochastic the play is not.
-        original_classifier["stochastic"] = False
+        # Also the other classifiers are nulled as well.
+        original_classifier = {
+            "memory_depth": 0,
+            "stochastic": False,
+            "makes_use_of": set(),
+            "long_run_time": False,
+            "inspects_source": False,
+            "manipulates_source": False,
+            "manipulates_state": False,
+        }
     else:
         original_classifier["stochastic"] = True
 

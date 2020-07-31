@@ -993,3 +993,17 @@ class TestJossAnnDual(TestPlayer):
         "manipulates_source": False,
         "manipulates_state": False,
     }
+
+
+class TestJossAnnOverwriteClassifier(TestPlayer):
+    name = "Joss-Ann Final Random: 0.5: [D, D]: (1.0, 0.0)"
+    player = JossAnnTransformer((1., 0.))(FinalTransformer([D, D])(axl.Random))
+    expected_classifier = {
+        "memory_depth": 0,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
