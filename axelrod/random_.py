@@ -26,7 +26,7 @@ class RandomGenerator(object):
         return self._random.randint(*args, **kwargs)
 
     def random_seed_int(self):
-        return self.randint(0, 2**32-1)
+        return self.randint(0, 2**32-1, dtype='u8')
 
     def choice(self, *args, **kwargs):
         return self._random.choice(*args, **kwargs)
