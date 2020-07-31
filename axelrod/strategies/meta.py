@@ -49,16 +49,16 @@ class MetaPlayer(Player):
         if team:
             self.team = team
         else:
-            # Needs to be computed manually to prevent circular dependency
             self.team = ordinary_strategies
         # Make sure we don't use any meta players to avoid infinite recursion.
         self.team = [t for t in self.team if not issubclass(t, MetaPlayer)]
         # Initiate all the players in our team.
         self.team = [t() for t in self.team]
-
+        self._last_results = None
         super().__init__()
 
-        # This player inherits the classifiers of its team.
+    def _post_init(self):
+        # The player's classification characteristics are derived from the team.
         # Note that memory_depth is not simply the max memory_depth of the team.
         for key in [
             "stochastic",
@@ -70,8 +70,6 @@ class MetaPlayer(Player):
 
         for t in self.team:
             self.classifier["makes_use_of"].update(Classifiers["makes_use_of"](t))
-
-        self._last_results = None
 
     def set_seed(self, seed=None):
         super().set_seed(seed=seed)
@@ -91,8 +89,22 @@ class MetaPlayer(Player):
 
     def update_histories(self, coplay):
         # Update team histories.
-        for player, play in zip(self.team, self._last_results):
-            player.history.append(play, coplay)
+        try:
+            for player, play in zip(self.team, self._last_results):
+                player.update_history(play, coplay)
+        except TypeError:
+            # If the Meta class is decorated by the Joss-Ann transformer,
+            # such that the decorated class is now deterministic, the underlying
+            # strategy isn't called. In that case, updating the history of all the
+            # team members doesn't matter.
+            # As a sanity check, look for at least one reclassifier, otherwise
+            # this try-except clause could hide a bug.
+            if len(self._reclassifiers) == 0:
+                raise TypeError("MetaClass update_histories issue, expected a transformer.")
+            # Otherwise just update with C always, so at least the histories have the
+            # expected length.
+            for player in self.team:
+                player.update_history(C, coplay)
 
     def update_history(self, play, coplay):
         super().update_history(play, coplay)
@@ -209,7 +221,11 @@ class MetaWinnerEnsemble(MetaWinner):
 
     def __init__(self, team=None):
         super().__init__(team=team)
-        if len(self.team) > 1:
+
+    def _post_init(self):
+        super()._post_init()
+        team = list(t.__class__ for t in self.team)
+        if len(team) > 1:
             self.classifier["stochastic"] = True
             self.singular = False
         else:
@@ -217,7 +233,7 @@ class MetaWinnerEnsemble(MetaWinner):
         # If the team has repeated identical members, then it reduces to a singular team
         # and it may not actually be stochastic.
         if team and len(set(team)) == 1:
-            self.classifier["stochastic"] = Classifiers["stochastic"](team[0]())
+            self.classifier["stochastic"] = Classifiers["stochastic"](self.team[0])
             self.singular = True
 
     def meta_strategy(self, results, opponent):
@@ -515,6 +531,10 @@ class MetaMixer(MetaPlayer):
 
     def __init__(self, team=None, distribution=None):
         super().__init__(team=team)
+        self.distribution = distribution
+
+    def _post_init(self):
+        distribution = self.distribution
         if distribution and len(set(distribution)) > 1:
             self.classifier["stochastic"] = True
         if len(self.team) == 1:
@@ -525,7 +545,6 @@ class MetaMixer(MetaPlayer):
             return
         # Check if the distribution has only one non-zero value. If so, the strategy may be
         # deterministic, and we can avoid _random.
-        self.distribution = distribution
         if distribution:
             total = sum(distribution)
             if total == 0:
@@ -678,10 +697,6 @@ class MemoryDecay(MetaPlayer):
         start_strategy_duration: int = 15,
     ):
         super().__init__(team=[start_strategy])
-        # This strategy is stochastic even if none of the team is.  The
-        # MetaPlayer initializer will set stochastic to be False in that case.
-        self.classifier["stochastic"] = True
-
         self.p_memory_delete = p_memory_delete
         self.p_memory_alter = p_memory_alter
         self.loss_value = loss_value
@@ -689,6 +704,12 @@ class MemoryDecay(MetaPlayer):
         self.memory = [] if not memory else memory
         self.start_strategy_duration = start_strategy_duration
         self.gloss_values = None
+
+    def _post_init(self):
+        super()._post_init()
+        # This strategy is stochastic even if none of the team is.  The
+        # MetaPlayer initializer will set stochastic to be False in that case.
+        self.classifier["stochastic"] = True
 
     def __repr__(self):
         return Player.__repr__(self)
