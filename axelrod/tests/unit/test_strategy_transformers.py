@@ -196,6 +196,53 @@ class TestTransformers(TestMatch):
         p2 = axl.Cooperator()
         self.versus_test(p1, p2, [D, D, C, C, C, C, D, D], [C] * 8)
 
+    def test_reclassification(self):
+        """Tests that reclassifiers properly work."""
+
+        def stochastic_reclassifier(original_classifier, *args):
+            original_classifier["stochastic"] = True
+            return original_classifier
+
+        def deterministic_reclassifier(original_classifier, *args):
+            original_classifier["stochastic"] = False
+            return original_classifier
+
+        StochasticTransformer = StrategyTransformerFactory(
+            generic_strategy_wrapper, reclassifier=stochastic_reclassifier)
+        DeterministicTransformer = StrategyTransformerFactory(
+            generic_strategy_wrapper, reclassifier=deterministic_reclassifier)
+
+        # Cooperator is not stochastic
+        self.assertFalse(axl.Cooperator().classifier["stochastic"])
+        # Transform makes it stochastic
+        player = StochasticTransformer()(axl.Cooperator)()
+        self.assertTrue(player.classifier["stochastic"])
+
+        # Composing transforms should return it to not being stochastic
+        cls1 = compose_transformers(DeterministicTransformer(), StochasticTransformer())
+        player = cls1(axl.Cooperator)()
+        self.assertFalse(player.classifier["stochastic"])
+
+        # Explicit composition
+        player = DeterministicTransformer()(StochasticTransformer()(axl.Cooperator))()
+        self.assertFalse(player.classifier["stochastic"])
+
+        # Random is stochastic
+        self.assertTrue(axl.Random().classifier["stochastic"])
+
+        # Transformer makes is not stochastic
+        player = DeterministicTransformer()(axl.Random)()
+        self.assertFalse(player.classifier["stochastic"])
+
+        # Composing transforms should return it to being stochastic
+        cls1 = compose_transformers(StochasticTransformer(), DeterministicTransformer())
+        player = cls1(axl.Random)()
+        self.assertTrue(player.classifier["stochastic"])
+
+        # Explicit composition
+        player = StochasticTransformer()(DeterministicTransformer()(axl.Random))()
+        self.assertTrue(player.classifier["stochastic"])
+
     def test_nilpotency(self):
         """Show that some of the transformers are (sometimes) nilpotent, i.e.
         that transformer(transformer(PlayerClass)) == PlayerClass"""
@@ -312,6 +359,9 @@ class TestDualTransformer(TestMatch):
         self.assert_dual_wrapper_correct(player_class)
 
         player_class = JossAnnTransformer((0.5, 0.4))(axl.EvolvedLookerUp2_2_2)
+        self.assert_dual_wrapper_correct(player_class)
+
+        player_class = JossAnnTransformer((0.2, 0.8))(axl.MetaHunter)
         self.assert_dual_wrapper_correct(player_class)
 
     def test_dual_transformer_simple_play_regression_test(self):
@@ -499,6 +549,17 @@ class TestJossAnnTransformer(TestMatch):
         p1 = JossAnnTransformer(probability)(axl.Cooperator)()
         self.assertFalse(axl.Classifiers["stochastic"](p1))
         self.versus_test(p1, p2, [D] * 5, [C] * 5)
+
+    def test_meta_strategy(self):
+        """Tests the JossAnn transformer on a Meta strategy to check
+        for a regression."""
+        probability = (1, 0)
+        for player_class in [axl.MetaHunter, axl.MemoryDecay, axl.MetaWinner]:
+            p1 = JossAnnTransformer(probability)(player_class)()
+            self.assertFalse(axl.Classifiers["stochastic"](p1))
+            p2 = axl.Cooperator()
+            m = axl.Match((p1, p2), turns=10)
+            m.play()
 
     def test_deterministic_match_override(self):
         """Tests the JossAnn transformer."""

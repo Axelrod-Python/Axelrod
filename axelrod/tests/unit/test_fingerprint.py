@@ -381,10 +381,42 @@ class TestFingerprint(unittest.TestCase):
         A test to check that we can fingerprint
         with any two given strategies or instances
         """
+        # strategy, probe = strategy_pair
+        # af = AshlockFingerprint(strategy, probe)
+        # data = af.fingerprint(turns=2, repetitions=2, step=0.5, progress_bar=False, seed=1)
+        # self.assertIsInstance(data, dict)
+        #
+        # strategy, probe = strategy_pair
+        # af = AshlockFingerprint(strategy(), probe)
+        # data = af.fingerprint(turns=2, repetitions=2, step=0.5, progress_bar=False, seed=2)
+        # self.assertIsInstance(data, dict)
+        #
+        # strategy, probe = strategy_pair
+        # af = AshlockFingerprint(strategy, probe())
+        # data = af.fingerprint(turns=2, repetitions=2, step=0.5, progress_bar=False, seed=3)
+        # self.assertIsInstance(data, dict)
+
         strategy, probe = strategy_pair
         af = AshlockFingerprint(strategy(), probe())
-        data = af.fingerprint(turns=2, repetitions=2, step=0.5, progress_bar=False)
+        data = af.fingerprint(turns=2, repetitions=2, step=0.5, progress_bar=False, seed=4)
         self.assertIsInstance(data, dict)
+
+    @given(strategy_pair=strategy_lists(min_size=2, max_size=2))
+    @settings(max_examples=5, deadline=None)
+    def test_fingerprint_reproducibility(self, strategy_pair):
+        """
+        A test to check that we can fingerprint
+        with any two given strategies or instances
+        """
+        strategy, probe = strategy_pair
+        af = AshlockFingerprint(strategy(), probe())
+        data = af.fingerprint(turns=2, repetitions=2, step=0.5, progress_bar=False, seed=4)
+
+        strategy, probe = strategy_pair
+        af = AshlockFingerprint(strategy(), probe())
+        data2 = af.fingerprint(turns=2, repetitions=2, step=0.5, progress_bar=False, seed=4)
+
+        self.assertEqual(data, data2)
 
 
 class TestTransitiveFingerprint(unittest.TestCase):

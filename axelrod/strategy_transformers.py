@@ -305,7 +305,6 @@ def generic_strategy_wrapper(player, opponent, proposed_action, *args, **kwargs)
     Returns
     -------
     action: an axelrod.Action, C or D
-
     """
 
     # This example just passes through the proposed_action
@@ -638,6 +637,12 @@ def joss_ann_wrapper(player, opponent, proposed_action, probability):
     action = player._random.choice(options, p=probability)
     return action
 
+    # try:
+    #     action = player._random.choice(options, p=probability)
+    # except AttributeError:
+    #     print(orig_prob, probability, player.name, player.classifier)
+    # return action
+
 
 def jossann_reclassifier(original_classifier, probability):
     """
@@ -648,6 +653,8 @@ def jossann_reclassifier(original_classifier, probability):
         probability = tuple([i / sum(probability) for i in probability])
 
     if probability in [(1, 0), (0, 1)]:
+        # In this case the player's strategy is never actually called,
+        # so even if it were stochastic the play is not.
         original_classifier["stochastic"] = False
     else:
         original_classifier["stochastic"] = True

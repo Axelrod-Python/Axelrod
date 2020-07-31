@@ -42,7 +42,7 @@ def _create_points(step: float, progress_bar: bool = True) -> List[Point]:
     num = int((1 / step) // 1) + 1
 
     if progress_bar:
-        p_bar = tqdm.tqdm(total=num ** 2, desc="Generating points")
+        p_bar = tqdm.tqdm(total=num**2, desc="Generating points")
 
     points = []
     for x in np.linspace(0, 1, num):
@@ -80,17 +80,18 @@ def _create_jossann(point: Point, probe: Any) -> Player:
     x, y = point
 
     if isinstance(probe, axl.Player):
+        probe_class = probe.__class__
         init_kwargs = probe.init_kwargs
-        probe = probe.__class__
     else:
+        probe_class = probe
         init_kwargs = {}
 
     if x + y >= 1:
-        joss_ann = DualTransformer()(JossAnnTransformer((1 - x, 1 - y))(probe))(
-            **init_kwargs
-        )
+        joss_ann = DualTransformer()(
+            JossAnnTransformer((1 - x, 1 - y))(
+                probe_class))(**init_kwargs)
     else:
-        joss_ann = JossAnnTransformer((x, y))(probe)(**init_kwargs)
+        joss_ann = JossAnnTransformer((x, y))(probe_class)(**init_kwargs)
     return joss_ann
 
 
@@ -128,7 +129,7 @@ def _create_edges(points: List[Point], progress_bar: bool = True) -> list:
     """Creates a set of edges for a spatial tournament.
 
     Constructs edges that correspond to `points`. All edges begin at 0, and
-    connect to the index +1 of the probe.
+    connect to the index + 1 of the probe.
 
     Parameters
     ----------
@@ -136,7 +137,6 @@ def _create_edges(points: List[Point], progress_bar: bool = True) -> list:
         of Point objects with coordinates (x, y)
     progress_bar : bool
         Whether or not to create a progress bar which will be updated
-
 
     Returns
     ----------
@@ -263,7 +263,7 @@ class AshlockFingerprint(object):
         )
 
         if isinstance(self.strategy, axl.Player):
-            tournament_players = [self.strategy] + probe_players
+            tournament_players = [self.strategy.clone()] + probe_players
         else:
             tournament_players = [self.strategy()] + probe_players
 
