@@ -638,7 +638,7 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(len(calls), 0)
 
     @given(turns=integers(min_value=1, max_value=200))
-    @settings(max_examples=5)
+    @settings(max_examples=5, deadline=None)
     @example(turns=3)
     @example(turns=axl.DEFAULT_TURNS)
     def test_play_matches(self, turns):
