@@ -2,12 +2,10 @@ import itertools
 import pickle
 import types
 import unittest
-import warnings
 
 import axelrod as axl
 import numpy as np
 from axelrod.tests.property import strategy_lists
-from axelrod.yaml import log_kwargs
 
 from hypothesis import given, settings
 from hypothesis.strategies import integers, sampled_from

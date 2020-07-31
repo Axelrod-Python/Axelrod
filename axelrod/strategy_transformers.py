@@ -5,7 +5,6 @@ strategy.
 See the various Meta strategies for another type of transformation.
 """
 
-import inspect
 from importlib import import_module
 from typing import Any
 
@@ -24,6 +23,8 @@ C, D = Action.C, Action.D
 
 
 def makes_use_of_reclassifier(original_classifier, player_class, wrapper):
+    """Reclassifier for post-transformation determination of whether
+    strategy makes_use_of anything differently."""
     classifier_makes_use_of = makes_use_of(player_class)
     classifier_makes_use_of.update(makes_use_of_variant(wrapper))
     try:
@@ -103,6 +104,7 @@ def StrategyTransformerFactory(
             reclassifiers = PlayerClass._reclassifiers.copy()
             if reclassifier is not None:
                 reclassifiers.append((makes_use_of_reclassifier, (PlayerClass, strategy_wrapper), {}))
+                # This one is second on the assumption that the wrapper reclassifier knows best.
                 reclassifiers.append((reclassifier, args, kwargs))
 
             # First handle the case where the strategy method is static.
