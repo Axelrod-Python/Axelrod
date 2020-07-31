@@ -26,7 +26,7 @@ class RandomGenerator(object):
         return self._random.randint(*args, **kwargs)
 
     def random_seed_int(self):
-        return self.randint(0, 2**32-1, dtype=np.int64)
+        return self.randint(low=0, high=2**32-1, dtype="uint64")
 
     def choice(self, *args, **kwargs):
         return self._random.choice(*args, **kwargs)
@@ -131,7 +131,8 @@ class BulkRandomGenerator(object):
         self._ints = self._random_generator.randint(
             low=0,
             high=2**32 - 1,
-            size=self._batch_size)
+            size=self._batch_size,
+            dtype="uint64")
         self._index = 0
 
     def __next__(self):
