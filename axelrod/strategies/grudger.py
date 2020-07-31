@@ -25,7 +25,6 @@ class Grudger(Player):
     classifier = {
         "memory_depth": float('inf'),
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -55,7 +54,6 @@ class ForgetfulGrudger(Player):
     classifier = {
         "memory_depth": 10,
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -99,7 +97,6 @@ class OppositeGrudger(Player):
     classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -128,7 +125,6 @@ class Aggravater(Player):
     classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -157,7 +153,6 @@ class SoftGrudger(Player):
     classifier = {
         "memory_depth": 6,
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -201,7 +196,6 @@ class GrudgerAlternator(Player):
     classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -233,7 +227,6 @@ class EasyGo(Player):
     classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -266,7 +259,6 @@ class GeneralSoftGrudger(Player):
     classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,

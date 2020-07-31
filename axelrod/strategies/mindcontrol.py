@@ -16,7 +16,6 @@ class MindController(Player):
     classifier = {
         "memory_depth": -10,
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": True,  # Finds out what opponent will do
@@ -49,7 +48,6 @@ class MindWarper(Player):
     classifier = {
         "memory_depth": -10,
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": True,  # changes what opponent will do
@@ -81,7 +79,6 @@ class MindBender(MindWarper):
     name = "Mind Bender"
     classifier = {
         "memory_depth": -10,
-        "makes_use_of": set(),
         "stochastic": False,
         "long_run_time": False,
         "inspects_source": False,

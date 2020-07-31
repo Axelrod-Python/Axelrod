@@ -799,6 +799,19 @@ class TestInitialFinalTransformedCooperator(TestPlayer):
     }
 
 
+class TestFinalInitialTransformedCooperator(TestPlayer):
+    player = FinalTransformer([D, D])(InitialTransformer([D, D, D])(axl.Cooperator))
+    name = "Final Initial Cooperator: [D, D, D]: [D, D]"
+    expected_classifier = {
+        "memory_depth": 3,
+        "stochastic": False,
+        "makes_use_of": {"length"},
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+
 class TestRUACooperatorisTFT(TestTitForTat):
     player = RetaliateUntilApologyTransformer()(axl.Cooperator)
     name = "RUA Cooperator"

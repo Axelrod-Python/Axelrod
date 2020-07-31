@@ -39,7 +39,6 @@ class Darwin(Player):
         "stochastic": False,
         "inspects_source": True,  # Checks to see if opponent is using simulated matches.
         "long_run_time": False,
-        "makes_use_of": set(),
         "manipulates_source": False,
         "manipulates_state": True,  # Does not reset properly.
     }

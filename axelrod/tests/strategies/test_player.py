@@ -613,7 +613,6 @@ class TestPlayer(unittest.TestCase):
                     ),
             )
 
-
 class TestMatch(unittest.TestCase):
     """Test class for heads up play between two given players. Plays an
     axelrod match between the two players."""

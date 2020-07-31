@@ -69,7 +69,6 @@ class ThueMorse(SequencePlayer):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -92,7 +91,6 @@ class ThueMorseInverse(ThueMorse):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,

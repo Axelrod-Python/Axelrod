@@ -18,7 +18,6 @@ class OnceBitten(Player):
     classifier = {
         "memory_depth": 12,  # Long memory
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -65,7 +64,6 @@ class FoolMeOnce(Player):
     classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -96,7 +94,6 @@ class ForgetfulFoolMeOnce(Player):
     classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": True,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,

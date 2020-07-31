@@ -20,7 +20,6 @@ class WorseAndWorse(Player):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -46,7 +45,6 @@ class KnowledgeableWorseAndWorse(Player):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
-        "makes_use_of": set(["length"]),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -74,7 +72,6 @@ class WorseAndWorse2(Player):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -108,7 +105,6 @@ class WorseAndWorse3(Player):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
-        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,

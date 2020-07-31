@@ -37,7 +37,7 @@ class TestHumanClass(TestPlayer):
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
-        "makes_use_of": set(["length", "game"]),
+        "makes_use_of": set(),
         "long_run_time": True,
         "inspects_source": True,
         "manipulates_source": False,

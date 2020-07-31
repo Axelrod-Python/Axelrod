@@ -54,7 +54,6 @@ class LRPlayer(MemoryOnePlayer):
     classifier = {
         "memory_depth": 1,  # Memory-one Four-Vector
         "stochastic": True,
-        "makes_use_of": set(["game"]),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,

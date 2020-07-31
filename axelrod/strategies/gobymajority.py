@@ -33,7 +33,6 @@ class GoByMajority(Player):
     classifier = {
         "stochastic": False,
         "inspects_source": False,
-        "makes_use_of": set(),
         "long_run_time": False,
         "manipulates_source": False,
         "manipulates_state": False,

@@ -187,7 +187,6 @@ class ANN(Player):
         "memory_depth": float("inf"),
         "stochastic": False,
         "inspects_source": False,
-        "makes_use_of": set(),
         "manipulates_source": False,
         "manipulates_state": False,
         "long_run_time": False,

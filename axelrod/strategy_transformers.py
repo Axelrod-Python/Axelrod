@@ -12,6 +12,7 @@ from typing import Any
 from axelrod.strategies.sequence_player import SequencePlayer
 
 from .action import Action
+from .makes_use_of import *
 from .player import Player
 
 C, D = Action.C, Action.D
@@ -22,7 +23,19 @@ C, D = Action.C, Action.D
 # Alternator.
 
 
-def StrategyTransformerFactory(strategy_wrapper, name_prefix=None, reclassifier=None):
+def makes_use_of_reclassifier(original_classifier, player_class, wrapper):
+    classifier_makes_use_of = makes_use_of(player_class)
+    classifier_makes_use_of.update(makes_use_of_variant(wrapper))
+    try:
+        original_classifier["makes_use_of"].update(classifier_makes_use_of)
+    except KeyError:
+        original_classifier["makes_use_of"] = classifier_makes_use_of
+    return original_classifier
+
+
+def StrategyTransformerFactory(
+    strategy_wrapper, name_prefix=None, reclassifier=None
+):
     """Modify an existing strategy dynamically by wrapping the strategy
     method with the argument `strategy_wrapper`.
 
@@ -86,15 +99,11 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None, reclassifier=
             # Since a strategy can be transformed multiple times, we need to build up an
             # array of the reclassifiers. These will be dynamically added to the new class
             # below.
+
             reclassifiers = PlayerClass._reclassifiers.copy()
             if reclassifier is not None:
+                reclassifiers.append((makes_use_of_reclassifier, (PlayerClass, strategy_wrapper), {}))
                 reclassifiers.append((reclassifier, args, kwargs))
-
-            # Define the new strategy method, wrapping the existing method
-            # with `strategy_wrapper`
-            # Here we build up the strategy function in parts to avoid unnecessary repeated
-            # auxiliary function calls. For example, is_strategy_static uses inspect
-            # which can be slow, so we don't want to call it more than needed.
 
             # First handle the case where the strategy method is static.
             if is_strategy_static(PlayerClass):
@@ -144,6 +153,16 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None, reclassifier=
                 new_class_name = "".join([name_prefix, PlayerClass.__name__])
                 # Modify the Player name (class variable inherited from Player)
                 name = " ".join([name_prefix, PlayerClass.name])
+
+            # original_classifier = copy.deepcopy(PlayerClass.classifier)  # Copy
+            # if reclassifier is not None:
+            #     classifier = reclassifier(original_classifier, *args, **kwargs)
+            # else:
+            #     classifier = original_classifier
+            # classifier_makes_use_of = makes_use_of(PlayerClass)
+            # classifier_makes_use_of.update(
+            #     makes_use_of_variant(strategy_wrapper))
+            # classifier["makes_use_of"] = classifier_makes_use_of
 
             # Define the new __repr__ method to add the wrapper arguments
             # at the end of the name
@@ -246,7 +265,11 @@ class DecoratorReBuilder(object):
     """
 
     def __call__(
-        self, factory_args: tuple, args: tuple, kwargs: dict, instance_name_prefix: str
+        self,
+        factory_args: tuple,
+        args: tuple,
+        kwargs: dict,
+        instance_name_prefix: str,
     ) -> Any:
         decorator_class = StrategyTransformerFactory(*factory_args)
         kwargs["name_prefix"] = instance_name_prefix
@@ -259,7 +282,9 @@ class StrategyReBuilder(object):
     that could not normally be pickled.
     """
 
-    def __call__(self, decorators: list, import_name: str, module_name: str) -> Player:
+    def __call__(
+        self, decorators: list, import_name: str, module_name: str
+    ) -> Player:
 
         module_ = import_module(module_name)
         import_class = getattr(module_, import_name)
@@ -288,7 +313,9 @@ def compose_transformers(t1, t2):
     return Composition()
 
 
-def generic_strategy_wrapper(player, opponent, proposed_action, *args, **kwargs):
+def generic_strategy_wrapper(
+    player, opponent, proposed_action, *args, **kwargs
+):
     """
     Strategy wrapper functions should be of the following form.
 
@@ -319,7 +346,9 @@ def flip_wrapper(player, opponent, action):
     return action.flip()
 
 
-FlipTransformer = StrategyTransformerFactory(flip_wrapper, name_prefix="Flipped")
+FlipTransformer = StrategyTransformerFactory(
+    flip_wrapper, name_prefix="Flipped"
+)
 
 
 def dual_wrapper(player, opponent: Player, proposed_action: Action) -> Action:
@@ -397,7 +426,9 @@ def forgiver_reclassifier(original_classifier, p):
 
 
 ForgiverTransformer = StrategyTransformerFactory(
-    forgiver_wrapper, name_prefix="Forgiving", reclassifier=forgiver_reclassifier
+    forgiver_wrapper,
+    name_prefix="Forgiving",
+    reclassifier=forgiver_reclassifier,
 )
 
 
@@ -462,7 +493,6 @@ def final_sequence(player, opponent, action, seq):
 
 def final_reclassifier(original_classifier, seq):
     """Reclassify the strategy"""
-    original_classifier["makes_use_of"].update(["length"])
     original_classifier["memory_depth"] = max(
         len(seq), original_classifier["memory_depth"]
     )
@@ -515,14 +545,18 @@ def grudge_wrapper(player, opponent, action, grudges):
     return action
 
 
-GrudgeTransformer = StrategyTransformerFactory(grudge_wrapper, name_prefix="Grudging")
+GrudgeTransformer = StrategyTransformerFactory(
+    grudge_wrapper, name_prefix="Grudging"
+)
 
 
 def apology_wrapper(player, opponent, action, myseq, opseq):
     length = len(myseq)
     if len(player.history) < length:
         return action
-    if (myseq == player.history[-length:]) and (opseq == opponent.history[-length:]):
+    if (myseq == player.history[-length:]) and (
+        opseq == opponent.history[-length:]
+    ):
         return C
     return action
 
@@ -636,12 +670,6 @@ def joss_ann_wrapper(player, opponent, proposed_action, probability):
 
     action = player._random.choice(options, p=probability)
     return action
-
-    # try:
-    #     action = player._random.choice(options, p=probability)
-    # except AttributeError:
-    #     print(orig_prob, probability, player.name, player.classifier)
-    # return action
 
 
 def jossann_reclassifier(original_classifier, probability):

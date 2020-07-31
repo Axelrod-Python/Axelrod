@@ -20,7 +20,6 @@ class BackStabber(Player):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
-        "makes_use_of": {"length"},
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -50,7 +49,6 @@ class DoubleCrosser(Player):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
-        "makes_use_of": {"length"},
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,

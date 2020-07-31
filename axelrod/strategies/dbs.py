@@ -17,7 +17,7 @@ class DBS(Player):
 
     Names
 
-    - Desired Belief Strategy: [Au2006]_
+    - Derived Belief Strategy: [Au2006]_
     """
 
     # These are various properties for the strategy
@@ -25,7 +25,6 @@ class DBS(Player):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
-        "makes_use_of": set(),
         "long_run_time": True,
         "inspects_source": False,
         "manipulates_source": False,

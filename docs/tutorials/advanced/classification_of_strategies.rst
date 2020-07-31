@@ -12,7 +12,6 @@ Here is the :code:`classifier` for the :code:`Cooperator` strategy::
     >>> import axelrod as axl
     >>> expected_dictionary = {
     ...    'manipulates_state': False,
-    ...    'makes_use_of': set([]),
     ...    'long_run_time': False,
     ...    'stochastic': False,
     ...    'manipulates_source': False,
@@ -43,7 +42,7 @@ strategy's logic as default, we use :code:`Classifiers[<classifier>](
 <strategy>)`::
 
     >>> from axelrod import Classifiers
-    >>> Classifiers['memory_depth'](axl.TitForTat)
+    >>> Classifiers['memory_depth'](axl.TitForTat())
     1
     >>> Classifiers['stochastic'](axl.Random())
     True
