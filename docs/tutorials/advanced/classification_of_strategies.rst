@@ -91,7 +91,7 @@ length of each match of the tournament::
     ... }
     >>> strategies = axl.filtered_strategies(filterset)
     >>> len(strategies)
-    23
+    22
 
 Note that in the filterset dictionary, the value for the 'makes_use_of' key
 must be a list. Here is how we might identify the number of strategies that use
@@ -102,7 +102,7 @@ both the length of the tournament and the game being played::
     ... }
     >>> strategies = axl.filtered_strategies(filterset)
     >>> len(strategies)
-    16
+    15
 
 Some strategies have been classified as having a particularly long run time::
 
