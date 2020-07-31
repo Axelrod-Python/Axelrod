@@ -1135,9 +1135,11 @@ class EvolvableFSMAsFSM(TestFSMPlayer):
     player = EvolvableFSMPlayerWithDefault
 
     def test_equality_of_clone(self):
+        # Can't pickle a Partialed Class
         pass
 
     def test_equality_of_pickle_clone(self):
+        # Can't pickle a Partialed Class
         pass
 
     def test_repr(self):

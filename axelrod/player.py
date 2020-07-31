@@ -16,9 +16,57 @@ C, D = Action.C, Action.D
 
 
 class PostInitCaller(type):
-    """Metaclass to be able to handle post __init__ tasks."""
+    """Metaclass to be able to handle post __init__ tasks.
+    If there is a DerivedPlayer class of Player that overrides
+    _post_init, as follows:
+
+    class Player(object, metaclass=PostInitCaller):
+        def __new__(cls, *args, **kwargs):
+            print("Player.__new__")
+            obj = super().__new__(cls)
+            return obj
+
+        def __init__(self):
+            print("Player.__init__")
+
+        def _post_init(self):
+            print("Player._post_init")
+
+        def _post_transform(self):
+            print("Player._post_transform")
+
+
+    class DerivedPlayer(Player):
+        def __init__(self):
+            print("DerivedPlayer.__init__")
+            super().__init__()
+
+        def _post_init(self):
+            print("DerivedPlayer._post_init")
+            super()._post_init()
+
+
+    dp = DerivedPlayer()
+
+    Then the call order is:
+        * PostInitCaller.__call__
+        * Player.__new__
+        * DerivedPlayer.__init__
+        * Player.__init__
+        * DerivedPlayer._post_init
+        * Player._post_init
+        * Player._post_transform
+
+    See here to learn more: https://blog.ionelmc.ro/2015/02/09/understanding-python-metaclasses/
+    """
     def __call__(cls, *args, **kwargs):
+        # This calls cls.__new__ and cls.__init__
         obj = type.__call__(cls, *args, **kwargs)
+        # Next we do any post init or post transform tasks, like recomputing
+        # classifiers
+        # Note that subclasses inherit the metaclass, and subclasses my override
+        # or extend __init__ so it's necessary to do these tasks after all the
+        # __init__'s have run in the case of a post-transform reclassification.
         obj._post_init()
         obj._post_transform()
         return obj
@@ -75,11 +123,10 @@ class Player(object, metaclass=PostInitCaller):
         # Reclassify strategy post __init__, if needed.
         for (reclassifier, args, kwargs) in self._reclassifiers:
             self.classifier = reclassifier(self.classifier, *args, **kwargs)
-        pass
 
     def __eq__(self, other):
         """
-        Test if two players are equal.
+        Test if two players are equal, ignoring random seed and RNG state.
         """
         if self.__repr__() != other.__repr__():
             return False

@@ -114,8 +114,9 @@ class Pdf(object):
 
 
 class BulkRandomGenerator(object):
-    """Bulk generator of random integers for tournament seeding
-    and reproducibility. Use like a generator."""
+    """Bulk generator of random integers for tournament seeding and
+    reproducibility. Bulk generation of random values is more efficient.
+    Use this class like a generator."""
     def __init__(self, seed=None, batch_size=1000):
         self._random_generator = RandomState()
         self._random_generator.seed(seed)
@@ -125,18 +126,19 @@ class BulkRandomGenerator(object):
         self._fill_ints()
 
     def _fill_ints(self):
-        ints = self._random_generator.randint(
+        # Generate more random values. Store as a list since generators
+        # cannot be pickled.
+        self._ints = self._random_generator.randint(
             low=0,
             high=2**32 - 1,
             size=self._batch_size)
-        self._ints = [x for x in ints]
         self._index = 0
 
     def __next__(self):
         try:
             x = self._ints[self._index]
-            self._index += 1
-            return x
         except IndexError:
             self._fill_ints()
-            return self.__next__()
+            x = self._ints[self._index]
+        self._index += 1
+        return x

@@ -93,6 +93,13 @@ class Match(object):
         self.reset = reset
 
     def set_seed(self, seed):
+        """Sets a random seed for the Match, for reproducibility. Initializes
+        a match-wide RNG instance which is used to propagate seeds to the Players
+        and to generate random values for noise. Seeds are only set for stochastic players.
+        Any seeds set on Players before being passed to Match will be overwritten.
+        However, Evolvable Players may have already used their seeds to initialize
+        their parameters, if underspecified.
+        """
         self.seed = seed
         self._random = RandomGenerator(seed=self.seed)
 
