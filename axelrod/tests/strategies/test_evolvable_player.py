@@ -59,8 +59,6 @@ class TestEvolvablePlayer(TestPlayer):
     init_parameters = dict()
 
     def player(self, seed=1):
-        if seed is None:
-            raise Exception()
         params = self.init_parameters.copy()
         if "seed" not in params:  # pragma: no cover
             params["seed"] = seed
