@@ -5,13 +5,14 @@ strategy.
 See the various Meta strategies for another type of transformation.
 """
 
+import inspect
 from importlib import import_module
 from typing import Any
 
 from axelrod.strategies.sequence_player import SequencePlayer
 
 from .action import Action
-from .makes_use_of import *
+from .makes_use_of import makes_use_of_variant
 from .player import Player
 
 C, D = Action.C, Action.D
@@ -25,8 +26,11 @@ C, D = Action.C, Action.D
 def makes_use_of_reclassifier(original_classifier, player_class, wrapper):
     """Reclassifier for post-transformation determination of whether
     strategy makes_use_of anything differently."""
-    classifier_makes_use_of = makes_use_of(player_class)
+    classifier_makes_use_of = makes_use_of_variant(player_class)
+    # Wrapper is usually a function, but can be a class, e.g. in the case of the
+    # RetaliationUntilApologyWrapper
     classifier_makes_use_of.update(makes_use_of_variant(wrapper))
+
     try:
         original_classifier["makes_use_of"].update(classifier_makes_use_of)
     except KeyError:
@@ -155,16 +159,6 @@ def StrategyTransformerFactory(
                 new_class_name = "".join([name_prefix, PlayerClass.__name__])
                 # Modify the Player name (class variable inherited from Player)
                 name = " ".join([name_prefix, PlayerClass.name])
-
-            # original_classifier = copy.deepcopy(PlayerClass.classifier)  # Copy
-            # if reclassifier is not None:
-            #     classifier = reclassifier(original_classifier, *args, **kwargs)
-            # else:
-            #     classifier = original_classifier
-            # classifier_makes_use_of = makes_use_of(PlayerClass)
-            # classifier_makes_use_of.update(
-            #     makes_use_of_variant(strategy_wrapper))
-            # classifier["makes_use_of"] = classifier_makes_use_of
 
             # Define the new __repr__ method to add the wrapper arguments
             # at the end of the name
@@ -494,10 +488,14 @@ def final_sequence(player, opponent, action, seq):
 
 
 def final_reclassifier(original_classifier, seq):
-    """Reclassify the strategy"""
+    """Reclassify the strategy."""
     original_classifier["memory_depth"] = max(
         len(seq), original_classifier["memory_depth"]
     )
+    # This should also be picked up by the makes_use_of inspection,
+    # but we list it here to be explicit.
+    if len(seq) > 0:
+        original_classifier["makes_use_of"].add("length")
     return original_classifier
 
 
