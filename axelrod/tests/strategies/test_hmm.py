@@ -13,7 +13,6 @@ from axelrod.strategies.hmm import (
 from .test_evolvable_player import PartialClass, TestEvolvablePlayer
 from .test_player import TestMatch, TestPlayer
 
-
 C, D = axl.Action.C, axl.Action.D
 
 

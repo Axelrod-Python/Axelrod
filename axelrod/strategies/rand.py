@@ -1,7 +1,6 @@
 from axelrod.action import Action
 from axelrod.player import Player
 
-
 C, D = Action.C, Action.D
 
 
@@ -61,4 +60,3 @@ class Random(Player):
     @classmethod
     def defect(cls, opponent: Player) -> Action:
         return D
-

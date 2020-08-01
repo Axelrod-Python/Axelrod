@@ -1,4 +1,5 @@
 from typing import Any, Dict
+
 from axelrod.action import Action
 from axelrod.evolvable_player import (
     EvolvablePlayer,

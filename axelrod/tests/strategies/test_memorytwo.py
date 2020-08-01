@@ -6,10 +6,10 @@ import warnings
 import axelrod as axl
 from axelrod.strategies.memorytwo import MemoryTwoPlayer
 
-from .test_player import TestPlayer
 from .test_alternator import TestAlternator
 from .test_cooperator import TestCooperator
 from .test_defector import TestDefector
+from .test_player import TestPlayer
 
 C, D = axl.Action.C, axl.Action.D
 
@@ -304,4 +304,3 @@ class TestMemoryTwoAlternator(TestAlternator):
         "manipulates_source": False,
         "manipulates_state": False,
     }
-

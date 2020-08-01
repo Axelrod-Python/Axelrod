@@ -5,10 +5,10 @@ import warnings
 import axelrod as axl
 from axelrod.strategies.memoryone import MemoryOnePlayer
 
-from .test_player import TestPlayer, test_four_vector
 from .test_alternator import TestAlternator
 from .test_cooperator import TestCooperator
 from .test_defector import TestDefector
+from .test_player import TestPlayer, test_four_vector
 from .test_titfortat import TestTitForTat
 
 C, D = axl.Action.C, axl.Action.D

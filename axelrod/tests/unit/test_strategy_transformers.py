@@ -2,8 +2,8 @@ import axelrod as axl
 from axelrod.strategy_transformers import *
 from axelrod.tests.strategies.test_cooperator import TestCooperator
 from axelrod.tests.strategies.test_defector import TestDefector
-from axelrod.tests.strategies.test_titfortat import TestTitForTat
 from axelrod.tests.strategies.test_player import TestMatch, TestPlayer
+from axelrod.tests.strategies.test_titfortat import TestTitForTat
 
 C, D = axl.Action.C, axl.Action.D
 
