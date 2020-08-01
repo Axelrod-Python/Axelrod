@@ -29,7 +29,7 @@ def class_makes_use_of(cls) -> Set[Text]:
 
 
 def makes_use_of(player: Type[Player]) -> Set[Text]:
-    if not isinstance(player, Player):
+    if not isinstance(player, Player):  # pragma: no cover
         player = player()
 
     return class_makes_use_of(player)
