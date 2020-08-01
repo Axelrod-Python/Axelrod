@@ -59,7 +59,7 @@ class TestPlayerClass(unittest.TestCase):
 
     def test_seed_warning(self):
         """Test that the user is warned if a null seed is given."""
-        player = self.Player()
+        player = self.player()
         with warnings.catch_warnings():
             player._set_seed(seed=None)
 
@@ -646,10 +646,10 @@ class TestMatch(unittest.TestCase):
         match.play()
 
         # Test expected sequence of plays from the match is as expected.
-        for (play, expected_play) in zip(player1.history, expected_actions1):
-            self.assertEqual(play, expected_play)
-        for (play, expected_play) in zip(player2.history, expected_actions2):
-            self.assertEqual(play, expected_play)
+        for i, (play, expected_play) in enumerate(zip(player1.history, expected_actions1)):
+            self.assertEqual((i, play), (i, expected_play))
+        for i, (play, expected_play) in enumerate(zip(player2.history, expected_actions2)):
+            self.assertEqual((i, play), (i, expected_play))
 
         # Test final player attributes are as expected
         if attrs:
