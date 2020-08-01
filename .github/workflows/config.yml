@@ -49,7 +49,7 @@ jobs:
         python run_mypy.py
     - name: Check imports are sorted
       run: |
-        python -m pip install isort
+        python -m pip install "isort==4.3.21"
         python -m isort --check-only --recursive axelrod/.
     - name: Check that all strategies are indexed
       run: |
