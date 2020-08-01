@@ -88,6 +88,12 @@ class TestMetaPlayer(TestPlayer):
             self.assertEqual(len(player1.history), turns)
             self.assertEqual(player1.history, player2.history)
 
+    def test_update_histories(self):
+        """Artificial test to ensure that an exception is thrown."""
+        p = axl.MetaHunter()
+        with self.assertRaises(TypeError):
+            p.update_histories(C)
+
 
 class TestMetaMajority(TestMetaPlayer):
     name = "Meta Majority"
@@ -149,6 +155,15 @@ class TestMetaMinority(TestMetaPlayer):
 class TestMetaWinnerEnsemble(TestMetaPlayer):
     name = "Meta Winner Ensemble"
     player = axl.MetaWinnerEnsemble
+
+    def test_singularity(self):
+        """Test meta_strategy when the player is singular."""
+        team = [axl.Cooperator]
+        player = axl.MetaWinnerEnsemble(team=team)
+        self.assertFalse(Classifiers["stochastic"](player))
+        coplayer = axl.Defector()
+        match = axl.Match((player, coplayer), turns=10)
+        match.play()
 
     def test_stochasticity(self):
         # One player teams may be stochastic or not
@@ -548,6 +563,28 @@ class TestMetaMixer(TestMetaPlayer):
         self.assertTrue(Classifiers["stochastic"](player))
 
     def test_strategy(self):
+        # Distribution = None
+        team = [axl.TitForTat, axl.Cooperator, axl.Grudger]
+        distribution = None
+
+        actions = [(C, C)] * 20
+        self.versus_test(
+            opponent=axl.Cooperator(),
+            expected_actions=actions,
+            init_kwargs={"team": team, "distribution": distribution},
+        )
+
+        # Distribution = [0, 0, 0]
+        team = [axl.TitForTat, axl.Cooperator, axl.Grudger]
+        distribution = [0, 0, 0]
+
+        actions = [(C, C)] * 20
+        self.versus_test(
+            opponent=axl.Cooperator(),
+            expected_actions=actions,
+            init_kwargs={"team": team, "distribution": distribution},
+        )
+
         team = [axl.TitForTat, axl.Cooperator, axl.Grudger]
         distribution = [0.2, 0.5, 0.3]
 

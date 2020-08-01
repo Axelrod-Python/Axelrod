@@ -155,7 +155,7 @@ class TestLevelPunisher(TestPlayer):
 class TestTrickyLevelPunisher(TestPlayer):
 
     name = "Level Punisher"
-    player = axl.LevelPunisher
+    player = axl.TrickyLevelPunisher
     expected_classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": False,
@@ -192,3 +192,4 @@ class TestTrickyLevelPunisher(TestPlayer):
         opponent = axl.MockPlayer([C] * 10)
         actions = [(C, C)] * 5
         self.versus_test(opponent=opponent, expected_actions=actions)
+

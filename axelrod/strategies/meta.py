@@ -544,6 +544,9 @@ class MetaMixer(MetaPlayer):
 
     def __init__(self, team=None, distribution=None):
         super().__init__(team=team)
+        # Check that distribution is not all zeros, which will make numpy unhappy.
+        if distribution and all(x == 0 for x in distribution):
+            distribution = None
         self.distribution = distribution
 
     def _post_init(self):

@@ -2,6 +2,7 @@ import itertools
 import pickle
 import types
 import unittest
+import warnings
 
 import axelrod as axl
 import numpy as np
@@ -55,6 +56,12 @@ class TestPlayerClass(unittest.TestCase):
     name = "Player"
     player = axl.Player
     classifier = {"stochastic": False}
+
+    def test_seed_warning(self):
+        """Test that the user is warned if a null seed is given."""
+        player = self.Player()
+        with warnings.catch_warnings():
+            player._set_seed(seed=None)
 
     def test_play(self):
         player1, player2 = self.player(), self.player()
