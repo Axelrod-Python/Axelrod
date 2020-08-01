@@ -1,3 +1,4 @@
+from typing import Any, Dict
 from axelrod.action import Action
 from axelrod.evolvable_player import (
     EvolvablePlayer,
@@ -71,9 +72,11 @@ class SimpleHMM(object):
         self.transitions_D = transitions_D
         self.emission_probabilities = emission_probabilities
         self.state = initial_state
-        self._cache_C = dict()
-        self._cache_D = dict()
+        self._cache_C = dict()  # type: Dict[int, int]
+        self._cache_D = dict()  # type: Dict[int, int]
         self._cache_deterministic_transitions()
+        # Random generator will be set by parent strategy
+        self._random = None  # type: Any
 
     def _cache_deterministic_transitions(self):
         """Cache deterministic transitions to avoid unnecessary random draws."""
@@ -217,6 +220,7 @@ class HMMPlayer(Player):
         super().set_seed(seed=seed)
         # Share RNG with HMM
         # The evolvable version of the class needs to manually share the rng with the HMM.
+        # after initialization.
         try:
             self.hmm._random = self._random
         except AttributeError:
