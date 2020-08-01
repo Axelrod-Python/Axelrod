@@ -428,13 +428,13 @@ The following code reproduces the above::
     ...            axl.WinStayLoseShift(),
     ...            ]
     >>> turns = 1000
-    >>> tournament = axl.Tournament(players, turns=turns, repetitions=1, seed=1)
+    >>> tournament = axl.Tournament(players, turns=turns, repetitions=1, seed=75)
     >>> results = tournament.play(progress_bar=False)
     >>> for average_score_per_turn in results.payoff_matrix[-2]:
     ...     print(round(average_score_per_turn * turns, 1))
     3000.0
     915.0
-    2756.0
+    2763.0
     3000.0
     3000.0
     2219.0
