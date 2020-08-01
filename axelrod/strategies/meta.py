@@ -563,8 +563,6 @@ class MetaMixer(MetaPlayer):
         # deterministic, and we can avoid _random.
         if distribution:
             total = sum(distribution)
-            if total == 0:
-                return
             distribution = np.array(distribution) / total
             if 1 in distribution:
                 self.index = list(distribution).index(1)

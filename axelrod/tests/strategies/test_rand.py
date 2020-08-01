@@ -34,7 +34,7 @@ class TestRandom(TestPlayer):
         actions = [(C, C), (D, C), (D, C), (C, C)]
         self.versus_test(opponent, expected_actions=actions, seed=1)
 
-    def test_stochastic_behavior1(self):
+    def test_stochastic_behavior2(self):
         opponent = axl.MockPlayer()
         actions = [(D, C), (C, C), (D, C)]
         self.versus_test(opponent, expected_actions=actions, seed=2)

@@ -17,9 +17,6 @@ def PartialClass(cls, **kwargs):
             seed = kwargs["seed"]
         except KeyError:
             kwargs["seed"] = 1
-        else:
-            if seed is None:
-                kwargs["seed"] = 1
         __init__ = functools.partialmethod(
             cls.__init__, **kwargs)
 
@@ -65,7 +62,7 @@ class TestEvolvablePlayer(TestPlayer):
         if seed is None:
             raise Exception()
         params = self.init_parameters.copy()
-        if "seed" not in params:
+        if "seed" not in params:  # pragma: no cover
             params["seed"] = seed
         return self.player_class(**params)
 

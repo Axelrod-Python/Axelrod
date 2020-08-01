@@ -732,21 +732,21 @@ class TestMemoryDecay(TestPlayer):
         # Test TitForTat behavior in first 15 turns
         opponent = axl.Cooperator()
         actions = list([(C, C)]) * 15
-        self.versus_test(opponent, expected_actions=actions)
+        self.versus_test(opponent, expected_actions=actions, seed=1)
 
         opponent = axl.Defector()
         actions = [(C, D)] + list([(D, D)]) * 14
-        self.versus_test(opponent, expected_actions=actions)
+        self.versus_test(opponent, expected_actions=actions, seed=1)
 
         opponent = axl.Alternator()
         actions = [(C, C)] + [(C, D), (D, C)] * 7
-        self.versus_test(opponent, expected_actions=actions)
+        self.versus_test(opponent, expected_actions=actions, seed=1)
 
         opponent_actions = [C, D, D, C, D, C, C, D, C, D, D, C, C, D, D]
         opponent = axl.MockPlayer(actions=opponent_actions)
         mem_actions = [C, C, D, D, C, D, C, C, D, C, D, D, C, C, D]
         actions = list(zip(mem_actions, opponent_actions))
-        self.versus_test(opponent, expected_actions=actions)
+        self.versus_test(opponent, expected_actions=actions, seed=1)
 
     def test_strategy2(self):
         opponent = axl.Random()
@@ -811,4 +811,15 @@ class TestMemoryDecay(TestPlayer):
                 "start_strategy": axl.Defector,
                 "start_strategy_duration": 0,
             },
+        )
+
+    def test_memory_alter_delete(self):
+        """Trigger memory_alter and memory_delete."""
+        opponent = axl.Cooperator()
+        actions = list([(C, C)]) * 50
+        self.versus_test(
+            opponent,
+            expected_actions=actions,
+            init_kwargs={"start_strategy": axl.Cooperator},
+            seed=11
         )

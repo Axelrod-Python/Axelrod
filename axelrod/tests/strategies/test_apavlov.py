@@ -73,7 +73,7 @@ class TestAPavlov2006(TestPlayer):
             opponent, expected_actions=actions, attrs={"opponent_class": "PavlovD"}
         )
 
-    def test_strategy_PavlovD(self):
+    def test_strategy_PavlovD2(self):
         """Tests that PavolvD is identified by DDCDDC and that the response
         is D then C"""
         opponent = axl.MockPlayer(actions=[D, D, C, D, D, C, D])

@@ -1094,6 +1094,13 @@ class TestEvolvableFSMPlayer(unittest.TestCase):
         self.assertEqual(lb, [0] * (4 * num_states + 1))
         self.assertEqual(ub, [1] * (4 * num_states + 1))
 
+    def test_mutate(self):
+        """Test to trigger random lines in mutate"""
+        for seed in [18, 22]:
+            player = axl.EvolvableFSMPlayer(
+                num_states=4, mutation_probability=0.5, seed=seed)
+            player.mutate()
+
 
 class TestEvolvableFSMPlayer2(TestEvolvablePlayer):
     name = "EvolvableFSMPlayer"
