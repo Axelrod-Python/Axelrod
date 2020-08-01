@@ -61,7 +61,7 @@ class TestPlayerClass(unittest.TestCase):
         """Test that the user is warned if a null seed is given."""
         player = self.player()
         with warnings.catch_warnings():
-            player._set_seed(seed=None)
+            player.set_seed(seed=None)
 
     def test_play(self):
         player1, player2 = self.player(), self.player()
