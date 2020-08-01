@@ -160,7 +160,6 @@ class EvolvableFSMPlayer(FSMPlayer, EvolvablePlayer):
             transitions=transitions,
             initial_state=initial_state,
             initial_action=initial_action)
-        # EvolvablePlayer.__init__(self)
         self.mutation_probability = mutation_probability
         self.overwrite_init_kwargs(
             transitions=transitions,

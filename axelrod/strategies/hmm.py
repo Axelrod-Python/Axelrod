@@ -220,7 +220,7 @@ class HMMPlayer(Player):
     def set_seed(self, seed=None):
         super().set_seed(seed=seed)
         # Share RNG with HMM
-        # The evolvable version of the class needs to manually share the rng with the HMM.
+        # The evolvable version of the class needs to manually share the rng with the HMM
         # after initialization.
         try:
             self.hmm._random = self._random

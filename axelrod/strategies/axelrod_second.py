@@ -742,7 +742,7 @@ class SecondByCave(Player):
     - turn > 19 and percent defects > 0.79
 
     Otherwise, respond to cooperation with cooperation.  And respond to defections
-    with either a defectection (if opponent has defected at least 18 times) or with
+    with either a defection (if opponent has defected at least 18 times) or with
     a random (50/50) choice.  [Cooperate on first.]
 
     Names:

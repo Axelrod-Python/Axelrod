@@ -513,7 +513,6 @@ class FirstByJoss(MemoryOnePlayer):
             or (D, C), i.e. the opponent cooperated.
         """
         four_vector = (p, 0, p, 0)
-        # self.p = p
         super().__init__(four_vector)
 
 
