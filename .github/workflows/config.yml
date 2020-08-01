@@ -50,7 +50,7 @@ jobs:
     - name: Check imports are sorted
       run: |
         python -m pip install isort
-        python -m isort --check-only
+        python -m isort --check-only --recursive axelrod/.
     - name: Check that all strategies are indexed
       run: |
         python run_strategy_indexer.py

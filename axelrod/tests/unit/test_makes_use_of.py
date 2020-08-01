@@ -7,7 +7,7 @@ from axelrod.makes_use_of import (
     class_makes_use_of,
     makes_use_of,
     makes_use_of_variant,
-    method_makes_use_of
+    method_makes_use_of,
 )
 from axelrod.strategy_transformers import final_sequence
 
