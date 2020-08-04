@@ -96,16 +96,13 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
            strategies=strategy_lists(min_size=20, max_size=20),
            )
     @settings(max_examples=5, deadline=None)
-    def test_makes_use_of_filtering(self, seed_, strategies):
+    def test_makes_use_of_filtering(self, strategies):
         """
         Test equivalent filtering using two approaches.
-
-        This needs to be seeded as some players classification is random.
         """
         classifiers = [["game"], ["length"], ["game", "length"]]
 
         for classifier in classifiers:
-            axl._module_random.seed(seed_)
             comprehension = set(
                 [
                     s
@@ -114,7 +111,6 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
                 ]
             )
 
-            axl._module_random.seed(seed_)
             filterset = {"makes_use_of": classifier}
             filtered = set(axl.filtered_strategies(filterset, strategies=strategies))
 
