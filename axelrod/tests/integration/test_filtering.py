@@ -21,6 +21,7 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
         warnings.simplefilter("default", category=UserWarning)
 
     @given(strategies=strategy_lists(min_size=20, max_size=20))
+    @example(strategies=[axl.DBS, axl.Cooperator])
     def test_boolean_filtering(self, strategies):
 
         classifiers = [
