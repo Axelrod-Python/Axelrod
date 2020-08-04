@@ -23,7 +23,7 @@ class TestCalculator(TestPlayer):
     }
 
     def test_twenty_rounds_joss_for_cyclers(self):
-        """Uses axelrod.strategies.axelrod_first.Joss strategy for first 20 rounds"""
+        """Uses axelrod.strategies.axelrod_first.FirstByJoss strategy for first 20 rounds"""
         seed = 4
         match = axl.Match((axl.FirstByJoss(), axl.Alternator()), turns=20, seed=seed)
         match.play()
@@ -32,7 +32,7 @@ class TestCalculator(TestPlayer):
         )
 
     def test_twenty_rounds_joss_then_defects_for_cyclers(self):
-        """Uses axelrod.strategies.axelrod_first.Joss strategy for first 20 rounds"""
+        """Uses axelrod.strategies.axelrod_first.FirstByJoss strategy for first 20 rounds"""
         seed = 4
         match = axl.Match((axl.FirstByJoss(), axl.Alternator()), turns=20, seed=seed)
         match.play()
@@ -42,7 +42,7 @@ class TestCalculator(TestPlayer):
         )
 
     def test_twenty_rounds_joss_for_noncyclers(self):
-        """Uses axelrod.strategies.axelrod_first.Joss strategy for first 20 rounds"""
+        """Uses axelrod.strategies.axelrod_first.FirstByJoss strategy for first 20 rounds"""
         seed = 4
         match = axl.Match((axl.FirstByJoss(), axl.AntiCycler()), turns=20, seed=seed)
         match.play()
@@ -51,7 +51,7 @@ class TestCalculator(TestPlayer):
         )
 
     def test_twenty_rounds_joss_then_tft_for_noncyclers(self):
-        """Uses axelrod.strategies.axelrod_first.Joss strategy for first 20 rounds"""
+        """Uses axelrod.strategies.axelrod_first.FirstByJoss strategy for first 20 rounds"""
         seed = 4
         match = axl.Match((axl.FirstByJoss(), axl.AntiCycler()), turns=20, seed=seed)
         match.play()

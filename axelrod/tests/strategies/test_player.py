@@ -656,8 +656,8 @@ class TestMatch(unittest.TestCase):
                 self.assertEqual(getattr(player1, attr), value)
 
     def search_seeds(self, *args, **kwargs):  # pragma: no cover
-        """Search for a seed that will pass the test. To use to find a new seed
-        for a versus_test, change self.versus_test to self.search_seeds
+        """Search for a seed that will pass the test. Use to find a new seed
+        for a versus_test by changing self.versus_test to self.search_seeds
         within a TestPlayer or TestMatch class.
         """
         for seed in range(1, 100000):

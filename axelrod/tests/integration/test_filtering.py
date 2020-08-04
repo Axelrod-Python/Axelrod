@@ -92,9 +92,7 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
         filtered = set(axl.filtered_strategies(filterset, strategies=strategies))
         self.assertEqual(comprehension, filtered)
 
-    @given(seed_=integers(min_value=0, max_value=4294967295),
-           strategies=strategy_lists(min_size=20, max_size=20),
-           )
+    @given(strategies=strategy_lists(min_size=20, max_size=20))
     @settings(max_examples=5, deadline=None)
     def test_makes_use_of_filtering(self, strategies):
         """

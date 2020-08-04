@@ -669,7 +669,7 @@ class TestOriginalGradual(TestPlayer):
         ]
 
         turns = 1000
-        tournament = axl.Tournament(players, turns=turns, repetitions=1, seed=1)
+        tournament = axl.Tournament(players, turns=turns, repetitions=1, seed=75)
         results = tournament.play(progress_bar=False)
         scores = [
             round(average_score_per_turn * 1000, 1)
@@ -678,7 +678,7 @@ class TestOriginalGradual(TestPlayer):
         expected_scores = [
             3000.0,
             915.0,
-            2756.0,
+            2763.0,
             3000.0,
             3000.0,
             2219.0,
@@ -1031,7 +1031,7 @@ class Test1TitsFor1TatsIsTFT(TestTitForTat):
 
 
 class Test1TitsFor2TatsIsTF2T(TestTitFor2Tats):
-    """Tests that for N = 1 = M, all the TFT tests are passed."""
+    """Tests that for N = 1,  M = 2, all the TF2T tests are passed."""
     name = "N Tit(s) For M Tat(s): 1, 2"
     player = lambda x: axl.NTitsForMTats(1, 2)
     expected_classifier = {
@@ -1045,8 +1045,8 @@ class Test1TitsFor2TatsIsTF2T(TestTitFor2Tats):
     }
 
 
-class Test2TitsFor1TatsIsT2FT(TestTwoTitsForTat):
-    """Tests that for N = 1 = M, all the TFT tests are passed."""
+class Test2TitsFor1TatsIs2TFT(TestTwoTitsForTat):
+    """Tests that for N = 2,  M = 1, all the 2TFT tests are passed."""
     name = "N Tit(s) For M Tat(s): 2, 1"
     player = lambda x: axl.NTitsForMTats(2, 1)
     expected_classifier = {

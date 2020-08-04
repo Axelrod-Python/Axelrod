@@ -180,9 +180,8 @@ class TestMetaWinnerEnsemble(TestMetaPlayer):
         player = axl.MetaWinnerEnsemble(team=team)
         self.assertTrue(Classifiers["stochastic"](player))
 
-        # If the players are all identical, a multiplayer
-        # team might is in fact deterministic, even though random values
-        # are being drawn.
+        # If the players are all identical, a multiplayer team might in fact
+        # be deterministic, even though random values are being drawn.
         team = [axl.Cooperator, axl.Cooperator]
         player = axl.MetaWinnerEnsemble(team=team)
         self.assertFalse(Classifiers["stochastic"](player))

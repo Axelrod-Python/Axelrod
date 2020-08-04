@@ -130,6 +130,3 @@ class TestHumanClass(TestPlayer):
 
     def equality_of_players_test(self, p1, p2, seed, opponent):
         return True
-
-    def test_reproducibility_of_play(self):
-        return True

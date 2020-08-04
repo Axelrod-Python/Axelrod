@@ -255,7 +255,7 @@ class TestMEM2(TestPlayer):
 
 
 class TestMemoryTwoCooperator(TestCooperator):
-    """Cooperator is equivalent to MemoryOnePlayer((1, 1, 1, 1), C)"""
+    """Cooperator is equivalent to MemoryTwoPlayer((1, 1, ..., 1), C)"""
     name = "Generic Memory Two Player: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], (C, C)"
     player = lambda x: axl.MemoryTwoPlayer(sixteen_vector=[1] * 16, initial=(C, C))
     expected_classifier = {
@@ -270,7 +270,7 @@ class TestMemoryTwoCooperator(TestCooperator):
 
 
 class TestMemoryTwoDefector(TestDefector):
-    """Defector is equivalent to MemoryOnePlayer((0, 0, 0, 0), D)"""
+    """Defector is equivalent to MemoryTwoPlayer((0, 0, ..., 0), D)"""
     name = "Generic Memory Two Player: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], (D, D)"
     player = lambda x: axl.MemoryTwoPlayer(sixteen_vector=[0] * 16, initial=(D, D))
     expected_classifier = {
@@ -291,10 +291,9 @@ def four_vector_to_sixteen_vector(four_vector):
 
 
 class TestMemoryTwoAlternator(TestAlternator):
-    """Alternator is equivalent to MemoryOnePlayer((0, 0, 1, 1), C)"""
+    """Alternator is equivalent to MemoryTwoPlayer(0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1), C)."""
     name = "Generic Memory Two Player: [0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1], (C, D)"
     player = lambda x: axl.MemoryTwoPlayer(sixteen_vector=four_vector_to_sixteen_vector((0, 0, 1, 1)), initial=(C, D))
-    # player = lambda x: axl.MemoryTwoPlayer(sixteen_vector=four_vector_to_sixteen_vector((1, 1, 0, 0)), initial=(C, D))
     expected_classifier = {
         "memory_depth": 1,
         "stochastic": False,
