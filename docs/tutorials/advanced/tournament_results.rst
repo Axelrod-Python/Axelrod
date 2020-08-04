@@ -343,7 +343,7 @@ This gives the count of cooperations made by each player during the first turn
 of every match::
 
     >>> results.initial_cooperation_count
-    [9.0, 0.0, 9.0, 9.0]
+    [9, 0, 9, 9]
 
 Each player plays an opponent a total of 9 times (3 opponents and 3
 repetitions). Apart from the :code:`Defector`, they all cooperate on the first
