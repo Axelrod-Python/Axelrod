@@ -1,6 +1,8 @@
+from typing import Optional
 import numpy as np
 from axelrod.action import Action
 from numpy.random import RandomState
+
 
 C, D = Action.C, Action.D
 
@@ -9,13 +11,13 @@ class RandomGenerator(object):
     """Container around a random number generator.
     Enables reproducibility of player behavior, matches,
     and tournaments."""
-    def __init__(self, seed=None):
+    def __init__(self, seed: Optional[int] = None):
         # _random is the internal object that generators random values
         self._random = RandomState()
         self.original_seed = seed
         self.seed(seed)
 
-    def seed(self, seed_):
+    def seed(self, seed_: Optional[int] = None):
         """Sets a seed"""
         self._random.seed(seed_)
 
@@ -25,7 +27,7 @@ class RandomGenerator(object):
     def randint(self, *args, **kwargs):
         return self._random.randint(*args, **kwargs)
 
-    def random_seed_int(self):
+    def random_seed_int(self) -> int:
         return self.randint(low=0, high=2**32-1, dtype="uint64")
 
     def choice(self, *args, **kwargs):
@@ -117,7 +119,7 @@ class BulkRandomGenerator(object):
     """Bulk generator of random integers for tournament seeding and
     reproducibility. Bulk generation of random values is more efficient.
     Use this class like a generator."""
-    def __init__(self, seed=None, batch_size=1000):
+    def __init__(self, seed=None, batch_size:int = 1000):
         self._random_generator = RandomState()
         self._random_generator.seed(seed)
         self._ints = None

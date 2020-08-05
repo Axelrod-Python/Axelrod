@@ -22,13 +22,12 @@ class TestWorseAndWorse(TestPlayer):
     }
 
     def test_strategy(self):
-        """Test that the strategy gives expected behaviour."""
-        # 6 Rounds Cooperate given seed
+        # For given seed cooperates for 6 rounds and then defects for a round
         actions = [(C, C)] * 6 + [(D, C)] + [(C, C)] * 3
         self.versus_test(axl.Cooperator(), expected_actions=actions, seed=144)
 
     def test_strategy2(self):
-        # 6 Rounds Cooperate and Defect no matter opponent
+        #  Test that behaviour does not depend on opponent
         actions = [(C, D)] * 6 + [(D, D)] + [(C, D)] * 3
         self.versus_test(axl.Defector(), expected_actions=actions, seed=144)
 

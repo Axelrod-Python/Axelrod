@@ -190,8 +190,8 @@ class Player(object, metaclass=PostInitCaller):
         """Set a random seed for the player's random number generator."""
         if seed is None:
             warnings.warn(
-                "Initializing player with seed from Axelrod module random number generator."
-                " Results may not be seed reproducible.")
+                "Initializing player with seed from Axelrod module random number generator. "
+                "Results may not be seed reproducible.")
             self._seed = _module_random.random_seed_int()
         else:
             self._seed = seed

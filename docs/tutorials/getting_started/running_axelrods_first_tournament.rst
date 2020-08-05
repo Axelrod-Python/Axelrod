@@ -71,9 +71,10 @@ The results object contains the ranked names::
     First by Anonymous
     Random: 0.5
 
-We see that `TitForTat` does not in fact win this tournament. `TitForTat` typically does not
-win, possibly because our implementations differ from the original strategies as their code
-is not available.
+
+We see that `TitForTat` does not win. In fact `TitForTat` typically does not
+win this tournament, possibly because our implementations differ from the original
+strategies as their code is not available.
 
 We can plot the reported rank (from [Axelrod1980]_) versus the reproduced one::
 
