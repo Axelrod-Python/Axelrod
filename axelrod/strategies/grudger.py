@@ -325,6 +325,7 @@ class SpitefulCC(Player):
     classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": False,
+        "makes_use_of": set(),
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -333,10 +334,7 @@ class SpitefulCC(Player):
 
     @staticmethod
     def strategy(opponent: Player) -> Action:
-        """
-        Cooperates until the oponent defects, then defects forever.
-        Always cooperates twice at the start.
-        """
+        """Actual strategy definition that determines player's action."""
         if len(opponent.history) < 2:
             return C
         elif opponent.defections:
