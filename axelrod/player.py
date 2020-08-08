@@ -118,8 +118,7 @@ class Player(object, metaclass=PostInitCaller):
         pass
 
     def _post_transform(self):
-        """Overwrite this function if you need to do a post-transform, post-init
-        modification."""
+        """Handles post transform tasks such as further reclassifying."""
         # Reclassify strategy post __init__, if needed.
         for (reclassifier, args, kwargs) in self._reclassifiers:
             self.classifier = reclassifier(self.classifier, *args, **kwargs)

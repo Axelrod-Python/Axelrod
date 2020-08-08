@@ -104,7 +104,7 @@ class MetaPlayer(Player):
             # As a sanity check, look for at least one reclassifier, otherwise
             # this try-except clause could hide a bug.
             if len(self._reclassifiers) == 0:
-                raise TypeError("MetaClass update_histories issue, expected a transformer.")
+                raise TypeError("MetaClass update_histories issue, expected a reclassifier.")
             # Otherwise just update with C always, so at least the histories have the
             # expected length.
             for player in self.team:
@@ -222,9 +222,6 @@ class MetaWinnerEnsemble(MetaWinner):
     """
 
     name = "Meta Winner Ensemble"
-
-    def __init__(self, team=None):
-        super().__init__(team=team)
 
     def _post_init(self):
         super()._post_init()

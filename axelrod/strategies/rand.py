@@ -44,6 +44,7 @@ class Random(Player):
         return self._random.random_choice(self.p)
 
     def _post_init(self):
+        super()._post_init()
         if self.p in [0, 1]:
             self.classifier["stochastic"] = False
         # Avoid calls to _random, if strategy is deterministic

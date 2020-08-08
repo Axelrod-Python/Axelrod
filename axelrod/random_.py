@@ -84,8 +84,7 @@ class RandomGenerator(object):
         return action
 
     def randrange(self, a: int, b: int) -> int:
-        """Python 2 / 3 compatible randrange. Returns a random integer uniformly
-        between a and b (inclusive)"""
+        """Returns a random integer uniformly between a and b: [a, b)."""
         c = b - a
         r = c * self.random()
         return a + int(r)

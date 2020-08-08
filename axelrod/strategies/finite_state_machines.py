@@ -114,7 +114,6 @@ class FSMPlayer(Player):
         initial_state: int = 1,
         initial_action: Action = C
     ) -> None:
-        # super().__init__()
         Player.__init__(self)
         self.initial_state = initial_state
         self.initial_action = initial_action

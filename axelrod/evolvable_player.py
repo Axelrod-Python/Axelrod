@@ -35,7 +35,7 @@ class EvolvablePlayer(Player):
     def create_new(self, **kwargs):
         """Creates a new variant with parameters overwritten by kwargs. This differs from
         cloning the Player because it propagates a seed forward, and is intended to be
-        used in my the mutation and crossover methods."""
+        used by the mutation and crossover methods."""
         init_kwargs = self.init_kwargs.copy()
         init_kwargs.update(kwargs)
         # Propagate seed forward for reproducibility.

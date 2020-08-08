@@ -735,14 +735,17 @@ class TestTournament(unittest.TestCase):
     @settings(max_examples=5, deadline=None)
     def test_seeding_equality(self, seed):
         """Tests that a tournament with a given seed will return the
-        same results each time."""
+        same results each time. This specifically checks when running using
+        multiple cores so as to confirm that
+        https://github.com/Axelrod-Python/Axelrod/issues/1277
+        is fixed."""
         rng = axl.RandomGenerator(seed=seed)
         players = [axl.Random(rng.random()) for _ in range(8)]
         tournament1 = axl.Tournament(
             name=self.test_name,
             players=players,
             game=self.game,
-            turns=3,
+            turns=10,
             repetitions=100,
             seed=seed
         )
@@ -750,7 +753,7 @@ class TestTournament(unittest.TestCase):
             name=self.test_name,
             players=players,
             game=self.game,
-            turns=3,
+            turns=10,
             repetitions=100,
             seed=seed
         )
