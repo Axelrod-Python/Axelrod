@@ -757,9 +757,10 @@ class TestTournament(unittest.TestCase):
             repetitions=100,
             seed=seed
         )
-        results1 = tournament1.play(processes=2)
-        results2 = tournament2.play(processes=2)
-        self.assertEqual(results1.ranked_names, results2.ranked_names)
+        for _ in range(4):
+            results1 = tournament1.play(processes=2)
+            results2 = tournament2.play(processes=2)
+            self.assertEqual(results1.ranked_names, results2.ranked_names)
 
     def test_seeding_inequality(self):
         players = [axl.Random(0.4), axl.Random(0.6)]

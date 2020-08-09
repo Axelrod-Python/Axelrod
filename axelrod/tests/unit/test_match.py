@@ -359,8 +359,8 @@ class TestSampleLength(unittest.TestCase):
             (2, 0.6, 1),
             (3, 0.4, 2),
         ]:
-            rg = RandomGenerator(seed)
-            r = rg.random()
+            rng = RandomGenerator(seed)
+            r = rng.random()
             self.assertEqual(axl.match.sample_length(prob_end, r), expected_length)
 
     def test_sample_with_0_prob(self):
