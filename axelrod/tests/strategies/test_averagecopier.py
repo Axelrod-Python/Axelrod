@@ -40,7 +40,6 @@ class TestAverageCopier(TestPlayer):
         self.versus_test(axl.Defector(), expected_actions=actions, seed=2)
 
     def test_random_behavior1(self):
-        # Variable behaviour based on the history and stochastic
         actions = [
             (C, C),
             (C, D),
@@ -118,17 +117,16 @@ class TestNiceAverageCopier(TestPlayer):
     }
 
     def test_cooperate_if_opponent_always_cooperates(self):
-        # Tests that if opponent has played all C then player chooses C.
+        """Tests that if opponent has played all C then player chooses C."""
         actions = [(C, C)] * 10
         self.versus_test(axl.Cooperator(), expected_actions=actions, seed=1)
 
     def test_defect_if_opponent_always_defects(self):
-        # Tests that if opponent has played all D then player chooses D.
+        """Tests that if opponent has played all D then player chooses D."""
         actions = [(C, D)] + [(D, D)] * 9
         self.versus_test(axl.Defector(), expected_actions=actions, seed=1)
 
     def test_random_behavior1(self):
-        # Variable behaviour based on the history and stochastic behaviour
         actions = [
             (C, C),
             (C, D),

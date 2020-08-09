@@ -434,7 +434,6 @@ class TestFlipTransformer(TestMatch):
         """A test that demonstrates the difference in outcomes if
         FlipTransformer is applied to Alternator and CyclerCD. In other words,
         the implementation matters, not just the outcomes."""
-        # Difference between Alternator and CyclerCD
         p1 = axl.Cycler(cycle="CD")
         p2 = FlipTransformer()(axl.Cycler)(cycle="CD")
         self.versus_test(p1, p2, [C, D, C, D, C], [D, C, D, C, D])

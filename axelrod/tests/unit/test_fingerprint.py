@@ -381,20 +381,20 @@ class TestFingerprint(unittest.TestCase):
         A test to check that we can fingerprint
         with any two given strategies or instances
         """
-        # strategy, probe = strategy_pair
-        # af = AshlockFingerprint(strategy, probe)
-        # data = af.fingerprint(turns=2, repetitions=2, step=0.5, progress_bar=False, seed=1)
-        # self.assertIsInstance(data, dict)
-        #
-        # strategy, probe = strategy_pair
-        # af = AshlockFingerprint(strategy(), probe)
-        # data = af.fingerprint(turns=2, repetitions=2, step=0.5, progress_bar=False, seed=2)
-        # self.assertIsInstance(data, dict)
-        #
-        # strategy, probe = strategy_pair
-        # af = AshlockFingerprint(strategy, probe())
-        # data = af.fingerprint(turns=2, repetitions=2, step=0.5, progress_bar=False, seed=3)
-        # self.assertIsInstance(data, dict)
+        strategy, probe = strategy_pair
+        af = AshlockFingerprint(strategy, probe)
+        data = af.fingerprint(turns=2, repetitions=2, step=0.5, progress_bar=False, seed=1)
+        self.assertIsInstance(data, dict)
+
+        strategy, probe = strategy_pair
+        af = AshlockFingerprint(strategy(), probe)
+        data = af.fingerprint(turns=2, repetitions=2, step=0.5, progress_bar=False, seed=2)
+        self.assertIsInstance(data, dict)
+
+        strategy, probe = strategy_pair
+        af = AshlockFingerprint(strategy, probe())
+        data = af.fingerprint(turns=2, repetitions=2, step=0.5, progress_bar=False, seed=3)
+        self.assertIsInstance(data, dict)
 
         strategy, probe = strategy_pair
         af = AshlockFingerprint(strategy(), probe())

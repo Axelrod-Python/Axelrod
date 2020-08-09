@@ -89,10 +89,10 @@ class EvolvableGambler(Gambler, EvolvableLookerUp):
     # The mutate and crossover methods are mostly inherited from EvolvableLookerUp, except for the following
     # modifications.
 
-    def random_value(self):
+    def random_value(self) -> float:
         return self._random.random()
 
-    def mutate_value(self, value):
+    def mutate_value(self, value: float) -> float:
         ep = self._random.uniform(-1, 1) / 4
         value += ep
         if value < 0:

@@ -53,7 +53,7 @@ class MemoryTwoPlayer(Player):
     }
 
     def __init__(
-        self, sixteen_vector: Tuple[float, ...] = None, initial: Optional[Tuple[Action, Action]] = None
+        self, sixteen_vector: Optional[Tuple[float, ...]] = None, initial: Optional[Tuple[Action, Action]] = None
     ) -> None:
         """
         Parameters
@@ -69,14 +69,14 @@ class MemoryTwoPlayer(Player):
         self._initial = initial
         self.set_initial_sixteen_vector(sixteen_vector)
 
-    def set_initial_sixteen_vector(self, sixteen_vector):
+    def set_initial_sixteen_vector(self, sixteen_vector: Optional[Tuple[float, ...]]):
         if sixteen_vector is None:
             sixteen_vector = tuple([1] * 16)
             warnings.warn("Memory two player is set to default, Cooperator.")
 
         self.set_sixteen_vector(sixteen_vector)
 
-    def set_sixteen_vector(self, sixteen_vector: Tuple):
+    def set_sixteen_vector(self, sixteen_vector: Tuple[float, ...]):
         if not all(0 <= p <= 1 for p in sixteen_vector):
             raise ValueError(
                 "An element in the probability vector, {}, is not "
@@ -92,7 +92,7 @@ class MemoryTwoPlayer(Player):
         )  # type: Dict[tuple, float]
 
     @staticmethod
-    def compute_memory_depth(sixteen_vector):
+    def compute_memory_depth(sixteen_vector: Dict[Tuple[Action, Action], float]) -> int:
         values = set(list(sixteen_vector.values()))
 
         # Memory-depth 0

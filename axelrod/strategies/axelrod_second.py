@@ -433,7 +433,7 @@ class SecondByGrofman(Player):
       - If its own previous move was D and the opponent has defected more than
         once in the last 8\* rounds, defect
 
-    \* The code looks at the first 7 of the last 8 rounds, ignoring the most
+    The code looks at the first 7 of the last 8 rounds, ignoring the most
     recent round.
 
     Names:
@@ -1530,7 +1530,7 @@ class SecondByWhite(Player):
     Strategy submitted to Axelrod's second tournament by Edward C White (K72R)
     and came in thirteenth in that tournament.
 
-    * Cooperate in the first ten turns
+    * Cooperate in the first ten turns.
     * If the opponent Cooperated last turn then Cooperate.
     * Otherwise Defect if and only if:
         floor(log(turn)) * opponent Defections >= turn

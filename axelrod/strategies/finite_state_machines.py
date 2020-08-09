@@ -1,5 +1,5 @@
 import itertools
-from typing import Any, Dict, Sequence, Text, Tuple
+from typing import Any, Dict, List, Sequence, Text, Tuple
 
 from axelrod.action import Action
 from axelrod.evolvable_player import (
@@ -200,7 +200,7 @@ class EvolvableFSMPlayer(FSMPlayer, EvolvablePlayer):
         initial_action = self._random.choice(actions)
         return tuple(rows), initial_state, initial_action
 
-    def mutate_rows(self, rows, mutation_probability):
+    def mutate_rows(self, rows: List[List], mutation_probability: float):
         rows = list(rows)
         randoms = self._random.random(len(rows))
         # Flip each value with a probability proportional to the mutation rate
@@ -239,7 +239,7 @@ class EvolvableFSMPlayer(FSMPlayer, EvolvablePlayer):
             initial_action=initial_action,
         )
 
-    def crossover_rows(self, rows1, rows2):
+    def crossover_rows(self, rows1: List[List], rows2: List[List]) -> List[List]:
         num_states = len(rows1) // 2
         cross_point = 2 * self._random.randint(0, num_states)
         new_rows = copy_lists(rows1[:cross_point])

@@ -30,7 +30,6 @@ class TestAntiCycler(TestPlayer):
     }
 
     def test_has_no_cycles(self):
-        # test_range = 100
         player = axl.AntiCycler()
         opponent = axl.Cooperator()
         match = axl.Match((player, opponent), turns=100)

@@ -31,7 +31,7 @@ even for the same random seed. We see that, for this random seed, the :code:`Ran
 won this Moran process. This is not what happens in a standard Moran process where the
 :code:`Random: 0.5` player will not win::
 
-    >>> mp = axl.MoranProcess(players, seed=2)
+    >>> mp = axl.MoranProcess(players, seed=5)
     >>> results = mp.play()
     >>> mp.population_distribution()
     Counter({'Defector': 3})

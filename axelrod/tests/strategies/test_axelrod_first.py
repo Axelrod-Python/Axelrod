@@ -38,7 +38,7 @@ class TestFirstByDavis(TestPlayer):
 
     def test_retaliation_after_ten_rounds1(self):
         """If opponent defects at any point then the player will defect forever
-        (after 10 rounds)"""
+        (after 10 rounds)."""
         opponent = axl.MockPlayer(actions=[C] * 10 + [D])
         actions = [(C, C)] * 10 + [(C, D), (D, C)]
         self.versus_test(opponent, expected_actions=actions)

@@ -98,8 +98,8 @@ class TestEvolvablePlayer(TestPlayer):
         if not self.init_parameters:
             return
         variants_produced = False
-        for seed in range(2, 400):
-            player = self.player(seed=seed)
+        for seed_ in range(2, 400):
+            player = self.player(seed=seed_)
             mutant = player.mutate()
             if player != mutant:
                 variants_produced = True

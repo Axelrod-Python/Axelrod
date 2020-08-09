@@ -22,15 +22,17 @@ class TestChampion(TestPlayer):
 
     def test_initial_rounds(self):
         # Cooperates for first 10 rounds
-        actions = [(C, D)] * 10  # Cooperate for ten rounds
+        actions = [(C, D)] * 10
         self.versus_test(axl.Defector(), expected_actions=actions)
         # Mirror partner for next phase
-        actions += [(D, D)] * 7  # Mirror opponent afterwards
+        actions += [(D, D)] * 7
         self.versus_test(axl.Defector(), expected_actions=actions)
 
     def test_cooperate_until_defect(self):
-        actions = [(C, C), (C, D)] * 5  # Cooperate for ten rounds
-        actions += [(D, C), (C, D)] * 7  # Mirror opponent afterwards
+        # Cooperates for first 10 rounds
+        actions = [(C, C), (C, D)] * 5
+        # Mirror partner for next phase
+        actions += [(D, C), (C, D)] * 7
         # Cooperate unless the opponent defected, has defected at least 40% of
         actions += [(D, C), (C, D), (C, C), (C, D)] * 3
         self.versus_test(axl.Alternator(), expected_actions=actions, seed=2)

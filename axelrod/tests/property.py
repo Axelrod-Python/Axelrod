@@ -153,7 +153,7 @@ def prob_end_tournaments(
     min_repetitions : integer
         The minimum number of repetitions
     max_repetitions : integer
-        The maximum number of
+        The maximum number of repetitions
     seed : integer
         Random seed
     """

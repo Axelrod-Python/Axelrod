@@ -32,7 +32,7 @@ class Calculator(Player):
         self.joss_instance = Joss()
         super().__init__()
 
-    def set_seed(self, seed=None):
+    def set_seed(self, seed: int = None):
         super().set_seed(seed)
         self.joss_instance.set_seed(seed)
 
