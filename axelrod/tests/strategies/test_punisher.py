@@ -154,8 +154,8 @@ class TestLevelPunisher(TestPlayer):
 
 class TestTrickyLevelPunisher(TestPlayer):
 
-    name = "Level Punisher"
-    player = axl.LevelPunisher
+    name = "Tricky Level Punisher"
+    player = axl.TrickyLevelPunisher
     expected_classifier = {
         "memory_depth": float("inf"),  # Long memory
         "stochastic": False,
@@ -171,24 +171,20 @@ class TestTrickyLevelPunisher(TestPlayer):
         actions = [(C, C)] * 9
         self.versus_test(opponent=axl.Cooperator(), expected_actions=actions)
 
-        # After 10 rounds
         # Check if number of defections by opponent is greater than 20%
-        opponent = axl.MockPlayer([C] * 4 + [D] * 2 + [C] * 3 + [D])
-        actions = [(C, C)] * 4 + [(C, D)] * 2 + [(C, C)] * 3 + [(C, D), (D, C)]
+        op_actions = [C] * 6 + [D] * 4
+        opponent = axl.MockPlayer(op_actions)
+        actions = list(zip([C] * 7 + [D] * 3, op_actions))
         self.versus_test(opponent=opponent, expected_actions=actions)
 
         # Check if number of defections by opponent is greater than 10%
-        opponent = axl.MockPlayer([C] * 4 + [D] + [C] * 4 + [D])
-        actions = [(C, C)] * 4 + [(C, D)] + [(C, C)] * 4 + [(C, D), (C, C)]
+        op_actions = [C] * 8 + [D, C]
+        opponent = axl.MockPlayer(op_actions)
+        actions = list(zip([C] * 9 + [D], op_actions))
         self.versus_test(opponent=opponent, expected_actions=actions)
 
-        # After 10 rounds
         # Check if number of defections by opponent is greater than 5%
-        opponent = axl.MockPlayer([C] * 4 + [D] + [C] * 5)
-        actions = [(C, C)] * 4 + [(C, D)] + [(C, C)] * 5
-        self.versus_test(opponent=opponent, expected_actions=actions)
-
-        # Check if number of defections by opponent is less than 5%
-        opponent = axl.MockPlayer([C] * 10)
-        actions = [(C, C)] * 5
+        op_actions = [C] * 18 + [D, C]
+        opponent = axl.MockPlayer(op_actions)
+        actions = list(zip([C] * 19 + [D], op_actions))
         self.versus_test(opponent=opponent, expected_actions=actions)

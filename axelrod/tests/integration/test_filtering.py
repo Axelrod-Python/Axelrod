@@ -20,6 +20,7 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
     def tearDown(self) -> None:
         warnings.simplefilter("default", category=UserWarning)
 
+    @settings(deadline=None)
     @given(strategies=strategy_lists(min_size=20, max_size=20))
     @example(strategies=[axl.DBS, axl.Cooperator])
     def test_boolean_filtering(self, strategies):
@@ -50,7 +51,7 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
         memory_depth=float("inf"),
         strategies=axl.short_run_time_strategies,
     )
-    @settings(max_examples=5)
+    @settings(max_examples=5, deadline=None)
     def test_memory_depth_filtering(
         self, min_memory_depth, max_memory_depth, memory_depth, strategies
     ):
@@ -92,21 +93,15 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
         filtered = set(axl.filtered_strategies(filterset, strategies=strategies))
         self.assertEqual(comprehension, filtered)
 
-    @given(
-        seed_=integers(min_value=0, max_value=4294967295),
-        strategies=strategy_lists(min_size=20, max_size=20),
-    )
-    @settings(max_examples=5)
-    def test_makes_use_of_filtering(self, seed_, strategies):
+    @given(strategies=strategy_lists(min_size=20, max_size=20))
+    @settings(max_examples=5, deadline=None)
+    def test_makes_use_of_filtering(self, strategies):
         """
         Test equivalent filtering using two approaches.
-
-        This needs to be seeded as some players classification is random.
         """
         classifiers = [["game"], ["length"], ["game", "length"]]
 
         for classifier in classifiers:
-            axl.seed(seed_)
             comprehension = set(
                 [
                     s
@@ -115,7 +110,6 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
                 ]
             )
 
-            axl.seed(seed_)
             filterset = {"makes_use_of": classifier}
             filtered = set(axl.filtered_strategies(filterset, strategies=strategies))
 

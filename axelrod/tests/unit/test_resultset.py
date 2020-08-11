@@ -494,9 +494,8 @@ class TestResultSet(unittest.TestCase):
         # Based on https://github.com/Axelrod-Python/Axelrod/issues/670
         # Note that the conclusion of #670 is incorrect and only includes one of
         # the copies of the strategy.
-        axl.seed(0)
         players = [s() for s in axl.demo_strategies]
-        tournament = axl.Tournament(players, repetitions=2, turns=5)
+        tournament = axl.Tournament(players, repetitions=2, turns=5, seed=0)
         results = tournament.play(progress_bar=False)
         self.assertEqual(results.payoff_diffs_means[-1][-1], 0.0)
 
@@ -1219,7 +1218,7 @@ class TestSummary(unittest.TestCase):
     @given(
         tournament=tournaments(min_size=2, max_size=5, max_turns=5, max_repetitions=3)
     )
-    @settings(max_examples=5)
+    @settings(max_examples=5, deadline=None)
     def test_summarise_without_failure(self, tournament):
         results = tournament.play(progress_bar=False)
         sd = results.summarise()

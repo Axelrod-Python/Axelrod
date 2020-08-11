@@ -1,5 +1,3 @@
-from typing import List
-
 from axelrod.action import Action
 from axelrod.player import Player
 
@@ -135,9 +133,7 @@ class LevelPunisher(Player):
     def strategy(self, opponent: Player) -> Action:
         if len(opponent.history) < 10:
             return C
-        elif (len(opponent.history) - opponent.cooperations) / len(
-            opponent.history
-        ) > 0.2:
+        elif opponent.defections / len(opponent.history) > 0.2:
             return D
         else:
             return C

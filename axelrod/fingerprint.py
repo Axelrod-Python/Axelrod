@@ -42,7 +42,7 @@ def _create_points(step: float, progress_bar: bool = True) -> List[Point]:
     num = int((1 / step) // 1) + 1
 
     if progress_bar:
-        p_bar = tqdm.tqdm(total=num ** 2, desc="Generating points")
+        p_bar = tqdm.tqdm(total=num**2, desc="Generating points")
 
     points = []
     for x in np.linspace(0, 1, num):
@@ -80,17 +80,18 @@ def _create_jossann(point: Point, probe: Any) -> Player:
     x, y = point
 
     if isinstance(probe, axl.Player):
+        probe_class = probe.__class__
         init_kwargs = probe.init_kwargs
-        probe = probe.__class__
     else:
+        probe_class = probe
         init_kwargs = {}
 
     if x + y >= 1:
-        joss_ann = DualTransformer()(JossAnnTransformer((1 - x, 1 - y))(probe))(
-            **init_kwargs
-        )
+        joss_ann = DualTransformer()(
+            JossAnnTransformer((1 - x, 1 - y))(
+                probe_class))(**init_kwargs)
     else:
-        joss_ann = JossAnnTransformer((x, y))(probe)(**init_kwargs)
+        joss_ann = JossAnnTransformer((x, y))(probe_class)(**init_kwargs)
     return joss_ann
 
 
@@ -128,7 +129,7 @@ def _create_edges(points: List[Point], progress_bar: bool = True) -> list:
     """Creates a set of edges for a spatial tournament.
 
     Constructs edges that correspond to `points`. All edges begin at 0, and
-    connect to the index +1 of the probe.
+    connect to the index + 1 of the probe.
 
     Parameters
     ----------
@@ -136,7 +137,6 @@ def _create_edges(points: List[Point], progress_bar: bool = True) -> list:
         of Point objects with coordinates (x, y)
     progress_bar : bool
         Whether or not to create a progress bar which will be updated
-
 
     Returns
     ----------
@@ -244,7 +244,6 @@ class AshlockFingerprint(object):
         progress_bar : bool
             Whether or not to create a progress bar which will be updated
 
-
         Returns
         ----------
         edges : list of tuples
@@ -264,7 +263,7 @@ class AshlockFingerprint(object):
         )
 
         if isinstance(self.strategy, axl.Player):
-            tournament_players = [self.strategy] + probe_players
+            tournament_players = [self.strategy.clone()] + probe_players
         else:
             tournament_players = [self.strategy()] + probe_players
 
@@ -278,6 +277,7 @@ class AshlockFingerprint(object):
         processes: int = None,
         filename: str = None,
         progress_bar: bool = True,
+        seed: int = None
     ) -> dict:
         """Build and play the spatial tournament.
 
@@ -303,6 +303,8 @@ class AshlockFingerprint(object):
             if None, will auto-generate a filename.
         progress_bar : bool
             Whether or not to create a progress bar which will be updated
+        seed : int, optional
+            Random seed for reproducibility
 
         Returns
         ----------
@@ -321,7 +323,8 @@ class AshlockFingerprint(object):
 
         self.step = step
         self.spatial_tournament = axl.Tournament(
-            tourn_players, turns=turns, repetitions=repetitions, edges=edges
+            tourn_players, turns=turns, repetitions=repetitions, edges=edges,
+            seed=seed
         )
         self.spatial_tournament.play(
             build_results=False,
@@ -429,6 +432,7 @@ class TransitiveFingerprint(object):
         processes: int = None,
         filename: str = None,
         progress_bar: bool = True,
+        seed: int = None
     ) -> np.array:
         """Creates a spatial tournament to run the necessary matches to obtain
         fingerprint data.
@@ -475,6 +479,7 @@ class TransitiveFingerprint(object):
             turns=turns,
             noise=noise,
             repetitions=repetitions,
+            seed=seed
         )
         tournament.play(
             filename=filename,

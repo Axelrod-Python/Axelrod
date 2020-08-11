@@ -6,7 +6,6 @@ from typing import Dict, Optional, Tuple
 
 from axelrod.action import Action
 from axelrod.player import Player
-from axelrod.random_ import random_choice
 
 from .defector import Defector
 from .titfortat import TitFor2Tats, TitForTat
@@ -35,7 +34,7 @@ class MemoryTwoPlayer(Player):
     13. P(C|DD, CC)
     14. P(C|DD, CD)
     15. P(C|DD, DC)
-    16. P(C|DD, DD))
+    16. P(C|DD, DD)
     Cooperator is set as the default player if sixteen_vector is not given.
 
     Names
@@ -54,31 +53,30 @@ class MemoryTwoPlayer(Player):
     }
 
     def __init__(
-        self, sixteen_vector: Tuple[float, ...] = None, initial: Optional[Action] = None
+        self, sixteen_vector: Optional[Tuple[float, ...]] = None, initial: Optional[Tuple[Action, Action]] = None
     ) -> None:
         """
         Parameters
         ----------
-
         sixteen_vector: list or tuple of floats of length 16
             The response probabilities to the preceding round of play
-        initial: C or D
+        initial: (Action, Action)
             The initial 2 moves
         """
         super().__init__()
         if initial is None:
-            initial = C
+            initial = (C, C)
         self._initial = initial
         self.set_initial_sixteen_vector(sixteen_vector)
 
-    def set_initial_sixteen_vector(self, sixteen_vector):
+    def set_initial_sixteen_vector(self, sixteen_vector: Optional[Tuple[float, ...]]):
         if sixteen_vector is None:
             sixteen_vector = tuple([1] * 16)
             warnings.warn("Memory two player is set to default, Cooperator.")
 
         self.set_sixteen_vector(sixteen_vector)
 
-    def set_sixteen_vector(self, sixteen_vector: Tuple):
+    def set_sixteen_vector(self, sixteen_vector: Tuple[float, ...]):
         if not all(0 <= p <= 1 for p in sixteen_vector):
             raise ValueError(
                 "An element in the probability vector, {}, is not "
@@ -92,17 +90,50 @@ class MemoryTwoPlayer(Player):
         self._sixteen_vector = dict(
             zip(states, sixteen_vector)
         )  # type: Dict[tuple, float]
-        self.classifier["stochastic"] = any(0 < x < 1 for x in set(sixteen_vector))
+
+    @staticmethod
+    def compute_memory_depth(sixteen_vector: Dict[Tuple[Action, Action], float]) -> int:
+        values = set(list(sixteen_vector.values()))
+
+        # Memory-depth 0
+        if all(x == 0 for x in values) or all(x == 1 for x in values):
+            return 0
+
+        is_memory_one = True
+        d = sixteen_vector
+        contexts = [(C, C), (C, D), (D, C), (D, D)]
+
+        for c1 in contexts:
+            values = set()
+            i, j = c1
+            for c2 in contexts:
+                x, y = c2
+                values.add(d[((x, i), (y, j))])
+            if len(values) > 1:
+                is_memory_one = False
+                break
+        if is_memory_one:
+            return 1
+        return 2
+
+    def _post_init(self):
+        values = set(self._sixteen_vector.values())
+        self.classifier["stochastic"] = any(0 < x < 1 for x in values)
+        self.classifier["memory_depth"] = self.compute_memory_depth(self._sixteen_vector)
 
     def strategy(self, opponent: Player) -> Action:
-        if len(opponent.history) <= 1:
-            return self._initial
+        turn = len(self.history)
+        if turn <= 1:
+            return self._initial[turn]
         # Determine which probability to use
         p = self._sixteen_vector[
             (tuple(self.history[-2:]), tuple(opponent.history[-2:]))
         ]
         # Draw a random number in [0, 1] to decide
-        return random_choice(p)
+        try:
+            return self._random.random_choice(p)
+        except AttributeError:
+            return C if p == 1 else D
 
 
 class AON2(MemoryTwoPlayer):

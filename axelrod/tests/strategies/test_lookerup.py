@@ -1,7 +1,6 @@
 """Test for the Looker Up strategy."""
 
 import copy
-import random
 import unittest
 
 import axelrod as axl
@@ -19,7 +18,7 @@ from .test_evolvable_player import PartialClass, TestEvolvablePlayer
 from .test_player import TestPlayer
 
 C, D = axl.Action.C, axl.Action.D
-
+random = axl.RandomGenerator()
 
 class TestLookupTable(unittest.TestCase):
     lookup_dict = {
@@ -666,18 +665,22 @@ class TestEvolvableLookerUp(unittest.TestCase):
         pattern = ("".join([random.choice(("C", "D")) for _ in range(8)]),)
 
         self.assertRaises(
-            InsufficientParametersError, self.player_class._normalize_parameters
+            InsufficientParametersError,
+            self.player_class,
+            seed=1
         )
         self.assertRaises(
             InsufficientParametersError,
-            self.player_class._normalize_parameters,
+            self.player_class,
             pattern=pattern,
             initial_actions=initial_actions,
+            seed=1
         )
         self.assertRaises(
             InsufficientParametersError,
-            self.player_class._normalize_parameters,
+            self.player_class,
             lookup_dict=lookup_dict,
+            seed=1
         )
 
 

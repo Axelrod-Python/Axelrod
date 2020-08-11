@@ -1,18 +1,17 @@
 import itertools
 import pickle
-import random
 import types
 import unittest
+import warnings
 
 import axelrod as axl
 import numpy as np
-from axelrod.player import simultaneous_play
 from axelrod.tests.property import strategy_lists
 from hypothesis import given, settings
 from hypothesis.strategies import integers, sampled_from
 
 C, D = axl.Action.C, axl.Action.D
-
+random = axl.RandomGenerator()
 short_run_time_short_mem = [
     s
     for s in axl.short_run_time_strategies
@@ -57,14 +56,22 @@ class TestPlayerClass(unittest.TestCase):
     player = axl.Player
     classifier = {"stochastic": False}
 
+    def test_seed_warning(self):
+        """Test that the user is warned if a null seed is given."""
+        player = self.player()
+        with warnings.catch_warnings():
+            player.set_seed(seed=None)
+
     def test_play(self):
         player1, player2 = self.player(), self.player()
         player1.strategy = cooperate
         player2.strategy = defect
-        player1.play(player2)
+
+        match = axl.Match((player1, player2), turns=1)
+        match.play()
+
         self.assertEqual(player1.history[0], C)
         self.assertEqual(player2.history[0], D)
-
         # Test cooperation / defection counts
         self.assertEqual(player1.cooperations, 1)
         self.assertEqual(player1.defections, 0)
@@ -74,7 +81,8 @@ class TestPlayerClass(unittest.TestCase):
         self.assertEqual(player1.state_distribution, {(C, D): 1})
         self.assertEqual(player2.state_distribution, {(D, C): 1})
 
-        player1.play(player2)
+        match = axl.Match((player1, player2), turns=2)
+        match.play()
         self.assertEqual(player1.history[-1], C)
         self.assertEqual(player2.history[-1], D)
         # Test cooperation / defection counts
@@ -99,16 +107,6 @@ class TestPlayerClass(unittest.TestCase):
             player2.state_distribution,
             {(C, C): 1, (C, D): 1, (D, C): 2, (D, D): 1},
         )
-
-    def test_noisy_play(self):
-        axl.seed(1)
-        noise = 0.2
-        player1, player2 = self.player(), self.player()
-        player1.strategy = cooperate
-        player2.strategy = defect
-        player1.play(player2, noise)
-        self.assertEqual(player1.history[0], D)
-        self.assertEqual(player2.history[0], D)
 
     def test_update_history(self):
         player = axl.Player()
@@ -140,12 +138,9 @@ class TestPlayerClass(unittest.TestCase):
         player2 = player1.clone()
         turns = 50
         for op in [axl.Cooperator(), axl.Defector(), axl.TitForTat()]:
-            player1.reset()
-            player2.reset()
             seed = random.randint(0, 10 ** 6)
             for p in [player1, player2]:
-                axl.seed(seed)
-                m = axl.Match((p, op), turns=turns)
+                m = axl.Match((p, op), turns=turns, reset=True, seed=seed)
                 m.play()
             self.assertEqual(len(player1.history), turns)
             self.assertEqual(player1.history, player2.history)
@@ -414,9 +409,8 @@ class TestPlayer(unittest.TestCase):
         a2 = opponent()
         self.assertEqual(p1, p2)
         for player, op in [(p1, a1), (p2, a2)]:
-            axl.seed(seed)
-            for _ in range(10):
-                simultaneous_play(player, op)
+            m = axl.Match(players=(player, op), turns=10, seed=seed)
+            m.play()
         self.assertEqual(p1, p2)
         p1 = pickle.loads(pickle.dumps(p1))
         p2 = pickle.loads(pickle.dumps(p2))
@@ -426,7 +420,7 @@ class TestPlayer(unittest.TestCase):
         opponent=sampled_from(short_run_time_short_mem),
         seed=integers(min_value=1, max_value=200),
     )
-    @settings(max_examples=1)
+    @settings(max_examples=1, deadline=None)
     def test_equality_of_clone(self, seed, opponent):
         p1 = self.player()
         p2 = p1.clone()
@@ -436,7 +430,7 @@ class TestPlayer(unittest.TestCase):
         opponent=sampled_from(axl.short_run_time_strategies),
         seed=integers(min_value=1, max_value=200),
     )
-    @settings(max_examples=1)
+    @settings(max_examples=1, deadline=None)
     def test_equality_of_pickle_clone(self, seed, opponent):
         p1 = self.player()
         p2 = pickle.loads(pickle.dumps(p1))
@@ -450,13 +444,10 @@ class TestPlayer(unittest.TestCase):
             axl.Alternator(),
             axl.Cooperator(),
         ]:
-
             player = self.player()
             clone = player.clone()
-            for seed in range(10):
-                axl.seed(seed)
-                player.play(opponent)
-
+            match = axl.Match((player, opponent), turns=10, seed=111)
+            match.play()
             player.reset()
             self.assertEqual(player, clone)
 
@@ -467,38 +458,34 @@ class TestPlayer(unittest.TestCase):
         clone = player.clone()
         self.assertEqual(player, clone)
 
-    @given(seed=integers(min_value=1, max_value=20000000))
-    @settings(max_examples=1)
-    def test_clone(self, seed):
+    @given(seed=integers(min_value=1, max_value=20000000),
+           turns=integers(min_value=5, max_value=10),
+           noise=integers(min_value=0, max_value=10))
+    @settings(max_examples=1, deadline=None)
+    def test_clone_reproducible_play(self, seed, turns, noise):
         # Test that the cloned player produces identical play
-        player1 = self.player()
-        if player1.name in ["Darwin", "Human"]:
+        player = self.player()
+        if player.name in ["Darwin", "Human", "Mind Bender", "Mind Controller", "Mind Warper"]:
             # Known exceptions
             return
-        player2 = player1.clone()
-        self.assertEqual(len(player2.history), 0)
-        self.assertEqual(player2.cooperations, 0)
-        self.assertEqual(player2.defections, 0)
-        self.assertEqual(player2.state_distribution, {})
-        self.assertEqual(player2.classifier, player1.classifier)
-        self.assertEqual(player2.match_attributes, player1.match_attributes)
 
-        turns = 50
-        r = random.random()
         for op in [
             axl.Cooperator(),
             axl.Defector(),
             axl.TitForTat(),
-            axl.Random(p=r),
+            axl.Random(p=0.5),
         ]:
-            player1.reset()
-            player2.reset()
-            for p in [player1, player2]:
-                axl.seed(seed)
-                m = axl.Match((p, op), turns=turns)
-                m.play()
-            self.assertEqual(len(player1.history), turns)
-            self.assertEqual(player1.history, player2.history)
+            player = self.player()
+            player_clone = player.clone()
+            op = op.clone()
+            op_clone = op.clone()
+            m1 = axl.Match((player, op), turns=turns, seed=seed, noise=noise/100.)
+            m2 = axl.Match((player_clone, op_clone), turns=turns, seed=seed, noise=noise/100.)
+            m1.play()
+            m2.play()
+            self.assertEqual(m1.result, m2.result)
+            self.assertEqual(player, player_clone)
+            self.assertEqual(op, op_clone)
 
     @given(
         strategies=strategy_lists(
@@ -507,7 +494,7 @@ class TestPlayer(unittest.TestCase):
         seed=integers(min_value=1, max_value=200),
         turns=integers(min_value=1, max_value=200),
     )
-    @settings(max_examples=1)
+    @settings(max_examples=1, deadline=None)
     def test_memory_depth_upper_bound(self, strategies, seed, turns):
         """
         Test that the memory depth is indeed an upper bound.
@@ -543,6 +530,7 @@ class TestPlayer(unittest.TestCase):
         self,
         opponent,
         expected_actions,
+        turns=None,
         noise=None,
         seed=None,
         match_attributes=None,
@@ -563,9 +551,6 @@ class TestPlayer(unittest.TestCase):
             Any noise to be passed to a match
         seed: int
             The random seed to be used
-        length: int
-            The length of the game. If `opponent` is a sequence of actions then
-            the length is taken to be the length of the sequence.
         match_attributes: dict
             The match attributes to be passed to the players.  For example,
             `{length:-1}` implies that the players do not know the length of the
@@ -577,27 +562,23 @@ class TestPlayer(unittest.TestCase):
             A dictionary of keyword arguments to instantiate player with
         """
 
-        turns = len(expected_actions)
         if init_kwargs is None:
             init_kwargs = dict()
 
-        if seed is not None:
-            axl.seed(seed)
-
         player = self.player(**init_kwargs)
 
-        match = axl.Match(
-            (player, opponent),
+        test_match = TestMatch()
+        test_match.versus_test(
+            player,
+            opponent,
+            [x for (x, y) in expected_actions],
+            [y for (x, y) in expected_actions],
             turns=turns,
             noise=noise,
-            match_attributes=match_attributes,
+            seed=seed,
+            attrs=attrs,
+            match_attributes=match_attributes
         )
-        self.assertEqual(match.play(), expected_actions)
-
-        if attrs:
-            player = match.players[0]
-            for attr, value in attrs.items():
-                self.assertEqual(getattr(player, attr), value)
 
     def classifier_test(self, expected_class_classifier=None):
         """Test that the keys in the expected_classifier dictionary give the
@@ -646,28 +627,53 @@ class TestMatch(unittest.TestCase):
         player2,
         expected_actions1,
         expected_actions2,
+        turns=None,
         noise=None,
         seed=None,
+        match_attributes=None,
+        attrs=None
     ):
         """Tests a sequence of outcomes for two given players."""
         if len(expected_actions1) != len(expected_actions2):
-            raise ValueError("Mismatched History lengths.")
-        if seed:
-            axl.seed(seed)
-        turns = len(expected_actions1)
-        match = axl.Match((player1, player2), turns=turns, noise=noise)
+            raise ValueError("Mismatched Expected History in TestMatch.")
+        if not turns:
+            turns = len(expected_actions1)
+
+        match = axl.Match(
+            (player1, player2), turns=turns, noise=noise, seed=seed,
+            match_attributes=match_attributes)
         match.play()
-        # Test expected sequence of play.
-        for i, (outcome1, outcome2) in enumerate(
-            zip(expected_actions1, expected_actions2)
-        ):
-            player1.play(player2)
-            self.assertEqual(player1.history[i], outcome1)
-            self.assertEqual(player2.history[i], outcome2)
+
+        # Test expected sequence of plays from the match is as expected.
+        for i, (play, expected_play) in enumerate(zip(player1.history, expected_actions1)):
+            self.assertEqual((i, play), (i, expected_play))
+        for i, (play, expected_play) in enumerate(zip(player2.history, expected_actions2)):
+            self.assertEqual((i, play), (i, expected_play))
+
+        # Test final player attributes are as expected
+        if attrs:
+            for attr, value in attrs.items():
+                self.assertEqual(getattr(player1, attr), value)
+
+    def search_seeds(self, *args, **kwargs):  # pragma: no cover
+        """Search for a seed that will pass the test. Use to find a new seed
+        for a versus_test by changing self.versus_test to self.search_seeds
+        within a TestPlayer or TestMatch class.
+        """
+        for seed in range(1, 100000):
+            try:
+                kwargs["seed"] = seed
+                self.versus_test(*args, **kwargs)
+            except AssertionError:
+                continue
+            else:
+                print(seed)
+                return seed
+        return None
 
     def test_versus_with_incorrect_history_lengths(self):
         """Test the error raised by versus_test if expected actions do not
-        match up"""
+        match up."""
         with self.assertRaises(ValueError):
             p1, p2 = axl.Cooperator(), axl.Cooperator()
             actions1 = [C, C]
@@ -693,8 +699,7 @@ def test_memory(player, opponent, memory_length, seed=0, turns=10):
     only the given amount of memory is used.
     """
     # Play the match normally.
-    axl.seed(seed)
-    match = axl.Match((player, opponent), turns=turns)
+    match = axl.Match((player, opponent), turns=turns, seed=seed)
     plays = [p[0] for p in match.play()]
 
     # Play with limited history.
@@ -702,8 +707,7 @@ def test_memory(player, opponent, memory_length, seed=0, turns=10):
     opponent.reset()
     player._history = axl.LimitedHistory(memory_length)
     opponent._history = axl.LimitedHistory(memory_length)
-    axl.seed(seed)
-    match = axl.Match((player, opponent), turns=turns, reset=False)
+    match = axl.Match((player, opponent), turns=turns, reset=False, seed=seed)
     limited_plays = [p[0] for p in match.play()]
 
     return plays == limited_plays

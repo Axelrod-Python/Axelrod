@@ -1,12 +1,9 @@
-import random
-
 import numpy as np
 from axelrod.action import Action
 from axelrod.classifier import Classifiers
 from axelrod.player import Player
 from axelrod.strategies import TitForTat
 from axelrod.strategy_transformers import NiceTransformer
-from numpy.random import choice
 
 from ._strategies import all_strategies
 from .hunter import (
@@ -53,16 +50,16 @@ class MetaPlayer(Player):
         if team:
             self.team = team
         else:
-            # Needs to be computed manually to prevent circular dependency
             self.team = ordinary_strategies
         # Make sure we don't use any meta players to avoid infinite recursion.
         self.team = [t for t in self.team if not issubclass(t, MetaPlayer)]
         # Initiate all the players in our team.
         self.team = [t() for t in self.team]
-
+        self._last_results = None
         super().__init__()
 
-        # This player inherits the classifiers of its team.
+    def _post_init(self):
+        # The player's classification characteristics are derived from the team.
         # Note that memory_depth is not simply the max memory_depth of the team.
         for key in [
             "stochastic",
@@ -78,7 +75,11 @@ class MetaPlayer(Player):
             if new_uses:
                 self.classifier["makes_use_of"].update(new_uses)
 
-        self._last_results = None
+    def set_seed(self, seed=None):
+        super().set_seed(seed=seed)
+        # Seed the team as well
+        for t in self.team:
+            t.set_seed(self._random.random_seed_int())
 
     def receive_match_attributes(self):
         for t in self.team:
@@ -92,8 +93,22 @@ class MetaPlayer(Player):
 
     def update_histories(self, coplay):
         # Update team histories.
-        for player, play in zip(self.team, self._last_results):
-            player.history.append(play, coplay)
+        try:
+            for player, play in zip(self.team, self._last_results):
+                player.update_history(play, coplay)
+        except TypeError:
+            # If the Meta class is decorated by the Joss-Ann transformer,
+            # such that the decorated class is now deterministic, the underlying
+            # strategy isn't called. In that case, updating the history of all the
+            # team members doesn't matter.
+            # As a sanity check, look for at least one reclassifier, otherwise
+            # this try-except clause could hide a bug.
+            if len(self._reclassifiers) == 0:
+                raise TypeError("MetaClass update_histories issue, expected a reclassifier.")
+            # Otherwise just update with C always, so at least the histories have the
+            # expected length.
+            for player in self.team:
+                player.update_history(C, coplay)
 
     def update_history(self, play, coplay):
         super().update_history(play, coplay)
@@ -183,7 +198,7 @@ class MetaWinner(MetaPlayer):
         self._update_scores(coplay)
 
     def meta_strategy(self, results, opponent):
-        # Choice an action based on the collection of scores
+        # Choose an action based on the collection of scores
         bestscore = max(self.scores)
         beststrategies = [
             i for (i, score) in enumerate(self.scores) if score == bestscore
@@ -199,7 +214,7 @@ NiceMetaWinner = NiceTransformer()(MetaWinner)
 class MetaWinnerEnsemble(MetaWinner):
     """A variant of MetaWinner that chooses one of the top scoring strategies
     at random against each opponent. Note this strategy is always stochastic
-    regardless of the team.
+    regardless of the team, if team larger than 1, and the players are distinct.
 
     Names:
 
@@ -208,13 +223,32 @@ class MetaWinnerEnsemble(MetaWinner):
 
     name = "Meta Winner Ensemble"
 
+    def _post_init(self):
+        super()._post_init()
+        team = list(t.__class__ for t in self.team)
+        if len(team) > 1:
+            self.classifier["stochastic"] = True
+            self.singular = False
+        else:
+            self.singular = True
+        # If the team has repeated identical members, then it reduces to a singular team
+        # and it may not actually be stochastic.
+        if team and len(set(team)) == 1:
+            self.classifier["stochastic"] = Classifiers["stochastic"](self.team[0])
+            self.singular = True
+
     def meta_strategy(self, results, opponent):
+        # If the team consists of identical players, just take the first result.
+        # This prevents an unnecessary call to _random below.
+        if self.singular:
+            return results[0]
         # Sort by score
         scores = [(score, i) for (i, score) in enumerate(self.scores)]
         # Choose one of the best scorers at random
         scores.sort(reverse=True)
         prop = max(1, int(len(scores) * 0.08))
-        index = choice([i for (s, i) in scores[:prop]])
+        best_scorers = [i for (s, i) in scores[:prop]]
+        index = self._random.choice(best_scorers)
         return results[index]
 
 
@@ -506,12 +540,46 @@ class MetaMixer(MetaPlayer):
     }
 
     def __init__(self, team=None, distribution=None):
-        self.distribution = distribution
         super().__init__(team=team)
+        # Check that distribution is not all zeros, which will make numpy unhappy.
+        if distribution and all(x == 0 for x in distribution):
+            distribution = None
+        self.distribution = distribution
+
+    def _post_init(self):
+        distribution = self.distribution
+        if distribution and len(set(distribution)) > 1:
+            self.classifier["stochastic"] = True
+        if len(self.team) == 1:
+            self.classifier["stochastic"] = Classifiers["stochastic"](self.team[0])
+            # Overwrite strategy to avoid use of _random. This will ignore self.meta_strategy.
+            self.index = 0
+            self.strategy = self.index_strategy
+            return
+        # Check if the distribution has only one non-zero value. If so, the strategy may be
+        # deterministic, and we can avoid _random.
+        if distribution:
+            total = sum(distribution)
+            distribution = np.array(distribution) / total
+            if 1 in distribution:
+                self.index = list(distribution).index(1)
+                # It's potentially deterministic.
+                self.classifier["stochastic"] = Classifiers["stochastic"](self.team[self.index])
+                # Overwrite strategy to avoid use of _random. This will ignore self.meta_strategy.
+                self.strategy = self.index_strategy
+
+    def index_strategy(self, opponent):
+        """When the team effectively has a single player, only use that strategy."""
+        results = [C] * len(self.team)
+        player = self.team[self.index]
+        action = player.strategy(opponent)
+        results[self.index] = action
+        self._last_results = results
+        return action
 
     def meta_strategy(self, results, opponent):
-        """Using the numpy.random choice function to sample with weights"""
-        return choice(results, p=self.distribution)
+        """Using the _random.choice function to sample with weights."""
+        return self._random.choice(results, p=self.distribution)
 
 
 class NMWEDeterministic(NiceMetaWinnerEnsemble):
@@ -647,10 +715,6 @@ class MemoryDecay(MetaPlayer):
         start_strategy_duration: int = 15,
     ):
         super().__init__(team=[start_strategy])
-        # This strategy is stochastic even if none of the team is.  The
-        # MetaPlayer initializer will set stochastic to be False in that case.
-        self.classifier["stochastic"] = True
-
         self.p_memory_delete = p_memory_delete
         self.p_memory_alter = p_memory_alter
         self.loss_value = loss_value
@@ -658,6 +722,12 @@ class MemoryDecay(MetaPlayer):
         self.memory = [] if not memory else memory
         self.start_strategy_duration = start_strategy_duration
         self.gloss_values = None
+
+    def _post_init(self):
+        super()._post_init()
+        # This strategy is stochastic even if none of the team is.  The
+        # MetaPlayer initializer will set stochastic to be False in that case.
+        self.classifier["stochastic"] = True
 
     def __repr__(self):
         return Player.__repr__(self)
@@ -674,14 +744,14 @@ class MemoryDecay(MetaPlayer):
         """
         Alters memory entry, i.e. puts C if there's a D and vice versa.
         """
-        alter = choice(range(0, len(self.memory)))
+        alter = self._random.choice(range(0, len(self.memory)))
         self.memory[alter] = self.memory[alter].flip()
 
     def memory_delete(self):
         """
         Deletes memory entry.
         """
-        self.memory.pop(choice(range(0, len(self.memory))))
+        self.memory.pop(self._random.choice(range(0, len(self.memory))))
 
     def meta_strategy(self, results, opponent):
         try:
@@ -691,9 +761,9 @@ class MemoryDecay(MetaPlayer):
         if len(self.history) < self.start_strategy_duration:
             return results[0]
         else:
-            if random.random() <= self.p_memory_alter:
+            if self._random.random() <= self.p_memory_alter:
                 self.memory_alter()
-            if random.random() <= self.p_memory_delete:
+            if self._random.random() <= self.p_memory_delete:
                 self.memory_delete()
             self.gain_loss_translate()
             if sum(self.gloss_values) < 0:

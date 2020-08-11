@@ -3,7 +3,7 @@ import unittest
 import axelrod as axl
 from axelrod.match_generator import graph_is_connected
 from hypothesis import example, given, settings
-from hypothesis.strategies import floats, integers
+from hypothesis.strategies import integers
 
 test_strategies = [
     axl.Cooperator,
@@ -166,18 +166,59 @@ class TestMatchGenerator(unittest.TestCase):
             players=self.players,
             turns=test_turns,
             game=test_game,
-            repetitions=repetitions,
+            repetitions=repetitions
         )
         chunks = list(rr.build_match_chunks())
         match_definitions = [
             tuple(list(index_pair) + [repetitions])
-            for (index_pair, match_params, repetitions) in chunks
+            for (index_pair, match_params, repetitions, _) in chunks
         ]
         expected_match_definitions = [
             (i, j, repetitions) for i in range(5) for j in range(i, 5)
         ]
 
         self.assertEqual(sorted(match_definitions), sorted(expected_match_definitions))
+
+    @given(repetitions=integers(min_value=1, max_value=test_repetitions),
+           seed=integers(min_value=1, max_value=4294967295),)
+    @settings(max_examples=5)
+    def test_seeding_equality(self, repetitions, seed):
+        rr1 = axl.MatchGenerator(
+            players=self.players,
+            turns=test_turns,
+            game=test_game,
+            repetitions=repetitions,
+            seed=seed
+        )
+        chunks1 = list(rr1.build_match_chunks())
+        rr2 = axl.MatchGenerator(
+            players=self.players,
+            turns=test_turns,
+            game=test_game,
+            repetitions=repetitions,
+            seed=seed
+        )
+        chunks2 = list(rr2.build_match_chunks())
+        self.assertEqual(chunks1, chunks2)
+
+    def test_seeding_inequality(self, repetitions=10):
+        rr1 = axl.MatchGenerator(
+            players=self.players,
+            turns=test_turns,
+            game=test_game,
+            repetitions=repetitions,
+            seed=0
+        )
+        chunks1 = list(rr1.build_match_chunks())
+        rr2 = axl.MatchGenerator(
+            players=self.players,
+            turns=test_turns,
+            game=test_game,
+            repetitions=repetitions,
+            seed=1
+        )
+        chunks2 = list(rr2.build_match_chunks())
+        self.assertNotEqual(chunks1, chunks2)
 
     @given(repetitions=integers(min_value=1, max_value=test_repetitions))
     @settings(max_examples=5)
@@ -194,7 +235,7 @@ class TestMatchGenerator(unittest.TestCase):
         chunks = list(rr.build_match_chunks())
         match_definitions = [
             tuple(list(index_pair) + [repetitions])
-            for (index_pair, match_params, repetitions) in chunks
+            for (index_pair, match_params, repetitions, _) in chunks
         ]
         expected_match_definitions = [(i, j, repetitions) for i, j in cycle]
 

@@ -2,7 +2,6 @@ from math import pi, sin
 
 from axelrod.action import Action
 from axelrod.player import Player
-from axelrod.random_ import random_choice
 
 C, D = Action.C, Action.D
 
@@ -47,6 +46,6 @@ class SelfSteem(Player):
             return opponent.history[-1]
 
         if sine_value < 0.3 and sine_value > -0.3:
-            return random_choice()
+            return self._random.random_choice()
 
         return C

@@ -1,10 +1,8 @@
-import random
 from collections import OrderedDict
-from typing import Dict, List, Union
+from typing import Dict, Union
 
 from axelrod.action import Action, actions_to_str
 from axelrod.player import Player
-from axelrod.random_ import random_choice
 
 Score = Union[int, float]
 
@@ -42,7 +40,7 @@ class RiskyQLearner(Player):
 
         super().__init__()
 
-        # Set this explicitely, since the constructor of super will not pick it up
+        # Set this explicitly, since the constructor of super will not pick it up
         # for any subclasses that do not override methods using random calls.
         self.classifier["stochastic"] = True
 
@@ -60,7 +58,7 @@ class RiskyQLearner(Player):
     def strategy(self, opponent: Player) -> Action:
         """Runs a qlearn algorithm while the tournament is running."""
         if len(self.history) == 0:
-            self.prev_action = random_choice()
+            self.prev_action = self._random.random_choice()
             self.original_prev_action = self.prev_action
         state = self.find_state(opponent)
         reward = self.find_reward(opponent)
@@ -77,11 +75,11 @@ class RiskyQLearner(Player):
         """
         Selects the action based on the epsilon-soft policy
         """
-        rnd_num = random.random()
+        rnd_num = self._random.random()
         p = 1.0 - self.action_selection_parameter
         if rnd_num < p:
             return max(self.Qs[state], key=lambda x: self.Qs[state][x])
-        return random_choice()
+        return self._random.random_choice()
 
     def find_state(self, opponent: Player) -> str:
         """
@@ -107,7 +105,7 @@ class RiskyQLearner(Player):
         """
 
         if len(opponent.history) == 0:
-            opp_prev_action = random_choice()
+            opp_prev_action = self._random.random_choice()
         else:
             opp_prev_action = opponent.history[-1]
         return self.payoff_matrix[self.prev_action][opp_prev_action]

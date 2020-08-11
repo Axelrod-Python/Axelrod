@@ -1,5 +1,3 @@
-import random
-
 from axelrod.action import Action
 from axelrod.player import Player
 
@@ -115,7 +113,7 @@ class ForgetfulFoolMeOnce(Player):
         self.forget_probability = forget_probability
 
     def strategy(self, opponent: Player) -> Action:
-        r = random.random()
+        r = self._random.random()
         if not opponent.history:
             return self._initial
         if opponent.history[-1] == D:

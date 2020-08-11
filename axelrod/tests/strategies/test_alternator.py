@@ -21,13 +21,15 @@ class TestAlternator(TestPlayer):
         "manipulates_state": False,
     }
 
-    def test_strategy(self):
+    def test_versus_cooperator(self):
         actions = [(C, C), (D, C)] * 5
         self.versus_test(axl.Cooperator(), expected_actions=actions)
 
+    def test_versus_defector(self):
         actions = [(C, D), (D, D)] * 5
         self.versus_test(axl.Defector(), expected_actions=actions)
 
-        opponent = axl.MockPlayer(actions=[D, C])
+    def test_versus_cycler_DC(self):
+        opponent = axl.CyclerDC()
         actions = [(C, D), (D, C)] * 5
         self.versus_test(opponent, expected_actions=actions)

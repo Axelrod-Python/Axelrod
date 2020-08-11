@@ -105,7 +105,6 @@ class TestTournament(unittest.TestCase):
         """
         files = []
         for _ in range(2):
-            axl.seed(0)
             stochastic_players = [
                 s()
                 for s in axl.short_run_time_strategies
@@ -117,6 +116,7 @@ class TestTournament(unittest.TestCase):
                 game=self.game,
                 turns=2,
                 repetitions=2,
+                seed=17
             )
             path = pathlib.Path("test_outputs/stochastic_tournament_{}.csv".format(_))
             files.append(axl_filename(path))
@@ -162,8 +162,7 @@ class TestProbEndTournament(unittest.TestCase):
         p2 = axl.Cooperator()
         p3 = axl.Cooperator()
         players = [p1, p2, p3]
-        axl.seed(0)
-        tournament = axl.Tournament(players, prob_end=0.5, repetitions=2)
+        tournament = axl.Tournament(players, prob_end=0.5, repetitions=2, seed=3)
         results = tournament.play(progress_bar=False)
         # Check that match length are different across the repetitions
         self.assertNotEqual(results.match_lengths[0], results.match_lengths[1])

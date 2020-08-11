@@ -1,6 +1,5 @@
 from axelrod.action import Action, actions_to_str
 from axelrod.player import Player
-from axelrod.random_ import random_choice
 from axelrod.strategy_transformers import FinalTransformer, TrackHistoryTransformer
 
 C, D = Action.C, Action.D
@@ -122,15 +121,14 @@ class DynamicTwoTitsForTat(Player):
         "manipulates_state": False,
     }
 
-    @staticmethod
-    def strategy(opponent):
+    def strategy(self, opponent):
         # First move
         if not opponent.history:
             # Make sure we cooperate first turn
             return C
         if D in opponent.history[-2:]:
             # Probability of cooperating regardless
-            return random_choice(opponent.cooperations / len(opponent.history))
+            return self._random.random_choice(opponent.cooperations / len(opponent.history))
         else:
             return C
 
@@ -836,7 +834,7 @@ class Michaelos(Player):
         if self.is_defector:
             return D
         if self.history[-1] == D and opponent.history[-1] == C:
-            decision = random_choice()
+            decision = self._random.random_choice()
             if decision == C:
                 return C
             else:
@@ -889,7 +887,10 @@ class RandomTitForTat(Player):
 
         if self.act_random:
             self.act_random = False
-            return random_choice(self.p)
+            try:
+                return self._random.random_choice(self.p)
+            except AttributeError:
+                return D if self.p == 0 else C
 
         self.act_random = True
         return opponent.history[-1]

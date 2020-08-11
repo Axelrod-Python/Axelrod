@@ -26,8 +26,16 @@ of the Moran process::
     >>> import axelrod as axl
     >>> C = axl.Action.C
     >>> players = [axl.EvolvableFSMPlayer(num_states=2, initial_state=1, initial_action=C) for _ in range(5)]
-    >>> mp = axl.MoranProcess(players, turns=10, mutation_method="atomic")
+    >>> mp = axl.MoranProcess(players, turns=10, mutation_method="atomic", seed=1)
     >>> population = mp.play()  # doctest: +SKIP
 
 Note that this may cause the Moran process to fail to converge, if the mutation rates are very high or the
 population size very large.  See :ref:`moran-process` for more information.
+
+Reproducible Seeding
+--------------------
+
+:code:`EvolvablePlayers` are inherently stochastic. For reproducibility of results, they can be seeded. When
+using the Moran process, a process level seed is sufficient. Child seeds will be created and propagated
+in a reproducible way. If initialized without a seed, an :code:`EvolvablePlayer` will be given a
+random seed in a non-reproducible way.

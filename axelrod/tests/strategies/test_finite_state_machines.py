@@ -1,6 +1,4 @@
 """Tests for Finite State Machine Strategies."""
-
-import random
 import unittest
 
 import axelrod as axl
@@ -16,6 +14,7 @@ from .test_evolvable_player import PartialClass, TestEvolvablePlayer
 from .test_player import TestPlayer
 
 C, D = axl.Action.C, axl.Action.D
+random = axl.RandomGenerator()
 
 
 class TestSimpleFSM(unittest.TestCase):
@@ -1053,12 +1052,14 @@ class TestEvolvableFSMPlayer(unittest.TestCase):
     def test_normalized_parameters(self):
         self.assertRaises(
             InsufficientParametersError,
-            self.player_class._normalize_parameters
+            self.player_class,
+            seed=1,  # To prevent exception from unset seed.
         )
         self.assertRaises(
             InsufficientParametersError,
-            self.player_class._normalize_parameters,
-            transitions=[[0, C, 1, D], [0, D, 0, D], [1, C, 1, C], [1, D, 1, D]]
+            self.player_class,
+            transitions=[[0, C, 1, D], [0, D, 0, D], [1, C, 1, C], [1, D, 1, D]],
+            seed=1,  # To prevent exception from unset seed.
         )
 
     def test_init(self):
@@ -1066,7 +1067,8 @@ class TestEvolvableFSMPlayer(unittest.TestCase):
         player = axl.EvolvableFSMPlayer(
             transitions=transitions,
             initial_action=D,
-            initial_state=1
+            initial_state=1,
+            seed=1,  # To prevent exception from unset seed.
         )
         self.assertEqual(player.num_states, 2)
         self.assertEqual(player.fsm.transitions(), transitions)
@@ -1076,7 +1078,7 @@ class TestEvolvableFSMPlayer(unittest.TestCase):
     def test_vector_to_instance(self):
         num_states = 4
         vector = [random.random() for _ in range(num_states * 4 + 1)]
-        player = axl.EvolvableFSMPlayer(num_states=num_states)
+        player = axl.EvolvableFSMPlayer(num_states=num_states, seed=1)
         player.receive_vector(vector)
         self.assertIsInstance(player, axl.EvolvableFSMPlayer)
 
@@ -1087,10 +1089,17 @@ class TestEvolvableFSMPlayer(unittest.TestCase):
 
     def test_create_vector_bounds(self):
         num_states = 4
-        player = axl.EvolvableFSMPlayer(num_states=num_states)
+        player = axl.EvolvableFSMPlayer(num_states=num_states, seed=1)
         lb, ub = player.create_vector_bounds()
         self.assertEqual(lb, [0] * (4 * num_states + 1))
         self.assertEqual(ub, [1] * (4 * num_states + 1))
+
+    def test_mutate(self):
+        """Test to trigger random lines in mutate"""
+        for seed in [18, 22]:
+            player = axl.EvolvableFSMPlayer(
+                num_states=4, mutation_probability=0.5, seed=seed)
+            player.mutate()
 
 
 class TestEvolvableFSMPlayer2(TestEvolvablePlayer):
@@ -1133,9 +1142,11 @@ class EvolvableFSMAsFSM(TestFSMPlayer):
     player = EvolvableFSMPlayerWithDefault
 
     def test_equality_of_clone(self):
+        # Can't pickle a Partialed Class
         pass
 
     def test_equality_of_pickle_clone(self):
+        # Can't pickle a Partialed Class
         pass
 
     def test_repr(self):

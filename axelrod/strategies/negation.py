@@ -1,6 +1,5 @@
 from axelrod.action import Action
 from axelrod.player import Player
-from axelrod.random_ import random_choice
 
 C, D = Action.C, Action.D
 
@@ -28,6 +27,6 @@ class Negation(Player):
     def strategy(self, opponent: Player) -> Action:
         # Random first move
         if not self.history:
-            return random_choice()
+            return self._random.random_choice()
         # Act opposite of opponent otherwise
         return opponent.history[-1].flip()

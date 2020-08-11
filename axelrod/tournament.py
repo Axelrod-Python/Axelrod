@@ -10,7 +10,7 @@ from typing import List, Optional, Tuple
 import axelrod.interaction_utils as iu
 import tqdm
 from axelrod import DEFAULT_TURNS
-from axelrod.action import Action, actions_to_str, str_to_actions
+from axelrod.action import Action, actions_to_str
 from axelrod.player import Player
 
 from .game import Game
@@ -33,6 +33,7 @@ class Tournament(object):
         noise: float = 0,
         edges: List[Tuple] = None,
         match_attributes: dict = None,
+        seed: int = None
     ) -> None:
         """
         Parameters
@@ -70,6 +71,7 @@ class Tournament(object):
         self.players = players
         self.repetitions = repetitions
         self.edges = edges
+        self.seed = seed
 
         if turns is None and prob_end is None:
             turns = DEFAULT_TURNS
@@ -85,6 +87,7 @@ class Tournament(object):
             noise=self.noise,
             edges=edges,
             match_attributes=match_attributes,
+            seed=self.seed
         )
         self._logger = logging.getLogger(__name__)
 
@@ -422,11 +425,12 @@ class Tournament(object):
                 (0, 1) -> [(C, D), (D, C),...]
         """
         interactions = defaultdict(list)
-        index_pair, match_params, repetitions = chunk
+        index_pair, match_params, repetitions, seed = chunk
         p1_index, p2_index = index_pair
         player1 = self.players[p1_index].clone()
         player2 = self.players[p2_index].clone()
         match_params["players"] = (player1, player2)
+        match_params["seed"] = seed
         match = Match(**match_params)
         for _ in range(repetitions):
             match.play()

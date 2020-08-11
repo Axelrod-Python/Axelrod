@@ -39,15 +39,14 @@ class TestMatchOutcomes(unittest.TestCase):
         turns=integers(min_value=1, max_value=20),
         seed=integers(min_value=0, max_value=4294967295),
     )
-    @settings(max_examples=5)
+    @settings(max_examples=5, deadline=None)
     def test_outcome_repeats_stochastic(self, strategies, turns, seed):
         """a test to check that if a seed is set stochastic strategies give the
         same result"""
         results = []
         for _ in range(3):
-            axl.seed(seed)
             players = [s() for s in strategies]
-            results.append(axl.Match(players, turns).play())
+            results.append(axl.Match(players, turns=turns, seed=seed).play())
 
         self.assertEqual(results[0], results[1])
         self.assertEqual(results[1], results[2])

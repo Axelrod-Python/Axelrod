@@ -1,6 +1,5 @@
 from axelrod.action import Action
 from axelrod.player import Player
-from axelrod.random_ import random_choice
 
 C, D = Action.C, Action.D
 
@@ -24,8 +23,7 @@ class Inverse(Player):
         "manipulates_state": False,
     }
 
-    @staticmethod
-    def strategy(opponent: Player) -> Action:
+    def strategy(self, opponent: Player) -> Action:
         """Looks at opponent history to see if they have defected.
 
         If so, player defection is inversely proportional to when this occurred.
@@ -44,4 +42,4 @@ class Inverse(Player):
         if index is None:
             return C
 
-        return random_choice(1 - 1 / abs(index))
+        return self._random.random_choice(1 - 1 / abs(index))

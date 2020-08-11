@@ -2,7 +2,7 @@
 
 import axelrod as axl
 
-from .test_player import TestMatch, TestPlayer
+from .test_player import TestPlayer
 
 C, D = axl.Action.C, axl.Action.D
 
@@ -21,26 +21,47 @@ class TestAdaptive(TestPlayer):
         "manipulates_state": False,
     }
 
-    def test_strategy(self):
-        actions = [(C, C)] * 6 + [(D, C)] * 8
-        self.versus_test(axl.Cooperator(), expected_actions=actions)
+    def test_default_initial_actions_against_cooperator(self):
+        coplayer = axl.Cooperator()
+        player_actions = [C] * 6 + [D] * 8
+        coplayer_actions = [C] * 14
+        expected_actions = list(zip(player_actions, coplayer_actions))
+        self.versus_test(coplayer, expected_actions=expected_actions)
 
-        actions = [(C, D)] * 6 + [(D, D)] * 8
-        self.versus_test(axl.Defector(), expected_actions=actions)
+    def test_default_initial_actions_against_defector(self):
+        coplayer = axl.Defector()
+        player_actions = [C] * 6 + [D] * 8
+        coplayer_actions = [D] * 14
+        expected_actions = list(zip(player_actions, coplayer_actions))
+        self.versus_test(coplayer, expected_actions=expected_actions)
 
-        actions = [(C, C), (C, D)] * 3 + [(D, C), (D, D)] * 4
-        self.versus_test(axl.Alternator(), expected_actions=actions)
+    def test_default_initial_actions_against_alternator(self):
+        coplayer = axl.Alternator()
+        player_actions = [C] * 6 + [D] * 8
+        coplayer_actions = [C, D] * 7
+        expected_actions = list(zip(player_actions, coplayer_actions))
+        self.versus_test(coplayer, expected_actions=expected_actions)
 
-        actions = [(C, C)] * 6 + [(D, C)] + [(D, D)] * 4 + [(C, D), (C, C)]
-        self.versus_test(axl.TitForTat(), expected_actions=actions)
+    def test_default_initial_actions_against_tft(self):
+        coplayer = axl.TitForTat()
+        player_actions = [C] * 6 + [D] * 5 + [C, C]
+        coplayer_actions = [C] * 7 + [D] * 5 + [C]
+        expected_actions = list(zip(player_actions, coplayer_actions))
+        self.versus_test(coplayer, expected_actions=expected_actions)
 
-    def test_scoring(self):
-        player = axl.Adaptive()
+    def test_scoring_with_default_game(self):
+        """Tests that the default game is used in scoring."""
         opponent = axl.Cooperator()
-        player.play(opponent)
-        player.play(opponent)
-        self.assertEqual(3, player.scores[C])
-        game = axl.Game(-3, 10, 10, 10)
-        player.set_match_attributes(game=game)
-        player.play(opponent)
-        self.assertEqual(0, player.scores[C])
+        attrs = {"scores": {C: 3, D: 0}}
+        expected_actions = list(zip([C, C], [C, C]))
+        self.versus_test(opponent, expected_actions, turns=2, attrs=attrs, seed=9)
+
+    def test_scoring_with_alternate_game(self):
+        """Tests that the alternate game is used in scoring."""
+        player = axl.Adaptive()
+        opponent = axl.Alternator()
+        expected_actions = list(zip([C, C, C], [C, D, C]))
+        attrs = {"scores": {C: 7, D: 0}}
+        match_attributes = {"game": axl.Game(-3, 10, 10, 10)}
+        self.versus_test(opponent, expected_actions, turns=3, attrs=attrs, seed=9,
+                         match_attributes=match_attributes)
