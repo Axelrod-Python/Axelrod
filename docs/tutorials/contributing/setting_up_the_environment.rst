@@ -14,7 +14,7 @@ For example, when using the virtual environment library :code:`venv`::
 
   $ python -m venv axelrod_development
   $ source axelrod_development/bin/activate
-  $ pip install -r requrirements
+  $ pip install -r requrirements.txt
 
 The git workflow
 ----------------
