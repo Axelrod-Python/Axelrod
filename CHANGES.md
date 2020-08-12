@@ -1,3 +1,37 @@
+# v4.10.0, 2020-08-12
+
+Major rewrite of the random seeding (which fixes a reproducibility bug when
+using parallel processing), support for python 3.8 and various
+documentation/internal fixes.
+
+- Move CI to github actions
+  https://github.com/Axelrod-Python/Axelrod/pull/1309
+  https://github.com/Axelrod-Python/Axelrod/pull/1322
+  https://github.com/Axelrod-Python/Axelrod/pull/1327
+- Sort all import statements using isort
+  https://github.com/Axelrod-Python/Axelrod/pull/1351
+- Add a test that all strategies have names
+  https://github.com/Axelrod-Python/Axelrod/pull/1354
+- Add a function to automatically check what information is used by strategies
+  https://github.com/Axelrod-Python/Axelrod/pull/1355
+  https://github.com/Axelrod-Python/Axelrod/pull/1331
+- Minor documentation fixes
+  https://github.com/Axelrod-Python/Axelrod/pull/1321
+  https://github.com/Axelrod-Python/Axelrod/pull/1329
+  https://github.com/Axelrod-Python/Axelrod/pull/1357
+  https://github.com/Axelrod-Python/Axelrod/pull/1358
+  https://github.com/Axelrod-Python/Axelrod/pull/1363
+- Add python 3.8 support
+  https://github.com/Axelrod-Python/Axelrod/pull/1366
+- Improve tests
+  https://github.com/Axelrod-Python/Axelrod/pull/1332
+  https://github.com/Axelrod-Python/Axelrod/pull/1333
+  https://github.com/Axelrod-Python/Axelrod/pull/1359
+- Fix RevisedDowning
+  https://github.com/Axelrod-Python/Axelrod/pull/1323
+
+https://github.com/Axelrod-Python/Axelrod/compare/v4.10.0...v4.9.1
+
 # v4.9.1, 2020-04-08
 
 Bug fixes
