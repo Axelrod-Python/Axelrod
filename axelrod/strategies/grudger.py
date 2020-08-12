@@ -18,6 +18,7 @@ class Grudger(Player):
     - Grim: [Berg2015]_
     - Grim Trigger: [Banks1990]_
     - Spite: [Beaufils1997]_
+    - Spiteful: [Mathieu2015]_
     - Vengeful: [Ashlock2009]_
     """
 
