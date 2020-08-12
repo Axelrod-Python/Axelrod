@@ -32,7 +32,12 @@ class TestZDExtortion(TestPlayer):
     }
 
     def test_four_vector(self):
-        expected_dictionary = {(C, C): 0.64, (C, D): 0.18, (D, C): 0.28, (D, D): 0}
+        expected_dictionary = {
+            (C, C): 0.64,
+            (C, D): 0.18,
+            (D, C): 0.28,
+            (D, D): 0,
+        }
         test_four_vector(self, expected_dictionary)
 
     def test_strategy(self):
@@ -43,7 +48,9 @@ class TestZDExtortion(TestPlayer):
 
     def test_strategy2(self):
         actions = [(C, D), (D, C), (D, D), (D, C), (D, D), (D, C)]
-        self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=1)
+        self.versus_test(
+            opponent=axl.CyclerDC(), expected_actions=actions, seed=1
+        )
 
 
 class TestZDExtort2(TestPlayer):
@@ -61,7 +68,12 @@ class TestZDExtort2(TestPlayer):
     }
 
     def test_four_vector(self):
-        expected_dictionary = {(C, C): 8 / 9, (C, D): 0.5, (D, C): 1 / 3, (D, D): 0.0}
+        expected_dictionary = {
+            (C, C): 8 / 9,
+            (C, D): 0.5,
+            (D, C): 1 / 3,
+            (D, D): 0.0,
+        }
         test_four_vector(self, expected_dictionary)
 
     def test_receive_match_attributes(self):
@@ -83,11 +95,15 @@ class TestZDExtort2(TestPlayer):
 
     def test_strategy3(self):
         actions = [(C, D), (D, C), (D, D), (D, C), (C, D), (C, C)]
-        self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=10)
+        self.versus_test(
+            opponent=axl.CyclerDC(), expected_actions=actions, seed=10
+        )
 
     def test_strategy4(self):
         actions = [(C, D), (C, C), (C, D), (C, C), (C, D), (C, C)]
-        self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=7)
+        self.versus_test(
+            opponent=axl.CyclerDC(), expected_actions=actions, seed=7
+        )
 
 
 class TestZDExtort2v2(TestPlayer):
@@ -121,7 +137,9 @@ class TestZDExtort2v2(TestPlayer):
 
     def test_strategy2(self):
         actions = [(C, D), (D, C), (D, D), (D, C), (D, D), (D, C)]
-        self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=2)
+        self.versus_test(
+            opponent=axl.CyclerDC(), expected_actions=actions, seed=2
+        )
 
 
 class TestZDExtort3(TestPlayer):
@@ -154,7 +172,9 @@ class TestZDExtort3(TestPlayer):
 
     def test_strategy2(self):
         actions = [(C, D), (D, C), (D, D), (D, C), (D, D), (D, C)]
-        self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=2)
+        self.versus_test(
+            opponent=axl.CyclerDC(), expected_actions=actions, seed=2
+        )
 
 
 class TestZDExtort4(TestPlayer):
@@ -172,7 +192,12 @@ class TestZDExtort4(TestPlayer):
     }
 
     def test_four_vector(self):
-        expected_dictionary = {(C, C): 11 / 17, (C, D): 0, (D, C): 8 / 17, (D, D): 0.0}
+        expected_dictionary = {
+            (C, C): 11 / 17,
+            (C, D): 0,
+            (D, C): 8 / 17,
+            (D, D): 0.0,
+        }
         test_four_vector(self, expected_dictionary)
 
     def test_strategy(self):
@@ -183,7 +208,9 @@ class TestZDExtort4(TestPlayer):
 
     def test_strategy2(self):
         actions = [(C, D), (D, C), (D, D), (D, C), (D, D), (D, C)]
-        self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=10)
+        self.versus_test(
+            opponent=axl.CyclerDC(), expected_actions=actions, seed=10
+        )
 
 
 class TestZDGen2(TestPlayer):
@@ -201,7 +228,12 @@ class TestZDGen2(TestPlayer):
     }
 
     def test_four_vector(self):
-        expected_dictionary = {(C, C): 1, (C, D): 9 / 16, (D, C): 1 / 2, (D, D): 1 / 8}
+        expected_dictionary = {
+            (C, C): 1,
+            (C, D): 9 / 16,
+            (D, C): 1 / 2,
+            (D, D): 1 / 8,
+        }
         test_four_vector(self, expected_dictionary)
 
     def test_strategy(self):
@@ -218,11 +250,15 @@ class TestZDGen2(TestPlayer):
 
     def test_strategy3(self):
         actions = [(C, D), (D, C), (D, D), (C, C), (C, D), (C, C)]
-        self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=10)
+        self.versus_test(
+            opponent=axl.CyclerDC(), expected_actions=actions, seed=10
+        )
 
     def test_strategy4(self):
         actions = [(C, D), (C, C), (C, D), (C, C), (C, D), (C, C)]
-        self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=3)
+        self.versus_test(
+            opponent=axl.CyclerDC(), expected_actions=actions, seed=3
+        )
 
 
 class TestZDGTFT2(TestPlayer):
@@ -239,7 +275,12 @@ class TestZDGTFT2(TestPlayer):
     }
 
     def test_four_vector(self):
-        expected_dictionary = {(C, C): 1.0, (C, D): 1 / 8, (D, C): 1.0, (D, D): 0.25}
+        expected_dictionary = {
+            (C, C): 1.0,
+            (C, D): 1 / 8,
+            (D, C): 1.0,
+            (D, D): 0.25,
+        }
         test_four_vector(self, expected_dictionary)
 
     def test_receive_match_attributes(self):
@@ -261,11 +302,15 @@ class TestZDGTFT2(TestPlayer):
 
     def test_strategy3(self):
         actions = [(C, D), (D, C), (C, D), (D, C), (C, D), (C, C)]
-        self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=4)
+        self.versus_test(
+            opponent=axl.CyclerDC(), expected_actions=actions, seed=4
+        )
 
     def test_strategy4(self):
         actions = [(C, D), (C, C), (C, D), (C, C), (C, D), (D, C)]
-        self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=23)
+        self.versus_test(
+            opponent=axl.CyclerDC(), expected_actions=actions, seed=23
+        )
 
 
 class TestZDMischief(TestPlayer):
@@ -294,7 +339,9 @@ class TestZDMischief(TestPlayer):
 
     def test_strategy2(self):
         actions = [(C, D), (D, C), (D, D), (D, C), (D, D), (D, C)]
-        self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=4)
+        self.versus_test(
+            opponent=axl.CyclerDC(), expected_actions=actions, seed=4
+        )
 
 
 class TestZDSet2(TestPlayer):
@@ -328,4 +375,6 @@ class TestZDSet2(TestPlayer):
 
     def test_strategy2(self):
         actions = [(C, D), (D, C), (D, D), (D, C), (D, D), (D, C)]
-        self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=12)
+        self.versus_test(
+            opponent=axl.CyclerDC(), expected_actions=actions, seed=12
+        )
