@@ -12,9 +12,7 @@ from axelrod.tests.property import (
 )
 from hypothesis import given, settings
 
-stochastic_strategies = [
-    s for s in axl.strategies if axl.Classifiers["stochastic"](s())
-]
+stochastic_strategies = [s for s in axl.strategies if axl.Classifiers["stochastic"](s())]
 
 
 class TestStrategyList(unittest.TestCase):
@@ -132,11 +130,7 @@ class TestProbEndTournament(unittest.TestCase):
         self.assertLessEqual(tournament.repetitions, 50)
         self.assertGreaterEqual(tournament.repetitions, 2)
 
-    @given(
-        tournament=prob_end_tournaments(
-            strategies=axl.basic_strategies, max_size=3
-        )
-    )
+    @given(tournament=prob_end_tournaments(strategies=axl.basic_strategies, max_size=3))
     @settings(max_examples=5)
     def test_decorator_with_given_strategies(self, tournament):
         self.assertIsInstance(tournament, axl.Tournament)
@@ -171,11 +165,7 @@ class TestSpatialTournament(unittest.TestCase):
         self.assertLessEqual(tournament.repetitions, 50)
         self.assertGreaterEqual(tournament.repetitions, 2)
 
-    @given(
-        tournament=spatial_tournaments(
-            strategies=axl.basic_strategies, max_size=3
-        )
-    )
+    @given(tournament=spatial_tournaments(strategies=axl.basic_strategies, max_size=3))
     @settings(max_examples=5)
     def test_decorator_with_given_strategies(self, tournament):
         self.assertIsInstance(tournament, axl.Tournament)

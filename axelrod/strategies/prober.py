@@ -80,7 +80,7 @@ class Detective(Player):
             return self.initial_actions[hist_size]
         if D not in opponent.history[:init_size]:
             return D
-        return opponent.history[-1]  # TFT
+        return opponent.history[-1] # TFT
 
 
 class Prober(Player):

@@ -36,9 +36,7 @@ class ActionValidator(Validator):
         text = document.text
 
         if text and text.upper() not in ["C", "D"]:
-            raise ValidationError(
-                message="Action must be C or D", cursor_position=0
-            )
+            raise ValidationError(message="Action must be C or D", cursor_position=0)
 
 
 class Human(Player):
@@ -85,14 +83,10 @@ class Human(Player):
         Described at http://python-prompt-toolkit.readthedocs.io/en/latest/pages/building_prompts.html#adding-a-bottom-toolbar
         """
         my_history = [self.symbols[action] for action in self.history]
-        opponent_history = [
-            self.symbols[action] for action in self.history.coplays
-        ]
+        opponent_history = [self.symbols[action] for action in self.history.coplays]
         history = list(zip(my_history, opponent_history))
         if self.history:
-            content = "History ({}, opponent): {}".format(
-                self.human_name, history
-            )
+            content = "History ({}, opponent): {}".format(self.human_name, history)
         else:
             content = ""
         return content

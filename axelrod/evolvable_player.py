@@ -7,7 +7,6 @@ from .player import Player
 
 class InsufficientParametersError(Exception):
     """Error indicating that insufficient parameters were specified to initialize an Evolvable Player."""
-
     def __init__(self, *args):
         super().__init__(*args)
 
@@ -50,7 +49,7 @@ class EvolvablePlayer(Player):
     def serialize_parameters(self):
         """Serialize parameters."""
         pickled = dumps(self.init_kwargs)  # bytes
-        s = base64.b64encode(pickled).decode("utf8")  # string
+        s = base64.b64encode(pickled).decode('utf8')  # string
         return s
 
     @classmethod

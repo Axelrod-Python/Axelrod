@@ -38,9 +38,7 @@ class TestHardGoByMajority(TestPlayer):
             + [(C, C)]
         )
         opponent = axl.MockPlayer(actions=opponent_actions)
-        self.versus_test(
-            opponent, expected_actions=actions, init_kwargs=init_kwargs
-        )
+        self.versus_test(opponent, expected_actions=actions, init_kwargs=init_kwargs)
 
     def test_memory_depth_even_soft_is_false(self):
         memory_depth = 4
@@ -48,9 +46,7 @@ class TestHardGoByMajority(TestPlayer):
         if self.default_soft:
             init_kwargs["soft"] = False
 
-        opponent = axl.MockPlayer(
-            actions=[C] * memory_depth + [D] * memory_depth
-        )
+        opponent = axl.MockPlayer(actions=[C] * memory_depth + [D] * memory_depth)
         actions = (
             [(D, C)]
             + [(C, C)] * 3
@@ -59,9 +55,7 @@ class TestHardGoByMajority(TestPlayer):
             + [(D, C)] * 3
             + [(C, C)]
         )
-        self.versus_test(
-            opponent, expected_actions=actions, init_kwargs=init_kwargs
-        )
+        self.versus_test(opponent, expected_actions=actions, init_kwargs=init_kwargs)
 
     def test_memory_depth_odd(self):
         memory_depth = 5
@@ -70,9 +64,7 @@ class TestHardGoByMajority(TestPlayer):
             first_action = [(C, C)]
         else:
             first_action = [(D, C)]
-        opponent = axl.MockPlayer(
-            actions=[C] * memory_depth + [D] * memory_depth
-        )
+        opponent = axl.MockPlayer(actions=[C] * memory_depth + [D] * memory_depth)
         actions = (
             first_action
             + [(C, C)] * 4
@@ -81,9 +73,7 @@ class TestHardGoByMajority(TestPlayer):
             + [(D, C)] * 3
             + [(C, C)] * 2
         )
-        self.versus_test(
-            opponent, expected_actions=actions, init_kwargs=init_kwargs
-        )
+        self.versus_test(opponent, expected_actions=actions, init_kwargs=init_kwargs)
 
     def test_default_values(self):
         player = self.player()
@@ -100,11 +90,7 @@ class TestGoByMajority(TestHardGoByMajority):
     def test_memory_depth_infinite_soft_is_true(self):
         opponent_actions = [C] * 50 + [D] * 100 + [C] * 52
         actions = (
-            [(C, C)] * 50
-            + [(C, D)] * 51
-            + [(D, D)] * 49
-            + [(D, C)] * 50
-            + [(C, C)] * 2
+            [(C, C)] * 50 + [(C, D)] * 51 + [(D, D)] * 49 + [(D, C)] * 50 + [(C, C)] * 2
         )
         opponent = axl.MockPlayer(actions=opponent_actions)
         self.versus_test(opponent, expected_actions=actions)
@@ -114,12 +100,8 @@ class TestGoByMajority(TestHardGoByMajority):
         init_kwargs = {"memory_depth": memory_depth}
 
         opponent = axl.MockPlayer([C] * memory_depth + [D] * memory_depth)
-        actions = (
-            [(C, C)] * 4 + [(C, D)] * 3 + [(D, D)] + [(D, C)] * 2 + [(C, C)] * 2
-        )
-        self.versus_test(
-            opponent, expected_actions=actions, init_kwargs=init_kwargs
-        )
+        actions = [(C, C)] * 4 + [(C, D)] * 3 + [(D, D)] + [(D, C)] * 2 + [(C, C)] * 2
+        self.versus_test(opponent, expected_actions=actions, init_kwargs=init_kwargs)
 
     def test_name(self):
         player = self.player(soft=True)
@@ -179,9 +161,7 @@ def factory_TestGoByRecentMajority(memory_depth, soft=True):
             else:
                 cooperations = int(memory_depth * 1.5) - 1
             defections = len(opponent_actions) - cooperations - 1
-            player_actions = (
-                first_player_action + [C] * cooperations + [D] * defections
-            )
+            player_actions = first_player_action + [C] * cooperations + [D] * defections
 
             actions = list(zip(player_actions, opponent_actions))
             self.versus_test(opponent, expected_actions=actions)

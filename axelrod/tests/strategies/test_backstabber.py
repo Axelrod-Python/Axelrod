@@ -117,13 +117,9 @@ class TestDoubleCrosser(TestBackStabber):
 
     def test_starting_defect_keeps_alt_strategy_from_triggering(self):
         opponent_actions_suffix = [C, D, C, D, D] + 3 * [C]
-        expected_actions_suffix = [
-            (C, C),
-            (C, D),
-            (C, C),
-            (C, D),
-            (C, D),
-        ] + 3 * [(D, C)]
+        expected_actions_suffix = [(C, C), (C, D), (C, C), (C, D), (C, D)] + 3 * [
+            (D, C)
+        ]
 
         defects_on_first = [D] + [C] * 6
         defects_on_first_actions = [(C, D)] + [(C, C)] * 6

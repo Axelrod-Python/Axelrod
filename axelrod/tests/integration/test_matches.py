@@ -9,14 +9,10 @@ from hypothesis.strategies import integers
 C, D = axl.Action.C, axl.Action.D
 
 deterministic_strategies = [
-    s
-    for s in axl.short_run_time_strategies
-    if not axl.Classifiers["stochastic"](s())
+    s for s in axl.short_run_time_strategies if not axl.Classifiers["stochastic"](s())
 ]
 stochastic_strategies = [
-    s
-    for s in axl.short_run_time_strategies
-    if axl.Classifiers["stochastic"](s())
+    s for s in axl.short_run_time_strategies if axl.Classifiers["stochastic"](s())
 ]
 
 

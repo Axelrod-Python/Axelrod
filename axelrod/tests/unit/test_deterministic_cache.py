@@ -18,9 +18,7 @@ class TestDeterministicCache(unittest.TestCase):
         cls.test_save_file = axl_filename(save_path)
         load_path = pathlib.Path("test_outputs/test_cache_load.txt")
         cls.test_load_file = axl_filename(load_path)
-        test_data_to_pickle = {
-            ("Tit For Tat", "Defector"): [(C, D), (D, D), (D, D)]
-        }
+        test_data_to_pickle = {("Tit For Tat", "Defector"): [(C, D), (D, D), (D, D)]}
         cls.test_pickle = pickle.dumps(test_data_to_pickle)
 
         with open(cls.test_load_file, "wb") as f:

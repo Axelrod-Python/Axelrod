@@ -32,11 +32,7 @@ class TestPlot(unittest.TestCase):
             [3 / 2 for _ in range(3)],
         ]
         cls.expected_boxplot_xticks_locations = [1, 2, 3, 4]
-        cls.expected_boxplot_xticks_labels = [
-            "Defector",
-            "Tit For Tat",
-            "Alternator",
-        ]
+        cls.expected_boxplot_xticks_labels = ["Defector", "Tit For Tat", "Alternator"]
 
         cls.expected_lengthplot_dataset = [
             [cls.turns for _ in range(3)],
@@ -45,21 +41,9 @@ class TestPlot(unittest.TestCase):
         ]
 
         cls.expected_payoff_dataset = [
-            [
-                0,
-                mean([9 / 5 for _ in range(3)]),
-                mean([17 / 5 for _ in range(3)]),
-            ],
-            [
-                mean([4 / 5 for _ in range(3)]),
-                0,
-                mean([13 / 5 for _ in range(3)]),
-            ],
-            [
-                mean([2 / 5 for _ in range(3)]),
-                mean([13 / 5 for _ in range(3)]),
-                0,
-            ],
+            [0, mean([9 / 5 for _ in range(3)]), mean([17 / 5 for _ in range(3)])],
+            [mean([4 / 5 for _ in range(3)]), 0, mean([13 / 5 for _ in range(3)])],
+            [mean([2 / 5 for _ in range(3)]), mean([13 / 5 for _ in range(3)]), 0],
         ]
         cls.expected_winplot_dataset = (
             [[2, 2, 2], [0, 0, 0], [0, 0, 0]],
@@ -120,15 +104,12 @@ class TestPlot(unittest.TestCase):
 
     def test_boxplot_dataset(self):
         plot = axl.Plot(self.test_result_set)
-        self.assertSequenceEqual(
-            plot._boxplot_dataset, self.expected_boxplot_dataset
-        )
+        self.assertSequenceEqual(plot._boxplot_dataset, self.expected_boxplot_dataset)
 
     def test_boxplot_xticks_locations(self):
         plot = axl.Plot(self.test_result_set)
         self.assertEqual(
-            plot._boxplot_xticks_locations,
-            self.expected_boxplot_xticks_locations,
+            plot._boxplot_xticks_locations, self.expected_boxplot_xticks_locations
         )
 
     def test_boxplot_xticks_labels(self):
@@ -164,9 +145,7 @@ class TestPlot(unittest.TestCase):
 
     def test_winplot_dataset(self):
         plot = axl.Plot(self.test_result_set)
-        self.assertSequenceEqual(
-            plot._winplot_dataset, self.expected_winplot_dataset
-        )
+        self.assertSequenceEqual(plot._winplot_dataset, self.expected_winplot_dataset)
 
     def test_winplot(self):
         plot = axl.Plot(self.test_result_set)
@@ -176,9 +155,7 @@ class TestPlot(unittest.TestCase):
 
     def test_sdvplot_dataset(self):
         plot = axl.Plot(self.test_result_set)
-        self.assertSequenceEqual(
-            plot._sdv_plot_dataset, self.expected_sdvplot_dataset
-        )
+        self.assertSequenceEqual(plot._sdv_plot_dataset, self.expected_sdvplot_dataset)
 
     def test_sdvplot(self):
         plot = axl.Plot(self.test_result_set)
@@ -188,9 +165,7 @@ class TestPlot(unittest.TestCase):
 
     def test_lengthplot_dataset(self):
         plot = axl.Plot(self.test_result_set)
-        self.assertSequenceEqual(
-            plot._winplot_dataset, self.expected_winplot_dataset
-        )
+        self.assertSequenceEqual(plot._winplot_dataset, self.expected_winplot_dataset)
 
     def test_lengthplot(self):
         plot = axl.Plot(self.test_result_set)
@@ -206,9 +181,7 @@ class TestPlot(unittest.TestCase):
 
     def test_payoff_dataset(self):
         plot = axl.Plot(self.test_result_set)
-        self.assertSequenceEqual(
-            plot._payoff_dataset, self.expected_payoff_dataset
-        )
+        self.assertSequenceEqual(plot._payoff_dataset, self.expected_payoff_dataset)
 
     def test_payoff(self):
         plot = axl.Plot(self.test_result_set)
@@ -277,8 +250,6 @@ class TestPlot(unittest.TestCase):
         )
         self.assertIsNone(
             plot.save_all_plots(
-                prefix="test_outputs/",
-                title_prefix="A prefix",
-                progress_bar=True,
+                prefix="test_outputs/", title_prefix="A prefix", progress_bar=True
             )
         )

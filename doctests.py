@@ -27,8 +27,7 @@ def load_tests(loader, tests, ignore):
                 tests.addTests(
                     doctest.DocFileSuite(
                         # ELLIPSIS option tells doctest to ignore portions of the verification value.
-                        os.path.join(root, f),
-                        optionflags=doctest.ELLIPSIS,
+                        os.path.join(root, f), optionflags=doctest.ELLIPSIS
                     )
                 )
 

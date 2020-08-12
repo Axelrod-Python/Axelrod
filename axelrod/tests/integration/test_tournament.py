@@ -51,9 +51,7 @@ class TestTournament(unittest.TestCase):
         path = pathlib.Path("test_outputs/test_tournament.csv")
         filename = axl_filename(path)
         self.assertIsNone(
-            tournament.play(
-                progress_bar=False, filename=filename, build_results=False
-            )
+            tournament.play(progress_bar=False, filename=filename, build_results=False)
         )
 
     def test_serial_play(self):
@@ -96,13 +94,9 @@ class TestTournament(unittest.TestCase):
                 turns=2,
                 repetitions=2,
             )
-            path = pathlib.Path(
-                "test_outputs/stochastic_tournament_{}.csv".format(_)
-            )
+            path = pathlib.Path("test_outputs/stochastic_tournament_{}.csv".format(_))
             files.append(axl_filename(path))
-            tournament.play(
-                progress_bar=False, filename=files[-1], build_results=False
-            )
+            tournament.play(progress_bar=False, filename=files[-1], build_results=False)
         self.assertTrue(filecmp.cmp(files[0], files[1]))
 
     def test_repeat_tournament_stochastic(self):
@@ -122,15 +116,11 @@ class TestTournament(unittest.TestCase):
                 game=self.game,
                 turns=2,
                 repetitions=2,
-                seed=17,
+                seed=17
             )
-            path = pathlib.Path(
-                "test_outputs/stochastic_tournament_{}.csv".format(_)
-            )
+            path = pathlib.Path("test_outputs/stochastic_tournament_{}.csv".format(_))
             files.append(axl_filename(path))
-            tournament.play(
-                progress_bar=False, filename=files[-1], build_results=False
-            )
+            tournament.play(progress_bar=False, filename=files[-1], build_results=False)
         self.assertTrue(filecmp.cmp(files[0], files[1]))
 
 
@@ -172,9 +162,7 @@ class TestProbEndTournament(unittest.TestCase):
         p2 = axl.Cooperator()
         p3 = axl.Cooperator()
         players = [p1, p2, p3]
-        tournament = axl.Tournament(
-            players, prob_end=0.5, repetitions=2, seed=3
-        )
+        tournament = axl.Tournament(players, prob_end=0.5, repetitions=2, seed=3)
         results = tournament.play(progress_bar=False)
         # Check that match length are different across the repetitions
         self.assertNotEqual(results.match_lengths[0], results.match_lengths[1])

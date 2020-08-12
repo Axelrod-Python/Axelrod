@@ -59,7 +59,6 @@ class PostInitCaller(type):
 
     See here to learn more: https://blog.ionelmc.ro/2015/02/09/understanding-python-metaclasses/
     """
-
     def __call__(cls, *args, **kwargs):
         # This calls cls.__new__ and cls.__init__
         obj = type.__call__(cls, *args, **kwargs)
@@ -131,9 +130,7 @@ class Player(object, metaclass=PostInitCaller):
         if self.__repr__() != other.__repr__():
             return False
 
-        for attribute in set(
-            list(self.__dict__.keys()) + list(other.__dict__.keys())
-        ):
+        for attribute in set(list(self.__dict__.keys()) + list(other.__dict__.keys())):
 
             value = getattr(self, attribute, None)
             other_value = getattr(other, attribute, None)
@@ -151,20 +148,14 @@ class Player(object, metaclass=PostInitCaller):
             ):
                 # Split the original generator so it is not touched
                 generator, original_value = itertools.tee(value)
-                other_generator, original_other_value = itertools.tee(
-                    other_value
-                )
+                other_generator, original_other_value = itertools.tee(other_value)
 
                 if isinstance(value, types.GeneratorType):
                     setattr(self, attribute, (ele for ele in original_value))
-                    setattr(
-                        other, attribute, (ele for ele in original_other_value)
-                    )
+                    setattr(other, attribute, (ele for ele in original_other_value))
                 else:
                     setattr(self, attribute, itertools.cycle(original_value))
-                    setattr(
-                        other, attribute, itertools.cycle(original_other_value)
-                    )
+                    setattr(other, attribute, itertools.cycle(original_other_value))
 
                 for _ in range(200):
                     try:
@@ -199,8 +190,7 @@ class Player(object, metaclass=PostInitCaller):
         if seed is None:
             warnings.warn(
                 "Initializing player with seed from Axelrod module random number generator. "
-                "Results may not be seed reproducible."
-            )
+                "Results may not be seed reproducible.")
             self._seed = _module_random.random_seed_int()
         else:
             self._seed = seed
@@ -211,9 +201,7 @@ class Player(object, metaclass=PostInitCaller):
         Appends the `__init__` parameters to the strategy's name."""
         name = self.name
         prefix = ": "
-        gen = (
-            value for value in self.init_kwargs.values() if value is not None
-        )
+        gen = (value for value in self.init_kwargs.values() if value is not None)
         for value in gen:
             try:
                 if issubclass(value, Player):

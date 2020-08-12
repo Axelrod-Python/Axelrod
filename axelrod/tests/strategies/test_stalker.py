@@ -28,14 +28,12 @@ class TestStalker(TestPlayer):
         # wish_score < current_average_score < very_good_score
         actions = [(C, C)] * 7 + [(C, D), (C, D), (C, C), (C, C), (D, C)]
         self.versus_test(
-            opponent=axl.MockPlayer(actions=[C] * 7 + [D] * 2),
-            expected_actions=actions,
+            opponent=axl.MockPlayer(actions=[C] * 7 + [D] * 2), expected_actions=actions
         )
 
         actions = [(C, C)] * 7 + [(C, D), (C, C), (D, C)]
         self.versus_test(
-            opponent=axl.MockPlayer(actions=[C] * 7 + [D]),
-            expected_actions=actions,
+            opponent=axl.MockPlayer(actions=[C] * 7 + [D]), expected_actions=actions
         )
 
         # current_average_score > 2
@@ -45,8 +43,7 @@ class TestStalker(TestPlayer):
         # 1 < current_average_score < 2
         actions = [(C, C)] * 7 + [(C, D)] * 4 + [(D, D)]
         self.versus_test(
-            opponent=axl.MockPlayer(actions=[C] * 7 + [D] * 5),
-            expected_actions=actions,
+            opponent=axl.MockPlayer(actions=[C] * 7 + [D] * 5), expected_actions=actions
         )
 
     def test_strategy2(self):
@@ -78,9 +75,7 @@ class TestStalker(TestPlayer):
         # defect in last round
         actions = [(C, C)] * 199 + [(D, C)]
         self.versus_test(
-            axl.Cooperator(),
-            expected_actions=actions,
-            match_attributes={"length": 200},
+            axl.Cooperator(), expected_actions=actions, match_attributes={"length": 200}
         )
 
         # Force a defection before the end of the actual match which ensures

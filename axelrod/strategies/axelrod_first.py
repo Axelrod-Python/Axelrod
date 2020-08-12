@@ -66,7 +66,7 @@ class FirstByDavis(Player):
         opponent ever plays D."""
         if len(self.history) < self._rounds_to_cooperate:
             return C
-        if opponent.defections > 0:  #  Implement Grudger
+        if opponent.defections > 0:  # Implement Grudger
             return D
         return C
 
@@ -262,14 +262,12 @@ class FirstByDowning(Player):
         # Adding 1 to cooperations for assumption that first opponent move
         # being a response to a cooperation. See docstring for more
         # information.
-        alpha = self.number_opponent_cooperations_in_response_to_C / (
-            self.cooperations + 1
-        )
+        alpha = (self.number_opponent_cooperations_in_response_to_C /
+                 (self.cooperations + 1))
         # Adding 2 to defections on the assumption that the first two
         # moves are defections, which may not be true in a noisy match
-        beta = self.number_opponent_cooperations_in_response_to_D / max(
-            self.defections, 2
-        )
+        beta = (self.number_opponent_cooperations_in_response_to_D /
+                 max(self.defections, 2))
 
         R, P, S, T = self.match_attributes["game"].RPST()
         expected_value_of_cooperating = alpha * R + (1 - alpha) * S
@@ -432,34 +430,25 @@ class FirstByGraaskamp(Player):
 
         # Check if opponent plays randomly, if so, defect for the rest of the game
         p_value = chisquare([opponent.cooperations, opponent.defections]).pvalue
-        self.opponent_is_random = (
-            p_value >= self.alpha
-        ) or self.opponent_is_random
+        self.opponent_is_random = (p_value >= self.alpha) or self.opponent_is_random
 
         if self.opponent_is_random:
             return D
-        if (
-            all(
-                opponent.history[i] == self.history[i - 1]
-                for i in range(1, len(self.history))
-            )
-            or opponent.history == self.history
-        ):
+        if all(
+            opponent.history[i] == self.history[i - 1]
+            for i in range(1, len(self.history))
+        ) or opponent.history == self.history:
             # Check if opponent plays Tit for Tat or a clone of itself.
             if opponent.history[-1] == D:
                 return D
             return C
 
         if self.next_random_defection_turn is None:
-            self.next_random_defection_turn = self._random.randint(5, 15) + len(
-                self.history
-            )
+            self.next_random_defection_turn = self._random.randint(5, 15) + len(self.history)
 
         if len(self.history) == self.next_random_defection_turn:
             # resample the next defection turn
-            self.next_random_defection_turn = self._random.randint(5, 15) + len(
-                self.history
-            )
+            self.next_random_defection_turn = self._random.randint(5, 15) + len(self.history)
             return D
         return C
 
@@ -591,27 +580,7 @@ class FirstByNydegger(Player):
     }
 
     def __init__(self) -> None:
-        self.As = [
-            1,
-            6,
-            7,
-            17,
-            22,
-            23,
-            26,
-            29,
-            30,
-            31,
-            33,
-            38,
-            39,
-            45,
-            49,
-            54,
-            55,
-            58,
-            61,
-        ]
+        self.As = [1, 6, 7, 17, 22, 23, 26, 29, 30, 31, 33, 38, 39, 45, 49, 54, 55, 58, 61]
         self.score_map = {(C, C): 0, (C, D): 2, (D, C): 1, (D, D): 3}
         super().__init__()
 
@@ -641,9 +610,7 @@ class FirstByNydegger(Player):
             else:
                 # TFT
                 return D if opponent.history[-1] == D else C
-        A = self.score_history(
-            self.history[-3:], opponent.history[-3:], self.score_map
-        )
+        A = self.score_history(self.history[-3:], opponent.history[-3:], self.score_map)
         if A in self.As:
             return D
         return C
@@ -882,9 +849,7 @@ class FirstBySteinAndRapoport(Player):
             return opponent.history[-1]
 
         if round_number % 15 == 0:
-            p_value = chisquare(
-                [opponent.cooperations, opponent.defections]
-            ).pvalue
+            p_value = chisquare([opponent.cooperations, opponent.defections]).pvalue
             self.opponent_is_random = p_value >= self.alpha
 
         if self.opponent_is_random:
@@ -1017,10 +982,8 @@ class FirstByTidemanAndChieruzzi(Player):
                 std_deviation = (N ** (1 / 2)) / 2
                 lower = N / 2 - 3 * std_deviation
                 upper = N / 2 + 3 * std_deviation
-                if (
-                    self.remembered_number_of_opponent_defectioons <= lower
-                    or self.remembered_number_of_opponent_defectioons >= upper
-                ):
+                if (self.remembered_number_of_opponent_defectioons <= lower or
+                    self.remembered_number_of_opponent_defectioons >= upper):
                     # Opponent deserves a fresh start
                     self.last_fresh_start = current_round
                     self._fresh_start()

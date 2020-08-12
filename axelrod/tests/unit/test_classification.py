@@ -50,9 +50,7 @@ class TestClassification(unittest.TestCase):
 
     def test_classifier_build(self):
         dirname = os.path.dirname(__file__)
-        test_path = os.path.join(
-            dirname, "../../../test_outputs/classifier_test.yaml"
-        )
+        test_path = os.path.join(dirname, "../../../test_outputs/classifier_test.yaml")
 
         # Just returns the name of the player.  For testing.
         name_classifier = Classifier[Text]("name", lambda player: player.name)
@@ -68,10 +66,7 @@ class TestClassification(unittest.TestCase):
 
         self.assertDictEqual(
             all_player_dicts,
-            {
-                "Cooperator": {"name": "Cooperator"},
-                "Defector": {"name": "Defector"},
-            },
+            {"Cooperator": {"name": "Cooperator"}, "Defector": {"name": "Defector"}},
         )
 
     def test_singletonity_of_classifiers_class(self):
@@ -96,9 +91,7 @@ class TestClassification(unittest.TestCase):
             Classifiers["invalid_key"](axl.TitForTat)
 
     def test_will_lookup_key_in_dict(self):
-        self.assertEqual(
-            Classifiers["memory_depth"](TitForTatWithEmptyClassifier), 1
-        )
+        self.assertEqual(Classifiers["memory_depth"](TitForTatWithEmptyClassifier), 1)
 
     def test_will_lookup_key_for_classes_that_cant_init(self):
         with self.assertRaises(Exception) as exptn:
@@ -121,9 +114,7 @@ class TestClassification(unittest.TestCase):
 
         for s in axl.all_strategies:
             s = s()
-            self.assertTrue(
-                None not in [Classifiers[key](s) for key in known_keys]
-            )
+            self.assertTrue(None not in [Classifiers[key](s) for key in known_keys])
 
     def test_multiple_instances(self):
         """Certain instances of classes of strategies will have different
@@ -194,19 +185,13 @@ class TestClassification(unittest.TestCase):
         ]
 
         for strategy in known_cheaters:
-            self.assertFalse(
-                axl.Classifiers.obey_axelrod(strategy()), msg=strategy
-            )
+            self.assertFalse(axl.Classifiers.obey_axelrod(strategy()), msg=strategy)
 
         for strategy in known_basic:
-            self.assertTrue(
-                axl.Classifiers.obey_axelrod(strategy()), msg=strategy
-            )
+            self.assertTrue(axl.Classifiers.obey_axelrod(strategy()), msg=strategy)
 
         for strategy in known_ordinary:
-            self.assertTrue(
-                axl.Classifiers.obey_axelrod(strategy()), msg=strategy
-            )
+            self.assertTrue(axl.Classifiers.obey_axelrod(strategy()), msg=strategy)
 
     def test_is_basic(self):
         """A test that verifies if the is_basic function works correctly"""
@@ -309,9 +294,7 @@ class TestStrategies(unittest.TestCase):
             axl.basic_strategies,
             axl.long_run_time_strategies,
         ]:
-            self.assertTrue(
-                str_reps(strategy_list).issubset(str_reps(strategies_set))
-            )
+            self.assertTrue(str_reps(strategy_list).issubset(str_reps(strategies_set)))
 
     def test_long_run_strategies(self):
         long_run_time_strategies = [
@@ -336,8 +319,7 @@ class TestStrategies(unittest.TestCase):
         ]
 
         self.assertEqual(
-            str_reps(long_run_time_strategies),
-            str_reps(axl.long_run_time_strategies),
+            str_reps(long_run_time_strategies), str_reps(axl.long_run_time_strategies)
         )
         self.assertTrue(
             all(map(Classifiers["long_run_time"], axl.long_run_time_strategies))
@@ -349,13 +331,10 @@ class TestStrategies(unittest.TestCase):
         ]
 
         self.assertEqual(
-            str_reps(short_run_time_strategies),
-            str_reps(axl.short_run_time_strategies),
+            str_reps(short_run_time_strategies), str_reps(axl.short_run_time_strategies)
         )
         self.assertFalse(
-            any(
-                map(Classifiers["long_run_time"], axl.short_run_time_strategies)
-            )
+            any(map(Classifiers["long_run_time"], axl.short_run_time_strategies))
         )
 
     def test_meta_inclusion(self):
@@ -374,6 +353,4 @@ class TestStrategies(unittest.TestCase):
             axl.Grudger,
             axl.Random,
         ]
-        self.assertTrue(
-            str_reps(demo_strategies), str_reps(axl.demo_strategies)
-        )
+        self.assertTrue(str_reps(demo_strategies), str_reps(axl.demo_strategies))

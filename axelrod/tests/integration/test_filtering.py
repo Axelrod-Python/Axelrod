@@ -36,9 +36,7 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
         for classifier in classifiers:
             comprehension = set(filter(axl.Classifiers[classifier], strategies))
             filterset = {classifier: True}
-        filtered = set(
-            axl.filtered_strategies(filterset, strategies=strategies)
-        )
+        filtered = set(axl.filtered_strategies(filterset, strategies=strategies))
         self.assertEqual(comprehension, filtered)
 
     @given(
@@ -92,9 +90,7 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
             ]
         )
         filterset = {"memory_depth": memory_depth}
-        filtered = set(
-            axl.filtered_strategies(filterset, strategies=strategies)
-        )
+        filtered = set(axl.filtered_strategies(filterset, strategies=strategies))
         self.assertEqual(comprehension, filtered)
 
     @given(strategies=strategy_lists(min_size=20, max_size=20))
@@ -110,16 +106,12 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
                 [
                     s
                     for s in strategies
-                    if set(classifier).issubset(
-                        set(axl.Classifiers["makes_use_of"](s))
-                    )
+                    if set(classifier).issubset(set(axl.Classifiers["makes_use_of"](s)))
                 ]
             )
 
             filterset = {"makes_use_of": classifier}
-            filtered = set(
-                axl.filtered_strategies(filterset, strategies=strategies)
-            )
+            filtered = set(axl.filtered_strategies(filterset, strategies=strategies))
 
             self.assertEqual(
                 comprehension, filtered, msg="classifier: {}".format(classifier)

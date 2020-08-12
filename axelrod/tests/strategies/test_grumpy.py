@@ -46,42 +46,32 @@ class TestGrumpy(TestPlayer):
 
         actions = ([(C, D)] * 11 + [(D, C)] * 22 + [(C, D)] * 11) * 3
         init_kwargs = {"starting_state": "Nice"}
-        self.versus_test(
-            opponent, expected_actions=actions, init_kwargs=init_kwargs
-        )
+        self.versus_test(opponent, expected_actions=actions, init_kwargs=init_kwargs)
 
         opponent = axl.MockPlayer(actions=opponent_actions)
         grumpy_starting = [(D, D)] * 11 + [(D, C)] * 22 + [(C, D)] * 11
         actions = grumpy_starting + actions
         init_kwargs = {"starting_state": "Grumpy"}
-        self.versus_test(
-            opponent, expected_actions=actions, init_kwargs=init_kwargs
-        )
+        self.versus_test(opponent, expected_actions=actions, init_kwargs=init_kwargs)
 
     def test_thresholds(self):
         init_kwargs = {"grumpy_threshold": 3, "nice_threshold": -2}
         opponent_actions = [D] * 4 + [C] * 7 + [D] * 3
         opponent = axl.MockPlayer(actions=opponent_actions)
         actions = ([(C, D)] * 4 + [(D, C)] * 7 + [(C, D)] * 3) * 3
-        self.versus_test(
-            opponent, expected_actions=actions, init_kwargs=init_kwargs
-        )
+        self.versus_test(opponent, expected_actions=actions, init_kwargs=init_kwargs)
 
         init_kwargs = {"grumpy_threshold": 0, "nice_threshold": -2}
         opponent_actions = [D] * 1 + [C] * 4 + [D] * 3
         opponent = axl.MockPlayer(actions=opponent_actions)
         actions = ([(C, D)] * 1 + [(D, C)] * 4 + [(C, D)] * 3) * 3
-        self.versus_test(
-            opponent, expected_actions=actions, init_kwargs=init_kwargs
-        )
+        self.versus_test(opponent, expected_actions=actions, init_kwargs=init_kwargs)
 
         init_kwargs = {"grumpy_threshold": 3, "nice_threshold": 0}
         opponent_actions = [D] * 4 + [C] * 5 + [D] * 1
         opponent = axl.MockPlayer(actions=opponent_actions)
         actions = ([(C, D)] * 4 + [(D, C)] * 5 + [(C, D)] * 1) * 3
-        self.versus_test(
-            opponent, expected_actions=actions, init_kwargs=init_kwargs
-        )
+        self.versus_test(opponent, expected_actions=actions, init_kwargs=init_kwargs)
 
     def test_reset_state_with_non_default_init(self):
         player = axl.Grumpy(starting_state="Grumpy")

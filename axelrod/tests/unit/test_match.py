@@ -38,9 +38,7 @@ class TestMatch(unittest.TestCase):
         self.assertEqual(match.noise, 0)
         self.assertEqual(match.game.RPST(), game.RPST())
 
-        self.assertEqual(
-            match.players[0].match_attributes["length"], float("inf")
-        )
+        self.assertEqual(match.players[0].match_attributes["length"], float("inf"))
         self.assertEqual(match._cache, {})
 
     @given(
@@ -58,9 +56,7 @@ class TestMatch(unittest.TestCase):
         self.assertEqual(match.noise, 0)
         self.assertEqual(match.game.RPST(), game.RPST())
 
-        self.assertEqual(
-            match.players[0].match_attributes["length"], float("inf")
-        )
+        self.assertEqual(match.players[0].match_attributes["length"], float("inf"))
         self.assertEqual(match._cache, {})
 
     def test_default_init(self):
@@ -87,9 +83,7 @@ class TestMatch(unittest.TestCase):
         expected_lengths = [2, 1, 1]
         for seed, expected_length in zip(range(3), expected_lengths):
             match = axl.Match((p1, p2), prob_end=0.5, seed=seed)
-            self.assertEqual(
-                match.players[0].match_attributes["length"], float("inf")
-            )
+            self.assertEqual(match.players[0].match_attributes["length"], float("inf"))
             self.assertEqual(len(match.play()), expected_length)
             self.assertEqual(match.noise, 0)
             self.assertEqual(match.game.RPST(), (3, 1, 0, 5))
@@ -123,7 +117,7 @@ class TestMatch(unittest.TestCase):
         with self.assertRaises(TypeError):
             len(match)
 
-    @given(p=floats(min_value=1e-10, max_value=1 - 1e-10))
+    @given(p=floats(min_value=1e-10, max_value=1-1e-10))
     def test_stochastic(self, p):
         p1, p2 = axl.Cooperator(), axl.Cooperator()
         match = axl.Match((p1, p2), 5)
@@ -136,7 +130,7 @@ class TestMatch(unittest.TestCase):
         match = axl.Match((p1, p2), 5)
         self.assertTrue(match._stochastic)
 
-    @given(p=floats(min_value=1e-10, max_value=1 - 1e-10))
+    @given(p=floats(min_value=1e-10, max_value=1-1e-10))
     def test_cache_update_required(self, p):
         p1, p2 = axl.Cooperator(), axl.Cooperator()
         match = axl.Match((p1, p2), 5, noise=p)
@@ -186,7 +180,8 @@ class TestMatch(unittest.TestCase):
         self.assertEqual(match.play(), expected_result_5_turn)
         # The cache should now hold the 5-turn result..
         self.assertEqual(
-            cache[(axl.Cooperator(), axl.Defector())], expected_result_5_turn
+            cache[(axl.Cooperator(), axl.Defector())],
+            expected_result_5_turn
         )
 
     def test_cache_doesnt_shrink(self):
@@ -205,7 +200,8 @@ class TestMatch(unittest.TestCase):
         self.assertEqual(match.play(), expected_result_3_turn)
         # The cache should still hold the 5.
         self.assertEqual(
-            cache[(axl.Cooperator(), axl.Defector())], expected_result_5_turn
+            cache[(axl.Cooperator(), axl.Defector())],
+            expected_result_5_turn
         )
 
     def test_scores(self):
@@ -365,9 +361,7 @@ class TestSampleLength(unittest.TestCase):
         ]:
             rng = RandomGenerator(seed)
             r = rng.random()
-            self.assertEqual(
-                axl.match.sample_length(prob_end, r), expected_length
-            )
+            self.assertEqual(axl.match.sample_length(prob_end, r), expected_length)
 
     def test_sample_with_0_prob(self):
         self.assertEqual(axl.match.sample_length(0, 0.4), float("inf"))

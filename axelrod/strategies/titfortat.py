@@ -1,9 +1,6 @@
 from axelrod.action import Action, actions_to_str
 from axelrod.player import Player
-from axelrod.strategy_transformers import (
-    FinalTransformer,
-    TrackHistoryTransformer,
-)
+from axelrod.strategy_transformers import FinalTransformer, TrackHistoryTransformer
 
 C, D = Action.C, Action.D
 
@@ -131,9 +128,7 @@ class DynamicTwoTitsForTat(Player):
             return C
         if D in opponent.history[-2:]:
             # Probability of cooperating regardless
-            return self._random.random_choice(
-                opponent.cooperations / len(opponent.history)
-            )
+            return self._random.random_choice(opponent.cooperations / len(opponent.history))
         else:
             return C
 

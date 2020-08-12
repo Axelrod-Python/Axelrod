@@ -194,28 +194,7 @@ class TestProber4(TestPlayer):
         "manipulates_source": False,
         "manipulates_state": False,
     }
-    initial_sequence = [
-        C,
-        C,
-        D,
-        C,
-        D,
-        D,
-        D,
-        C,
-        C,
-        D,
-        C,
-        D,
-        C,
-        C,
-        D,
-        C,
-        D,
-        D,
-        C,
-        D,
-    ]
+    initial_sequence = [C, C, D, C, D, D, D, C, C, D, C, D, C, C, D, C, D, D, C, D]
 
     def test_strategy(self):
         # Starts by playing CCDCDDDCCDCDCCDCDDCD.
@@ -235,9 +214,7 @@ class TestProber4(TestPlayer):
         for history in provocative_histories:
             opponent = axl.MockPlayer(history + [C] * 5)
             actions = list(zip(self.initial_sequence, history)) + [(D, C)] * 5
-            self.versus_test(
-                opponent=opponent, expected_actions=actions, attrs=attrs
-            )
+            self.versus_test(opponent=opponent, expected_actions=actions, attrs=attrs)
 
         # Otherwise cooperates for 5 rounds and plays TfT afterwards
         unprovocative_histories = [
@@ -253,9 +230,7 @@ class TestProber4(TestPlayer):
             opponent = axl.MockPlayer(history + [D] * 5 + [C, C])
             actions = list(zip(self.initial_sequence, history)) + [(C, D)] * 5
             actions += [(D, C), (C, C)]
-            self.versus_test(
-                opponent=opponent, expected_actions=actions, attrs=attrs
-            )
+            self.versus_test(opponent=opponent, expected_actions=actions, attrs=attrs)
 
 
 class TestHardProber(TestPlayer):

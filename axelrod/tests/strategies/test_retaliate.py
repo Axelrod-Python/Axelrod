@@ -93,18 +93,14 @@ class TestLimitedRetaliate(TestPlayer):
         opponent = axl.Cooperator()
         actions = [(C, C)] * 5
         self.versus_test(
-            opponent=opponent,
-            expected_actions=actions,
-            attrs={"retaliating": False},
+            opponent=opponent, expected_actions=actions, attrs={"retaliating": False}
         )
 
         # Retaliate after a (C, D) round.
         opponent = axl.MockPlayer([C, C, C, D, C])
         actions = [(C, C), (C, C), (C, C), (C, D), (D, C), (D, C)]
         self.versus_test(
-            opponent=opponent,
-            expected_actions=actions,
-            attrs={"retaliating": True},
+            opponent=opponent, expected_actions=actions, attrs={"retaliating": True}
         )
 
         opponent = axl.Alternator()
@@ -112,9 +108,7 @@ class TestLimitedRetaliate(TestPlayer):
         # Count retaliations
         actions = [(C, C), (C, D), (D, C), (D, D), (D, C)]
         self.versus_test(
-            opponent=opponent,
-            expected_actions=actions,
-            attrs={"retaliation_count": 3},
+            opponent=opponent, expected_actions=actions, attrs={"retaliation_count": 3}
         )
         opponent = axl.Alternator()
 

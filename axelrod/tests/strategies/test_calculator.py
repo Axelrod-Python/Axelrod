@@ -25,9 +25,7 @@ class TestCalculator(TestPlayer):
     def test_twenty_rounds_joss_for_cyclers(self):
         """Uses axelrod.strategies.axelrod_first.FirstByJoss strategy for first 20 rounds"""
         seed = 4
-        match = axl.Match(
-            (axl.FirstByJoss(), axl.Alternator()), turns=20, seed=seed
-        )
+        match = axl.Match((axl.FirstByJoss(), axl.Alternator()), turns=20, seed=seed)
         match.play()
         self.versus_test(
             axl.Alternator(), expected_actions=match.result, seed=seed
@@ -36,24 +34,17 @@ class TestCalculator(TestPlayer):
     def test_twenty_rounds_joss_then_defects_for_cyclers(self):
         """Uses axelrod.strategies.axelrod_first.FirstByJoss strategy for first 20 rounds"""
         seed = 4
-        match = axl.Match(
-            (axl.FirstByJoss(), axl.Alternator()), turns=20, seed=seed
-        )
+        match = axl.Match((axl.FirstByJoss(), axl.Alternator()), turns=20, seed=seed)
         match.play()
         expected_actions = match.result + [(D, C), (D, D), (D, C), (D, D)]
         self.versus_test(
-            axl.Alternator(),
-            expected_actions=expected_actions,
-            seed=seed,
-            turns=24,
+            axl.Alternator(), expected_actions=expected_actions, seed=seed, turns=24,
         )
 
     def test_twenty_rounds_joss_for_noncyclers(self):
         """Uses axelrod.strategies.axelrod_first.FirstByJoss strategy for first 20 rounds"""
         seed = 4
-        match = axl.Match(
-            (axl.FirstByJoss(), axl.AntiCycler()), turns=20, seed=seed
-        )
+        match = axl.Match((axl.FirstByJoss(), axl.AntiCycler()), turns=20, seed=seed)
         match.play()
         self.versus_test(
             axl.AntiCycler(), expected_actions=match.result, seed=seed
@@ -62,29 +53,16 @@ class TestCalculator(TestPlayer):
     def test_twenty_rounds_joss_then_tft_for_noncyclers(self):
         """Uses axelrod.strategies.axelrod_first.FirstByJoss strategy for first 20 rounds"""
         seed = 4
-        match = axl.Match(
-            (axl.FirstByJoss(), axl.AntiCycler()), turns=20, seed=seed
-        )
+        match = axl.Match((axl.FirstByJoss(), axl.AntiCycler()), turns=20, seed=seed)
         match.play()
-        expected_actions = match.result + [
-            (C, C),
-            (C, C),
-            (C, D),
-            (D, C),
-            (C, C),
-        ]
+        expected_actions = match.result + [(C, C), (C, C), (C, D), (D, C), (C, C)]
         self.versus_test(
-            axl.AntiCycler(),
-            expected_actions=expected_actions,
-            seed=seed,
-            turns=24,
+            axl.AntiCycler(), expected_actions=expected_actions, seed=seed, turns=24,
         )
 
     def test_edge_case_calculator_sees_cycles_of_size_ten(self):
         ten_length_cycle = [C, D, C, C, D, C, C, C, D, C]
-        self.assertEqual(
-            detect_cycle((ten_length_cycle * 2)), tuple(ten_length_cycle)
-        )
+        self.assertEqual(detect_cycle((ten_length_cycle * 2)), tuple(ten_length_cycle))
 
         ten_cycle_twenty_rounds = get_joss_strategy_actions(
             ten_length_cycle * 2, indices_to_flip=[16]
@@ -107,9 +85,7 @@ class TestCalculator(TestPlayer):
         )
 
         opponent_actions = twenty_rounds_of_eleven_len_cycle[:-1] + [D] + [C, D]
-        self.assertEqual(
-            detect_cycle(opponent_actions), tuple(eleven_length_cycle)
-        )
+        self.assertEqual(detect_cycle(opponent_actions), tuple(eleven_length_cycle))
 
         uses_tit_for_tat_after_twenty_rounds = twenty_rounds + [(D, C), (C, D)]
         self.versus_test(
@@ -129,19 +105,13 @@ class TestCalculator(TestPlayer):
 
         self.assertEqual(get_joss_strategy_actions(opponent, []), without_flip)
         self.assertEqual(
-            get_joss_strategy_actions(
-                opponent, flip_never_occurs_at_index_zero
-            ),
+            get_joss_strategy_actions(opponent, flip_never_occurs_at_index_zero),
             without_flip,
         )
-        self.assertEqual(
-            get_joss_strategy_actions(opponent, flip_indices), with_flip
-        )
+        self.assertEqual(get_joss_strategy_actions(opponent, flip_indices), with_flip)
 
 
-def get_joss_strategy_actions(
-    opponent_moves: list, indices_to_flip: list
-) -> list:
+def get_joss_strategy_actions(opponent_moves: list, indices_to_flip: list) -> list:
     """
     Takes a list of opponent moves and returns a tuple list of [(Joss moves, opponent moves)].
     "indices_to_flip" are the indices where Joss differs from it's expected TitForTat.

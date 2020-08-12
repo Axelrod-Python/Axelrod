@@ -20,7 +20,6 @@ class CanNotPickle(axl.Cooperator):
 
 class TestTransformers(TestMatch):
     """Test generic transformer properties."""
-
     def test_player_can_be_pickled(self):
         player = axl.Cooperator()
         self.assertTrue(player_can_be_pickled(player))
@@ -56,13 +55,9 @@ class TestTransformers(TestMatch):
         args = decorator.args
         kwargs = decorator.kwargs.copy()
 
-        new_decorator = DecoratorReBuilder()(
-            factory_args, args, kwargs, new_prefix
-        )
+        new_decorator = DecoratorReBuilder()(factory_args, args, kwargs, new_prefix)
 
-        self.assertEqual(
-            decorator(axl.Cooperator)(), new_decorator(axl.Cooperator)()
-        )
+        self.assertEqual(decorator(axl.Cooperator)(), new_decorator(axl.Cooperator)())
 
     def test_StrategyReBuilder_declared_class_with_name_prefix(self):
         player = CanNotPickle()
@@ -156,15 +151,9 @@ class TestTransformers(TestMatch):
             str(InitialTransformer([D, D, C])(axl.Alternator)()),
             "Initial Alternator: [D, D, C]",
         )
+        self.assertEqual(str(FlipTransformer()(axl.Random)(0.1)), "Flipped Random: 0.1")
         self.assertEqual(
-            str(FlipTransformer()(axl.Random)(0.1)), "Flipped Random: 0.1"
-        )
-        self.assertEqual(
-            str(
-                MixedTransformer(0.3, (axl.Alternator, axl.Bully))(axl.Random)(
-                    0.1
-                )
-            ),
+            str(MixedTransformer(0.3, (axl.Alternator, axl.Bully))(axl.Random)(0.1)),
             "Mutated Random: 0.1: 0.3, ['Alternator', 'Bully']",
         )
 
@@ -192,9 +181,7 @@ class TestTransformers(TestMatch):
         p2 = axl.Cooperator()
         self.versus_test(p1, p2, [D, D, C, C, C, C, D, D], [C] * 8)
 
-        cls1 = FinalTransformer([D, D])(
-            InitialTransformer([D, D])(axl.Cooperator)
-        )
+        cls1 = FinalTransformer([D, D])(InitialTransformer([D, D])(axl.Cooperator))
         p1 = cls1()
         p2 = axl.Cooperator()
         self.versus_test(p1, p2, [D, D, C, C, C, C, D, D], [C] * 8)
@@ -221,11 +208,9 @@ class TestTransformers(TestMatch):
             return original_classifier
 
         StochasticTransformer = StrategyTransformerFactory(
-            generic_strategy_wrapper, reclassifier=stochastic_reclassifier
-        )
+            generic_strategy_wrapper, reclassifier=stochastic_reclassifier)
         DeterministicTransformer = StrategyTransformerFactory(
-            generic_strategy_wrapper, reclassifier=deterministic_reclassifier
-        )
+            generic_strategy_wrapper, reclassifier=deterministic_reclassifier)
 
         # Cooperator is not stochastic
         self.assertFalse(axl.Cooperator().classifier["stochastic"])
@@ -234,16 +219,12 @@ class TestTransformers(TestMatch):
         self.assertTrue(player.classifier["stochastic"])
 
         # Composing transforms should return it to not being stochastic
-        cls1 = compose_transformers(
-            DeterministicTransformer(), StochasticTransformer()
-        )
+        cls1 = compose_transformers(DeterministicTransformer(), StochasticTransformer())
         player = cls1(axl.Cooperator)()
         self.assertFalse(player.classifier["stochastic"])
 
         # Explicit composition
-        player = DeterministicTransformer()(
-            StochasticTransformer()(axl.Cooperator)
-        )()
+        player = DeterministicTransformer()(StochasticTransformer()(axl.Cooperator))()
         self.assertFalse(player.classifier["stochastic"])
 
         # Random is stochastic
@@ -254,16 +235,12 @@ class TestTransformers(TestMatch):
         self.assertFalse(player.classifier["stochastic"])
 
         # Composing transforms should return it to being stochastic
-        cls1 = compose_transformers(
-            StochasticTransformer(), DeterministicTransformer()
-        )
+        cls1 = compose_transformers(StochasticTransformer(), DeterministicTransformer())
         player = cls1(axl.Random)()
         self.assertTrue(player.classifier["stochastic"])
 
         # Explicit composition
-        player = StochasticTransformer()(
-            DeterministicTransformer()(axl.Random)
-        )()
+        player = StochasticTransformer()(DeterministicTransformer()(axl.Random))()
         self.assertTrue(player.classifier["stochastic"])
 
     def test_nilpotency(self):
@@ -339,20 +316,16 @@ class TestDeadlockBreakingTransformer(TestMatch):
             axl.TitForTat(),
             InitialTransformer([D])(axl.TitForTat)(),
             [C, D, C, D],
-            [D, C, D, C],
-        )
+            [D, C, D, C])
 
         # Now let's use the transformer to break the deadlock to achieve
         # Mutual cooperation
         # self.versus_test(
         self.versus_test(
             axl.TitForTat(),
-            DeadlockBreakingTransformer()(
-                InitialTransformer([D])(axl.TitForTat)
-            )(),
+            DeadlockBreakingTransformer()(InitialTransformer([D])(axl.TitForTat))(),
             [C, D, C, C],
-            [D, C, C, C],
-        )
+            [D, C, C, C])
 
 
 class TestDualTransformer(TestMatch):
@@ -404,12 +377,10 @@ class TestDualTransformer(TestMatch):
             DualTransformer()(axl.Cooperator)
         )()
 
-        self.versus_test(
-            multiple_dual_transformers,
-            dual_transformer_not_first,
-            [D, D, D],
-            [D, D, D],
-        )
+        self.versus_test(multiple_dual_transformers,
+                         dual_transformer_not_first,
+                         [D, D, D],
+                         [D, D, D])
 
     def test_dual_transformer_multiple_interspersed_regression_test(self):
         """DualTransformer has failed when there were multiple DualTransformers.
@@ -435,9 +406,7 @@ class TestFinalTransformer(TestMatch):
         p2 = FinalTransformer([D, D, D])(axl.Cooperator)()
         self.assertEqual(axl.Classifiers["makes_use_of"](p2), set(["length"]))
         self.assertEqual(axl.Classifiers["memory_depth"](p2), 3)
-        self.assertEqual(
-            axl.Classifiers["makes_use_of"](axl.Cooperator()), set([])
-        )
+        self.assertEqual(axl.Classifiers["makes_use_of"](axl.Cooperator()), set([]))
         self.versus_test(p1, p2, [C] * 8, [C, C, C, C, C, D, D, D], turns=8)
 
     def test_infinite_memory_depth_transformed(self):
@@ -450,9 +419,8 @@ class TestFinalTransformer(TestMatch):
         """Tests the FinalTransformer when tournament length is not known."""
         p1 = axl.Defector()
         p2 = FinalTransformer([D, D])(axl.Cooperator)()
-        self.versus_test(
-            p1, p2, [D] * 6, [C] * 6, match_attributes={"length": -1}
-        )
+        self.versus_test(p1, p2, [D] * 6, [C] * 6,
+                         match_attributes={"length": -1})
 
 
 class TestFlipTransformer(TestMatch):
@@ -481,9 +449,8 @@ class TestForgivingTransformer(TestMatch):
         p1 = ForgiverTransformer(0.5)(axl.Alternator)()
         p2 = axl.Defector()
         turns = 10
-        self.versus_test(
-            p1, p2, [C, D, C, C, D, C, C, D, C, D], [D] * turns, seed=8
-        )
+        self.versus_test(p1, p2, [C, D, C, C, D, C, C, D, C, D], [D] * turns,
+                         seed=8)
 
     def test_stochastic_values_classifier(self):
         p1 = ForgiverTransformer(0.5)(axl.Alternator)()
@@ -506,9 +473,7 @@ class TestGrudgingTransformer(TestMatch):
     def test_grudging2(self):
         p1 = InitialTransformer([C])(axl.Defector)()
         p2 = GrudgeTransformer(2)(axl.Cooperator)()
-        self.versus_test(
-            p1, p2, [C, D, D, D, D, D, D, D], [C, C, C, C, D, D, D, D], seed=11
-        )
+        self.versus_test(p1, p2, [C, D, D, D, D, D, D, D], [C, C, C, C, D, D, D, D], seed=11)
 
 
 class TestHistoryTrackingTransformer(TestMatch):
@@ -545,12 +510,8 @@ class TestIdentityTransformer(TestMatch):
         Defector2 = transformer(axl.Defector)
 
         turns = 100
-        self.versus_test(
-            axl.Cooperator(), Cooperator2(), [C] * turns, [C] * turns
-        )
-        self.versus_test(
-            axl.Cooperator(), Defector2(), [C] * turns, [D] * turns
-        )
+        self.versus_test(axl.Cooperator(), Cooperator2(), [C] * turns, [C] * turns)
+        self.versus_test(axl.Cooperator(), Defector2(), [C] * turns, [D] * turns)
 
 
 class TestInitialTransformer(TestMatch):
@@ -723,9 +684,7 @@ class TestNoisyTransformer(TestMatch):
         p1 = axl.Cooperator()
         p2 = NoisyTransformer(0.5)(axl.Cooperator)()
         self.assertTrue(axl.Classifiers["stochastic"](p2))
-        self.versus_test(
-            p1, p2, [C] * 10, [D, C, C, D, C, D, C, D, D, C], seed=1
-        )
+        self.versus_test(p1, p2, [C] * 10, [D, C, C, D, C, D, C, D, D, C], seed=1)
 
     def test_noisy_transformation_stochastic(self):
         """Depending on the value of the noise parameter, the strategy may become stochastic
@@ -763,9 +722,7 @@ class TestRetailiateTransformer(TestMatch):
         TwoTitsForTat = RetaliationTransformer(2)(axl.Cooperator)
         p1 = TwoTitsForTat()
         p2 = axl.CyclerCCD()
-        self.versus_test(
-            p1, p2, [C, C, C, D, D, C, D, D, C], [C, C, D, C, C, D, C, C, D]
-        )
+        self.versus_test(p1, p2, [C, C, C, D, D, C, D, D, C], [C, C, D, C, C, D, C, C, D])
 
 
 class TestRetailiateUntilApologyTransformer(TestMatch):
@@ -788,7 +745,6 @@ class TestRetailiateUntilApologyTransformer(TestMatch):
 
 
 # Run the standard Player tests on some specifically transformed players
-
 
 class TestNullInitialTransformedCooperator(TestPlayer):
     player = InitialTransformer([])(axl.Cooperator)
@@ -830,9 +786,7 @@ class TestFinalTransformedCooperator(TestPlayer):
 
 
 class TestInitialFinalTransformedCooperator(TestPlayer):
-    player = InitialTransformer([D, D])(
-        FinalTransformer([D, D, D])(axl.Cooperator)
-    )
+    player = InitialTransformer([D, D])(FinalTransformer([D, D, D])(axl.Cooperator))
     name = "Initial Final Cooperator: [D, D, D]: [D, D]"
     expected_classifier = {
         "memory_depth": 3,
@@ -845,9 +799,7 @@ class TestInitialFinalTransformedCooperator(TestPlayer):
 
 
 class TestFinalInitialTransformedCooperator(TestPlayer):
-    player = FinalTransformer([D, D])(
-        InitialTransformer([D, D, D])(axl.Cooperator)
-    )
+    player = FinalTransformer([D, D])(InitialTransformer([D, D, D])(axl.Cooperator))
     name = "Final Initial Cooperator: [D, D, D]: [D, D]"
     expected_classifier = {
         "memory_depth": 3,
@@ -959,9 +911,7 @@ class TestMixed0(TestDefector):
 
 
 class TestMixed1(TestDefector):
-    name = (
-        "Mutated Cooperator: 1, <class 'axelrod.strategies.defector.Defector'>"
-    )
+    name = "Mutated Cooperator: 1, <class 'axelrod.strategies.defector.Defector'>"
     player = MixedTransformer(1, axl.Defector)(axl.Cooperator)
     expected_classifier = {
         "memory_depth": 0,
@@ -1046,9 +996,7 @@ class TestJossAnnDual(TestPlayer):
 
 class TestJossAnnOverwriteClassifier(TestPlayer):
     name = "Joss-Ann Final Random: 0.5: [D, D]: (1.0, 0.0)"
-    player = JossAnnTransformer((1.0, 0.0))(
-        FinalTransformer([D, D])(axl.Random)
-    )
+    player = JossAnnTransformer((1., 0.))(FinalTransformer([D, D])(axl.Random))
     expected_classifier = {
         "memory_depth": 0,
         "stochastic": False,

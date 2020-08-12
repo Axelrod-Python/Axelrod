@@ -43,9 +43,7 @@ class TestGeller(TestPlayer):
         """Should cooperate against cooperators and defect against defectors."""
         self.versus_test(axl.Defector(), expected_actions=[(D, D)] * 5)
         self.versus_test(axl.Cooperator(), expected_actions=[(C, C)] * 5)
-        self.versus_test(
-            axl.Alternator(), expected_actions=[(C, C), (D, D)] * 5
-        )
+        self.versus_test(axl.Alternator(), expected_actions=[(C, C), (D, D)] * 5)
 
     def test_strategy_against_lookerup_players(self):
         """
@@ -66,9 +64,7 @@ class TestGeller(TestPlayer):
             seed=2,
         )
 
-        self.versus_test(
-            axl.Darwin(), expected_actions=[(C, C), (C, C), (C, C)], seed=3
-        )
+        self.versus_test(axl.Darwin(), expected_actions=[(C, C), (C, C), (C, C)], seed=3)
 
         self.versus_test(
             axl.MindReader(), expected_actions=[(D, D), (D, D), (D, D)], seed=1
@@ -95,13 +91,10 @@ class TestGellerCooperator(TestGeller):
 
     def test_returns_foil_inspection_strategy_of_opponent(self):
         self.versus_test(
-            axl.GellerDefector(),
-            expected_actions=[(D, C), (D, C), (D, C), (D, C)],
+            axl.GellerDefector(), expected_actions=[(D, C), (D, C), (D, C), (D, C)]
         )
 
-        self.versus_test(
-            axl.Darwin(), expected_actions=[(C, C), (C, C), (C, C)]
-        )
+        self.versus_test(axl.Darwin(), expected_actions=[(C, C), (C, C), (C, C)])
 
         self.versus_test(
             axl.MindReader(), expected_actions=[(D, D), (D, D), (D, D)]
@@ -129,13 +122,10 @@ class TestGellerDefector(TestGeller):
     def test_returns_foil_inspection_strategy_of_opponent(self):
 
         self.versus_test(
-            axl.GellerDefector(),
-            expected_actions=[(D, D), (D, D), (D, D), (D, D)],
+            axl.GellerDefector(), expected_actions=[(D, D), (D, D), (D, D), (D, D)]
         )
 
-        self.versus_test(
-            axl.Darwin(), expected_actions=[(C, C), (C, C), (C, C)]
-        )
+        self.versus_test(axl.Darwin(), expected_actions=[(C, C), (C, C), (C, C)])
 
         self.versus_test(
             axl.MindReader(), expected_actions=[(D, D), (D, D), (D, D)]

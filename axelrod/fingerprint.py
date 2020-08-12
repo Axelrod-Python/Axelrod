@@ -42,7 +42,7 @@ def _create_points(step: float, progress_bar: bool = True) -> List[Point]:
     num = int((1 / step) // 1) + 1
 
     if progress_bar:
-        p_bar = tqdm.tqdm(total=num ** 2, desc="Generating points")
+        p_bar = tqdm.tqdm(total=num**2, desc="Generating points")
 
     points = []
     for x in np.linspace(0, 1, num):
@@ -88,8 +88,8 @@ def _create_jossann(point: Point, probe: Any) -> Player:
 
     if x + y >= 1:
         joss_ann = DualTransformer()(
-            JossAnnTransformer((1 - x, 1 - y))(probe_class)
-        )(**init_kwargs)
+            JossAnnTransformer((1 - x, 1 - y))(
+                probe_class))(**init_kwargs)
     else:
         joss_ann = JossAnnTransformer((x, y))(probe_class)(**init_kwargs)
     return joss_ann
@@ -177,10 +177,7 @@ def _generate_data(interactions: dict, points: list, edges: list) -> dict:
     """
     edge_scores = [
         np.mean(
-            [
-                compute_final_score_per_turn(scores)[0]
-                for scores in interactions[edge]
-            ]
+            [compute_final_score_per_turn(scores)[0] for scores in interactions[edge]]
         )
         for edge in edges
     ]
@@ -218,9 +215,7 @@ def _reshape_data(data: dict, points: list, size: int) -> np.ndarray:
 
 class AshlockFingerprint(object):
     def __init__(
-        self,
-        strategy: Union[type, Player],
-        probe: Union[type, Player] = axl.TitForTat,
+        self, strategy: Union[type, Player], probe: Union[type, Player] = axl.TitForTat
     ) -> None:
         """
         Parameters
@@ -282,7 +277,7 @@ class AshlockFingerprint(object):
         processes: int = None,
         filename: str = None,
         progress_bar: bool = True,
-        seed: int = None,
+        seed: int = None
     ) -> dict:
         """Build and play the spatial tournament.
 
@@ -328,11 +323,8 @@ class AshlockFingerprint(object):
 
         self.step = step
         self.spatial_tournament = axl.Tournament(
-            tourn_players,
-            turns=turns,
-            repetitions=repetitions,
-            edges=edges,
-            seed=seed,
+            tourn_players, turns=turns, repetitions=repetitions, edges=edges,
+            seed=seed
         )
         self.spatial_tournament.play(
             build_results=False,
@@ -440,7 +432,7 @@ class TransitiveFingerprint(object):
         processes: int = None,
         filename: str = None,
         progress_bar: bool = True,
-        seed: int = None,
+        seed: int = None
     ) -> np.array:
         """Creates a spatial tournament to run the necessary matches to obtain
         fingerprint data.
@@ -487,7 +479,7 @@ class TransitiveFingerprint(object):
             turns=turns,
             noise=noise,
             repetitions=repetitions,
-            seed=seed,
+            seed=seed
         )
         tournament.play(
             filename=filename,
@@ -524,9 +516,7 @@ class TransitiveFingerprint(object):
             opponent in each turn. The ith row corresponds to the ith opponent
             and the jth column the jth turn.
         """
-        did_c = np.vectorize(
-            lambda actions: [int(action == "C") for action in actions]
-        )
+        did_c = np.vectorize(lambda actions: [int(action == "C") for action in actions])
 
         cooperation_rates = {}
         df = dd.read_csv(filename)
@@ -535,10 +525,7 @@ class TransitiveFingerprint(object):
         df = df[df["Player index"] == 0][["Opponent index", "Actions"]]
 
         for _, row in df.iterrows():
-            opponent_index, player_history = (
-                row["Opponent index"],
-                row["Actions"],
-            )
+            opponent_index, player_history = row["Opponent index"], row["Actions"]
             if opponent_index in cooperation_rates:
                 cooperation_rates[opponent_index].append(did_c(player_history))
             else:
@@ -603,8 +590,7 @@ class TransitiveFingerprint(object):
 
         if display_names:
             plt.yticks(
-                range(len(self.opponents)),
-                [str(player) for player in self.opponents],
+                range(len(self.opponents)), [str(player) for player in self.opponents]
             )
         else:
             plt.yticks([0, len(self.opponents) - 1], [0, 1])

@@ -11,7 +11,6 @@ class RandomGenerator(object):
     """Container around a random number generator.
     Enables reproducibility of player behavior, matches,
     and tournaments."""
-
     def __init__(self, seed: Optional[int] = None):
         # _random is the internal object that generators random values
         self._random = RandomState()
@@ -29,7 +28,7 @@ class RandomGenerator(object):
         return self._random.randint(*args, **kwargs)
 
     def random_seed_int(self) -> int:
-        return self.randint(low=0, high=2 ** 32 - 1, dtype="uint64")
+        return self.randint(low=0, high=2**32-1, dtype="uint64")
 
     def choice(self, *args, **kwargs):
         return self._random.choice(*args, **kwargs)
@@ -119,8 +118,7 @@ class BulkRandomGenerator(object):
     """Bulk generator of random integers for tournament seeding and
     reproducibility. Bulk generation of random values is more efficient.
     Use this class like a generator."""
-
-    def __init__(self, seed=None, batch_size: int = 1000):
+    def __init__(self, seed=None, batch_size:int = 1000):
         self._random_generator = RandomState()
         self._random_generator.seed(seed)
         self._ints = None
@@ -132,8 +130,10 @@ class BulkRandomGenerator(object):
         # Generate more random values. Store as a list since generators
         # cannot be pickled.
         self._ints = self._random_generator.randint(
-            low=0, high=2 ** 32 - 1, size=self._batch_size, dtype="uint64"
-        )
+            low=0,
+            high=2**32 - 1,
+            size=self._batch_size,
+            dtype="uint64")
         self._index = 0
 
     def __next__(self):

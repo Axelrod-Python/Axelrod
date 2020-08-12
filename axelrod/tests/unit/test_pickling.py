@@ -10,9 +10,7 @@ random = axl.RandomGenerator()
 
 # First set: special cases
 
-PointerToWrappedStrategy = axl.strategy_transformers.FlipTransformer()(
-    axl.strategy_transformers.FlipTransformer()(axl.Cooperator)
-)
+PointerToWrappedStrategy = axl.strategy_transformers.FlipTransformer()(axl.strategy_transformers.FlipTransformer()(axl.Cooperator))
 
 
 class MyDefector(axl.Player):
@@ -113,9 +111,7 @@ strategies = [axl.Grudger, axl.TitForTat]
 probability = [0.2, 0.3]
 
 
-@axl.strategy_transformers.MixedTransformer(
-    probability, strategies, name_prefix=None
-)
+@axl.strategy_transformers.MixedTransformer(probability, strategies, name_prefix=None)
 class Mixed(axl.Cooperator):
     pass
 
@@ -163,9 +159,7 @@ class MetaThue(axl.MetaPlayer):
         super().__init__(team=team)
 
 
-TransformedMetaThue = axl.strategy_transformers.IdentityTransformer(
-    name_prefix=None
-)(MetaThue)
+TransformedMetaThue = axl.strategy_transformers.IdentityTransformer(name_prefix=None)(MetaThue)
 
 
 transformed_no_prefix = [
@@ -239,24 +233,12 @@ class TestPickle(unittest.TestCase):
         self.assert_original_equals_pickled(player)
 
     def test_sequence_player(self):
-        inline_transformed_thue = axl.strategy_transformers.IdentityTransformer(
-            name_prefix="Transformed"
-        )(axl.ThueMorse)()
-        for player in [
-            axl.ThueMorse(),
-            axl.ThueMorseInverse(),
-            MetaThue(),
-            TransformedMetaThue(),
-            inline_transformed_thue,
-            TransformedThue(),
-        ]:
+        inline_transformed_thue = axl.strategy_transformers.IdentityTransformer(name_prefix="Transformed")(axl.ThueMorse)()
+        for player in [axl.ThueMorse(), axl.ThueMorseInverse(), MetaThue(), TransformedMetaThue(),
+                       inline_transformed_thue, TransformedThue(),
+                       ]:
             self.assert_equals_instance_from_pickling(player)
-            opponents = (
-                axl.Defector,
-                axl.Cooperator,
-                axl.Random,
-                axl.CyclerCCCDCD,
-            )
+            opponents = (axl.Defector, axl.Cooperator, axl.Random, axl.CyclerCCCDCD)
             for opponent_class in opponents:
                 player.reset()
                 opponent = opponent_class()
@@ -289,13 +271,9 @@ class TestPickle(unittest.TestCase):
                 self.assert_original_equals_pickled(player)
 
     def test_created_on_the_spot_multiple_transformers(self):
-        player_class = axl.strategy_transformers.FlipTransformer()(
-            axl.Cooperator
-        )
+        player_class = axl.strategy_transformers.FlipTransformer()(axl.Cooperator)
         player_class = axl.strategy_transformers.DualTransformer()(player_class)
-        player = axl.strategy_transformers.FinalTransformer((C, D))(
-            player_class
-        )()
+        player = axl.strategy_transformers.FinalTransformer((C, D))(player_class)()
 
         self.assert_original_equals_pickled(player)
 
@@ -312,13 +290,9 @@ class TestPickle(unittest.TestCase):
 
         player_class = axl.WinStayLoseShift
         player_class = axl.strategy_transformers.DualTransformer()(player_class)
-        player_class = axl.strategy_transformers.InitialTransformer((C, D))(
-            player_class
-        )
+        player_class = axl.strategy_transformers.InitialTransformer((C, D))(player_class)
         player_class = axl.strategy_transformers.DualTransformer()(player_class)
-        player_class = axl.strategy_transformers.TrackHistoryTransformer()(
-            player_class
-        )
+        player_class = axl.strategy_transformers.TrackHistoryTransformer()(player_class)
 
         interspersed_dual_transformers = player_class()
 
@@ -340,8 +314,7 @@ class TestPickle(unittest.TestCase):
         player = MyCooperator()
         class_names = [class_.__name__ for class_ in MyCooperator.mro()]
         self.assertEqual(
-            class_names,
-            ["FlippedMyCooperator", "MyCooperator", "Player", "object"],
+            class_names, ["FlippedMyCooperator", "MyCooperator", "Player", "object"]
         )
 
         self.assert_original_equals_pickled(player)
@@ -401,23 +374,17 @@ class TestPickle(unittest.TestCase):
         self.assertEqual(no_prefix.__class__.__name__, "Flip")
         self.assert_original_equals_pickled(no_prefix)
 
-        default_prefix = axl.strategy_transformers.FlipTransformer()(
-            axl.Cooperator
-        )()
+        default_prefix = axl.strategy_transformers.FlipTransformer()(axl.Cooperator)()
         self.assertEqual(default_prefix.__class__.__name__, "FlippedCooperator")
         self.assert_original_equals_pickled(default_prefix)
 
-        fliptastic = axl.strategy_transformers.FlipTransformer(
-            name_prefix="Fliptastic"
-        )
+        fliptastic = axl.strategy_transformers.FlipTransformer(name_prefix="Fliptastic")
         new_prefix = fliptastic(axl.Cooperator)()
         self.assertEqual(new_prefix.__class__.__name__, "FliptasticCooperator")
         self.assert_original_equals_pickled(new_prefix)
 
     def test_dynamic_class_no_name_prefix(self):
-        player = axl.strategy_transformers.FlipTransformer(name_prefix=None)(
-            axl.Cooperator
-        )()
+        player = axl.strategy_transformers.FlipTransformer(name_prefix=None)(axl.Cooperator)()
 
         self.assertEqual(player.__class__.__name__, "Cooperator")
         self.assert_original_equals_pickled(player)

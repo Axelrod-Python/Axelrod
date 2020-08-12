@@ -28,22 +28,10 @@ class TestInverse(TestPlayer):
 
         # Tests that if opponent has played all D then player chooses D,
         # regardless of the random seed.
-        self.versus_test(
-            axl.Defector(), expected_actions=[(C, D)] + [(D, D)] * 9, seed=None
-        )
+        self.versus_test(axl.Defector(), expected_actions=[(C, D)] + [(D, D)] * 9, seed=None)
 
-        expected_actions = [
-            (C, D),
-            (D, C),
-            (D, C),
-            (C, D),
-            (D, C),
-            (C, C),
-            (D, C),
-            (C, C),
-            (C, D),
-            (D, D),
-        ]
+        expected_actions = [(C, D), (D, C), (D, C), (C, D), (D, C), (C, C),
+                            (D, C), (C, C), (C, D), (D, D)]
         self.versus_test(
             axl.MockPlayer(actions=[a[1] for a in expected_actions]),
             expected_actions=expected_actions,

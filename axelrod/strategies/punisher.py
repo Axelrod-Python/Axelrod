@@ -51,9 +51,7 @@ class Punisher(Player):
             return D
 
         elif D in opponent.history[-1:]:
-            self.mem_length = (opponent.defections * 20) // len(
-                opponent.history
-            )
+            self.mem_length = (opponent.defections * 20) // len(opponent.history)
             self.grudged = True
             return D
 
@@ -103,9 +101,7 @@ class InversePunisher(Player):
             self.grudge_memory += 1
             return D
         elif D in opponent.history[-1:]:
-            self.mem_length = (opponent.cooperations * 20) // len(
-                opponent.history
-            )
+            self.mem_length = (opponent.cooperations * 20) // len(opponent.history)
             if self.mem_length == 0:
                 self.mem_length += 1
             self.grudged = True

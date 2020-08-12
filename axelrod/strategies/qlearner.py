@@ -65,9 +65,7 @@ class RiskyQLearner(Player):
         if state not in self.Qs:
             self.Qs[state] = OrderedDict(zip([C, D], [0, 0]))
             self.Vs[state] = 0
-        self.perform_q_learning(
-            self.prev_state, state, self.prev_action, reward
-        )
+        self.perform_q_learning(self.prev_state, state, self.prev_action, reward)
         action = self.select_action(state)
         self.prev_state = state
         self.prev_action = action
@@ -92,22 +90,16 @@ class RiskyQLearner(Player):
         action_str = actions_to_str(opponent.history[-self.memory_length :])
         return action_str + prob
 
-    def perform_q_learning(
-        self, prev_state: str, state: str, action: Action, reward
-    ):
+    def perform_q_learning(self, prev_state: str, state: str, action: Action, reward):
         """
         Performs the qlearning algorithm
         """
-        self.Qs[prev_state][action] = (1.0 - self.learning_rate) * self.Qs[
-            prev_state
-        ][action] + self.learning_rate * (
-            reward + self.discount_rate * self.Vs[state]
-        )
+        self.Qs[prev_state][action] = (1.0 - self.learning_rate) * self.Qs[prev_state][
+            action
+        ] + self.learning_rate * (reward + self.discount_rate * self.Vs[state])
         self.Vs[prev_state] = max(self.Qs[prev_state].values())
 
-    def find_reward(
-        self, opponent: Player
-    ) -> Dict[Action, Dict[Action, Score]]:
+    def find_reward(self, opponent: Player) -> Dict[Action, Dict[Action, Score]]:
         """
         Finds the reward gained on the last iteration
         """

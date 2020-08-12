@@ -98,7 +98,7 @@ class TestGetMemoryFromTransitions(unittest.TestCase):
             (1, C, 2, C),
             (1, D, 0, D),
             (2, C, 0, C),
-            (2, D, 2, D),
+            (2, D, 2, D)
         )
 
         trans_dict = self.transitions_to_dict(transitions)

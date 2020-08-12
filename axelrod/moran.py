@@ -28,7 +28,7 @@ class MoranProcess(object):
         fitness_transformation: Callable = None,
         mutation_method="transition",
         stop_on_fixation=True,
-        seed=None,
+        seed=None
     ) -> None:
         """
         An agent based Moran process class. In each round, each player plays a
@@ -93,9 +93,7 @@ class MoranProcess(object):
         if m in ["atomic", "transition"]:
             self.mutation_method = m
         else:
-            raise ValueError(
-                "Invalid mutation method {}".format(mutation_method)
-            )
+            raise ValueError("Invalid mutation method {}".format(mutation_method))
         assert (mutation_rate >= 0) and (mutation_rate <= 1)
         assert (noise >= 0) and (noise <= 1)
         mode = mode.lower()
@@ -129,9 +127,7 @@ class MoranProcess(object):
             d[str(p)] = p
         mutation_targets = dict()
         for key in sorted(keys):
-            mutation_targets[key] = [
-                v for (k, v) in sorted(d.items()) if k != key
-            ]
+            mutation_targets[key] = [v for (k, v) in sorted(d.items()) if k != key]
         self.mutation_targets = mutation_targets
 
         if interaction_graph is None:
@@ -150,18 +146,14 @@ class MoranProcess(object):
         self.fitness_transformation = fitness_transformation
         # Map players to graph vertices
         self.locations = sorted(interaction_graph.vertices)
-        self.index = dict(
-            zip(sorted(interaction_graph.vertices), range(len(players)))
-        )
+        self.index = dict(zip(sorted(interaction_graph.vertices), range(len(players))))
         self.fixated = self.fixation_check()
 
     def set_players(self) -> None:
         """Copy the initial players into the first population, setting seeds as needed."""
         self.players = []
         for player in self.initial_players:
-            if (self.mutation_method == "atomic") and issubclass(
-                player.__class__, EvolvablePlayer
-            ):
+            if (self.mutation_method == "atomic") and issubclass(player.__class__, EvolvablePlayer):
                 # For reproducibility, we generate random seeds for evolvable players.
                 seed = next(self._bulk_random)
                 new_player = player.create_new(seed=seed)
@@ -171,9 +163,8 @@ class MoranProcess(object):
                 self.players.append(player)
         self.populations = [self.population_distribution()]
 
-    def fitness_proportionate_selection(
-        self, scores: List, fitness_transformation: Callable = None
-    ) -> int:
+    def fitness_proportionate_selection(self,
+                                        scores: List, fitness_transformation: Callable = None) -> int:
         """Randomly selects an individual proportionally to score.
 
         Parameters
@@ -209,9 +200,7 @@ class MoranProcess(object):
 
         if self.mutation_method == "atomic":
             if not issubclass(self.players[index].__class__, EvolvablePlayer):
-                raise TypeError(
-                    "Player is not evolvable. Use a subclass of EvolvablePlayer."
-                )
+                raise TypeError("Player is not evolvable. Use a subclass of EvolvablePlayer.")
             return self.players[index].mutate()
 
         # Assuming mutation_method == "transition"
@@ -248,9 +237,7 @@ class MoranProcess(object):
             # Select locally
             # index is not None in this case
             vertex = self._random.choice(
-                sorted(
-                    self.reproduction_graph.out_vertices(self.locations[index])
-                )
+                sorted(self.reproduction_graph.out_vertices(self.locations[index]))
             )
             i = self.index[vertex]
         return i
@@ -383,7 +370,7 @@ class MoranProcess(object):
                 noise=self.noise,
                 game=self.game,
                 deterministic_cache=self.deterministic_cache,
-                seed=next(self._bulk_random),
+                seed=next(self._bulk_random)
             )
             match.play()
             match_scores = match.final_score_per_turn()
@@ -497,11 +484,8 @@ class ApproximateMoranProcess(MoranProcess):
     """
 
     def __init__(
-        self,
-        players: List[Player],
-        cached_outcomes: dict,
-        mutation_rate: float = 0,
-        seed: Optional[int] = None,
+        self, players: List[Player], cached_outcomes: dict, mutation_rate: float = 0,
+        seed: Optional[int] = None
     ) -> None:
         """
         Parameters
@@ -519,7 +503,7 @@ class ApproximateMoranProcess(MoranProcess):
             noise=0,
             deterministic_cache=None,
             mutation_rate=mutation_rate,
-            seed=seed,
+            seed=seed
         )
         self.cached_outcomes = cached_outcomes
 
@@ -545,9 +529,7 @@ class ApproximateMoranProcess(MoranProcess):
         scores = [0] * N
         for i in range(N):
             for j in range(i + 1, N):
-                player_names = tuple(
-                    [str(self.players[i]), str(self.players[j])]
-                )
+                player_names = tuple([str(self.players[i]), str(self.players[j])])
                 cached_score = self._get_scores_from_cache(player_names)
                 scores[i] += cached_score[0]
                 scores[j] += cached_score[1]

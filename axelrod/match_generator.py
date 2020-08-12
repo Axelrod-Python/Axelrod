@@ -12,7 +12,7 @@ class MatchGenerator(object):
         prob_end=None,
         edges=None,
         match_attributes=None,
-        seed=None,
+        seed=None
     ):
         """
         A class to generate matches. This is used by the Tournament class which

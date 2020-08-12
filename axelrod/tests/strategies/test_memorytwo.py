@@ -80,7 +80,9 @@ class TestMemoryTwoPlayer(unittest.TestCase):
 
 
 class TestMemoryStochastic(TestPlayer):
-    name = "Generic Memory Two Player"
+    name = (
+        "Generic Memory Two Player"
+    )
     player = axl.MemoryTwoPlayer
     expected_classifier = {
         "memory_depth": 0,  # Memory-two Sixteen-Vector
@@ -154,9 +156,7 @@ class TestAON2(TestPlayer):
 
         # tests states 3, 5 and 12
         actions = [(C, D), (C, C), (D, C), (D, D), (D, D), (C, D)]
-        self.versus_test(
-            opponent=axl.SuspiciousTitForTat(), expected_actions=actions
-        )
+        self.versus_test(opponent=axl.SuspiciousTitForTat(), expected_actions=actions)
 
         # tests state 1
         actions = [(C, C), (C, C), (C, C), (C, C)]
@@ -189,15 +189,12 @@ class TestDelayedAON1(TestPlayer):
         # tests states 1, 4 and 8
         actions = [(C, D), (C, D), (D, D), (C, C), (C, C), (C, D)]
         self.versus_test(
-            opponent=axl.Cycler(["D", "D", "D", "C", "C"]),
-            expected_actions=actions,
+            opponent=axl.Cycler(["D", "D", "D", "C", "C"]), expected_actions=actions
         )
 
         # tests states 3, 5
         actions = [(C, D), (C, C), (D, C), (D, D), (C, D)]
-        self.versus_test(
-            opponent=axl.SuspiciousTitForTat(), expected_actions=actions
-        )
+        self.versus_test(opponent=axl.SuspiciousTitForTat(), expected_actions=actions)
 
 
 class TestMEM2(TestPlayer):
@@ -259,11 +256,8 @@ class TestMEM2(TestPlayer):
 
 class TestMemoryTwoCooperator(TestCooperator):
     """Cooperator is equivalent to MemoryTwoPlayer((1, 1, ..., 1), C)"""
-
     name = "Generic Memory Two Player: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], (C, C)"
-    player = lambda x: axl.MemoryTwoPlayer(
-        sixteen_vector=[1] * 16, initial=(C, C)
-    )
+    player = lambda x: axl.MemoryTwoPlayer(sixteen_vector=[1] * 16, initial=(C, C))
     expected_classifier = {
         "memory_depth": 0,
         "stochastic": False,
@@ -277,11 +271,8 @@ class TestMemoryTwoCooperator(TestCooperator):
 
 class TestMemoryTwoDefector(TestDefector):
     """Defector is equivalent to MemoryTwoPlayer((0, 0, ..., 0), D)"""
-
     name = "Generic Memory Two Player: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], (D, D)"
-    player = lambda x: axl.MemoryTwoPlayer(
-        sixteen_vector=[0] * 16, initial=(D, D)
-    )
+    player = lambda x: axl.MemoryTwoPlayer(sixteen_vector=[0] * 16, initial=(D, D))
     expected_classifier = {
         "memory_depth": 0,
         "stochastic": False,
@@ -301,12 +292,8 @@ def four_vector_to_sixteen_vector(four_vector):
 
 class TestMemoryTwoAlternator(TestAlternator):
     """Alternator is equivalent to MemoryTwoPlayer(0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1), C)."""
-
     name = "Generic Memory Two Player: [0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1], (C, D)"
-    player = lambda x: axl.MemoryTwoPlayer(
-        sixteen_vector=four_vector_to_sixteen_vector((0, 0, 1, 1)),
-        initial=(C, D),
-    )
+    player = lambda x: axl.MemoryTwoPlayer(sixteen_vector=four_vector_to_sixteen_vector((0, 0, 1, 1)), initial=(C, D))
     expected_classifier = {
         "memory_depth": 1,
         "stochastic": False,

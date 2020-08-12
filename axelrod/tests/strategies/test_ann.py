@@ -18,7 +18,6 @@ class TestSplitWeights(unittest.TestCase):
     def test_split_weights(self):
         with self.assertRaises(ValueError):
             split_weights([0] * 20, 12, 10)
-
     # Doesn't Raise
     split_weights([0] * 70, 5, 10)
     split_weights([0] * 12, 10, 1)
@@ -131,7 +130,7 @@ class TestEvolvableANN3(TestEvolvablePlayer):
     init_parameters = {
         "num_features": nn_weights["Evolved ANN 5"][0],
         "num_hidden": nn_weights["Evolved ANN 5"][1],
-        "weights": nn_weights["Evolved ANN 5"][2],
+        "weights": nn_weights["Evolved ANN 5"][2]
     }
 
 
@@ -140,7 +139,7 @@ EvolvableANNPlayerWithDefault = PartialClass(
     axl.EvolvableANN,
     num_features=num_features,
     num_hidden=num_hidden,
-    weights=weights,
+    weights=weights
 )
 
 

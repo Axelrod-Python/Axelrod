@@ -62,10 +62,7 @@ class BushMosteller(Player):
         self._c_prob, self._d_prob = c_prob, d_prob
         self._init_c_prob, self._init_d_prob = c_prob, d_prob
         self._aspiration_level = abs(
-            (
-                max(self.match_attributes["game"].RPST())
-                / aspiration_level_divider
-            )
+            (max(self.match_attributes["game"].RPST()) / aspiration_level_divider)
         )
 
         self._stimulus = 0.0
@@ -107,9 +104,7 @@ class BushMosteller(Player):
                 )
 
             elif self._stimulus < 0:
-                self._c_prob += (
-                    self._learning_rate * self._stimulus * self._c_prob
-                )
+                self._c_prob += self._learning_rate * self._stimulus * self._c_prob
 
         # Updates probability following previous choice D
         if self.history[-1] == D:
@@ -119,21 +114,15 @@ class BushMosteller(Player):
                 )
 
             elif self._stimulus < 0:
-                self._d_prob += (
-                    self._learning_rate * self._stimulus * self._d_prob
-                )
+                self._d_prob += self._learning_rate * self._stimulus * self._d_prob
 
     def strategy(self, opponent: Player) -> Action:
 
         # First turn
         if len(self.history) == 0:
-            return self._random.random_choice(
-                self._c_prob / (self._c_prob + self._d_prob)
-            )
+            return self._random.random_choice(self._c_prob / (self._c_prob + self._d_prob))
 
         # Updating stimulus depending on his own latest choice
         self.stimulus_update(opponent)
 
-        return self._random.random_choice(
-            self._c_prob / (self._c_prob + self._d_prob)
-        )
+        return self._random.random_choice(self._c_prob / (self._c_prob + self._d_prob))

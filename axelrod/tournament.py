@@ -33,7 +33,7 @@ class Tournament(object):
         noise: float = 0,
         edges: List[Tuple] = None,
         match_attributes: dict = None,
-        seed: int = None,
+        seed: int = None
     ) -> None:
         """
         Parameters
@@ -87,7 +87,7 @@ class Tournament(object):
             noise=self.noise,
             edges=edges,
             match_attributes=match_attributes,
-            seed=self.seed,
+            seed=self.seed
         )
         self._logger = logging.getLogger(__name__)
 
@@ -232,9 +232,7 @@ class Tournament(object):
 
     def _get_progress_bar(self):
         if self.use_progress_bar:
-            return tqdm.tqdm(
-                total=self.match_generator.size, desc="Playing matches"
-            )
+            return tqdm.tqdm(total=self.match_generator.size, desc="Playing matches")
         return None
 
     def _write_interactions_to_file(self, results, writer):
@@ -258,14 +256,8 @@ class Tournament(object):
                     ) = results
                 for index, player_index in enumerate(index_pair):
                     opponent_index = index_pair[index - 1]
-                    row = [
-                        self.num_interactions,
-                        player_index,
-                        opponent_index,
-                        repetition,
-                        str(self.players[player_index]),
-                        str(self.players[opponent_index]),
-                    ]
+                    row = [self.num_interactions, player_index, opponent_index, repetition,
+                           str(self.players[player_index]), str(self.players[opponent_index])]
                     history = actions_to_str([i[index] for i in interaction])
                     row.append(history)
 
@@ -285,24 +277,16 @@ class Tournament(object):
                         for state in states:
                             row.append(state_distribution[state])
                         for state in states:
-                            row.append(
-                                state_to_action_distributions[index][(state, C)]
-                            )
-                            row.append(
-                                state_to_action_distributions[index][(state, D)]
-                            )
+                            row.append(state_to_action_distributions[index][(state, C)])
+                            row.append(state_to_action_distributions[index][(state, D)])
 
-                        row.append(
-                            int(cooperations[index] >= cooperations[index - 1])
-                        )
+                        row.append(int(cooperations[index] >= cooperations[index - 1]))
 
                     writer.writerow(row)
                 repetition += 1
                 self.num_interactions += 1
 
-    def _run_parallel(
-        self, processes: int = 2, build_results: bool = True
-    ) -> bool:
+    def _run_parallel(self, processes: int = 2, build_results: bool = True) -> bool:
         """
         Run all matches in parallel
 
@@ -365,8 +349,7 @@ class Tournament(object):
         """
         for worker in range(workers):
             process = Process(
-                target=self._worker,
-                args=(work_queue, done_queue, build_results),
+                target=self._worker, args=(work_queue, done_queue, build_results)
             )
             work_queue.put("STOP")
             process.start()
@@ -404,9 +387,7 @@ class Tournament(object):
         _close_objects(out_file, progress_bar)
         return True
 
-    def _worker(
-        self, work_queue: Queue, done_queue: Queue, build_results: bool = True
-    ):
+    def _worker(self, work_queue: Queue, done_queue: Queue, build_results: bool = True):
         """
         The work for each parallel sub-process to execute.
 
@@ -474,17 +455,13 @@ class Tournament(object):
         turns = len(interactions)
         results.append(turns)
 
-        score_per_turns = iu.compute_final_score_per_turn(
-            interactions, self.game
-        )
+        score_per_turns = iu.compute_final_score_per_turn(interactions, self.game)
         results.append(score_per_turns)
 
         score_diffs_per_turns = score_diffs[0] / turns, score_diffs[1] / turns
         results.append(score_diffs_per_turns)
 
-        initial_coops = tuple(
-            map(bool, iu.compute_cooperations(interactions[:1]))
-        )
+        initial_coops = tuple(map(bool, iu.compute_cooperations(interactions[:1])))
         results.append(initial_coops)
 
         cooperations = iu.compute_cooperations(interactions)

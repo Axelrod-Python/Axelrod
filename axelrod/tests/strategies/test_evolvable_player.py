@@ -3,11 +3,7 @@ import unittest
 
 import axelrod as axl
 from axelrod.action import Action
-from axelrod.evolvable_player import (
-    copy_lists,
-    crossover_dictionaries,
-    crossover_lists,
-)
+from axelrod.evolvable_player import copy_lists, crossover_dictionaries, crossover_lists
 
 from .test_player import TestPlayer
 
@@ -21,7 +17,8 @@ def PartialClass(cls, **kwargs):
             seed = kwargs["seed"]
         except KeyError:
             kwargs["seed"] = 1
-        __init__ = functools.partialmethod(cls.__init__, **kwargs)
+        __init__ = functools.partialmethod(
+            cls.__init__, **kwargs)
 
     return PartialedClass
 
@@ -48,9 +45,7 @@ class EvolvableTestOpponent(axl.EvolvablePlayer):
 
     def crossover(self, other):
         if other.__class__ != self.__class__:
-            raise TypeError(
-                "Crossover must be between the same player classes."
-            )
+            raise TypeError("Crossover must be between the same player classes.")
         value = self.value + other.value
         return EvolvableTestOpponent(value)
 
@@ -130,11 +125,7 @@ class TestEvolvablePlayer(TestPlayer):
                 players.append(player)
             player1, player2 = players
             crossed = player1.crossover(player2)
-            if (
-                player1 != crossed
-                and player2 != crossed
-                and crossed == crossed.clone()
-            ):
+            if player1 != crossed and player2 != crossed and crossed == crossed.clone():
                 return
         # Should never get here unless a change breaks the test, so don't include in coverage.
         self.assertFalse(True)  # pragma: no cover
@@ -149,9 +140,7 @@ class TestEvolvablePlayer(TestPlayer):
         """Serializing and deserializing should return the original player."""
         player = self.player(seed=1)
         serialized = player.serialize_parameters()
-        deserialized_player = player.__class__.deserialize_parameters(
-            serialized
-        )
+        deserialized_player = player.__class__.deserialize_parameters(serialized)
         self.assertEqual(player, deserialized_player)
         self.assertEqual(deserialized_player, deserialized_player.clone())
 
@@ -160,7 +149,7 @@ class TestEvolvablePlayer(TestPlayer):
         player = self.player(seed=1)
         serialized = player.serialize_parameters()
         s = "0, 1, {}, 3".format(serialized)
-        s2 = s.split(",")[2]
+        s2 = s.split(',')[2]
         deserialized_player = player.__class__.deserialize_parameters(s2)
         self.assertEqual(player, deserialized_player)
         self.assertEqual(deserialized_player, deserialized_player.clone())
@@ -189,9 +178,7 @@ class TestEvolvablePlayer(TestPlayer):
         self.behavior_test(player, parent_player)
 
         serialized = player.serialize_parameters()
-        deserialized_player = player.__class__.deserialize_parameters(
-            serialized
-        )
+        deserialized_player = player.__class__.deserialize_parameters(serialized)
         self.behavior_test(deserialized_player, parent_player)
 
     def test_seed_propagation(self):
@@ -215,6 +202,7 @@ class TestEvolvablePlayer(TestPlayer):
 
 
 class TestUtilityFunctions(unittest.TestCase):
+
     def test_copy_lists(self):
         l1 = [list(range(10)), list(range(20))]
         l2 = copy_lists(l1)
@@ -233,12 +221,12 @@ class TestUtilityFunctions(unittest.TestCase):
         self.assertEqual(crossed, list1[:1] + list2[1:])
 
     def test_crossover_dictionaries(self):
-        dict1 = {"1": 1, "2": 2, "3": 3}
-        dict2 = {"1": "a", "2": "b", "3": "c"}
+        dict1 = {'1': 1, '2': 2, '3': 3}
+        dict2 = {'1': 'a', '2': 'b', '3': 'c'}
 
         rng = axl.RandomGenerator(seed=1)
         crossed = crossover_dictionaries(dict1, dict2, rng)
-        self.assertEqual(crossed, {"1": 1, "2": "b", "3": "c"})
+        self.assertEqual(crossed, {'1': 1, '2': 'b', '3': 'c'})
 
         rng = axl.RandomGenerator(seed=2)
         crossed = crossover_dictionaries(dict1, dict2, rng)

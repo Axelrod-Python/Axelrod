@@ -23,21 +23,16 @@ class TestMoranProcess(unittest.TestCase):
         self.assertEqual(mp.noise, 0)
         self.assertEqual(mp.initial_players, players)
         self.assertEqual(mp.players, list(players))
-        self.assertEqual(
-            mp.populations, [Counter({"Cooperator": 1, "Defector": 1})]
-        )
+        self.assertEqual(mp.populations, [Counter({"Cooperator": 1, "Defector": 1})])
         self.assertIsNone(mp.winning_strategy_name)
         self.assertEqual(mp.mutation_rate, 0)
         self.assertEqual(mp.mode, "bd")
         self.assertEqual(mp.deterministic_cache, axl.DeterministicCache())
         self.assertEqual(
-            mp.mutation_targets,
-            {"Cooperator": [players[1]], "Defector": [players[0]]},
+            mp.mutation_targets, {"Cooperator": [players[1]], "Defector": [players[0]]}
         )
         self.assertEqual(mp.interaction_graph._edges, [(0, 1), (1, 0)])
-        self.assertEqual(
-            mp.reproduction_graph._edges, [(0, 1), (1, 0), (0, 0), (1, 1)]
-        )
+        self.assertEqual(mp.reproduction_graph._edges, [(0, 1), (1, 0), (0, 0), (1, 1)])
         self.assertEqual(mp.fitness_transformation, None)
         self.assertEqual(mp.locations, [0, 1])
         self.assertEqual(mp.index, {0: 0, 1: 1})
@@ -53,9 +48,7 @@ class TestMoranProcess(unittest.TestCase):
             sorted([(0, 1), (2, 0), (1, 2), (0, 0), (1, 1), (2, 2)]),
         )
 
-        mp = axl.MoranProcess(
-            players, interaction_graph=graph, reproduction_graph=graph
-        )
+        mp = axl.MoranProcess(players, interaction_graph=graph, reproduction_graph=graph)
         self.assertEqual(mp.interaction_graph._edges, [(0, 1), (2, 0), (1, 2)])
         self.assertEqual(mp.reproduction_graph._edges, [(0, 1), (2, 0), (1, 2)])
 
@@ -232,12 +225,8 @@ class TestMoranProcess(unittest.TestCase):
 
     def test_two_players_with_mutation(self):
         p1, p2 = axl.Cooperator(), axl.Defector()
-        mp = MoranProcess(
-            (p1, p2), mutation_rate=0.2, stop_on_fixation=False, seed=5
-        )
-        self.assertDictEqual(
-            mp.mutation_targets, {str(p1): [p2], str(p2): [p1]}
-        )
+        mp = MoranProcess((p1, p2), mutation_rate=0.2, stop_on_fixation=False, seed=5)
+        self.assertDictEqual(mp.mutation_targets, {str(p1): [p2], str(p2): [p1]})
         # Test that mutation causes the population to alternate between
         # fixations
         counters = [
@@ -273,9 +262,7 @@ class TestMoranProcess(unittest.TestCase):
         p2 = axl.Random()
         p3 = axl.Defector()
         players = [p1, p2, p3]
-        mp = axl.MoranProcess(
-            players, mutation_rate=0.2, stop_on_fixation=False
-        )
+        mp = axl.MoranProcess(players, mutation_rate=0.2, stop_on_fixation=False)
         self.assertDictEqual(
             mp.mutation_targets,
             {str(p1): [p3, p2], str(p2): [p1, p3], str(p3): [p1, p2]},
@@ -386,61 +373,49 @@ class TestMoranProcess(unittest.TestCase):
         w = 0.95
         fitness_transformation = lambda score: 1 - w + w * score
         mp = MoranProcess(
-            players,
-            turns=10,
-            fitness_transformation=fitness_transformation,
-            seed=3419,
+            players, turns=10, fitness_transformation=fitness_transformation,
+            seed=3419
         )
         populations = mp.play()
         self.assertEqual(mp.winning_strategy_name, "Cooperator")
 
     def test_atomic_mutation_fsm(self):
-        players = [
-            axl.EvolvableFSMPlayer(
-                num_states=2, initial_state=1, initial_action=C, seed=4
-            )
-            for _ in range(5)
-        ]
+        players = [axl.EvolvableFSMPlayer(num_states=2, initial_state=1, initial_action=C,
+                                          seed=4)
+                   for _ in range(5)]
         mp = MoranProcess(players, turns=10, mutation_method="atomic", seed=12)
         rounds = 10
         for _ in range(rounds):
             next(mp)
         self.assertEqual(
             list(sorted(mp.populations[-1].items()))[0][0],
-            "EvolvableFSMPlayer: ((0, C, 0, C), (0, D, 1, C), (1, C, 1, D), (1, D, 1, D)), 0, D, 2, 0.1, 2240802643",
-        )
+            'EvolvableFSMPlayer: ((0, C, 0, C), (0, D, 1, C), (1, C, 1, D), (1, D, 1, D)), 0, D, 2, 0.1, 2240802643')
         self.assertEqual(len(mp.populations), 11)
         self.assertFalse(mp.fixated)
 
     def test_atomic_mutation_cycler(self):
         cycle_length = 5
-        players = [
-            axl.EvolvableCycler(cycle_length=cycle_length, seed=4)
-            for _ in range(5)
-        ]
+        players = [axl.EvolvableCycler(cycle_length=cycle_length, seed=4)
+                   for _ in range(5)]
         mp = MoranProcess(players, turns=10, mutation_method="atomic", seed=10)
         rounds = 10
         for _ in range(rounds):
             next(mp)
         self.assertEqual(
             list(mp.populations[-1].items())[0],
-            ("EvolvableCycler: CCDDD, 5, 0.2, 1, 1164244177", 1),
-        )
+            ('EvolvableCycler: CCDDD, 5, 0.2, 1, 1164244177', 1))
         self.assertEqual(len(mp.populations), 11)
         self.assertFalse(mp.fixated)
 
     def test_mutation_method_exceptions(self):
         cycle_length = 5
-        players = [
-            axl.EvolvableCycler(cycle_length=cycle_length, seed=4)
-            for _ in range(5)
-        ]
+        players = [axl.EvolvableCycler(cycle_length=cycle_length, seed=4)
+                   for _ in range(5)]
         with self.assertRaises(ValueError):
             MoranProcess(players, turns=10, mutation_method="random", seed=10)
 
-        players = [
-            axl.Cycler(cycle="CD" * random.randint(2, 10)) for _ in range(10)
-        ]
+        players = [axl.Cycler(cycle="CD" * random.randint(2, 10))
+                   for _ in range(10)]
         mp = MoranProcess(players, turns=10, mutation_method="atomic", seed=53)
         with self.assertRaises(TypeError):
             for _ in range(10):
@@ -467,12 +442,9 @@ class GraphMoranProcess(unittest.TestCase):
             mp = MoranProcess(players, seed=seed)
             mp.play()
             winner = mp.winning_strategy_name
-            mp = MoranProcess(
-                players,
-                interaction_graph=interaction_graph,
-                reproduction_graph=reproduction_graph,
-                seed=seed,
-            )
+            mp = MoranProcess(players, interaction_graph=interaction_graph,
+                              reproduction_graph=reproduction_graph,
+                              seed=seed)
             mp.play()
             winner2 = mp.winning_strategy_name
             self.assertEqual(winner, winner2)
@@ -511,18 +483,14 @@ class GraphMoranProcess(unittest.TestCase):
             players.append(axl.Defector())
         for seed, outcome in seeds:
             mp = MoranProcess(
-                players,
-                interaction_graph=graph1,
-                reproduction_graph=graph2,
-                seed=seed,
+                players, interaction_graph=graph1, reproduction_graph=graph2,
+                seed=seed
             )
             mp.play()
             winner = mp.winning_strategy_name
             mp = MoranProcess(
-                players,
-                interaction_graph=graph2,
-                reproduction_graph=graph1,
-                seed=seed,
+                players, interaction_graph=graph2, reproduction_graph=graph1,
+                seed=seed
             )
             mp.play()
             winner2 = mp.winning_strategy_name
@@ -540,14 +508,10 @@ class GraphMoranProcess(unittest.TestCase):
         for _ in range(N // 2):
             players.append(axl.Defector())
         for seed, outcome in seeds:
-            mp = MoranProcess(
-                players, interaction_graph=graph, mode="bd", seed=seed
-            )
+            mp = MoranProcess(players, interaction_graph=graph, mode="bd", seed=seed)
             mp.play()
             winner = mp.winning_strategy_name
-            mp = MoranProcess(
-                players, interaction_graph=graph, mode="db", seed=seed
-            )
+            mp = MoranProcess(players, interaction_graph=graph, mode="db", seed=seed)
             mp.play()
             winner2 = mp.winning_strategy_name
             self.assertEqual((winner == winner2), outcome)
@@ -577,11 +541,7 @@ class TestApproximateMoranProcess(unittest.TestCase):
         """Test the initialisation process"""
         self.assertEqual(
             set(self.amp.cached_outcomes.keys()),
-            {
-                ("Cooperator", "Defector"),
-                ("Cooperator", "Cooperator"),
-                ("Defector", "Defector"),
-            },
+            {("Cooperator", "Defector"), ("Cooperator", "Cooperator"), ("Defector", "Defector")},
         )
         self.assertEqual(self.amp.players, self.players)
         self.assertEqual(self.amp.turns, 0)
