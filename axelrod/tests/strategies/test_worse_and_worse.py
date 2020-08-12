@@ -101,7 +101,8 @@ class TestWorseAndWorse2(TestPlayer):
     def test_strategy2(self):
         actions = [(C, C), (C, C), (C, D), (D, C)]
         self.versus_test(
-            opponent=axl.MockPlayer(actions=[C, C, D, C]), expected_actions=actions
+            opponent=axl.MockPlayer(actions=[C, C, D, C]),
+            expected_actions=actions,
         )
 
     def test_strategy3(self):

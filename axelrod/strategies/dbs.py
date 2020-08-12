@@ -266,7 +266,9 @@ class DBS(Player):
             if r_minus_in_Rd:
                 self.v += 1
             # If the number of violations is superior to a threshold, clean Rd.
-            if (self.v > self.reject_threshold) or (r_plus_in_Rc and r_minus_in_Rd):
+            if (self.v > self.reject_threshold) or (
+                r_plus_in_Rc and r_minus_in_Rd
+            ):
                 self.Rd.clear()
                 self.v = 0
 
@@ -274,7 +276,9 @@ class DBS(Player):
             Rp = {}
             all_cond = [(C, C), (C, D), (D, C), (D, D)]
             for outcome in all_cond:
-                if (outcome not in self.Rc.keys()) and (outcome not in self.Rd.keys()):
+                if (outcome not in self.Rc.keys()) and (
+                    outcome not in self.Rd.keys()
+                ):
                     # Compute opponent's C answer probability.
                     Rp[outcome] = self.compute_prob_rule(outcome, self.alpha)
 
@@ -327,8 +331,12 @@ class StochasticNode(Node):
         siblings which are DeterministicNodes, their depth is equal to current
         node depth's + 1.
         """
-        opponent_c_choice = DeterministicNode(self.own_action, C, self.depth + 1)
-        opponent_d_choice = DeterministicNode(self.own_action, D, self.depth + 1)
+        opponent_c_choice = DeterministicNode(
+            self.own_action, C, self.depth + 1
+        )
+        opponent_d_choice = DeterministicNode(
+            self.own_action, D, self.depth + 1
+        )
         return opponent_c_choice, opponent_d_choice
 
     def is_stochastic(self):
@@ -354,8 +362,12 @@ class DeterministicNode(Node):
         of the same depth as the current node. Their probabilities pC are
         defined by the policy argument.
         """
-        c_choice = StochasticNode(C, policy[(self.action1, self.action2)], self.depth)
-        d_choice = StochasticNode(D, policy[(self.action1, self.action2)], self.depth)
+        c_choice = StochasticNode(
+            C, policy[(self.action1, self.action2)], self.depth
+        )
+        d_choice = StochasticNode(
+            D, policy[(self.action1, self.action2)], self.depth
+        )
         return c_choice, d_choice
 
     def is_stochastic(self):
@@ -401,7 +413,9 @@ def minimax_tree_search(begin_node, policy, max_depth):
         # The stochastic node value is the expected value of siblings.
         node_value = begin_node.pC * minimax_tree_search(
             siblings[0], policy, max_depth
-        ) + (1 - begin_node.pC) * minimax_tree_search(siblings[1], policy, max_depth)
+        ) + (1 - begin_node.pC) * minimax_tree_search(
+            siblings[1], policy, max_depth
+        )
         return node_value
     else:  # Deterministic node
         if begin_node.depth == max_depth:
@@ -433,7 +447,9 @@ def move_gen(outcome, policy, depth_search_tree=5):
     using tree-search procedure.
     """
     current_node = DeterministicNode(outcome[0], outcome[1], depth=0)
-    values_of_choices = minimax_tree_search(current_node, policy, depth_search_tree)
+    values_of_choices = minimax_tree_search(
+        current_node, policy, depth_search_tree
+    )
     # Returns the Action which correspond to the best choice in terms of
     # expected value. In case value(C) == value(D), returns C.
     actions_tuple = (C, D)

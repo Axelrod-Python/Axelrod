@@ -155,15 +155,24 @@ def passes_filterset(strategy, filterset):
         ),
         "manipulates_state": FilterFunction(
             function=passes_operator_filter,
-            kwargs={"classifier_key": "manipulates_state", "operator": operator.eq},
+            kwargs={
+                "classifier_key": "manipulates_state",
+                "operator": operator.eq,
+            },
         ),
         "manipulates_source": FilterFunction(
             function=passes_operator_filter,
-            kwargs={"classifier_key": "manipulates_source", "operator": operator.eq},
+            kwargs={
+                "classifier_key": "manipulates_source",
+                "operator": operator.eq,
+            },
         ),
         "inspects_source": FilterFunction(
             function=passes_operator_filter,
-            kwargs={"classifier_key": "inspects_source", "operator": operator.eq},
+            kwargs={
+                "classifier_key": "inspects_source",
+                "operator": operator.eq,
+            },
         ),
         "memory_depth": FilterFunction(
             function=passes_operator_filter,
@@ -178,7 +187,8 @@ def passes_filterset(strategy, filterset):
             kwargs={"classifier_key": "memory_depth", "operator": operator.le},
         ),
         "makes_use_of": FilterFunction(
-            function=passes_in_list_filter, kwargs={"classifier_key": "makes_use_of"}
+            function=passes_in_list_filter,
+            kwargs={"classifier_key": "makes_use_of"},
         ),
     }
 
