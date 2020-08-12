@@ -10,6 +10,7 @@ Contents:
    :maxdepth: 2
 
    guidelines.rst
+   setting_up_the_environment.rst
    strategy/index.rst
    library/index.rst
    running_tests.rst
