@@ -732,13 +732,19 @@ class TestTournament(unittest.TestCase):
         self.assertTrue(df.equals(expected_df))
 
     @given(seed=integers(min_value=1, max_value=4294967295))
+    @example(seed=2)
     @settings(max_examples=5, deadline=None)
     def test_seeding_equality(self, seed):
         """Tests that a tournament with a given seed will return the
         same results each time. This specifically checks when running using
         multiple cores so as to confirm that
         https://github.com/Axelrod-Python/Axelrod/issues/1277
-        is fixed."""
+        is fixed.
+
+        Note that the final asserts test only specific properties of the results
+        sets and not the entire result sets as some floating point errors can
+        emerge.
+        """
         rng = axl.RandomGenerator(seed=seed)
         players = [axl.Random(rng.random()) for _ in range(8)]
         tournament1 = axl.Tournament(
@@ -758,9 +764,12 @@ class TestTournament(unittest.TestCase):
             seed=seed
         )
         for _ in range(4):
-            results1 = tournament1.play(processes=2)
-            results2 = tournament2.play(processes=2)
-            self.assertEqual(results1.ranked_names, results2.ranked_names)
+            results1 = tournament1.play(processes=2, progress_bar=False)
+            results2 = tournament2.play(processes=2, progress_bar=False)
+            self.assertEqual(results1.wins, results2.wins)
+            self.assertEqual(results1.match_lengths, results2.match_lengths)
+            self.assertEqual(results1.scores, results2.scores)
+            self.assertEqual(results1.cooperation, results2.cooperation)
 
     def test_seeding_inequality(self):
         players = [axl.Random(0.4), axl.Random(0.6)]
