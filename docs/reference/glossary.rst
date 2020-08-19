@@ -23,10 +23,8 @@ A **play** is a single player choosing an **action**.
 In terms of code this is equivalent to::
 
     >>> p1, p2 = axl.Cooperator(), axl.Defector()
-    >>> (C, D) = p1.play(p2)  # This constitues two 'plays' (p1 plays and p2 plays).
-
-This is equivalent to :code:`p2.play(p1)`. Either function invokes both
-:code:`p1.strategy(p2)` and :code:`p2.strategy(p1)`.
+    >>> C = p1.strategy(p2)  # This constitutes two 'plays' (p1 plays and p2 plays).
+    >>> D = p2.strategy(p1)  # This constitutes two 'plays' (p1 plays and p2 plays).
 
 A turn
 ------
@@ -45,11 +43,10 @@ used in the tournament is 200. Here is a single match between two players over
 3 turns::
 
     >>> p1, p2 = axl.Cooperator(), axl.Defector()
-    >>> for turn in range(3):
-    ...     p1.play(p2)
-    (C, D)
-    (C, D)
-    (C, D)
+    >>> match = axl.Match((p1, p2), turns=3)
+    >>> result = match.play()
+    >>> result
+    [(C, D), (C, D), (C, D)]
     >>> p1.history, p2.history
     ([C, C, C], [D, D, D])
 

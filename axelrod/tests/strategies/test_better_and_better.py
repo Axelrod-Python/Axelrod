@@ -23,72 +23,29 @@ class TestBetterAndBetter(TestPlayer):
 
     def test_strategy(self):
         """Tests that the strategy gives expected behaviour."""
+        expected_actions = [(D, D)] * 90 + [(C, D)]
         self.versus_test(
             axl.Defector(),
-            expected_actions=[
-                (D, D),
-                (D, D),
-                (D, D),
-                (D, D),
-                (C, D),
-                (D, D),
-                (D, D),
-                (D, D),
-                (D, D),
-            ],
+            expected_actions=expected_actions,
             seed=6,
         )
+        expected_actions = [(D, C)] * 10
         self.versus_test(
             axl.Cooperator(),
-            expected_actions=[
-                (D, C),
-                (D, C),
-                (D, C),
-                (D, C),
-                (D, C),
-                (D, C),
-                (D, C),
-                (D, C),
-                (D, C),
-            ],
+            expected_actions=expected_actions,
             seed=8,
         )
+        expected_actions = [(D, D)] * 41 + [(C, D)]
         self.versus_test(
             axl.Defector(),
-            expected_actions=[
-                (C, D),
-                (D, D),
-                (D, D),
-                (D, D),
-                (D, D),
-                (D, D),
-                (D, D),
-                (D, D),
-                (D, D),
-            ],
-            seed=1514,
+            expected_actions=expected_actions,
+            seed=13,
         )
-        actions = []
-        for index in range(200):
-            if index in [
-                64,
-                79,
-                91,
-                99,
-                100,
-                107,
-                111,
-                119,
-                124,
-                127,
-                137,
-                141,
-                144,
-                154,
-                192,
-                196,
-            ]:
-                actions.append((C, D))
-            else:
-                actions.append((D, D))
-        self.versus_test(axl.Defector(), expected_actions=actions, seed=8)
+        expected_indices = [18, 39, 49, 67, 77, 116, 139, 142, 149]
+        m = axl.Match((self.player(), axl.Defector()), turns=150, seed=111)
+        result = m.play()
+        indices = []
+        for index, actions in enumerate(result):
+            if actions == (C, D):
+                indices.append(index)
+        self.assertEqual(expected_indices, indices)

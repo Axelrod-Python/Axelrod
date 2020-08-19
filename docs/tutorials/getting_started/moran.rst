@@ -22,18 +22,17 @@ type. That type is declared the winner. To run an instance of the process with
 the library, proceed as follows::
 
     >>> import axelrod as axl
-    >>> axl.seed(0)  # for reproducible example
     >>> players = [axl.Cooperator(), axl.Defector(),
     ...            axl.TitForTat(), axl.Grudger()]
-    >>> mp = axl.MoranProcess(players)
+    >>> mp = axl.MoranProcess(players, seed=1)
     >>> populations = mp.play()
     >>> mp.winning_strategy_name
-    'Defector'
+    'Tit For Tat'
 
 You can access some attributes of the process, such as the number of rounds::
 
     >>> len(mp)
-    16
+    15
 
 The sequence of populations::
 
@@ -62,35 +61,33 @@ The scores in each round::
     >>> for row in mp.score_history:
     ...     print([round(element, 1) for element in row])
     [6.0, 7.0, 7.0, 7.0]
-    [6.0, 7.0, 7.0, 7.0]
-    [6.0, 11.0, 7.0, 6.0]
-    [3.0, 11.0, 11.0, 3.0]
-    [6.0, 15.0, 6.0, 6.0]
-    [6.0, 15.0, 6.0, 6.0]
-    [3.0, 11.0, 11.0, 3.0]
-    [7.0, 7.0, 7.0, 0.0]
-    [7.0, 7.0, 7.0, 0.0]
-    [7.0, 7.0, 7.0, 0.0]
-    [7.0, 7.0, 7.0, 0.0]
-    [7.0, 7.0, 7.0, 0.0]
-    [7.0, 7.0, 7.0, 0.0]
-    [7.0, 7.0, 7.0, 0.0]
-    [7.0, 7.0, 7.0, 0.0]
+    [7.0, 3.1, 7.0, 7.0]
+    [7.0, 3.1, 7.0, 7.0]
+    [7.0, 3.1, 7.0, 7.0]
+    [7.0, 3.1, 7.0, 7.0]
+    [3.0, 3.0, 5.0, 5.0]
+    [3.0, 3.0, 5.0, 5.0]
+    [3.1, 7.0, 7.0, 7.0]
+    [3.1, 7.0, 7.0, 7.0]
+    [9.0, 9.0, 9.0, 9.0]
+    [9.0, 9.0, 9.0, 9.0]
+    [9.0, 9.0, 9.0, 9.0]
+    [9.0, 9.0, 9.0, 9.0]
+    [9.0, 9.0, 9.0, 9.0]
 
 We can plot the results of a Moran process with `mp.populations_plot()`. Let's
 use a larger population to get a bit more data::
 
     >>> import random
     >>> import matplotlib.pyplot as plt
-    >>> axl.seed(15)  # for reproducible example
     >>> players = [axl.Defector(), axl.Defector(), axl.Defector(),
     ...        axl.Cooperator(), axl.Cooperator(), axl.Cooperator(),
     ...        axl.TitForTat(), axl.TitForTat(), axl.TitForTat(),
     ...        axl.Random()]
-    >>> mp = axl.MoranProcess(players=players, turns=200)
+    >>> mp = axl.MoranProcess(players=players, turns=200, seed=2)
     >>> populations = mp.play()
     >>> mp.winning_strategy_name
-    'Cooperator'
+    'Tit For Tat'
     >>> ax = mp.populations_plot()
     >>> plt.show()  #doctest: +SKIP
 
@@ -108,28 +105,26 @@ states, and will iterate forever. To prevent this, iterate with a loop (or
 function like :code:`takewhile` from :code:`itertools`)::
 
     >>> import axelrod as axl
-    >>> axl.seed(4)  # for reproducible example
     >>> players = [axl.Cooperator(), axl.Defector(),
     ...            axl.TitForTat(), axl.Grudger()]
-    >>> mp = axl.MoranProcess(players, mutation_rate=0.1)
+    >>> mp = axl.MoranProcess(players, mutation_rate=0.1, seed=10)
     >>> for _ in mp:
     ...     if len(mp.population_distribution()) == 1:
     ...         break
     >>> mp.population_distribution()
-    Counter({'Grudger': 4})
+    Counter({'Defector': 4})
 
 It is possible to pass a fitness function that scales the utility values. A common one
 used in the literature, [Ohtsuki2006]_, is :math:`f(s) = 1 - w + ws` where :math:`w`
 denotes the intensity of selection::
 
-    >>> axl.seed(689)
     >>> players = (axl.Cooperator(), axl.Defector(), axl.Defector(), axl.Defector())
     >>> w = 0.95
     >>> fitness_transformation = lambda score: 1 - w + w * score
-    >>> mp = axl.MoranProcess(players, turns=10, fitness_transformation=fitness_transformation)
+    >>> mp = axl.MoranProcess(players, turns=10, fitness_transformation=fitness_transformation, seed=3)
     >>> populations = mp.play()
     >>> mp.winning_strategy_name
-    'Cooperator'
+    'Defector'
 
 Other types of implemented Moran processes:
 

@@ -12,6 +12,7 @@ from .test_evolvable_player import PartialClass, TestEvolvablePlayer
 from .test_player import TestPlayer
 
 C, D = Action.C, Action.D
+random = axl.RandomGenerator()
 
 
 class TestAntiCycler(TestPlayer):
@@ -29,10 +30,10 @@ class TestAntiCycler(TestPlayer):
     }
 
     def test_has_no_cycles(self):
-        test_range = 100
         player = axl.AntiCycler()
-        for _ in range(test_range):
-            player.play(axl.Cooperator())
+        opponent = axl.Cooperator()
+        match = axl.Match((player, opponent), turns=100)
+        match.play()
 
         contains_no_cycles = player.history
         for slice_at in range(1, len(contains_no_cycles) + 1):
@@ -153,50 +154,49 @@ class TestEvolvableCycler(unittest.TestCase):
     def test_normalized_parameters(self):
         # Must specify at least one of cycle or cycle_length
         self.assertRaises(
-            InsufficientParametersError, self.player_class._normalize_parameters
+            InsufficientParametersError,
+            self.player_class,
+            seed=1,  # to prevent warning for unset seed
         )
         self.assertRaises(
             InsufficientParametersError,
-            self.player_class._normalize_parameters,
+            self.player_class,
             cycle="",
+            seed=1,  # to prevent warning for unset seed
         )
         self.assertRaises(
             InsufficientParametersError,
-            self.player_class._normalize_parameters,
+            self.player_class,
             cycle_length=0,
+            seed=1,  # to prevent warning for unset seed
         )
 
         cycle = "C" * random.randint(0, 20) + "D" * random.randint(0, 20)
-        self.assertEqual(
-            self.player_class._normalize_parameters(cycle=cycle), (cycle, len(cycle))
-        )
+        self.assertEqual(self.player_class(cycle=cycle, seed=1)._normalize_parameters(cycle=cycle),
+                         (cycle, len(cycle)))
 
         cycle_length = random.randint(1, 20)
-        random_cycle, cycle_length2 = self.player_class._normalize_parameters(
-            cycle_length=cycle_length
-        )
+        random_cycle, cycle_length2 = self.player_class(cycle=cycle, seed=1)._normalize_parameters(cycle_length=cycle_length)
         self.assertEqual(len(random_cycle), cycle_length)
         self.assertEqual(cycle_length, cycle_length2)
 
     def test_crossover_even_length(self):
         cycle1 = "C" * 6
         cycle2 = "D" * 6
-        cross_cycle = "CDDDDD"
+        cross_cycle = "CCCCCD"
 
-        player1 = self.player_class(cycle=cycle1)
-        player2 = self.player_class(cycle=cycle2)
-        axl.seed(3)
+        player1 = self.player_class(cycle=cycle1, seed=1)
+        player2 = self.player_class(cycle=cycle2, seed=2)
         crossed = player1.crossover(player2)
         self.assertEqual(cross_cycle, crossed.cycle)
 
     def test_crossover_odd_length(self):
         cycle1 = "C" * 7
         cycle2 = "D" * 7
-        cross_cycle = "CDDDDDD"
+        cross_cycle = "CCCCCDD"
 
-        player1 = self.player_class(cycle=cycle1)
-        player2 = self.player_class(cycle=cycle2)
-        axl.seed(3)
+        player1 = self.player_class(cycle=cycle1, seed=1)
+        player2 = self.player_class(cycle=cycle2, seed=2)
         crossed = player1.crossover(player2)
         self.assertEqual(cross_cycle, crossed.cycle)
 

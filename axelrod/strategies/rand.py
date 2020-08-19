@@ -1,6 +1,7 @@
 from axelrod.action import Action
 from axelrod.player import Player
-from axelrod.random_ import random_choice
+
+C, D = Action.C, Action.D
 
 
 class Random(Player):
@@ -38,8 +39,25 @@ class Random(Player):
         """
         super().__init__()
         self.p = p
-        if p in [0, 1]:
-            self.classifier["stochastic"] = False
 
     def strategy(self, opponent: Player) -> Action:
-        return random_choice(self.p)
+        return self._random.random_choice(self.p)
+
+    def _post_init(self):
+        super()._post_init()
+        if self.p in [0, 1]:
+            self.classifier["stochastic"] = False
+        # Avoid calls to _random, if strategy is deterministic
+        # by overwriting the strategy function.
+        if self.p <= 0:
+            self.strategy = self.defect
+        if self.p >= 1:
+            self.strategy = self.cooperate
+
+    @classmethod
+    def cooperate(cls, opponent: Player) -> Action:
+        return C
+
+    @classmethod
+    def defect(cls, opponent: Player) -> Action:
+        return D

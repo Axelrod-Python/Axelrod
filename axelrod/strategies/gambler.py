@@ -4,13 +4,11 @@ swarm algorithms.
 For the original see:
  https://gist.github.com/GDKO/60c3d0fd423598f3c4e4
 """
-import random
 from typing import Any
 
 from axelrod.action import Action, actions_to_str, str_to_actions
 from axelrod.load_data_ import load_pso_tables
 from axelrod.player import Player
-from axelrod.random_ import random_choice
 
 from .lookerup import (
     EvolvableLookerUp,
@@ -48,7 +46,7 @@ class Gambler(LookerUp):
         actions_or_float = super(Gambler, self).strategy(opponent)
         if isinstance(actions_or_float, Action):
             return actions_or_float
-        return random_choice(actions_or_float)
+        return self._random.random_choice(actions_or_float)
 
 
 class EvolvableGambler(Gambler, EvolvableLookerUp):
@@ -60,7 +58,8 @@ class EvolvableGambler(Gambler, EvolvableLookerUp):
         initial_actions: tuple = None,
         pattern: Any = None,  # pattern is str or tuple of Actions.
         parameters: Plays = None,
-        mutation_probability: float = None
+        mutation_probability: float = None,
+        seed: int = None
     ) -> None:
         EvolvableLookerUp.__init__(
             self,
@@ -68,7 +67,8 @@ class EvolvableGambler(Gambler, EvolvableLookerUp):
             initial_actions=initial_actions,
             pattern=pattern,
             parameters=parameters,
-            mutation_probability=mutation_probability
+            mutation_probability=mutation_probability,
+            seed=seed
         )
         self.pattern = list(self.pattern)
         Gambler.__init__(
@@ -89,13 +89,11 @@ class EvolvableGambler(Gambler, EvolvableLookerUp):
     # The mutate and crossover methods are mostly inherited from EvolvableLookerUp, except for the following
     # modifications.
 
-    @classmethod
-    def random_value(cls):
-        return random.random()
+    def random_value(self) -> float:
+        return self._random.random()
 
-    @classmethod
-    def mutate_value(cls, value):
-        ep = random.uniform(-1, 1) / 4
+    def mutate_value(self, value: float) -> float:
+        ep = self._random.uniform(-1, 1) / 4
         value += ep
         if value < 0:
             value = 0

@@ -1,7 +1,6 @@
 """Test for the Gambler strategy. Most tests come from the LookerUp test suite.
 """
 import copy
-import random
 import unittest
 
 import axelrod as axl
@@ -14,6 +13,7 @@ from .test_player import TestPlayer
 
 tables = load_pso_tables("pso_gambler.csv", directory="data")
 C, D = axl.Action.C, axl.Action.D
+random = axl.RandomGenerator()
 
 
 class TestGambler(TestPlayer):
@@ -48,7 +48,7 @@ class TestGambler(TestPlayer):
             axl.Cooperator(),
             expected_actions=expected_actions,
             init_kwargs={"lookup_dict": stochastic_lookup},
-            seed=1,
+            seed=80,
         )
 
 
@@ -83,13 +83,12 @@ class TestPSOGamblerMem1(TestPlayer):
         self.versus_test(axl.Cooperator(), expected_actions=vs_cooperator)
 
     def test_defects_forever_with_correct_conditions(self):
-        seed = 1
         opponent_actions = [D, D] + [C] * 10
         expected = [(C, D), (C, D), (D, C)] + [(D, C)] * 9
         self.versus_test(
             axl.MockPlayer(actions=opponent_actions),
             expected_actions=expected,
-            seed=seed,
+            seed=1,
         )
 
 
@@ -123,25 +122,24 @@ class TestPSOGambler1_1_1(TestPlayer):
         self.assertEqual(self.player().lookup_dict, converted_original)
 
     def test_cooperate_forever(self):
-        seed = 2
         opponent = [D] * 3 + [C] * 10
         expected = [(C, D), (D, D), (D, D)] + [(C, C)] * 10
         self.versus_test(
-            axl.MockPlayer(opponent), expected_actions=expected, seed=seed
+            axl.MockPlayer(opponent), expected_actions=expected, seed=4
         )
 
     def test_defect_forever(self):
-        seed = 2
         opponent_actions = [C] + [D] + [C] * 10
         expected = [(C, C), (C, D)] + [(D, C)] * 10
         self.versus_test(
-            axl.MockPlayer(opponent_actions), expected_actions=expected, seed=seed
+            axl.MockPlayer(opponent_actions), expected_actions=expected, seed=2
         )
 
+    def test_defect_forever2(self):
         opponent_actions = [D] + [C] * 10
         expected = [(C, D)] + [(D, C)] * 10
         self.versus_test(
-            axl.MockPlayer(opponent_actions), expected_actions=expected, seed=seed
+            axl.MockPlayer(opponent_actions), expected_actions=expected, seed=4
         )
 
 
@@ -239,12 +237,10 @@ class TestPSOGambler2_2_2(TestPlayer):
         self.versus_test(axl.Cooperator(), expected_actions=expected)
 
     def test_vs_alternator(self):
-        seed = 1
         expected = [(C, C), (C, D), (C, C), (D, D), (D, C), (D, D), (D, C)]
-        self.versus_test(axl.Alternator(), expected_actions=expected, seed=seed)
+        self.versus_test(axl.Alternator(), expected_actions=expected, seed=20)
 
     def test_vs_DCDDC(self):
-        seed = 2
         opponent_actions = [D, C, D, D, C]
         expected = [
             (C, D),
@@ -261,15 +257,28 @@ class TestPSOGambler2_2_2(TestPlayer):
         self.versus_test(
             axl.MockPlayer(actions=opponent_actions),
             expected_actions=expected,
-            seed=seed,
+            seed=2,
         )
 
-        new_seed = 139  # First seed with different result.
+    def test_vs_DCDDC2(self):
+        opponent_actions = [D, C, D, D, C]
+        expected = [
+            (C, D),
+            (C, C),
+            (D, D),
+            (D, D),
+            (C, C),
+            (D, D),
+            (D, C),
+            (D, D),
+            (D, D),
+            (C, C),
+        ]
         expected[5] = (C, D)
         self.versus_test(
             axl.MockPlayer(actions=opponent_actions),
             expected_actions=expected,
-            seed=new_seed,
+            seed=531,
         )
 
 
@@ -366,19 +375,17 @@ class TestPSOGambler2_2_2_Noise05(TestPlayer):
         self.versus_test(axl.Cooperator(), expected_actions=expected)
 
     def test_vs_alternator(self):
-        seed = 2
         expected = [(C, C), (C, D), (C, C), (D, D), (D, C), (D, D), (C, C)]
-        self.versus_test(axl.Alternator(), expected_actions=expected, seed=seed)
+        self.versus_test(axl.Alternator(), expected_actions=expected, seed=2)
 
-        new_seed = 1
+    def test_vs_alternator2(self):
+        expected = [(C, C), (C, D), (C, C), (D, D), (D, C), (D, D), (C, C)]
         expected[4] = (C, C)
         expected[6] = (D, C)
-        self.versus_test(axl.Alternator(), expected_actions=expected, seed=new_seed)
+        self.versus_test(axl.Alternator(), expected_actions=expected, seed=3)
 
     def test_vs_DCDDC(self):
         opponent_actions = [D, C, D, D, C]
-
-        seed = 1
         expected = [
             (C, D),
             (C, C),
@@ -391,23 +398,47 @@ class TestPSOGambler2_2_2_Noise05(TestPlayer):
             (C, D),
         ]
         self.versus_test(
-            axl.MockPlayer(opponent_actions), expected_actions=expected, seed=seed
+            axl.MockPlayer(opponent_actions), expected_actions=expected, seed=1
         )
 
-        new_seed = 3
-        expected[8] = (D, D)
+    def test_vs_DCDDC2(self):
+        opponent_actions = [D, C, D, D, C]
+        expected = [
+            (C, D),
+            (C, C),
+            (D, D),
+            (D, D),
+            (C, C),
+            (D, D),
+            (D, C),
+            (C, D),
+            (D, D),  # different than above test
+        ]
         self.versus_test(
             axl.MockPlayer(opponent_actions),
             expected_actions=expected,
-            seed=new_seed,
+            seed=5,
         )
 
-        new_seed = 2
+    def test_vs_DCDDC3(self):
+        opponent_actions = [D, C, D, D, C]
+        expected = [
+            (C, D),
+            (C, C),
+            (D, D),
+            (D, D),
+            (C, C),
+            (D, D),
+            (D, C),
+            (C, C),  # different than above test
+            (D, D),  # different than above test
+            (D, D),  # different than above test
+        ]
         new_expected = expected[:6] + [(C, C), (D, D), (D, D)]
         self.versus_test(
             axl.MockPlayer(opponent_actions),
             expected_actions=new_expected,
-            seed=new_seed,
+            seed=10,
         )
 
 
@@ -448,7 +479,6 @@ class TestZDMem2(TestPlayer):
         self.assertEqual(self.player().lookup_dict, converted_original)
 
     def test_vs_defector(self):
-        seed = 5
         expected = [
             (C, D),
             (C, D),
@@ -462,10 +492,9 @@ class TestZDMem2(TestPlayer):
             (D, D),
         ]
 
-        self.versus_test(axl.Defector(), expected_actions=expected, seed=seed)
+        self.versus_test(axl.Defector(), expected_actions=expected, seed=30)
 
     def test_vs_cooperator(self):
-        seed = 5
         expected = [
             (C, C),
             (C, C),
@@ -479,16 +508,15 @@ class TestZDMem2(TestPlayer):
             (C, C),
         ]
 
-        self.versus_test(axl.Cooperator(), expected_actions=expected, seed=seed)
+        self.versus_test(axl.Cooperator(), expected_actions=expected, seed=33)
 
     def test_vs_alternator(self):
-        seed = 2
         expected = [(C, C), (C, D), (D, C), (D, D), (C, C), (C, D), (D, C)]
-        self.versus_test(axl.Alternator(), expected_actions=expected, seed=seed)
+        self.versus_test(axl.Alternator(), expected_actions=expected, seed=42)
 
-        new_seed = 1
+    def test_vs_alternator2(self):
         expected = [(C, C), (C, D), (C, C), (D, D), (D, C), (C, D), (D, C)]
-        self.versus_test(axl.Alternator(), expected_actions=expected, seed=new_seed)
+        self.versus_test(axl.Alternator(), expected_actions=expected, seed=67)
 
 
 class TestEvolvableGambler(unittest.TestCase):
@@ -496,7 +524,7 @@ class TestEvolvableGambler(unittest.TestCase):
     def test_receive_vector(self):
         plays, op_plays, op_start_plays = 1, 1, 1
         player = axl.EvolvableGambler(
-            parameters=(plays, op_plays, op_start_plays))
+            parameters=(plays, op_plays, op_start_plays), seed=1)
 
         self.assertRaises(AttributeError, axl.EvolvableGambler.__getattribute__,
                           *[player, 'vector'])
@@ -508,7 +536,7 @@ class TestEvolvableGambler(unittest.TestCase):
     def test_vector_to_instance(self):
         plays, op_plays, op_start_plays = 1, 1, 1
         player = axl.EvolvableGambler(
-            parameters=(plays, op_plays, op_start_plays))
+            parameters=(plays, op_plays, op_start_plays), seed=1)
 
         vector = [random.random() for _ in range(8)]
         player.receive_vector(vector)
@@ -520,7 +548,7 @@ class TestEvolvableGambler(unittest.TestCase):
     def test_create_vector_bounds(self):
         plays, op_plays, op_start_plays = 1, 1, 1
         player = axl.EvolvableGambler(
-            parameters=(plays, op_plays, op_start_plays))
+            parameters=(plays, op_plays, op_start_plays), seed=1)
         lb, ub = player.create_vector_bounds()
         self.assertIsInstance(lb, list)
         self.assertIsInstance(ub, list)
@@ -528,8 +556,9 @@ class TestEvolvableGambler(unittest.TestCase):
         self.assertEqual(len(ub), 8)
 
     def test_mutate_value_bounds(self):
-        self.assertEqual(axl.EvolvableGambler.mutate_value(2), 1)
-        self.assertEqual(axl.EvolvableGambler.mutate_value(-2), 0)
+        player = axl.EvolvableGambler(parameters=(1, 1, 1), seed=0)
+        self.assertEqual(player.mutate_value(2), 1)
+        self.assertEqual(player.mutate_value(-2), 0)
 
 
 class TestEvolvableGambler2(TestEvolvablePlayer):

@@ -3,7 +3,13 @@
 import unittest
 
 import axelrod as axl
-from axelrod.makes_use_of import makes_use_of
+from axelrod.makes_use_of import (
+    class_makes_use_of,
+    makes_use_of,
+    makes_use_of_variant,
+    method_makes_use_of,
+)
+from axelrod.strategy_transformers import final_sequence
 
 
 class TestMakesUseOfLengthAndGamePlayer(axl.Player):
@@ -45,3 +51,19 @@ class TestMakesUseOf(unittest.TestCase):
 
     def test_makes_use_of_empty(self):
         self.assertEqual(makes_use_of(TestMakesUseOfNothingPlayer()), set())
+
+    def test_untransformed_class(self):
+        for player in [axl.Cooperator(), axl.Random()]:
+            self.assertEqual(class_makes_use_of(player), set())
+            self.assertEqual(makes_use_of_variant(player), set())
+            self.assertEqual(method_makes_use_of(player.strategy), set())
+
+    def test_transformer_wrapper(self):
+        # Test that the final transformer wrapper makes use of length
+        self.assertEqual(method_makes_use_of(final_sequence), {"length"})
+
+    def test_makes_use_of_transformed(self):
+        # These players use match length via Final transformer
+        for player in [axl.BackStabber(), axl.FirstBySteinAndRapoport()]:
+            self.assertEqual(makes_use_of(player), {"length"})
+            self.assertEqual(makes_use_of_variant(player), {"length"})

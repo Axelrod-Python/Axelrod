@@ -46,6 +46,7 @@ class TestStalker(TestPlayer):
             opponent=axl.MockPlayer(actions=[C] * 7 + [D] * 5), expected_actions=actions
         )
 
+    def test_strategy2(self):
         # current_average_score < 1
         actions = (
             [(C, D)]
@@ -53,8 +54,9 @@ class TestStalker(TestPlayer):
             + [(C, D)] * 3
             + [(D, D), (C, D), (D, D), (C, D), (D, D), (C, D), (D, D)]
         )
-        self.versus_test(axl.Defector(), expected_actions=actions, seed=6)
+        self.versus_test(axl.Defector(), expected_actions=actions, seed=3222)
 
+    def test_strategy3(self):
         actions = [(C, D)] * 3 + [
             (D, D),
             (C, D),
@@ -67,8 +69,9 @@ class TestStalker(TestPlayer):
             (C, D),
             (D, D),
         ]
-        self.versus_test(axl.Defector(), expected_actions=actions, seed=7)
+        self.versus_test(axl.Defector(), expected_actions=actions, seed=649)
 
+    def test_strategy4(self):
         # defect in last round
         actions = [(C, C)] * 199 + [(D, C)]
         self.versus_test(
@@ -83,12 +86,3 @@ class TestStalker(TestPlayer):
             expected_actions=actions,
             match_attributes={"length": 4},
         )
-
-    def test_reset(self):
-        axl.seed(0)
-        player = axl.Stalker()
-        m = axl.Match((player, axl.Alternator()))
-        m.play()
-        self.assertNotEqual(player.current_score, 0)
-        player.reset()
-        self.assertEqual(player.current_score, 0)

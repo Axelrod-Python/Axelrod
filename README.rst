@@ -89,9 +89,8 @@ Quick Start
 The following runs a basic tournament::
 
     >>> import axelrod as axl
-    >>> axl.seed(0)  # Set a seed
     >>> players = [s() for s in axl.demo_strategies]  # Create players
-    >>> tournament = axl.Tournament(players)  # Create a tournament
+    >>> tournament = axl.Tournament(players, seed=1)  # Create a tournament
     >>> results = tournament.play()  # Play the tournament
     >>> results.ranked_names
     ['Defector', 'Grudger', 'Tit For Tat', 'Cooperator', 'Random: 0.5']

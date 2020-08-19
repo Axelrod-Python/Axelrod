@@ -1,6 +1,7 @@
 """Tests for the various Meta strategies."""
 
 import axelrod as axl
+from axelrod.classifier import Classifiers
 from hypothesis import given, settings
 from hypothesis.strategies import integers
 
@@ -63,7 +64,7 @@ class TestMetaPlayer(TestPlayer):
         )
 
     @given(seed=integers(min_value=1, max_value=20000000))
-    @settings(max_examples=1)
+    @settings(max_examples=1, deadline=None)
     def test_clone(self, seed):
         # Test that the cloned player produces identical play
         player1 = self.player()
@@ -81,14 +82,17 @@ class TestMetaPlayer(TestPlayer):
             axl.Defector(),
             axl.TitForTat(),
         ]:
-            player1.reset()
-            player2.reset()
             for p in [player1, player2]:
-                axl.seed(seed)
-                m = axl.Match((p, op), turns=turns)
-                m.play()
+                match = axl.Match((p, op), turns=turns, reset=True, seed=seed)
+                match.play()
             self.assertEqual(len(player1.history), turns)
             self.assertEqual(player1.history, player2.history)
+
+    def test_update_histories(self):
+        """Artificial test to ensure that an exception is thrown."""
+        p = axl.MetaHunter()
+        with self.assertRaises(TypeError):
+            p.update_histories(C)
 
 
 class TestMetaMajority(TestMetaPlayer):
@@ -148,6 +152,41 @@ class TestMetaMinority(TestMetaPlayer):
         self.assertEqual(P1.strategy(P2), C)
 
 
+class TestMetaWinnerEnsemble(TestMetaPlayer):
+    name = "Meta Winner Ensemble"
+    player = axl.MetaWinnerEnsemble
+
+    def test_singularity(self):
+        """Test meta_strategy when the player is singular."""
+        team = [axl.Cooperator]
+        player = axl.MetaWinnerEnsemble(team=team)
+        self.assertFalse(Classifiers["stochastic"](player))
+        coplayer = axl.Defector()
+        match = axl.Match((player, coplayer), turns=10)
+        match.play()
+
+    def test_stochasticity(self):
+        # One player teams may be stochastic or not
+        team = [axl.Cooperator]
+        player = axl.MetaWinnerEnsemble(team=team)
+        self.assertFalse(Classifiers["stochastic"](player))
+
+        team = [axl.Random]
+        player = axl.MetaWinnerEnsemble(team=team)
+        self.assertTrue(Classifiers["stochastic"](player))
+
+        # Multiplayer teams without repetition are always stochastic
+        team = [axl.Cooperator, axl.Defector]
+        player = axl.MetaWinnerEnsemble(team=team)
+        self.assertTrue(Classifiers["stochastic"](player))
+
+        # If the players are all identical, a multiplayer team might in fact
+        # be deterministic, even though random values are being drawn.
+        team = [axl.Cooperator, axl.Cooperator]
+        player = axl.MetaWinnerEnsemble(team=team)
+        self.assertFalse(Classifiers["stochastic"](player))
+
+
 class TestNiceMetaWinner(TestMetaPlayer):
     name = "Nice Meta Winner"
     player = axl.NiceMetaWinner
@@ -181,20 +220,20 @@ class TestNiceMetaWinner(TestMetaPlayer):
 
         opponent = axl.Cooperator()
         player = axl.NiceMetaWinner(team=[axl.Cooperator, axl.Defector])
-        for _ in range(5):
-            player.play(opponent)
+        match = axl.Match((player, opponent), turns=5)
+        match.play()
         self.assertEqual(player.history[-1], C)
 
         opponent = axl.Defector()
         player = axl.NiceMetaWinner(team=[axl.Defector])
-        for _ in range(20):
-            player.play(opponent)
+        match = axl.Match((player, opponent), turns=20)
+        match.play()
         self.assertEqual(player.history[-1], D)
 
         opponent = axl.Defector()
         player = axl.MetaWinner(team=[axl.Cooperator, axl.Defector])
-        for _ in range(20):
-            player.play(opponent)
+        match = axl.Match((player, opponent), turns=20)
+        match.play()
         self.assertEqual(player.history[-1], D)
 
 
@@ -211,6 +250,7 @@ class TestNiceMetaWinnerEnsemble(TestMetaPlayer):
         "manipulates_state": False,
     }
 
+
     def test_strategy(self):
         actions = [(C, C)] * 8
         self.versus_test(
@@ -218,6 +258,8 @@ class TestNiceMetaWinnerEnsemble(TestMetaPlayer):
             expected_actions=actions,
             init_kwargs={"team": [axl.Cooperator, axl.Defector]},
         )
+
+    def test_strategy2(self):
         actions = [(C, D)] + [(D, D)] * 7
         self.versus_test(
             opponent=axl.Defector(),
@@ -241,7 +283,7 @@ class TestMetaHunter(TestMetaPlayer):
 
     def test_strategy(self):
         # We are not using the Cooperator Hunter here, so this should lead to
-        #  cooperation.
+        # cooperation.
         actions = [(C, C)] * 5
         self.versus_test(opponent=axl.Cooperator(), expected_actions=actions)
 
@@ -347,7 +389,7 @@ class TestMetaMajorityMemoryOne(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=1)
 
 
 class TestMetaMajorityFiniteMemory(TestMetaPlayer):
@@ -365,7 +407,7 @@ class TestMetaMajorityFiniteMemory(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=2)
 
 
 class TestMetaMajorityLongMemory(TestMetaPlayer):
@@ -385,6 +427,7 @@ class TestMetaMajorityLongMemory(TestMetaPlayer):
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
         self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=0)
 
+    def test_strategy2(self):
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
         self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=1)
 
@@ -404,7 +447,7 @@ class TestMetaWinnerMemoryOne(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (C, C), (D, D), (D, C)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=1)
 
 
 class TestMetaWinnerFiniteMemory(TestMetaPlayer):
@@ -422,7 +465,7 @@ class TestMetaWinnerFiniteMemory(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (C, C), (D, D), (D, C)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=1)
 
 
 class TestMetaWinnerLongMemory(TestMetaPlayer):
@@ -440,7 +483,7 @@ class TestMetaWinnerLongMemory(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (C, C), (D, D), (D, C)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=4)
 
 
 class TestMetaWinnerDeterministic(TestMetaPlayer):
@@ -476,7 +519,7 @@ class TestMetaWinnerStochastic(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (C, C), (D, D), (D, C)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=1)
 
 
 class TestMetaMixer(TestMetaPlayer):
@@ -492,12 +535,58 @@ class TestMetaMixer(TestMetaPlayer):
         "stochastic": True,
     }
 
+    def test_stochasticity(self):
+        # If the distribution is deterministic, the strategy may be deterministic.
+        team = [axl.TitForTat, axl.Cooperator, axl.Grudger]
+        distribution = [1, 0, 0]
+        player = self.player(team=team, distribution=distribution)
+        self.assertFalse(Classifiers["stochastic"](player))
+
+        team = [axl.Random, axl.Cooperator, axl.Grudger]
+        distribution = [1, 0, 0]
+        player = self.player(team=team, distribution=distribution)
+        self.assertTrue(Classifiers["stochastic"](player))
+
+        # If the team has only one player, the strategy may be deterministic.
+        team = [axl.TitForTat]
+        player = self.player(team=team)
+        self.assertFalse(Classifiers["stochastic"](player))
+
+        team = [axl.Random]
+        player = self.player(team=team)
+        self.assertTrue(Classifiers["stochastic"](player))
+
+        # Stochastic if the distribution isn't degenerate.
+        team = [axl.TitForTat, axl.Cooperator, axl.Grudger]
+        distribution = [0.2, 0.5, 0.3]
+        self.assertTrue(Classifiers["stochastic"](player))
+
     def test_strategy(self):
+        # Distribution = None
+        team = [axl.TitForTat, axl.Cooperator, axl.Grudger]
+        distribution = None
+
+        actions = [(C, C)] * 20
+        self.versus_test(
+            opponent=axl.Cooperator(),
+            expected_actions=actions,
+            init_kwargs={"team": team, "distribution": distribution},
+        )
+
+        # Distribution = [0, 0, 0]
+        team = [axl.TitForTat, axl.Cooperator, axl.Grudger]
+        distribution = [0, 0, 0]
+
+        actions = [(C, C)] * 20
+        self.versus_test(
+            opponent=axl.Cooperator(),
+            expected_actions=actions,
+            init_kwargs={"team": team, "distribution": distribution},
+        )
+
         team = [axl.TitForTat, axl.Cooperator, axl.Grudger]
         distribution = [0.2, 0.5, 0.3]
 
-        P1 = axl.MetaMixer(team=team, distribution=distribution)
-        P2 = axl.Cooperator()
         actions = [(C, C)] * 20
         self.versus_test(
             opponent=axl.Cooperator(),
@@ -526,8 +615,8 @@ class TestMetaMixer(TestMetaPlayer):
         distribution = [0.2, 0.5, 0.5]  # Not a valid probability distribution
 
         player = axl.MetaMixer(team=team, distribution=distribution)
+        player.set_seed(100)
         opponent = axl.Cooperator()
-
         self.assertRaises(ValueError, player.strategy, opponent)
 
 
@@ -550,7 +639,7 @@ class TestNMWEDeterministic(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (D, C), (D, D), (D, C)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=11)
 
 
 class TestNMWEStochastic(TestMetaPlayer):
@@ -568,7 +657,7 @@ class TestNMWEStochastic(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=20)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=16)
 
 
 class TestNMWEFiniteMemory(TestMetaPlayer):
@@ -586,7 +675,7 @@ class TestNMWEFiniteMemory(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (D, C), (D, D), (D, C)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=7)
 
 
 class TestNMWELongMemory(TestMetaPlayer):
@@ -604,7 +693,7 @@ class TestNMWELongMemory(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (C, C), (D, D), (D, C)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=10)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=3)
 
 
 class TestNMWEMemoryOne(TestMetaPlayer):
@@ -622,7 +711,7 @@ class TestNMWEMemoryOne(TestMetaPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (C, C), (D, D), (D, C)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=2)
 
 
 class TestMemoryDecay(TestPlayer):
@@ -642,26 +731,28 @@ class TestMemoryDecay(TestPlayer):
         # Test TitForTat behavior in first 15 turns
         opponent = axl.Cooperator()
         actions = list([(C, C)]) * 15
-        self.versus_test(opponent, expected_actions=actions)
+        self.versus_test(opponent, expected_actions=actions, seed=1)
 
         opponent = axl.Defector()
         actions = [(C, D)] + list([(D, D)]) * 14
-        self.versus_test(opponent, expected_actions=actions)
+        self.versus_test(opponent, expected_actions=actions, seed=1)
 
         opponent = axl.Alternator()
         actions = [(C, C)] + [(C, D), (D, C)] * 7
-        self.versus_test(opponent, expected_actions=actions)
+        self.versus_test(opponent, expected_actions=actions, seed=1)
 
         opponent_actions = [C, D, D, C, D, C, C, D, C, D, D, C, C, D, D]
         opponent = axl.MockPlayer(actions=opponent_actions)
         mem_actions = [C, C, D, D, C, D, C, C, D, C, D, D, C, C, D]
         actions = list(zip(mem_actions, opponent_actions))
-        self.versus_test(opponent, expected_actions=actions)
+        self.versus_test(opponent, expected_actions=actions, seed=1)
 
+    def test_strategy2(self):
         opponent = axl.Random()
         actions = [(C, D), (D, D), (D, C), (C, C), (C, D), (D, C)]
-        self.versus_test(opponent, expected_actions=actions, seed=0)
+        self.versus_test(opponent, expected_actions=actions, seed=15)
 
+    def test_strategy3(self):
         # Test net-cooperation-score (NCS) based decisions in subsequent turns
         opponent = axl.Cooperator()
         actions = [(C, C)] * 15 + [(C, C)]
@@ -672,6 +763,7 @@ class TestMemoryDecay(TestPlayer):
             init_kwargs={"memory": [D] * 5 + [C] * 10},
         )
 
+    def test_strategy4(self):
         opponent = axl.Cooperator()
         actions = [(C, C)] * 15 + [(C, C)]
         self.versus_test(
@@ -681,6 +773,7 @@ class TestMemoryDecay(TestPlayer):
             init_kwargs={"memory": [D] * 4 + [C] * 11},
         )
 
+    def test_alternative_starting_strategies(self):
         # Test alternative starting strategies
         opponent = axl.Cooperator()
         actions = list([(D, C)]) * 15
@@ -717,4 +810,15 @@ class TestMemoryDecay(TestPlayer):
                 "start_strategy": axl.Defector,
                 "start_strategy_duration": 0,
             },
+        )
+
+    def test_memory_alter_delete(self):
+        """Trigger memory_alter and memory_delete."""
+        opponent = axl.Cooperator()
+        actions = list([(C, C)]) * 50
+        self.versus_test(
+            opponent,
+            expected_actions=actions,
+            init_kwargs={"start_strategy": axl.Cooperator},
+            seed=11
         )

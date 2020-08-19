@@ -2,7 +2,7 @@
 
 import axelrod as axl
 
-from .test_player import TestOpponent, TestPlayer
+from .test_player import TestPlayer
 
 C, D = axl.Action.C, axl.Action.D
 

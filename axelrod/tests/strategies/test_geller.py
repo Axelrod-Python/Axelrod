@@ -33,11 +33,11 @@ class TestGeller(TestPlayer):
         super(TestGeller, self).setUp()
 
     def test_foil_strategy_inspection(self):
-        axl.seed(2)
         player = self.player()
-        self.assertEqual(player.foil_strategy_inspection(), D)
-        self.assertEqual(player.foil_strategy_inspection(), D)
+        player.set_seed(2)
         self.assertEqual(player.foil_strategy_inspection(), C)
+        self.assertEqual(player.foil_strategy_inspection(), C)
+        self.assertEqual(player.foil_strategy_inspection(), D)
 
     def test_strategy(self):
         """Should cooperate against cooperators and defect against defectors."""
@@ -60,11 +60,11 @@ class TestGeller(TestPlayer):
     def test_returns_foil_inspection_strategy_of_opponent(self):
         self.versus_test(
             axl.GellerDefector(),
-            expected_actions=[(D, D), (D, D), (D, C), (D, C)],
+            expected_actions=[(D, D), (D, C), (D, D), (D, C)],
             seed=2,
         )
 
-        self.versus_test(axl.Darwin(), expected_actions=[(C, C), (C, C), (C, C)])
+        self.versus_test(axl.Darwin(), expected_actions=[(C, C), (C, C), (C, C)], seed=3)
 
         self.versus_test(
             axl.MindReader(), expected_actions=[(D, D), (D, D), (D, D)], seed=1

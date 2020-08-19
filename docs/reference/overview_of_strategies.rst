@@ -427,9 +427,8 @@ The following code reproduces the above::
     ...            axl.OriginalGradual(),
     ...            axl.WinStayLoseShift(),
     ...            ]
-    >>> axl.seed(1)
     >>> turns = 1000
-    >>> tournament = axl.Tournament(players, turns=turns, repetitions=1)
+    >>> tournament = axl.Tournament(players, turns=turns, repetitions=1, seed=75)
     >>> results = tournament.play(progress_bar=False)
     >>> for average_score_per_turn in results.payoff_matrix[-2]:
     ...     print(round(average_score_per_turn * turns, 1))

@@ -283,20 +283,22 @@ class TestNaiveProber(TestPlayer):
         # Always retaliate a defection
         opponent = axl.MockPlayer([C, D, D, D, D])
         actions = [(C, C), (C, D), (D, D), (D, D), (D, D)]
-        self.versus_test(opponent=opponent, expected_actions=actions)
+        self.versus_test(opponent=opponent, expected_actions=actions, seed=1)
 
     def test_random_defection(self):
         # Unprovoked defection with small probability
         actions = [(C, C), (D, C), (D, C), (C, C), (C, C)]
         self.versus_test(
-            opponent=axl.Cooperator(), expected_actions=actions, seed=2
+            opponent=axl.Cooperator(), expected_actions=actions, seed=55
         )
 
+    def test_random_defection2(self):
         actions = [(C, C), (C, C), (C, C), (C, C), (D, C)]
         self.versus_test(
-            opponent=axl.Cooperator(), expected_actions=actions, seed=5
+            opponent=axl.Cooperator(), expected_actions=actions, seed=31
         )
 
+    def test_random_defection3(self):
         # Always defect when p is 1
         actions = [(C, C), (D, C), (D, C), (D, C), (D, C)]
         self.versus_test(
@@ -343,18 +345,20 @@ class TestRemorsefulProber(TestPlayer):
         self.versus_test(
             opponent=axl.Cooperator(),
             expected_actions=actions,
-            seed=2,
+            seed=55,
             attrs={"probing": True},
         )
 
+    def test_random_defection2(self):
         actions = [(C, C), (C, C), (C, C), (C, C), (D, C)]
         self.versus_test(
             opponent=axl.Cooperator(),
             expected_actions=actions,
-            seed=5,
+            seed=31,
             attrs={"probing": True},
         )
 
+    def test_random_defection3(self):
         # Always defect when p is 1
         actions = [(C, C), (D, C), (D, C), (D, C), (D, C)]
         self.versus_test(
@@ -371,7 +375,7 @@ class TestRemorsefulProber(TestPlayer):
         self.versus_test(
             opponent=opponent,
             expected_actions=actions,
-            seed=2,
+            seed=55,
             attrs={"probing": False},
         )
 

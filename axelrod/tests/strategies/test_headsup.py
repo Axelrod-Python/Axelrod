@@ -56,7 +56,7 @@ class TestZDGTFT2vsBully(TestMatch):
         self.versus_test(
             axl.ZDGTFT2(),
             axl.Bully(),
-            [C, D, D, C, C, C],
+            [C, D, D, C, C, D],
             [D, D, C, C, D, D],
             seed=2,
         )
@@ -69,9 +69,9 @@ class TestZDExtort2vsTFT(TestMatch):
         self.versus_test(
             axl.ZDExtort2(),
             axl.TitForTat(),
-            [C, D, D, D, D, D],
-            [C, C, D, D, D, D],
-            seed=2,
+            [C, D, C, D, D, D],
+            [C, C, D, C, D, D],
+            seed=100,
         )
 
 

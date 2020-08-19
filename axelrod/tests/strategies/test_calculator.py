@@ -22,81 +22,45 @@ class TestCalculator(TestPlayer):
         "manipulates_state": False,
     }
 
+    def test_twenty_rounds_joss_for_cyclers(self):
+        """Uses axelrod.strategies.axelrod_first.FirstByJoss strategy for first 20 rounds"""
+        seed = 4
+        match = axl.Match((axl.FirstByJoss(), axl.Alternator()), turns=20, seed=seed)
+        match.play()
+        self.versus_test(
+            axl.Alternator(), expected_actions=match.result, seed=seed
+        )
+
     def test_twenty_rounds_joss_then_defects_for_cyclers(self):
-        """Uses axelrod.strategies.axelrod_first.Joss strategy for first 20 rounds"""
-        seed = 2
-        flip_indices = [1, 3]
-        twenty_alternator_actions = [C, D] * 10
-        twenty_test_actions = get_joss_strategy_actions(
-            twenty_alternator_actions, flip_indices
-        )
-
-        expected_actions = twenty_test_actions + [(D, C), (D, D), (D, C), (D, D)]
+        """Uses axelrod.strategies.axelrod_first.FirstByJoss strategy for first 20 rounds"""
+        seed = 4
+        match = axl.Match((axl.FirstByJoss(), axl.Alternator()), turns=20, seed=seed)
+        match.play()
+        expected_actions = match.result + [(D, C), (D, D), (D, C), (D, D)]
         self.versus_test(
-            axl.Alternator(), expected_actions=twenty_test_actions, seed=seed
+            axl.Alternator(), expected_actions=expected_actions, seed=seed, turns=24,
         )
+
+    def test_twenty_rounds_joss_for_noncyclers(self):
+        """Uses axelrod.strategies.axelrod_first.FirstByJoss strategy for first 20 rounds"""
+        seed = 4
+        match = axl.Match((axl.FirstByJoss(), axl.AntiCycler()), turns=20, seed=seed)
+        match.play()
         self.versus_test(
-            axl.Alternator(), expected_actions=expected_actions, seed=seed
+            axl.AntiCycler(), expected_actions=match.result, seed=seed
         )
 
-    def test_twenty_rounds_joss_then_tit_for_tat_for_non_cyclers(self):
-        """Uses axelrod.strategies.axelrod_first.Joss strategy for first 20 rounds"""
-        seed = 2
-        flip_indices = [1, 2]
-
-        twenty_non_cyclical_actions = [
-            C,
-            C,
-            D,
-            C,
-            C,
-            D,
-            C,
-            C,
-            C,
-            D,
-            C,
-            C,
-            C,
-            C,
-            D,
-            C,
-            C,
-            C,
-            C,
-            C,
-        ]
-        twenty_test_actions = get_joss_strategy_actions(
-            twenty_non_cyclical_actions, flip_indices
-        )
-
-        subsequent_opponent_actions = [D, C, D, C, D, C, D, C]
-        subsequent_test_actions = [
-            (C, D),
-            (D, C),
-            (C, D),
-            (D, C),
-            (C, D),
-            (D, C),
-            (C, D),
-            (D, C),
-        ]
-
-        opponent_actions = twenty_non_cyclical_actions + subsequent_opponent_actions
-        test_actions = twenty_test_actions + subsequent_test_actions
+    def test_twenty_rounds_joss_then_tft_for_noncyclers(self):
+        """Uses axelrod.strategies.axelrod_first.FirstByJoss strategy for first 20 rounds"""
+        seed = 4
+        match = axl.Match((axl.FirstByJoss(), axl.AntiCycler()), turns=20, seed=seed)
+        match.play()
+        expected_actions = match.result + [(C, C), (C, C), (C, D), (D, C), (C, C)]
         self.versus_test(
-            axl.MockPlayer(actions=twenty_non_cyclical_actions),
-            expected_actions=twenty_test_actions,
-            seed=seed,
-        )
-        self.versus_test(
-            axl.MockPlayer(actions=opponent_actions),
-            expected_actions=test_actions,
-            seed=seed,
+            axl.AntiCycler(), expected_actions=expected_actions, seed=seed, turns=24,
         )
 
     def test_edge_case_calculator_sees_cycles_of_size_ten(self):
-        seed = 3
         ten_length_cycle = [C, D, C, C, D, C, C, C, D, C]
         self.assertEqual(detect_cycle((ten_length_cycle * 2)), tuple(ten_length_cycle))
 
@@ -108,11 +72,10 @@ class TestCalculator(TestPlayer):
         self.versus_test(
             axl.MockPlayer(actions=opponent_actions),
             expected_actions=expected,
-            seed=seed,
+            seed=14,
         )
 
     def test_edge_case_calculator_ignores_cycles_gt_len_ten(self):
-        seed = 3
         eleven_length_cycle = [D, D, C, C, D, C, C, C, D, C, D]
         twenty_rounds_of_eleven_len_cycle = (
             eleven_length_cycle + eleven_length_cycle[:9]
@@ -128,7 +91,7 @@ class TestCalculator(TestPlayer):
         self.versus_test(
             axl.MockPlayer(actions=opponent_actions),
             expected_actions=uses_tit_for_tat_after_twenty_rounds,
-            seed=seed,
+            seed=3,
         )
 
     def test_get_joss_strategy_actions(self):

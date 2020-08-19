@@ -1,12 +1,14 @@
 """Tests for the Memorytwo strategies."""
 
-import random
 import unittest
 import warnings
 
 import axelrod as axl
 from axelrod.strategies.memorytwo import MemoryTwoPlayer
 
+from .test_alternator import TestAlternator
+from .test_cooperator import TestCooperator
+from .test_defector import TestDefector
 from .test_player import TestPlayer
 
 C, D = axl.Action.C, axl.Action.D
@@ -83,7 +85,7 @@ class TestMemoryStochastic(TestPlayer):
     )
     player = axl.MemoryTwoPlayer
     expected_classifier = {
-        "memory_depth": 2,  # Memory-two Sixteen-Vector
+        "memory_depth": 0,  # Memory-two Sixteen-Vector
         "stochastic": False,
         "makes_use_of": set(),
         "long_run_time": False,
@@ -93,10 +95,10 @@ class TestMemoryStochastic(TestPlayer):
     }
 
     def test_strategy(self):
-        axl.seed(0)
-        vector = [random.random() for _ in range(16)]
+        rng = axl.RandomGenerator(seed=7888)
+        vector = [rng.random() for _ in range(16)]
 
-        actions = [(C, C), (C, C), (D, D), (D, C), (C, C), (C, D), (C, C)]
+        actions = [(C, C), (C, C), (D, D), (C, C), (D, C), (D, D), (D, C)]
         self.versus_test(
             opponent=axl.CyclerCCD(),
             expected_actions=actions,
@@ -104,7 +106,7 @@ class TestMemoryStochastic(TestPlayer):
             init_kwargs={"sixteen_vector": vector},
         )
 
-        actions = [(C, C), (C, C), (C, D), (D, C), (C, C), (C, D), (C, C)]
+        actions = [(C, C), (C, C), (C, D), (C, C), (D, C), (D, D), (D, C)]
         self.versus_test(
             opponent=axl.CyclerCCD(),
             expected_actions=actions,
@@ -112,7 +114,7 @@ class TestMemoryStochastic(TestPlayer):
             init_kwargs={"sixteen_vector": vector},
         )
 
-        actions = [(C, C), (C, C), (D, C), (D, D), (C, D), (C, C), (D, C)]
+        actions = [(C, C), (C, C), (D, C), (D, D), (D, D), (D, D), (D, D)]
         self.versus_test(
             opponent=axl.TitForTat(),
             expected_actions=actions,
@@ -120,7 +122,7 @@ class TestMemoryStochastic(TestPlayer):
             init_kwargs={"sixteen_vector": vector},
         )
 
-        actions = [(C, C), (C, C), (C, C), (D, C), (D, D), (C, D), (C, C)]
+        actions = [(C, C), (C, C), (C, C), (D, C), (D, D), (D, D), (D, D)]
         self.versus_test(
             opponent=axl.TitForTat(),
             expected_actions=actions,
@@ -250,3 +252,54 @@ class TestMEM2(TestPlayer):
             expected_actions=actions,
             attrs={"play_as": "ALLD", "shift_counter": -1, "alld_counter": 2},
         )
+
+
+class TestMemoryTwoCooperator(TestCooperator):
+    """Cooperator is equivalent to MemoryTwoPlayer((1, 1, ..., 1), C)"""
+    name = "Generic Memory Two Player: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], (C, C)"
+    player = lambda x: axl.MemoryTwoPlayer(sixteen_vector=[1] * 16, initial=(C, C))
+    expected_classifier = {
+        "memory_depth": 0,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+
+class TestMemoryTwoDefector(TestDefector):
+    """Defector is equivalent to MemoryTwoPlayer((0, 0, ..., 0), D)"""
+    name = "Generic Memory Two Player: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], (D, D)"
+    player = lambda x: axl.MemoryTwoPlayer(sixteen_vector=[0] * 16, initial=(D, D))
+    expected_classifier = {
+        "memory_depth": 0,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+
+def four_vector_to_sixteen_vector(four_vector):
+    a, b, c, d = four_vector
+    sixteen_vector = [a, b, a, b, d, c, d, c] * 2
+    return sixteen_vector
+
+
+class TestMemoryTwoAlternator(TestAlternator):
+    """Alternator is equivalent to MemoryTwoPlayer(0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1), C)."""
+    name = "Generic Memory Two Player: [0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1], (C, D)"
+    player = lambda x: axl.MemoryTwoPlayer(sixteen_vector=four_vector_to_sixteen_vector((0, 0, 1, 1)), initial=(C, D))
+    expected_classifier = {
+        "memory_depth": 1,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }

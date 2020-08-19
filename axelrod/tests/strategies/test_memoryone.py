@@ -5,14 +5,18 @@ import warnings
 import axelrod as axl
 from axelrod.strategies.memoryone import MemoryOnePlayer
 
+from .test_alternator import TestAlternator
+from .test_cooperator import TestCooperator
+from .test_defector import TestDefector
 from .test_player import TestPlayer, test_four_vector
+from .test_titfortat import TestTitForTat
 
 C, D = axl.Action.C, axl.Action.D
 
 
 class TestWinStayLoseShift(TestPlayer):
 
-    name = "Win-Stay Lose-Shift: C"
+    name = "Win-Stay Lose-Shift"
     player = axl.WinStayLoseShift
     expected_classifier = {
         "memory_depth": 1,
@@ -25,7 +29,7 @@ class TestWinStayLoseShift(TestPlayer):
     }
 
     def test_strategy(self):
-        # Check that switches if does not get best payoff.
+        # Check that player switches if does not get best payoff.
         actions = [(C, C), (C, D), (D, C), (D, D), (C, C)]
         self.versus_test(opponent=axl.Alternator(), expected_actions=actions)
 
@@ -65,8 +69,9 @@ class TestGTFT(TestPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=0)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=2)
 
+    def test_strategy2(self):
         actions = [(C, C), (C, D), (C, C), (C, D), (D, C)]
         self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=1)
 
@@ -101,13 +106,14 @@ class TestFirmButFair(TestPlayer):
         test_four_vector(self, expected_dictionary)
 
     def test_strategy(self):
-
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
         self.versus_test(opponent=axl.Alternator(), expected_actions=actions)
 
+    def test_strategy2(self):
         actions = [(C, D), (D, D), (D, D), (D, D), (C, D)]
-        self.versus_test(opponent=axl.Defector(), expected_actions=actions, seed=0)
+        self.versus_test(opponent=axl.Defector(), expected_actions=actions, seed=10)
 
+    def test_strategy3(self):
         actions = [(C, D), (D, D), (C, D), (D, D), (D, D)]
         self.versus_test(opponent=axl.Defector(), expected_actions=actions, seed=1)
 
@@ -137,16 +143,19 @@ class TestStochasticCooperator(TestPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (D, D), (C, C), (C, D), (C, C), (D, D)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=15)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=113)
 
+    def test_strategy2(self):
         actions = [(C, C), (C, D), (D, C), (D, D), (C, C), (C, D)]
         self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=1)
 
+    def test_strategy3(self):
         actions = [(C, C), (C, D), (D, C), (D, D), (D, C), (D, D)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=3)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=5)
 
+    def test_strategy4(self):
         actions = [(C, C), (C, D), (D, C), (D, D), (D, C), (C, D)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=13)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=12)
 
 
 class TestStochasticWSLS(TestPlayer):
@@ -165,16 +174,19 @@ class TestStochasticWSLS(TestPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (D, D), (C, C), (C, D), (D, C), (D, D)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=2)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=50)
 
+    def test_strategy2(self):
         actions = [(C, C), (C, D), (D, C), (D, D), (C, C), (C, D)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=31)
+        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=1)
 
+    def test_strategy3(self):
         actions = [(C, D), (D, C), (D, D), (C, C), (C, D), (D, C)]
         self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=2)
 
+    def test_strategy4(self):
         actions = [(C, D), (C, C), (C, D), (D, C), (D, D), (C, C)]
-        self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=31)
+        self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=23)
 
     def test_four_vector(self):
         player = self.player()
@@ -236,6 +248,7 @@ class TestSoftJoss(TestPlayer):
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (C, D)]
         self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=2)
 
+    def test_strategy2(self):
         actions = [(C, D), (D, C), (C, D), (D, C), (C, D), (D, C)]
         self.versus_test(opponent=axl.CyclerDC(), expected_actions=actions, seed=5)
 
@@ -257,6 +270,8 @@ class TestALLCorALLD(TestPlayer):
     def test_strategy(self):
         actions = [(D, C)] * 10
         self.versus_test(opponent=axl.Cooperator(), expected_actions=actions, seed=0)
+
+    def test_strategy2(self):
         actions = [(C, C)] * 10
         self.versus_test(opponent=axl.Cooperator(), expected_actions=actions, seed=1)
 
@@ -285,3 +300,78 @@ class TestGenericReactiveStrategy(unittest.TestCase):
         self.assertIsInstance(self.p1, MemoryOnePlayer)
         self.assertIsInstance(self.p2, MemoryOnePlayer)
         self.assertIsInstance(self.p3, MemoryOnePlayer)
+
+
+class TestMemoryOneAlternator(TestAlternator):
+    """Alternator is equivalent to MemoryOnePlayer((0, 0, 1, 1), C)"""
+    name = "Generic Memory One Player: (0, 0, 1, 1), C"
+    player = lambda x: axl.MemoryOnePlayer(four_vector=(0, 0, 1, 1))
+    expected_classifier = {
+        "memory_depth": 1,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+
+class TestMemoryOneCooperator(TestCooperator):
+    """Cooperator is equivalent to MemoryOnePlayer((1, 1, 1, 1), C)"""
+    name = "Generic Memory One Player: (1, 1, 1, 1), C"
+    player = lambda x: axl.MemoryOnePlayer(four_vector=(1, 1, 1, 1))
+    expected_classifier = {
+        "memory_depth": 0,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+
+class TestMemoryOneDefector(TestDefector):
+    """Defector is equivalent to MemoryOnePlayer((0, 0, 0, 0), D)"""
+    name = "Generic Memory One Player: (0, 0, 0, 0), D"
+    player = lambda x: axl.MemoryOnePlayer(four_vector=(0, 0, 0, 0), initial=D)
+    expected_classifier = {
+        "memory_depth": 0,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+
+class TestMemoryOneTitForTat(TestTitForTat):
+    """TitForTat is equivalent to MemoryOnePlayer((1, 0, 1, 0), C)"""
+    name = "Generic Memory One Player: (1, 0, 1, 0), C"
+    player = lambda x: axl.MemoryOnePlayer(four_vector=(1, 0, 1, 0))
+    expected_classifier = {
+        "memory_depth": 1,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+
+class TestMemoryOneWSLS(TestWinStayLoseShift):
+    """WinStayLoseShift is equivalent to MemoryOnePlayer((1, 0, 0, 1), C)"""
+    name = "Generic Memory One Player: (1, 0, 0, 1), C"
+    player = lambda x: axl.MemoryOnePlayer(four_vector=(1, 0, 0, 1))
+    expected_classifier = {
+        "memory_depth": 1,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }

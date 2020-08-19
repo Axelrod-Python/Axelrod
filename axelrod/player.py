@@ -2,29 +2,77 @@ import copy
 import inspect
 import itertools
 import types
+import warnings
 from typing import Any, Dict
 
 import numpy as np
+from axelrod import _module_random
 from axelrod.action import Action
 from axelrod.game import DefaultGame
 from axelrod.history import History
-from axelrod.random_ import random_flip
+from axelrod.random_ import RandomGenerator
 
 C, D = Action.C, Action.D
 
 
-def simultaneous_play(player, coplayer, noise=0):
-    """This pits two players against each other."""
-    s1, s2 = player.strategy(coplayer), coplayer.strategy(player)
-    if noise:
-        s1 = random_flip(s1, noise)
-        s2 = random_flip(s2, noise)
-    player.update_history(s1, s2)
-    coplayer.update_history(s2, s1)
-    return s1, s2
+class PostInitCaller(type):
+    """Metaclass to be able to handle post __init__ tasks.
+    If there is a DerivedPlayer class of Player that overrides
+    _post_init, as follows:
+
+    class Player(object, metaclass=PostInitCaller):
+        def __new__(cls, *args, **kwargs):
+            print("Player.__new__")
+            obj = super().__new__(cls)
+            return obj
+
+        def __init__(self):
+            print("Player.__init__")
+
+        def _post_init(self):
+            print("Player._post_init")
+
+        def _post_transform(self):
+            print("Player._post_transform")
 
 
-class Player(object):
+    class DerivedPlayer(Player):
+        def __init__(self):
+            print("DerivedPlayer.__init__")
+            super().__init__()
+
+        def _post_init(self):
+            print("DerivedPlayer._post_init")
+            super()._post_init()
+
+
+    dp = DerivedPlayer()
+
+    Then the call order is:
+        * PostInitCaller.__call__
+        * Player.__new__
+        * DerivedPlayer.__init__
+        * Player.__init__
+        * DerivedPlayer._post_init
+        * Player._post_init
+        * Player._post_transform
+
+    See here to learn more: https://blog.ionelmc.ro/2015/02/09/understanding-python-metaclasses/
+    """
+    def __call__(cls, *args, **kwargs):
+        # This calls cls.__new__ and cls.__init__
+        obj = type.__call__(cls, *args, **kwargs)
+        # Next we do any post init or post transform tasks, like recomputing
+        # classifiers
+        # Note that subclasses inherit the metaclass, and subclasses my override
+        # or extend __init__ so it's necessary to do these tasks after all the
+        # __init__'s have run in the case of a post-transform reclassification.
+        obj._post_init()
+        obj._post_transform()
+        return obj
+
+
+class Player(object, metaclass=PostInitCaller):
     """A class for a player in the tournament.
 
     This is an abstract base class, not intended to be used directly.
@@ -32,6 +80,7 @@ class Player(object):
 
     name = "Player"
     classifier = {}  # type: Dict[str, Any]
+    _reclassifiers = []
 
     def __new__(cls, *args, **kwargs):
         """Caches arguments for Player cloning."""
@@ -44,7 +93,7 @@ class Player(object):
         """
         Return a dictionary containing the init parameters of a strategy
         (without 'self').
-        Use *args and *kwargs as value if specified
+        Use *args and **kwargs as value if specified
         and complete the rest with the default values.
         """
         sig = inspect.signature(cls.__init__)
@@ -59,14 +108,24 @@ class Player(object):
         return boundargs.arguments
 
     def __init__(self):
-        """Initiates an empty history."""
+        """Initial class setup."""
         self._history = History()
         self.classifier = copy.deepcopy(self.classifier)
         self.set_match_attributes()
 
+    def _post_init(self):
+        """Post initialization tasks such as reclassifying the strategy."""
+        pass
+
+    def _post_transform(self):
+        """Handles post transform tasks such as further reclassifying."""
+        # Reclassify strategy post __init__, if needed.
+        for (reclassifier, args, kwargs) in self._reclassifiers:
+            self.classifier = reclassifier(self.classifier, *args, **kwargs)
+
     def __eq__(self, other):
         """
-        Test if two players are equal.
+        Test if two players are equal, ignoring random seed and RNG state.
         """
         if self.__repr__() != other.__repr__():
             return False
@@ -75,6 +134,10 @@ class Player(object):
 
             value = getattr(self, attribute, None)
             other_value = getattr(other, attribute, None)
+
+            if attribute in ["_random", "_seed"]:
+                # Don't compare the random generators.
+                continue
 
             if isinstance(value, np.ndarray):
                 if not (np.array_equal(value, other_value)):
@@ -122,6 +185,17 @@ class Player(object):
         self.match_attributes = {"length": length, "game": game, "noise": noise}
         self.receive_match_attributes()
 
+    def set_seed(self, seed):
+        """Set a random seed for the player's random number generator."""
+        if seed is None:
+            warnings.warn(
+                "Initializing player with seed from Axelrod module random number generator. "
+                "Results may not be seed reproducible.")
+            self._seed = _module_random.random_seed_int()
+        else:
+            self._seed = seed
+        self._random = RandomGenerator(seed=self._seed)
+
     def __repr__(self):
         """The string method for the strategy.
         Appends the `__init__` parameters to the strategy's name."""
@@ -145,10 +219,6 @@ class Player(object):
     def strategy(self, opponent):
         """This is a placeholder strategy."""
         raise NotImplementedError()
-
-    def play(self, opponent, noise=0):
-        """This pits two players against each other."""
-        return simultaneous_play(self, opponent, noise)
 
     def clone(self):
         """Clones the player without history, reapplying configuration

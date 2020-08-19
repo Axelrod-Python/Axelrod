@@ -1,6 +1,5 @@
 import copy
 import itertools
-import random
 from typing import List, Tuple
 
 from axelrod.action import Action, actions_to_str, str_to_actions
@@ -87,7 +86,7 @@ class Cycler(Player):
         Alternator is equivalent to Cycler("CD")
 
         """
-        super().__init__()
+        Player.__init__(self)
         self.cycle = cycle
         self.set_cycle(cycle=cycle)
 
@@ -111,12 +110,12 @@ class EvolvableCycler(Cycler, EvolvablePlayer):
         cycle: str = None,
         cycle_length: int = None,
         mutation_probability: float = 0.2,
-        mutation_potency: int = 1
+        mutation_potency: int = 1,
+        seed: int = None
     ) -> None:
+        EvolvablePlayer.__init__(self, seed=seed)
         cycle, cycle_length = self._normalize_parameters(cycle, cycle_length)
-        # The following __init__ sets self.cycle = cycle
         Cycler.__init__(self, cycle=cycle)
-        EvolvablePlayer.__init__(self)
         # Overwrite init_kwargs in the case that we generated a new cycle from cycle_length
         self.overwrite_init_kwargs(
             cycle=cycle,
@@ -124,31 +123,29 @@ class EvolvableCycler(Cycler, EvolvablePlayer):
         self.mutation_probability = mutation_probability
         self.mutation_potency = mutation_potency
 
-    @classmethod
-    def _normalize_parameters(cls, cycle=None, cycle_length=None) -> Tuple[str, int]:
+    def _normalize_parameters(self, cycle=None, cycle_length=None) -> Tuple[str, int]:
         """Compute other parameters from those that may be missing, to ensure proper cloning."""
         if not cycle:
             if not cycle_length:
                 raise InsufficientParametersError("Insufficient Parameters to instantiate EvolvableCycler")
-            cycle = cls._generate_random_cycle(cycle_length)
+            cycle = self._generate_random_cycle(cycle_length)
         cycle_length = len(cycle)
         return cycle, cycle_length
 
-    @classmethod
-    def _generate_random_cycle(cls, cycle_length: int) -> str:
+    def _generate_random_cycle(self, cycle_length: int) -> str:
         """
         Generate a sequence of random moves
         """
-        return actions_to_str(random.choice(actions) for _ in range(cycle_length))
+        return actions_to_str(self._random.choice(actions) for _ in range(cycle_length))
 
     def mutate(self) -> EvolvablePlayer:
         """
         Basic mutation which may change any random actions in the sequence.
         """
-        if random.random() <= self.mutation_probability:
+        if self._random.random() <= self.mutation_probability:
             mutated_sequence = list(str_to_actions(self.cycle))
             for _ in range(self.mutation_potency):
-                index_to_change = random.randint(0, len(mutated_sequence) - 1)
+                index_to_change = self._random.randint(0, len(mutated_sequence) - 1)
                 mutated_sequence[index_to_change] = mutated_sequence[index_to_change].flip()
             cycle = actions_to_str(mutated_sequence)
         else:
@@ -162,10 +159,10 @@ class EvolvableCycler(Cycler, EvolvablePlayer):
         """
         if other.__class__ != self.__class__:
             raise TypeError("Crossover must be between the same player classes.")
-        cycle_list = crossover_lists(self.cycle, other.cycle)
+        cycle_list = crossover_lists(self.cycle, other.cycle, self._random)
         cycle = "".join(cycle_list)
         cycle, _ = self._normalize_parameters(cycle)
-        return self.create_new(cycle=cycle)
+        return self.create_new(cycle=cycle, seed=self._random.random_seed_int())
 
 
 class CyclerDC(Cycler):

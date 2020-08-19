@@ -16,6 +16,8 @@ def strategy_lists(
 
     Parameters
     ----------
+    strategies : List(axl.Player)
+        The set of strategies to draw from
     min_size : integer
         The minimum number of strategies to include
     max_size : integer
@@ -82,6 +84,8 @@ def tournaments(
 
     Parameters
     ----------
+    strategies : List(axl.Player)
+        The set of strategies to draw from
     min_size : integer
         The minimum number of strategies to include
     max_size : integer
@@ -93,6 +97,8 @@ def tournaments(
     min_noise : float
         The minimum noise value
     min_noise : float
+        The minimum noise value
+    max_noise : float
         The maximum noise value
     min_repetitions : integer
         The minimum number of repetitions
@@ -123,12 +129,15 @@ def prob_end_tournaments(
     max_noise=1,
     min_repetitions=1,
     max_repetitions=20,
+    seed=None
 ):
     """
     A hypothesis decorator to return a tournament,
 
     Parameters
     ----------
+    strategies : List(axl.Player)
+        The set of strategies to draw from
     min_size : integer
         The minimum number of strategies to include
     max_size : integer
@@ -145,6 +154,8 @@ def prob_end_tournaments(
         The minimum number of repetitions
     max_repetitions : integer
         The maximum number of repetitions
+    seed : integer
+        Random seed
     """
     strategies = draw(
         strategy_lists(strategies=strategies, min_size=min_size, max_size=max_size)
@@ -155,7 +166,7 @@ def prob_end_tournaments(
     noise = draw(floats(min_value=min_noise, max_value=max_noise))
 
     tournament = axl.Tournament(
-        players, prob_end=prob_end, repetitions=repetitions, noise=noise
+        players, prob_end=prob_end, repetitions=repetitions, noise=noise, seed=seed
     )
     return tournament
 
@@ -178,6 +189,8 @@ def spatial_tournaments(
 
     Parameters
     ----------
+    strategies : List(axl.Player)
+        The set of strategies to draw from
     min_size : integer
         The minimum number of strategies to include
     max_size : integer
@@ -207,7 +220,6 @@ def spatial_tournaments(
         lists(
             sampled_from(all_potential_edges),
             unique=True,
-            average_size=2 * len(players),
         )
     )
 
@@ -246,6 +258,8 @@ def prob_end_spatial_tournaments(
 
     Parameters
     ----------
+    strategies : List(axl.Player)
+        The set of strategies to draw from
     min_size : integer
         The minimum number of strategies to include
     max_size : integer
@@ -275,7 +289,6 @@ def prob_end_spatial_tournaments(
         lists(
             sampled_from(all_potential_edges),
             unique=True,
-            average_size=2 * len(players),
         )
     )
 

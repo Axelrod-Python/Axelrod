@@ -19,10 +19,8 @@ import sys
 import mock
 
 MOCK_MODULES = [
-    "cloudpickle",
     "dask",
     "dask.dataframe",
-    "dill",
     "matplotlib",
     "matplotlib.pyplot",
     "matplotlib.transforms",
@@ -40,9 +38,6 @@ MOCK_MODULES = [
     "prompt_toolkit.validation",
     "scipy",
     "scipy.stats",
-    "toolz",
-    "toolz.curried",
-    "toolz.functoolz",
     "tqdm",
     "yaml",
 ]

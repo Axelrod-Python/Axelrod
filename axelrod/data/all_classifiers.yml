@@ -961,7 +961,9 @@ Meta Hunter Aggressive:
 Meta Majority:
   inspects_source: false
   long_run_time: true
-  makes_use_of: !!set {}
+  makes_use_of: !!set
+    game: null
+    length: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -969,7 +971,8 @@ Meta Majority:
 Meta Majority Finite Memory:
   inspects_source: false
   long_run_time: true
-  makes_use_of: !!set {}
+  makes_use_of: !!set
+    game: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -977,7 +980,9 @@ Meta Majority Finite Memory:
 Meta Majority Long Memory:
   inspects_source: false
   long_run_time: true
-  makes_use_of: !!set {}
+  makes_use_of: !!set
+    game: null
+    length: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -985,7 +990,8 @@ Meta Majority Long Memory:
 Meta Majority Memory One:
   inspects_source: false
   long_run_time: true
-  makes_use_of: !!set {}
+  makes_use_of: !!set
+    game: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -993,7 +999,9 @@ Meta Majority Memory One:
 Meta Minority:
   inspects_source: false
   long_run_time: true
-  makes_use_of: !!set {}
+  makes_use_of: !!set
+    game: null
+    length: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1011,6 +1019,7 @@ Meta Winner:
   long_run_time: true
   makes_use_of: !!set
     game: null
+    length: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1020,6 +1029,7 @@ Meta Winner Deterministic:
   long_run_time: true
   makes_use_of: !!set
     game: null
+    length: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1029,6 +1039,7 @@ Meta Winner Ensemble:
   long_run_time: true
   makes_use_of: !!set
     game: null
+    length: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1047,6 +1058,7 @@ Meta Winner Long Memory:
   long_run_time: true
   makes_use_of: !!set
     game: null
+    length: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1065,6 +1077,7 @@ Meta Winner Stochastic:
   long_run_time: true
   makes_use_of: !!set
     game: null
+    length: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1130,8 +1143,9 @@ N Tit(s) For M Tat(s):
 NMWE Deterministic:
   inspects_source: false
   long_run_time: true
-  makes_use_of: &id001 !!set
+  makes_use_of: !!set
     game: null
+    length: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1139,7 +1153,8 @@ NMWE Deterministic:
 NMWE Finite Memory:
   inspects_source: false
   long_run_time: true
-  makes_use_of: *id001
+  makes_use_of: !!set
+    game: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1147,7 +1162,9 @@ NMWE Finite Memory:
 NMWE Long Memory:
   inspects_source: false
   long_run_time: true
-  makes_use_of: *id001
+  makes_use_of: !!set
+    game: null
+    length: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1155,7 +1172,8 @@ NMWE Long Memory:
 NMWE Memory One:
   inspects_source: false
   long_run_time: true
-  makes_use_of: *id001
+  makes_use_of: !!set
+    game: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1163,7 +1181,9 @@ NMWE Memory One:
 NMWE Stochastic:
   inspects_source: false
   long_run_time: true
-  makes_use_of: *id001
+  makes_use_of: !!set
+    game: null
+    length: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1197,6 +1217,7 @@ Nice Meta Winner:
   long_run_time: true
   makes_use_of: !!set
     game: null
+    length: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
@@ -1204,7 +1225,9 @@ Nice Meta Winner:
 Nice Meta Winner Ensemble:
   inspects_source: false
   long_run_time: true
-  makes_use_of: *id001
+  makes_use_of: !!set
+    game: null
+    length: null
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
