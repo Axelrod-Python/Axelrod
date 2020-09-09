@@ -9,12 +9,12 @@ from collections import defaultdict
 
 class Graph(object):
     """Weighted and directed graph class.
-    
+
     This class is intended for the graph associated to a Markov process,
     since it gives easy access to the neighbors of a particular state.
 
     Vertices can be any hashable Python object.
-    
+
     Initialize with a list of edges:
         [[node1, node2, weights], ...]
     Weights can be omitted for an undirected graph.
@@ -22,7 +22,7 @@ class Graph(object):
     For efficiency, neighbors are cached in dictionaries. Undirected
     graphs are implemented as directed graphs in which every edge (s, t)
     has the opposite edge (t, s).
-    
+
     Attributes
     ----------
     directed: Boolean indicating whether the graph is directed
@@ -31,7 +31,7 @@ class Graph(object):
         all tails to their edge weights (None means no weight)
     in_mapping: a dictionary mapping all tails to dictionaries that map
         all heads to their edge weights (none means to weight)
-    
+
     Properties
     ----------
     vertices: the set of vertices in the graph

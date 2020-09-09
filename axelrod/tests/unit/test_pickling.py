@@ -23,8 +23,10 @@ class MyDefector(axl.Player):
         return D
 
 
-PointerToWrappedClassNotInStrategies = axl.strategy_transformers.FlipTransformer()(
-    axl.strategy_transformers.FlipTransformer()(MyDefector)
+PointerToWrappedClassNotInStrategies = (
+    axl.strategy_transformers.FlipTransformer()(
+        axl.strategy_transformers.FlipTransformer()(MyDefector)
+    )
 )
 
 

@@ -334,7 +334,10 @@ class TestGradual(TestPlayer):
         self.versus_test(
             opponent,
             expected_actions=actions,
-            attrs={"calm_count": 0, "punish_count": 0,},
+            attrs={
+                "calm_count": 0,
+                "punish_count": 0,
+            },
         )
 
         opponent = axl.MockPlayer(actions=[D])
@@ -342,7 +345,10 @@ class TestGradual(TestPlayer):
         self.versus_test(
             opponent,
             expected_actions=actions,
-            attrs={"calm_count": 0, "punish_count": 0,},
+            attrs={
+                "calm_count": 0,
+                "punish_count": 0,
+            },
         )
 
         opponent = axl.MockPlayer(actions=[D, C])
@@ -350,7 +356,10 @@ class TestGradual(TestPlayer):
         self.versus_test(
             opponent,
             expected_actions=actions,
-            attrs={"calm_count": 2, "punish_count": 0,},
+            attrs={
+                "calm_count": 2,
+                "punish_count": 0,
+            },
         )
 
         opponent = axl.MockPlayer(actions=[D, C, C])
@@ -358,7 +367,10 @@ class TestGradual(TestPlayer):
         self.versus_test(
             opponent,
             expected_actions=actions,
-            attrs={"calm_count": 1, "punish_count": 0,},
+            attrs={
+                "calm_count": 1,
+                "punish_count": 0,
+            },
         )
 
         opponent = axl.MockPlayer(actions=[D, C, D, C])
@@ -366,7 +378,10 @@ class TestGradual(TestPlayer):
         self.versus_test(
             opponent,
             expected_actions=actions,
-            attrs={"calm_count": 0, "punish_count": 0,},
+            attrs={
+                "calm_count": 0,
+                "punish_count": 0,
+            },
         )
 
         opponent = axl.MockPlayer(actions=[D, C, D, C, C])
@@ -374,7 +389,10 @@ class TestGradual(TestPlayer):
         self.versus_test(
             opponent,
             expected_actions=actions,
-            attrs={"calm_count": 0, "punish_count": 0,},
+            attrs={
+                "calm_count": 0,
+                "punish_count": 0,
+            },
         )
 
         opponent = axl.MockPlayer(actions=[D, C, D, C, C, C])
@@ -382,7 +400,10 @@ class TestGradual(TestPlayer):
         self.versus_test(
             opponent,
             expected_actions=actions,
-            attrs={"calm_count": 0, "punish_count": 0,},
+            attrs={
+                "calm_count": 0,
+                "punish_count": 0,
+            },
         )
 
         opponent = axl.MockPlayer(actions=[D, C, D, C, C, C, D, C])
@@ -399,7 +420,10 @@ class TestGradual(TestPlayer):
         self.versus_test(
             opponent,
             expected_actions=actions,
-            attrs={"calm_count": 2, "punish_count": 2,},
+            attrs={
+                "calm_count": 2,
+                "punish_count": 2,
+            },
         )
 
         opponent = axl.MockPlayer(actions=[D, C, D, C, C, D, D, D])
@@ -416,7 +440,10 @@ class TestGradual(TestPlayer):
         self.versus_test(
             opponent,
             expected_actions=actions,
-            attrs={"calm_count": 2, "punish_count": 1,},
+            attrs={
+                "calm_count": 2,
+                "punish_count": 1,
+            },
         )
 
         opponent = axl.Defector()
@@ -477,7 +504,10 @@ class TestGradual(TestPlayer):
         self.versus_test(
             opponent,
             expected_actions=actions,
-            attrs={"calm_count": 2, "punish_count": 42,},
+            attrs={
+                "calm_count": 2,
+                "punish_count": 42,
+            },
         )
 
     def test_specific_set_of_results(self):
@@ -490,7 +520,8 @@ class TestGradual(TestPlayer):
         both players cooperated in the previous round.
         """
         mistrust_with_bug = axl.MemoryOnePlayer(
-            initial=D, four_vector=(1, 0, 0, 0),
+            initial=D,
+            four_vector=(1, 0, 0, 0),
         )
         players = [
             self.player(),

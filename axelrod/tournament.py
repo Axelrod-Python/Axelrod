@@ -97,7 +97,7 @@ class Tournament(object):
 
     def setup_output(self, filename=None):
         """assign/create `filename` to `self`. If file should be deleted once
-        `play` is finished, assign a file descriptor. """
+        `play` is finished, assign a file descriptor."""
         temp_file_descriptor = None
         if filename is None:
             temp_file_descriptor, filename = mkstemp()

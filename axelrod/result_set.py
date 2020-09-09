@@ -152,8 +152,10 @@ class ResultSet:
             "DD to C count",
             "DD to D count",
         ]
-        self.state_to_action_distribution = self._build_state_to_action_distribution(
-            sum_per_player_opponent_df[columns]
+        self.state_to_action_distribution = (
+            self._build_state_to_action_distribution(
+                sum_per_player_opponent_df[columns]
+            )
         )
         self.normalised_state_to_action_distribution = (
             self._build_normalised_state_to_action_distribution()

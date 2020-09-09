@@ -118,12 +118,14 @@ class Human(Player):
                 if PROMPT2
                 else lambda cli: [(token_toolbar, self._history_toolbar())]
             )
-            print_statement = "{}Turn {}: {} played {}, opponent played {}".format(
-                linesep,
-                len(self.history),
-                self.human_name,
-                self.symbols[self.history[-1]],
-                self.symbols[self.history.coplays[-1]],
+            print_statement = (
+                "{}Turn {}: {} played {}, opponent played {}".format(
+                    linesep,
+                    len(self.history),
+                    self.human_name,
+                    self.symbols[self.history[-1]],
+                    self.symbols[self.history.coplays[-1]],
+                )
             )
         else:
             toolbar = None

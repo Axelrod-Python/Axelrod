@@ -175,8 +175,7 @@ class TestTransformers(TestMatch):
         self.assertEqual(player.__doc__, transformer.__doc__)
 
     def test_cloning(self):
-        """Tests that Player.clone preserves the application of transformations.
-        """
+        """Tests that Player.clone preserves the application of transformations."""
         p1 = axl.Cooperator()
         p2 = FlipTransformer()(axl.Cooperator)()  # Defector
         p3 = p2.clone()

@@ -159,8 +159,7 @@ class TestGetMemoryFromTransitions(unittest.TestCase):
         self.assertEqual(get_memory_from_transitions(trans_dict), 2)
 
     def test_tit_for_five_tat(self):
-        """Analogous to tit for two tat above.
-        """
+        """Analogous to tit for two tat above."""
         transitions = (
             (1, C, 1, C),
             (1, D, 2, C),
@@ -227,8 +226,7 @@ class TestGetMemoryFromTransitions(unittest.TestCase):
         self.assertEqual(get_memory_from_transitions(trans_dict), 3)
 
     def test_complex_cooperator(self):
-        """Tests a cooperator with lots of states and transitions.
-        """
+        """Tests a cooperator with lots of states and transitions."""
         transitions = (
             (0, C, 0, C),
             (0, D, 1, C),

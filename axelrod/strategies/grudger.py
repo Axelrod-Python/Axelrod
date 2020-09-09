@@ -167,8 +167,7 @@ class SoftGrudger(Player):
         self.grudge_memory = 0
 
     def strategy(self, opponent: Player) -> Action:
-        """Begins by playing C, then plays D, D, D, D, C, C against a defection
-        """
+        """Begins by playing C, then plays D, D, D, D, C, C against a defection"""
         if self.grudged:
             strategy = [D, D, D, C, C][self.grudge_memory]
             self.grudge_memory += 1

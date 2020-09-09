@@ -535,7 +535,8 @@ class EvolvableLookerUp(LookerUp, EvolvablePlayer):
             if r < self.mutation_probability:
                 initial_actions[i] = initial_actions[i].flip()
         return self.create_new(
-            lookup_dict=lookup_dict, initial_actions=tuple(initial_actions),
+            lookup_dict=lookup_dict,
+            initial_actions=tuple(initial_actions),
         )
 
     def crossover(self, other):

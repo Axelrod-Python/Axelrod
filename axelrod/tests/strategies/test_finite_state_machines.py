@@ -452,7 +452,11 @@ class TestPredator(TestFSMPlayer):
             (5, D),
             (3, C),
             (5, C),
-        ] + [(7, C), (8, D), (6, C),] * 5
+        ] + [
+            (7, C),
+            (8, D),
+            (6, C),
+        ] * 5
         self.transitions_test(state_and_actions)
 
         state_and_actions = (
