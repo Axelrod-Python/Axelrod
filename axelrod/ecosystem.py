@@ -33,7 +33,7 @@ class Ecosystem(object):
         population: List[int] = None,
     ) -> None:
         """Create a new ecosystem.
-        
+
         Parameters
         ----------
         results: ResultSet
@@ -83,7 +83,7 @@ class Ecosystem(object):
 
     def reproduce(self, turns: int):
         """Reproduce populations according to the payoff matrix.
-        
+
         Parameters
         ----------
         turns: int

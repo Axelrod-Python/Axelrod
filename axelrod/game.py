@@ -20,7 +20,7 @@ class Game(object):
         self, r: Score = 3, s: Score = 0, t: Score = 5, p: Score = 1
     ) -> None:
         """Create a new game object.
-        
+
         Parameters
         ----------
         r: int or float

@@ -241,7 +241,12 @@ def spatial_tournaments(
 
     all_potential_edges = list(itertools.combinations(player_indices, 2))
     all_potential_edges.extend([(i, i) for i in player_indices])  # Loops
-    edges = draw(lists(sampled_from(all_potential_edges), unique=True,))
+    edges = draw(
+        lists(
+            sampled_from(all_potential_edges),
+            unique=True,
+        )
+    )
 
     # Ensure all players/nodes are connected:
     node_indices = sorted(set([node for edge in edges for node in edge]))
@@ -311,7 +316,12 @@ def prob_end_spatial_tournaments(
 
     all_potential_edges = list(itertools.combinations(player_indices, 2))
     all_potential_edges.extend([(i, i) for i in player_indices])  # Loops
-    edges = draw(lists(sampled_from(all_potential_edges), unique=True,))
+    edges = draw(
+        lists(
+            sampled_from(all_potential_edges),
+            unique=True,
+        )
+    )
 
     # Ensure all players/nodes are connected:
     node_indices = sorted(set([node for edge in edges for node in edge]))

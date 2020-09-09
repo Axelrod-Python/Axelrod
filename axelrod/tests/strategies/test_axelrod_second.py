@@ -274,7 +274,7 @@ class TestTranquilizer(TestPlayer):
 
     def test_strategy4(self):
         """If score is greater than 2.25 either cooperate or defect,
-           if turn number <= 5; cooperate"""
+        if turn number <= 5; cooperate"""
 
         opponent = axl.MockPlayer(actions=[C] * 5)
         actions = [(C, C)] * 5
@@ -304,8 +304,8 @@ class TestTranquilizer(TestPlayer):
         )
 
     def test_strategy6(self):
-        """ Given score per turn is greater than 2.25,
-            Tranquilizer will never defect twice in a row"""
+        """Given score per turn is greater than 2.25,
+        Tranquilizer will never defect twice in a row"""
 
         opponent = axl.MockPlayer(actions=[C] * 6)
         actions = [(C, C)] * 4 + [(D, C), (C, C)]

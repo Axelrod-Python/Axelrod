@@ -733,7 +733,10 @@ class TestEvolvableLookerUp4(TestEvolvablePlayer):
     init_parameters = {
         "parameters": (2, 2, 2),
         "pattern": "".join([random.choice(("C", "D")) for _ in range(64)]),
-        "initial_actions": (C, C,),
+        "initial_actions": (
+            C,
+            C,
+        ),
     }
 
 
@@ -743,7 +746,10 @@ class TestEvolvableLookerUp5(TestEvolvablePlayer):
     parent_class = axl.LookerUp
     parent_kwargs = ["lookup_dict", "initial_actions"]
     init_parameters = {
-        "initial_actions": (C, C,),
+        "initial_actions": (
+            C,
+            C,
+        ),
         "lookup_dict": {
             ((C, C), (C,), ()): C,
             ((C, C), (D,), ()): D,

@@ -142,6 +142,7 @@ from .grudger import (
     GrudgerAlternator,
     OppositeGrudger,
     SoftGrudger,
+    SpitefulCC,
 )
 from .grumpy import Grumpy
 from .handshake import Handshake
@@ -467,6 +468,7 @@ all_strategies = [
     SolutionB1,
     SolutionB5,
     SpitefulTitForTat,
+    SpitefulCC,
     Stalker,
     StochasticCooperator,
     StochasticWSLS,

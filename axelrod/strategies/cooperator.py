@@ -60,8 +60,9 @@ class TrickyCooperator(Player):
         After 3 rounds, if opponent has not defected to a max history depth of
         10, defect.
         """
-        if self._has_played_enough_rounds_to_be_tricky() and self._opponents_has_cooperated_enough_to_be_tricky(
-            opponent
+        if (
+            self._has_played_enough_rounds_to_be_tricky()
+            and self._opponents_has_cooperated_enough_to_be_tricky(opponent)
         ):
             return D
         return C

@@ -316,13 +316,13 @@ class HardTitFor2Tats(Player):
 
 class OmegaTFT(Player):
     """OmegaTFT modifies Tit For Tat in two ways:
-       - checks for deadlock loops of alternating rounds of (C, D) and (D, C),
-       and attempting to break them
-       - uses a more sophisticated retaliation mechanism that is noise tolerant
+    - checks for deadlock loops of alternating rounds of (C, D) and (D, C),
+    and attempting to break them
+    - uses a more sophisticated retaliation mechanism that is noise tolerant
 
-       Names:
+    Names:
 
-       - OmegaTFT: [Slany2007]_
+    - OmegaTFT: [Slany2007]_
     """
 
     name = "Omega TFT"
@@ -404,7 +404,7 @@ class OriginalGradual(Player):
     Names:
 
     - Gradual: [Beaufils1997]_
-     """
+    """
 
     name = "Original Gradual"
     classifier = {
