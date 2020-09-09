@@ -415,7 +415,9 @@ class TestPSOGambler2_2_2_Noise05(TestPlayer):
             (D, D),  # different than above test
         ]
         self.versus_test(
-            axl.MockPlayer(opponent_actions), expected_actions=expected, seed=5,
+            axl.MockPlayer(opponent_actions),
+            expected_actions=expected,
+            seed=5,
         )
 
     def test_vs_DCDDC3(self):
@@ -598,7 +600,10 @@ class TestEvolvableGambler4(TestEvolvablePlayer):
     init_parameters = {
         "parameters": (2, 2, 2),
         "pattern": [random.random() for _ in range(64)],
-        "initial_actions": (C, C,),
+        "initial_actions": (
+            C,
+            C,
+        ),
     }
 
 
@@ -607,7 +612,10 @@ EvolvableGamblerWithDefault = PartialClass(
     axl.EvolvableGambler,
     pattern=tables[("PSO Gambler 2_2_2", 2, 2, 2)],
     parameters=(2, 2, 2),
-    initial_actions=(C, C,),
+    initial_actions=(
+        C,
+        C,
+    ),
 )
 
 
