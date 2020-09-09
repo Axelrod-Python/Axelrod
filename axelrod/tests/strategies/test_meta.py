@@ -504,6 +504,7 @@ class TestMetaWinnerFiniteMemory(TestMetaPlayer):
             opponent=axl.Alternator(), expected_actions=actions, seed=1
         )
 
+
 class TestMetaWinnerLongMemory(TestMetaPlayer):
     name = "Meta Winner Long Memory"
     player = axl.MetaWinnerLongMemory
@@ -522,6 +523,7 @@ class TestMetaWinnerLongMemory(TestMetaPlayer):
         self.versus_test(
             opponent=axl.Alternator(), expected_actions=actions, seed=4
         )
+
 
 class TestMetaWinnerDeterministic(TestMetaPlayer):
     name = "Meta Winner Deterministic"
@@ -559,6 +561,7 @@ class TestMetaWinnerStochastic(TestMetaPlayer):
         self.versus_test(
             opponent=axl.Alternator(), expected_actions=actions, seed=1
         )
+
 
 class TestMetaMixer(TestMetaPlayer):
     name = "Meta Mixer"
