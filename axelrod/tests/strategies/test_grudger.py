@@ -305,3 +305,34 @@ class TestGeneralSoftGrudger(TestPlayer):
             expected_actions=actions,
             init_kwargs={"n": 1, "d": 1, "c": 1},
         )
+
+
+class TestSpitefulCC(TestPlayer):
+
+    name = "SpitefulCC"
+    player = axl.SpitefulCC
+    expected_classifier = {
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+    def test_strategy(self):
+        # If opponent defects at any point then the player will defect forever.
+        # Cooperates for the first 2 turns.
+        opponent = axl.Cooperator()
+        actions = [(C, C)] * 20
+        self.versus_test(opponent, expected_actions=actions)
+
+        opponent = axl.Defector()
+        actions = [(C, D)] * 2 + [(D, D)] * 20
+        self.versus_test(opponent, expected_actions=actions)
+
+        opponent_actions = [D] * 20 + [C] * 20
+        opponent = axl.MockPlayer(actions=opponent_actions)
+        actions = [(C, D)] * 2 + [(D, D)] * 18 + [(D, C)] * 20
+        self.versus_test(opponent, expected_actions=actions)

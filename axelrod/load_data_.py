@@ -56,7 +56,12 @@ def load_pso_tables(filename="pso_gambler.csv", directory="data"):
     rows = load_file(filename, directory)
     d = dict()
     for row in rows:
-        name, a, b, c, = str(row[0]), int(row[1]), int(row[2]), int(row[3])
+        name, a, b, c, = (
+            str(row[0]),
+            int(row[1]),
+            int(row[2]),
+            int(row[3]),
+        )
         values = list(map(float, row[4:]))
         d[(name, int(a), int(b), int(c))] = values
     return d

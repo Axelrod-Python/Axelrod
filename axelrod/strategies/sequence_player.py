@@ -80,7 +80,7 @@ class ThueMorse(SequencePlayer):
 
 
 class ThueMorseInverse(ThueMorse):
-    """ A player who plays the inverse of the Thue-Morse sequence.
+    """A player who plays the inverse of the Thue-Morse sequence.
 
     Names:
 
