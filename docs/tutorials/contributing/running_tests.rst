@@ -4,10 +4,6 @@ Running tests
 Basic test runners
 ------------------
 
-Before running tests, you should have hypothesis 3.2 installed::
-
-    $ pip install hypothesis==3.2
-
 The project has an extensive test suite which is run each time a new
 contribution is made to the repository.  If you want to check that all the tests
 pass before you submit a pull request you can run the tests yourself::
@@ -73,12 +69,3 @@ You can also run the type checker on a given file. For example, to run the type
 checker on the Grudger strategy::
 
     $ mypy --ignore-missing-imports --follow-imports skip axelrod/strategies/grudger.py
-
-
-Continuous integration
-======================
-
-This project is being taken care of by `travis-ci
-<https://travis-ci.org/>`_, so all tests will be run automatically when opening
-a pull request.  You can see the latest build status `here
-<https://travis-ci.org/Axelrod-Python/Axelrod>`_.
