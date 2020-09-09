@@ -35,7 +35,9 @@ class TestDetectCycle(unittest.TestCase):
         history = [D, D, C, C, C]
         self.assertIsNone(detect_cycle(history))
 
-    def test_regression_test_can_detect_cycle_that_is_repeated_exactly_once(self):
+    def test_regression_test_can_detect_cycle_that_is_repeated_exactly_once(
+        self,
+    ):
         self.assertEqual(detect_cycle([C, D, C, D]), (C, D))
         self.assertEqual(detect_cycle([C, D, C, D, C]), (C, D))
 
@@ -53,11 +55,14 @@ class TestDetectCycle(unittest.TestCase):
 
     def test_min_size_greater_than_two_times_max_size_has_no_effect(self):
         self.assertEqual(
-            detect_cycle([C, C, C, C, C, C, C, C], min_size=2, max_size=3), (C, C)
+            detect_cycle([C, C, C, C, C, C, C, C], min_size=2, max_size=3),
+            (C, C),
         )
 
     def test_cycle_greater_than_max_size_returns_none(self):
-        self.assertEqual(detect_cycle([C, C, D] * 2, min_size=1, max_size=3), (C, C, D))
+        self.assertEqual(
+            detect_cycle([C, C, D] * 2, min_size=1, max_size=3), (C, C, D)
+        )
         self.assertIsNone(detect_cycle([C, C, D] * 2, min_size=1, max_size=2))
 
 
@@ -81,7 +86,9 @@ class TestInspectStrategy(unittest.TestCase):
         inspector = axl.Cooperator()
         match = axl.Match((d_geller, inspector), turns=1)
         match.play()
-        self.assertEqual(inspect_strategy(inspector=inspector, opponent=d_geller), D)
+        self.assertEqual(
+            inspect_strategy(inspector=inspector, opponent=d_geller), D
+        )
         self.assertEqual(d_geller.strategy(inspector), C)
 
 

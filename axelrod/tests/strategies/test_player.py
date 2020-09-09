@@ -458,14 +458,22 @@ class TestPlayer(unittest.TestCase):
         clone = player.clone()
         self.assertEqual(player, clone)
 
-    @given(seed=integers(min_value=1, max_value=20000000),
-           turns=integers(min_value=5, max_value=10),
-           noise=integers(min_value=0, max_value=10))
+    @given(
+        seed=integers(min_value=1, max_value=20000000),
+        turns=integers(min_value=5, max_value=10),
+        noise=integers(min_value=0, max_value=10),
+    )
     @settings(max_examples=1, deadline=None)
     def test_clone_reproducible_play(self, seed, turns, noise):
         # Test that the cloned player produces identical play
         player = self.player()
-        if player.name in ["Darwin", "Human", "Mind Bender", "Mind Controller", "Mind Warper"]:
+        if player.name in [
+            "Darwin",
+            "Human",
+            "Mind Bender",
+            "Mind Controller",
+            "Mind Warper",
+        ]:
             # Known exceptions
             return
 
@@ -479,8 +487,15 @@ class TestPlayer(unittest.TestCase):
             player_clone = player.clone()
             op = op.clone()
             op_clone = op.clone()
-            m1 = axl.Match((player, op), turns=turns, seed=seed, noise=noise/100.)
-            m2 = axl.Match((player_clone, op_clone), turns=turns, seed=seed, noise=noise/100.)
+            m1 = axl.Match(
+                (player, op), turns=turns, seed=seed, noise=noise / 100.0
+            )
+            m2 = axl.Match(
+                (player_clone, op_clone),
+                turns=turns,
+                seed=seed,
+                noise=noise / 100.0,
+            )
             m1.play()
             m2.play()
             self.assertEqual(m1.result, m2.result)
@@ -577,7 +592,7 @@ class TestPlayer(unittest.TestCase):
             noise=noise,
             seed=seed,
             attrs=attrs,
-            match_attributes=match_attributes
+            match_attributes=match_attributes,
         )
 
     def classifier_test(self, expected_class_classifier=None):
@@ -610,12 +625,13 @@ class TestPlayer(unittest.TestCase):
                 axl.Classifiers[key](player),
                 self.expected_classifier[key],
                 msg="%s - Behaviour: %s != Expected Behaviour: %s"
-                    % (
-                        key,
-                        axl.Classifiers[key](player),
-                        self.expected_classifier[key],
-                    ),
+                % (
+                    key,
+                    axl.Classifiers[key](player),
+                    self.expected_classifier[key],
+                ),
             )
+
 
 class TestMatch(unittest.TestCase):
     """Test class for heads up play between two given players. Plays an
@@ -631,7 +647,7 @@ class TestMatch(unittest.TestCase):
         noise=None,
         seed=None,
         match_attributes=None,
-        attrs=None
+        attrs=None,
     ):
         """Tests a sequence of outcomes for two given players."""
         if len(expected_actions1) != len(expected_actions2):
@@ -640,14 +656,22 @@ class TestMatch(unittest.TestCase):
             turns = len(expected_actions1)
 
         match = axl.Match(
-            (player1, player2), turns=turns, noise=noise, seed=seed,
-            match_attributes=match_attributes)
+            (player1, player2),
+            turns=turns,
+            noise=noise,
+            seed=seed,
+            match_attributes=match_attributes,
+        )
         match.play()
 
         # Test expected sequence of plays from the match is as expected.
-        for i, (play, expected_play) in enumerate(zip(player1.history, expected_actions1)):
+        for i, (play, expected_play) in enumerate(
+            zip(player1.history, expected_actions1)
+        ):
             self.assertEqual((i, play), (i, expected_play))
-        for i, (play, expected_play) in enumerate(zip(player2.history, expected_actions2)):
+        for i, (play, expected_play) in enumerate(
+            zip(player2.history, expected_actions2)
+        ):
             self.assertEqual((i, play), (i, expected_play))
 
         # Test final player attributes are as expected

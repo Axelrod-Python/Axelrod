@@ -59,7 +59,7 @@ class EvolvableGambler(Gambler, EvolvableLookerUp):
         pattern: Any = None,  # pattern is str or tuple of Actions.
         parameters: Plays = None,
         mutation_probability: float = None,
-        seed: int = None
+        seed: int = None,
     ) -> None:
         EvolvableLookerUp.__init__(
             self,
@@ -68,7 +68,7 @@ class EvolvableGambler(Gambler, EvolvableLookerUp):
             pattern=pattern,
             parameters=parameters,
             mutation_probability=mutation_probability,
-            seed=seed
+            seed=seed,
         )
         self.pattern = list(self.pattern)
         Gambler.__init__(
@@ -76,7 +76,7 @@ class EvolvableGambler(Gambler, EvolvableLookerUp):
             lookup_dict=self.lookup_dict,
             initial_actions=self.initial_actions,
             pattern=self.pattern,
-            parameters=self.parameters
+            parameters=self.parameters,
         )
         self.overwrite_init_kwargs(
             lookup_dict=self.lookup_dict,
@@ -105,7 +105,9 @@ class EvolvableGambler(Gambler, EvolvableLookerUp):
         """Receives a vector and updates the player's pattern. Ignores extra parameters."""
         self.pattern = vector
         self_depth, op_depth, op_openings_depth = self.parameters
-        self._lookup = LookupTable.from_pattern(self.pattern, self_depth, op_depth, op_openings_depth)
+        self._lookup = LookupTable.from_pattern(
+            self.pattern, self_depth, op_depth, op_openings_depth
+        )
 
     def create_vector_bounds(self):
         """Creates the bounds for the decision variables. Ignores extra parameters."""

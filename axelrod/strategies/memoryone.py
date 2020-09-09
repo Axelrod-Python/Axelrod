@@ -66,7 +66,9 @@ class MemoryOnePlayer(Player):
     }
 
     def __init__(
-        self, four_vector: Tuple[float, float, float, float] = None, initial: Action = C
+        self,
+        four_vector: Tuple[float, float, float, float] = None,
+        initial: Action = C,
     ) -> None:
         """
         Parameters
@@ -109,7 +111,9 @@ class MemoryOnePlayer(Player):
                 "An element in the probability vector, {}, is not "
                 "between 0 and 1.".format(str(four_vector))
             )
-        self._four_vector = dict(zip([(C, C), (C, D), (D, C), (D, D)], four_vector))
+        self._four_vector = dict(
+            zip([(C, C), (C, D), (D, C), (D, D)], four_vector)
+        )
 
     def _post_init(self):
         # Adjust classifiers

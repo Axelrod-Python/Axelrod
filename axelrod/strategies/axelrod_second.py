@@ -327,8 +327,12 @@ class SecondByTranquilizer(Player):
         self.opponent_consecutive_defections = 0  # equal to S variable
         self.one_turn_after_good_defection_ratio = 5  # equal to AD variable
         self.two_turns_after_good_defection_ratio = 0  # equal to NO variable
-        self.one_turn_after_good_defection_ratio_count = 1  # equal to AK variable
-        self.two_turns_after_good_defection_ratio_count = 1  # equal to NK variable
+        self.one_turn_after_good_defection_ratio_count = (
+            1  # equal to AK variable
+        )
+        self.two_turns_after_good_defection_ratio_count = (
+            1  # equal to NK variable
+        )
         # All above variables correspond to those in original Fotran Code
         self.dict = {C: 0, D: 1}
 
@@ -353,7 +357,12 @@ class SecondByTranquilizer(Player):
                 )
                 + (3 - (3 * self.dict[opponent.history[-1]]))
                 + (2 * self.dict[self.history[-1]])
-                - ((self.dict[opponent.history[-1]] * self.dict[self.history[-1]]))
+                - (
+                    (
+                        self.dict[opponent.history[-1]]
+                        * self.dict[self.history[-1]]
+                    )
+                )
             ) / (self.two_turns_after_good_defection_ratio_count + 1)
             self.two_turns_after_good_defection_ratio_count += 1
         elif self.num_turns_after_good_defection == 1:
@@ -365,7 +374,10 @@ class SecondByTranquilizer(Player):
                 )
                 + (3 - (3 * self.dict[opponent.history[-1]]))
                 + (2 * self.dict[self.history[-1]])
-                - (self.dict[opponent.history[-1]] * self.dict[self.history[-1]])
+                - (
+                    self.dict[opponent.history[-1]]
+                    * self.dict[self.history[-1]]
+                )
             ) / (self.one_turn_after_good_defection_ratio_count + 1)
             self.one_turn_after_good_defection_ratio_count += 1
 
@@ -402,7 +414,10 @@ class SecondByTranquilizer(Player):
             return D
         if (current_score[0] / ((len(self.history)) + 1)) >= 1.75:
             probability = (
-                (0.25 + ((opponent.cooperations + 1) / ((len(self.history)) + 1)))
+                (
+                    0.25
+                    + ((opponent.cooperations + 1) / ((len(self.history)) + 1))
+                )
                 - (self.opponent_consecutive_defections * 0.25)
                 + ((current_score[0] - current_score[1]) / 100)
                 + (4 / ((len(self.history)) + 1))
@@ -516,7 +531,12 @@ class SecondByKluepfel(Player):
 
     def __init__(self):
         super().__init__()
-        self.cd_counts, self.dd_counts, self.dc_counts, self.cc_counts = 0, 0, 0, 0
+        self.cd_counts, self.dd_counts, self.dc_counts, self.cc_counts = (
+            0,
+            0,
+            0,
+            0,
+        )
 
     def strategy(self, opponent: Player) -> Action:
         # First update the response matrix.
@@ -534,7 +554,9 @@ class SecondByKluepfel(Player):
 
         # Check for randomness
         if len(self.history) > 26:
-            if self.cd_counts >= (self.cd_counts + self.dd_counts) / 2 - 0.75 * np.sqrt(
+            if self.cd_counts >= (
+                self.cd_counts + self.dd_counts
+            ) / 2 - 0.75 * np.sqrt(
                 self.cd_counts + self.dd_counts
             ) and self.dc_counts >= (
                 self.dc_counts + self.cc_counts
@@ -969,7 +991,10 @@ class SecondByWeiner(Player):
         if self.forgive_flag:
             self.forgive_flag = False
             self.defect_padding = 0
-            if self.grudge < len(self.history) + 1 and opponent.history[-1] == D:
+            if (
+                self.grudge < len(self.history) + 1
+                and opponent.history[-1] == D
+            ):
                 # Then override
                 self.grudge += 20
                 return self.try_return(C)
@@ -1095,7 +1120,9 @@ class SecondByHarrington(Player):
         self.mode = "Normal"
         self.recorded_defects = 0  # Count opponent defects after turn 1
         self.exit_defect_meter = 0  # When >= 11, then exit defect mode.
-        self.coops_in_first_36 = None  # On turn 37, count cooperations in first 36
+        self.coops_in_first_36 = (
+            None  # On turn 37, count cooperations in first 36
+        )
         self.was_defective = False  # Previously in Defect mode
 
         self.prob = 0.25  # After turn 37, probability that we'll defect
@@ -1105,7 +1132,9 @@ class SecondByHarrington(Player):
         self.more_coop = 0  # This schedules cooperation for future turns
         # Initial last_generous_n_turns_ago to 3 because this counts up and
         # triggers a strategy change at 2.
-        self.last_generous_n_turns_ago = 3  # How many tuns ago was a "generous" move
+        self.last_generous_n_turns_ago = (
+            3  # How many tuns ago was a "generous" move
+        )
         self.burned = False
 
         self.defect_streak = 0
@@ -1114,7 +1143,9 @@ class SecondByHarrington(Player):
             0,
         ]  # Counters that get (almost) alternatively incremented.
         self.parity_bit = 0  # Which parity_streak to increment
-        self.parity_limit = 5  # When a parity streak hits this limit, alter strategy.
+        self.parity_limit = (
+            5  # When a parity streak hits this limit, alter strategy.
+        )
         self.parity_hits = 0  # Counts how many times a parity_limit was hit.
         # After hitting parity_hits 8 times, lower parity_limit to 3.
 
@@ -1153,7 +1184,9 @@ class SecondByHarrington(Player):
         denom = turn - 2
 
         expected_matrix = (
-            np.outer(self.move_history.sum(axis=1), self.move_history.sum(axis=0))
+            np.outer(
+                self.move_history.sum(axis=1), self.move_history.sum(axis=0)
+            )
             / denom
         )
 
@@ -1162,7 +1195,9 @@ class SecondByHarrington(Player):
             for j in range(2):
                 expect = expected_matrix[i, j]
                 if expect > 1.0:
-                    chi_squared += (expect - self.move_history[i, j]) ** 2 / expect
+                    chi_squared += (
+                        expect - self.move_history[i, j]
+                    ) ** 2 / expect
 
         return chi_squared
 
@@ -1184,7 +1219,10 @@ class SecondByHarrington(Player):
 
         if self.move_history[0, 0] / denom >= 0.8:
             return False
-        if self.recorded_defects / denom < 0.25 or self.recorded_defects / denom > 0.75:
+        if (
+            self.recorded_defects / denom < 0.25
+            or self.recorded_defects / denom > 0.75
+        ):
             return False
 
         if self.calculate_chi_squared(turn) > 3:
@@ -1276,7 +1314,11 @@ class SecondByHarrington(Player):
 
         # Only enter Fair-weather mode if the opponent Cooperated the first 37
         # turns then Defected on the 38th.
-        if turn == 38 and opponent.history[-1] == D and opponent.cooperations == 36:
+        if (
+            turn == 38
+            and opponent.history[-1] == D
+            and opponent.cooperations == 36
+        ):
             self.mode = "Fair-weather"
             return self.try_return(to_return=C, lower_flags=False)
 
@@ -1297,7 +1339,9 @@ class SecondByHarrington(Player):
             self.parity_streak[
                 self.parity_bit
             ] = 0  # Reset `parity_streak` when we hit the limit.
-            self.parity_hits += 1  # Keep track of how many times we hit the limit.
+            self.parity_hits += (
+                1  # Keep track of how many times we hit the limit.
+            )
             if self.parity_hits >= 8:  # After 8 times, lower the limit.
                 self.parity_limit = 3
             return self.try_return(
@@ -1521,7 +1565,9 @@ class SecondByLeyvraz(Player):
                 recent_history[-go_back] = opponent.history[-go_back]
 
         return self._random.random_choice(
-            self.prob_coop[(recent_history[-3], recent_history[-2], recent_history[-1])]
+            self.prob_coop[
+                (recent_history[-3], recent_history[-2], recent_history[-1])
+            ]
         )
 
 
@@ -1704,7 +1750,10 @@ class SecondByRichardHufford(Player):
             else:
                 self.def_after_ab_count += 1
             self.streak_needed = (
-                np.floor(20.0 * self.def_after_ab_count / self.coop_after_ab_count) + 1
+                np.floor(
+                    20.0 * self.def_after_ab_count / self.coop_after_ab_count
+                )
+                + 1
             )
             self.current_streak = 0
             return C
@@ -1804,7 +1853,9 @@ class SecondByYamachi(Player):
 
         # Update history
         if turn >= 3:
-            self.count_them_us_them[(them_three_ago, us_two_ago, them_two_ago)] += 1
+            self.count_them_us_them[
+                (them_three_ago, us_two_ago, them_two_ago)
+            ] += 1
 
         if (
             self.count_them_us_them[(them_two_ago, us_last, C)]
@@ -1866,7 +1917,9 @@ class SecondByColbert(FSMPlayer):
             (10, D, 7, C),
         )
 
-        super().__init__(transitions=transitions, initial_state=0, initial_action=C)
+        super().__init__(
+            transitions=transitions, initial_state=0, initial_action=C
+        )
 
 
 class SecondByMikkelson(FSMPlayer):
@@ -2100,6 +2153,8 @@ class SecondByAppold(Player):
 
         # Calculate the probability that the opponent cooperated last turn given
         # what we know two turns ago.
-        prob_coop = self.opp_c_after_x[us_two_turns_ago] / self.total_num_of_x[
-            us_two_turns_ago]
+        prob_coop = (
+            self.opp_c_after_x[us_two_turns_ago]
+            / self.total_num_of_x[us_two_turns_ago]
+        )
         return self._random.random_choice(prob_coop)

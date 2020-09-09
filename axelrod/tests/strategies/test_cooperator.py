@@ -41,7 +41,9 @@ class TestTrickyCooperator(TestPlayer):
 
     def test_strategy(self):
         # Test if it tries to trick opponent.
-        self.versus_test(axl.Cooperator(), [(C, C), (C, C), (C, C), (D, C), (D, C)])
+        self.versus_test(
+            axl.Cooperator(), [(C, C), (C, C), (C, C), (D, C), (D, C)]
+        )
 
         opponent_actions = [C, C, C, C, D, D]
         expected_actions = [(C, C), (C, C), (C, C), (D, C), (D, D), (C, D)]
@@ -68,7 +70,7 @@ class TestTrickyCooperator(TestPlayer):
         self.versus_test(axl.Alternator(), expected_actions=against_alternator)
 
     def test_defects_after_three_rounds_if_opponent_only_cooperated_in_max_history_depth_ten(
-        self
+        self,
     ):
         against_cooperator = [(C, C)] * 3 + [(D, C)] * 20
         self.versus_test(axl.Cooperator(), expected_actions=against_cooperator)
@@ -76,4 +78,6 @@ class TestTrickyCooperator(TestPlayer):
     def test_defects_when_opponent_has_no_defections_to_history_depth_ten(self):
         opponent_actions = [D] + [C] * 10 + [D, C]
         expected_actions = [(C, D)] + [(C, C)] * 10 + [(D, D), (C, C)]
-        self.versus_test(axl.MockPlayer(actions=opponent_actions), expected_actions)
+        self.versus_test(
+            axl.MockPlayer(actions=opponent_actions), expected_actions
+        )

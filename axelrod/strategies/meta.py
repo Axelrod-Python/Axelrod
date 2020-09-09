@@ -104,7 +104,9 @@ class MetaPlayer(Player):
             # As a sanity check, look for at least one reclassifier, otherwise
             # this try-except clause could hide a bug.
             if len(self._reclassifiers) == 0:
-                raise TypeError("MetaClass update_histories issue, expected a reclassifier.")
+                raise TypeError(
+                    "MetaClass update_histories issue, expected a reclassifier."
+                )
             # Otherwise just update with C always, so at least the histories have the
             # expected length.
             for player in self.team:
@@ -234,7 +236,9 @@ class MetaWinnerEnsemble(MetaWinner):
         # If the team has repeated identical members, then it reduces to a singular team
         # and it may not actually be stochastic.
         if team and len(set(team)) == 1:
-            self.classifier["stochastic"] = Classifiers["stochastic"](self.team[0])
+            self.classifier["stochastic"] = Classifiers["stochastic"](
+                self.team[0]
+            )
             self.singular = True
 
     def meta_strategy(self, results, opponent):
@@ -551,7 +555,9 @@ class MetaMixer(MetaPlayer):
         if distribution and len(set(distribution)) > 1:
             self.classifier["stochastic"] = True
         if len(self.team) == 1:
-            self.classifier["stochastic"] = Classifiers["stochastic"](self.team[0])
+            self.classifier["stochastic"] = Classifiers["stochastic"](
+                self.team[0]
+            )
             # Overwrite strategy to avoid use of _random. This will ignore self.meta_strategy.
             self.index = 0
             self.strategy = self.index_strategy
@@ -564,7 +570,9 @@ class MetaMixer(MetaPlayer):
             if 1 in distribution:
                 self.index = list(distribution).index(1)
                 # It's potentially deterministic.
-                self.classifier["stochastic"] = Classifiers["stochastic"](self.team[self.index])
+                self.classifier["stochastic"] = Classifiers["stochastic"](
+                    self.team[self.index]
+                )
                 # Overwrite strategy to avoid use of _random. This will ignore self.meta_strategy.
                 self.strategy = self.index_strategy
 

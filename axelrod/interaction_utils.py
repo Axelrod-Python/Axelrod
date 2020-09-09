@@ -32,7 +32,8 @@ def compute_final_score(interactions, game=None):
         return None
 
     final_score = tuple(
-        sum([score[player_index] for score in scores]) for player_index in [0, 1]
+        sum([score[player_index] for score in scores])
+        for player_index in [0, 1]
     )
     return final_score
 
