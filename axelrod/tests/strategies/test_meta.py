@@ -438,6 +438,7 @@ class TestMetaMajorityFiniteMemory(TestMetaPlayer):
             opponent=axl.Alternator(), expected_actions=actions, seed=2
         )
 
+
 class TestMetaMajorityLongMemory(TestMetaPlayer):
     name = "Meta Majority Long Memory"
     player = axl.MetaMajorityLongMemory
@@ -482,6 +483,7 @@ class TestMetaWinnerMemoryOne(TestMetaPlayer):
         self.versus_test(
             opponent=axl.Alternator(), expected_actions=actions, seed=1
         )
+
 
 class TestMetaWinnerFiniteMemory(TestMetaPlayer):
     name = "Meta Winner Finite Memory"
@@ -537,6 +539,7 @@ class TestMetaWinnerDeterministic(TestMetaPlayer):
     def test_strategy(self):
         actions = [(C, C), (C, D), (C, C), (D, D), (D, C)]
         self.versus_test(opponent=axl.Alternator(), expected_actions=actions)
+
 
 class TestMetaWinnerStochastic(TestMetaPlayer):
     name = "Meta Winner Stochastic"
