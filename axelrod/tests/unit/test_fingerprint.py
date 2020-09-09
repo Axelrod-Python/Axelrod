@@ -506,9 +506,7 @@ class TestTransitiveFingerprint(unittest.TestCase):
         tf = TransitiveFingerprint(strategy)
         path = pathlib.Path("test_outputs/test_fingerprint.csv")
         tf.fingerprint(
-            repetitions=1,
-            progress_bar=False,
-            filename=axl_filename(path),
+            repetitions=1, progress_bar=False, filename=axl_filename(path),
         )
         self.assertEqual(tf.data.shape, (50, 50))
 

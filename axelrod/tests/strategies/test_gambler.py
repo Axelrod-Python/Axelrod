@@ -415,9 +415,7 @@ class TestPSOGambler2_2_2_Noise05(TestPlayer):
             (D, D),  # different than above test
         ]
         self.versus_test(
-            axl.MockPlayer(opponent_actions),
-            expected_actions=expected,
-            seed=5,
+            axl.MockPlayer(opponent_actions), expected_actions=expected, seed=5,
         )
 
     def test_vs_DCDDC3(self):
