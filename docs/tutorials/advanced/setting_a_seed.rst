@@ -53,7 +53,7 @@ To seed a tournament we also pass a seed to the tournament at creation time:
     >>> tournament = axl.Tournament(players, turns=5, repetitions=5, seed=seed)
     >>> results = tournament.play(processes=1)
     >>> tournament2 = axl.Tournament(players, turns=5, repetitions=5, seed=seed)
-    >>> results2 = tournament.play(processes=1)
+    >>> results2 = tournament2.play(processes=1)
     >>> results.ranked_names == results2.ranked_names
     True
 
@@ -65,7 +65,7 @@ rankings, will be the same.
     >>> tournament = axl.Tournament(players, turns=5, repetitions=5, seed=201)
     >>> results = tournament.play(processes=2)
     >>> tournament2 = axl.Tournament(players, turns=5, repetitions=5, seed=201)
-    >>> results2 = tournament.play(processes=2)
+    >>> results2 = tournament2.play(processes=2)
     >>> results.ranked_names == results2.ranked_names
     True
 
