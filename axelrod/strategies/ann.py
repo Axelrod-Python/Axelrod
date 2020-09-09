@@ -113,7 +113,10 @@ def compute_features(player: Player, opponent: Player) -> List[int]:
 
 
 def activate(
-    bias: List[float], hidden: List[float], output: List[float], inputs: List[int]
+    bias: List[float],
+    hidden: List[float],
+    output: List[float],
+    inputs: List[int],
 ) -> float:
     """
     Compute the output of the neural network:
@@ -193,8 +196,7 @@ class ANN(Player):
     }
 
     def __init__(
-        self, num_features: int, num_hidden: int,
-        weights: List[float] = None
+        self, num_features: int, num_hidden: int, weights: List[float] = None
     ) -> None:
         Player.__init__(self)
         self.num_features = num_features
@@ -225,42 +227,68 @@ class ANN(Player):
 
 class EvolvableANN(ANN, EvolvablePlayer):
     """Evolvable version of ANN."""
+
     name = "EvolvableANN"
 
     def __init__(
-        self, num_features: int, num_hidden: int,
+        self,
+        num_features: int,
+        num_hidden: int,
         weights: List[float] = None,
         mutation_probability: float = None,
         mutation_distance: int = 5,
-        seed: int = None
+        seed: int = None,
     ) -> None:
         EvolvablePlayer.__init__(self, seed=seed)
-        num_features, num_hidden, weights, mutation_probability = self._normalize_parameters(
-            num_features, num_hidden, weights, mutation_probability)
-        ANN.__init__(self,
-                     num_features=num_features,
-                     num_hidden=num_hidden,
-                     weights=weights)
+        (
+            num_features,
+            num_hidden,
+            weights,
+            mutation_probability,
+        ) = self._normalize_parameters(
+            num_features, num_hidden, weights, mutation_probability
+        )
+        ANN.__init__(
+            self,
+            num_features=num_features,
+            num_hidden=num_hidden,
+            weights=weights,
+        )
         self.mutation_probability = mutation_probability
         self.mutation_distance = mutation_distance
         self.overwrite_init_kwargs(
             num_features=num_features,
             num_hidden=num_hidden,
             weights=weights,
-            mutation_probability=mutation_probability)
+            mutation_probability=mutation_probability,
+        )
 
-    def _normalize_parameters(self, num_features=None, num_hidden=None, weights=None, mutation_probability=None):
+    def _normalize_parameters(
+        self,
+        num_features=None,
+        num_hidden=None,
+        weights=None,
+        mutation_probability=None,
+    ):
         if not (num_features and num_hidden):
-            raise InsufficientParametersError("Insufficient Parameters to instantiate EvolvableANN")
+            raise InsufficientParametersError(
+                "Insufficient Parameters to instantiate EvolvableANN"
+            )
         size = num_weights(num_features, num_hidden)
         if not weights:
             weights = [self._random.uniform(-1, 1) for _ in range(size)]
         if mutation_probability is None:
-            mutation_probability = 10. / size
+            mutation_probability = 10.0 / size
         return num_features, num_hidden, weights, mutation_probability
 
-    def mutate_weights(self, weights, num_features, num_hidden, mutation_probability,
-                       mutation_distance):
+    def mutate_weights(
+        self,
+        weights,
+        num_features,
+        num_hidden,
+        mutation_probability,
+        mutation_distance,
+    ):
         size = num_weights(num_features, num_hidden)
         randoms = self._random.random(size)
         for i, r in enumerate(randoms):
@@ -271,13 +299,19 @@ class EvolvableANN(ANN, EvolvablePlayer):
 
     def mutate(self):
         weights = self.mutate_weights(
-            self.weights, self.num_features, self.num_hidden,
-            self.mutation_probability, self.mutation_distance)
+            self.weights,
+            self.num_features,
+            self.num_hidden,
+            self.mutation_probability,
+            self.mutation_distance,
+        )
         return self.create_new(weights=weights)
 
     def crossover(self, other):
         if other.__class__ != self.__class__:
-            raise TypeError("Crossover must be between the same player classes.")
+            raise TypeError(
+                "Crossover must be between the same player classes."
+            )
         weights = crossover_lists(self.weights, other.weights, self._random)
         return self.create_new(weights=weights)
 
@@ -300,9 +334,8 @@ class EvolvedANN(ANN):
     def __init__(self) -> None:
         num_features, num_hidden, weights = nn_weights["Evolved ANN"]
         super().__init__(
-            num_features=num_features,
-            num_hidden=num_hidden,
-            weights=weights)
+            num_features=num_features, num_hidden=num_hidden, weights=weights
+        )
 
 
 class EvolvedANN5(ANN):
@@ -323,9 +356,8 @@ class EvolvedANN5(ANN):
     def __init__(self) -> None:
         num_features, num_hidden, weights = nn_weights["Evolved ANN 5"]
         super().__init__(
-            num_features=num_features,
-            num_hidden=num_hidden,
-            weights=weights)
+            num_features=num_features, num_hidden=num_hidden, weights=weights
+        )
 
 
 class EvolvedANNNoise05(ANN):
@@ -346,6 +378,5 @@ class EvolvedANNNoise05(ANN):
     def __init__(self) -> None:
         num_features, num_hidden, weights = nn_weights["Evolved ANN 5 Noise 05"]
         super().__init__(
-            num_features=num_features,
-            num_hidden=num_hidden,
-            weights=weights)
+            num_features=num_features, num_hidden=num_hidden, weights=weights
+        )

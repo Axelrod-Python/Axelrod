@@ -76,7 +76,9 @@ class TestDarwin(TestPlayer):
 
     def test_reset_history_and_attributes(self):
         # Overwrite this method because Darwin does not reset
-        self.versus_test(axl.Defector(), expected_actions=[(C, D)] + [(D, D)] * 4)
+        self.versus_test(
+            axl.Defector(), expected_actions=[(C, D)] + [(D, D)] * 4
+        )
 
         p1 = self.player()
         self.assertEqual(p1.genome, [D, C, C, C, D])
@@ -89,7 +91,9 @@ class TestDarwin(TestPlayer):
         p2 = self.player()
         self.assertIs(p1.genome, p2.genome)
 
-        self.versus_test(axl.Defector(), expected_actions=[(C, D)] + [(D, D)] * 4)
+        self.versus_test(
+            axl.Defector(), expected_actions=[(C, D)] + [(D, D)] * 4
+        )
 
         self.assertEqual(p2.genome, [D, C, C, C, D])
         self.assertIs(p1.genome, p2.genome)
@@ -97,7 +101,9 @@ class TestDarwin(TestPlayer):
         self.assertIs(p3.genome, p2.genome)
 
     def test_reset_genome(self):
-        self.versus_test(axl.Defector(), expected_actions=[(C, D)] + [(D, D)] * 4)
+        self.versus_test(
+            axl.Defector(), expected_actions=[(C, D)] + [(D, D)] * 4
+        )
         self.player.reset_genome()
         self.assertEqual(self.player().genome, [C])
 

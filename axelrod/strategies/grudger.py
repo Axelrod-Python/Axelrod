@@ -24,7 +24,7 @@ class Grudger(Player):
 
     name = "Grudger"
     classifier = {
-        "memory_depth": float('inf'),
+        "memory_depth": float("inf"),
         "stochastic": False,
         "long_run_time": False,
         "inspects_source": False,

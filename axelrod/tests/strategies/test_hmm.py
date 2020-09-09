@@ -193,17 +193,23 @@ class TestEvolvedHMM5(TestPlayer):
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (D, C), (D, D), (D, C)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=2)
+        self.versus_test(
+            opponent=axl.Alternator(), expected_actions=actions, seed=2
+        )
 
 
 class TestEvolvedHMM5vsCooperator(TestMatch):
     def test_rounds(self):
-        self.versus_test(axl.EvolvedHMM5(), axl.Cooperator(), [C] * 5, [C] * 5, seed=3)
+        self.versus_test(
+            axl.EvolvedHMM5(), axl.Cooperator(), [C] * 5, [C] * 5, seed=3
+        )
 
 
 class TestEvolvedHMM5vsDefector(TestMatch):
     def test_rounds(self):
-        self.versus_test(axl.EvolvedHMM5(), axl.Defector(), [C, C, D], [D, D, D], seed=5)
+        self.versus_test(
+            axl.EvolvedHMM5(), axl.Defector(), [C, C, D], [D, D, D], seed=5
+        )
 
 
 class TestEvolvableHMMPlayer(unittest.TestCase):
@@ -218,9 +224,7 @@ class TestEvolvableHMMPlayer(unittest.TestCase):
         initial_action = C
 
         self.assertRaises(
-            InsufficientParametersError,
-            self.player_class,
-            seed=1
+            InsufficientParametersError, self.player_class, seed=1
         )
         self.assertRaises(
             InsufficientParametersError,
@@ -229,7 +233,7 @@ class TestEvolvableHMMPlayer(unittest.TestCase):
             transitions_D=transitions_D,
             emission_probabilities=emission_probabilities,
             initial_state=None,
-            seed=1
+            seed=1,
         )
         self.assertRaises(
             InsufficientParametersError,
@@ -238,14 +242,14 @@ class TestEvolvableHMMPlayer(unittest.TestCase):
             transitions_D=transitions_D,
             emission_probabilities=emission_probabilities,
             initial_action=None,
-            seed=1
+            seed=1,
         )
         self.assertRaises(
             InsufficientParametersError,
             self.player_class,
             initial_state=initial_state,
             initial_action=initial_action,
-            seed=1
+            seed=1,
         )
 
     def test_vector_to_instance(self):

@@ -101,7 +101,11 @@ class LookupTable(object):
 
     @classmethod
     def from_pattern(
-        cls, pattern: tuple, player_depth: int, op_depth: int, op_openings_depth: int
+        cls,
+        pattern: tuple,
+        player_depth: int,
+        op_depth: int,
+        op_openings_depth: int,
     ):
         keys = create_lookup_table_keys(
             player_depth=player_depth,
@@ -151,7 +155,9 @@ class LookupTable(object):
         """
 
         def sorter(plays):
-            return tuple(actions_to_str(getattr(plays, field) for field in sort_by))
+            return tuple(
+                actions_to_str(getattr(plays, field) for field in sort_by)
+            )
 
         col_width = 11
         sorted_keys = sorted(self._dict, key=sorter)
@@ -318,7 +324,7 @@ class LookerUp(Player):
         lookup_dict: dict = None,
         initial_actions: tuple = None,
         pattern: Any = None,  # pattern is str or tuple of Action's.
-        parameters: Plays = None
+        parameters: Plays = None,
     ) -> None:
 
         Player.__init__(self)
@@ -405,11 +411,21 @@ class EvolvableLookerUp(LookerUp, EvolvablePlayer):
         pattern: Any = None,  # pattern is str or tuple of Action's.
         parameters: Plays = None,
         mutation_probability: float = None,
-        seed: int = None
+        seed: int = None,
     ) -> None:
         EvolvablePlayer.__init__(self, seed=seed)
-        lookup_dict, initial_actions, pattern, parameters, mutation_probability = self._normalize_parameters(
-            lookup_dict, initial_actions, pattern, parameters, mutation_probability
+        (
+            lookup_dict,
+            initial_actions,
+            pattern,
+            parameters,
+            mutation_probability,
+        ) = self._normalize_parameters(
+            lookup_dict,
+            initial_actions,
+            pattern,
+            parameters,
+            mutation_probability,
         )
         LookerUp.__init__(
             self,
@@ -427,30 +443,50 @@ class EvolvableLookerUp(LookerUp, EvolvablePlayer):
             mutation_probability=mutation_probability,
         )
 
-    def _normalize_parameters(self, lookup_dict=None, initial_actions=None, pattern=None, parameters=None,
-                              mutation_probability=None):
+    def _normalize_parameters(
+        self,
+        lookup_dict=None,
+        initial_actions=None,
+        pattern=None,
+        parameters=None,
+        mutation_probability=None,
+    ):
         if lookup_dict and initial_actions:
             # Compute the associated pattern and parameters
             # Map the table keys to namedTuple Plays
-            lookup_table = self._get_lookup_table(lookup_dict, pattern, parameters)
+            lookup_table = self._get_lookup_table(
+                lookup_dict, pattern, parameters
+            )
             lookup_dict = lookup_table.dictionary
-            parameters = (lookup_table.player_depth, lookup_table.op_depth, lookup_table.op_openings_depth)
+            parameters = (
+                lookup_table.player_depth,
+                lookup_table.op_depth,
+                lookup_table.op_openings_depth,
+            )
             pattern = tuple(v for k, v in sorted(lookup_dict.items()))
         elif pattern and parameters and initial_actions:
             # Compute the associated lookup table
             plays, op_plays, op_start_plays = parameters
-            lookup_table = self._get_lookup_table(lookup_dict, pattern, parameters)
+            lookup_table = self._get_lookup_table(
+                lookup_dict, pattern, parameters
+            )
             lookup_dict = lookup_table.dictionary
         elif parameters:
             # Generate a random pattern and (maybe) initial actions
             plays, op_plays, op_start_plays = parameters
-            pattern, lookup_table = self.random_params(plays, op_plays, op_start_plays)
+            pattern, lookup_table = self.random_params(
+                plays, op_plays, op_start_plays
+            )
             lookup_dict = lookup_table.dictionary
             if not initial_actions:
                 num_actions = max([plays, op_plays, op_start_plays])
-                initial_actions = tuple([self._random.choice((C, D)) for _ in range(num_actions)])
+                initial_actions = tuple(
+                    [self._random.choice((C, D)) for _ in range(num_actions)]
+                )
         else:
-            raise InsufficientParametersError("Insufficient Parameters to instantiate EvolvableLookerUp")
+            raise InsufficientParametersError(
+                "Insufficient Parameters to instantiate EvolvableLookerUp"
+            )
         # Normalize pattern
         if isinstance(pattern, str):
             pattern = str_to_actions(pattern)
@@ -458,8 +494,14 @@ class EvolvableLookerUp(LookerUp, EvolvablePlayer):
         if mutation_probability is None:
             plays, op_plays, op_start_plays = parameters
             keys = create_lookup_table_keys(plays, op_plays, op_start_plays)
-            mutation_probability = 2. / len(keys)
-        return lookup_dict, initial_actions, pattern, parameters, mutation_probability
+            mutation_probability = 2.0 / len(keys)
+        return (
+            lookup_dict,
+            initial_actions,
+            pattern,
+            parameters,
+            mutation_probability,
+        )
 
     def random_value(self):
         return self._random.choice(actions)
@@ -484,7 +526,9 @@ class EvolvableLookerUp(LookerUp, EvolvablePlayer):
         return table
 
     def mutate(self):
-        lookup_dict = self.mutate_table(self.lookup_dict, self.mutation_probability)
+        lookup_dict = self.mutate_table(
+            self.lookup_dict, self.mutation_probability
+        )
         # Add in starting moves
         initial_actions = list(self.initial_actions)
         for i in range(len(initial_actions)):
@@ -492,14 +536,17 @@ class EvolvableLookerUp(LookerUp, EvolvablePlayer):
             if r < self.mutation_probability:
                 initial_actions[i] = initial_actions[i].flip()
         return self.create_new(
-            lookup_dict=lookup_dict,
-            initial_actions=tuple(initial_actions),
+            lookup_dict=lookup_dict, initial_actions=tuple(initial_actions),
         )
 
     def crossover(self, other):
         if other.__class__ != self.__class__:
-            raise TypeError("Crossover must be between the same player classes.")
-        lookup_dict = crossover_dictionaries(self.lookup_dict, other.lookup_dict, self._random)
+            raise TypeError(
+                "Crossover must be between the same player classes."
+            )
+        lookup_dict = crossover_dictionaries(
+            self.lookup_dict, other.lookup_dict, self._random
+        )
         return self.create_new(lookup_dict=lookup_dict)
 
 
@@ -516,7 +563,9 @@ class EvolvedLookerUp1_1_1(LookerUp):
 
     def __init__(self) -> None:
         params = Plays(self_plays=1, op_plays=1, op_openings=1)
-        super().__init__(parameters=params, pattern="CDDDDCDD", initial_actions=(C,))
+        super().__init__(
+            parameters=params, pattern="CDDDDCDD", initial_actions=(C,)
+        )
 
 
 class EvolvedLookerUp2_2_2(LookerUp):
@@ -532,8 +581,12 @@ class EvolvedLookerUp2_2_2(LookerUp):
 
     def __init__(self) -> None:
         params = Plays(self_plays=2, op_plays=2, op_openings=2)
-        pattern = "CDDCDCDDCDDDCDDDDDCDCDCCCDDCCDCDDDCCCCCDDDCDDDDDDDDDCCDDCDDDCCCD"
-        super().__init__(parameters=params, pattern=pattern, initial_actions=(C, C))
+        pattern = (
+            "CDDCDCDDCDDDCDDDDDCDCDCCCDDCCDCDDDCCCCCDDDCDDDDDDDDDCCDDCDDDCCCD"
+        )
+        super().__init__(
+            parameters=params, pattern=pattern, initial_actions=(C, C)
+        )
 
 
 class Winner12(LookerUp):
@@ -550,7 +603,9 @@ class Winner12(LookerUp):
     def __init__(self) -> None:
         params = Plays(self_plays=1, op_plays=2, op_openings=0)
         pattern = "CDCDDCDD"
-        super().__init__(parameters=params, pattern=pattern, initial_actions=(C, C))
+        super().__init__(
+            parameters=params, pattern=pattern, initial_actions=(C, C)
+        )
 
 
 class Winner21(LookerUp):
@@ -567,7 +622,9 @@ class Winner21(LookerUp):
     def __init__(self) -> None:
         params = Plays(self_plays=1, op_plays=2, op_openings=0)
         pattern = "CDCDCDDD"
-        super().__init__(parameters=params, pattern=pattern, initial_actions=(D, C))
+        super().__init__(
+            parameters=params, pattern=pattern, initial_actions=(D, C)
+        )
 
 
 def get_last_n_plays(player: Player, depth: int) -> tuple:

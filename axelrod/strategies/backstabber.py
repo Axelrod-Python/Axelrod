@@ -99,7 +99,9 @@ def _opponent_triggers_alt_strategy(opponent: Player) -> bool:
     return before_alt_strategy < current_round <= last_round_of_alt_strategy
 
 
-def _opponent_defected_in_first_n_rounds(opponent: Player, first_n_rounds: int) -> bool:
+def _opponent_defected_in_first_n_rounds(
+    opponent: Player, first_n_rounds: int
+) -> bool:
     """
     If opponent defected in the first N rounds, return True. Else return False.
     """

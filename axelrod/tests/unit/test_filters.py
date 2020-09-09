@@ -18,10 +18,14 @@ class TestFilters(unittest.TestCase):
 
     def test_equality_filter(self):
         self.assertTrue(
-            passes_operator_filter(self.TestStrategy, "stochastic", True, operator.eq)
+            passes_operator_filter(
+                self.TestStrategy, "stochastic", True, operator.eq
+            )
         )
         self.assertFalse(
-            passes_operator_filter(self.TestStrategy, "stochastic", False, operator.eq)
+            passes_operator_filter(
+                self.TestStrategy, "stochastic", False, operator.eq
+            )
         )
         self.assertTrue(
             passes_operator_filter(
@@ -70,7 +74,9 @@ class TestFilters(unittest.TestCase):
             passes_in_list_filter(self.TestStrategy, "makes_use_of", ["length"])
         )
         self.assertTrue(
-            passes_in_list_filter(self.TestStrategy, "makes_use_of", ["game", "length"])
+            passes_in_list_filter(
+                self.TestStrategy, "makes_use_of", ["game", "length"]
+            )
         )
         self.assertFalse(
             passes_in_list_filter(self.TestStrategy, "makes_use_of", "test")
@@ -119,11 +125,21 @@ class TestFilters(unittest.TestCase):
             "min_memory_depth": smaller,
         }
 
-        self.assertTrue(passes_filterset(self.TestStrategy, full_passing_filterset_1))
-        self.assertTrue(passes_filterset(self.TestStrategy, full_passing_filterset_2))
-        self.assertTrue(passes_filterset(self.TestStrategy, sparse_passing_filterset))
-        self.assertFalse(passes_filterset(self.TestStrategy, full_failing_filterset))
-        self.assertFalse(passes_filterset(self.TestStrategy, sparse_failing_filterset))
+        self.assertTrue(
+            passes_filterset(self.TestStrategy, full_passing_filterset_1)
+        )
+        self.assertTrue(
+            passes_filterset(self.TestStrategy, full_passing_filterset_2)
+        )
+        self.assertTrue(
+            passes_filterset(self.TestStrategy, sparse_passing_filterset)
+        )
+        self.assertFalse(
+            passes_filterset(self.TestStrategy, full_failing_filterset)
+        )
+        self.assertFalse(
+            passes_filterset(self.TestStrategy, sparse_failing_filterset)
+        )
 
     def test_filtered_strategies(self):
         class StochasticTestStrategy(Player):
@@ -134,7 +150,11 @@ class TestFilters(unittest.TestCase):
             }
 
         class MemoryDepth2TestStrategy(Player):
-            classifier = {"stochastic": False, "memory_depth": 2, "makes_use_of": []}
+            classifier = {
+                "stochastic": False,
+                "memory_depth": 2,
+                "makes_use_of": [],
+            }
 
         class UsesLengthTestStrategy(Player):
             classifier = {

@@ -67,7 +67,9 @@ class TestTreeSearch(unittest.TestCase):
         """
         expected_output = [D, D, D, D]
         for inp, out in zip(self.input_pos, expected_output):
-            out_move = dbs.move_gen(inp, self.cooperator_policy, depth_search_tree=5)
+            out_move = dbs.move_gen(
+                inp, self.cooperator_policy, depth_search_tree=5
+            )
             self.assertEqual(out_move, out)
 
     def test_minimaxTreeSearch_defector(self):
@@ -89,7 +91,9 @@ class TestTreeSearch(unittest.TestCase):
         """
         expected_output = [D, D, D, D]
         for inp, out in zip(self.input_pos, expected_output):
-            out_move = dbs.move_gen(inp, self.defector_policy, depth_search_tree=5)
+            out_move = dbs.move_gen(
+                inp, self.defector_policy, depth_search_tree=5
+            )
             self.assertEqual(out_move, out)
 
     def test_minimaxTreeSearch_titForTat(self):
@@ -125,7 +129,9 @@ class TestTreeSearch(unittest.TestCase):
         """
         expected_output = [C, C, C, C]
         for inp, out in zip(self.input_pos, expected_output):
-            out_move = dbs.move_gen(inp, self.titForTat_policy, depth_search_tree=5)
+            out_move = dbs.move_gen(
+                inp, self.titForTat_policy, depth_search_tree=5
+            )
             self.assertEqual(out_move, out)
 
     def test_minimaxTreeSearch_alternator(self):
@@ -147,7 +153,9 @@ class TestTreeSearch(unittest.TestCase):
         """
         expected_output = [D, D, D, D]
         for inp, out in zip(self.input_pos, expected_output):
-            out_move = dbs.move_gen(inp, self.random_policy, depth_search_tree=5)
+            out_move = dbs.move_gen(
+                inp, self.random_policy, depth_search_tree=5
+            )
             self.assertEqual(out_move, out)
 
     def test_minimaxTreeSearch_random(self):
@@ -169,7 +177,9 @@ class TestTreeSearch(unittest.TestCase):
         """
         expected_output = [D, D, D, D]
         for inp, out in zip(self.input_pos, expected_output):
-            out_move = dbs.move_gen(inp, self.random_policy, depth_search_tree=5)
+            out_move = dbs.move_gen(
+                inp, self.random_policy, depth_search_tree=5
+            )
             self.assertEqual(out_move, out)
 
     def test_minimaxTreeSearch_grudger(self):
@@ -192,7 +202,9 @@ class TestTreeSearch(unittest.TestCase):
         """
         expected_output = [C, D, D, D]
         for inp, out in zip(self.input_pos, expected_output):
-            out_move = dbs.move_gen(inp, self.grudger_policy, depth_search_tree=5)
+            out_move = dbs.move_gen(
+                inp, self.grudger_policy, depth_search_tree=5
+            )
             self.assertEqual(out_move, out)
 
 

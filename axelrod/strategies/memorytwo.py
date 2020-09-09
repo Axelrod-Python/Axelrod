@@ -53,7 +53,9 @@ class MemoryTwoPlayer(Player):
     }
 
     def __init__(
-        self, sixteen_vector: Optional[Tuple[float, ...]] = None, initial: Optional[Tuple[Action, Action]] = None
+        self,
+        sixteen_vector: Optional[Tuple[float, ...]] = None,
+        initial: Optional[Tuple[Action, Action]] = None,
     ) -> None:
         """
         Parameters
@@ -69,7 +71,9 @@ class MemoryTwoPlayer(Player):
         self._initial = initial
         self.set_initial_sixteen_vector(sixteen_vector)
 
-    def set_initial_sixteen_vector(self, sixteen_vector: Optional[Tuple[float, ...]]):
+    def set_initial_sixteen_vector(
+        self, sixteen_vector: Optional[Tuple[float, ...]]
+    ):
         if sixteen_vector is None:
             sixteen_vector = tuple([1] * 16)
             warnings.warn("Memory two player is set to default, Cooperator.")
@@ -84,7 +88,8 @@ class MemoryTwoPlayer(Player):
             )
 
         states = [
-            (hist[:2], hist[2:]) for hist in list(itertools.product((C, D), repeat=4))
+            (hist[:2], hist[2:])
+            for hist in list(itertools.product((C, D), repeat=4))
         ]
 
         self._sixteen_vector = dict(
@@ -92,7 +97,9 @@ class MemoryTwoPlayer(Player):
         )  # type: Dict[tuple, float]
 
     @staticmethod
-    def compute_memory_depth(sixteen_vector: Dict[Tuple[Action, Action], float]) -> int:
+    def compute_memory_depth(
+        sixteen_vector: Dict[Tuple[Action, Action], float]
+    ) -> int:
         values = set(list(sixteen_vector.values()))
 
         # Memory-depth 0
@@ -119,7 +126,9 @@ class MemoryTwoPlayer(Player):
     def _post_init(self):
         values = set(self._sixteen_vector.values())
         self.classifier["stochastic"] = any(0 < x < 1 for x in values)
-        self.classifier["memory_depth"] = self.compute_memory_depth(self._sixteen_vector)
+        self.classifier["memory_depth"] = self.compute_memory_depth(
+            self._sixteen_vector
+        )
 
     def strategy(self, opponent: Player) -> Action:
         """Actual strategy definition that determines player's action."""
@@ -260,7 +269,11 @@ class MEM2(Player):
 
     def __init__(self) -> None:
         super().__init__()
-        self.players = {"TFT": TitForTat(), "TFTT": TitFor2Tats(), "ALLD": Defector()}
+        self.players = {
+            "TFT": TitForTat(),
+            "TFTT": TitFor2Tats(),
+            "ALLD": Defector(),
+        }
         self.play_as = "TFT"
         self.shift_counter = 3
         self.alld_counter = 0
