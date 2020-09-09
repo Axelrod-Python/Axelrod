@@ -23,7 +23,7 @@ The project follows the following guidelines:
    from `Chris Beams <https://chris.beams.io/posts/git-commit/>`_
 5. Testing: the project uses the `unittest
    <https://docs.python.org/2/library/unittest.html>`_ library and has a nice
-   testing suite that makes some things very easy to write tests for. Please try
+   testing suite that makes some things easy to write tests for. Please try
    to increase the test coverage on pull requests.
 6. Merging pull-requests: We require two of the (currently three) core-team
    maintainers to merge. Opening a PR for early
