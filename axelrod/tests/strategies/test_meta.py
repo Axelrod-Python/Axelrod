@@ -6,6 +6,7 @@ from hypothesis import given, settings
 from hypothesis.strategies import integers
 
 from .test_player import TestPlayer
+from axelrod.tests.property import strategy_lists
 
 C, D = axl.Action.C, axl.Action.D
 
@@ -95,6 +96,27 @@ class TestMetaPlayer(TestPlayer):
         p = axl.MetaHunter()
         with self.assertRaises(TypeError):
             p.update_histories(C)
+
+    @settings(max_examples=5, deadline=None)
+    @given(opponent_list=strategy_lists(max_size=1))
+    def test_players_return_valid_actions(self, opponent_list):
+        """
+        Whenever a new strategy is added to the library this potentially
+        modifies the behaviour of meta strategies which in turn requires
+        modification of the tests.
+
+        In https://github.com/Axelrod-Python/Axelrod/pull/1373 specific
+        behaviour tests for the meta strategies were removed.
+
+        This test ensures that a valid example is always returned by checking
+        that the actions played are a subset of {C, D}.
+        """
+        player = self.player()
+        opponent = opponent_list[0]()
+        match = axl.Match(players=(player, opponent))
+        interactions = match.play()
+        player_actions = set(player_action for player_action, _ in interactions)
+        self.assertTrue(player_actions <= set((C, D)))
 
 
 class TestMetaMajority(TestMetaPlayer):
