@@ -2,11 +2,11 @@
 
 import axelrod as axl
 from axelrod.classifier import Classifiers
+from axelrod.tests.property import strategy_lists
 from hypothesis import given, settings
 from hypothesis.strategies import integers
 
 from .test_player import TestPlayer
-from axelrod.tests.property import strategy_lists
 
 C, D = axl.Action.C, axl.Action.D
 
