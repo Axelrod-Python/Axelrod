@@ -2,6 +2,7 @@
 
 import axelrod as axl
 from axelrod.classifier import Classifiers
+from axelrod.tests.property import strategy_lists
 from hypothesis import given, settings
 from hypothesis.strategies import integers
 
@@ -95,6 +96,27 @@ class TestMetaPlayer(TestPlayer):
         p = axl.MetaHunter()
         with self.assertRaises(TypeError):
             p.update_histories(C)
+
+    @settings(max_examples=5, deadline=None)
+    @given(opponent_list=strategy_lists(max_size=1))
+    def test_players_return_valid_actions(self, opponent_list):
+        """
+        Whenever a new strategy is added to the library this potentially
+        modifies the behaviour of meta strategies which in turn requires
+        modification of the tests.
+
+        In https://github.com/Axelrod-Python/Axelrod/pull/1373 specific
+        behaviour tests for the meta strategies were removed.
+
+        This test ensures that a valid example is always returned by checking
+        that the actions played are a subset of {C, D}.
+        """
+        player = self.player()
+        opponent = opponent_list[0]()
+        match = axl.Match(players=(player, opponent))
+        interactions = match.play()
+        player_actions = set(player_action for player_action, _ in interactions)
+        self.assertTrue(player_actions <= set((C, D)))
 
 
 class TestMetaMajority(TestMetaPlayer):
@@ -390,12 +412,6 @@ class TestMetaMajorityMemoryOne(TestMetaPlayer):
         "manipulates_state": False,
     }
 
-    def test_strategy(self):
-        actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
-        self.versus_test(
-            opponent=axl.Alternator(), expected_actions=actions, seed=1
-        )
-
 
 class TestMetaMajorityFiniteMemory(TestMetaPlayer):
     name = "Meta Majority Finite Memory"
@@ -409,12 +425,6 @@ class TestMetaMajorityFiniteMemory(TestMetaPlayer):
         "manipulates_source": False,
         "manipulates_state": False,
     }
-
-    def test_strategy(self):
-        actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
-        self.versus_test(
-            opponent=axl.Alternator(), expected_actions=actions, seed=2
-        )
 
 
 class TestMetaMajorityLongMemory(TestMetaPlayer):
@@ -430,18 +440,6 @@ class TestMetaMajorityLongMemory(TestMetaPlayer):
         "manipulates_state": False,
     }
 
-    def test_strategy(self):
-        actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
-        self.versus_test(
-            opponent=axl.Alternator(), expected_actions=actions, seed=0
-        )
-
-    def test_strategy2(self):
-        actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
-        self.versus_test(
-            opponent=axl.Alternator(), expected_actions=actions, seed=1
-        )
-
 
 class TestMetaWinnerMemoryOne(TestMetaPlayer):
     name = "Meta Winner Memory One"
@@ -455,12 +453,6 @@ class TestMetaWinnerMemoryOne(TestMetaPlayer):
         "manipulates_source": False,
         "manipulates_state": False,
     }
-
-    def test_strategy(self):
-        actions = [(C, C), (C, D), (C, C), (D, D), (D, C)]
-        self.versus_test(
-            opponent=axl.Alternator(), expected_actions=actions, seed=1
-        )
 
 
 class TestMetaWinnerFiniteMemory(TestMetaPlayer):
@@ -476,12 +468,6 @@ class TestMetaWinnerFiniteMemory(TestMetaPlayer):
         "manipulates_state": False,
     }
 
-    def test_strategy(self):
-        actions = [(C, C), (C, D), (C, C), (D, D), (D, C)]
-        self.versus_test(
-            opponent=axl.Alternator(), expected_actions=actions, seed=1
-        )
-
 
 class TestMetaWinnerLongMemory(TestMetaPlayer):
     name = "Meta Winner Long Memory"
@@ -495,12 +481,6 @@ class TestMetaWinnerLongMemory(TestMetaPlayer):
         "manipulates_source": False,
         "manipulates_state": False,
     }
-
-    def test_strategy(self):
-        actions = [(C, C), (C, D), (C, C), (D, D), (D, C)]
-        self.versus_test(
-            opponent=axl.Alternator(), expected_actions=actions, seed=4
-        )
 
 
 class TestMetaWinnerDeterministic(TestMetaPlayer):
@@ -516,10 +496,6 @@ class TestMetaWinnerDeterministic(TestMetaPlayer):
         "manipulates_state": False,
     }
 
-    def test_strategy(self):
-        actions = [(C, C), (C, D), (C, C), (D, D), (D, C)]
-        self.versus_test(opponent=axl.Alternator(), expected_actions=actions)
-
 
 class TestMetaWinnerStochastic(TestMetaPlayer):
     name = "Meta Winner Stochastic"
@@ -533,12 +509,6 @@ class TestMetaWinnerStochastic(TestMetaPlayer):
         "manipulates_source": False,
         "manipulates_state": False,
     }
-
-    def test_strategy(self):
-        actions = [(C, C), (C, D), (C, C), (D, D), (D, C)]
-        self.versus_test(
-            opponent=axl.Alternator(), expected_actions=actions, seed=1
-        )
 
 
 class TestMetaMixer(TestMetaPlayer):
@@ -661,12 +631,6 @@ class TestNMWEDeterministic(TestMetaPlayer):
     def classifier_test(self, expected_class_classifier=None):
         pass
 
-    def test_strategy(self):
-        actions = [(C, C), (C, D), (C, C), (D, D), (D, C)]
-        self.versus_test(
-            opponent=axl.Alternator(), expected_actions=actions, seed=11
-        )
-
 
 class TestNMWEStochastic(TestMetaPlayer):
     name = "NMWE Stochastic"
@@ -680,12 +644,6 @@ class TestNMWEStochastic(TestMetaPlayer):
         "manipulates_source": False,
         "manipulates_state": False,
     }
-
-    def test_strategy(self):
-        actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
-        self.versus_test(
-            opponent=axl.Alternator(), expected_actions=actions, seed=16
-        )
 
 
 class TestNMWEFiniteMemory(TestMetaPlayer):
@@ -701,12 +659,6 @@ class TestNMWEFiniteMemory(TestMetaPlayer):
         "manipulates_state": False,
     }
 
-    def test_strategy(self):
-        actions = [(C, C), (C, D), (D, C), (D, D), (D, C)]
-        self.versus_test(
-            opponent=axl.Alternator(), expected_actions=actions, seed=7
-        )
-
 
 class TestNMWELongMemory(TestMetaPlayer):
     name = "NMWE Long Memory"
@@ -721,12 +673,6 @@ class TestNMWELongMemory(TestMetaPlayer):
         "manipulates_state": False,
     }
 
-    def test_strategy(self):
-        actions = [(C, C), (C, D), (C, C), (D, D), (D, C)]
-        self.versus_test(
-            opponent=axl.Alternator(), expected_actions=actions, seed=3
-        )
-
 
 class TestNMWEMemoryOne(TestMetaPlayer):
     name = "NMWE Memory One"
@@ -740,12 +686,6 @@ class TestNMWEMemoryOne(TestMetaPlayer):
         "manipulates_source": False,
         "manipulates_state": False,
     }
-
-    def test_strategy(self):
-        actions = [(C, C), (C, D), (C, C), (D, D), (D, C)]
-        self.versus_test(
-            opponent=axl.Alternator(), expected_actions=actions, seed=2
-        )
 
 
 class TestMemoryDecay(TestPlayer):
