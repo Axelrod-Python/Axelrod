@@ -3,9 +3,11 @@ from axelrod.player import Player
 
 C, D = Action.C, Action.D
 
+
 def calculate_cooperation_ratio(player: Player) -> float:
     """ Calculates the cooperation ratio of the player given."""
     return player.cooperations / len(player.history)
+
 
 class AverageCopier(Player):
     """

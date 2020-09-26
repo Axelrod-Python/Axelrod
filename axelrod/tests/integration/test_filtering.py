@@ -35,7 +35,9 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
 
         comprehension, filterset = strategies, {}
         for classifier in classifiers:
-            comprehension = set(filter(axl.Classifiers[classifier], strategies)) & set(comprehension)
+            comprehension = set(
+                filter(axl.Classifiers[classifier], strategies)
+            ) & set(comprehension)
             filterset[classifier] = True
         filtered = set(
             axl.filtered_strategies(filterset, strategies=strategies)
