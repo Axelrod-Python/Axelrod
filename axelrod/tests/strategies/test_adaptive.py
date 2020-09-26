@@ -54,7 +54,9 @@ class TestAdaptive(TestPlayer):
         opponent = axl.Cooperator()
         attrs = {"scores": {C: 3, D: 0}}
         expected_actions = list(zip([C, C], [C, C]))
-        self.versus_test(opponent, expected_actions, turns=2, attrs=attrs, seed=9)
+        self.versus_test(
+            opponent, expected_actions, turns=2, attrs=attrs, seed=9
+        )
 
     def test_scoring_with_alternate_game(self):
         """Tests that the alternate game is used in scoring."""
@@ -63,5 +65,11 @@ class TestAdaptive(TestPlayer):
         expected_actions = list(zip([C, C, C], [C, D, C]))
         attrs = {"scores": {C: 7, D: 0}}
         match_attributes = {"game": axl.Game(-3, 10, 10, 10)}
-        self.versus_test(opponent, expected_actions, turns=3, attrs=attrs, seed=9,
-                         match_attributes=match_attributes)
+        self.versus_test(
+            opponent,
+            expected_actions,
+            turns=3,
+            attrs=attrs,
+            seed=9,
+            match_attributes=match_attributes,
+        )

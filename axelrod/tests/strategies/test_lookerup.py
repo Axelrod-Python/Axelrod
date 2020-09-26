@@ -20,6 +20,7 @@ from .test_player import TestPlayer
 C, D = axl.Action.C, axl.Action.D
 random = axl.RandomGenerator()
 
+
 class TestLookupTable(unittest.TestCase):
     lookup_dict = {
         ((C, C), (C,), ()): C,
@@ -69,7 +70,9 @@ class TestLookupTable(unittest.TestCase):
         table = LookupTable.from_pattern(
             pattern, player_depth=2, op_depth=1, op_openings_depth=0
         )
-        self.assertEqual(table.dictionary, make_keys_into_plays(self.lookup_dict))
+        self.assertEqual(
+            table.dictionary, make_keys_into_plays(self.lookup_dict)
+        )
 
     def test_from_pattern_raises_error_pattern_len_ne_dict_size(self):
         too_big = (C,) * 17
@@ -151,7 +154,9 @@ class TestLookupTableHelperFunctions(unittest.TestCase):
         self.assertEqual(Plays(1, 2, 3), (1, 2, 3))
 
     def test_plays_assign_values(self):
-        self.assertEqual(Plays(op_plays=2, self_plays=1, op_openings=3), Plays(1, 2, 3))
+        self.assertEqual(
+            Plays(op_plays=2, self_plays=1, op_openings=3), Plays(1, 2, 3)
+        )
 
     def test_make_keys_into_plays(self):
         old = {((C, D), (C,), ()): 1, ((D, D), (D,), ()): 2}
@@ -307,7 +312,9 @@ class TestLookerUp(TestPlayer):
         self.assertEqual(axl.Classifiers["memory_depth"](mem_depth_3), 3)
 
         mem_depth_inf = axl.LookerUp(pattern="CC", parameters=Plays(0, 0, 1))
-        self.assertEqual(axl.Classifiers["memory_depth"](mem_depth_inf), float("inf"))
+        self.assertEqual(
+            axl.Classifiers["memory_depth"](mem_depth_inf), float("inf")
+        )
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (D, C), (C, D)]
@@ -375,10 +382,13 @@ class TestLookerUp(TestPlayer):
 
     def test_lookup_table_display(self):
         player = axl.LookerUp(
-            pattern="CCCC", parameters=Plays(self_plays=2, op_plays=0, op_openings=0)
+            pattern="CCCC",
+            parameters=Plays(self_plays=2, op_plays=0, op_openings=0),
         )
         self.assertEqual(
-            player.lookup_table_display(("self_plays", "op_plays", "op_openings")),
+            player.lookup_table_display(
+                ("self_plays", "op_plays", "op_openings")
+            ),
             (
                 "self_plays | op_plays  |op_openings\n"
                 + "   C, C    ,           ,           : C,\n"
@@ -420,12 +430,16 @@ class TestEvolvedLookerUp1_1_1(TestPlayer):
     def test_vs_initial_defector(self):
         opponent = [D, C, C, D, D, C]
         expected = [(C, D), (D, C), (C, C), (D, D), (D, D), (D, C)]
-        self.versus_test(axl.MockPlayer(actions=opponent), expected_actions=expected)
+        self.versus_test(
+            axl.MockPlayer(actions=opponent), expected_actions=expected
+        )
 
     def test_vs_initial_cooperator(self):
         opponent = [C, D, D, C, C, D]
         expected = [(C, C), (C, D), (D, D), (D, C), (D, C), (D, D)]
-        self.versus_test(axl.MockPlayer(actions=opponent), expected_actions=expected)
+        self.versus_test(
+            axl.MockPlayer(actions=opponent), expected_actions=expected
+        )
 
 
 class TestEvolvedLookerUp2_2_2(TestPlayer):
@@ -521,7 +535,14 @@ class TestEvolvedLookerUp2_2_2(TestPlayer):
 
     def test_vs_initial_d_c(self):
         opponent_actions = [D, C] + [C, D] * 3
-        expected = [(C, D), (C, C)] + [(D, C), (C, D), (C, C), (D, D), (C, C), (C, D)]
+        expected = [(C, D), (C, C)] + [
+            (D, C),
+            (C, D),
+            (C, C),
+            (D, D),
+            (C, C),
+            (C, D),
+        ]
         self.versus_test(
             axl.MockPlayer(actions=opponent_actions), expected_actions=expected
         )
@@ -604,7 +625,9 @@ class TestWinner21(TestPlayer):
         vs_alternator = [(D, C), (C, D)] + [(D, C), (D, D)] * 5
         self.versus_test(axl.Alternator(), expected_actions=vs_alternator)
 
-        self.versus_test(axl.Cooperator(), expected_actions=[(D, C)] + [(C, C)] * 10)
+        self.versus_test(
+            axl.Cooperator(), expected_actions=[(D, C)] + [(C, C)] * 10
+        )
 
         self.versus_test(
             axl.Defector(), expected_actions=([(D, D), (C, D)] + [(D, D)] * 10)
@@ -616,7 +639,11 @@ class TestDictConversionFunctions(unittest.TestCase):
         opponent_starting_plays = ""
         player_last_plays = "CC"
         opponent_last_plays = "D"
-        old_key = (opponent_starting_plays, player_last_plays, opponent_last_plays)
+        old_key = (
+            opponent_starting_plays,
+            player_last_plays,
+            opponent_last_plays,
+        )
 
         new_key = Plays(self_plays=(C, C), op_plays=(D,), op_openings=())
 
@@ -665,22 +692,20 @@ class TestEvolvableLookerUp(unittest.TestCase):
         pattern = ("".join([random.choice(("C", "D")) for _ in range(8)]),)
 
         self.assertRaises(
-            InsufficientParametersError,
-            self.player_class,
-            seed=1
+            InsufficientParametersError, self.player_class, seed=1
         )
         self.assertRaises(
             InsufficientParametersError,
             self.player_class,
             pattern=pattern,
             initial_actions=initial_actions,
-            seed=1
+            seed=1,
         )
         self.assertRaises(
             InsufficientParametersError,
             self.player_class,
             lookup_dict=lookup_dict,
-            seed=1
+            seed=1,
         )
 
 
@@ -708,7 +733,10 @@ class TestEvolvableLookerUp4(TestEvolvablePlayer):
     init_parameters = {
         "parameters": (2, 2, 2),
         "pattern": "".join([random.choice(("C", "D")) for _ in range(64)]),
-        "initial_actions": (C, C,),
+        "initial_actions": (
+            C,
+            C,
+        ),
     }
 
 
@@ -718,7 +746,10 @@ class TestEvolvableLookerUp5(TestEvolvablePlayer):
     parent_class = axl.LookerUp
     parent_kwargs = ["lookup_dict", "initial_actions"]
     init_parameters = {
-        "initial_actions": (C, C,),
+        "initial_actions": (
+            C,
+            C,
+        ),
         "lookup_dict": {
             ((C, C), (C,), ()): C,
             ((C, C), (D,), ()): D,

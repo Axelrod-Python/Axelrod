@@ -27,7 +27,9 @@ class TestActionValidator(TestCase):
             ActionValidator().validate(test_document)
 
         test_document = TestDocument("E")
-        self.assertRaises(ValidationError, ActionValidator().validate, test_document)
+        self.assertRaises(
+            ValidationError, ActionValidator().validate, test_document
+        )
 
 
 class TestHumanClass(TestPlayer):
@@ -70,8 +72,8 @@ class TestHumanClass(TestPlayer):
         self.assertEqual(actual_messages, expected_messages)
 
         human.history.append(C, C)
-        expected_print_message = "{}Turn 1: human played C, opponent played C".format(
-            linesep
+        expected_print_message = (
+            "{}Turn 1: human played C, opponent played C".format(linesep)
         )
         actual_messages = human._status_messages()
         self.assertEqual(actual_messages["print"], expected_print_message)

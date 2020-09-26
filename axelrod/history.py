@@ -82,7 +82,9 @@ class History(object):
         if isinstance(other, list):
             return self._plays == other
         elif isinstance(other, History):
-            return self._plays == other._plays and self._coplays == other._coplays
+            return (
+                self._plays == other._plays and self._coplays == other._coplays
+            )
         raise TypeError("Cannot compare types.")
 
     def __getitem__(self, key):
@@ -121,7 +123,9 @@ class LimitedHistory(History):
     def flip_plays(self):
         """Creates a flipped plays history for use with DualTransformer."""
         flipped_plays = [action.flip() for action in self._plays]
-        return self.__class__(self.memory_depth, plays=flipped_plays, coplays=self._coplays)
+        return self.__class__(
+            self.memory_depth, plays=flipped_plays, coplays=self._coplays
+        )
 
     def append(self, play, coplay):
         """Appends a new (play, coplay) pair an updates metadata for

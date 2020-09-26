@@ -4,12 +4,21 @@ A module for creating hypothesis based strategies for property based testing
 import itertools
 
 import axelrod as axl
-from hypothesis.strategies import composite, floats, integers, lists, sampled_from
+from hypothesis.strategies import (
+    composite,
+    floats,
+    integers,
+    lists,
+    sampled_from,
+)
 
 
 @composite
 def strategy_lists(
-    draw, strategies=axl.short_run_time_strategies, min_size=1, max_size=len(axl.strategies)
+    draw,
+    strategies=axl.short_run_time_strategies,
+    min_size=1,
+    max_size=len(axl.strategies),
 ):
     """
     A hypothesis decorator to return a list of strategies
@@ -106,14 +115,20 @@ def tournaments(
         The maximum number of repetitions
     """
     strategies = draw(
-        strategy_lists(strategies=strategies, min_size=min_size, max_size=max_size)
+        strategy_lists(
+            strategies=strategies, min_size=min_size, max_size=max_size
+        )
     )
     players = [s() for s in strategies]
     turns = draw(integers(min_value=min_turns, max_value=max_turns))
-    repetitions = draw(integers(min_value=min_repetitions, max_value=max_repetitions))
+    repetitions = draw(
+        integers(min_value=min_repetitions, max_value=max_repetitions)
+    )
     noise = draw(floats(min_value=min_noise, max_value=max_noise))
 
-    tournament = axl.Tournament(players, turns=turns, repetitions=repetitions, noise=noise)
+    tournament = axl.Tournament(
+        players, turns=turns, repetitions=repetitions, noise=noise
+    )
     return tournament
 
 
@@ -129,7 +144,7 @@ def prob_end_tournaments(
     max_noise=1,
     min_repetitions=1,
     max_repetitions=20,
-    seed=None
+    seed=None,
 ):
     """
     A hypothesis decorator to return a tournament,
@@ -158,15 +173,23 @@ def prob_end_tournaments(
         Random seed
     """
     strategies = draw(
-        strategy_lists(strategies=strategies, min_size=min_size, max_size=max_size)
+        strategy_lists(
+            strategies=strategies, min_size=min_size, max_size=max_size
+        )
     )
     players = [s() for s in strategies]
     prob_end = draw(floats(min_value=min_prob_end, max_value=max_prob_end))
-    repetitions = draw(integers(min_value=min_repetitions, max_value=max_repetitions))
+    repetitions = draw(
+        integers(min_value=min_repetitions, max_value=max_repetitions)
+    )
     noise = draw(floats(min_value=min_noise, max_value=max_noise))
 
     tournament = axl.Tournament(
-        players, prob_end=prob_end, repetitions=repetitions, noise=noise, seed=seed
+        players,
+        prob_end=prob_end,
+        repetitions=repetitions,
+        noise=noise,
+        seed=seed,
     )
     return tournament
 
@@ -209,7 +232,9 @@ def spatial_tournaments(
         The maximum number of repetitions
     """
     strategies = draw(
-        strategy_lists(strategies=strategies, min_size=min_size, max_size=max_size)
+        strategy_lists(
+            strategies=strategies, min_size=min_size, max_size=max_size
+        )
     )
     players = [s() for s in strategies]
     player_indices = list(range(len(players)))
@@ -225,13 +250,17 @@ def spatial_tournaments(
 
     # Ensure all players/nodes are connected:
     node_indices = sorted(set([node for edge in edges for node in edge]))
-    missing_nodes = [index for index in player_indices if index not in node_indices]
+    missing_nodes = [
+        index for index in player_indices if index not in node_indices
+    ]
     for index in missing_nodes:
         opponent = draw(sampled_from(player_indices))
         edges.append((index, opponent))
 
     turns = draw(integers(min_value=min_turns, max_value=max_turns))
-    repetitions = draw(integers(min_value=min_repetitions, max_value=max_repetitions))
+    repetitions = draw(
+        integers(min_value=min_repetitions, max_value=max_repetitions)
+    )
     noise = draw(floats(min_value=min_noise, max_value=max_noise))
 
     tournament = axl.Tournament(
@@ -278,7 +307,9 @@ def prob_end_spatial_tournaments(
         The maximum number of repetitions
     """
     strategies = draw(
-        strategy_lists(strategies=strategies, min_size=min_size, max_size=max_size)
+        strategy_lists(
+            strategies=strategies, min_size=min_size, max_size=max_size
+        )
     )
     players = [s() for s in strategies]
     player_indices = list(range(len(players)))
@@ -294,17 +325,25 @@ def prob_end_spatial_tournaments(
 
     # Ensure all players/nodes are connected:
     node_indices = sorted(set([node for edge in edges for node in edge]))
-    missing_nodes = [index for index in player_indices if index not in node_indices]
+    missing_nodes = [
+        index for index in player_indices if index not in node_indices
+    ]
     for index in missing_nodes:
         opponent = draw(sampled_from(player_indices))
         edges.append((index, opponent))
 
     prob_end = draw(floats(min_value=min_prob_end, max_value=max_prob_end))
-    repetitions = draw(integers(min_value=min_repetitions, max_value=max_repetitions))
+    repetitions = draw(
+        integers(min_value=min_repetitions, max_value=max_repetitions)
+    )
     noise = draw(floats(min_value=min_noise, max_value=max_noise))
 
     tournament = axl.Tournament(
-        players, prob_end=prob_end, repetitions=repetitions, noise=noise, edges=edges
+        players,
+        prob_end=prob_end,
+        repetitions=repetitions,
+        noise=noise,
+        edges=edges,
     )
     return tournament
 

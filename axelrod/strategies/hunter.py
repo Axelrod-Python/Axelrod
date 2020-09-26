@@ -30,7 +30,7 @@ class DefectorHunter(Player):
         if (
             len(self.history) >= 4
             and len(opponent.history) == opponent.defections
-            ):
+        ):
             return D
         return C
 
@@ -58,7 +58,7 @@ class CooperatorHunter(Player):
         if (
             len(self.history) >= 4
             and len(opponent.history) == opponent.cooperations
-            ):
+        ):
             return D
         return C
 

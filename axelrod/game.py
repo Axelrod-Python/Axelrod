@@ -16,9 +16,11 @@ class Game(object):
         The numerical score attribute to all combinations of action pairs.
     """
 
-    def __init__(self, r: Score = 3, s: Score = 0, t: Score = 5, p: Score = 1) -> None:
+    def __init__(
+        self, r: Score = 3, s: Score = 0, t: Score = 5, p: Score = 1
+    ) -> None:
         """Create a new game object.
-        
+
         Parameters
         ----------
         r: int or float
@@ -30,7 +32,12 @@ class Game(object):
         p: int or float
             Score obtained by both player for mutual defection.
         """
-        self.scores = {(C, C): (r, r), (D, D): (p, p), (C, D): (s, t), (D, C): (t, s)}
+        self.scores = {
+            (C, C): (r, r),
+            (D, D): (p, p),
+            (C, D): (s, t),
+            (D, C): (t, s),
+        }
 
     def RPST(self) -> Tuple[Score, Score, Score, Score]:
         """Returns game matrix values in Press and Dyson notation."""

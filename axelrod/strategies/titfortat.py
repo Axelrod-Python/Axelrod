@@ -1,6 +1,9 @@
 from axelrod.action import Action, actions_to_str
 from axelrod.player import Player
-from axelrod.strategy_transformers import FinalTransformer, TrackHistoryTransformer
+from axelrod.strategy_transformers import (
+    FinalTransformer,
+    TrackHistoryTransformer,
+)
 
 C, D = Action.C, Action.D
 
@@ -128,7 +131,9 @@ class DynamicTwoTitsForTat(Player):
             return C
         if D in opponent.history[-2:]:
             # Probability of cooperating regardless
-            return self._random.random_choice(opponent.cooperations / len(opponent.history))
+            return self._random.random_choice(
+                opponent.cooperations / len(opponent.history)
+            )
         else:
             return C
 
@@ -302,13 +307,13 @@ class HardTitFor2Tats(Player):
 
 class OmegaTFT(Player):
     """OmegaTFT modifies Tit For Tat in two ways:
-       - checks for deadlock loops of alternating rounds of (C, D) and (D, C),
-       and attempting to break them
-       - uses a more sophisticated retaliation mechanism that is noise tolerant
+    - checks for deadlock loops of alternating rounds of (C, D) and (D, C),
+    and attempting to break them
+    - uses a more sophisticated retaliation mechanism that is noise tolerant
 
-       Names:
+    Names:
 
-       - OmegaTFT: [Slany2007]_
+    - OmegaTFT: [Slany2007]_
     """
 
     name = "Omega TFT"
@@ -389,7 +394,7 @@ class OriginalGradual(Player):
     Names:
 
     - Gradual: [Beaufils1997]_
-     """
+    """
 
     name = "Original Gradual"
     classifier = {

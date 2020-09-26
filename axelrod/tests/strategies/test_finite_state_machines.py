@@ -2,7 +2,9 @@
 import unittest
 
 import axelrod as axl
-from axelrod.compute_finite_state_machine_memory import get_memory_from_transitions
+from axelrod.compute_finite_state_machine_memory import (
+    get_memory_from_transitions,
+)
 from axelrod.evolvable_player import InsufficientParametersError
 from axelrod.strategies.finite_state_machines import (
     EvolvableFSMPlayer,
@@ -46,8 +48,15 @@ class TestSimpleFSM(unittest.TestCase):
         self.assertFalse(new_two_state.__eq__(self.two_state))
 
     def test__eq__false_by_transition(self):
-        different_transitions = ((1, C, 0, D), (1, D, 0, D), (0, C, 1, D), (0, D, 1, C))
-        new_two_state = SimpleFSM(transitions=different_transitions, initial_state=1)
+        different_transitions = (
+            (1, C, 0, D),
+            (1, D, 0, D),
+            (0, C, 1, D),
+            (0, D, 1, C),
+        )
+        new_two_state = SimpleFSM(
+            transitions=different_transitions, initial_state=1
+        )
 
         self.assertFalse(new_two_state.__eq__(self.two_state))
 
@@ -91,7 +100,9 @@ class TestSimpleFSM(unittest.TestCase):
         with self.assertRaises(ValueError) as cm:
             self.two_state.state = 5
         error_msg = cm.exception.args[0]
-        self.assertEqual(error_msg, "state: 5 does not have values for both C and D")
+        self.assertEqual(
+            error_msg, "state: 5 does not have values for both C and D"
+        )
 
 
 class TestSampleFSMPlayer(TestPlayer):
@@ -157,7 +168,12 @@ class TestSampleFSMPlayer(TestPlayer):
         """Tests that the player defined by the table for TFT is in fact
         WSLS (also known as Pavlov."""
         wsls_init_kwargs = {
-            "transitions": ((1, C, 1, C), (1, D, 2, D), (2, C, 2, D), (2, D, 1, C)),
+            "transitions": (
+                (1, C, 1, C),
+                (1, D, 2, D),
+                (2, C, 2, D),
+                (2, D, 1, C),
+            ),
             "initial_state": 1,
             "initial_action": C,
         }
@@ -272,7 +288,9 @@ class TestFSMPlayer(TestPlayer):
         opponent = axl.MockPlayer([D, D, C, C, D])
         actions = [(C, D), (C, D), (C, C), (D, C), (C, D)]
         self.versus_test(
-            opponent, expected_actions=actions, init_kwargs={"transitions": transitions}
+            opponent,
+            expected_actions=actions,
+            init_kwargs={"transitions": transitions},
         )
 
     def test_memory(self):
@@ -280,7 +298,10 @@ class TestFSMPlayer(TestPlayer):
         Test the memory depth using implemented algorithm
         """
         transitions = self.player().fsm._state_transitions
-        self.assertEqual(get_memory_from_transitions(transitions), self.expected_classifier["memory_depth"])
+        self.assertEqual(
+            get_memory_from_transitions(transitions),
+            self.expected_classifier["memory_depth"],
+        )
 
 
 class TestFortress3(TestFSMPlayer):
@@ -311,7 +332,15 @@ class TestFortress3(TestFSMPlayer):
         state_and_actions = [(1, C), (1, D), (2, C), (1, C)]
         self.transitions_test(state_and_actions)
 
-        state_and_actions = [(1, D), (2, D), (3, C), (3, C), (3, C), (3, D), (1, C)] * 2
+        state_and_actions = [
+            (1, D),
+            (2, D),
+            (3, C),
+            (3, C),
+            (3, C),
+            (3, D),
+            (1, C),
+        ] * 2
         self.transitions_test(state_and_actions)
 
     @unittest.expectedFailure
@@ -415,7 +444,15 @@ class TestPredator(TestFSMPlayer):
         ] + [(7, D), (7, C), (8, C), (8, D), (6, D)] * 3
         self.transitions_test(state_and_actions)
 
-        state_and_actions = [(0, D), (1, C), (2, D), (3, C), (5, D), (3, C), (5, C)] + [
+        state_and_actions = [
+            (0, D),
+            (1, C),
+            (2, D),
+            (3, C),
+            (5, D),
+            (3, C),
+            (5, C),
+        ] + [
             (7, C),
             (8, D),
             (6, C),
@@ -520,7 +557,9 @@ class TestRipoff(TestFSMPlayer):
     """
 
     def test_strategy(self):
-        state_and_actions = [(1, C), (2, C)] * 3 + [(1, D)] + [(3, C), (3, D)] * 5
+        state_and_actions = (
+            [(1, C), (2, C)] * 3 + [(1, D)] + [(3, C), (3, D)] * 5
+        )
         self.transitions_test(state_and_actions)
 
         state_and_actions = [(1, C), (2, D)] + [(3, D)] * 5
@@ -621,7 +660,11 @@ class TestSolutionB1(TestFSMPlayer):
     def test_strategy(self):
 
         state_and_actions = (
-            [(1, D)] * 3 + [(1, C)] + [(2, C)] * 3 + [(2, D)] + [(3, C), (3, D)] * 3
+            [(1, D)] * 3
+            + [(1, C)]
+            + [(2, C)] * 3
+            + [(2, D)]
+            + [(3, C), (3, D)] * 3
         )
         self.transitions_test(state_and_actions)
 
@@ -802,7 +845,9 @@ class TestEvolvedFSM16(TestFSMPlayer):
 
     def test_strategy(self):
         # finished: 0,
-        state_and_actions = [(0, C)] * 3 + [(0, D)] + [(12, D), (11, D), (5, C)] * 3
+        state_and_actions = (
+            [(0, C)] * 3 + [(0, D)] + [(12, D), (11, D), (5, C)] * 3
+        )
         self.transitions_test(state_and_actions)
 
         # finished: 0, 5, 10
@@ -849,7 +894,13 @@ class TestEvolvedFSM16(TestFSMPlayer):
         self.transitions_test(state_and_actions)
 
         # finished: 0, 1, 2, 3, 5, 10, 11, 12, 13, 14, 15
-        state_and_actions = to_state_seven + [(7, D), (1, D), (6, C), (5, D), (10, C)]
+        state_and_actions = to_state_seven + [
+            (7, D),
+            (1, D),
+            (6, C),
+            (5, D),
+            (10, C),
+        ]
         self.transitions_test(state_and_actions)
 
         # finished: 0, 1, 2, 3, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15
@@ -979,7 +1030,12 @@ class TestEvolvedFSM16Noise05(TestFSMPlayer):
         # finished 0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 13, 15
         to_state_eleven = [(0, D), (3, C), (10, D), (1, D), (15, D)]
 
-        state_and_actions = to_state_eleven + [(11, C), (14, C), (3, C), (10, D)]
+        state_and_actions = to_state_eleven + [
+            (11, C),
+            (14, C),
+            (3, C),
+            (10, D),
+        ]
         self.transitions_test(state_and_actions)
 
         # finished 0, 1, 2, 3, 4, 5, 6, 8, 10, 11, 12, 13, 15
@@ -1058,7 +1114,12 @@ class TestEvolvableFSMPlayer(unittest.TestCase):
         self.assertRaises(
             InsufficientParametersError,
             self.player_class,
-            transitions=[[0, C, 1, D], [0, D, 0, D], [1, C, 1, C], [1, D, 1, D]],
+            transitions=[
+                [0, C, 1, D],
+                [0, D, 0, D],
+                [1, C, 1, C],
+                [1, D, 1, D],
+            ],
             seed=1,  # To prevent exception from unset seed.
         )
 
@@ -1083,7 +1144,9 @@ class TestEvolvableFSMPlayer(unittest.TestCase):
         self.assertIsInstance(player, axl.EvolvableFSMPlayer)
 
         serialized = player.serialize_parameters()
-        deserialized_player = player.__class__.deserialize_parameters(serialized)
+        deserialized_player = player.__class__.deserialize_parameters(
+            serialized
+        )
         self.assertEqual(player, deserialized_player)
         self.assertEqual(deserialized_player, deserialized_player.clone())
 
@@ -1098,7 +1161,8 @@ class TestEvolvableFSMPlayer(unittest.TestCase):
         """Test to trigger random lines in mutate"""
         for seed in [18, 22]:
             player = axl.EvolvableFSMPlayer(
-                num_states=4, mutation_probability=0.5, seed=seed)
+                num_states=4, mutation_probability=0.5, seed=seed
+            )
             player.mutate()
 
 
@@ -1126,7 +1190,7 @@ class TestEvolvableFSMPlayer4(TestEvolvablePlayer):
     init_parameters = {
         "transitions": ((1, C, 1, C), (1, D, 2, D), (2, C, 2, D), (2, D, 1, C)),
         "initial_state": 1,
-        "initial_action": C
+        "initial_action": C,
     }
 
 
@@ -1135,7 +1199,8 @@ EvolvableFSMPlayerWithDefault = PartialClass(
     EvolvableFSMPlayer,
     transitions=((1, C, 1, C), (1, D, 1, D)),
     initial_state=1,
-    initial_action=C)
+    initial_action=C,
+)
 
 
 class EvolvableFSMAsFSM(TestFSMPlayer):

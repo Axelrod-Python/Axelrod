@@ -23,10 +23,14 @@ class TestRandom(TestPlayer):
 
     def test_deterministic(self):
         actions = [(D, C), (D, C), (D, C)]
-        self.versus_test(axl.Cooperator(), expected_actions=actions, init_kwargs={"p": 0})
+        self.versus_test(
+            axl.Cooperator(), expected_actions=actions, init_kwargs={"p": 0}
+        )
 
         actions = [(C, C), (C, C), (C, C)]
-        self.versus_test(axl.Cooperator(), expected_actions=actions, init_kwargs={"p": 1})
+        self.versus_test(
+            axl.Cooperator(), expected_actions=actions, init_kwargs={"p": 1}
+        )
 
     def test_stochastic_behavior1(self):
         """Test that strategy is randomly picked (not affected by history)."""

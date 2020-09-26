@@ -29,7 +29,7 @@ class Match(object):
         noise=0,
         match_attributes=None,
         reset=True,
-        seed=None
+        seed=None,
     ):
         """
         Parameters
@@ -193,7 +193,8 @@ class Match(object):
             result = []
             for _ in range(turns):
                 plays = self.simultaneous_play(
-                    self.players[0], self.players[1], self.noise)
+                    self.players[0], self.players[1], self.noise
+                )
                 result.append(plays)
 
             if self._cache_update_required:
