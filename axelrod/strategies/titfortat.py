@@ -71,6 +71,7 @@ class TitFor2Tats(Player):
 
     @staticmethod
     def strategy(opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         return D if opponent.history[-2:] == [D, D] else C
 
 
@@ -95,6 +96,7 @@ class TwoTitsForTat(Player):
 
     @staticmethod
     def strategy(opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         return D if D in opponent.history[-2:] else C
 
 
@@ -122,6 +124,7 @@ class DynamicTwoTitsForTat(Player):
     }
 
     def strategy(self, opponent):
+        """Actual strategy definition that determines player's action."""
         # First move
         if not opponent.history:
             # Make sure we cooperate first turn
@@ -158,6 +161,7 @@ class Bully(Player):
 
     @staticmethod
     def strategy(opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         return C if opponent.history[-1:] == [D] else D
 
 
@@ -180,6 +184,7 @@ class SneakyTitForTat(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         if len(self.history) < 2:
             return C
         if D not in opponent.history:
@@ -210,6 +215,7 @@ class SuspiciousTitForTat(Player):
 
     @staticmethod
     def strategy(opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         return C if opponent.history[-1:] == [C] else D
 
 
@@ -235,6 +241,7 @@ class AntiTitForTat(Player):
 
     @staticmethod
     def strategy(opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         return D if opponent.history[-1:] == [C] else C
 
 
@@ -258,6 +265,7 @@ class HardTitForTat(Player):
 
     @staticmethod
     def strategy(opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         # Cooperate on the first move
         if not opponent.history:
             return C
@@ -289,6 +297,7 @@ class HardTitFor2Tats(Player):
 
     @staticmethod
     def strategy(opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         # Cooperate on the first move
         if not opponent.history:
             return C
@@ -331,6 +340,7 @@ class OmegaTFT(Player):
         self.deadlock_counter = 0
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         # Cooperate on the first move
         if not self.history:
             return C
@@ -410,6 +420,7 @@ class OriginalGradual(Player):
         self.punishment_limit = 0
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
 
         if self.calming:
             self.calming = False
@@ -475,6 +486,7 @@ class Gradual(Player):
         self.punish_count = 0
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
 
         if len(self.history) == 0:
             return C
@@ -523,6 +535,7 @@ class ContriteTitForTat(Player):
         self._recorded_history = []
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
 
         if not opponent.history:
             return C
@@ -590,6 +603,7 @@ class AdaptiveTitForTat(Player):
         self.world = rate
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
 
         if len(opponent.history) == 0:
             return C
@@ -631,6 +645,7 @@ class SpitefulTitForTat(Player):
         self.retaliating = False
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         # First move
         if not self.history:
             return C
@@ -668,6 +683,7 @@ class SlowTitForTwoTats2(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
 
         # Start with two cooperations
         if len(self.history) < 2:
@@ -702,6 +718,7 @@ class Alexei(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         if not self.history:
             return C
         if opponent.history[-1] == D:
@@ -736,6 +753,7 @@ class EugineNier(Player):
         self.is_defector = False
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         if not self.history:
             return C
         if not (self.is_defector) and opponent.defections >= 5:
@@ -791,6 +809,7 @@ class NTitsForMTats(Player):
         self.retaliate_count = 0
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         # if opponent defected consecutively M times, start the retaliation
         if not self.M or opponent.history[-self.M :].count(D) == self.M:
             self.retaliate_count = self.N
@@ -829,6 +848,7 @@ class Michaelos(Player):
         self.is_defector = False
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         if not self.history:
             return C
         if self.is_defector:

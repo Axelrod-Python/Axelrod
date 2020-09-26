@@ -60,6 +60,7 @@ class Darwin(Player):
         return C
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         trial = len(self.history)
 
         if trial > 0:

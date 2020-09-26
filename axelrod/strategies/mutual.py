@@ -47,6 +47,7 @@ class Hopeless(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         if not opponent.history:
             return self._random.random_choice()
         if self.history[-1] == C and opponent.history[-1] == C:

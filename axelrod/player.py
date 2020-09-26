@@ -64,7 +64,7 @@ class PostInitCaller(type):
         obj = type.__call__(cls, *args, **kwargs)
         # Next we do any post init or post transform tasks, like recomputing
         # classifiers
-        # Note that subclasses inherit the metaclass, and subclasses my override
+        # Note that subclasses inherit the metaclass, and subclasses may override
         # or extend __init__ so it's necessary to do these tasks after all the
         # __init__'s have run in the case of a post-transform reclassification.
         obj._post_init()

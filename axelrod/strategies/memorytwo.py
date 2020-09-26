@@ -122,6 +122,7 @@ class MemoryTwoPlayer(Player):
         self.classifier["memory_depth"] = self.compute_memory_depth(self._sixteen_vector)
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         turn = len(self.history)
         if turn <= 1:
             return self._initial[turn]
@@ -265,6 +266,7 @@ class MEM2(Player):
         self.alld_counter = 0
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         # Update Histories
         # Note that this assumes that TFT and TFTT do not use internal counters,
         # Rather that they examine the actual history of play

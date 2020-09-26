@@ -25,6 +25,7 @@ class Doubler(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         if not self.history:
             return C
         if (

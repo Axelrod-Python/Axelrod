@@ -55,6 +55,7 @@ class Stalker(Player):
         self.current_score += scores[0]
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
 
         if len(self.history) == 0:
             return C

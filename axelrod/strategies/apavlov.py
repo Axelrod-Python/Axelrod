@@ -33,6 +33,7 @@ class APavlov2006(Player):
         self.opponent_class = None  # type: Optional[str]
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         # TFT for six rounds
         if len(self.history) < 6:
             return D if opponent.history[-1:] == [D] else C
@@ -96,6 +97,7 @@ class APavlov2011(Player):
         self.opponent_class = None  # type: Optional[str]
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         # TFT for six rounds
         if len(self.history) < 6:
             return D if opponent.history[-1:] == [D] else C

@@ -210,6 +210,7 @@ class DBS(Player):
         return p_cond
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         # First move
         if not self.history:
             return C

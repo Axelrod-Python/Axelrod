@@ -361,6 +361,7 @@ class LookerUp(Player):
         return initial_actions[:table_depth]
 
     def strategy(self, opponent: Player) -> Reaction:
+        """Actual strategy definition that determines player's action."""
         turn_index = len(opponent.history)
         while turn_index < len(self._initial_actions_pool):
             return self._initial_actions_pool[turn_index]

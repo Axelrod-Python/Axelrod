@@ -25,6 +25,7 @@ class CotoDeRatio(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         # Initially cooperate
         if len(opponent.history) == 0:
             return C

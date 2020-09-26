@@ -117,6 +117,7 @@ class BushMosteller(Player):
                 self._d_prob += self._learning_rate * self._stimulus * self._d_prob
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
 
         # First turn
         if len(self.history) == 0:

@@ -208,6 +208,7 @@ class HMMPlayer(Player):
         return False
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         if len(self.history) == 0:
             return self.initial_action
         else:

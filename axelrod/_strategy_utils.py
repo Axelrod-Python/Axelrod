@@ -113,7 +113,7 @@ def simulate_match(player_1, player_2, strategy, rounds=10):
 
 
 def _calculate_scores(p1, p2, game):
-    """Calculates the scores for two players based their history.
+    """Calculates the scores for two players based on their history.
 
     Parameters
     ----------

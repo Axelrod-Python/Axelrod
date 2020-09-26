@@ -7,7 +7,7 @@ C, D = Action.C, Action.D
 
 
 class Adaptive(Player):
-    """Start with a specific sequence of C and D, then play the strategy that
+    """Start with a specific sequence of C and D, then play the action that
     has worked best, recalculated each turn.
 
     Names:
@@ -42,6 +42,8 @@ class Adaptive(Player):
             self.scores[last_round[0]] += scores[0]
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
+
         # Update scores from the last play
         self.score_last_round(opponent)
         # Begin by playing the sequence C,C,C,C,C,C,D,D,D,D,D

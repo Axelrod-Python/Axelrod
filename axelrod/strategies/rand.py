@@ -41,6 +41,7 @@ class Random(Player):
         self.p = p
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         return self._random.random_choice(self.p)
 
     def _post_init(self):

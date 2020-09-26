@@ -52,8 +52,6 @@ class Tournament(object):
             The number of times the round robin should be repeated
         noise : float
             The probability that a player's intended action should be flipped
-        prob_end : float
-            The probability of a given turn ending a match
         edges : list
             A list of edges between players
         match_attributes : dict

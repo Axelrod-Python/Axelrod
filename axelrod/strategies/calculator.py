@@ -37,6 +37,7 @@ class Calculator(Player):
         self.joss_instance.set_seed(seed)
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         turn = len(self.history)
         if turn > 0:
             self.joss_instance.history.append(self.history[-1],

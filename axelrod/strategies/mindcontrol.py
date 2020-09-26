@@ -18,7 +18,7 @@ class MindController(Player):
         "stochastic": False,
         "long_run_time": False,
         "inspects_source": False,
-        "manipulates_source": True,  # Finds out what opponent will do
+        "manipulates_source": True,  # Changes what opponent will do
         "manipulates_state": False,
     }
 
@@ -62,6 +62,7 @@ class MindWarper(Player):
 
     @staticmethod
     def strategy(opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         opponent.strategy = lambda opponent: C
         return D
 
@@ -88,5 +89,6 @@ class MindBender(MindWarper):
 
     @staticmethod
     def strategy(opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         opponent.__dict__["strategy"] = lambda opponent: C
         return D

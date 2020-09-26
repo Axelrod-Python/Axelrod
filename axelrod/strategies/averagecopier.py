@@ -3,10 +3,13 @@ from axelrod.player import Player
 
 C, D = Action.C, Action.D
 
+def calculate_cooperation_ratio(player: Player) -> float:
+    """ Calculates the cooperation ratio of the player given."""
+    return player.cooperations / len(player.history)
 
 class AverageCopier(Player):
     """
-    The player will cooperate with probability p if the opponent's cooperation
+    The player will cooperate with probability p where the opponent's cooperation
     ratio is p. Starts with random decision.
 
     Names:
@@ -25,11 +28,11 @@ class AverageCopier(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         if len(opponent.history) == 0:
             # Randomly picks a strategy (not affected by history).
             return self._random.random_choice(0.5)
-        p = opponent.cooperations / len(opponent.history)
-        return self._random.random_choice(p)
+        return self._random.random_choice(calculate_cooperation_ratio(opponent))
 
 
 class NiceAverageCopier(Player):
@@ -52,7 +55,7 @@ class NiceAverageCopier(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         if len(opponent.history) == 0:
             return C
-        p = opponent.cooperations / len(opponent.history)
-        return self._random.random_choice(p)
+        return self._random.random_choice(calculate_cooperation_ratio(opponent))

@@ -26,6 +26,7 @@ class Cooperator(Player):
 
     @staticmethod
     def strategy(opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         return C
 
 

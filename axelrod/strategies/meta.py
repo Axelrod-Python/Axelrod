@@ -115,6 +115,7 @@ class MetaPlayer(Player):
         self.update_histories(coplay)
 
     def strategy(self, opponent):
+        """Actual strategy definition that determines player's action."""
         # Get the results of all our players.
         results = []
         for player in self.team:

@@ -25,6 +25,7 @@ class BetterAndBetter(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         current_round = len(self.history) + 1
         probability = current_round / 1000
         return self._random.random_choice(probability)

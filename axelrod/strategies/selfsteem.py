@@ -36,6 +36,7 @@ class SelfSteem(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         turns_number = len(self.history)
         sine_value = sin(2 * pi * turns_number / 10)
 

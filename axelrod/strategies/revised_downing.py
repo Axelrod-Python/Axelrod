@@ -45,6 +45,7 @@ class RevisedDowning(Player):
         self.total_D = 0  # note the same as self.defections
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         round_number = len(self.history) + 1
 
         if round_number == 1:

@@ -44,6 +44,7 @@ class AbstractAdaptor(Player):
         self.s = 0.
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         if self.history:
             # Update internal state from the last play
             last_round = (self.history[-1], opponent.history[-1])

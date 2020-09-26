@@ -27,6 +27,7 @@ class BackStabber(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         return _backstabber_strategy(opponent)
 
 
@@ -56,6 +57,7 @@ class DoubleCrosser(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         if _opponent_triggers_alt_strategy(opponent):
             return _alt_strategy(opponent)
         return _backstabber_strategy(opponent)

@@ -32,6 +32,7 @@ class Handshake(Player):
         self.initial_plays = initial_plays
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         # Begin by playing the sequence C, D
         index = len(self.history)
         if index < len(self.initial_plays):

@@ -209,6 +209,7 @@ class ANN(Player):
         self.bias_weights = np.array(bias)
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         features = compute_features(self, opponent)
         output = activate(
             self.bias_weights,

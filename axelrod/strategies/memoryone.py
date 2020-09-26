@@ -33,6 +33,7 @@ class WinStayLoseShift(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         if not self.history:
             return C
         # React to the opponent's last move
@@ -119,6 +120,7 @@ class MemoryOnePlayer(Player):
             self.classifier["memory_depth"] = 0
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         if len(opponent.history) == 0:
             return self._initial
         # Determine which probability to use
@@ -324,6 +326,7 @@ class ALLCorALLD(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         if len(self.history) == 0:
             return self._random.random_choice(0.6)
         return self.history[-1]

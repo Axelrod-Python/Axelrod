@@ -32,6 +32,7 @@ class VeryBad(Player):
 
     @staticmethod
     def strategy(opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         total_moves = len(opponent.history)
 
         if total_moves < 3:
