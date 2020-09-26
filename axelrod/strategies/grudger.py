@@ -334,7 +334,7 @@ class SpitefulCC(Player):
     @staticmethod
     def strategy(opponent: Player) -> Action:
         """
-        Cooperates until the oponent defects. Then defects forever.
+        Cooperates until the oponent defects, then defects forever.
         Always cooperates twice at the start.
         """
         if len(opponent.history) < 2:
