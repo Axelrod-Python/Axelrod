@@ -21,7 +21,10 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
         warnings.simplefilter("default", category=UserWarning)
 
     @settings(deadline=None)
-    @given(strategies=strategy_lists(min_size=20, max_size=20), hypothesis_selector=data())
+    @given(
+        strategies=strategy_lists(min_size=20, max_size=20),
+        hypothesis_selector=data(),
+    )
     def test_boolean_filtering(self, strategies, hypothesis_selector):
 
         classifier_list = [
@@ -33,7 +36,12 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
         ]
 
         classifiers = hypothesis_selector.draw(
-            lists(sampled_from(classifier_list), min_size=1, max_size=len(classifier_list), unique=True)
+            lists(
+                sampled_from(classifier_list),
+                min_size=1,
+                max_size=len(classifier_list),
+                unique=True,
+            )
         )
 
         comprehension, filterset = strategies, {}
