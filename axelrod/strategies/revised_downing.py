@@ -68,7 +68,7 @@ class RevisedDowning(Player):
         alt = 4.0 * self.good - 5.0 * self.bad - 1
         if c >= 0 and c >= alt:
             move = C
-        elif (c >= 0 and c < alt) or (alt >= 0):
+        elif (0 <= c < alt) or (alt >= 0):
             move = self.history[-1].flip()
         else:
             move = D

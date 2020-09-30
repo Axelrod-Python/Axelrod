@@ -142,9 +142,9 @@ def look_ahead(player1, player2, game, rounds=10):
 
     Parameters
     ----------
-    player_1: Player
+    player1: Player
         The player that will look ahead.
-    player_2: Player
+    player2: Player
         The opponent that will be inspected.
     game: Game
         The Game object used to score rounds.

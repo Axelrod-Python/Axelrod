@@ -761,7 +761,7 @@ class EugineNier(Player):
         """Actual strategy definition that determines player's action."""
         if not self.history:
             return C
-        if not (self.is_defector) and opponent.defections >= 5:
+        if not self.is_defector and opponent.defections >= 5:
             self.is_defector = True
         if self.is_defector:
             return D
@@ -896,7 +896,7 @@ class RandomTitForTat(Player):
         """
         Parameters
         ----------
-        p, float
+        p: float
             The probability to cooperate
         """
         super().__init__()

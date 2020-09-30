@@ -43,10 +43,10 @@ class SelfSteem(Player):
         if sine_value > 0.95:
             return D
 
-        if abs(sine_value) < 0.95 and abs(sine_value) > 0.3:
+        if 0.95 > abs(sine_value) > 0.3:
             return opponent.history[-1]
 
-        if sine_value < 0.3 and sine_value > -0.3:
+        if 0.3 > sine_value > -0.3:
             return self._random.random_choice()
 
         return C

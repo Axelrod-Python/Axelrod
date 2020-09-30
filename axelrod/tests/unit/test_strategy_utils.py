@@ -26,7 +26,7 @@ class TestDetectCycle(unittest.TestCase):
         history = cycle * period
         detected = detect_cycle(history)
         self.assertIsNotNone(detected)
-        self.assertIn("".join(map(str, detected)), "".join(map(str, (cycle))))
+        self.assertIn("".join(map(str, detected)), "".join(map(str, cycle)))
 
     def test_no_cycle(self):
         history = [C, D, C, C]

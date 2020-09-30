@@ -4,7 +4,7 @@ import warnings
 import axelrod as axl
 from axelrod.tests.property import strategy_lists
 from hypothesis import example, given, settings
-from hypothesis.strategies import integers
+from hypothesis.strategies import integers, lists, sampled_from, data
 
 
 class TestFiltersAgainstComprehensions(unittest.TestCase):
@@ -21,17 +21,20 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
         warnings.simplefilter("default", category=UserWarning)
 
     @settings(deadline=None)
-    @given(strategies=strategy_lists(min_size=20, max_size=20))
-    @example(strategies=[axl.DBS, axl.Cooperator])
-    def test_boolean_filtering(self, strategies):
+    @given(strategies=strategy_lists(min_size=20, max_size=20), hypothesis_selector=data())
+    def test_boolean_filtering(self, strategies, hypothesis_selector):
 
-        classifiers = [
+        classifier_list = [
             "stochastic",
             "long_run_time",
             "manipulates_state",
             "manipulates_source",
             "inspects_source",
         ]
+
+        classifiers = hypothesis_selector.draw(
+            lists(sampled_from(classifier_list), min_size=1, max_size=len(classifier_list), unique=True)
+        )
 
         comprehension, filterset = strategies, {}
         for classifier in classifiers:
