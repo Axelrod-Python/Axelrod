@@ -4,7 +4,7 @@ import warnings
 import axelrod as axl
 from axelrod.tests.property import strategy_lists
 from hypothesis import example, given, settings
-from hypothesis.strategies import integers, lists, sampled_from, data
+from hypothesis.strategies import data, integers, lists, sampled_from
 
 
 class TestFiltersAgainstComprehensions(unittest.TestCase):
