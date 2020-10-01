@@ -29,6 +29,7 @@ class Resurrection(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         if len(self.history) == 0:
             return C
         if len(self.history) >= 5 and self.history[-5:] == [D, D, D, D, D]:
@@ -61,6 +62,7 @@ class DoubleResurrection(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         if len(self.history) == 0:
             return C
         if len(self.history) >= 5 and self.history[-5:] == [C, C, C, C, C]:

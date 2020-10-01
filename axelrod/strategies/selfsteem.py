@@ -36,16 +36,17 @@ class SelfSteem(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         turns_number = len(self.history)
         sine_value = sin(2 * pi * turns_number / 10)
 
         if sine_value > 0.95:
             return D
 
-        if abs(sine_value) < 0.95 and abs(sine_value) > 0.3:
+        if 0.95 > abs(sine_value) > 0.3:
             return opponent.history[-1]
 
-        if sine_value < 0.3 and sine_value > -0.3:
+        if 0.3 > sine_value > -0.3:
             return self._random.random_choice()
 
         return C

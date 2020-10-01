@@ -134,6 +134,7 @@ class Aggravater(Player):
 
     @staticmethod
     def strategy(opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         if len(opponent.history) < 3:
             return D
         elif opponent.defections:

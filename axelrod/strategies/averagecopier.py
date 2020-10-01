@@ -25,6 +25,7 @@ class AverageCopier(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         if len(opponent.history) == 0:
             # Randomly picks a strategy (not affected by history).
             return self._random.random_choice(0.5)
@@ -52,6 +53,7 @@ class NiceAverageCopier(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         if len(opponent.history) == 0:
             return C
         p = opponent.cooperations / len(opponent.history)

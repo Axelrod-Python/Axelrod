@@ -131,6 +131,7 @@ class MemoryTwoPlayer(Player):
         )
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         turn = len(self.history)
         if turn <= 1:
             return self._initial[turn]
@@ -278,6 +279,7 @@ class MEM2(Player):
         self.alld_counter = 0
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         # Update Histories
         # Note that this assumes that TFT and TFTT do not use internal counters,
         # Rather that they examine the actual history of play
@@ -289,9 +291,9 @@ class MEM2(Player):
             self.shift_counter = 2
             # Depending on the last two moves, play as TFT, TFTT, or ALLD
             last_two = list(zip(self.history[-2:], opponent.history[-2:]))
-            if set(last_two) == set([(C, C)]):
+            if set(last_two) == {(C, C)}:
                 self.play_as = "TFT"
-            elif set(last_two) == set([(C, D), (D, C)]):
+            elif set(last_two) == {(C, D), (D, C)}:
                 self.play_as = "TFTT"
             else:
                 self.play_as = "ALLD"

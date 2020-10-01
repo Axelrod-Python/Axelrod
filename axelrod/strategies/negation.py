@@ -25,6 +25,7 @@ class Negation(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         # Random first move
         if not self.history:
             return self._random.random_choice()

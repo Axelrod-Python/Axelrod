@@ -142,7 +142,7 @@ class TestRecursiveThueMorse(unittest.TestCase):
 class TestThueMorseGenerator(unittest.TestCase):
     def test_initial_values(self):
         generator = thue_morse_generator()
-        values = [next(generator) for i in range(5)]
+        values = [next(generator) for _ in range(5)]
         self.assertEqual(values, [0, 1, 1, 0, 1])
 
     def test_with_offset(self):

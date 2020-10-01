@@ -52,7 +52,7 @@ def passes_operator_filter(player, classifier_key, value, operator):
 def passes_in_list_filter(player, classifier_key, value):
     """
     Tests whether a given list of values exist in the list returned from the
-    given players's classifier dict for the given classifier_key.
+    given player's classifier dict for the given classifier_key.
 
     e.g.
 

@@ -72,6 +72,7 @@ class FoolMeOnce(Player):
 
     @staticmethod
     def strategy(opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         if not opponent.history:
             return C
         if opponent.defections > 1:
@@ -113,6 +114,7 @@ class ForgetfulFoolMeOnce(Player):
         self.forget_probability = forget_probability
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         r = self._random.random()
         if not opponent.history:
             return self._initial

@@ -43,6 +43,7 @@ class Gambler(LookerUp):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         actions_or_float = super(Gambler, self).strategy(opponent)
         if isinstance(actions_or_float, Action):
             return actions_or_float

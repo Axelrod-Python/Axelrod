@@ -124,6 +124,7 @@ class BushMosteller(Player):
                 )
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
 
         # First turn
         if len(self.history) == 0:

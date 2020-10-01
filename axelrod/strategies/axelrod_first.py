@@ -245,6 +245,7 @@ class FirstByDowning(Player):
         self.number_opponent_cooperations_in_response_to_D = 0
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         round_number = len(self.history) + 1
 
         if round_number == 1:
@@ -347,6 +348,7 @@ class FirstByFeld(Player):
         return max(self._start_coop_prob + slope * rounds, self._end_coop_prob)
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         if not opponent.history:
             return C
         if opponent.history[-1] == D:
@@ -491,6 +493,7 @@ class FirstByGrofman(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         if len(self.history) == 0 or self.history[-1] == opponent.history[-1]:
             return C
         return self._random.random_choice(2 / 7)
@@ -630,6 +633,7 @@ class FirstByNydegger(Player):
         return a
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         if len(self.history) == 0:
             return C
         if len(self.history) == 1:
@@ -713,6 +717,7 @@ class FirstByShubik(Player):
                 self.is_retaliating = False
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         if not opponent.history:
             return C
 
@@ -773,6 +778,7 @@ class FirstByTullock(Player):
         self._rounds_to_cooperate = 11
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         if len(self.history) < self._rounds_to_cooperate:
             return C
         rounds = self._rounds_to_cooperate - 1
@@ -817,6 +823,7 @@ class FirstByAnonymous(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         r = self._random.uniform(3, 7) / 10
         return self._random.random_choice(r)
 
@@ -872,6 +879,7 @@ class FirstBySteinAndRapoport(Player):
         self.opponent_is_random = False
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         round_number = len(self.history) + 1
 
         # First 4 moves
@@ -984,6 +992,7 @@ class FirstByTidemanAndChieruzzi(Player):
         self.opponent_score += scores[1]
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         if not opponent.history:
             return C
 

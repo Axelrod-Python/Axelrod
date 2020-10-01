@@ -1,6 +1,5 @@
 """Tests for the Cycler strategies."""
 import itertools
-import random
 import unittest
 
 import axelrod as axl
