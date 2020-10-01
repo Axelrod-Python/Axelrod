@@ -310,3 +310,35 @@ class GeneralSoftGrudger(Player):
 
     def __repr__(self) -> str:
         return "%s: n=%s,d=%s,c=%s" % (self.name, self.n, self.d, self.c)
+
+
+class SpitefulCC(Player):
+    """
+    Behaves like Grudger after cooperating for 2 turns
+
+    Names:
+
+    - spiteful_cc: [Mathieu2015]_
+    """
+
+    name = "SpitefulCC"
+    classifier = {
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": False,
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+    @staticmethod
+    def strategy(opponent: Player) -> Action:
+        """
+        Cooperates until the oponent defects, then defects forever.
+        Always cooperates twice at the start.
+        """
+        if len(opponent.history) < 2:
+            return C
+        elif opponent.defections:
+            return D
+        return C

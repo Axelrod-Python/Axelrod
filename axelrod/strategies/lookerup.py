@@ -468,6 +468,10 @@ class EvolvableLookerUp(LookerUp, EvolvablePlayer):
             lookup_table = self._get_lookup_table(
                 lookup_dict, pattern, parameters
             )
+            plays, op_plays, op_start_plays = parameters
+            lookup_table = self._get_lookup_table(
+                lookup_dict, pattern, parameters
+            )
             lookup_dict = lookup_table.dictionary
         elif parameters:
             # Generate a random pattern and (maybe) initial actions
