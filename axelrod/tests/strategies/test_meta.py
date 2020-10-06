@@ -631,6 +631,7 @@ class TestNMWEDeterministic(TestMetaPlayer):
     def classifier_test(self, expected_class_classifier=None):
         pass
 
+
 class TestNMWEStochastic(TestMetaPlayer):
     name = "NMWE Stochastic"
     player = axl.NMWEStochastic

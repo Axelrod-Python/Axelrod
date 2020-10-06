@@ -1,6 +1,9 @@
 from axelrod.action import Action, actions_to_str
 from axelrod.player import Player
-from axelrod.strategy_transformers import FinalTransformer, TrackHistoryTransformer
+from axelrod.strategy_transformers import (
+    FinalTransformer,
+    TrackHistoryTransformer,
+)
 
 C, D = Action.C, Action.D
 
