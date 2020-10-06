@@ -3,11 +3,7 @@ import unittest
 
 import axelrod as axl
 from axelrod.action import Action
-from axelrod.evolvable_player import (
-    copy_lists,
-    crossover_dictionaries,
-    crossover_lists,
-)
+from axelrod.evolvable_player import copy_lists, crossover_dictionaries, crossover_lists
 
 from .test_player import TestPlayer
 

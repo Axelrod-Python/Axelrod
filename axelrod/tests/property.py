@@ -4,13 +4,7 @@ A module for creating hypothesis based strategies for property based testing
 import itertools
 
 import axelrod as axl
-from hypothesis.strategies import (
-    composite,
-    floats,
-    integers,
-    lists,
-    sampled_from,
-)
+from hypothesis.strategies import composite, floats, integers, lists, sampled_from
 
 
 @composite
@@ -18,7 +12,7 @@ def strategy_lists(
     draw,
     strategies=axl.short_run_time_strategies,
     min_size=1,
-    max_size=len(axl.strategies),
+    max_size=len(axl.short_run_time_strategies),
 ):
     """
     A hypothesis decorator to return a list of strategies

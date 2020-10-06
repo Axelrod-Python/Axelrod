@@ -4,7 +4,32 @@ import warnings
 import axelrod as axl
 from axelrod.tests.property import strategy_lists
 from hypothesis import example, given, settings
-from hypothesis.strategies import integers
+from hypothesis.strategies import integers, lists, sampled_from
+
+
+def classifiers_lists(min_size=1, max_size=5):
+    """
+    A function to return a list of classifiers
+
+    Parameters
+    ----------
+    min_size : integer
+        The minimum number of classifiers to include
+    max_size : integer
+        The maximum number of classifiers to include
+    """
+    classifier_list = [
+        "stochastic",
+        "long_run_time",
+        "manipulates_state",
+        "manipulates_source",
+        "inspects_source",
+    ]
+
+    classifiers = lists(
+        sampled_from(classifier_list), min_size=min_size, max_size=max_size
+    )
+    return classifiers
 
 
 class TestFiltersAgainstComprehensions(unittest.TestCase):
@@ -21,18 +46,16 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
         warnings.simplefilter("default", category=UserWarning)
 
     @settings(deadline=None)
-    @given(strategies=strategy_lists(min_size=20, max_size=20))
-    @example(strategies=[axl.DBS, axl.Cooperator])
-    def test_boolean_filtering(self, strategies):
+    @given(
+        strategies=strategy_lists(min_size=20, max_size=20),
+        classifiers=classifiers_lists(),
+    )
+    @example(
+        strategies=[axl.DBS, axl.Cooperator], classifiers=["long_run_time"]
+    )
+    def test_boolean_filtering(self, strategies, classifiers):
 
-        classifiers = [
-            "stochastic",
-            "long_run_time",
-            "manipulates_state",
-            "manipulates_source",
-            "inspects_source",
-        ]
-
+        comprehension, filterset = strategies, {}
         for classifier in classifiers:
             comprehension = set(filter(axl.Classifiers[classifier], strategies))
             filterset = {classifier: True}
