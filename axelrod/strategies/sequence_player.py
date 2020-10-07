@@ -34,7 +34,7 @@ class SequencePlayer(Player):
             return C
 
     def strategy(self, opponent: Player) -> Action:
-        # Iterate through the sequence and apply the meta strategy
+        """Iterate through the sequence and apply the meta strategy."""
         for s in self.sequence_generator:
             return self.meta_strategy(s)
 

@@ -33,6 +33,7 @@ class CollectiveStrategy(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         turn = len(self.history)
         if turn == 0:
             return C
@@ -74,6 +75,7 @@ class Detective(Player):
             self.initial_actions = initial_actions
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         hist_size = len(self.history)
         init_size = len(self.initial_actions)
         if hist_size < init_size:
@@ -104,6 +106,7 @@ class Prober(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         turn = len(self.history)
         if turn == 0:
             return D
@@ -140,6 +143,7 @@ class Prober2(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         turn = len(self.history)
         if turn == 0:
             return D
@@ -176,6 +180,7 @@ class Prober3(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         turn = len(self.history)
         if turn == 0:
             return D
@@ -241,6 +246,7 @@ class Prober4(Player):
         self.turned_defector = False
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         if not self.history:
             return self.init_sequence[0]
         turn = len(self.history)
@@ -283,6 +289,7 @@ class HardProber(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         turn = len(self.history)
         if turn == 0:
             return D
@@ -332,6 +339,7 @@ class NaiveProber(Player):
             self.classifier["stochastic"] = False
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         # First move
         if len(self.history) == 0:
             return C
@@ -379,6 +387,7 @@ class RemorsefulProber(NaiveProber):
         self.probing = False
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         # First move
         if len(self.history) == 0:
             return C

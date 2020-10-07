@@ -31,6 +31,7 @@ class GradualKiller(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         if opponent.history[5:7] == [D, D]:
             return D
         return C

@@ -24,7 +24,7 @@ class TestZDExtortion(TestPlayer):
     expected_classifier = {
         "memory_depth": 1,
         "stochastic": True,
-        "makes_use_of": set(["game"]),
+        "makes_use_of": {"game"},
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -60,7 +60,7 @@ class TestZDExtort2(TestPlayer):
     expected_classifier = {
         "memory_depth": 1,
         "stochastic": True,
-        "makes_use_of": set(["game"]),
+        "makes_use_of": {"game"},
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -113,7 +113,7 @@ class TestZDExtort2v2(TestPlayer):
     expected_classifier = {
         "memory_depth": 1,
         "stochastic": True,
-        "makes_use_of": set(["game"]),
+        "makes_use_of": {"game"},
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -148,7 +148,7 @@ class TestZDExtort3(TestPlayer):
     expected_classifier = {
         "memory_depth": 1,
         "stochastic": True,
-        "makes_use_of": set(["game"]),
+        "makes_use_of": {"game"},
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -184,7 +184,7 @@ class TestZDExtort4(TestPlayer):
     expected_classifier = {
         "memory_depth": 1,
         "stochastic": True,
-        "makes_use_of": set(["game"]),
+        "makes_use_of": {"game"},
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -220,7 +220,7 @@ class TestZDGen2(TestPlayer):
     expected_classifier = {
         "memory_depth": 1,
         "stochastic": True,
-        "makes_use_of": set(["game"]),
+        "makes_use_of": {"game"},
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -265,14 +265,14 @@ class TestZDGTFT2(TestPlayer):
 
     name = "ZD-GTFT-2: 0.25, 0.5"
     player = axl.ZDGTFT2
-    expected_classifier = {
-        "memory_depth": 1,
-        "stochastic": True,
-        "makes_use_of": set(["game"]),
-        "inspects_source": False,
-        "manipulates_source": False,
-        "manipulates_state": False,
-    }
+    expected_classifier = dict(
+        memory_depth=1,
+        stochastic=True,
+        makes_use_of=set(["game"]),
+        inspects_source=False,
+        manipulates_source=False,
+        manipulates_state=False,
+    )
 
     def test_four_vector(self):
         expected_dictionary = {
@@ -320,7 +320,7 @@ class TestZDMischief(TestPlayer):
     expected_classifier = {
         "memory_depth": 1,
         "stochastic": True,
-        "makes_use_of": set(["game"]),
+        "makes_use_of": {"game"},
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -351,7 +351,7 @@ class TestZDSet2(TestPlayer):
     expected_classifier = {
         "memory_depth": 1,
         "stochastic": True,
-        "makes_use_of": set(["game"]),
+        "makes_use_of": {"game"},
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,

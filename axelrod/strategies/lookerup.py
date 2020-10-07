@@ -465,6 +465,9 @@ class EvolvableLookerUp(LookerUp, EvolvablePlayer):
             pattern = tuple(v for k, v in sorted(lookup_dict.items()))
         elif pattern and parameters and initial_actions:
             # Compute the associated lookup table
+            lookup_table = self._get_lookup_table(
+                lookup_dict, pattern, parameters
+            )
             plays, op_plays, op_start_plays = parameters
             lookup_table = self._get_lookup_table(
                 lookup_dict, pattern, parameters

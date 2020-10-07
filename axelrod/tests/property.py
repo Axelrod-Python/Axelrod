@@ -18,7 +18,7 @@ def strategy_lists(
     draw,
     strategies=axl.short_run_time_strategies,
     min_size=1,
-    max_size=len(axl.strategies),
+    max_size=len(axl.short_run_time_strategies),
 ):
     """
     A hypothesis decorator to return a list of strategies
@@ -41,7 +41,6 @@ def strategy_lists(
 @composite
 def matches(
     draw,
-    strategies=axl.short_run_time_strategies,
     min_turns=1,
     max_turns=200,
     min_noise=0,
@@ -52,8 +51,6 @@ def matches(
 
     Parameters
     ----------
-    strategies : list
-        The strategies from which to sample the two the players
     min_turns : integer
         The minimum number of turns
     max_turns : integer

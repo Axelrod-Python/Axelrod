@@ -76,7 +76,7 @@ class TestPdf(unittest.TestCase):
 
     def test_init(self):
         self.assertEqual(set(self.pdf.sample_space), set(self.counter.keys()))
-        self.assertEqual(set(self.pdf.counts), set([4, 12, 2, 15]))
+        self.assertEqual(set(self.pdf.counts), {4, 12, 2, 15})
         self.assertEqual(self.pdf.total, sum([4, 12, 2, 15]))
         self.assertAlmostEqual(sum(self.pdf.probability), 1)
 

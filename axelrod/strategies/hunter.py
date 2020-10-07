@@ -26,6 +26,7 @@ class DefectorHunter(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         if (
             len(self.history) >= 4
             and len(opponent.history) == opponent.defections
@@ -53,6 +54,7 @@ class CooperatorHunter(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         if (
             len(self.history) >= 4
             and len(opponent.history) == opponent.cooperations
@@ -91,11 +93,11 @@ class AlternatorHunter(Player):
         self.is_alt = False
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         if len(opponent.history) < 6:
             return C
         if len(self.history) == 6:
-            if is_alternator(opponent.history):
-                self.is_alt = True
+            self.is_alt = is_alternator(opponent.history)
         if self.is_alt:
             return D
         return C
@@ -125,6 +127,7 @@ class CycleHunter(Player):
         self.cycle = None  # type: Optional[Tuple[Action]]
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         if self.cycle:
             return D
         cycle = detect_cycle(opponent.history, min_size=3)
@@ -146,6 +149,7 @@ class EventualCycleHunter(CycleHunter):
     name = "Eventual Cycle Hunter"
 
     def strategy(self, opponent: Player) -> None:
+        """Actual strategy definition that determines player's action."""
         if len(opponent.history) < 10:
             return C
         if len(opponent.history) == opponent.cooperations:

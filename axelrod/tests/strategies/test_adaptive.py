@@ -14,7 +14,7 @@ class TestAdaptive(TestPlayer):
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
-        "makes_use_of": set(["game"]),
+        "makes_use_of": {"game"},
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -60,7 +60,6 @@ class TestAdaptive(TestPlayer):
 
     def test_scoring_with_alternate_game(self):
         """Tests that the alternate game is used in scoring."""
-        player = axl.Adaptive()
         opponent = axl.Alternator()
         expected_actions = list(zip([C, C, C], [C, D, C]))
         attrs = {"scores": {C: 7, D: 0}}

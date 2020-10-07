@@ -12,7 +12,7 @@ class TestBushMostellar(TestPlayer):
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
-        "makes_use_of": set(["game"]),
+        "makes_use_of": {"game"},
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,

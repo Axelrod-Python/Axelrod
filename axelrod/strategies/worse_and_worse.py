@@ -27,6 +27,7 @@ class WorseAndWorse(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         current_round = len(self.history) + 1
         probability = 1 - current_round / 1000
         return self._random.random_choice(probability)
@@ -52,6 +53,7 @@ class KnowledgeableWorseAndWorse(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         current_round = len(self.history) + 1
         expected_length = self.match_attributes["length"]
         probability = 1 - current_round / expected_length
@@ -79,6 +81,7 @@ class WorseAndWorse2(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         current_round = len(self.history) + 1
 
         if current_round == 1:
@@ -112,6 +115,7 @@ class WorseAndWorse3(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         current_round = len(self.history) + 1
 
         if current_round == 1:

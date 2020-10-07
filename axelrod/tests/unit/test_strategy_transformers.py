@@ -432,7 +432,7 @@ class TestFinalTransformer(TestMatch):
         # Final play transformer
         p1 = axl.Cooperator()
         p2 = FinalTransformer([D, D, D])(axl.Cooperator)()
-        self.assertEqual(axl.Classifiers["makes_use_of"](p2), set(["length"]))
+        self.assertEqual(axl.Classifiers["makes_use_of"](p2), {"length"})
         self.assertEqual(axl.Classifiers["memory_depth"](p2), 3)
         self.assertEqual(
             axl.Classifiers["makes_use_of"](axl.Cooperator()), set([])
@@ -990,20 +990,6 @@ class TestIdentityDualTransformer(TestPlayer):
 class TestFlippedDualTransformer(TestPlayer):
     name = "Flipped Dual Cooperator"
     player = FlipTransformer()(DualTransformer()(axl.Cooperator))
-    expected_classifier = {
-        "memory_depth": 0,
-        "stochastic": False,
-        "makes_use_of": set(),
-        "long_run_time": False,
-        "inspects_source": False,
-        "manipulates_source": False,
-        "manipulates_state": False,
-    }
-
-
-class TestIdentityDualTransformer(TestPlayer):
-    name = "Dual Cooperator"
-    player = IdentityTransformer()(DualTransformer()(axl.Cooperator))
     expected_classifier = {
         "memory_depth": 0,
         "stochastic": False,

@@ -41,6 +41,7 @@ class SecondByChampion(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         current_round = len(self.history)
         # Cooperate for the first 10 turns
         if current_round == 0:
@@ -84,6 +85,7 @@ class SecondByEatherley(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         # Cooperate on the first move
         if not len(opponent.history):
             return C
@@ -127,6 +129,7 @@ class SecondByTester(Player):
         self.is_TFT = False
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         # Defect on the first move
         if not opponent.history:
             return D
@@ -180,6 +183,7 @@ class SecondByGladstein(Player):
         self.patsy = True
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         # Defect on the first move
         if not self.history:
             return D
@@ -382,6 +386,7 @@ class SecondByTranquilizer(Player):
             self.one_turn_after_good_defection_ratio_count += 1
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
 
         if not self.history:
             return C
@@ -467,6 +472,7 @@ class SecondByGrofman(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         # Cooperate on the first two moves
         if len(self.history) < 2:
             return C
@@ -539,6 +545,7 @@ class SecondByKluepfel(Player):
         )
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         # First update the response matrix.
         if len(self.history) >= 2:
             if self.history[-2] == D:
@@ -670,6 +677,7 @@ class SecondByBorufsen(Player):
         return D
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         turn = len(self.history) + 1
 
         if turn == 1:
@@ -697,7 +705,7 @@ class SecondByBorufsen(Player):
                 self.mode = "Defect"
 
             # Check for a random strategy
-            if (coops >= 8 and coops <= 17) and self.cc_counts / coops < 0.7:
+            if (8 <= coops <= 17) and self.cc_counts / coops < 0.7:
                 self.mode = "Defect"
 
             self.cd_counts, self.cc_counts = 0, 0
@@ -783,6 +791,7 @@ class SecondByCave(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         turn = len(self.history) + 1
         if turn == 1:
             return C
@@ -833,6 +842,7 @@ class SecondByWmAdams(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         if len(self.history) <= 1:
             return C
         number_defects = opponent.defections
@@ -889,6 +899,7 @@ class SecondByGraaskampKatzen(Player):
         self.own_score += game.score(last_round)[0]
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         if self.mode == "Defect":
             return D
 
@@ -978,6 +989,7 @@ class SecondByWeiner(Player):
         return to_return
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         if len(opponent.history) == 0:
             return C
 
@@ -1262,6 +1274,7 @@ class SecondByHarrington(Player):
             return True
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         turn = len(self.history) + 1
 
         if turn == 1:
@@ -1433,6 +1446,7 @@ class SecondByTidemanAndChieruzzi(Player):
         self.opponent_score += scores[1]
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         current_round = len(self.history) + 1
 
         if current_round == 1:
@@ -1507,6 +1521,7 @@ class SecondByGetzler(Player):
         self.flack = 0.0  # The relative untrustworthiness of opponent
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         if not opponent.history:
             return C
 
@@ -1833,7 +1848,7 @@ class SecondByYamachi(Player):
         # If so, then override
         if turn > 40:
             portion_defect = (opp_def + 0.5) / turn
-            if 0.45 < portion_defect and portion_defect < 0.55:
+            if 0.45 < portion_defect < 0.55:
                 return D
 
         return to_return

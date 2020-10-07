@@ -25,6 +25,7 @@ class Alternator(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         if len(self.history) == 0:
             return C
         if self.history[-1] == C:

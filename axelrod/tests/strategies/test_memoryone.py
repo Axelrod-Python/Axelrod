@@ -61,7 +61,7 @@ class TestGTFT(TestPlayer):
     expected_classifier = {
         "memory_depth": 1,
         "stochastic": True,
-        "makes_use_of": set(["game"]),
+        "makes_use_of": {"game"},
         "inspects_source": False,
         "manipulates_source": False,
         "manipulates_state": False,

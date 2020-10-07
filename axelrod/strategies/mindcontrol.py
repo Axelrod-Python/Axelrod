@@ -62,6 +62,7 @@ class MindWarper(Player):
 
     @staticmethod
     def strategy(opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         opponent.strategy = lambda opponent: C
         return D
 
@@ -88,5 +89,6 @@ class MindBender(MindWarper):
 
     @staticmethod
     def strategy(opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         opponent.__dict__["strategy"] = lambda opponent: C
         return D

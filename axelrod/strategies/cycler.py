@@ -45,6 +45,7 @@ class AntiCycler(Player):
         return [C, D, D]
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         while self.first_three:
             return self.first_three.pop(0)
         if self.cycle_counter < self.cycle_length:
@@ -91,6 +92,7 @@ class Cycler(Player):
         self.set_cycle(cycle=cycle)
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         return next(self.cycle_iter)
 
     def set_cycle(self, cycle: str):

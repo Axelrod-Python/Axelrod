@@ -135,6 +135,7 @@ class LevelPunisher(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         if len(opponent.history) < 10:
             return C
         elif opponent.defections / len(opponent.history) > 0.2:
@@ -165,6 +166,7 @@ class TrickyLevelPunisher(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        """Actual strategy definition that determines player's action."""
         if len(opponent.history) == 0:
             return C
         if len(opponent.history) < 10:

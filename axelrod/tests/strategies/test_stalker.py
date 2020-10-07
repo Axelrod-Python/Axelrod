@@ -14,7 +14,7 @@ class TestStalker(TestPlayer):
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
-        "makes_use_of": set(["game", "length"]),
+        "makes_use_of": {"game", "length"},
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
