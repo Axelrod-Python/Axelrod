@@ -5,11 +5,12 @@
 * Krapohl, Sebastian, Václav Ocelík, and Dawid M. Walentek. "The instability of globalization: applying evolutionary game theory to global trade cooperation." [Public Choice](https://ideas.repec.org/a/kap/pubcho/vyid10.1007_s11127-020-00799-1.html) (2020): 1-21.
 * Glynatsi, Nikoleta E., and Vincent A. Knight. "A meta analysis of tournaments and an evaluation of performance in the Iterated Prisoner's Dilemma" arXiv preprint arXiv:2001.05911 (2019). [ArXiv](https://arxiv.org/abs/2001.05911)
 * Wang, Shiheng, and Fangzhen Lin. "Nice Invincible Strategy for the Average-Payoff IPD." [Proceedings of the AAAI Conference on Artificial Intelligence](https://aaai.org/ojs/index.php/AAAI/article/view/5604)
+* Glynatsi, Nikoleta E., and Vincent A. Knight. "Using a theory of mind to find best responses to memory-one strategies." Sci Rep 10, 17287 (2020). [Scientific Reports](https://doi.org/10.1038/s41598-020-74181-y)
+
 
 ### 2019
 
 * T.J. Gaffney, Marc Harper, Vincent A. Knight. "Memory depth of finite state machine strategies for the iterated prisoner's dilemm" arXiv preprint arxiv:1912.04493 (2019). [ArXiv](https://arxiv.org/abs/1912.04493)
-* Glynatsi, Nikoleta E., and Vincent A. Knight. "Stability of defection, optimisation of strategies and the limits of memory in the Prisoner’s Dilemma." arXiv preprint arxiv:1911.12112 (2019). [ArXiv](https://arxiv.org/abs/1911.12112)
 * Glynatsi, Nikoleta E., and Vincent A. Knight. "A bibliometric study of research topics, collaboration and influence in the field of the Iterated Prisoner's Dilemma" arXiv preprint arXiv:1911.06128 (2019). [ArXiv](https://arxiv.org/abs/1911.06128)
 * O'Neil, Daniel A., and Mikel D. Petty. "Synthesizing Social Networks with Iterated Prisoners' Dilemma." [Proceedings of the International Conference on Modeling, Simulation and Visualization Methods (MSV).](https://csce.ucmss.com/cr/books/2019/LFS/CSREA2019/MSV2345.pdf) The Steering Committee of The World Congress in Computer Science, Computer Engineering and Applied Computing (WorldComp), 2019.
 * Collins, David. "A Genetic Algorithm Approach to the Iterated Prisoner’s Dilemma." [Undergraduate Research in Natural and Clinical Science and Technology Journal](https://urncst.com/index.php/urncst/article/view/155) (2019): 1-9.
