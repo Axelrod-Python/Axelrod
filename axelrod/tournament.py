@@ -52,14 +52,15 @@ class Tournament(object):
             The number of times the round robin should be repeated
         noise : float
             The probability that a player's intended action should be flipped
-        prob_end : float
-            The probability of a given turn ending a match
         edges : list
             A list of edges between players
         match_attributes : dict
             Mapping attribute names to values which should be passed to players.
             The default is to use the correct values for turns, game and noise
             but these can be overridden if desired.
+        seed : integer
+            The seed for random numbers that will be generated for this
+            tournament, thus allowing future runs to exactly reproduce results.
         """
         if game is None:
             self.game = Game()
