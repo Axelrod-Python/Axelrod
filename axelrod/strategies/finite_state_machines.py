@@ -1024,8 +1024,8 @@ class TF3(FSMPlayer):
         super().__init__(
             transitions=transitions, initial_state=0, initial_action=C
         )
-
- class EvolvedFSM8(FSMPlayer):
+        
+class EvolvedFSM8(FSMPlayer):
     """
     An 8 state FSM player trained with an evolutionary algorithm.
     
