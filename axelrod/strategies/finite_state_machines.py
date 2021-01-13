@@ -1029,30 +1029,7 @@ class EvolvedFSM8(FSMPlayer):
     """
     An 8 state FSM player trained with an evolutionary algorithm.
     
-    Evolved from the 10 state FSM designed by Frederick Vincent with transitions
-    
-    transitions = (
-            (1, C, 2, C),
-            (1, D, 3, D),
-            (2, C, 1, C),
-            (2, D, 4, D),
-            (3, C, 4, C),
-            (3, D, 5, D),
-            (4, C, 5, C),
-            (4, D, 6, D),
-            (5, C, 2, C),
-            (5, D, 9, D),
-            (6, C, 5, D),
-            (6, D, 7, D),
-            (7, C, 5, C),
-            (7, D, 8, D),
-            (8, C, 5, D),
-            (8, D, 5, C),
-            (9, C, 2, C),
-            (9, D, 10, C),
-            (10, C, 2, C),
-            (10, D, 4, D)
-    )
+    Evolved from the 10 state FSM designed by Frederick Vincent.
 
     Names:
 
