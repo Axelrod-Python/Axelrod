@@ -1060,7 +1060,7 @@ class EvolvedFSM6(FSMPlayer):
             (6, C, 3, C),
             (6, D, 5, D),
             (7, C, 2, C),
-            (7, D, 3, D)
+            (7, D, 3, D),
         )
 
         super().__init__(
