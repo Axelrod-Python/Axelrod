@@ -1101,10 +1101,10 @@ class TestTF3(TestFSMPlayer):
         self.versus_test(axl.Alternator(), expected_actions=actions)
 
 
-class TestEvolvedFSM8(TestFSMPlayer):
+class TestEvolvedFSM6(TestFSMPlayer):
 
-    name = "Evolved FSM 8"
-    player = axl.EvolvedFSM8
+    name = "Evolved FSM 6"
+    player = axl.EvolvedFSM6
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -1115,7 +1115,7 @@ class TestEvolvedFSM8(TestFSMPlayer):
         "manipulates_state": False,
     }
 
-    def test_initial_state(self):
+    def test_strategy(self):
         player = self.player()
         self.assertEqual(player.initial_state, 4)
         self.assertEqual(player.initial_action, C)
