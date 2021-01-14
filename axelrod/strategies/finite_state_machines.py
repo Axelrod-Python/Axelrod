@@ -1024,11 +1024,12 @@ class TF3(FSMPlayer):
         super().__init__(
             transitions=transitions, initial_state=0, initial_action=C
         )
-        
+
+
 class EvolvedFSM8(FSMPlayer):
     """
     An 8 state FSM player trained with an evolutionary algorithm.
-    
+
     Evolved from the 10 state FSM designed by Frederick Vincent.
 
     Names:
@@ -1047,22 +1048,22 @@ class EvolvedFSM8(FSMPlayer):
     }
 
     def __init__(self) -> None:
-        transitions =  (
-            (0, C, 2, C), 
-            (0, D, 7, C), 
-            (1, C, 0, D), 
-            (1, D, 4, D), 
-            (2, C, 2, D), 
-            (2, D, 7, D), 
-            (3, C, 6, D), 
-            (3, D, 4, C), 
-            (4, C, 4, C), 
-            (4, D, 6, D), 
-            (5, C, 2, D), 
-            (5, D, 7, D), 
-            (6, C, 3, C), 
-            (6, D, 5, D), 
-            (7, C, 2, C), 
+        transitions = (
+            (0, C, 2, C),
+            (0, D, 7, C),
+            (1, C, 0, D),
+            (1, D, 4, D),
+            (2, C, 2, D),
+            (2, D, 7, D),
+            (3, C, 6, D),
+            (3, D, 4, C),
+            (4, C, 4, C),
+            (4, D, 6, D),
+            (5, C, 2, D),
+            (5, D, 7, D),
+            (6, C, 3, C),
+            (6, D, 5, D),
+            (7, C, 2, C),
             (7, D, 3, D)
         )
 

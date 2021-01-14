@@ -53,7 +53,7 @@ Count the number of available players::
 
     >>> import axelrod as axl
     >>> len(axl.strategies)
-    237
+    238
 
 Create matches between two players::
 
