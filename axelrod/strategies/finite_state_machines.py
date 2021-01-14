@@ -1026,18 +1026,18 @@ class TF3(FSMPlayer):
         )
 
 
-class EvolvedFSM8(FSMPlayer):
+class EvolvedFSM6(FSMPlayer):
     """
-    An 8 state FSM player trained with an evolutionary algorithm.
+    An 6 state FSM player trained with an evolutionary algorithm.
 
     Evolved from the 10 state FSM designed by Frederick Vincent.
 
     Names:
 
-        - Evolved FSM 8: Original name by Frederick Vincent & Dashiell Fryer
+        - Evolved FSM 6: Original name by Frederick Vincent & Dashiell Fryer
     """
 
-    name = "Evolved FSM 8"
+    name = "Evolved FSM 6"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -1049,10 +1049,6 @@ class EvolvedFSM8(FSMPlayer):
 
     def __init__(self) -> None:
         transitions = (
-            (0, C, 2, C),
-            (0, D, 7, C),
-            (1, C, 0, D),
-            (1, D, 4, D),
             (2, C, 2, D),
             (2, D, 7, D),
             (3, C, 6, D),
