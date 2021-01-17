@@ -1031,7 +1031,7 @@ class EvolvedFSM6(FSMPlayer):
     An 6 state FSM player trained with an evolutionary algorithm.
 
     Evolved using axelrod-dojo version 0.0.8 and axelrod version 4.10.0, trained to maximize score against
-    the short_run_time_strategies with 10 machine states for 500 generations,population size of 40,
+    the short_run_time_strategies with 10 machine states for 500 generations, population size of 40,
     mutation rate at 0.1, bottleneck at 10, 200 turns, and 0 noise. The resulting strategy had only 6
     states in its accessible component.
 
