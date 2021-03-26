@@ -6,6 +6,7 @@
 
 ### 2020
 
+* Kies, Martin. "Finding Best Answers for the Iterated Prisoner’s Dilemma Using Improved Q-Learning." [Available at SSRN 3556714](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3556714) (2020).
 * Krapohl, Sebastian, Václav Ocelík, and Dawid M. Walentek. "The instability of globalization: applying evolutionary game theory to global trade cooperation." [Public Choice](https://ideas.repec.org/a/kap/pubcho/vyid10.1007_s11127-020-00799-1.html) (2020): 1-21.
 * Glynatsi, Nikoleta E., and Vincent A. Knight. "A meta analysis of tournaments and an evaluation of performance in the Iterated Prisoner's Dilemma" arXiv preprint arXiv:2001.05911 (2019). [ArXiv](https://arxiv.org/abs/2001.05911)
 * Wang, Shiheng, and Fangzhen Lin. "Nice Invincible Strategy for the Average-Payoff IPD." [Proceedings of the AAAI Conference on Artificial Intelligence](https://aaai.org/ojs/index.php/AAAI/article/view/5604)
