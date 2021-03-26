@@ -50,3 +50,4 @@
 * Santana, Jonas Cardoso Carvalho. "Aprendizado de máquina e o dilema dos prisioneiros". (2020)
 * Black, Ben. "An Empirical Evaluation of the Ohtsuki-Nowak Approximation." [Master's Thesis](https://www.lancaster.ac.uk/~blackb/documents/MScDiss.pdf). (2018).
 * Hayes, Victoria. The Evolution of Cooperation: A Recreation of Axelrod's Computer Tournament. The University of North Carolina at Greensboro, (2017). [PDF](http://libres.uncg.edu/ir/uncg/f/Hayes_uncg_0154M_12243.pdf)
+* Latorre Ochoa, Julian Felipe. "Compromiso y simpatía: emotividad en la toma de decisiones cooperativas en redes estocásticas de siguiente generación". [Available online](https://repositorio.unal.edu.co/handle/unal/60956) (2017)
