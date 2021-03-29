@@ -91,25 +91,27 @@ def compute_features(player: Player, opponent: Player) -> np.ndarray:
     total_player_c = player.cooperations
     total_player_d = player.defections
 
-    return np.array((
-        opponent_first_c,
-        opponent_first_d,
-        opponent_second_c,
-        opponent_second_d,
-        my_previous_c,
-        my_previous_d,
-        my_previous2_c,
-        my_previous2_d,
-        opponent_previous_c,
-        opponent_previous_d,
-        opponent_previous2_c,
-        opponent_previous2_d,
-        total_opponent_c,
-        total_opponent_d,
-        total_player_c,
-        total_player_d,
-        len(player.history),
-        ))
+    return np.array(
+        (
+            opponent_first_c,
+            opponent_first_d,
+            opponent_second_c,
+            opponent_second_d,
+            my_previous_c,
+            my_previous_d,
+            my_previous2_c,
+            my_previous2_d,
+            opponent_previous_c,
+            opponent_previous_d,
+            opponent_previous2_c,
+            opponent_previous2_d,
+            total_opponent_c,
+            total_opponent_d,
+            total_player_c,
+            total_player_d,
+            len(player.history),
+        )
+    )
 
 
 def activate(
