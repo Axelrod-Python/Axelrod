@@ -15,7 +15,6 @@ from axelrod.interaction_utils import (
 )
 from axelrod.strategy_transformers import DualTransformer, JossAnnTransformer
 from mpl_toolkits.axes_grid1 import make_axes_locatable
-
 from numpy.typing import ArrayLike
 
 Point = namedtuple("Point", "x y")
