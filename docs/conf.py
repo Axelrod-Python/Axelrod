@@ -29,7 +29,6 @@ MOCK_MODULES = [
     "numpy",
     "numpy.linalg",
     "numpy.random",
-    "numpy.typing",
     "pandas",
     "pandas.util",
     "pandas.util.decorators",
