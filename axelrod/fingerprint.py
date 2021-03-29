@@ -16,6 +16,8 @@ from axelrod.interaction_utils import (
 from axelrod.strategy_transformers import DualTransformer, JossAnnTransformer
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
+from numpy.typing import ArrayLike
+
 Point = namedtuple("Point", "x y")
 
 
@@ -188,7 +190,7 @@ def _generate_data(interactions: dict, points: list, edges: list) -> dict:
     return point_scores
 
 
-def _reshape_data(data: dict, points: list, size: int) -> np.ndarray:
+def _reshape_data(data: dict, points: list, size: int) -> ArrayLike:
     """Shape the data so that it can be plotted easily.
 
     Parameters
@@ -441,7 +443,7 @@ class TransitiveFingerprint(object):
         filename: str = None,
         progress_bar: bool = True,
         seed: int = None,
-    ) -> np.array:
+    ) -> ArrayLike:
         """Creates a spatial tournament to run the necessary matches to obtain
         fingerprint data.
 

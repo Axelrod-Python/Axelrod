@@ -22,7 +22,7 @@ def num_weights(num_features, num_hidden):
     return size
 
 
-def compute_features(player: Player, opponent: Player) -> List[int]:
+def compute_features(player: Player, opponent: Player) -> np.ndarray:
     """
     Compute history features for Neural Network:
     * Opponent's first move is C
@@ -91,7 +91,7 @@ def compute_features(player: Player, opponent: Player) -> List[int]:
     total_player_c = player.cooperations
     total_player_d = player.defections
 
-    return [
+    return np.array((
         opponent_first_c,
         opponent_first_d,
         opponent_second_c,
@@ -109,20 +109,19 @@ def compute_features(player: Player, opponent: Player) -> List[int]:
         total_player_c,
         total_player_d,
         len(player.history),
-    ]
+        ))
 
 
 def activate(
     bias: List[float],
     hidden: List[float],
     output: List[float],
-    inputs: List[int],
+    inputs: np.ndarray,
 ) -> float:
     """
     Compute the output of the neural network:
         output = relu(inputs * hidden_weights + bias) * output_weights
     """
-    inputs = np.array(inputs)
     hidden_values = bias + np.dot(hidden, inputs)
     hidden_values = relu(hidden_values)
     output_value = np.dot(hidden_values, output)
