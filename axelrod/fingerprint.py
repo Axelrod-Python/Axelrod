@@ -441,7 +441,7 @@ class TransitiveFingerprint(object):
         filename: str = None,
         progress_bar: bool = True,
         seed: int = None,
-    ) -> np.array:
+    ) -> np.ndarray:
         """Creates a spatial tournament to run the necessary matches to obtain
         fingerprint data.
 
