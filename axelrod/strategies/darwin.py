@@ -76,12 +76,12 @@ class Darwin(Player):
         return current
 
     def reset(self):
-        """ Reset instance properties. """
+        """Reset instance properties."""
         super().reset()
         Darwin.genome[0] = C  # Ensure initial Cooperate
 
     def mutate(self, outcome: tuple, trial: int) -> None:
-        """ Select response according to outcome. """
+        """Select response according to outcome."""
         if outcome[0] < 3 and (len(Darwin.genome) >= trial):
             self.response = D if Darwin.genome[trial - 1] == C else C
 
