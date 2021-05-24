@@ -77,8 +77,7 @@ def _limited_simulate_play(player_1, player_2, h1):
     for both players. Note that player_1's move is an argument.
 
     If you need a more complete simulation, see `simulate_play` in
-    player.py. This function is specifically designed for the needs
-    of MindReader.
+    player.py. 
 
     Parameters
     ----------
@@ -92,24 +91,6 @@ def _limited_simulate_play(player_1, player_2, h1):
     h2 = inspect_strategy(player_1, player_2)
     player_1.update_history(h1, h2)
     player_2.update_history(h2, h1)
-
-
-def simulate_match(player_1, player_2, strategy, rounds=10):
-    """Simulates a number of rounds with a constant strategy.
-
-    Parameters
-    ----------
-    player_1: Player
-        The player that will have a constant strategy.
-    player_2: Player
-        The player we want to simulate.
-    strategy: Action
-        The constant strategy to use for first player.
-    rounds: int
-        The number of rounds to play.
-    """
-    for match in range(rounds):
-        _limited_simulate_play(player_1, player_2, strategy)
 
 
 def _calculate_scores(p1, p2, game):

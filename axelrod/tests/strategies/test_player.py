@@ -467,13 +467,7 @@ class TestPlayer(unittest.TestCase):
     def test_clone_reproducible_play(self, seed, turns, noise):
         # Test that the cloned player produces identical play
         player = self.player()
-        if player.name in [
-            "Darwin",
-            "Human",
-            "Mind Bender",
-            "Mind Controller",
-            "Mind Warper",
-        ]:
+        if player.name in ["Darwin", "Human"]:
             # Known exceptions
             return
 
