@@ -5,7 +5,6 @@ import axelrod as axl
 from axelrod._strategy_utils import (
     detect_cycle,
     inspect_strategy,
-    look_ahead,
     recursive_thue_morse,
     thue_morse_generator,
 )
