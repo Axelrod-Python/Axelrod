@@ -414,16 +414,9 @@ class TestTournament(unittest.TestCase):
             repetitions=test_repetitions,
         )
     )
-    # These two examples are to make sure #465 is fixed.
+    # This example is to make sure #465 is fixed.
     # As explained there: https://github.com/Axelrod-Python/Axelrod/issues/465,
-    # these two examples were identified by hypothesis.
-    @example(
-        tournament=axl.Tournament(
-            players=[axl.BackStabber(), axl.MindReader()],
-            turns=2,
-            repetitions=1,
-        )
-    )
+    # this example was identified by hypothesis.
     @example(
         tournament=axl.Tournament(
             players=[axl.BackStabber(), axl.ThueMorse()], turns=2, repetitions=1
@@ -860,25 +853,6 @@ class TestProbEndTournament(unittest.TestCase):
             prob_end=0.2,
             repetitions=test_repetitions,
             seed=101,
-        )
-    )
-    # These two examples are to make sure #465 is fixed.
-    # As explained there: https://github.com/Axelrod-Python/Axelrod/issues/465,
-    # these two examples were identified by hypothesis.
-    @example(
-        tournament=axl.Tournament(
-            players=[axl.BackStabber(), axl.MindReader()],
-            prob_end=0.2,
-            repetitions=1,
-            seed=102,
-        )
-    )
-    @example(
-        tournament=axl.Tournament(
-            players=[axl.ThueMorse(), axl.MindReader()],
-            prob_end=0.2,
-            repetitions=1,
-            seed=103,
         )
     )
     def test_property_serial_play(self, tournament):

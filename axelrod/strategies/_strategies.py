@@ -120,7 +120,6 @@ from .gambler import (
     ZDMem2,
 )
 from .gambler import EvolvableGambler, Gambler  # pylint: disable=unused-import
-from .geller import Geller, GellerCooperator, GellerDefector
 from .gobymajority import (
     GoByMajority,
     GoByMajority5,
@@ -361,9 +360,6 @@ all_strategies = [
     Fortress3,
     Fortress4,
     GTFT,
-    Geller,
-    GellerCooperator,
-    GellerDefector,
     GeneralSoftGrudger,
     GoByMajority,
     GoByMajority10,

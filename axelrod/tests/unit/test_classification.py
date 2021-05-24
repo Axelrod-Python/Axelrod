@@ -165,10 +165,6 @@ class TestClassification(unittest.TestCase):
             axl.Geller,
             axl.GellerCooperator,
             axl.GellerDefector,
-            axl.MindBender,
-            axl.MindController,
-            axl.MindWarper,
-            axl.MindReader,
         ]
 
         known_basic = [
@@ -215,10 +211,6 @@ class TestClassification(unittest.TestCase):
             axl.Geller,
             axl.GellerCooperator,
             axl.GellerDefector,
-            axl.MindBender,
-            axl.MindController,
-            axl.MindWarper,
-            axl.MindReader,
         ]
 
         known_basic = [
