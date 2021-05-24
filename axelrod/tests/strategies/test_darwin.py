@@ -37,9 +37,6 @@ class TestDarwin(TestPlayer):
         self.assertEqual(player.genome, [C])
         self.assertEqual(player.history, [])
 
-    def test_foil_strategy_inspection(self):
-        self.assertEqual(self.player().foil_strategy_inspection(), C)
-
     def test_strategy(self):
         p1 = self.player()
         p1.reset()
