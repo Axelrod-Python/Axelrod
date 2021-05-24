@@ -31,7 +31,6 @@ modules = [
     "axelrod/strategies/darwin.py",
     "axelrod/strategies/defector.py",
     "axelrod/strategies/forgiver.py",
-    "axelrod/strategies/geller.py",
     "axelrod/strategies/gradualkiller.py",
     "axelrod/strategies/grudger.py",
     "axelrod/strategies/grumpy.py",

@@ -50,8 +50,6 @@ Here are the docstrings of all the strategies in the library.
    :members:
 .. automodule:: axelrod.strategies.gambler
    :members:
-.. automodule:: axelrod.strategies.geller
-   :members:
 .. automodule:: axelrod.strategies.gobymajority
    :members:
 .. automodule:: axelrod.strategies.gradualkiller
@@ -77,10 +75,6 @@ Here are the docstrings of all the strategies in the library.
 .. automodule:: axelrod.strategies.memoryone
    :members:
 .. automodule:: axelrod.strategies.meta
-   :members:
-.. automodule:: axelrod.strategies.mindcontrol
-   :members:
-.. automodule:: axelrod.strategies.mindreader
    :members:
 .. automodule:: axelrod.strategies.mutual
    :members:
