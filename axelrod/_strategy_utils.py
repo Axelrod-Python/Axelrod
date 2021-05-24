@@ -45,55 +45,6 @@ def detect_cycle(history, min_size=1, max_size=12, offset=0):
     return None
 
 
-def inspect_strategy(inspector, opponent):
-    """Inspects the strategy of an opponent.
-
-    Simulate one round of play with an opponent, unless the opponent has
-    an inspection countermeasure.
-
-    Parameters
-    ----------
-    inspector: Player
-        The player doing the inspecting
-    opponent: Player
-        The player being inspected
-
-    Returns
-    -------
-    Action
-        The action that would be taken by the opponent.
-    """
-    if hasattr(opponent, "foil_strategy_inspection"):
-        return opponent.foil_strategy_inspection()
-    else:
-        return opponent.strategy(inspector)
-
-
-def _calculate_scores(p1, p2, game):
-    """Calculates the scores for two players based their history.
-
-    Parameters
-    ----------
-    p1: Player
-        The first player.
-    p2: Player
-        The second player.
-    game: Game
-        Game object used to score rounds in the players' histories.
-
-    Returns
-    -------
-    int, int
-        The scores for the two input players.
-    """
-    s1, s2 = 0, 0
-    for pair in zip(p1.history, p2.history):
-        score = game.score(pair)
-        s1 += score[0]
-        s2 += score[1]
-    return s1, s2
-
-
 @lru_cache()
 def recursive_thue_morse(n):
     """The recursive definition of the Thue-Morse sequence.
