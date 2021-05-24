@@ -302,9 +302,8 @@ class TestMoranProcess(unittest.TestCase):
 
     @given(strategies=strategy_lists(min_size=2, max_size=4))
     @settings(max_examples=5, deadline=None)
-    # Two specific examples relating to cloning of strategies
-    @example(strategies=[axl.BackStabber, axl.MindReader])
-    @example(strategies=[axl.ThueMorse, axl.MindReader])
+    # A specific example relating to cloning of strategies
+    @example(strategies=[axl.ThueMorse, axl.BackStabber])
     def test_property_players(self, strategies):
         """Hypothesis test that randomly checks players"""
         players = [s() for s in strategies]

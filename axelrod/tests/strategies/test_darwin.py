@@ -61,19 +61,6 @@ class TestDarwin(TestPlayer):
         expected_actions = [(C, C)] + [(D, C)] * 3 + [(C, C)] * 2
         self.versus_test(axl.Cooperator(), expected_actions)
 
-    def test_against_geller_and_mindreader(self):
-        self.versus_test(
-            axl.GellerCooperator(),
-            expected_actions=[(C, C)] * 2,
-            attrs={"genome": [C, C]},
-        )
-
-        self.versus_test(
-            axl.MindReader(),
-            expected_actions=[(C, D)] * 2,
-            attrs={"genome": [D, C]},
-        )
-
     def test_reset_history_and_attributes(self):
         # Overwrite this method because Darwin does not reset
         self.versus_test(

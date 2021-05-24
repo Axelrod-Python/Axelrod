@@ -7,7 +7,6 @@ from axelrod._strategy_utils import (
     inspect_strategy,
     look_ahead,
     recursive_thue_morse,
-    simulate_match,
     thue_morse_generator,
 )
 from hypothesis import given, settings
@@ -80,54 +79,6 @@ class TestInspectStrategy(unittest.TestCase):
         self.assertEqual(tft.history, [C, C])
         self.assertEqual(inspect_strategy(inspector=inspector, opponent=tft), D)
         self.assertEqual(tft.strategy(inspector), D)
-
-    def test_strategies_with_countermeasures_return_their_countermeasures(self):
-        d_geller = axl.GellerDefector()
-        inspector = axl.Cooperator()
-        match = axl.Match((d_geller, inspector), turns=1)
-        match.play()
-        self.assertEqual(
-            inspect_strategy(inspector=inspector, opponent=d_geller), D
-        )
-        self.assertEqual(d_geller.strategy(inspector), C)
-
-
-class TestSimulateMatch(unittest.TestCase):
-    def test_tft_reacts_to_cooperation(self):
-        tft = axl.TitForTat()
-        inspector = axl.Alternator()
-
-        simulate_match(inspector, tft, C, 5)
-        self.assertEqual(inspector.history, [C, C, C, C, C])
-        self.assertEqual(tft.history, [C, C, C, C, C])
-
-    def test_tft_reacts_to_defection(self):
-        tft = axl.TitForTat()
-        inspector = axl.Alternator()
-
-        simulate_match(inspector, tft, D, 5)
-        self.assertEqual(inspector.history, [D, D, D, D, D])
-        self.assertEqual(tft.history, [C, D, D, D, D])
-
-
-class TestLookAhead(unittest.TestCase):
-    def setUp(self):
-        self.inspector = axl.Player()
-        self.game = axl.Game()
-
-    def test_cooperator(self):
-        tft = axl.Cooperator()
-        # It always makes sense to defect here.
-        self.assertEqual(look_ahead(self.inspector, tft, self.game, 1), D)
-        self.assertEqual(look_ahead(self.inspector, tft, self.game, 2), D)
-        self.assertEqual(look_ahead(self.inspector, tft, self.game, 5), D)
-
-    def test_tit_for_tat(self):
-        tft = axl.TitForTat()
-        # Cooperation should be chosen if we look ahead further than one move.
-        self.assertEqual(look_ahead(self.inspector, tft, self.game, 1), D)
-        self.assertEqual(look_ahead(self.inspector, tft, self.game, 2), C)
-        self.assertEqual(look_ahead(self.inspector, tft, self.game, 5), C)
 
 
 class TestRecursiveThueMorse(unittest.TestCase):

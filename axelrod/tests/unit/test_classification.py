@@ -162,9 +162,6 @@ class TestClassification(unittest.TestCase):
         """A test that verifies if the obey_axl function works correctly"""
         known_cheaters = [
             axl.Darwin,
-            axl.Geller,
-            axl.GellerCooperator,
-            axl.GellerDefector,
         ]
 
         known_basic = [
@@ -208,9 +205,6 @@ class TestClassification(unittest.TestCase):
         """A test that verifies if the is_basic function works correctly"""
         known_cheaters = [
             axl.Darwin,
-            axl.Geller,
-            axl.GellerCooperator,
-            axl.GellerDefector,
         ]
 
         known_basic = [
