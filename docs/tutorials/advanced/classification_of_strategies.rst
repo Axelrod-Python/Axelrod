@@ -57,7 +57,7 @@ strategies::
     ... }
     >>> strategies = axl.filtered_strategies(filterset)
     >>> len(strategies)
-    88
+    87
 
 Or, to find out how many strategies only use 1 turn worth of memory to
 make a decision::
@@ -116,7 +116,7 @@ Strategies that :code:`manipulate_source`, :code:`manipulate_state`
 and/or :code:`inspect_source` return :code:`False` for the
 :code:`Classifier.obey_axelrod` function::
 
-    >>> s = axl.MindBender()
+    >>> s = axl.Darwin()
     >>> axl.Classifiers.obey_axelrod(s)
     False
     >>> s = axl.TitForTat()
