@@ -4,7 +4,6 @@ import unittest
 import axelrod as axl
 from axelrod._strategy_utils import (
     detect_cycle,
-    inspect_strategy,
     recursive_thue_morse,
     thue_morse_generator,
 )
@@ -62,22 +61,6 @@ class TestDetectCycle(unittest.TestCase):
             detect_cycle([C, C, D] * 2, min_size=1, max_size=3), (C, C, D)
         )
         self.assertIsNone(detect_cycle([C, C, D] * 2, min_size=1, max_size=2))
-
-
-class TestInspectStrategy(unittest.TestCase):
-    def test_strategies_without_countermeasures_return_their_strategy(self):
-        tft = axl.TitForTat()
-        inspector = axl.Alternator()
-        match = axl.Match((tft, inspector), turns=1)
-        match.play()
-        self.assertEqual(tft.history, [C])
-        self.assertEqual(inspect_strategy(inspector=inspector, opponent=tft), C)
-
-        match = axl.Match((tft, inspector), turns=2)
-        match.play()
-        self.assertEqual(tft.history, [C, C])
-        self.assertEqual(inspect_strategy(inspector=inspector, opponent=tft), D)
-        self.assertEqual(tft.strategy(inspector), D)
 
 
 class TestRecursiveThueMorse(unittest.TestCase):
