@@ -190,8 +190,6 @@ from .memoryone import (  # pylint: disable=unused-import
 from .memorytwo import AON2, MEM2, DelayedAON1
 from .memorytwo import MemoryTwoPlayer  # pylint: disable=unused-import
 
-from .mindcontrol import MindBender, MindController, MindWarper
-from .mindreader import MindReader, MirrorMindReader, ProtectedMindReader
 from .mutual import Desperate, Hopeless, Willing
 from .negation import Negation
 from .oncebitten import FoolMeOnce, ForgetfulFoolMeOnce, OnceBitten
@@ -399,11 +397,6 @@ all_strategies = [
     MEM2,
     MathConstantHunter,
     Michaelos,
-    MindBender,
-    MindController,
-    MindReader,
-    MindWarper,
-    MirrorMindReader,
     NTitsForMTats,
     NaiveProber,
     Negation,
@@ -422,7 +415,6 @@ all_strategies = [
     Prober2,
     Prober3,
     Prober4,
-    ProtectedMindReader,
     Pun1,
     Punisher,
     Raider,
