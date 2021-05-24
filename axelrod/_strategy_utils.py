@@ -69,30 +69,6 @@ def inspect_strategy(inspector, opponent):
         return opponent.strategy(inspector)
 
 
-def _limited_simulate_play(player_1, player_2, h1):
-    """Simulates a player's move.
-
-    After inspecting player_2's next move (allowing player_2's strategy
-    method to set any internal variables as needed), update histories
-    for both players. Note that player_1's move is an argument.
-
-    If you need a more complete simulation, see `simulate_play` in
-    player.py. 
-
-    Parameters
-    ----------
-    player_1: Player
-        The player whose move is already known.
-    player_2: Player
-        The player the we want to inspect.
-    h1: Action
-        The next action for first player.
-    """
-    h2 = inspect_strategy(player_1, player_2)
-    player_1.update_history(h1, h2)
-    player_2.update_history(h2, h1)
-
-
 def _calculate_scores(p1, p2, game):
     """Calculates the scores for two players based their history.
 
@@ -116,42 +92,6 @@ def _calculate_scores(p1, p2, game):
         s1 += score[0]
         s2 += score[1]
     return s1, s2
-
-
-def look_ahead(player1, player2, game, rounds=10):
-    """Returns a constant action that maximizes score by looking ahead.
-
-    Parameters
-    ----------
-    player_1: Player
-        The player that will look ahead.
-    player_2: Player
-        The opponent that will be inspected.
-    game: Game
-        The Game object used to score rounds.
-    rounds: int
-        The number of rounds to look ahead.
-
-    Returns
-    -------
-    Action
-        The action that maximized score if it is played constantly.
-    """
-    results = {}
-    possible_strategies = {C: Cooperator(), D: Defector()}
-    for action, player in possible_strategies.items():
-        # Instead of a deepcopy, create a new opponent and replay the history to it.
-        opponent_ = player2.clone()
-        if opponent_.classifier["stochastic"]:
-            opponent_.set_seed(player2._seed)
-        for h in player1.history:
-            _limited_simulate_play(player, opponent_, h)
-
-        # Now play forward with the constant strategy.
-        simulate_match(player, opponent_, action, rounds)
-        results[action] = _calculate_scores(player, opponent_, game)
-
-    return C if results[C] > results[D] else D
 
 
 @lru_cache()
