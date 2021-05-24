@@ -632,7 +632,7 @@ class TestNMWEDeterministic(TestMetaPlayer):
         pass
 
     def test_strategy(self):
-        actions = [(C, C), (C, D), (C, C), (D, D), (D, C)]
+        actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
         self.versus_test(opponent=axl.Alternator(), expected_actions=actions, seed=11)
 
 
