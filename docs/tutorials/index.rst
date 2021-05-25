@@ -10,7 +10,5 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   getting_started/index.rst
-   further_topics/index.rst
-   advanced/index.rst
-   contributing/index.rst
+   new_to_game_theory_and_or_python/index.rst
+   running_axelrods_first_tournament/index.rst
