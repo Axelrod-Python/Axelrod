@@ -3,6 +3,7 @@
 ### 2021
 
 * Glynatsi, Nikoleta E., and Vincent A. Knight. "A bibliometric study of research topics, collaboration, and centrality in the iterated prisoner’s dilemma." Humanities and Social Sciences Communications 8.1 (2021): 1-12. [Nature.com](https://www.nature.com/articles/s41599-021-00718-9) [ArXiv](https://arxiv.org/abs/1911.06128)
+* Glynatsi, Nikoleta E., and Vincent A. Knight. "Game Theory and Python: An educational tutorial to game theory and repeated games using Python." Journal of Open Source Education, 4(39), 78. [jose.theoj.org](https://doi.org/10.21105/jose.00078)
 
 ### 2020
 
