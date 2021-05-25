@@ -1,3 +1,32 @@
+# v4.11.0, 2021-05-25
+
+A number of improvements to documentation, a new strategy, removing the cheating
+strategies and a number of internal fixes.
+
+- Use black style formatting 
+  https://github.com/Axelrod-Python/Axelrod/pull/1368
+- Move to `dev` as main branch
+  https://github.com/Axelrod-Python/Axelrod/pull/1367
+- Tests refactor
+  https://github.com/Axelrod-Python/Axelrod/pull/1372
+  https://github.com/Axelrod-Python/Axelrod/pull/1373
+- Improved docstrings
+  https://github.com/Axelrod-Python/Axelrod/pull/1377
+  https://github.com/Axelrod-Python/Axelrod/pull/1381
+- Add publications
+  https://github.com/Axelrod-Python/Axelrod/pull/1378
+  https://github.com/Axelrod-Python/Axelrod/pull/1384
+- Bump pyaml
+  https://github.com/Axelrod-Python/Axelrod/pull/1380
+- Add new FSM
+  https://github.com/Axelrod-Python/Axelrod/pull/1383
+- Update some type hinting
+  https://github.com/Axelrod-Python/Axelrod/pull/1385
+- Remove cheating strategies
+  https://github.com/Axelrod-Python/Axelrod/pull/1388
+
+https://github.com/Axelrod-Python/Axelrod/compare/v4.11.0...v4.10.0
+
 # v4.10.0, 2020-08-12
 
 Major rewrite of the random seeding (which fixes a reproducibility bug when
