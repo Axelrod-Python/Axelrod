@@ -27,6 +27,5 @@ with the Axelrod library.
    set_a_seed.rst
    set_player_information.rst
    check_player_equality.rst
-   use_different_stage_games.rst
    cite_the_library.rst
    contributing/index.rst
