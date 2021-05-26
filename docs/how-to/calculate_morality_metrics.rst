@@ -1,7 +1,7 @@
 .. _morality-metrics:
 
-Morality Metrics
-================
+Calculate Morality Metrics
+==========================
 
 Tyler Singer-Clark's June 2014 paper, "Morality Metrics On Iterated Prisoner’s
 Dilemma Players" [Singer-Clark2014]_), describes several interesting metrics which

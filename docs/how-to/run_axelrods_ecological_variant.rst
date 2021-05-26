@@ -1,7 +1,7 @@
 .. _ecological-variant:
 
-Ecological Variant
-==================
+Run Axelrod's Ecological Variant
+================================
 
 In Axelrod's original work an ecological approach based on the payoff matrix of
 the tournament was used to study the evolutionary stability of each strategy.

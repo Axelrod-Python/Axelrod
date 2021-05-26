@@ -1,7 +1,7 @@
 .. _approximate-moran-process:
 
-Approximate Moran Process
-=========================
+Create Approximate Moran Process
+================================
 
 Due to the high computational cost of a single Moran process, an approximate
 Moran process is implemented that can make use of cached outcomes of games. The

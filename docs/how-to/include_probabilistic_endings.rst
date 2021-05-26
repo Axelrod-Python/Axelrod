@@ -1,5 +1,5 @@
-Probabilistic Ending Tournaments
-================================
+Include probabilistic endings
+=============================
 
 It is possible to create a tournament where the length of each Match is not
 constant for all encounters: after each turn the Match ends with a given

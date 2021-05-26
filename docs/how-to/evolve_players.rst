@@ -1,7 +1,7 @@
 .. _evolvable_players:
 
-Evolvable Players
-=================
+Evolve Players
+==============
 
 Several strategies in the library derive from :code:`EvolvablePlayer` which specifies methods
 allowing evolutionary or particle swarm algorithms to be used with these strategies. The

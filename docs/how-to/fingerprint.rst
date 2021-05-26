@@ -1,7 +1,7 @@
 .. _fingerprinting:
 
-Fingerprinting
-==============
+Fingerprint
+===========
 
 Ashlock Fingerprints
 --------------------

@@ -1,7 +1,7 @@
 .. _moran-process-on-graphs:
 
-Moran Process on Graphs
-=======================
+Create Moran Processes On Graphs
+================================
 
 The library also provides a graph-based Moran process [Shakarian2013]_ with
 :code:`MoranProcess`.  To use this feature you must supply at least one

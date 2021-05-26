@@ -1,5 +1,5 @@
-Noisy tournaments
-=================
+Include noise
+=============
 
 A common variation on iterated prisoner’s dilemma tournaments is to add
 stochasticity in the choice of actions, simply called noise. This noise is

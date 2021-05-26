@@ -100,9 +100,7 @@ Table of Contents
    :maxdepth: 3
 
    tutorials/index.rst
-   reference/index.rst
-   community/index.rst
-   citing_the_library.rst
+   how-to/index.rst
 
 
 Indices and tables

@@ -1,5 +1,5 @@
-Spatial tournaments
-===================
+Create spatial tournaments
+==========================
 
 A spatial tournament is defined on a graph where the nodes correspond to players
 and edges define whether or not a given player pair will have a match.
