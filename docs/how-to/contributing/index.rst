@@ -1,5 +1,5 @@
-Contributing
-============
+Contribute
+==========
 
 This section contains a variety of tutorials that should help you contribute to
 the library.

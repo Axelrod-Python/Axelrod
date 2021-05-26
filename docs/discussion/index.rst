@@ -13,3 +13,4 @@ Contents:
    strategy_archetypes.rst
    overview_of_past_tournaments.rst
    play_contexts.rst
+   community/index.rst

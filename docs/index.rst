@@ -103,8 +103,6 @@ Table of Contents
    how-to/index.rst
    discussion/index.rst
    reference/index.rst
-   community/index.rst
-   contributing/index.rst
 
 
 Indices and tables
