@@ -1,5 +1,5 @@
-Tournaments
-===========
+Overview of past Tournaments
+============================
 
 Axelrod's first tournament
 --------------------------

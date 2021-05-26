@@ -1,7 +1,7 @@
 .. _metastrategies:
 
-Meta-Strategies
-===============
+Strategy Archetypes
+===================
 
 Finite State Machines
 ---------------------
