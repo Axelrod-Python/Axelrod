@@ -1,5 +1,5 @@
-Citing the library
-==================
+Cite the library
+================
 
 We would be delighted if anyone wanted to use and/or reference this library for
 their own research.

@@ -26,3 +26,4 @@ with the Axelrod library.
    set_player_information.rst
    check_player_equality.rst
    use_different_stage_games.rst
+   cite_the_library.rst
