@@ -101,6 +101,7 @@ Table of Contents
 
    tutorials/index.rst
    how-to/index.rst
+   reference/index.rst
 
 
 Indices and tables
