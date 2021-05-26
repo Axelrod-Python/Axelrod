@@ -16,4 +16,3 @@ Contents:
    visualising_results.rst
    moran.rst
    human_interaction.rst
-   running_axelrods_first_tournament.rst

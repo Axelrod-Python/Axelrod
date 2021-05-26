@@ -17,6 +17,8 @@ with the Axelrod library.
    fingerprint.rst
    evolve_players.rst
    access_collections_of_strategies.rst
+   classify_strategies.rst
+   use_strategy_transformers.rst
    access_tournament_results.rst
    read_and_write_interactions.rst
    use_parallel_processing.rst
@@ -27,3 +29,4 @@ with the Axelrod library.
    check_player_equality.rst
    use_different_stage_games.rst
    cite_the_library.rst
+   contributing/index.rst
