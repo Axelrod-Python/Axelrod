@@ -97,7 +97,7 @@ Table of Contents
 -----------------
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 1
 
    tutorials/index.rst
    how-to/index.rst

@@ -5,7 +5,7 @@ This section contains short descriptions of how to accomplish specific tasks
 with the Axelrod library.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    include_noise.rst
    include_probabilistic_endings.rst
@@ -16,3 +16,13 @@ with the Axelrod library.
    run_axelrods_ecological_variant.rst
    fingerprint.rst
    evolve_players.rst
+   access_collections_of_strategies.rst
+   access_tournament_results.rst
+   read_and_write_interactions.rst
+   use_parallel_processing.rst
+   use_a_cache.rst
+   use_different_stage_games.rst
+   set_a_seed.rst
+   set_player_information.rst
+   check_player_equality.rst
+   use_different_stage_games.rst
