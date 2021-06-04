@@ -5,7 +5,7 @@ A script to check that all strategy modules have been included in
 import pathlib
 import sys
 
-default_index_path = pathlib.Path("./docs/reference/all_strategies.rst")
+default_index_path = pathlib.Path("./docs/reference/strategy_index.rst")
 excluded_modules = ("_strategies", "__init__", "_filters", "human")
 
 

@@ -97,12 +97,12 @@ Table of Contents
 -----------------
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 1
 
    tutorials/index.rst
+   how-to/index.rst
+   discussion/index.rst
    reference/index.rst
-   community/index.rst
-   citing_the_library.rst
 
 
 Indices and tables
