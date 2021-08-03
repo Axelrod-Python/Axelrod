@@ -346,16 +346,20 @@ class SpitefulCC(Player):
 
 class CAPRI(Player):
     """
-    CAPRI is a strategy whose behavior is defined by the following five rules.
-    C: Cooperate at mutual cooperation
-    A: Accept punishmentl
-    P: Punish
-    R: Recover
-    I: In all ohter cases, defect.
+    CAPRI is a memory-3 strategy proposed in [Murase2020]_. Its behavior is defined by the following five rules.
+    C: Cooperate at mutual cooperation.
+        This rule prescribes c at (ccc, ccc).
+    A: Accept punishment when you mistakenly defected from mutual cooperation.
+        This rule prescribes c at (ccd, ccc), (cdc, ccd), (dcc, cdc), and (ccc, dcc).
+    P: Punish your co-player by defecting once when he defected from mutual cooperation.
+        This rule prescribes d at (ccc, ccd), and then c at (ccd, cdc), (cdc, dcc), and (dcc, ccc).
+    R: Recover cooperation when you or your co-player cooperated at mutual defection.
+        This rule prescribes c at (ddd, ddc), (ddc, dcc), (dcc, ccc), (ddc, ddd), (dcc, ddc), (ccc, dcc), (ddc, ddc), and (dcc, dcc).
+    I: In all the ohter cases, defect.
 
     Names:
 
-    - CAPRI: Original Name by Y. Murase et al. [Murase 2020]
+    - CAPRI: Original Name by Y. Murase et al. [Murase2020]_
     """
 
     name = "CAPRI"
@@ -369,6 +373,7 @@ class CAPRI(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        # initial history profile is full cooperation
         hist = [[C,C],[C,C],[C,C]]
         for i in range(min(len(self.history), 3)):
             hist[-i-1][0] = self.history[-i-1]

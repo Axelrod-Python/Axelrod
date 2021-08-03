@@ -46,6 +46,7 @@ documentation.
   for the Iterated Prisoner's Dilemma. Proceedings of the 2015
   International Conference on Autonomous Agents and Multiagent Systems.
 .. [Mittal2009] Mittal, S., & Deb, K. (2009). Optimal strategies of the iterated prisoner’s dilemma problem for multiple conflicting objectives. IEEE Transactions on Evolutionary Computation, 13(3), 554–565. https://doi.org/10.1109/TEVC.2008.2009459
+.. [Murase2020] Murase, Y., & Baek, S.K. (2020). Five Rules for Friendly Rivalry in Direct Reciprocity. Scientific Reports 10:16904 https://doi.org/10.1038/s41598-020-73855-x
 .. [Nachbar1992] Nachbar J., Evolution in the finitely repeated prisoner’s dilemma, Journal of Economic Behavior & Organization, 19(3): 307-326, 1992.
 .. [NC2019] https://github.com/ncase/trust (Accessed: 30 October 2019)
 .. [Nowak1989] Nowak, Martin, and Karl Sigmund. "Game-dynamical aspects of the prisoner's dilemma." Applied Mathematics and Computation 30.3 (1989): 191-213.
