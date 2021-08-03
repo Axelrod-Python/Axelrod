@@ -342,3 +342,70 @@ class SpitefulCC(Player):
         elif opponent.defections:
             return D
         return C
+
+
+class CAPRI(Player):
+    """
+    CAPRI is a strategy whose behavior is defined by the following five rules.
+    C: Cooperate at mutual cooperation
+    A: Accept punishmentl
+    P: Punish
+    R: Recover
+    I: In all ohter cases, defect.
+
+    Names:
+
+    - CAPRI: Original Name by Y. Murase et al. [Murase 2020]
+    """
+
+    name = "CAPRI"
+    classifier = {
+        "memory_depth": 3,
+        "stochastic": False,
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+    def strategy(self, opponent: Player) -> Action:
+        hist = [[C,C],[C,C],[C,C]]
+        for i in range(min(len(self.history), 3)):
+            hist[-i-1][0] = self.history[-i-1]
+            hist[-i-1][1] = opponent.history[-i-1]
+
+        if hist == [[C,C],[C,C],[C,C]]:   # Rule: C
+            return C
+        elif hist == [[C,C],[C,C],[D,C]]:  # Rule: A
+            return C
+        elif hist == [[C,C],[D,C],[C,D]]:
+            return C
+        elif hist == [[D,C],[C,D],[C,C]]:
+            return C
+        elif hist == [[C,D],[C,C],[C,C]]:
+            return C
+        elif hist == [[C,C],[C,C],[C,D]]:  # Rule: P
+            return D
+        elif hist == [[C,C],[C,D],[D,C]]:
+            return C
+        elif hist == [[C,D],[D,C],[C,C]]:
+            return C
+        elif hist == [[D,C],[C,C],[C,C]]:
+            return C
+        elif hist == [[D,D],[D,D],[D,C]]:  # Rule: R1
+            return C
+        elif hist == [[D,D],[D,C],[C,C]]:
+            return C
+        elif hist == [[D,C],[C,C],[C,C]]:
+            return C
+        elif hist == [[D,D],[D,D],[C,D]]:  # Rule: R2
+            return C
+        elif hist == [[D,D],[C,D],[C,C]]:
+            return C
+        elif hist == [[C,D],[C,C],[C,C]]:
+            return C
+        elif hist == [[D,D],[D,D],[C,C]]:  # Rule: R3
+            return C
+        elif hist == [[D,D],[C,C],[C,C]]:
+            return C
+        return D
