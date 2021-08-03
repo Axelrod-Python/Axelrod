@@ -336,3 +336,69 @@ class TestSpitefulCC(TestPlayer):
         opponent = axl.MockPlayer(actions=opponent_actions)
         actions = [(C, D)] * 2 + [(D, D)] * 18 + [(D, C)] * 20
         self.versus_test(opponent, expected_actions=actions)
+
+
+class TestCAPRI(TestPlayer):
+
+    name = "CAPRI"
+    player = axl.CAPRI
+    expected_classifier = {
+        "memory_depth": 3,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+    def assert_prescription(self, player_history, opponent_history, prescription):
+        player = self.player()
+        player._history = player_history
+        opponent = axl.MockPlayer()
+        opponent._history = opponent_history
+        self.assertEqual(player.strategy(opponent=opponent), prescription)
+
+    def test_strategy(self):
+        # cooperate at mutual cooperation
+        opponent = axl.Cooperator()
+        actions = [(C, C)] * 20
+        self.versus_test(opponent, expected_actions=actions)
+
+        # defect against defectors
+        opponent = axl.Defector()
+        actions = [(C, D)] + [(D, D)] * 20
+        self.versus_test(opponent, expected_actions=actions)
+
+        # punishment co-players for his/her mistake
+        opponent_actions = [C] * 10 + [D] + [C] * 10
+        opponent = axl.MockPlayer(actions=opponent_actions)
+        actions = [(C, C)] * 10 + [(C, D)] + [(D, C)]  + [(C,C)] * 9
+        self.versus_test(opponent, expected_actions=actions)
+
+        # never allow the defection more than once
+        opponent_actions = [C] * 10 + [D] * 2 + [C] * 10
+        opponent = axl.MockPlayer(actions=opponent_actions)
+        actions = [(C, C)] * 10 + [(C, D)] + [(D, D)]  + [(D,C)] * 9
+        self.versus_test(opponent, expected_actions=actions)
+
+        # accept punishment when making a mistake
+        self.assert_prescription([C,C,D], [C,C,C], C)
+        self.assert_prescription([C,D,C], [C,C,D], C)
+        self.assert_prescription([D,C,C], [C,D,C], C)
+        self.assert_prescription([C,C,C], [D,C,C], C)
+
+        # recover the cooperation
+        self.assert_prescription([D,D,C], [D,D,D], C)
+        self.assert_prescription([D,C,C], [D,D,C], C)
+
+        self.assert_prescription([D,D,D], [D,D,C], C)
+        self.assert_prescription([D,D,C], [D,C,C], C)
+        self.assert_prescription([D,C,C], [C,C,C], C)
+
+        self.assert_prescription([D,D,C], [D,D,C], C)
+        self.assert_prescription([D,C,C], [D,C,C], C)
+
+        # in other cases, defect
+        self.assert_prescription([D,C,C], [D,D,D], D)
+        self.assert_prescription([C,D,C], [C,C,C], D)
