@@ -338,7 +338,7 @@ class TestSpitefulCC(TestPlayer):
         self.versus_test(opponent, expected_actions=actions)
 
 
-class TestCAPRI(TestPlayer):
+class TestCapri(TestPlayer):
 
     name = "CAPRI"
     player = axl.CAPRI
