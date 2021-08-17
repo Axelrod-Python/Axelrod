@@ -374,7 +374,7 @@ class Capri(Player):
 
     def strategy(self, opponent: Player) -> Action:
         # initial history profile is full cooperation
-        hist = [[C,C],[C,C],[C,C]]
+        hist = [[C, C], [C, C], [C, C]]
         for i in range(min(len(self.history), 3)):
             hist[-i-1][0] = self.history[-i-1]
             hist[-i-1][1] = opponent.history[-i-1]
