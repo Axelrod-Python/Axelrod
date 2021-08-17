@@ -143,7 +143,7 @@ from .grudger import (
     OppositeGrudger,
     SoftGrudger,
     SpitefulCC,
-    CAPRI,
+    Capri,
 )
 from .grumpy import Grumpy
 from .handshake import Handshake
