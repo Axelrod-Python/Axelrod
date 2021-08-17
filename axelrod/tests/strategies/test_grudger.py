@@ -341,7 +341,7 @@ class TestSpitefulCC(TestPlayer):
 class TestCapri(TestPlayer):
 
     name = "CAPRI"
-    player = axl.CAPRI
+    player = axl.Capri
     expected_classifier = {
         "memory_depth": 3,
         "stochastic": False,
