@@ -344,7 +344,7 @@ class SpitefulCC(Player):
         return C
 
 
-class CAPRI(Player):
+class Capri(Player):
     """
     CAPRI is a memory-3 strategy proposed in [Murase2020]_. Its behavior is defined by the following five rules.
     C: Cooperate at mutual cooperation.
