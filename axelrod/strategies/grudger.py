@@ -381,36 +381,36 @@ class Capri(Player):
 
         if hist == [[C,C],[C,C],[C,C]]:   # Rule: C
             return C
-        elif hist == [[C,C],[C,C],[D,C]]:  # Rule: A
+        if hist == [[C, C], [C, C], [D, C]]:  # Rule: A
             return C
-        elif hist == [[C,C],[D,C],[C,D]]:
+        if hist == [[C, C], [D, C], [C, D]]:
             return C
-        elif hist == [[D,C],[C,D],[C,C]]:
+        if hist == [[D, C], [C, D], [C, C]]:
             return C
-        elif hist == [[C,D],[C,C],[C,C]]:
+        if hist == [[C, D], [C, C], [C, C]]:
             return C
-        elif hist == [[C,C],[C,C],[C,D]]:  # Rule: P
+        if hist == [[C, C], [C, C], [C, D]]:  # Rule: P
             return D
-        elif hist == [[C,C],[C,D],[D,C]]:
+        if hist == [[C, C], [C, D], [D, C]]:
             return C
-        elif hist == [[C,D],[D,C],[C,C]]:
+        if hist == [[C, D], [D, C], [C, C]]:
             return C
-        elif hist == [[D,C],[C,C],[C,C]]:
+        if hist == [[D, C], [C, C], [C, C]]:
             return C
-        elif hist == [[D,D],[D,D],[D,C]]:  # Rule: R1
+        if hist == [[D, D], [D, D], [D, C]]:  # Rule: R1
             return C
-        elif hist == [[D,D],[D,C],[C,C]]:
+        if hist == [[D, D], [D, C], [C, C]]:
             return C
-        elif hist == [[D,C],[C,C],[C,C]]:
+        if hist == [[D, C], [C, C], [C, C]]:
             return C
-        elif hist == [[D,D],[D,D],[C,D]]:  # Rule: R2
+        if hist == [[D, D], [D, D], [C, D]]:  # Rule: R2
             return C
-        elif hist == [[D,D],[C,D],[C,C]]:
+        if hist == [[D, D], [C, D], [C, C]]:
             return C
-        elif hist == [[C,D],[C,C],[C,C]]:
+        if hist == [[C, D], [C, C], [C, C]]:
             return C
-        elif hist == [[D,D],[D,D],[C,C]]:  # Rule: R3
+        if hist == [[D, D], [D, D], [C, C]]:  # Rule: R3
             return C
-        elif hist == [[D,D],[C,C],[C,C]]:
+        if hist == [[D, D], [C, C], [C, C]]:
             return C
         return D
