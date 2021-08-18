@@ -34,6 +34,7 @@ class Tournament(object):
         edges: List[Tuple] = None,
         match_attributes: dict = None,
         seed: int = None,
+        match_class = Match,
     ) -> None:
         """
         Parameters
@@ -78,6 +79,7 @@ class Tournament(object):
             turns = DEFAULT_TURNS
 
         self.turns = turns
+        self.match_class = match_class
         self.prob_end = prob_end
         self.match_generator = MatchGenerator(
             players=players,
@@ -451,7 +453,7 @@ class Tournament(object):
         player2 = self.players[p2_index].clone()
         match_params["players"] = (player1, player2)
         match_params["seed"] = seed
-        match = Match(**match_params)
+        match = self.match_class(**match_params)
         for _ in range(repetitions):
             match.play()
 

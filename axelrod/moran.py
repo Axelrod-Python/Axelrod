@@ -29,6 +29,7 @@ class MoranProcess(object):
         mutation_method="transition",
         stop_on_fixation=True,
         seed=None,
+        match_class=Match,
     ) -> None:
         """
         An agent based Moran process class. In each round, each player plays a
@@ -106,6 +107,7 @@ class MoranProcess(object):
         else:
             self.deterministic_cache = DeterministicCache()
         self.turns = turns
+        self.match_class = match_class
         self.prob_end = prob_end
         self.game = game
         self.noise = noise
@@ -376,7 +378,7 @@ class MoranProcess(object):
         for i, j in self._matchup_indices():
             player1 = self.players[i]
             player2 = self.players[j]
-            match = Match(
+            match = self.match_class(
                 (player1, player2),
                 turns=self.turns,
                 prob_end=self.prob_end,
@@ -574,3 +576,4 @@ class ApproximateMoranProcess(MoranProcess):
         except KeyError:  # If players are stored in opposite order
             match_scores = self.cached_outcomes[player_names[::-1]].sample()
             return match_scores[::-1]
+            
