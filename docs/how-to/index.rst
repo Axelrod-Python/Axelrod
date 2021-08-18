@@ -27,5 +27,6 @@ with the Axelrod library.
    set_a_seed.rst
    set_player_information.rst
    check_player_equality.rst
+   heterogeneous_matches.rst
    cite_the_library.rst
    contributing/index.rst
