@@ -114,7 +114,7 @@ All contributions are welcome!
 
 You can find helpful instructions about contributing in the
 documentation:
-http://axelrod.readthedocs.org/en/latest/tutorials/contributing/index.html
+https://axelrod.readthedocs.org/en/latest/how-to/contributing/index.html
 
 Publications
 ------------
