@@ -346,7 +346,7 @@ class SpitefulCC(Player):
 
 class Capri(Player):
     """
-    CAPRI is a memory-3 strategy proposed in [Murase2020]_. Its behavior is defined by the following five rules.
+    CAPRI is a memory-3 strategy proposed in [Murase2020]_. Its behavior is defined in[Murase2020]_ by the following five rules applied to the last 3 moves of the player and the opponent:
     C: Cooperate at mutual cooperation.
         This rule prescribes c at (ccc, ccc).
     A: Accept punishment when you mistakenly defected from mutual cooperation.
