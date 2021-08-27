@@ -346,16 +346,24 @@ class SpitefulCC(Player):
 
 class Capri(Player):
     """
-    CAPRI is a memory-3 strategy proposed in [Murase2020]_. Its behavior is defined in[Murase2020]_ by the following five rules applied to the last 3 moves of the player and the opponent:
-    C: Cooperate at mutual cooperation.
-        This rule prescribes c at (ccc, ccc).
-    A: Accept punishment when you mistakenly defected from mutual cooperation.
-        This rule prescribes c at (ccd, ccc), (cdc, ccd), (dcc, cdc), and (ccc, dcc).
-    P: Punish your co-player by defecting once when he defected from mutual cooperation.
-        This rule prescribes d at (ccc, ccd), and then c at (ccd, cdc), (cdc, dcc), and (dcc, ccc).
-    R: Recover cooperation when you or your co-player cooperated at mutual defection.
-        This rule prescribes c at (ddd, ddc), (ddc, dcc), (dcc, ccc), (ddc, ddd), (dcc, ddc), (ccc, dcc), (ddc, ddc), and (dcc, dcc).
-    I: In all the ohter cases, defect.
+    CAPRI is a memory-3 strategy proposed in [Murase2020]_. Its behavior is
+    defined by the following five rules applied to the last 3 moves of the
+    player and the opponent:
+
+    - C: Cooperate at mutual cooperation.  This rule prescribes c at (ccc, ccc).
+    - A: Accept punishment when you mistakenly defected from mutual cooperation.
+      This rule prescribes c at (ccd, ccc), (cdc, ccd), (dcc, cdc), and (ccc,
+      dcc).
+    - P: Punish your co-player by defecting once when he defected from mutual
+      cooperation.  This rule prescribes d at (ccc, ccd), and then c at (ccd,
+      cdc), (cdc, dcc), and (dcc, ccc).
+    - R: Recover cooperation when you or your co-player cooperated at mutual
+      defection.  This rule prescribes c at (ddd, ddc), (ddc, dcc), (dcc, ccc),
+      (ddc, ddd), (dcc, ddc), (ccc, dcc), (ddc, ddc), and (dcc, dcc).
+    - I: In all the other cases, defect.
+
+    The original implementation used in [Murase2020]_ is available at
+    https://github.com/yohm/sim_exhaustive_m3_PDgame
 
     Names:
 
