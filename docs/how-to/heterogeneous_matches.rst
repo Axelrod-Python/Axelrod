@@ -24,7 +24,7 @@ Using the :code:`setattr()` method, additional attributes can be passed to playe
     >>> set_player_mass(players, masses)
 
 The :code:`Match` class can be partially altered to enable different behaviour. Here we extend :code:`axl.Match` and overwrite its :code:`final_score_per_turn()`
-function to utilize the player mass attribute als a multiplier for the final score::
+function to utilize the player mass attribute as a multiplier for the final score::
 
     >>> class MassBaseMatch(axl.Match):
     >>> """Axelrod Match object with a modified final score function to enable mass to influence the final score as a multiplier"""
