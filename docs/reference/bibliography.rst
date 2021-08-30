@@ -35,6 +35,7 @@ documentation.
 .. [Hilbe2017] Hilbe, C., Martinez-Vaquero, L. A., Chatterjee K., Nowak M. A. (2017). Memory-n strategies of direct reciprocity, Proceedings of the National Academy of Sciences May 2017, 114 (18) 4715-4720; doi: 10.1073/pnas.1621239114.
 .. [Kuhn2017] Kuhn, Steven, "Prisoner's Dilemma", The Stanford Encyclopedia of Philosophy (Spring 2017 Edition), Edward N. Zalta (ed.), https://plato.stanford.edu/archives/spr2017/entries/prisoner-dilemma/
 .. [Kraines1989] Kraines, David, and Vivian Kraines. "Pavlov and the prisoner's dilemma." Theory and decision 26.1 (1989): 47-79. doi:10.1007/BF00134056
+.. [Krapohl2020] Krapohl, S., Ocelík, V. & Walentek, D.M. The instability of globalization: applying evolutionary game theory to global trade cooperation. Public Choice 188, 31–51 (2021). https://doi.org/10.1007/s11127-020-00799-1
 .. [LessWrong2011] Zoo of Strategies (2011) LessWrong. Available at: http://lesswrong.com/lw/7f2/prisoners_dilemma_tournament_results/
 .. [Li2007] Li, J, How to Design a Strategy to Win an IPD Tournament, in Kendall G., Yao X. and Chong S. (eds.) The iterated prisoner’s dilemma: 20 years on. World Scientific, chapter 4, pp. 29-40, 2007.
 .. [Li2009] Li, J. & Kendall, G. (2009). A Strategy with Novel Evolutionary Features for the Iterated Prisoner’s Dilemma. Evolutionary Computation 17(2): 257–274.
