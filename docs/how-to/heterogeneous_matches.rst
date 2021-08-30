@@ -1,7 +1,11 @@
 .. _heterogeneous-matches:
 
 Use custom matches
+<<<<<<< HEAD
 ===================
+=======
+===================
+>>>>>>> a90487a68b0b2997e860d6735dea0b52deece66b
 
 Axelrod Matches are homogeneous by nature but can be extended to utilize additional attributes of heterogeneous players. 
 This tutorial indicates how the Axelrod :code:`Match` class can be manipulated in order to play heterogeneous tournaments and Moran processes using country mass as a score modifier.
