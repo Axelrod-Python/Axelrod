@@ -382,15 +382,17 @@ class TestCapri(TestPlayer):
         actions = [(C, C)] * 10 + [(C, D)] + [(D, D)]  + [(D,C)] * 9
         self.versus_test(opponent, expected_actions=actions)
 
+    def test_prescriptions(self):
         # accept punishment when making a mistake
         self.assert_prescription([C,C,D], [C,C,C], C)
         self.assert_prescription([C,D,C], [C,C,D], C)
         self.assert_prescription([D,C,C], [C,D,C], C)
         self.assert_prescription([C,C,C], [D,C,C], C)
 
-        # recover the cooperation
+        # recover the cooperation from mutual defection
         self.assert_prescription([D,D,C], [D,D,D], C)
         self.assert_prescription([D,C,C], [D,D,C], C)
+        self.assert_prescription([C,C,C], [D,C,C], C)
 
         self.assert_prescription([D,D,D], [D,D,C], C)
         self.assert_prescription([D,D,C], [D,C,C], C)
