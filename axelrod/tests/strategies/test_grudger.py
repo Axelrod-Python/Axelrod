@@ -382,25 +382,38 @@ class TestCapri(TestPlayer):
         actions = [(C, C)] * 10 + [(C, D)] + [(D, D)]  + [(D,C)] * 9
         self.versus_test(opponent, expected_actions=actions)
 
-    def test_prescriptions(self):
+    def test_noisy_actions(self):
         # accept punishment when making a mistake
-        self.assert_prescription([C,C,D], [C,C,C], C)
-        self.assert_prescription([C,D,C], [C,C,D], C)
-        self.assert_prescription([D,C,C], [C,D,C], C)
-        self.assert_prescription([C,C,C], [D,C,C], C)
+        actions1 = [C,C,D,C,C,C,C]
+        actions2 = [C,C,C,D,C,C,C]
+        opponent = axl.MockPlayer(actions=actions2)
+        self.versus_test(opponent, expected_actions=list(zip(actions1,actions2)), noise=0.1, seed=20)
 
-        # recover the cooperation from mutual defection
-        self.assert_prescription([D,D,C], [D,D,D], C)
-        self.assert_prescription([D,C,C], [D,D,C], C)
-        self.assert_prescription([C,C,C], [D,C,C], C)
+        # recover the cooperation when the opponent cooperated from mutual defection
+        actions1 = [C,D,D,D,D,C,C,C]
+        actions2 = [D,D,D,D,C,C,C,C]
+        opponent = axl.MockPlayer(actions=actions2)
+        self.versus_test(opponent, expected_actions=list(zip(actions1,actions2)), noise=0)
 
-        self.assert_prescription([D,D,D], [D,D,C], C)
-        self.assert_prescription([D,D,C], [D,C,C], C)
-        self.assert_prescription([D,C,C], [C,C,C], C)
+        # recover the cooperation when the player cooperated by mistake from mutual defection
+        actions1 = [C,D,D,D,C,C,C,C]
+        actions2 = [D,D,D,D,D,C,C,C]
+        opponent = axl.MockPlayer(actions=actions2)
+        self.versus_test(opponent, expected_actions=list(zip(actions1,actions2)), noise=0.1, seed=72)
 
-        self.assert_prescription([D,D,C], [D,D,C], C)
-        self.assert_prescription([D,C,C], [D,C,C], C)
+        # recover the cooperation when the focal and the opponent player cooperated by mistake from mutual defection
+        actions1 = [C,D,D,D,C,C,C,C]
+        actions2 = [D,D,D,D,C,C,C,C]
+        opponent = axl.MockPlayer(actions=actions2)
+        self.versus_test(opponent, expected_actions=list(zip(actions1,actions2)), noise=0.1, seed=72)
 
         # in other cases, defect
-        self.assert_prescription([D,C,C], [D,D,D], D)
-        self.assert_prescription([C,D,C], [C,C,C], D)
+        actions1 = [C,D,C,C,D,D,D,D]
+        actions2 = [D,D,D,D,D,C,C,D]
+        opponent = axl.MockPlayer(actions=actions2)
+        self.versus_test(opponent, expected_actions=list(zip(actions1,actions2)), noise=0.1, seed=452)
+
+        actions1 = [C,D,C,D]
+        actions2 = [C,C,C,D]
+        opponent = axl.MockPlayer(actions=actions2)
+        self.versus_test(opponent, expected_actions=list(zip(actions1,actions2)), noise=0.1, seed=15)
