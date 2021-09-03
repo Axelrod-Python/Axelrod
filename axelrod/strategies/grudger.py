@@ -382,43 +382,42 @@ class Capri(Player):
 
     def strategy(self, opponent: Player) -> Action:
         # initial history profile is full cooperation
-        hist = [[C, C], [C, C], [C, C]]
-        for i in range(min(len(self.history), 3)):
-            hist[-i-1][0] = self.history[-i-1]
-            hist[-i-1][1] = opponent.history[-i-1]
+        hist = list(zip(self.history[-3:], opponent.history[-3:]))
+        while len(hist) < 3:
+            hist.insert(0, (C, C))
 
-        if hist == [[C,C],[C,C],[C,C]]:   # Rule: C
+        if hist == [(C, C), (C, C), (C, C)]:  # Rule: C
             return C
-        if hist == [[C, C], [C, C], [D, C]]:  # Rule: A
+        if hist == [(C, C), (C, C), (D, C)]:  # Rule: A
             return C
-        if hist == [[C, C], [D, C], [C, D]]:
+        if hist == [(C, C), (D, C), (C, D)]:
             return C
-        if hist == [[D, C], [C, D], [C, C]]:
+        if hist == [(D, C), (C, D), (C, C)]:
             return C
-        if hist == [[C, D], [C, C], [C, C]]:
+        if hist == [(C, D), (C, C), (C, C)]:
             return C
-        if hist == [[C, C], [C, C], [C, D]]:  # Rule: P
+        if hist == [(C, C), (C, C), (C, D)]:  # Rule: P
             return D
-        if hist == [[C, C], [C, D], [D, C]]:
+        if hist == [(C, C), (C, D), (D, C)]:
             return C
-        if hist == [[C, D], [D, C], [C, C]]:
+        if hist == [(C, D), (D, C), (C, C)]:
             return C
-        if hist == [[D, C], [C, C], [C, C]]:
+        if hist == [(D, C), (C, C), (C, C)]:
             return C
-        if hist == [[D, D], [D, D], [D, C]]:  # Rule: R1
+        if hist == [(D, D), (D, D), (D, C)]:  # Rule: R1
             return C
-        if hist == [[D, D], [D, C], [C, C]]:
+        if hist == [(D, D), (D, C), (C, C)]:
             return C
-        # if hist == [[D, C], [C, C], [C, C]]:  # duplicate of Rule P
-        #     return C
-        if hist == [[D, D], [D, D], [C, D]]:  # Rule: R2
+        # if hist == [(D, C), (C, C), (C, C)]:  # duplicate of Rule P
+        #     return(C
+        if hist == [(D, D), (D, D), (C, D)]:  # Rule: R2
             return C
-        if hist == [[D, D], [C, D], [C, C]]:
+        if hist == [(D, D), (C, D), (C, C)]:
             return C
-        # if hist == [[C, D], [C, C], [C, C]]:  # duplicate of Rule A
-        #     return C
-        if hist == [[D, D], [D, D], [C, C]]:  # Rule: R3
+        # if hist == [(C, D), (C, C), (C, C)]:  # duplicate of Rule A
+        #     return(C
+        if hist == [(D, D), (D, D), (C, C)]:  # Rule: R3
             return C
-        if hist == [[D, D], [C, C], [C, C]]:
+        if hist == [(D, D), (C, C), (C, C)]:
             return C
         return D
