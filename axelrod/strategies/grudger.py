@@ -394,7 +394,7 @@ class Capri(Player):
             return C
         if hist == [(D, C), (C, D), (C, C)]:
             return C
-        if hist == [(C, D), (C, C), (C, C)]:
+        if hist == [(C, D), (C, C), (C, C)]:  # Rule: A & R2
             return C
         if hist == [(C, C), (C, C), (C, D)]:  # Rule: P
             return D
@@ -402,20 +402,16 @@ class Capri(Player):
             return C
         if hist == [(C, D), (D, C), (C, C)]:
             return C
-        if hist == [(D, C), (C, C), (C, C)]:
+        if hist == [(D, C), (C, C), (C, C)]:  # Rule: P & R1
             return C
         if hist == [(D, D), (D, D), (D, C)]:  # Rule: R1
             return C
         if hist == [(D, D), (D, C), (C, C)]:
             return C
-        # if hist == [(D, C), (C, C), (C, C)]:  # duplicate of Rule P
-        #     return(C
         if hist == [(D, D), (D, D), (C, D)]:  # Rule: R2
             return C
         if hist == [(D, D), (C, D), (C, C)]:
             return C
-        # if hist == [(C, D), (C, C), (C, C)]:  # duplicate of Rule A
-        #     return(C
         if hist == [(D, D), (D, D), (C, C)]:  # Rule: R3
             return C
         if hist == [(D, D), (C, C), (C, C)]:

@@ -352,13 +352,6 @@ class TestCapri(TestPlayer):
         "manipulates_state": False,
     }
 
-    def assert_prescription(self, player_history, opponent_history, prescription):
-        player = self.player()
-        player._history = player_history
-        opponent = axl.MockPlayer()
-        opponent._history = opponent_history
-        self.assertEqual(player.strategy(opponent=opponent), prescription)
-
     def test_strategy(self):
         # cooperate at mutual cooperation
         opponent = axl.Cooperator()
