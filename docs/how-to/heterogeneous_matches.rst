@@ -49,7 +49,7 @@ This requires us to build a specific match class:
     ...         super().__next__()
     ...         return self
 
-In [Krapohl2020] a non standard Moran process is used where the mass of individuals is not reproduced so we will use inheritance to create a new Moran process that keeps the mass of the individuals constant.
+In [Krapohl2020]_ a non standard Moran process is used where the mass of individuals is not reproduced so we will use inheritance to create a new Moran process that keeps the mass of the individuals constant.
 
     >>> mp = MassBasedMoranProcess(players, match_class=MassBaseMatch)
     >>> mp.play()
