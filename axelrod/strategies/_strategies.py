@@ -135,6 +135,7 @@ from .gobymajority import (
 from .gradualkiller import GradualKiller
 from .grudger import (
     Aggravater,
+    Capri,
     EasyGo,
     ForgetfulGrudger,
     GeneralSoftGrudger,
@@ -143,7 +144,6 @@ from .grudger import (
     OppositeGrudger,
     SoftGrudger,
     SpitefulCC,
-    Capri,
 )
 from .grumpy import Grumpy
 from .handshake import Handshake
@@ -304,6 +304,7 @@ all_strategies = [
     Bully,
     BushMosteller,
     Calculator,
+    Capri,
     CautiousQLearner,
     CollectiveStrategy,
     ContriteTitForTat,
