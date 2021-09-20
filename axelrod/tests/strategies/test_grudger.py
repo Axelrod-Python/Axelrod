@@ -366,47 +366,74 @@ class TestCapri(TestPlayer):
         # punishment co-players for his/her mistake
         opponent_actions = [C] * 10 + [D] + [C] * 10
         opponent = axl.MockPlayer(actions=opponent_actions)
-        actions = [(C, C)] * 10 + [(C, D)] + [(D, C)]  + [(C,C)] * 9
+        actions = [(C, C)] * 10 + [(C, D)] + [(D, C)] + [(C, C)] * 9
         self.versus_test(opponent, expected_actions=actions)
 
         # never allow the defection more than once
         opponent_actions = [C] * 10 + [D] * 2 + [C] * 10
         opponent = axl.MockPlayer(actions=opponent_actions)
-        actions = [(C, C)] * 10 + [(C, D)] + [(D, D)]  + [(D,C)] * 9
+        actions = [(C, C)] * 10 + [(C, D)] + [(D, D)] + [(D, C)] * 9
         self.versus_test(opponent, expected_actions=actions)
 
     def test_noisy_actions(self):
         # accept punishment when making a mistake
-        actions1 = [C,C,D,C,C,C,C]
-        actions2 = [C,C,C,D,C,C,C]
+        actions1 = [C, C, D, C, C, C, C]
+        actions2 = [C, C, C, D, C, C, C]
         opponent = axl.MockPlayer(actions=actions2)
-        self.versus_test(opponent, expected_actions=list(zip(actions1,actions2)), noise=0.1, seed=20)
+        self.versus_test(
+            opponent,
+            expected_actions=list(zip(actions1, actions2)),
+            noise=0.1,
+            seed=20,
+        )
 
         # recover the cooperation when the opponent cooperated from mutual defection
-        actions1 = [C,D,D,D,D,C,C,C]
-        actions2 = [D,D,D,D,C,C,C,C]
+        actions1 = [C, D, D, D, D, C, C, C]
+        actions2 = [D, D, D, D, C, C, C, C]
         opponent = axl.MockPlayer(actions=actions2)
-        self.versus_test(opponent, expected_actions=list(zip(actions1,actions2)), noise=0)
+        self.versus_test(
+            opponent, expected_actions=list(zip(actions1, actions2)), noise=0
+        )
 
         # recover the cooperation when the player cooperated by mistake from mutual defection
-        actions1 = [C,D,D,D,C,C,C,C]
-        actions2 = [D,D,D,D,D,C,C,C]
+        actions1 = [C, D, D, D, C, C, C, C]
+        actions2 = [D, D, D, D, D, C, C, C]
         opponent = axl.MockPlayer(actions=actions2)
-        self.versus_test(opponent, expected_actions=list(zip(actions1,actions2)), noise=0.1, seed=72)
+        self.versus_test(
+            opponent,
+            expected_actions=list(zip(actions1, actions2)),
+            noise=0.1,
+            seed=72,
+        )
 
         # recover the cooperation when the focal and the opponent player cooperated by mistake from mutual defection
-        actions1 = [C,D,D,D,C,C,C,C]
-        actions2 = [D,D,D,D,C,C,C,C]
+        actions1 = [C, D, D, D, C, C, C, C]
+        actions2 = [D, D, D, D, C, C, C, C]
         opponent = axl.MockPlayer(actions=actions2)
-        self.versus_test(opponent, expected_actions=list(zip(actions1,actions2)), noise=0.1, seed=72)
+        self.versus_test(
+            opponent,
+            expected_actions=list(zip(actions1, actions2)),
+            noise=0.1,
+            seed=72,
+        )
 
         # in other cases, defect
-        actions1 = [C,D,C,C,D,D,D,D]
-        actions2 = [D,D,D,D,D,C,C,D]
+        actions1 = [C, D, C, C, D, D, D, D]
+        actions2 = [D, D, D, D, D, C, C, D]
         opponent = axl.MockPlayer(actions=actions2)
-        self.versus_test(opponent, expected_actions=list(zip(actions1,actions2)), noise=0.1, seed=452)
+        self.versus_test(
+            opponent,
+            expected_actions=list(zip(actions1, actions2)),
+            noise=0.1,
+            seed=452,
+        )
 
-        actions1 = [C,D,C,D]
-        actions2 = [C,C,C,D]
+        actions1 = [C, D, C, D]
+        actions2 = [C, C, C, D]
         opponent = axl.MockPlayer(actions=actions2)
-        self.versus_test(opponent, expected_actions=list(zip(actions1,actions2)), noise=0.1, seed=15)
+        self.versus_test(
+            opponent,
+            expected_actions=list(zip(actions1, actions2)),
+            noise=0.1,
+            seed=15,
+        )
