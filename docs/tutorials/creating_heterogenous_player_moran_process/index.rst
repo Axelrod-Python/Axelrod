@@ -32,7 +32,7 @@ modification of individual strategies::
     >>> set_player_mass(players, masses)
 
 The :code:`Match` class can be partially altered to enable different behaviour
-(see :ref:`use-custom-matches`_).
+(see :ref:`use-custom-matches`).
 Here we extend :code:`axl.Match` and overwrite its
 :code:`final_score_per_turn()` function to utilize the player mass attribute as
 a multiplier for the final score::
