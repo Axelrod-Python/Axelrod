@@ -3,7 +3,7 @@
 Use custom matches
 ==================
 
-At present it is possible to use a custom match class in a Moran process. Below
+The Moran process supports custom match classes. Below
 creates a new class of a match where both players end with a score of 2::
 
 
@@ -13,8 +13,8 @@ creates a new class of a match where both players end with a score of 2::
     ...     def final_score_per_turn(self):
     ...         return 2, 2
 
-We can now create a Moran process like we normally would and pass our custom
-:code:`MassBaseMatch` to the moran process with the :code:`match_class` keyword
+We then create a Moran process with the custom match class by passing our custom
+:code:`MassBaseMatch` to the Moran process with the :code:`match_class` keyword
 argument::
 
     >>> players = [axl.Cooperator(), axl.Defector(), axl.TitForTat(), axl.Grudger()]
