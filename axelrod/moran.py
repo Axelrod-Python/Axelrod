@@ -576,4 +576,3 @@ class ApproximateMoranProcess(MoranProcess):
         except KeyError:  # If players are stored in opposite order
             match_scores = self.cached_outcomes[player_names[::-1]].sample()
             return match_scores[::-1]
-            
