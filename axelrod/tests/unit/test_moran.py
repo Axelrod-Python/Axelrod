@@ -191,6 +191,19 @@ class TestMoranProcess(unittest.TestCase):
         mp = MoranProcess((p1, p2), turns=5, game=game, seed=3)
         populations = mp.play()
         self.assertEqual(mp.winning_strategy_name, str(p1))
+
+    def test_different_match(self):
+        # Using a different game where the scores are all the same
+        # This is a test to mainly show that the results are different to the
+        # results of `test_different_game` where the same seed is used.
+        class StandInMatch(axl.Match):
+            """A Match were all players get a score of 3"""
+            def final_score_per_turn(self):
+                return 0, 3
+        p1, p2 = axl.Cooperator(), axl.Defector()
+        game = axl.Game(r=4, p=2, s=1, t=6)
+        mp = MoranProcess((p1, p2), turns=5, game=game, match_class=StandInMatch, seed=3)
+        populations = mp.play()
         self.assertEqual(mp.winning_strategy_name, str(p2))
 
     def test_death_birth(self):
