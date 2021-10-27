@@ -3,6 +3,7 @@ cloudpickle>=0.2.2
 fsspec>=0.6.0
 toolz>=0.8.2
 
+docutils <= 0.17  # Added this for a problem with sphinx https://github.com/sphinx-doc/sphinx/commit/13803a79e7179f40a27f46d5a5a05f1eebbcbb63
 dask>=2.9.2
 hypothesis==5.19.3
 matplotlib>=3.0.3
