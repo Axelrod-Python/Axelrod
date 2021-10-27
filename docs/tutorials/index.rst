@@ -12,3 +12,4 @@ Contents:
 
    new_to_game_theory_and_or_python/index.rst
    running_axelrods_first_tournament/index.rst
+   creating_heterogenous_player_moran_process/index.rst

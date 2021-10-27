@@ -188,7 +188,25 @@ class TestMoranProcess(unittest.TestCase):
         # Possible for Cooperator to become fixed when using a different game
         p1, p2 = axl.Cooperator(), axl.Defector()
         game = axl.Game(r=4, p=2, s=1, t=6)
-        mp = MoranProcess((p1, p2), turns=5, game=game, seed=88)
+        mp = MoranProcess((p1, p2), turns=5, game=game, seed=3)
+        populations = mp.play()
+        self.assertEqual(mp.winning_strategy_name, str(p1))
+
+    def test_different_match(self):
+        """Test alternative Match class, mainly to show that the results are different
+        than the results of `test_different_game` where the same seed is used."""
+        # Using a different game where the scores are all constant
+        class StandInMatch(axl.Match):
+            """A Match were all players get a score of 3"""
+
+            def final_score_per_turn(self):
+                return 0, 3
+
+        p1, p2 = axl.Cooperator(), axl.Defector()
+        game = axl.Game(r=4, p=2, s=1, t=6)
+        mp = MoranProcess(
+            (p1, p2), turns=5, game=game, match_class=StandInMatch, seed=3
+        )
         populations = mp.play()
         self.assertEqual(mp.winning_strategy_name, str(p2))
 

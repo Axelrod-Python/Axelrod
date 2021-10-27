@@ -24,6 +24,7 @@ with the Axelrod library.
    use_parallel_processing.rst
    use_a_cache.rst
    use_different_stage_games.rst
+   use_custom_matches.rst
    set_a_seed.rst
    set_player_information.rst
    check_player_equality.rst

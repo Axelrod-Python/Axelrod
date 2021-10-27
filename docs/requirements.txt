@@ -1,0 +1,1 @@
+docutils <= 0.17  # Added this for a problem with sphinx https://github.com/sphinx-doc/sphinx/commit/13803a79e7179f40a27f46d5a5a05f1eebbcbb63
