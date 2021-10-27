@@ -1,6 +1,6 @@
 .. _create-heterogeneous-moran-processes:
 
-Create heterogeneous Moran Processes
+Create Heterogeneous Moran Processes
 ====================================
 
 Axelrod Matches are homogeneous by nature but can be extended to utilize
@@ -16,7 +16,7 @@ This is equivalent in principle to the country masses discussed in
 
     >>> import axelrod as axl
     >>> players = [player() for player in axl.demo_strategies]
-    >>> masses = [1 * i for i in range(len(players))]
+    >>> masses = [i for i in range(len(players))]
     >>> players
     [Cooperator, Defector, Tit For Tat, Grudger, Random: 0.5]
 
@@ -60,6 +60,6 @@ process that keeps the mass of the individuals constant::
     Random: 0.5
 
 Note that the snippets here only influence the final score of matches. The
-behavior of matches,  and moran processes can be more heavily influenced by
+behavior of matches, and Moran processes can be more heavily influenced by
 partially overwriting other :code:`match` functions or :code:`birth` and
 :code:`death` functions within :code:`MoranProcess`.

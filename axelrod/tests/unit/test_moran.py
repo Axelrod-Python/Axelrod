@@ -193,9 +193,9 @@ class TestMoranProcess(unittest.TestCase):
         self.assertEqual(mp.winning_strategy_name, str(p1))
 
     def test_different_match(self):
-        # Using a different game where the scores are all the same
-        # This is a test to mainly show that the results are different to the
-        # results of `test_different_game` where the same seed is used.
+        """Test alternative Match class, mainly to show that the results are different
+        than the results of `test_different_game` where the same seed is used."""
+        # Using a different game where the scores are all constant
         class StandInMatch(axl.Match):
             """A Match were all players get a score of 3"""
 
