@@ -1,9 +1,27 @@
+# v4.12.0, 2021-05-25
+
+New documentation structure, new strategy and ability to pass a custom match to
+the Moran class.
+
+- Move documentation to diataxis framework
+  https://github.com/Axelrod-Python/Axelrod/pull/1391
+- Add the CAPRI strategy
+  https://github.com/Axelrod-Python/Axelrod/pull/1393
+- Add custom matches to Moran process
+  https://github.com/Axelrod-Python/Axelrod/pull/1397
+- Update CITATIONS.md
+  https://github.com/Axelrod-Python/Axelrod/pull/1389
+- Fix contributor documentation links
+  https://github.com/Axelrod-Python/Axelrod/pull/1396
+
+https://github.com/Axelrod-Python/Axelrod/compare/v4.12.0...v4.11.0
+
 # v4.11.0, 2021-05-25
 
 A number of improvements to documentation, a new strategy, removing the cheating
 strategies and a number of internal fixes.
 
-- Use black style formatting 
+- Use black style formatting
   https://github.com/Axelrod-Python/Axelrod/pull/1368
 - Move to `dev` as main branch
   https://github.com/Axelrod-Python/Axelrod/pull/1367
