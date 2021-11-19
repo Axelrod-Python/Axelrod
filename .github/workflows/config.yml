@@ -3,7 +3,7 @@ name: CI
 on:
   push:
   pull_request:
-  # Run weakly at 00:00 on Sunday.
+  # Run weekly at 00:00 on Sunday.
   schedule:
   - cron:  '0 0 * * 0'
 
