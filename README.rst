@@ -71,7 +71,7 @@ a peer reviewed paper introducing the library (22 authors).
 Installation
 ------------
 
-The library is tested on Python versions 3.6, 3.7, and 3.8.
+The library is tested on Python versions 3.8, 3.9, and 3.10.
 
 The simplest way to install is::
 
