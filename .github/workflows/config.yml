@@ -3,7 +3,7 @@ name: CI
 on:
   push:
   pull_request:
-  # Run weakly at 00:00 on Sunday.
+  # Run weekly at 00:00 on Sunday.
   schedule:
   - cron:  '0 0 * * 0'
 
@@ -14,7 +14,7 @@ jobs:
       max-parallel: 4
       matrix:
         os: [ubuntu-latest, windows-latest]
-        python-version: [3.6, 3.7, 3.8]
+        python-version: ["3.8", "3.9", "3.10"]
 
     steps:
     - uses: actions/checkout@v1
