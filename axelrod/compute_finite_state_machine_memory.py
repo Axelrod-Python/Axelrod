@@ -113,7 +113,10 @@ def get_accessible_transitions(
         if trans.state in accessible_states:
             accessible_transitions[
                 (trans.state, trans.last_opponent_action)
-            ] = (trans.next_state, trans.next_action)
+            ] = (
+                trans.next_state,
+                trans.next_action,
+            )
 
     return accessible_transitions
 
