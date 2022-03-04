@@ -57,6 +57,8 @@ class RiskyQLearner(Player):
 
     def strategy(self, opponent: Player) -> Action:
         """Runs a qlearn algorithm while the tournament is running."""
+        print(self.match_attributes["game"].RPST())
+        self.receive_match_attributes()
         if len(self.history) == 0:
             self.prev_action = self._random.random_choice()
             self.original_prev_action = self.prev_action
@@ -90,7 +92,8 @@ class RiskyQLearner(Player):
         """
         prob = "{:.1f}".format(opponent.cooperations)
         action_str = actions_to_str(opponent.history[-self.memory_length :])
-        return action_str + prob
+        change_prob = str(self.match_attributes["change_prob"])
+        return action_str + prob + change_prob
 
     def perform_q_learning(
         self, prev_state: str, state: str, action: Action, reward

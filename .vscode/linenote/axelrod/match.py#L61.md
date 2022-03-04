@@ -1,0 +1,1 @@
+- this allows you to make match infinite with a probability of ending

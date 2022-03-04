@@ -30,6 +30,7 @@ class Match(object):
         match_attributes=None,
         reset=True,
         seed=None,
+        p_A=None
     ):
         """
         Parameters
@@ -79,12 +80,15 @@ class Match(object):
         else:
             self._cache = deterministic_cache
 
+        self.p_A = 0 if p_A is None else p_A
+
         if match_attributes is None:
             known_turns = self.turns if prob_end is None else float("inf")
             self.match_attributes = {
                 "length": known_turns,
                 "game": self.game,
                 "noise": self.noise,
+                "change_prob": self.p_A
             }
         else:
             self.match_attributes = match_attributes
@@ -196,6 +200,7 @@ class Match(object):
                     self.players[0], self.players[1], self.noise
                 )
                 result.append(plays)
+                self.game.change_game(self.p_A)
 
             if self._cache_update_required:
                 self._cache[cache_key] = result

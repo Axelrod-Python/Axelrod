@@ -1,0 +1,1 @@
+- have a way for players to see the updated game matrix before applying strategy. Gets passed the match attributes.

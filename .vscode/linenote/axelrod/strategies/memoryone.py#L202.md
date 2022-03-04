@@ -1,0 +1,2 @@
+- have to change the probabilities since I am changing the payoff associated with each outcome
+- o/w changing payoffs leads to a value error

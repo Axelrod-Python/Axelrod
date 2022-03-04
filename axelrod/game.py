@@ -1,6 +1,7 @@
 from typing import Tuple, Union
 
 from axelrod import Action
+from random import randint
 
 C, D = Action.C, Action.D
 
@@ -17,7 +18,7 @@ class Game(object):
     """
 
     def __init__(
-        self, r: Score = 3, s: Score = 0, t: Score = 5, p: Score = 1
+        self, r: Score = 32, s: Score = 10, t: Score = 52, p: Score = 24
     ) -> None:
         """Create a new game object.
 
@@ -61,6 +62,21 @@ class Game(object):
             Scores for two player resulting from their actions.
         """
         return self.scores[pair]
+
+    def change_game(self, p_A: float) -> None:
+        """Changes the rewards associated with each outcome to less cooperative version with a probability p_A."""
+        seed = randint(1, 100)
+        if seed <= 100*p_A:
+            self.scores[(C, C)] = (32, 32)
+            self.scores[(D, D)] = (24, 24)
+            self.scores[(C, D)] = (10, 52)
+            self.scores[(D, C)] = (52, 10)
+
+        else:
+            self.scores[(C, C)] = (62, 62)
+            self.scores[(D, D)] = (24, 24)
+            self.scores[(C, D)] = (10, 82)
+            self.scores[(D, C)] = (82, 10)
 
     def __repr__(self) -> str:
         return "Axelrod game: (R,P,S,T) = {}".format(self.RPST())

@@ -188,10 +188,10 @@ class Player(object, metaclass=PostInitCaller):
         # the game matrix, the number of rounds or the noise
         pass
 
-    def set_match_attributes(self, length=-1, game=None, noise=0):
+    def set_match_attributes(self, length=-1, game=None, noise=0, change_prob=0):
         if not game:
             game = DefaultGame
-        self.match_attributes = {"length": length, "game": game, "noise": noise}
+        self.match_attributes = {"length": length, "game": game, "noise": noise, "change_prob": change_prob}
         self.receive_match_attributes()
 
     def set_seed(self, seed):

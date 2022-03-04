@@ -1,0 +1,1 @@
+Change prob_end to 1/3? or maybe once repetitions have reached a certain value set prob end to be non null

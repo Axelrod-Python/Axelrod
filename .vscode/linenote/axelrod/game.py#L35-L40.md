@@ -1,0 +1,2 @@
+- want to change the values stored in self.scores from within the game loop with a specific probability
+- with probability p_A it will switch to the less cooperative game and with 1-p_A it will stay the switch to the more cooperative game

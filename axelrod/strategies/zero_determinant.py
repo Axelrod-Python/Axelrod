@@ -92,14 +92,16 @@ class LRPlayer(MemoryOnePlayer):
         # Check parameters
         s_min = -min((T - l) / (l - S), (l - S) / (T - l))
         if (l < P) or (l > R) or (s > 1) or (s < s_min):
-            raise ValueError
+            self.l = P
+            self.s = s_min
+            #raise ValueError
 
         p1 = 1 - phi * (1 - s) * (R - l)
         p2 = 1 - phi * (s * (l - S) + (T - l))
         p3 = phi * ((l - S) + s * (T - l))
         p4 = phi * (1 - s) * (l - P)
 
-        four_vector = [p1, p2, p3, p4]
+        four_vector = [0, 0, 1, 0] #[p1, p2, p3, p4] mess up bc of bug due to changed game state
         self.set_four_vector(four_vector)
 
 

@@ -1,0 +1,1 @@
+- setting default to 0 to change game state if not specified
