@@ -194,13 +194,23 @@ class Match(object):
                 # Generate a random seed for the player, if stochastic
                 if Classifiers["stochastic"](p):
                     p.set_seed(self._random.random_seed_int())
+            self.players[0].load_state() #note that this requires first player to be a QLearner or inherit from that class
             result = []
-            for _ in range(turns):
+            self.game.change_game(0.5) #first game is random
+            for i in range(turns):
                 plays = self.simultaneous_play(
                     self.players[0], self.players[1], self.noise
                 )
                 result.append(plays)
-                self.game.change_game(self.p_A)
+                if i == 0:
+                    self.game.change_game(self.p_A) #game gets realized for period 1 and later on
+                    self.match_attributes["change_prob"] = 0 if self.match_attributes["game"].RPST()[0] == 62 else 1
+                    newplayers = []
+                    for player in self.players:
+                        player.set_match_attributes(**self.match_attributes)
+                        newplayers.append(player)
+                    self._players = newplayers
+            self.players[0].save_state()
 
             if self._cache_update_required:
                 self._cache[cache_key] = result

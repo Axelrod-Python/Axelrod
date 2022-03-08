@@ -4,6 +4,9 @@ from typing import Dict, Union
 from axelrod.action import Action, actions_to_str
 from axelrod.player import Player
 
+import csv
+from csv import reader
+
 Score = Union[int, float]
 
 C, D = Action.C, Action.D
@@ -57,7 +60,6 @@ class RiskyQLearner(Player):
 
     def strategy(self, opponent: Player) -> Action:
         """Runs a qlearn algorithm while the tournament is running."""
-        print(self.match_attributes["game"].RPST())
         self.receive_match_attributes()
         if len(self.history) == 0:
             self.prev_action = self._random.random_choice()
@@ -121,6 +123,77 @@ class RiskyQLearner(Player):
             opp_prev_action = opponent.history[-1]
         return self.payoff_matrix[self.prev_action][opp_prev_action]
 
+    def load_state(self):
+        # open file in read mode
+        values = []
+        keys = []
+        with open('Qtable_values.csv', 'r') as read_obj:
+            csv_reader = reader(read_obj)
+            for row in csv_reader:
+                values += row
+        dict = self.dictify(values)
+        with open('Qtable_keys.csv', 'r') as read_obj:
+            csv_reader = reader(read_obj)
+            for row in csv_reader:
+                keys += row
+        self.Qs = OrderedDict([(k,v) for k,v in zip(keys, dict)])
+        
+        values = []
+        keys = []
+        with open('Vtable_values.csv', 'r') as read_obj:
+            csv_reader = reader(read_obj)
+            for row in csv_reader:
+                values += [float(i) for i in row]
+        with open('Vtable_keys.csv', 'r') as read_obj:
+            csv_reader = reader(read_obj)
+            for row in csv_reader:
+                keys += row
+        
+        self.Vs = OrderedDict([(k, v) for k, v in zip(keys, values)])
+        print(self.Vs)
+
+    def dictify(self, list):
+        #convert the list of stringed C and D values to ordered dict
+        dicts = []
+        previous = -1
+        for element in list:
+            value = float(element)
+            if previous == -1:
+                previous = value
+            else:
+                dicts.append(OrderedDict(zip([C, D], [previous, float(element)])))
+                previous = -1
+        return dicts
+
+    def save_state(self):
+        keys, values = [], []
+
+        for key, value in self.Qs.items():
+            keys.append(key)
+            for k, v in value.items():
+                values.append(v)
+
+        with open("Qtable_keys.csv", "w") as outfile:
+            csvwriter = csv.writer(outfile)
+            csvwriter.writerow(keys)
+        
+        with open("Qtable_values.csv", "w") as outfile:
+            csvwriter = csv.writer(outfile)
+            csvwriter.writerow(values)
+
+        keys, values = [], []
+
+        for key, value in self.Vs.items():
+            keys.append(key)
+            values.append(value)       
+
+        with open("Vtable_keys.csv", "w") as outfile:
+            csvwriter = csv.writer(outfile)
+            csvwriter.writerow(keys)
+
+        with open("Vtable_values.csv", "w") as outfile:
+            csvwriter = csv.writer(outfile)
+            csvwriter.writerow(values)
 
 class ArrogantQLearner(RiskyQLearner):
     """A player who learns the best strategies through the q-learning

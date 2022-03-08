@@ -29,6 +29,7 @@ class Tournament(object):
         game: Game = None,
         turns: int = None,
         prob_end: float = None,
+        p_A: float = 0, 
         repetitions: int = 10,
         noise: float = 0,
         edges: List[Tuple] = None,

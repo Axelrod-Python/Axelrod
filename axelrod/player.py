@@ -188,6 +188,16 @@ class Player(object, metaclass=PostInitCaller):
         # the game matrix, the number of rounds or the noise
         pass
 
+    def load_state(self):
+        # Overwrite this function if your strategy needs
+        # to remember weights from previous plays
+        pass
+    
+    def save_state(self):
+        # Overwrite this function if your strategy needs
+        # to save learned weights for future games
+        pass
+
     def set_match_attributes(self, length=-1, game=None, noise=0, change_prob=0):
         if not game:
             game = DefaultGame
