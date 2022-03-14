@@ -327,7 +327,7 @@ class EvolvableHMMPlayer(HMMPlayer, EvolvablePlayer):
         emission_probabilities = list(map(float, emission_probabilities))
         num_states = len(emission_probabilities)
         if mutation_probability is None:
-            mutation_probability = 10 / (num_states ** 2)
+            mutation_probability = 10 / (num_states**2)
         else:
             mutation_probability = mutation_probability
         return (
@@ -432,7 +432,7 @@ class EvolvableHMMPlayer(HMMPlayer, EvolvablePlayer):
         entry is the initial_action.
         """
 
-        assert len(vector) == 2 * self.num_states ** 2 + self.num_states + 1
+        assert len(vector) == 2 * self.num_states**2 + self.num_states + 1
 
         def deserialize(vector):
             matrix = []
@@ -442,9 +442,9 @@ class EvolvableHMMPlayer(HMMPlayer, EvolvablePlayer):
                 matrix.append(row)
             return matrix
 
-        break_tc = self.num_states ** 2
-        break_td = 2 * self.num_states ** 2
-        break_ep = 2 * self.num_states ** 2 + self.num_states
+        break_tc = self.num_states**2
+        break_td = 2 * self.num_states**2
+        break_ep = 2 * self.num_states**2 + self.num_states
         initial_state = 0
         self.hmm = SimpleHMM(
             deserialize(vector[0:break_tc]),
@@ -457,7 +457,7 @@ class EvolvableHMMPlayer(HMMPlayer, EvolvablePlayer):
 
     def create_vector_bounds(self):
         """Creates the bounds for the decision variables."""
-        vec_len = 2 * self.num_states ** 2 + self.num_states + 1
+        vec_len = 2 * self.num_states**2 + self.num_states + 1
         lb = [0.0] * vec_len
         ub = [1.0] * vec_len
         return lb, ub

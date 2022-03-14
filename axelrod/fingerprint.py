@@ -42,7 +42,7 @@ def _create_points(step: float, progress_bar: bool = True) -> List[Point]:
     num = int((1 / step) // 1) + 1
 
     if progress_bar:
-        p_bar = tqdm.tqdm(total=num ** 2, desc="Generating points")
+        p_bar = tqdm.tqdm(total=num**2, desc="Generating points")
 
     points = []
     for x in np.linspace(0, 1, num):
