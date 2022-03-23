@@ -136,7 +136,8 @@ class RiskyQLearner(Player):
             csv_reader = reader(read_obj)
             for row in csv_reader:
                 keys += row
-        self.Qs = OrderedDict([(k,v) for k,v in zip(keys, dict)])
+        if len(values) > 0:
+            self.Qs = OrderedDict([(k,v) for k,v in zip(keys, dict)])
         
         values = []
         keys = []
@@ -149,8 +150,8 @@ class RiskyQLearner(Player):
             for row in csv_reader:
                 keys += row
         
-        self.Vs = OrderedDict([(k, v) for k, v in zip(keys, values)])
-        print(self.Vs)
+        if len(values) > 1:
+            self.Vs = OrderedDict([(k, v) for k, v in zip(keys, values)])
 
     def dictify(self, list):
         #convert the list of stringed C and D values to ordered dict

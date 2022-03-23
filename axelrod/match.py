@@ -197,6 +197,10 @@ class Match(object):
             self.players[0].load_state() #note that this requires first player to be a QLearner or inherit from that class
             result = []
             self.game.change_game(0.5) #first game is random
+            if self.game.RPST() == (32, 24, 10, 52):
+                print("*A0")
+            else:
+                print("*B0")
             for i in range(turns):
                 plays = self.simultaneous_play(
                     self.players[0], self.players[1], self.noise
@@ -204,13 +208,17 @@ class Match(object):
                 result.append(plays)
                 if i == 0:
                     self.game.change_game(self.p_A) #game gets realized for period 1 and later on
+                    if self.game.RPST() == (32, 24, 10, 52):
+                        print("A1")
+                    else:
+                        print("B1")
                     self.match_attributes["change_prob"] = 0 if self.match_attributes["game"].RPST()[0] == 62 else 1
                     newplayers = []
                     for player in self.players:
                         player.set_match_attributes(**self.match_attributes)
                         newplayers.append(player)
                     self._players = newplayers
-            self.players[0].save_state()
+            #self.players[0].save_state()
 
             if self._cache_update_required:
                 self._cache[cache_key] = result
