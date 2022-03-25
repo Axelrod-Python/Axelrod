@@ -95,7 +95,8 @@ class RiskyQLearner(Player):
         prob = "{:.1f}".format(opponent.cooperations)
         action_str = actions_to_str(opponent.history[-self.memory_length :])
         change_prob = str(self.match_attributes["change_prob"])
-        return action_str + prob + change_prob
+        exp_coop_reward = str(self.match_attributes["exp_coop_reward"])
+        return action_str + prob + exp_coop_reward #CHANGED STATE
 
     def perform_q_learning(
         self, prev_state: str, state: str, action: Action, reward

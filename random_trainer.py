@@ -30,9 +30,9 @@ def train():
     """given 20 players, run the tournament to make qlearner learn 
     with variable tournament parameters"""
     players = setup_opponents()
-    # players.append(axl.TitForTat())
+    #players.append(axl.TitForTat())
     for player in tqdm(players):
-        match = axl.Match([axl.RiskyQLearner(), player], prob_end = 0.001, p_A = random.random())
+        match = axl.Match([axl.RiskyQLearner(), player], prob_end = 0.001, p_A = random.choice([0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1]))
         match.play()
 
 def test_match(p_A, first_time_coop, first_time_defections, switchingAtoB, switchingBtoA):
@@ -40,22 +40,22 @@ def test_match(p_A, first_time_coop, first_time_defections, switchingAtoB, switc
     eg. static titfortat, dynamic, players inclined to cooperate and
     players inclined to defect"""
     players = [axl.RiskyQLearner(), axl.TitForTat()]
-    match = axl.Match(players, prob_end=0.0001, p_A = p_A)
+    match = axl.Match(players, prob_end=0.001, p_A = p_A)
     match.play()
 
     # update statistics
     scores = match.scores()
     if scores[0][0] in [32, 10, 62]:
-        print("COOP")
+        # print("COOP")
         first_time_coop += 1
-        if scores[0][0] not in [32, 10, 62]:
-            print("SWITCH")
+        if scores[1][0] not in [32, 10, 62]:
+            # print("SWITCH_CD")
             switchingAtoB += 1
     else:
-        print("DEFCT")
+        # print("DEFCT")
         first_time_defections += 1
         if scores[1][0] in [32, 10, 62]:
-            print("SWITCH")
+            # print("SWITCH_DC")
             switchingBtoA += 1
     return first_time_coop, first_time_defections, switchingAtoB, switchingBtoA
     
@@ -73,13 +73,15 @@ def run(first_time_coop, first_time_defections, switchingAtoB, switchingBtoA):
     """run random training simulation about a 1000 times "
     to collect data and plot cooperation rates"""
 
-    # print("length is: " + str(len(all_strategies))+ " and last strat is " + str(all_strategies[len(all_strategies)-35]))
+    #print("length is: " + str(len(all_strategies))+ " and last strat is " + str(all_strategies[len(all_strategies)-35]))
     # for i in trange(15):
     #     train()
-    p_vals = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
+    p_vals = [0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1]
+    #p_vals = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
+    
     for j in tqdm(p_vals):
         first_time_coop, first_time_defections, switchingAtoB, switchingBtoA = (0, 0, 0, 0)
-        for i in trange(50):
+        for i in range(50):
             first_time_coop, first_time_defections, switchingAtoB, switchingBtoA = test_match(j, first_time_coop, first_time_defections, switchingAtoB, switchingBtoA)
         print("p_A: " + str(j))
         summary(first_time_coop, first_time_defections, switchingAtoB, switchingBtoA)

@@ -81,6 +81,7 @@ class Match(object):
             self._cache = deterministic_cache
 
         self.p_A = 0 if p_A is None else p_A
+        self.ecr = self.p_A*(32-10)+(1-self.p_A)*(62-10)
 
         if match_attributes is None:
             known_turns = self.turns if prob_end is None else float("inf")
@@ -88,7 +89,8 @@ class Match(object):
                 "length": known_turns,
                 "game": self.game,
                 "noise": self.noise,
-                "change_prob": self.p_A
+                "change_prob": self.p_A,
+                "exp_coop_reward": self.ecr
             }
         else:
             self.match_attributes = match_attributes
@@ -181,7 +183,7 @@ class Match(object):
         """
         if self.prob_end:
             r = self._random.random()
-            turns = min(sample_length(self.prob_end, r), self.turns)
+            turns = max(50, min(sample_length(self.prob_end, r), self.turns))
         else:
             turns = self.turns
         cache_key = (self.players[0], self.players[1])
@@ -197,10 +199,11 @@ class Match(object):
             self.players[0].load_state() #note that this requires first player to be a QLearner or inherit from that class
             result = []
             self.game.change_game(0.5) #first game is random
-            if self.game.RPST() == (32, 24, 10, 52):
-                print("*A0")
-            else:
-                print("*B0")
+            
+            # if self.game.RPST() == (32, 24, 10, 52):
+            #     print("*A0")
+            # else:
+            #     print("*B0")
             for i in range(turns):
                 plays = self.simultaneous_play(
                     self.players[0], self.players[1], self.noise
@@ -208,11 +211,12 @@ class Match(object):
                 result.append(plays)
                 if i == 0:
                     self.game.change_game(self.p_A) #game gets realized for period 1 and later on
-                    if self.game.RPST() == (32, 24, 10, 52):
-                        print("A1")
-                    else:
-                        print("B1")
+                    # if self.game.RPST() == (32, 24, 10, 52):
+                    #     print("A1")
+                    # else:
+                    #     print("B1")
                     self.match_attributes["change_prob"] = 0 if self.match_attributes["game"].RPST()[0] == 62 else 1
+                    self.match_attributes["exp_coop_reward"] = 52 if self.match_attributes["game"].RPST()[0] == 62 else 22
                     newplayers = []
                     for player in self.players:
                         player.set_match_attributes(**self.match_attributes)

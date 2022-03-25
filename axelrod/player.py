@@ -198,10 +198,10 @@ class Player(object, metaclass=PostInitCaller):
         # to save learned weights for future games
         pass
 
-    def set_match_attributes(self, length=-1, game=None, noise=0, change_prob=0):
+    def set_match_attributes(self, length=-1, game=None, noise=0, change_prob=0, exp_coop_reward = (32-10)*0.5+(62-10)*0.5):
         if not game:
             game = DefaultGame
-        self.match_attributes = {"length": length, "game": game, "noise": noise, "change_prob": change_prob}
+        self.match_attributes = {"length": length, "game": game, "noise": noise, "change_prob": change_prob, "exp_coop_reward": exp_coop_reward}
         self.receive_match_attributes()
 
     def set_seed(self, seed):
