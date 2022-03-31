@@ -32,14 +32,14 @@ def train():
     players = setup_opponents()
     #players.append(axl.TitForTat())
     for player in tqdm(players):
-        match = axl.Match([axl.RiskyQLearner(), player], prob_end = 0.001, p_A = random.choice([0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1]))
+        match = axl.Match([axl.ArrogantQLearner(), player], prob_end = 0.001, p_A = random.choice([0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1]))
         match.play()
 
 def test_match(p_A, first_time_coop, first_time_defections, switchingAtoB, switchingBtoA):
     """test general knowledge player against categories of players,
     eg. static titfortat, dynamic, players inclined to cooperate and
     players inclined to defect"""
-    players = [axl.RiskyQLearner(), axl.TitForTat()]
+    players = [axl.ArrogantQLearner(), axl.TitForTat()]
     match = axl.Match(players, prob_end=0.001, p_A = p_A)
     match.play()
 
