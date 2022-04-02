@@ -34,7 +34,7 @@ class RiskyQLearner(Player):
         "manipulates_state": False,
     }
     learning_rate = 0.9
-    discount_rate = 0.9
+    discount_rate = 0.33
     action_selection_parameter = 0.1
     memory_length = 12
 
