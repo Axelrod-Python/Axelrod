@@ -138,7 +138,7 @@ class TestPlayerClass(unittest.TestCase):
         player2 = player1.clone()
         turns = 50
         for op in [axl.Cooperator(), axl.Defector(), axl.TitForTat()]:
-            seed = random.randint(0, 10 ** 6)
+            seed = random.randint(0, 10**6)
             for p in [player1, player2]:
                 m = axl.Match((p, op), turns=turns, reset=True, seed=seed)
                 m.play()

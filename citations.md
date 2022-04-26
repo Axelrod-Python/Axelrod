@@ -1,7 +1,6 @@
 # Citations
 
 ### 2021
-
 * Glynatsi, Nikoleta E., and Vincent A. Knight. "A bibliometric study of research topics, collaboration, and centrality in the iterated prisoner’s dilemma." Humanities and Social Sciences Communications 8.1 (2021): 1-12. [Nature.com](https://www.nature.com/articles/s41599-021-00718-9) [ArXiv](https://arxiv.org/abs/1911.06128)
 * Glynatsi, Nikoleta E., and Vincent A. Knight. "Game Theory and Python: An educational tutorial to game theory and repeated games using Python." Journal of Open Source Education, 4(39), 78. [jose.theoj.org](https://doi.org/10.21105/jose.00078)
 
@@ -47,6 +46,7 @@
 
 ### Disserations
 
+* Dollbo, Anna. MIXED MEMORY Q-LEARNER: An adaptive reinforcement learning algorithm for the Iterated Prisoner’s Dilemma. [BS thesis](https://gupea.ub.gu.se/handle/2077/69664). 2021.
 * Glynatsi, Nikoleta. "Understanding responses to environments for the Prisoner's Dilemma: A meta analysis, multidimensional optimisation and machine learning approach". PhD Thesis, Cardiff University. (2020) [Available Online](http://orca.cf.ac.uk/135221/).
 * Santana, Jonas Cardoso Carvalho. "Aprendizado de máquina e o dilema dos prisioneiros". (2020)
 * Black, Ben. "An Empirical Evaluation of the Ohtsuki-Nowak Approximation." [Master's Thesis](https://www.lancaster.ac.uk/~blackb/documents/MScDiss.pdf). (2018).
