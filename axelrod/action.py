@@ -28,6 +28,16 @@ class Action(Enum):
 
     C = 0  # Cooperate
     D = 1  # Defect
+    One = 2 # 0.0-0.1
+    Two = 3 # 0.1-0.2
+    Three = 4 #0.2- 0.3
+    Four = 5 #0.3- 0.4
+    Five = 6 #0.4- 0.5
+    Six = 7 #0.5- 0.6
+    Seven = 8 #0.6- 0.7
+    Eight = 9 #0.7- 0.8
+    Nine = 10 #0.8- 0.9
+    Ten = 11 #0.9- 1.0
 
     def __lt__(self, other):
         return self.value < other.value

@@ -1743,6 +1743,15 @@ Stochastic Cooperator:
   manipulates_state: false
   memory_depth: 1
   stochastic: true
+Stochastic QLearner:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set
+    game: null
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
 Stochastic WSLS:
   inspects_source: false
   long_run_time: false

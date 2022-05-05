@@ -63,6 +63,14 @@ class RandomGenerator(object):
             return C
         return D
 
+    def random_prob(self) -> Action:
+        """
+        Return an action out of "one", ..., "ten" randomly
+        """
+        r = self.random()
+        values = {0.1: Action.One, 0.2: Action.Two, 0.3: Action.Three, 0.4: Action.Four, 0.5: Action.Five, 0.6: Action.Six, 0.7: Action.Seven, 0.8: Action.Eight, 0.9: Action.Nine, 1.0: Action.Ten}
+        return values[round(r, 1)] if round(r, 1) > 0 else Action.Ten
+    
     def random_flip(self, action: Action, threshold: float) -> Action:
         """
         Return flipped action with probability `threshold`

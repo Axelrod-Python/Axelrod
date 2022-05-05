@@ -215,6 +215,7 @@ from .qlearner import (
     CautiousQLearner,
     HesitantQLearner,
     RiskyQLearner,
+    StochasticQLearner,
 )
 from .rand import Random
 from .resurrection import DoubleResurrection, Resurrection
@@ -463,6 +464,7 @@ all_strategies = [
     SpitefulCC,
     Stalker,
     StochasticCooperator,
+    StochasticQLearner,
     StochasticWSLS,
     SuspiciousTitForTat,
     TF1,
