@@ -209,19 +209,20 @@ class Match(object):
                     self.players[0], self.players[1], self.noise
                 )
                 result.append(plays)
-                if i == 0:
-                    self.game.change_game(self.p_A) #game gets realized for period 1 and later on
-                    # if self.game.RPST() == (32, 24, 10, 52):
-                    #     print("A1")
-                    # else:
-                    #     print("B1")
-                    self.match_attributes["change_prob"] = 0 if self.match_attributes["game"].RPST()[0] == 62 else 1
-                    self.match_attributes["exp_coop_reward"] = 52 if self.match_attributes["game"].RPST()[0] == 62 else 22
-                    newplayers = []
-                    for player in self.players:
-                        player.set_match_attributes(**self.match_attributes)
-                        newplayers.append(player)
-                    self._players = newplayers
+                # if i == 0:
+                #     self.game.change_game(self.p_A) #game gets realized for period 1 and later on
+                #     # if self.game.RPST() == (32, 24, 10, 52):
+                #     #     print("A1")
+                #     # else:
+                #     #     print("B1")
+                #     self.match_attributes["change_prob"] = 0 if self.match_attributes["game"].RPST()[0] == 62 else 1
+                #     self.match_attributes["exp_coop_reward"] = 52 if self.match_attributes["game"].RPST()[0] == 62 else 22
+                #     newplayers = []
+                #     for player in self.players:
+                #         player.set_match_attributes(**self.match_attributes)
+                #         newplayers.append(player)
+                #     self._players = newplayers
+                self.game.change_game(self.p_A)
             #self.players[0].save_state()
 
             if self._cache_update_required:
