@@ -1661,7 +1661,7 @@ class SecondByBlack(Player):
         recent_history = opponent.history[-5:]
 
         did_d = np.vectorize(lambda action: int(action == D))
-        number_defects = np.sum(did_d(recent_history))
+        number_defects = sum(did_d(recent_history))
 
         return self._random.random_choice(self.prob_coop[number_defects])
 
@@ -1774,7 +1774,7 @@ class SecondByRichardHufford(Player):
             return C
 
         proportion_agree = self.num_agreements / turn
-        last_four_num = np.sum(self.last_four_agreements)
+        last_four_num = sum(self.last_four_agreements)
         if proportion_agree > 0.9 and last_four_num >= 4:
             return C
         elif proportion_agree >= 0.625 and last_four_num >= 2:
