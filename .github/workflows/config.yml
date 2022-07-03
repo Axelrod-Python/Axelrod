@@ -30,7 +30,6 @@ jobs:
       run: |
         python -m pip install sphinx
         python -m pip install sphinx_rtd_theme
-        python -m pip install docutils==0.12
         python -m pip install mock
         cd docs; make clean; make html; cd ..;
     - name: Run tests
