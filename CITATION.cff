@@ -1,0 +1,73 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: 'Axelrod-Python/Axelrod: v4.12.0'
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Vince
+    family-names: Knight
+  - given-names: Owen
+    family-names: Campbell
+  - given-names: Marc
+  - given-names: T.J.
+    family-names: Gaffney
+  - given-names: Eric
+    family-names: Shaw
+  - given-names: VSN
+    family-names: Reddy Janga
+  - given-names: Nikoleta
+    family-names: Glynatsi
+  - given-names: James
+    family-names: Campbell
+  - given-names: Karol M.
+    family-names: Langner
+  - given-names: Sourav
+    family-names: Singh
+  - given-names: Julie
+    family-names: Rymer
+  - given-names: Thomas
+    family-names: Campbell
+  - given-names: Jason
+    family-names: Young
+  - given-names: M
+    family-names: Hakem
+  - given-names: Geraint
+    family-names: Palmer
+  - given-names: Kristian
+    family-names: Glass
+  - given-names: Daniel
+    family-names: Mancia
+  - given-names: Edouard
+    family-names: Argenson
+  - given-names: Jones
+    family-names: Martin
+  - family-names: Kjurgielajtis
+  - given-names: Yohsuke
+    family-names: Murase
+  - given-names: Sudarshan
+    family-names: Parvatikar
+  - given-names: Melanie
+    family-names: Beck
+  - given-names: Cameron
+    family-names: Davidson-Pilon
+  - given-names: Marios
+    family-names: Zoulias
+  - given-names: Adam
+    family-names: Pohl
+  - given-names: Paul
+    family-names: Slavin
+  - given-names: Timothy
+    family-names: Standen
+  - given-names: Aaron
+    family-names: Kratz
+  - given-names: Ahmed
+    family-names: Areeb
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.5616793
+repository-code: 'https://github.com/Axelrod-Python/Axelrod'
+url: 'http://axelrod.readthedocs.org/'
