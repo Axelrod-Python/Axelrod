@@ -10,6 +10,9 @@ repository::
 
     $ pip install axelrod
 
+If you want to have access to the manual Human strategy for interactive play, use the following command to also install `prompt_toolkit`::
+
+    $ pip install axelrod[Human]
 
 You can also build it from source if you would like to::
 
