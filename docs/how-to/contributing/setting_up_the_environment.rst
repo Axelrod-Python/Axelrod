@@ -16,11 +16,11 @@ For example, when using the virtual environment library :code:`venv`::
   $ source axelrod_development/bin/activate
   $ pip install -r requirements/development.txt
 
-Alternatively, you can use `pip` and specify the development variant::
+Alternatively, you can specify the development variant rather than the path::
 
   $ python -m venv axelrod_development
   $ source axelrod_development/bin/activate
-  $ pip install axelrod[Development]
+  $ pip install .[development]
 
 The git workflow
 ----------------
