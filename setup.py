@@ -1,18 +1,24 @@
 from collections import defaultdict
 import os
+import pathlib
 from setuptools import setup
 
 # Read in the requirements files.
 requirements = defaultdict(list)
-with os.listdir("requirements/") as filenames:
-    for filename in filenames:
-        variant = filename.split('.')[0]
-        with open(filename) as libraries:
-            for library in libraries:
-                if len(library) > 0 and (not library.startswith('-r')):
-                    requirements[variant].append(library)
+
+requirements_directory = pathlib.Path.cwd() / "requirements"
+for filename in requirements_directory.glob('*.txt'):
+    variant = filename.stem
+    with filename.open() as libraries:
+        for library in libraries:
+            if len(library) > 0 and (not library.startswith('-r')):
+                requirements[variant].append(library.strip())
+
+# Grab the default requirements
 install_requires=requirements['requirements']
+# Delete the default from the dictionary for the extra variants.
 del requirements['requirements']
+extras_require = dict(requirements)
 
 # Read in long description
 with open("README.rst", "r") as f:
@@ -42,5 +48,5 @@ setup(
         "Programming Language :: Python :: 3 :: Only",
     ],
     python_requires=">=3.6",
-    extras_require=requirements,
+    extras_require=extras_require,
 )
