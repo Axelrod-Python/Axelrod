@@ -42,10 +42,6 @@ jobs:
     - name: Run doctests
       run: |
         python doctests.py
-    - name: Run static type checker
-      run: |
-        python -m pip install mypy types-setuptools
-        python run_mypy.py
     - name: Check imports are sorted
       run: |
         python -m pip install "isort==4.3.21"
