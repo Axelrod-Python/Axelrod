@@ -569,7 +569,7 @@ class FirstByNydegger(Player):
 
     .. math::
 
-        A \in \{1, 6, 7, 17, 22, 23, 26, 29, 30, 31, 33, 38, 39, 45, 49, 54, 55, 58, 61\}
+        A \\in \\{1, 6, 7, 17, 22, 23, 26, 29, 30, 31, 33, 38, 39, 45, 49, 54, 55, 58, 61\\}
 
     Thus if all three preceding moves are mutual defection, A = 63 and the rule
     cooperates. This rule was designed for use in laboratory experiments as a
