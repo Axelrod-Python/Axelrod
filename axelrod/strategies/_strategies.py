@@ -151,7 +151,7 @@ from .grumpy import Grumpy
 from .handshake import Handshake
 from .hmm import EvolvedHMM5
 from .hmm import EvolvableHMMPlayer, HMMPlayer  # pylint: disable=unused-import
-try:
+try: # pragma: no cover
     import prompt_toolkit
     from .human import Human  # pylint: disable=unused-import
 except ImportError:
