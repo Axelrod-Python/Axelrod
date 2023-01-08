@@ -151,10 +151,10 @@ from .grumpy import Grumpy
 from .handshake import Handshake
 from .hmm import EvolvedHMM5
 from .hmm import EvolvableHMMPlayer, HMMPlayer  # pylint: disable=unused-import
-try: # pragma: no cover
+try:
     import prompt_toolkit
     from .human import Human  # pylint: disable=unused-import
-except ImportError:
+except ImportError: # pragma: no cover
     warnings.warn("Human strategy not available because python package prompt_toolkit is not available.")
 from .hunter import (
     AlternatorHunter,
