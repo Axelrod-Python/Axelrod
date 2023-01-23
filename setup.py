@@ -7,17 +7,17 @@ from setuptools import setup
 requirements = defaultdict(list)
 
 requirements_directory = pathlib.Path.cwd() / "requirements"
-for filename in requirements_directory.glob('*.txt'):
+for filename in requirements_directory.glob("*.txt"):
     variant = filename.stem
     with filename.open() as libraries:
         for library in libraries:
-            if len(library) > 0 and (not library.startswith('-r')):
+            if len(library) > 0 and (not library.startswith("-r")):
                 requirements[variant].append(library.strip())
 
 # Grab the default requirements
-install_requires=requirements['requirements']
+install_requires = requirements["requirements"]
 # Delete the default from the dictionary for the extra variants.
-del requirements['requirements']
+del requirements["requirements"]
 extras_require = dict(requirements)
 
 # Read in long description

@@ -151,12 +151,15 @@ from .grumpy import Grumpy
 from .handshake import Handshake
 from .hmm import EvolvedHMM5
 from .hmm import EvolvableHMMPlayer, HMMPlayer  # pylint: disable=unused-import
+
 try:
     from .human import Human  # pylint: disable=unused-import
-except ImportError as ie: # pragma: no cover
+except ImportError as ie:  # pragma: no cover
     # Check that the expected module is missing and no other.
     if ie.name == "prompt_toolkit":
-        warnings.warn("Human strategy not available because python package prompt_toolkit is not available.")
+        warnings.warn(
+            "Human strategy not available because python package prompt_toolkit is not available."
+        )
     else:
         raise ie
 from .hunter import (
