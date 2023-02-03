@@ -1,11 +1,24 @@
+from collections import defaultdict
+import os
+import pathlib
 from setuptools import setup
 
-# Read in the requirements.txt file
-with open("requirements.txt") as f:
-    requirements = []
-    for library in f.read().splitlines():
-        if "hypothesis" not in library:  # Skip: used only for dev
-            requirements.append(library)
+# Read in the requirements files.
+requirements = defaultdict(list)
+
+requirements_directory = pathlib.Path.cwd() / "requirements"
+for filename in requirements_directory.glob("*.txt"):
+    variant = filename.stem
+    with filename.open() as libraries:
+        for library in libraries:
+            if len(library) > 0 and (not library.startswith("-r")):
+                requirements[variant].append(library.strip())
+
+# Grab the default requirements
+install_requires = requirements["requirements"]
+# Delete the default from the dictionary for the extra variants.
+del requirements["requirements"]
+extras_require = dict(requirements)
 
 # Read in long description
 with open("README.rst", "r") as f:
@@ -17,7 +30,7 @@ exec(open("axelrod/version.py", "r").read())
 setup(
     name="Axelrod",
     version=__version__,
-    install_requires=requirements,
+    install_requires=install_requires,
     author="Vince Knight, Owen Campbell, Karol Langner, Marc Harper",
     author_email=("axelrod-python@googlegroups.com"),
     packages=["axelrod", "axelrod.strategies", "axelrod.data"],
@@ -35,4 +48,5 @@ setup(
         "Programming Language :: Python :: 3 :: Only",
     ],
     python_requires=">=3.6",
+    extras_require=extras_require,
 )

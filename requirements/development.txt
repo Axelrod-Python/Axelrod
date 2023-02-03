@@ -1,0 +1,3 @@
+-r requirements.txt
+-r human.txt
+hypothesis==5.19.3

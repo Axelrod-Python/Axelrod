@@ -4,9 +4,9 @@ Setting up the environment
 Installing all dependencies
 ---------------------------
 
-All dependencies can be installed by running::
+All development dependencies can be installed by running::
 
-  $ pip install -r requirements.txt
+  $ pip install -r requirements/development.txt
 
 It is recommended to do this using a virtual environment tool of your choice.
 
@@ -14,7 +14,13 @@ For example, when using the virtual environment library :code:`venv`::
 
   $ python -m venv axelrod_development
   $ source axelrod_development/bin/activate
-  $ pip install -r requirements.txt
+  $ pip install -r requirements/development.txt
+
+Alternatively, you can specify the development variant rather than the path::
+
+  $ python -m venv axelrod_development
+  $ source axelrod_development/bin/activate
+  $ pip install .[development]
 
 The git workflow
 ----------------
