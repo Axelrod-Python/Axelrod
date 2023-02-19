@@ -919,3 +919,35 @@ class RandomTitForTat(Player):
 
         self.act_random = True
         return opponent.history[-1]
+
+
+class BurnBothEnds(Player):
+    """
+    Plays like TitForTat except it cooperates after opponent cooperation with probability 9/10.
+
+    Names:
+
+     - BurnBothEnds (BBE): Marinoff [Marinoff1992]_
+    """
+
+    name = "Burn Both Ends"
+    classifier = {
+        "memory_depth": 1,
+        "stochastic": True,
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+    def strategy(self, opponent):
+        # First move
+        if not opponent.history:
+            # Make sure we cooperate first turn
+            return C
+        # BBE modification 
+        if opponent.history[-1] == C:
+            # Cooperate with 0.9
+            return self._random.random_choice(0.9)
+        # Else TFT. Opponent played D, so play D in return.
+        return D
