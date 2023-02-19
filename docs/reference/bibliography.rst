@@ -43,9 +43,8 @@ documentation.
 .. [Li2014] Li, J. and Kendall, G. (2014). The Effect of Memory Size on the Evolutionary Stability of Strategies in Iterated Prisoner's Dilemma. IEEE Transactions on Evolutionary Computation, 18(6) 819-826
 .. [LiS2014] Li, Siwei. (2014). Strategies in the Stochastic Iterated Prisoner's Dilemma. Available at: http://math.uchicago.edu/~may/REU2014/REUPapers/Li,Siwei.pdf
 .. [Luis2008] Luis R. Izquierdo and Segismundo S. Izquierdo (2008). Dynamics of the Bush-Mosteller Learning Algorithm in 2x2 Games, Reinforcement Learning, Cornelius Weber,  Mark Elshaw and Norbert Michael Mayer  (Ed.), InTech, DOI: 10.5772/5282. Available from: https://www.intechopen.com/books/reinforcement_learning/dynamics_of_the_bush-mosteller_learning_algorithm_in_2x2_games
-.. [Mathieu2015] Mathieu, P. and Delahaye, J. (2015). New Winning Strategies
-  for the Iterated Prisoner's Dilemma. Proceedings of the 2015
-  International Conference on Autonomous Agents and Multiagent Systems.
+.. [Marinoff1992] Marinoff, Louis. (1992). Maximizing expected utilities in the prisoner's dilemma. Journal of Conflict Resolution 36.1: 183-216.
+.. [Mathieu2015] Mathieu, P. and Delahaye, J. (2015). New Winning Strategies for the Iterated Prisoner's Dilemma. Proceedings of the 2015 International Conference on Autonomous Agents and Multiagent Systems.
 .. [Mittal2009] Mittal, S., & Deb, K. (2009). Optimal strategies of the iterated prisoner’s dilemma problem for multiple conflicting objectives. IEEE Transactions on Evolutionary Computation, 13(3), 554–565. https://doi.org/10.1109/TEVC.2008.2009459
 .. [Murase2020] Murase, Y., & Baek, S.K. (2020). Five Rules for Friendly Rivalry in Direct Reciprocity. Scientific Reports 10:16904 https://doi.org/10.1038/s41598-020-73855-x
 .. [Nachbar1992] Nachbar J., Evolution in the finitely repeated prisoner’s dilemma, Journal of Economic Behavior & Organization, 19(3): 307-326, 1992.
