@@ -31,15 +31,12 @@ class AsymmetricGame(object):
             the payoff matrix for player B.
         """
 
-        self.scores = {
-            (C, C): (A[0][0], B[0][0]),
-            (D, D): (A[1][1], B[1][1]),
-            (C, D): (A[0][1], B[0][1]),
-            (D, C): (A[1][0], B[1][0]),
-        }
-
         self.A = A
         self.B = B
+
+        self.scores = {
+            pair: self.score(pair) for pair in ((C, C), (D, D), (C, D), (D, C))
+        }
 
     def score(
         self, pair: Union[Tuple[Action, Action], Tuple[int, int]]
@@ -60,19 +57,33 @@ class AsymmetricGame(object):
         tuple of int or float
             Scores for two player resulting from their actions.
         """
-        # handle being passed Actions, or a mix of Actions and ints
-        actions_to_ints = {C: 0, D: 1}
 
-        def convert_action(x):
+        def _convert_action(x: Union[Action, int]) -> int:
+            """
+            A helper function to handle Actions as Ints.
+
+            Parameters
+            ----------
+            x: Action or Int
+                The potential Action or Hint to handle.
+
+            Returns
+            -------
+            int
+                If given an action, returns the action as an integer (C = 0, D = 1),
+                otherwise just returns the integer.
+            """
             if isinstance(x, Action):
-                return actions_to_ints[x]
+                return {C: 0, D: 1}[x]
             return x
 
-        r, c = map(convert_action, pair)
+        # handle being potentially passed actions or ints, and unpack
+        # the decision pair into the row and column players' respectively
+        row, col = map(_convert_action, pair)
 
         # the '.item()' method converts the values from Numpy datatypes
         # to native Python ones for compatibility
-        return (self.A[r][c].item(), self.B[r][c].item())
+        return (self.A[row][col].item(), self.B[row][col].item())
 
     def __repr__(self) -> str:
         return "Axelrod game with matrices = {}".format((self.A, self.B))
