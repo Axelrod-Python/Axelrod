@@ -43,7 +43,7 @@ MOCK_MODULES = [
 ]
 
 for mod_name in MOCK_MODULES:
-    sys.modules[mod_name] = mock.Mock()
+    sys.modules[mod_name] = mock.MagicMock()
 
 # Adds absolute path to axelrod module
 sys.path.insert(0, os.path.abspath("../"))  # Adding path to module
