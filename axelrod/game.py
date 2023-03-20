@@ -58,6 +58,8 @@ class AsymmetricGame(object):
             Scores for two player resulting from their actions.
         """
 
+        row, col = pair
+
         # the '.item()' method converts the values from Numpy datatypes
         # to native Python ones for compatibility
         # actions can be interpreted as indices as they are
@@ -65,7 +67,7 @@ class AsymmetricGame(object):
         return (self.A[row][col].item(), self.B[row][col].item())
 
     def __repr__(self) -> str:
-        return "Axelrod game with matrices = {}".format((self.A, self.B))
+        return "Axelrod game with matrices: {}".format((self.A, self.B))
 
     def __eq__(self, other):
         if not isinstance(other, Game):
