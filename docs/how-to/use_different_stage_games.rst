@@ -47,3 +47,25 @@ The default Prisoner's dilemma has different results::
     >>> results = tournament.play()
     >>> results.ranked_names
     ['Defector', 'Tit For Tat', 'Cooperator']
+
+Asymmetric games can also be implemented via the AsymmetricGame class 
+with two Numpy arrays for payoff matrices::
+
+    >>> import numpy as np
+    >>> A = np.array([[3, 1], [1, 3]])
+    >>> B = np.array([[1, 3], [2, 1]])
+    >>> asymmetric_game = axl.AsymmetricGame(A, B)
+    >>> asymmetric_game
+    Axelrod game with matrices: (array([[3, 1], [1, 3]]), array([[1, 3], [2, 1]]))
+
+Asymmetric games can also be different sizes, such as Rock Paper Scissors::
+
+    >>> A = np.array([[0, -1, 1], [1, 0, -1], [-1, 1, 0]])
+    >>> rock_paper_scissors = axl.AsymmetricGame(A, -A)
+    >>> rock_paper_scissors
+    Axelrod game with matrices: (array([[ 0, -1,  1],
+                                        [ 1,  0, -1],
+                                        [-1,  1,  0]]),
+                                 array([[ 0,  1, -1],
+                                        [-1,  0,  1],
+                                        [ 1, -1,  0]]))
