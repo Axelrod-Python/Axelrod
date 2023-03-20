@@ -58,31 +58,10 @@ class AsymmetricGame(object):
             Scores for two player resulting from their actions.
         """
 
-        def _convert_action(x: Union[Action, int]) -> int:
-            """
-            A helper function to handle Actions as Ints.
-
-            Parameters
-            ----------
-            x: Action or Int
-                The potential Action or Hint to handle.
-
-            Returns
-            -------
-            int
-                If given an action, returns the action as an integer (C = 0, D = 1),
-                otherwise just returns the integer.
-            """
-            if isinstance(x, Action):
-                return {C: 0, D: 1}[x]
-            return x
-
-        # handle being potentially passed actions or ints, and unpack
-        # the decision pair into the row and column players' respectively
-        row, col = map(_convert_action, pair)
-
         # the '.item()' method converts the values from Numpy datatypes
         # to native Python ones for compatibility
+        # actions can be interpreted as indices as they are
+        # an IntEnum class
         return (self.A[row][col].item(), self.B[row][col].item())
 
     def __repr__(self) -> str:
