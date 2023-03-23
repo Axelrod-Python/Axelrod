@@ -31,6 +31,12 @@ class AsymmetricGame(object):
             the payoff matrix for player B.
         """
 
+        if A.shape != B.transpose().shape:
+            raise ValueError(
+                "AsymmetricGame was given invalid payoff matrices; the shape "
+                "of matrix A should be the shape of B's transpose matrix."
+            )
+
         self.A = A
         self.B = B
 
