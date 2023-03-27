@@ -229,7 +229,7 @@ class DBS(Player):
             # rule defined in the should_promote function).
             if r_plus[0] not in self.Rc.keys():
                 if self.should_promote(r_plus, self.promotion_threshold):
-                    self.Rc[r_plus[0]] = action_to_int(r_plus[1])
+                    self.Rc[r_plus[0]] = int(r_plus[1])
                     self.violation_counts[r_plus[0]] = 0
                     self.violation_counts[r_plus[0]] = 0
 
@@ -257,11 +257,11 @@ class DBS(Player):
             # r+ in Rc.
             r_plus_in_Rc = r_plus[0] in self.Rc.keys() and self.Rc[
                 r_plus[0]
-            ] == action_to_int(r_plus[1])
+            ] == int(r_plus[1])
             # r- in Rd
             r_minus_in_Rd = r_minus[0] in self.Rd.keys() and self.Rd[
                 r_minus[0]
-            ] == action_to_int(r_minus[1])
+            ] == int(r_minus[1])
 
             # Increment number of violations of Rd rules.
             if r_minus_in_Rd:
@@ -392,12 +392,6 @@ def create_policy(pCC, pCD, pDC, pDD):
         Must be between 0 and 1.
     """
     return {(C, C): pCC, (C, D): pCD, (D, C): pDC, (D, D): pDD}
-
-
-def action_to_int(action):
-    if action == C:
-        return 1
-    return 0
 
 
 def minimax_tree_search(begin_node, policy, max_depth):
