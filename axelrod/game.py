@@ -66,11 +66,9 @@ class AsymmetricGame(object):
 
         row, col = pair
 
-        # the '.item()' method converts the values from Numpy datatypes
-        # to native Python ones for compatibility
         # actions can be interpreted as indices as they are
         # an IntEnum class
-        return (self.A[row][col].item(), self.B[row][col].item())
+        return (self.A[row][col], self.B[row][col])
 
     def __repr__(self) -> str:
         return "Axelrod game with matrices: {}".format((self.A, self.B))
