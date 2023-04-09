@@ -33,7 +33,7 @@ class SimpleFSM(object):
         """
         self._state = initial_state
         self._state_transitions = {
-            (current_state, input_action): (next_state, output_action)
+            (current_state, Action(input_action)): (next_state, Action(output_action))
             for current_state, input_action, next_state, output_action in transitions
         }  # type: dict
 
@@ -118,7 +118,7 @@ class FSMPlayer(Player):
     ) -> None:
         Player.__init__(self)
         self.initial_state = initial_state
-        self.initial_action = initial_action
+        self.initial_action = Action(initial_action)
         self.fsm = SimpleFSM(transitions, initial_state)
 
     def strategy(self, opponent: Player) -> Action:
