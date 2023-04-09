@@ -111,6 +111,7 @@ class TestAsymmetricGame(unittest.TestCase):
     @settings(max_examples=5)
     def test_equality(self, asymgame1, asymgame2):
         """Tests equality of AsymmetricGames based on their matrices."""
+        self.assertFalse(asymgame1=='foo')
         self.assertEqual(asymgame1, asymgame1)
         self.assertEqual(asymgame2, asymgame2)
         self.assertEqual((asymgame1==asymgame2), (asymgame1.A.all() == asymgame2.A.all()
