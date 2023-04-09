@@ -517,7 +517,7 @@ class EvolvableLookerUp(LookerUp, EvolvablePlayer):
 
     @classmethod
     def mutate_value(cls, value):
-        return value.flip()
+        return Action(value).flip()
 
     def mutate_table(self, table, mutation_probability):
         randoms = self._random.random(len(table.keys()))
@@ -536,7 +536,7 @@ class EvolvableLookerUp(LookerUp, EvolvablePlayer):
         for i in range(len(initial_actions)):
             r = self._random.random()
             if r < self.mutation_probability:
-                initial_actions[i] = initial_actions[i].flip()
+                initial_actions[i] = Action(initial_actions[i]).flip()
         return self.create_new(
             lookup_dict=lookup_dict,
             initial_actions=tuple(initial_actions),
