@@ -1,9 +1,13 @@
 import unittest
 
+import numpy as np
+
 import axelrod as axl
-from axelrod.tests.property import games
+from axelrod.tests.property import games, asymmetric_games
 from hypothesis import given, settings
 from hypothesis.strategies import integers
+from hypothesis.extra.numpy import arrays, array_shapes
+
 
 C, D = axl.Action.C, axl.Action.D
 
@@ -77,3 +81,37 @@ class TestGame(unittest.TestCase):
         expected_repr = "Axelrod game: (R,P,S,T) = {}".format(game.RPST())
         self.assertEqual(expected_repr, game.__repr__())
         self.assertEqual(expected_repr, str(game))
+
+class TestAsymmetricGame(unittest.TestCase):
+    @given(A=arrays(int, array_shapes(min_dims=2, max_dims=2, min_side=2)),
+           B=arrays(int, array_shapes(min_dims=2, max_dims=2, min_side=2)))
+    @settings(max_examples=5)
+    def test_invalid_matrices(self, A, B):
+        """Test that an error is raised when the matrices aren't the right size."""
+        # ensures that an error is raised when the shapes are invalid,
+        # and not raised otherwise
+        error_raised = False
+        try:
+            game = axl.AsymmetricGame(A, B)
+        except ValueError:
+            error_raised = True
+
+        self.assertEqual(error_raised, (A.shape != B.transpose().shape))
+
+    @given(asymgame=asymmetric_games())
+    @settings(max_examples=5)
+    def test_random_repr(self, asymgame):
+        """Test repr with random scores."""
+        expected_repr = "Axelrod game with matrices: {}".format((asymgame.A, asymgame.B))
+        self.assertEqual(expected_repr, asymgame.__repr__())
+        self.assertEqual(expected_repr, str(asymgame))
+
+    @given(asymgame1=asymmetric_games(),
+           asymgame2=asymmetric_games())
+    @settings(max_examples=5)
+    def test_equality(self, asymgame1, asymgame2):
+        """Tests equality of AsymmetricGames based on their matrices."""
+        self.assertEqual(asymgame1, asymgame1)
+        self.assertEqual(asymgame2, asymgame2)
+        self.assertEqual((asymgame1==asymgame2), (asymgame1.A.all() == asymgame2.A.all()
+                                                  and asymgame1.B.all() == asymgame2.B.all()))

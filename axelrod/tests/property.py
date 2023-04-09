@@ -11,6 +11,7 @@ from hypothesis.strategies import (
     lists,
     sampled_from,
 )
+from hypothesis.extra.numpy import arrays
 
 
 @composite
@@ -381,3 +382,16 @@ def games(draw, prisoners_dilemma=True, max_value=100):
 
     game = axl.Game(r=r, s=s, t=t, p=p)
     return game
+
+
+@composite
+def asymmetric_games(draw, valid=True):
+    """Hypothesis decorator to draw a random asymmetric game."""
+
+    rows = draw(integers(min_value=2, max_value=255))
+    cols = draw(integers(min_value=2, max_value=255))
+
+    A = draw(arrays(int, (rows, cols)))
+    B = draw(arrays(int, (cols, rows)))
+
+    return axl.AsymmetricGame(A, B)

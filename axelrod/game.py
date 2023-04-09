@@ -74,7 +74,7 @@ class AsymmetricGame(object):
         return "Axelrod game with matrices: {}".format((self.A, self.B))
 
     def __eq__(self, other):
-        if not isinstance(other, Game):
+        if not isinstance(other, AsymmetricGame):
             return False
         return self.A.all() == other.A.all() and self.B.all() == other.B.all()
 
