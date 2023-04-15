@@ -26,12 +26,6 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         python -m pip install -r requirements/development.txt
-    - name: Check that documentation builds
-      run: |
-        python -m pip install sphinx
-        python -m pip install sphinx_rtd_theme
-        python -m pip install mock
-        cd docs; make clean; make html; cd ..;
     - name: Run tests
       run: |
         python -m pip install coverage
@@ -39,13 +33,15 @@ jobs:
     - name: Report coverage
       run: |
         coverage report -m --fail-under=100
+    - name: Check that documentation builds
+      run: |
+        python -m pip install sphinx
+        python -m pip install sphinx_rtd_theme
+        python -m pip install mock
+        cd docs; make clean; make html; cd ..;
     - name: Run doctests
       run: |
         python doctests.py
-    - name: Check imports are sorted
-      run: |
-        python -m pip install "isort==4.3.21"
-        python -m isort --check-only --recursive axelrod/.
     - name: Check that all strategies are indexed
       run: |
         python run_strategy_indexer.py
@@ -53,12 +49,27 @@ jobs:
       run: |
         python -m pip install pylint
         python -m pylint --disable=all --enable=unused-import axelrod/strategies/_strategies.py
-    - name: Check format
-      run: |
-        python -m pip install black
-        python -m black -l 80 . --check
     - name: Check that installs
       run: |
         python setup.py install
         cd ..
         python -c "import axelrod"
+
+  format-check:
+    needs: build
+    runs-on: ${{ matrix.os }}
+    strategy:
+      max-parallel: 4
+      matrix:
+        os: [ubuntu-latest]
+        python-version: ["3.11"]
+    steps:
+    - name: Check imports are sorted
+      run: |
+        python -m pip install "isort==4.3.21"
+        python -m isort --check-only --recursive axelrod/.
+    - name: Check format
+      run: |
+        python -m pip install black=="22.10.0"
+        python -m black -l 80 . --check
+
