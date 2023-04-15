@@ -56,7 +56,9 @@ with two Numpy arrays for payoff matrices::
     >>> B = np.array([[1, 3], [2, 1]])
     >>> asymmetric_game = axl.AsymmetricGame(A, B)
     >>> asymmetric_game
-    Axelrod game with matrices: (array([[3, 1], [1, 3]]), array([[1, 3], [2, 1]]))
+    Axelrod game with matrices: (array([[3, 1],
+       [1, 3]]), array([[1, 3],
+       [2, 1]]))
 
 Asymmetric games can also be different sizes, such as Rock Paper Scissors::
 
@@ -64,8 +66,7 @@ Asymmetric games can also be different sizes, such as Rock Paper Scissors::
     >>> rock_paper_scissors = axl.AsymmetricGame(A, -A)
     >>> rock_paper_scissors
     Axelrod game with matrices: (array([[ 0, -1,  1],
-                                        [ 1,  0, -1],
-                                        [-1,  1,  0]]),
-                                 array([[ 0,  1, -1],
-                                        [-1,  0,  1],
-                                        [ 1, -1,  0]]))
+        [ 1,  0, -1],
+        [-1,  1,  0]]), array([[ 0,  1, -1],
+        [-1,  0,  1],
+        [ 1, -1,  0]]))
