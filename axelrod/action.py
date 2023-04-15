@@ -6,7 +6,7 @@ from axelrod import Action
 C, D = Action.C, Action.D
 """
 
-from enum import IntEnum
+from enum import Enum
 from functools import total_ordering
 from typing import Iterable, Tuple
 
@@ -19,7 +19,7 @@ class UnknownActionError(ValueError):
 
 
 @total_ordering
-class Action(IntEnum):
+class Action(Enum):
     """Core actions in the Prisoner's Dilemma.
 
     There are only two possible actions, namely Cooperate or Defect,

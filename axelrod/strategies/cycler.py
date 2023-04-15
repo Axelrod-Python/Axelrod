@@ -141,7 +141,7 @@ class EvolvableCycler(Cycler, EvolvablePlayer):
         Generate a sequence of random moves
         """
         return actions_to_str(
-            Action(self._random.choice(actions)) for _ in range(cycle_length)
+            self._random.choice(actions) for _ in range(cycle_length)
         )
 
     def mutate(self) -> EvolvablePlayer:

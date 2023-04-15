@@ -34,7 +34,6 @@ class History(object):
         """Appends a new (play, coplay) pair an updates metadata for
         number of cooperations and defections, and the state distribution."""
         # casts plays sent as integers into Action objects
-        play, coplay = Action(play), Action(coplay)
         self._plays.append(play)
         self._actions[play] += 1
         self._coplays.append(coplay)
@@ -46,8 +45,6 @@ class History(object):
 
     def flip_plays(self):
         """Creates a flipped plays history for use with DualTransformer."""
-        # sometimes the 'action' under a transformer is cast to an integer;
-        # the Action(...) call ensures it is cast back so it can be flipped
         flipped_plays = [action.flip() for action in self._plays]
         return self.__class__(plays=flipped_plays, coplays=self._coplays)
 
@@ -135,7 +132,6 @@ class LimitedHistory(History):
         """Appends a new (play, coplay) pair an updates metadata for
         number of cooperations and defections, and the state distribution."""
         # casts plays sent as integers into Action objects
-        play, coplay = Action(play), Action(coplay)
 
         self._plays.append(play)
         self._actions[play] += 1

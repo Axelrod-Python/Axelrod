@@ -385,10 +385,7 @@ def dual_wrapper(player, opponent: Player, proposed_action: Action) -> Action:
     # is done in the strategy of the new PlayerClass created by DualTransformer.
     # The DualTransformer is dynamically created in StrategyTransformerFactory.
 
-    # sometimes the action is an integer - this is a bug. the
-    # Action(...) call around proposed_action ensures it is an action.
-
-    return Action(proposed_action).flip()
+    return proposed_action.flip()
 
 
 DualTransformer = StrategyTransformerFactory(dual_wrapper, name_prefix="Dual")

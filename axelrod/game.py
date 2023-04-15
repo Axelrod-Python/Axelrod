@@ -1,4 +1,5 @@
 from typing import Tuple, Union
+from enum import Enum
 
 import numpy as np
 
@@ -64,10 +65,14 @@ class AsymmetricGame(object):
             Scores for two player resulting from their actions.
         """
 
-        row, col = pair
+        # if an Action has been passed to the method,
+        # get which integer the Action corresponds to
+        def get_value(x):
+            if isinstance(x, Enum):
+                return x.value
+            return x
+        row, col = map(get_value, pair)
 
-        # actions can be interpreted as indices as they are
-        # an IntEnum class
         return (self.A[row][col], self.B[row][col])
 
     def __repr__(self) -> str:
