@@ -82,6 +82,18 @@ class TestGame(unittest.TestCase):
         self.assertEqual(expected_repr, game.__repr__())
         self.assertEqual(expected_repr, str(game))
 
+    @given(game=games())
+    def test_integer_actions(self, game):
+        """Test Actions and integers are treated equivalently."""
+        pair_ints = {
+            (C, C): (0 ,0),
+            (C, D): (0, 1),
+            (D, C): (1, 0),
+            (D, D): (1, 1)
+        }
+        for key, value in pair_ints.items():
+            self.assertEqual(game.score(key), game.score(value))
+
 class TestAsymmetricGame(unittest.TestCase):
     @given(A=arrays(int, array_shapes(min_dims=2, max_dims=2, min_side=2)),
            B=arrays(int, array_shapes(min_dims=2, max_dims=2, min_side=2)))
