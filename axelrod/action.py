@@ -63,9 +63,9 @@ class Action(Enum):
         UnknownActionError
             If the input string is not 'C' or 'D'
         """
-        if character == "C" or character == "0":
+        if character == "C":
             return cls.C
-        if character == "D" or character == "1":
+        if character == "D":
             return cls.D
         raise UnknownActionError('Character must be "C" or "D".')
 

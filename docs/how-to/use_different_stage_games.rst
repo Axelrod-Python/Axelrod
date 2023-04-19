@@ -72,3 +72,9 @@ Asymmetric games can also be different sizes, such as Rock Paper Scissors::
                                  array([[ 0,  1, -1],
                                         [-1,  0,  1],
                                         [ 1, -1,  0]]))
+
+**NB: Some features of Axelrod, such as strategy transformers, are specifically created for
+use with the iterated Prisoner's Dilemma; they may break with games of other sizes.**
+Note also that most strategies in Axelrod are Prisoners' Dilemma strategies, so behave
+as though they are playing the Prisoners' Dilemma; in the rock-paper-scissors example above,
+they will certainly never choose scissors (because their strategy action set is two actions!)

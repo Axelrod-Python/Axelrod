@@ -33,7 +33,6 @@ class History(object):
     def append(self, play, coplay):
         """Appends a new (play, coplay) pair an updates metadata for
         number of cooperations and defections, and the state distribution."""
-        # casts plays sent as integers into Action objects
         self._plays.append(play)
         self._actions[play] += 1
         self._coplays.append(coplay)
@@ -131,8 +130,6 @@ class LimitedHistory(History):
     def append(self, play, coplay):
         """Appends a new (play, coplay) pair an updates metadata for
         number of cooperations and defections, and the state distribution."""
-        # casts plays sent as integers into Action objects
-
         self._plays.append(play)
         self._actions[play] += 1
         self._coplays.append(coplay)
