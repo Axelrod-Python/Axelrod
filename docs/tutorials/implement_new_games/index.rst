@@ -12,6 +12,7 @@ However, just changing the stage game may not be sufficient. Take, for example, 
 game rock-paper-scissors::
 
     >>> import axelrod as axl
+    >>> import numpy as np
     >>> A = np.array([[0, -1, 1], [1, 0, -1], [-1, 1, 0]])
     >>> rock_paper_scissors = axl.AsymmetricGame(A, -A)
     >>> rock_paper_scissors  # doctest: +NORMALIZE_WHITESPACE
@@ -51,35 +52,31 @@ has :code:`flip`, which flips a :code:`C` to a :code:`D` and vice versa!)
 
 A simple rock-paper-scissors action class would look like so::
 
-    class RPSAction(Enum):
-        """Actions for Rock-Paper-Scissors."""
-
-        R = 0
-        P = 1
-        S = 2
-
-        def __repr__(self):
-            return self.name
-
-        def __str__(self):
-            return self.name
-
-        def rotate(self):
-            """
-            Cycles one step through the actions.
-
-            Maps:
-            R -> P
-            P -> S
-            S -> R
-            """
-            rotations = {
-                RPSAction.R: RPSAction.P,
-                RPSAction.P: RPSAction.S,
-                RPSAction.S: RPSAction.R
-            }
-
-            return rotations[self]
+    >>> from enum import Enum
+    >>> class RPSAction(Enum):
+    ...     """Actions for Rock-Paper-Scissors."""
+    ...     R = 0  # rock
+    ...     P = 1  # paper
+    ...     S = 2  # scissors
+    ...     
+    ...     def __repr__(self):
+    ...         return self.name
+    ...     
+    ...     def __str__(self):
+    ...         return self.name
+    ...     
+    ...     def rotate(self):
+    ...         """
+    ...         Cycles one step through the actions.
+    ...         Maps R->P, P->S, S->R
+    ...         """
+    ...         rotations = {
+    ...             RPSAction.R: RPSAction.P,
+    ...             RPSAction.P: RPSAction.S,
+    ...             RPSAction.S: RPSAction.R
+    ...         }
+    ...         
+    ...         return rotations[self]
 
 We can then implement some strategies. Below we have the implementation of an
 Axelrod strategy into Python. These follow the same format;
@@ -100,88 +97,88 @@ Axelrod strategy into Python. These follow the same format;
 If we want, we can also initialise some shorthand for the actions to
 avoid having to evoke their full names::
 
-    R = RPSAction.R
-    P = RPSAction.P
-    S = RPSAction.S
+    >>> R = RPSAction.R
+    >>> P = RPSAction.P
+    >>> S = RPSAction.S
 
 Here are a couple of examples. One is a strategy which copies the opponent's
 previous move, and the other simply cycles through the moves. Both have
 an initialisation parameter for which move they start with::
 
-    class Copycat(Player):
-        """
-        Starts with a chosen move,
-        and then copies their opponent's previous move.
+    >>> from axelrod.player import Player
+    >>> class Copycat(Player):
+    ...     """
+    ...     Starts with a chosen move,
+    ...     and then copies their opponent's previous move.
+    ... 
+    ...     Parameters
+    ...     ----------
+    ...     starting_move: RPSAction, default S
+    ...         What move to play on the first round.
+    ...     """
+    ...     name = "Copycat"
+    ...     classifier = {
+    ...         "memory_depth": 1,
+    ...         "stochastic": False,
+    ...         "long_run_time": False,
+    ...         "inspects_source": False,
+    ...         "manipulates_source": False,
+    ...         "manipulates_state": False,
+    ...     }
+    ...     
+    ...     def __init__(self, starting_move=S):
+    ...         self.starting_move = starting_move
+    ...         super().__init__()
+    ...     
+    ...     def strategy(self, opponent: Player) -> RPSAction:
+    ...         """Actual strategy definition that determines player's action."""
+    ...         if not self.history:
+    ...             return self.starting_move
+    ...         return opponent.history[-1]
 
-        Parameters
-        ----------
-        starting_move: RPSAction, default S
-        What move to play on the first round.
-        """
-
-        name = "Copycat"
-        classifier = {
-            "memory_depth": 1,
-            "stochastic": False,
-            "long_run_time": False,
-            "inspects_source": False,
-            "manipulates_source": False,
-            "manipulates_state": False,
-        }
-
-        def __init__(self, starting_move=S):
-            self.starting_move = starting_move
-            super().__init__()
-
-        def strategy(self, opponent: Player) -> RPSAction:
-            """Actual strategy definition that determines player's action."""
-            if not self.history:
-                return self.starting_move
-            return opponent.history[-1]
-
-
-    class Rotator(Player):
-        """
-        Cycles through the moves from a chosen starting move.
-
-        Parameters
-        ----------
-        starting_move: RPSAction, default S
-            What move to play on the first round.
-        """
-
-        name = "Rotator"
-        classifier = {
-            "memory_depth": 1,
-            "stochastic": False,
-            "long_run_time": False,
-            "inspects_source": False,
-            "manipulates_source": False,
-            "manipulates_state": False,
-        }
-
-        def __init__(self, starting_move=S):
-            self.starting_move = starting_move
-            super().__init__()
-
-        def strategy(self, opponent: Player) -> RPSAction:
-            """Actual strategy definition that determines player's action."""
-            if not self.history:
-                return self.starting_move
-            return self.history[-1].rotate()
+    >>> class Rotator(Player):
+    ...     """
+    ...     Cycles through the moves from a chosen starting move.
+    ...     
+    ...     Parameters
+    ...     ----------
+    ...     starting_move: RPSAction, default S
+    ...         What move to play on the first round.
+    ...     """
+    ...     name = "Rotator"
+    ...     classifier = {
+    ...         "memory_depth": 1,
+    ...         "stochastic": False,
+    ...         "long_run_time": False,
+    ...         "inspects_source": False,
+    ...         "manipulates_source": False,
+    ...         "manipulates_state": False,
+    ...     }
+    ...     
+    ...     def __init__(self, starting_move=S):
+    ...         self.starting_move = starting_move
+    ...         super().__init__()
+    ...     
+    ...     def strategy(self, opponent: Player) -> RPSAction:
+    ...         """Actual strategy definition that determines player's action."""
+    ...         if not self.history:
+    ...             return self.starting_move
+    ...         return self.history[-1].rotate()
 
 We are now all set to run some matches and tournaments in our new game!
 Let's start with a match between our two new players::
 
-    >>> match = axl.Match(players=(Copycat(), Rotator()), turns=5, game=rock_paper_scissors)
-    >>> match.play()  # doctest: +SKIP
-    [(S, S), (S, R), (R, P), (P, S), (S, R)]
+    >>> match = axl.Match(players=(Copycat(starting_move=P), Rotator()),
+    ...                   turns=5, 
+    ...                   game=rock_paper_scissors)
+    >>> match.play()
+    [(P, S), (S, R), (R, P), (P, S), (S, R)]
 
 and as with the Prisoners' Dilemma, we can run a tournament in the same way. Just
 make sure you specify the game when creating the tournament!::
 
-    tournament = axl.Tournament(players, game=rock_paper_scissors)
-    tournament.play()
+    >>> tournament = axl.Tournament(players, game=rock_paper_scissors)  # doctest: +SKIP
+    >>> tournament.play()  # doctest: +SKIP
 
 where :code:`players` is set to a list of Rock-Paper-Scissors strategies; hopefully
 more than two, else it isn't a very interesting tournament!
