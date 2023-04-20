@@ -1,3 +1,5 @@
+.. _use_different_stage_games:
+
 Use different stage games
 =========================
 
@@ -61,7 +63,8 @@ with two Numpy arrays for payoff matrices::
                                  array([[1, 3],
                                         [2, 1]]))
 
-Asymmetric games can also be different sizes, such as Rock Paper Scissors::
+Asymmetric games can also be different sizes (even if symmetric; regular games
+can currently only be 2x2), such as Rock Paper Scissors::
 
     >>> A = np.array([[0, -1, 1], [1, 0, -1], [-1, 1, 0]])
     >>> rock_paper_scissors = axl.AsymmetricGame(A, -A)
@@ -78,3 +81,6 @@ use with the iterated Prisoner's Dilemma; they may break with games of other siz
 Note also that most strategies in Axelrod are Prisoners' Dilemma strategies, so behave
 as though they are playing the Prisoners' Dilemma; in the rock-paper-scissors example above,
 they will certainly never choose scissors (because their strategy action set is two actions!)
+
+For a more detailed tutorial on how to implement another game into Axelrod, :ref:`here is a 
+tutorial using rock paper scissors as an example. <implement-new-games>`
