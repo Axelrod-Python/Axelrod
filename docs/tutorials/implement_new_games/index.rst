@@ -94,7 +94,7 @@ Axelrod strategy into Python. These follow the same format;
     actions, or starting moves)
 
   * A :code:`strategy` method, which takes the parameters :code:`self`
-    and `opponent`, representing both players in the match, and provides
+    and :code:`opponent`, representing both players in the match, and provides
     the algorithm for determining the player's next move.
 
 If we want, we can also initialise some shorthand for the actions to
