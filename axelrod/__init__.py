@@ -16,7 +16,7 @@ _module_random = RandomGenerator()
 from axelrod.load_data_ import load_pso_tables, load_weights
 from axelrod import graph
 from axelrod.plot import Plot
-from axelrod.game import DefaultGame, Game
+from axelrod.game import DefaultGame, AsymmetricGame, Game
 from axelrod.history import History, LimitedHistory
 from axelrod.player import Player
 from axelrod.classifier import Classifiers

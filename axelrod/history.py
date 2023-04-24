@@ -130,12 +130,10 @@ class LimitedHistory(History):
     def append(self, play, coplay):
         """Appends a new (play, coplay) pair an updates metadata for
         number of cooperations and defections, and the state distribution."""
-
         self._plays.append(play)
         self._actions[play] += 1
-        if coplay:
-            self._coplays.append(coplay)
-            self._state_distribution[(play, coplay)] += 1
+        self._coplays.append(coplay)
+        self._state_distribution[(play, coplay)] += 1
         if len(self._plays) > self.memory_depth:
             first_play, first_coplay = self._plays.pop(0), self._coplays.pop(0)
             self._actions[first_play] -= 1
