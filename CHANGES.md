@@ -1,3 +1,26 @@
+# v4.13.0, 2021-05-25
+
+Generalisation of games, new BurnBothEnds strategy, added CITATION.cff file,
+support for py3.10, add references and various internal improvements.
+
+- Add references
+  https://github.com/Axelrod-Python/Axelrod/pull/1399
+- Add support for py3.10
+  https://github.com/Axelrod-Python/Axelrod/pull/1398
+- Internal improvements
+  https://github.com/Axelrod-Python/Axelrod/pull/1412
+  https://github.com/Axelrod-Python/Axelrod/pull/1409
+  https://github.com/Axelrod-Python/Axelrod/pull/1408
+  https://github.com/Axelrod-Python/Axelrod/pull/1407
+- Add the Burn Both Ends strategy
+  https://github.com/Axelrod-Python/Axelrod/pull/1410
+- Add CITATION.cff file
+  https://github.com/Axelrod-Python/Axelrod/pull/1405
+- Generalise games
+  https://github.com/Axelrod-Python/Axelrod/pull/1413
+
+https://github.com/Axelrod-Python/Axelrod/compare/v4.13.0...v4.12.0
+
 # v4.12.0, 2021-05-25
 
 New documentation structure, new strategy and ability to pass a custom match to
