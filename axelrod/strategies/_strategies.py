@@ -205,6 +205,7 @@ from .memorytwo import MemoryTwoPlayer  # pylint: disable=unused-import
 from .mutual import Desperate, Hopeless, Willing
 from .negation import Negation
 from .oncebitten import FoolMeOnce, ForgetfulFoolMeOnce, OnceBitten
+from .probabilistic_hill_climb import ProbabilisticHillClimb
 from .prober import (
     CollectiveStrategy,
     Detective,
@@ -423,6 +424,7 @@ all_strategies = [
     PSOGamblerMem1,
     Pi,
     Predator,
+    ProbabilisticHillClimb,
     Prober,
     Prober2,
     Prober3,
