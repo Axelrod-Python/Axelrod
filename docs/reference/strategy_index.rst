@@ -82,6 +82,8 @@ Here are the docstrings of all the strategies in the library.
    :members:
 .. automodule:: axelrod.strategies.oncebitten
    :members:
+.. automodule:: axelrod.strategies.probabilistic_hill_climb
+   :members:
 .. automodule:: axelrod.strategies.prober
    :members:
 .. automodule:: axelrod.strategies.punisher
