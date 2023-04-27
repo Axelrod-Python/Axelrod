@@ -5,16 +5,22 @@ C, D = Action.C, Action.D
 
 class ProbabilisticHillClimb(Player):
 	"""
-	Defects with probability of 50%.
+	Defects with initial probability of 50%.
 	Every time the oppenent deffects, probability becomes '(100 + 1)/100', increasing by 1%.
-	Every time the opponent confesses, probability becomes '(100 - 1)/100', decreasing by 1%.
+	Every time the opponent cooperates, probability becomes '(100 - 1)/100', decreasing by 1%.
 	In case of error (conditions aren't triggered, repeat last move)
 
-	This strategy is based on the following assumption: if the opponent is going to deffect,
-	it is better to deffect. If the opponent is going to confess, it is better to confess. 
-	Using a simple probabilistic approach, we can predict the opponents nexzt move and chose
-	to confess/deffect accordingly.
+	This strategy is based on the following assumption: if the opponent is going to defect,
+	it is better to defect. If the opponent is going to cooperate, it is better to cooperate. 
+	Using a simple probabilistic approach, we can predict the opponents next move and chose
+	to cooperate/defect accordingly.
 	
+    Hill climbing algorithms can be prone to being 'stuck' in local minima. To avoid this we 
+    introduce some randomness, that is, if the probability of defection becomes equal to or 
+    greater than 1 ( >= 100%), the probability of defection will be reset to 50% to avoid this. 
+    For example: Think of this strategy playing against another strategy such as Tit-For-Tat. 
+    If the probability of defection becomes too high, then (without adding radomness) both 
+    ProbabilistciHillClimbing and Tit-For-Tat will infinitely defect, leading to a worse outcome.
 	"""
 	
 	name = "Hill Climb"
@@ -29,27 +35,25 @@ class ProbabilisticHillClimb(Player):
 	
 	def __init__(self) -> None:
 		super().__init__()
-		self.probability = 0.5
+		self.probability_of_defection = 0.5
 	
 	def strategy(self, opponent: Player) -> Action:
 		"""Actual strategy definition that determines player's action."""
-		MAX = 100
-		if not len(opponent.history): # if opponent has no previous moves, confess on first move
+        
+		if len(opponent.history) == 0:
 			return C
 		
 		else:
 			if opponent.history[-1] == D:
-				self.probability += 1/MAX
-				if(self.probability >= 1):
-					self.probability = 0.5 # to excape local maxima
-				return self._random.random_choice(self.probability)
+				self.probability_of_defection += 1 / 100
+				if(self.probability_of_defection >= 1):
+					self.probability_of_defection = 0.5
+				return self._random.random_choice(self.probability_of_defection)
 				
 			if opponent.history[-1] == C:
-				self.probability -= 1/MAX
-				if(self.probability <= 0):
-					self.probability = 0.1 # avoid crash
-				return self._random.random_choice(self.probability)
+				self.probability_of_defection -= 1 / 100
+				if(self.probability_of_defection <= 0):
+					self.probability_of_defection = 0.1 # avoid crash
+				return self._random.random_choice(self.probability_of_defection)
 			
-			else:
-				print("There has been an error")
-				return self.history[-1]
+		return self.history[-1]
