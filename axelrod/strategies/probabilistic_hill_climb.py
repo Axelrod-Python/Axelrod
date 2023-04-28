@@ -25,13 +25,13 @@ class ProbabilisticHillClimb(Player):
 	
 	name = "Hill Climb"
 	classifier = {
-		"memory_depth": float("inf"),
-		"stochastic": True,
-		"long_run_time": False,
-		"inpects_source": False,
-		"manipulates_source": False,
-		"manipulates_state": False,
-	}
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": True,
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
 	
 	def __init__(self) -> None:
 		super().__init__()
