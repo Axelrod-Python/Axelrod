@@ -21,14 +21,13 @@ class MockPlayer(Player):
     """
 
     name = "Mock Player"
-    attributes = {}
 
-    def __init__(self, actions: List[Action] = None, attributes: dict = None) -> None:
+    def __init__(self, actions: List[Action] = None, classifier: dict = None) -> None:
         super().__init__()
         if not actions:
             actions = []
-        if attributes:
-            self.attributes = attributes
+        if classifier:
+            self.classifier = classifier
         self.actions = cycle(actions)
 
     def strategy(self, opponent: Player) -> Action:
