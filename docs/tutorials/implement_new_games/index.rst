@@ -124,6 +124,7 @@ an initialisation parameter for which move they start with::
     ...         "inspects_source": False,
     ...         "manipulates_source": False,
     ...         "manipulates_state": False,
+    ...         "actions_size": 3,
     ...     }
     ...     
     ...     def __init__(self, starting_move=S):
@@ -153,6 +154,7 @@ an initialisation parameter for which move they start with::
     ...         "inspects_source": False,
     ...         "manipulates_source": False,
     ...         "manipulates_state": False,
+    ...         "actions_size": 3,
     ...     }
     ...     
     ...     def __init__(self, starting_move=S):
@@ -164,6 +166,11 @@ an initialisation parameter for which move they start with::
     ...         if not self.history:
     ...             return self.starting_move
     ...         return self.history[-1].rotate()
+
+Note that in the classifier for each strategy we set 'actions_size' to `3`. This
+is how we let Axelrod know that this strategy is expecting to have 3 possible actions,
+because if we tried to use these strategies on the IPD and they played 'scissors' (action 3),
+the game wouldn't know what to do with that!
 
 We are now all set to run some matches and tournaments in our new game!
 Let's start with a match between our two new players::
