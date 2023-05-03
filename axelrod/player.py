@@ -258,6 +258,28 @@ class Player(object, metaclass=PostInitCaller):
     def update_history(self, play, coplay):
         self.history.append(play, coplay)
 
+    def check_actions_size(self, game_size: int):
+        """
+        Compares the actions set size of the player to a given game size.
+        If the game is too small, throws an error; if the game is too big,
+        creates a warning that the player may not use certain actions.
+
+        Parameters
+        ----------
+        game_size: int
+            The size of the game to compare player action size with.
+        """
+        
+        actions_size = self.classifier.get('actions_size', 2)
+        if actions_size > game_size:
+            raise IndexError("The action set of player {} is larger "
+                             "than the number of possible actions "
+                             "in the game.".format(self.name))
+        if actions_size < game_size:
+            warnings.warn("The action set of player {} is smaller "
+                          "than the size of the game; they may "
+                          "not play certain actions.")
+
     @property
     def history(self):
         return self._history

@@ -111,6 +111,10 @@ class Match(object):
     def players(self, players):
         """Ensure that players are passed the match attributes"""
         newplayers = []
+        # ensure players have the correct size action sets for the game
+        player[0].check_actions_size(self.game.A.shape[0])
+        player[1].check_actions_size(self.game.B.shape[0])
+
         for player in players:
             player.set_match_attributes(**self.match_attributes)
             newplayers.append(player)
