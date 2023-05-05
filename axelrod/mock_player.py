@@ -8,8 +8,8 @@ C, D = Action.C, Action.D
 
 
 class MockPlayer(Player):
-    """Creates a mock player that plays a given sequence of actions. If
-    no actions are given, or it runs out of actions,
+    """Creates a mock player that cycles through a given 
+    sequence of actions. If no actions are given, 
     plays like Cooperator. Used for testing.
 
     Parameters
