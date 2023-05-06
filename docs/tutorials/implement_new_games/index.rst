@@ -50,7 +50,7 @@ A simple rock-paper-scissors action class would look like so::
     >>> from enum import Enum
     >>> from functools import total_ordering
     >>> @total_ordering
-    >>> class RPSAction(Enum):
+    ... class RPSAction(Enum):
     ...     """Actions for Rock-Paper-Scissors."""
     ...     R = 0  # rock
     ...     P = 1  # paper
