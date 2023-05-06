@@ -29,14 +29,9 @@ corresponding to rows 1 and 2 respectively). If we tried to use it on rock-paper
 interpret the game in the following way:
 
 1. On the first turn, choose rock (option 1, cooperate)
-2. If the opponent's last move is the Python object
-   :code:`axl.Action.D` (which it may never be unless the opponent also thinks it's playing IPD!), 
-   then choose paper (option 2, defection)
+2. If the opponent's last move is action 2, then choose paper (action 2, defect)
 
-and so as we see, :code:`Tit-For-Tat` would simply play Rock every turn, unless it
-were playing against another Prisoners' Dilemma strategy (then it
-plays rock unless the opponent last played paper, in which case it plays paper). In
-particular, it would never play scissors - it does not know that Scissors is something
+In particular, it would never play scissors - it does not know that Scissors is something
 it can even do. This is not a bug, or an issue with the strategy itself; 
 simply that :code:`Tit-For-Tat` *thinks* it is playing the Iterated Prisoners' Dilemma
 and its :code:`Action` set, regardless of what the actual game is.
@@ -53,11 +48,16 @@ has :code:`flip`, which flips a :code:`C` to a :code:`D` and vice versa!)
 A simple rock-paper-scissors action class would look like so::
 
     >>> from enum import Enum
+    >>> from functools import total_ordering
+    >>> @total_ordering
     >>> class RPSAction(Enum):
     ...     """Actions for Rock-Paper-Scissors."""
     ...     R = 0  # rock
     ...     P = 1  # paper
     ...     S = 2  # scissors
+    ...     
+    ...     def __lt__(self, other):
+    ...         return self.value < other.value
     ...     
     ...     def __repr__(self):
     ...         return self.name
@@ -77,6 +77,11 @@ A simple rock-paper-scissors action class would look like so::
     ...         }
     ...         
     ...         return rotations[self]
+
+Note that the :code:`total_ordering` decorator and the :code:`__lt__` method are required for
+Python to equate different types of Action sets based on what action they correspond
+to; without it, strategies on two separate games of the same size wouldn't be
+interoperable!
 
 We can then implement some strategies. Below we have the implementation of an
 Axelrod strategy into Python. These follow the same format;
