@@ -72,7 +72,7 @@ manipulates_source = Classifier[Optional[bool]](
 manipulates_state = Classifier[Optional[bool]](
     "manipulates_state", lambda _: None
 )
-actions_size = Classifier[int]("actions_size", lambda _: 2)
+assumptions = Classifier[Optional[dict]]("assumptions", lambda _: {'actions_size': 2})
 
 # Should list all known classifiers.
 all_classifiers = [

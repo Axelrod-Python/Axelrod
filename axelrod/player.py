@@ -258,27 +258,36 @@ class Player(object, metaclass=PostInitCaller):
     def update_history(self, play, coplay):
         self.history.append(play, coplay)
 
-    def check_actions_size(self, game_size: int):
+    def check_assumptions(self, attributes, raise_error=True):
         """
-        Compares the actions set size of the player to a given game size.
-        If the game is too small, throws an error; if the game is too big,
-        creates a warning that the player may not use certain actions.
+        Compares the player assumptions to a dictionary of attributes.
+        Generates a warning or error if an assumption is not fulfilled.
 
-        Parameters
-        ----------
-        game_size: int
-            The size of the game to compare player action size with.
+        Parameters:
+        -----------
+        attributes: dict
+            The dictionary of attributes to compare the player's assumptions to.
+        raise_error: bool, default True
+            If True, raises an error if the assumption is violated. Else,
+            just generate a warning.
         """
-        
-        actions_size = self.classifier.get('actions_size', 2)
-        if actions_size > game_size:
-            raise IndexError("The action set of player {} is larger "
-                             "than the number of possible actions "
-                             "in the game.".format(self.name))
-        if actions_size < game_size:
-            warnings.warn("The action set of player {} is smaller "
-                          "than the size of the game; they may "
-                          "not play certain actions.")
+
+        for key, value in self.classifier.get('assumptions', {}):
+            msg = None
+            if key not in attributes.keys():
+                msg = ("Player {} assumes that "
+                       "the game has the attribute {}, "
+                       "but the game does not declare this attribute."
+                       "".format(self.name, key))
+            elif value != attributes[key]:
+                msg = ("Player {} assumes that the game attribute "
+                       "{} is set to {}, but it is actually set to {}."
+                       "".format(self.name, key, value, attributes[key]))
+
+            if msg is not None:
+                if raise_error:
+                    raise RuntimeError(msg)
+                warnings.warn(msg + " The strategy may not behave as expected.")
 
     @property
     def history(self):

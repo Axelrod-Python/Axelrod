@@ -20,7 +20,7 @@ class AsymmetricGame(object):
     """
 
     # pylint: disable=invalid-name
-    def __init__(self, A: np.array, B: np.array) -> None:
+    def __init__(self, A: np.array, B: np.array, **attributes) -> None:
         """
         Creates an asymmetric game from two matrices.
 
@@ -30,6 +30,9 @@ class AsymmetricGame(object):
             the payoff matrix for player A.
         B: np.array
             the payoff matrix for player B.
+        **attributes
+            optional attributes for the game. Used
+            to ensure strategies used with the game are valid.
         """
 
         if A.shape != B.transpose().shape:
@@ -40,6 +43,8 @@ class AsymmetricGame(object):
 
         self.A = A
         self.B = B
+
+        self.attributes = attributes
 
         self.scores = {
             pair: self.score(pair) for pair in ((C, C), (D, D), (C, D), (D, C))
@@ -75,6 +80,24 @@ class AsymmetricGame(object):
 
         return (self.A[row][col], self.B[row][col])
 
+    @property
+    def attributes(self):
+        return self._attributes
+
+    @attributes.setter
+    def attributes(self, attributes):
+        """
+        Adds or changes game attributes.
+
+        Parameters
+        ----------
+        attributes: dict
+            Attributes to add to the game. If the added
+            attribute already exists, it will overwrite the
+            previous value.
+        """
+        self._attributes = {**self._attributes, **attributes}
+
     def __repr__(self) -> str:
         return "Axelrod game with matrices: {}".format((self.A, self.B))
 
@@ -97,7 +120,7 @@ class Game(AsymmetricGame):
         The numerical score attribute to all combinations of action pairs.
     """
 
-    def __init__(self, r: Score = 3, s: Score = 0, t: Score = 5, p: Score = 1) -> None:
+    def __init__(self, r: Score = 3, s: Score = 0, t: Score = 5, p: Score = 1, **attributes) -> None:
         """Create a new game object.
 
         Parameters
@@ -110,10 +133,19 @@ class Game(AsymmetricGame):
             Score obtained by a player for defecting against a cooperator.
         p: int or float
             Score obtained by both player for mutual defection.
+        **attributes
+            optional attributes for the game. Used
+            to ensure strategies used with the game are valid.
+
         """
         A = np.array([[r, s], [t, p]])
 
-        super().__init__(A, A.transpose())
+        default_attributes = {
+            'has_RPST': True
+        }
+        attributes = {**default_attributes, **attributes}
+
+        super().__init__(A, A.transpose(), **attributes)
 
     def RPST(self) -> Tuple[Score, Score, Score, Score]:
         """Returns game matrix values in Press and Dyson notation."""
@@ -132,4 +164,4 @@ class Game(AsymmetricGame):
         return self.RPST() == other.RPST()
 
 
-DefaultGame = Game()
+DefaultGame = Game(3, 0, 5, 1, game_type='prisoners_dilemma')
