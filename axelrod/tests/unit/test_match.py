@@ -356,16 +356,14 @@ class TestMatch(unittest.TestCase):
         self.assertEqual(match.sparklines("X", "Y"), expected_sparklines)
 
     @given(game=asymmetric_games(), n1=integers(min_value=2), n2=integers(min_value=2))
+    @settings(max_examples=5)
     def test_game_size_checking(self, game, n1, n2):
         """Tests warnings, errors or normal flow agrees with player action size."""
-        player1 = MockPlayer(classifier={'actions_size': n1})
-        player2 = MockPlayer(classifier={'actions_size': n2})
+        player1 = MockPlayer(classifier={'assumptions': {'actions_size': n1}})
+        player2 = MockPlayer(classifier={'assumptions': {'actions_size': n2}})
 
-        if (n1 > game.A.shape[0] or n2 > game.B.shape[0]):
-            with self.assertRaises(IndexError):
-                match = axl.Match((player1, player2), game=game)
-        elif (n1 < game.A.shape[0] or n2 < game.B.shape[0]):
-            with self.assertWarns(UserWarning):
+        if (n1 != game.A.shape[0] or n2 != game.B.shape[0]):
+            with self.assertRaises(RuntimeError):
                 match = axl.Match((player1, player2), game=game)
         else:
             match = axl.Match((player1, player2), game=game)

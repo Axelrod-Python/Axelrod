@@ -347,6 +347,28 @@ class TestPlayerClass(unittest.TestCase):
             TypeError, ParameterisedTestPlayer, "other", "other", "other"
         )
 
+    def test_assumption_checking(self):
+        """
+        Checks that assumptions are checked, and warnings
+        or errors are raised when they're unfulfilled.
+        """
+        player = axl.MockPlayer(classifier={'assumptions': {'foo': True, 'bar': 3}})
+
+        # these should pass without errors/warnings
+        player.check_assumptions({'foo': True, 'bar': 3})
+        player.check_assumptions({'foo': True, 'bar': 3, 'baz': []})
+
+        with self.assertRaises(RuntimeError):
+            player.check_assumptions({'foo': True})
+        with self.assertRaises(RuntimeError):
+            player.check_assumptions({'foo': True, 'bar': 5})
+
+        with self.assertWarns(UserWarning):
+            player.check_assumptions({'foo': True}, raise_error=False)
+        with self.assertWarns(UserWarning):
+            player.check_assumptions({'foo': True, 'bar': 5}, raise_error=False)
+
+
 
 class TestOpponent(axl.Player):
     """A player who only exists so we have something to test against"""
