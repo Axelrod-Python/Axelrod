@@ -6,7 +6,7 @@ from axelrod.deterministic_cache import DeterministicCache
 from axelrod.mock_player import MockPlayer
 from axelrod.random_ import RandomGenerator
 from axelrod.tests.property import games, asymmetric_games
-from hypothesis import example, given
+from hypothesis import example, given, settings
 from hypothesis.strategies import floats, integers
 
 C, D = axl.Action.C, axl.Action.D
