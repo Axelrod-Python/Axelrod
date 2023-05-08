@@ -30,6 +30,7 @@ class Match(object):
         match_attributes=None,
         reset=True,
         seed=None,
+        strict_player_compatibility=True
     ):
         """
         Parameters
@@ -54,6 +55,9 @@ class Match(object):
             Whether to reset players or not
         seed : int
             Random seed for reproducibility
+        strict_player_compatibility: bool, default True
+            If True, throws an error if strategies make assumptions which aren't
+            compatible with the game. if False, just produces warnings instead.
         """
 
         defaults = {
@@ -89,6 +93,7 @@ class Match(object):
         else:
             self.match_attributes = match_attributes
 
+        self.strict_player_compatibility = strict_player_compatibility
         self.players = list(players)
         self.reset = reset
 
@@ -114,8 +119,10 @@ class Match(object):
         # ensure the game satisfies the player assumptions
         # note the game size attribute is added here because the player
         # and coplayer may have different game sizes if the game is asymmetric!
-        players[0].check_assumptions({**self.game.attributes, 'actions_size': self.game.A.shape[0]})
-        players[1].check_assumptions({**self.game.attributes, 'actions_size': self.game.B.shape[0]})
+        players[0].check_assumptions({**self.game.attributes, 'actions_size': self.game.A.shape[0]},
+                                      raise_error=strict_player_compatibility)
+        players[1].check_assumptions({**self.game.attributes, 'actions_size': self.game.B.shape[0]},
+                                      raise_error=strict_player_compatibility)
 
         for player in players:
             player.set_match_attributes(**self.match_attributes)
