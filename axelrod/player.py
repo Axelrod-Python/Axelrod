@@ -272,7 +272,7 @@ class Player(object, metaclass=PostInitCaller):
             just generate a warning.
         """
 
-        for key, value in self.classifier.get('assumptions', {}):
+        for key, value in self.classifier.get('assumptions', {}).items():
             msg = None
             if key not in attributes.keys():
                 msg = ("Player {} assumes that "

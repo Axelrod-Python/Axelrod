@@ -83,7 +83,7 @@ all_classifiers = [
     inspects_source,
     manipulates_source,
     manipulates_state,
-    actions_size,
+    assumptions,
 ]
 
 all_classifiers_map = {c.name: c.classify_player for c in all_classifiers}

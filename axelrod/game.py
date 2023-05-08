@@ -17,6 +17,9 @@ class AsymmetricGame(object):
     ----------
     scores: dict
         The numerical score attribute to all combinations of action pairs.
+    attributes: dict
+        A dictionary of attributes of the game. Used to ensure strategies
+        used with the game are valid.
     """
 
     # pylint: disable=invalid-name
@@ -96,7 +99,10 @@ class AsymmetricGame(object):
             attribute already exists, it will overwrite the
             previous value.
         """
-        self._attributes = {**self._attributes, **attributes}
+        try:
+            self._attributes = {**self._attributes, **attributes}
+        except AttributeError:
+            self._attributes = attributes
 
     def __repr__(self) -> str:
         return "Axelrod game with matrices: {}".format((self.A, self.B))
