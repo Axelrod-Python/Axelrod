@@ -258,7 +258,7 @@ class Player(object, metaclass=PostInitCaller):
     def update_history(self, play, coplay):
         self.history.append(play, coplay)
 
-    def check_assumptions(self, attributes, raise_error=True):
+    def check_assumptions(self, attributes: dict, raise_error: bool=True):
         """
         Compares the player assumptions to a dictionary of attributes.
         Generates a warning or error if an assumption is not fulfilled.
@@ -288,6 +288,33 @@ class Player(object, metaclass=PostInitCaller):
                 if raise_error:
                     raise RuntimeError(msg)
                 warnings.warn(msg + " The strategy may not behave as expected.")
+
+    def assumptions_satisfy(self, attributes: dict) -> bool:
+        """
+        Compares the player assumptions to a dictionary of attributes.
+        Returns True if the player assumptions are all satisfied by
+        these attributes, and False otherwise.
+
+        Parameters:
+        -----------
+        attributes: dict
+            The dictionary of attributes to compare the player's assumptions to.
+
+        Returns
+        -------
+        bool
+            A boolean of whether or not the attributes satisfy the player's
+            assumptions.
+        """
+
+        # we use check_assumptions as our 'base' rather than the other way
+        # around as check_assumptions needs finer grained understanding of
+        # the assumptions to produce useful error messages
+        try:
+            self.check_assumptions(attributes, raise_error=True)
+        except RuntimeError:
+            return False
+        return True
 
     @property
     def history(self):
