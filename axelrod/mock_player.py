@@ -26,7 +26,8 @@ class MockPlayer(Player):
         super().__init__()
         if not actions:
             actions = []
-        self.classifier = classifier
+        if classifier:
+            self.classifier = classifier
         self.actions = cycle(actions)
 
     def strategy(self, opponent: Player) -> Action:
