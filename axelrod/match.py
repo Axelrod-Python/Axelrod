@@ -117,11 +117,11 @@ class Match(object):
         """Ensure that players are passed the match attributes"""
         newplayers = []
         # ensure the game satisfies the player assumptions
-        # note the game size attribute is added here because the player
+        # note the game size characteristic is added here because the player
         # and coplayer may have different game sizes if the game is asymmetric!
-        players[0].check_assumptions({**self.game.attributes, 'actions_size': self.game.A.shape[0]},
+        players[0].check_assumptions({**self.game.characteristics, 'actions_size': self.game.A.shape[0]},
                                       raise_error=self.strict_player_checking)
-        players[1].check_assumptions({**self.game.attributes, 'actions_size': self.game.B.shape[0]},
+        players[1].check_assumptions({**self.game.characteristics, 'actions_size': self.game.B.shape[0]},
                                       raise_error=self.strict_player_checking)
 
         for player in players:
