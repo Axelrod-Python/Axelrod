@@ -146,11 +146,6 @@ class Game(AsymmetricGame):
         """
         A = np.array([[r, s], [t, p]])
 
-        default_characteristics = {
-            'has_RPST': hasattr(self, 'RPST')
-        }
-        characteristics = {**default_characteristics, **characteristics}
-
         super().__init__(A, A.transpose(), **characteristics)
 
     def RPST(self) -> Tuple[Score, Score, Score, Score]:
