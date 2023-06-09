@@ -3,9 +3,10 @@ from collections import Counter
 
 import axelrod as axl
 from axelrod.deterministic_cache import DeterministicCache
+from axelrod.mock_player import MockPlayer
 from axelrod.random_ import RandomGenerator
-from axelrod.tests.property import games
-from hypothesis import example, given
+from axelrod.tests.property import games, asymmetric_games
+from hypothesis import example, given, settings
 from hypothesis.strategies import floats, integers
 
 C, D = axl.Action.C, axl.Action.D
@@ -354,6 +355,18 @@ class TestMatch(unittest.TestCase):
         expected_sparklines = "XXXX\nXYXY"
         self.assertEqual(match.sparklines("X", "Y"), expected_sparklines)
 
+    @given(game=asymmetric_games(), n1=integers(min_value=2), n2=integers(min_value=2))
+    @settings(max_examples=5)
+    def test_game_size_checking(self, game, n1, n2):
+        """Tests warnings, errors or normal flow agrees with player action size."""
+        player1 = MockPlayer(classifier={'assumptions': {'actions_size': n1}})
+        player2 = MockPlayer(classifier={'assumptions': {'actions_size': n2}})
+
+        if (n1 != game.A.shape[0] or n2 != game.B.shape[0]):
+            with self.assertRaises(RuntimeError):
+                match = axl.Match((player1, player2), game=game)
+        else:
+            match = axl.Match((player1, player2), game=game)
 
 class TestSampleLength(unittest.TestCase):
     def test_sample_length(self):

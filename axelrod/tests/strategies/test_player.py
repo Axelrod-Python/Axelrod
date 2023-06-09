@@ -347,6 +347,42 @@ class TestPlayerClass(unittest.TestCase):
             TypeError, ParameterisedTestPlayer, "other", "other", "other"
         )
 
+    def test_assumption_checking(self):
+        """
+        Checks that assumptions are checked, and warnings
+        or errors are raised when they're unfulfilled.
+        """
+        player = axl.MockPlayer(classifier={'assumptions': {'foo': True, 'bar': 3}})
+
+        # these should pass without errors/warnings
+        player.check_assumptions({'foo': True, 'bar': 3})  # correct characteristics
+        player.check_assumptions({'foo': True, 'bar': 3, 'baz': []})  # extraneous characteristic
+
+        with self.assertRaises(RuntimeError):
+            player.check_assumptions({'foo': True})  # missing characteristic
+        with self.assertRaises(RuntimeError):
+            player.check_assumptions({'foo': True, 'bar': 5})  # invalid charateristic value
+
+        with self.assertWarns(UserWarning):
+            player.check_assumptions({'foo': True}, raise_error=False)  # missing characteristic
+        with self.assertWarns(UserWarning):
+            player.check_assumptions({'foo': True, 'bar': 5}, raise_error=False)  # invalid charateristic value
+
+    def test_assumptions_satisfy(self):
+        """
+        Tests that the assumptions_satisfy() method works as intended.
+        It is a wrapper around check_assumptions() so the actual assumption
+        testing logic is checked more thoroughly there.
+        """
+        player = axl.MockPlayer(classifier={'assumptions': {'foo': True, 'bar': 3}})
+
+        self.assertEqual(player.assumptions_satisfy({'foo': True, 'bar': 3}), True)  # correct characteristics
+        self.assertEqual(player.assumptions_satisfy({'foo': True, 'bar': 3, 'baz': []}), True)  # extraneous characteristic
+        self.assertEqual(player.assumptions_satisfy({'foo': True}), False)  # missing characteristic
+        self.assertEqual(player.assumptions_satisfy({'foo': True, 'bar': 5}), False)  # invalid charateristic value
+
+
+
 
 class TestOpponent(axl.Player):
     """A player who only exists so we have something to test against"""

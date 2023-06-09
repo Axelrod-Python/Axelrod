@@ -72,6 +72,7 @@ manipulates_source = Classifier[Optional[bool]](
 manipulates_state = Classifier[Optional[bool]](
     "manipulates_state", lambda _: None
 )
+assumptions = Classifier[Optional[dict]]("assumptions", lambda _: {'actions_size': 2})
 
 # Should list all known classifiers.
 all_classifiers = [
@@ -82,6 +83,7 @@ all_classifiers = [
     inspects_source,
     manipulates_source,
     manipulates_state,
+    assumptions,
 ]
 
 all_classifiers_map = {c.name: c.classify_player for c in all_classifiers}

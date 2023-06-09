@@ -258,6 +258,64 @@ class Player(object, metaclass=PostInitCaller):
     def update_history(self, play, coplay):
         self.history.append(play, coplay)
 
+    def check_assumptions(self, game_characteristics: dict, raise_error: bool=True):
+        """
+        Compares the player assumptions to a dictionary of game characteristics.
+        Generates a warning or error if an assumption is not fulfilled.
+
+        Parameters:
+        -----------
+        game_characteristics: dict
+            The dictionary of game characteristics to compare the player's assumptions to.
+        raise_error: bool, default True
+            If True, raises an error if the assumption is violated. Else,
+            just generate a warning.
+        """
+
+        for key, value in self.classifier.get('assumptions', {}).items():
+            msg = None
+            if key not in game_characteristics.keys():
+                msg = ("Player {} assumes that "
+                       "the game has the attribute {}, "
+                       "but the game does not declare this attribute."
+                       "".format(self.name, key))
+            elif value != game_characteristics[key]:
+                msg = ("Player {} assumes that the game attribute "
+                       "{} is set to {}, but it is actually set to {}."
+                       "".format(self.name, key, value, game_characteristics[key]))
+
+            if msg is not None:
+                if raise_error:
+                    raise RuntimeError(msg)
+                warnings.warn(msg + " The strategy may not behave as expected.")
+
+    def assumptions_satisfy(self, game_characteristics: dict) -> bool:
+        """
+        Compares the player assumptions to a dictionary of game characteristics.
+        Returns True if the player assumptions are all satisfied by
+        these characteristics, and False otherwise.
+
+        Parameters:
+        -----------
+        game_characteristics: dict
+            The dictionary of game characteristics to compare the player's assumptions to.
+
+        Returns
+        -------
+        bool
+            A boolean of whether or not the game characteristics satisfy the player's
+            assumptions.
+        """
+
+        # we use check_assumptions as our 'base' rather than the other way
+        # around as check_assumptions needs finer grained understanding of
+        # the assumptions to produce useful error messages
+        try:
+            self.check_assumptions(game_characteristics, raise_error=True)
+        except RuntimeError:
+            return False
+        return True
+
     @property
     def history(self):
         return self._history
