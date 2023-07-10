@@ -1,5 +1,14 @@
 # Citations
 
+### 2023
+
+* Hutter, Adrian. "Balancing Cooperativeness and Adaptiveness in the (Noisy) Iterated Prisoner's Dilemma." [arXiv:2303.03519](https://arxiv.org/abs/2303.03519).
+* Domingos, Elias Fernández, Francisco C. Santos, and Tom Lenaerts. "EGTtools: Evolutionary game dynamics in Python". [Iscience 26.4 ](https://www.cell.com/iscience/pdf/S2589-0042(23)00496-0.pdf). (2023).
+
+### 2022
+
+* Knight, Vincent, and Geraint Palmer. Applied Mathematics with Open-source Software: Operational Research Problems with Python and R. CRC Press, 2022.
+
 ### 2021
 * Glynatsi, Nikoleta E., and Vincent A. Knight. "A bibliometric study of research topics, collaboration, and centrality in the iterated prisoner’s dilemma." Humanities and Social Sciences Communications 8.1 (2021): 1-12. [Nature.com](https://www.nature.com/articles/s41599-021-00718-9) [ArXiv](https://arxiv.org/abs/1911.06128)
 * Glynatsi, Nikoleta E., and Vincent A. Knight. "Game Theory and Python: An educational tutorial to game theory and repeated games using Python." Journal of Open Source Education, 4(39), 78. [jose.theoj.org](https://doi.org/10.21105/jose.00078)
@@ -11,7 +20,6 @@
 * Glynatsi, Nikoleta E., and Vincent A. Knight. "A meta analysis of tournaments and an evaluation of performance in the Iterated Prisoner's Dilemma" arXiv preprint arXiv:2001.05911 (2019). [ArXiv](https://arxiv.org/abs/2001.05911)
 * Wang, Shiheng, and Fangzhen Lin. "Nice Invincible Strategy for the Average-Payoff IPD." [Proceedings of the AAAI Conference on Artificial Intelligence](https://aaai.org/ojs/index.php/AAAI/article/view/5604)
 * Glynatsi, Nikoleta E., and Vincent A. Knight. "Using a theory of mind to find best responses to memory-one strategies." Sci Rep 10, 17287 (2020). [Scientific Reports](https://doi.org/10.1038/s41598-020-74181-y)
-
 
 ### 2019
 
@@ -44,8 +52,9 @@
 
 * Knight, Vincent. "Playing Games: A Case Study in Active Learning Applied to Game Theory." [MSOR Connections 14.1 (2015): 28-38](https://journals.gre.ac.uk/index.php/msor/article/download/254/254).
 
-### Disserations
+### Dissertations
 
+* Wang, Shiheng. [Strategies and Best Responses in The Iterated Prisoner’s Dilemma](https://search.proquest.com/openview/796acc73fdddc4f3635b58b4bfe1f606/1?pq-origsite=gscholar&cbl=2026366&diss=y). Hong Kong University of Science and Technology (Hong Kong), 2021.
 * Dollbo, Anna. MIXED MEMORY Q-LEARNER: An adaptive reinforcement learning algorithm for the Iterated Prisoner’s Dilemma. [BS thesis](https://gupea.ub.gu.se/handle/2077/69664). 2021.
 * Glynatsi, Nikoleta. "Understanding responses to environments for the Prisoner's Dilemma: A meta analysis, multidimensional optimisation and machine learning approach". PhD Thesis, Cardiff University. (2020) [Available Online](http://orca.cf.ac.uk/135221/).
 * Santana, Jonas Cardoso Carvalho. "Aprendizado de máquina e o dilema dos prisioneiros". (2020)
