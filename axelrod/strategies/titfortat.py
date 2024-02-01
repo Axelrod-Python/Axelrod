@@ -957,7 +957,7 @@ class BurnBothEnds(Player):
 class ModalTFT(Player):
     """
     A player starts by cooperating and then analyses the history of the opponent. From this information it will
-    respond with the mode of the opponents historical response.
+    respond with the mode of the opponents historical responses.
     """
 
     # These are various properties for the strategy
