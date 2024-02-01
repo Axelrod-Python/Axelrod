@@ -260,6 +260,7 @@ from .titfortat import (
     HardTitFor2Tats,
     HardTitForTat,
     Michaelos,
+    ModalTFT,
     NTitsForMTats,
     OmegaTFT,
     OriginalGradual,
@@ -271,7 +272,6 @@ from .titfortat import (
     TitFor2Tats,
     TitForTat,
     TwoTitsForTat,
-    ModalTFT,
 )
 from .verybad import VeryBad
 from .worse_and_worse import (
