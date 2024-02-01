@@ -271,6 +271,7 @@ from .titfortat import (
     TitFor2Tats,
     TitForTat,
     TwoTitsForTat,
+    ModalTFT,
 )
 from .verybad import VeryBad
 from .worse_and_worse import (
@@ -409,6 +410,7 @@ all_strategies = [
     MEM2,
     MathConstantHunter,
     Michaelos,
+    ModalTFT,
     NTitsForMTats,
     NaiveProber,
     Negation,
