@@ -977,5 +977,5 @@ class ModalTFT(Player):
         if not self.history:
             return C
         # React to the opponent's historical moves
-        return statistics.mode(self.history)
+        return statistics.mode(opponent.history)
 
