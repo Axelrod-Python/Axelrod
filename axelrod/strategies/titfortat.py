@@ -963,7 +963,7 @@ class ModalTFT(Player):
     # These are various properties for the strategy
     name = "Modal TFT"
     classifier = {
-        "memory_depth": 1,  # Four-Vector = (1.,0.,1.,0.)
+        "memory_depth": float("inf"),
         "stochastic": False,
         "long_run_time": False,
         "inspects_source": False,
