@@ -1,5 +1,6 @@
 from axelrod.action import Action, actions_to_str
 from axelrod.player import Player
+import statistics
 from axelrod.strategy_transformers import (
     FinalTransformer,
     TrackHistoryTransformer,
@@ -945,9 +946,36 @@ class BurnBothEnds(Player):
         if not opponent.history:
             # Make sure we cooperate first turn
             return C
-        # BBE modification 
+        # BBE modification
         if opponent.history[-1] == C:
             # Cooperate with 0.9
             return self._random.random_choice(0.9)
         # Else TFT. Opponent played D, so play D in return.
         return D
+
+
+class ModalTFT(Player):
+    """
+    A player starts by cooperating and then analyses the history of the opponent. From this information it will
+    respond with the mode of the opponents historical response.
+    """
+
+    # These are various properties for the strategy
+    name = "Modal TFT"
+    classifier = {
+        "memory_depth": 1,  # Four-Vector = (1.,0.,1.,0.)
+        "stochastic": False,
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+    def strategy(self, opponent: Player) -> Action:
+        """This is the actual strategy"""
+        # First move
+        if not self.history:
+            return C
+        # React to the opponent's historical moves
+        return statistics.mode(self.history)
+
