@@ -79,7 +79,7 @@ The simplest way to install is::
 
 To install from source::
 
-    $ git clone https://github.com/Axelrod-Python/Axelrod.git
+    $ git clone https://github.com/benjjo/Axelrod.git
     $ cd Axelrod
     $ python setup.py install
 
