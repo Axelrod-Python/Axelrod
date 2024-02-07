@@ -873,7 +873,7 @@ class Michaelos(Player):
 class RandomTitForTat(Player):
     """
     A player starts by cooperating and then follows by copying its
-    opponent (tit for tat style).  From then on the player
+    opponent (tit-for-tat style).  From then on the player
     will switch between copying its opponent and randomly
     responding every other iteration.
 
@@ -980,6 +980,4 @@ class ModalTFT(Player):
         # React to the opponent's historical moves
         print(statistics.mode(opponent.history))
         return C if opponent.history[-1] == C else statistics.mode(opponent.history)
-
-
 
