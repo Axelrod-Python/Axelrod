@@ -1341,3 +1341,23 @@ class TestBurnBothEnds(TestPlayer):
     def test_vs_defector(self):
         actions = [(C, D), (D, D), (D, D), (D, D), (D, D)]
         self.versus_test(axl.Defector(), expected_actions=actions)
+
+
+class TestModalTFT(TestPlayer):
+    name = "Modal TFT"
+    player = axl.ModalTFT
+    expected_classifier = {
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+    def test_strategy(self):
+        opponent = axl.MockPlayer(actions=[C, C, D, D, D, D, C, D])
+        actions = [(C, C), (C, C), (C, D), (C, D), (C, D), (D, D), (D, C), (C, D), (D, C)]
+        self.versus_test(opponent, expected_actions=actions)
+
+

@@ -956,8 +956,9 @@ class BurnBothEnds(Player):
 
 class ModalTFT(Player):
     """
-    A player starts by cooperating and then analyses the history of the opponent. From this information it will
-    respond with the mode of the opponents historical responses.
+    A player starts by cooperating and then analyses the history of the opponent. If the opponent Cooperated in the
+    last round, they are immediately returned with a Cooperation. If the opponent chose to Defect in the previous round,
+    then this strategy will return with the mode of the previous opponent responses.
     """
 
     # These are various properties for the strategy
@@ -977,5 +978,8 @@ class ModalTFT(Player):
         if not self.history:
             return C
         # React to the opponent's historical moves
-        return statistics.mode(opponent.history)
+        print(statistics.mode(opponent.history))
+        return C if opponent.history[-1] == C else statistics.mode(opponent.history)
+
+
 
