@@ -75,34 +75,6 @@ class TestPlot(unittest.TestCase):
             ["Defector", "Tit For Tat", "Alternator"],
         )
 
-    def test_default_cmap(self):
-        cmap = axl.plot.default_cmap("0.0")
-        self.assertEqual(cmap, "YlGnBu")
-
-        cmap = axl.plot.default_cmap("1.3alpha")
-        self.assertEqual(cmap, "YlGnBu")
-
-        cmap = axl.plot.default_cmap("1.4.99")
-        self.assertEqual(cmap, "YlGnBu")
-
-        cmap = axl.plot.default_cmap("1.4")
-        self.assertEqual(cmap, "YlGnBu")
-
-        cmap = axl.plot.default_cmap()
-        self.assertEqual(cmap, "viridis")
-
-        cmap = axl.plot.default_cmap("1.5")
-        self.assertEqual(cmap, "viridis")
-
-        cmap = axl.plot.default_cmap("1.5beta")
-        self.assertEqual(cmap, "viridis")
-
-        cmap = axl.plot.default_cmap("1.7")
-        self.assertEqual(cmap, "viridis")
-
-        cmap = axl.plot.default_cmap("2.0")
-        self.assertEqual(cmap, "viridis")
-
     def test_init(self):
         plot = axl.Plot(self.test_result_set)
         self.assertEqual(plot.result_set, self.test_result_set)

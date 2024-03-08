@@ -1,5 +1,4 @@
 import pathlib
-from distutils.version import LooseVersion
 from typing import List, Union
 
 import matplotlib
@@ -14,13 +13,6 @@ from .result_set import ResultSet
 titleType = List[str]
 namesType = List[str]
 dataType = List[List[Union[int, float]]]
-
-
-def default_cmap(version: str = "2.0") -> str:
-    """Sets a default matplotlib colormap based on the version."""
-    if LooseVersion(version) >= "1.5":
-        return "viridis"
-    return "YlGnBu"
 
 
 class Plot(object):
@@ -184,6 +176,7 @@ class Plot(object):
         names: namesType,
         title: titleType = None,
         ax: matplotlib.axes.SubplotBase = None,
+        cmap: str = 'viridis'
     ) -> matplotlib.figure.Figure:
         """Generic heatmap plot"""
 
@@ -196,8 +189,6 @@ class Plot(object):
         width = max(self.num_players / 4, 12)
         height = width
         figure.set_size_inches(width, height)
-        matplotlib_version = matplotlib.__version__
-        cmap = default_cmap(matplotlib_version)
         mat = ax.matshow(data, cmap=cmap)
         ax.set_xticks(range(self.result_set.num_players))
         ax.set_yticks(range(self.result_set.num_players))
