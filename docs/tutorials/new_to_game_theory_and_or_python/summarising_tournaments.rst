@@ -33,10 +33,10 @@ It is also possible to write this data directly to a csv file using the
     ...     for row in csvreader:
     ...         print(row)
     ['Rank', 'Name', 'Median_score', 'Cooperation_rating', 'Wins', 'Initial_C_rate', 'CC_rate', 'CD_rate', 'DC_rate', 'DD_rate', 'CC_to_C_rate', 'CD_to_C_rate', 'DC_to_C_rate', 'DD_to_C_rate']
-    ['0', 'Defector', '2.6...', '0.0', '3.0', '0.0', '0.0', '0.0', '0.4...', '0.6...', '0', '0', '0', '0']
-    ['1', 'Tit For Tat', '2.3...', '0.7', '0.0', '1.0', '0.66...', '0.03...', '0.0', '0.3...', '1.0', '0', '0', '0']
-    ['2', 'Grudger', '2.3...', '0.7', '0.0', '1.0', '0.66...', '0.03...', '0.0', '0.3...', '1.0', '0', '0', '0']
-    ['3', 'Cooperator', '2.0...', '1.0', '0.0', '1.0', '0.66...', '0.33...', '0.0', '0.0', '1.0', '1.0', '0', '0']
+    ['0', 'Defector', ...
+    ['1', 'Tit For Tat', ...
+    ['2', 'Grudger', ...
+    ['3', 'Cooperator', ...
 
 
 The result set class computes a large number of detailed outcomes read about
