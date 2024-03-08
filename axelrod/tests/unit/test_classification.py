@@ -89,7 +89,7 @@ class TestClassification(unittest.TestCase):
         warnings.simplefilter("default", category=UserWarning)
         with warnings.catch_warnings(record=True) as w:
             self.assertEqual(Classifiers["memory_depth"](axl.TitForTat), 1)
-            self.assertEquals(len(w), 1)
+            self.assertEqual(len(w), 1)
 
     def test_key_error_on_uknown_classifier(self):
         with self.assertRaises(KeyError):
