@@ -1,8 +1,7 @@
 import pathlib
 from typing import Dict, List, Text, Tuple
 
-import pkg_resources
-
+import pkgutil
 
 def axl_filename(path: pathlib.Path) -> pathlib.Path:
     """Given a path under Axelrod/, return absolute filepath.
@@ -24,9 +23,11 @@ def axl_filename(path: pathlib.Path) -> pathlib.Path:
 def load_file(filename: str, directory: str) -> List[List[str]]:
     """Loads a data file stored in the Axelrod library's data subdirectory,
     likely for parameters for a strategy."""
-    path = "/".join((directory, filename))
-    data_bytes = pkg_resources.resource_string(__name__, path)
+
+    path = str(pathlib.Path(directory) / filename)
+    data_bytes = pkgutil.get_data(__name__, path)
     data = data_bytes.decode("UTF-8", "replace")
+    
     rows = []
     for line in data.split("\n"):
         if line.startswith("#") or len(line) == 0:
