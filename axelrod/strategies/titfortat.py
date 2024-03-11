@@ -1,5 +1,6 @@
 from axelrod.action import Action, actions_to_str
 from axelrod.player import Player
+import statistics
 from axelrod.strategy_transformers import (
     FinalTransformer,
     TrackHistoryTransformer,
@@ -872,7 +873,7 @@ class Michaelos(Player):
 class RandomTitForTat(Player):
     """
     A player starts by cooperating and then follows by copying its
-    opponent (tit for tat style).  From then on the player
+    opponent (tit-for-tat style).  From then on the player
     will switch between copying its opponent and randomly
     responding every other iteration.
 
@@ -945,9 +946,41 @@ class BurnBothEnds(Player):
         if not opponent.history:
             # Make sure we cooperate first turn
             return C
-        # BBE modification 
+        # BBE modification
         if opponent.history[-1] == C:
             # Cooperate with 0.9
             return self._random.random_choice(0.9)
         # Else TFT. Opponent played D, so play D in return.
         return D
+
+
+class ModalTFT(Player):
+    """
+    A player starts by cooperating and then analyses the history of the opponent. If the opponent Cooperated in the
+    last round, they are returned with a Cooperation. If the opponent chose to Defect in the previous round,
+    then this strategy will return with the mode of the previous opponent responses.
+    """
+
+    # These are various properties for the strategy
+    name = "Modal TFT"
+    classifier = {
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+    def strategy(self, opponent: Player) -> Action:
+        """This is the actual strategy"""
+        # First move
+        if not self.history:
+            return C
+        # React to the opponent's historical moves
+        if opponent.history[-1] == C:
+            return C
+        else:
+            # returns with the mode of the opponent's history.
+            return statistics.mode(opponent.history)
+

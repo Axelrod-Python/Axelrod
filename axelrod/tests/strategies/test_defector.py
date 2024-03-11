@@ -61,3 +61,21 @@ class TestTrickyDefector(TestPlayer):
         self.versus_test(
             axl.MockPlayer(actions=opponent_actions), expected_actions=actions
         )
+
+
+class TestModalDefector(TestPlayer):
+    name = "Modal Defector"
+    player = axl.ModalDefector
+    expected_classifier = {
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+    def test_strategy(self):
+        opponent = axl.MockPlayer(actions=[C, C, D, D, D, D, C, D])
+        actions = [(D, C), (D, C), (D, D), (C, D), (C, D), (D, D), (D, C), (D, D), (D, C)]
+        self.versus_test(opponent, expected_actions=actions)
