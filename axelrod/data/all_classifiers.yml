@@ -1999,3 +1999,12 @@ ZD-SET-2:
   manipulates_state: false
   memory_depth: 1
   stochastic: true
+greedy:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set
+    game: null
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
