@@ -9,7 +9,9 @@ class EpsilonGreedy(Player):
     Behaves greedily (chooses the optimal action) with a probability of 1 - epsilon,
     and chooses randomly between the actions with a probability of epsilon.
 
-    The optimal action is determined from the average payoff of each action in previous turns.
+    The optimal action is determined from the average payoff of each action in previous turns;
+    if initial rewards for each action are equivalent (true by default),
+    then the optimal action for the first turn is cooperate.
 
     Names:
 
@@ -45,7 +47,7 @@ class EpsilonGreedy(Player):
 
         Special cases
         ----------
-            epsilon = 0 is equal to Random(0.5)
+            When epsilon <= 0, this player behaves like Random(0.5)
         """
         super().__init__()
         self.epsilon = epsilon
@@ -75,9 +77,9 @@ class EpsilonGreedy(Player):
         else:
             num_plays = self.history.defections
 
-        self._rewards[last_play] = self._rewards[last_play] + (
-            1 / num_plays
-        ) * (last_score - self._rewards[last_play])
+        self._rewards[last_play] = self._rewards[last_play] + (1 / num_plays) * (
+            last_score - self._rewards[last_play]
+        )
 
     def strategy(self, opponent: Player) -> Action:
         """Actual strategy definition that determines player's action."""
