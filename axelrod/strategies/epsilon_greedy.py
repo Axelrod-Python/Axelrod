@@ -86,7 +86,7 @@ class EpsilonGreedy(Player):
             self.update_rewards(opponent)
 
         # explore
-        if self._random.uniform(0.0, 1.0) <= self.epsilon:
+        if self.epsilon > 0 and self._random.uniform(0.0, 1.0) <= self.epsilon:
             return self._random.random_choice()
         # exploit
         else:
