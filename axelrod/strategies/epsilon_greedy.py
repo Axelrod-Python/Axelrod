@@ -15,7 +15,7 @@ class EpsilonGreedy(Player):
 
     Names:
 
-    # TODO: reference Sutton & Barto's Reinforcement Learning: an Introduction 2nd Ed.
+    - Epsilon-greedy: [Sutton2018]_
     """
 
     name = "$\varepsilon$-greedy"
