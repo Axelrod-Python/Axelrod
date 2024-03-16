@@ -34,7 +34,7 @@ class Greedy(Player):
         self,
         init_c_reward: float = 0.0,
         init_d_reward: float = 0.0,
-        recency_weight: float = UNIFORM
+        recency_weight: float = UNIFORM,
     ) -> None:
         """
         Parameters
@@ -67,7 +67,9 @@ class Greedy(Player):
 
         # if UNIFORM, use 1 / total number of times the updated action was taken previously
         if np.isinf(self.weight):
-            weight = 1 / (self.history.cooperations if last_play == C else self.history.defections)
+            weight = 1 / (
+                self.history.cooperations if last_play == C else self.history.defections
+            )
         else:
             weight = self.weight
 
@@ -109,7 +111,7 @@ class EpsilonGreedy(Greedy):
         epsilon: float = 0.1,
         init_c_reward: float = 0.0,
         init_d_reward: float = 0.0,
-        recency_weight: float = Greedy.UNIFORM
+        recency_weight: float = Greedy.UNIFORM,
     ) -> None:
         """
         Parameters
