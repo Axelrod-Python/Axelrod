@@ -1,4 +1,4 @@
-import math
+import numpy as np
 
 from axelrod.action import Action
 from axelrod.player import Player
@@ -28,7 +28,7 @@ class Greedy(Player):
         "manipulates_state": False,
     }
 
-    UNIFORM = float("-inf")  # constant that replaces weight when rewards aren't weighted
+    UNIFORM = np.inf  # constant that replaces weight when rewards aren't weighted
 
     def __init__(
         self,
@@ -53,9 +53,9 @@ class Greedy(Player):
         self.weight = recency_weight
 
         # treat out of range values as extremes
-        if (not math.isinf(self.weight)) and (self.weight <= 0):
+        if self.weight <= 0:
             self.weight = 0.0
-        if recency_weight >= 1:
+        if (not np.isinf(self.weight)) and (self.weight >= 1):
             self.weight = 1.0
 
     def update_rewards(self, opponent: Player):
@@ -66,8 +66,8 @@ class Greedy(Player):
         last_score = game.score(last_round)[0]
 
         # if UNIFORM, use 1 / total number of times the updated action was taken previously
-        if math.isinf(self.weight):
-            weight = self.history.cooperations if last_play == C else self.defections
+        if np.isinf(self.weight):
+            weight = 1 / (self.history.cooperations if last_play == C else self.history.defections)
         else:
             weight = self.weight
 
@@ -109,6 +109,7 @@ class EpsilonGreedy(Greedy):
         epsilon: float = 0.1,
         init_c_reward: float = 0.0,
         init_d_reward: float = 0.0,
+        recency_weight: float = Greedy.UNIFORM
     ) -> None:
         """
         Parameters
@@ -126,7 +127,7 @@ class EpsilonGreedy(Greedy):
             When epsilon <= 0, this player behaves like Random(0.5)
             When epsilon >= 1, this player behaves like Greedy()
         """
-        super().__init__(init_c_reward, init_d_reward)
+        super().__init__(init_c_reward, init_d_reward, recency_weight)
         self.epsilon = epsilon
 
         # treat out of range values as extremes
@@ -142,10 +143,12 @@ class EpsilonGreedy(Greedy):
 
     def strategy(self, opponent: Player) -> Action:
         """Actual strategy definition that determines player's action."""
+        # this will also update the reward appropriately
+        greedy_action = super().strategy(opponent)
 
         # explore
-        if self.epsilon > 0 and self._random.uniform(0.0, 1.0) <= self.epsilon:
+        if self.epsilon > 0 and self._random.uniform() <= self.epsilon:
             return self._random.random_choice()
         # exploit
         else:
-            return super().strategy(opponent)
+            return greedy_action
