@@ -48,6 +48,8 @@ Here are the docstrings of all the strategies in the library.
    :members:
 .. automodule:: axelrod.strategies.forgiver
    :members:
+.. automodule:: axelrod.strategies.epsilon_greedy
+   :members:
 .. automodule:: axelrod.strategies.gambler
    :members:
 .. automodule:: axelrod.strategies.gobymajority

@@ -90,6 +90,7 @@ from .darwin import Darwin
 from .dbs import DBS
 from .defector import Defector, TrickyDefector
 from .doubler import Doubler
+from .epsilon_greedy import EpsilonGreedy
 from .finite_state_machines import (
     TF1,
     TF2,
@@ -334,6 +335,7 @@ all_strategies = [
     Doubler,
     DynamicTwoTitsForTat,
     EasyGo,
+    EpsilonGreedy,
     EugineNier,
     EventualCycleHunter,
     EvolvedANN,
