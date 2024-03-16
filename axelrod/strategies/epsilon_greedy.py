@@ -70,15 +70,20 @@ class EpsilonGreedy(Player):
         last_score = game.score(last_round)[0]
 
         # update the expected rewards based on previous play
-        num_plays = (
-            self.cooperations() if last_play == C else self.defections()
-        )
+        if last_play == C:
+            num_plays = self.history.cooperations
+        else:
+            num_plays = self.history.defections
+
         self._rewards[last_play] = self._rewards[last_play] + (
             1 / num_plays
         ) * (last_score - self._rewards[last_play])
 
     def strategy(self, opponent: Player) -> Action:
         """Actual strategy definition that determines player's action."""
+        # if not the first turn
+        if len(self.history) != 0:
+            self.update_rewards(opponent)
 
         # explore
         if self._random.uniform(0.0, 1.0) <= self.epsilon:
