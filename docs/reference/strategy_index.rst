@@ -18,6 +18,8 @@ Here are the docstrings of all the strategies in the library.
    :members:
 .. automodule:: axelrod.strategies.appeaser
    :members:
+.. automodule:: axelrod.strategies.armed_bandits
+   :members:
 .. automodule:: axelrod.strategies.averagecopier
    :members:
 .. automodule:: axelrod.strategies.axelrod_first
@@ -47,8 +49,6 @@ Here are the docstrings of all the strategies in the library.
 .. automodule:: axelrod.strategies.finite_state_machines
    :members:
 .. automodule:: axelrod.strategies.forgiver
-   :members:
-.. automodule:: axelrod.strategies.epsilon_greedy
    :members:
 .. automodule:: axelrod.strategies.gambler
    :members:

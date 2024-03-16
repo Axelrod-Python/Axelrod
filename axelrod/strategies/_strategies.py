@@ -89,7 +89,7 @@ from .darwin import Darwin
 from .dbs import DBS
 from .defector import Defector, TrickyDefector
 from .doubler import Doubler
-from .epsilon_greedy import EpsilonGreedy
+from .armed_bandits import Greedy, EpsilonGreedy
 from .finite_state_machines import (
     TF1,
     TF2,
@@ -387,6 +387,7 @@ all_strategies = [
     Golden,
     Gradual,
     GradualKiller,
+    Greedy,
     Grudger,
     GrudgerAlternator,
     Grumpy,
