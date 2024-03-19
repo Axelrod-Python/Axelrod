@@ -4,11 +4,34 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "axelrod"
-authors = [{name = "Vincent Knight", email = "knightva@cardiff.ac.uk"}]
+authors = [
+    {name = "Vincent Knight", email = "knightva@cardiff.ac.uk"},
+    {name = "Marc Harper", email = "marc.harper@gmail.com"},
+    {name = "Nikoleta Glynatsi", email = "glynatsi@evolbio.mpg.de"},
+    {name = "Owen Campbell", email = "owen.campbell@empiria.co.uk"},
+    {name = "TJ Gaffney", email = "gaffney.tj@gmail.com"},
+]
 readme = "README.rst"
 license = {file = "LICENSE.txt"}
 classifiers = ["License :: OSI Approved :: MIT License"]
 dynamic = ["version", "description"]
+requires-python= ">=3.11"
+requires = [
+    "cloudpickle>=0.2.2",
+    "fsspec>=0.6.0",
+    "toolz>=0.8.2",
+    "dask>=2.9.2",
+    "matplotlib>=3.0.3",
+    "numpy>=1.17.4",
+    "pandas>=1.0.0",
+    "pyyaml>=5.1",
+    "scipy>=1.3.3",
+    "tqdm>=4.39.0",
+]
+
 
 [project.urls]
 Home = "https://axelrod.readthedocs.io"
+
+[tool.flit.metadata.requires-extra]
+doc = ["sphinx==6.2.1", "sphinx-rtd-theme", "sphinx-togglebutton", "matplotlib", "sphinxcontrib.mermaid"]
