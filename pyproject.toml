@@ -1,0 +1,14 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "axelrod"
+authors = [{name = "Vincent Knight", email = "knightva@cardiff.ac.uk"}]
+readme = "README.rst"
+license = {file = "LICENSE.txt"}
+classifiers = ["License :: OSI Approved :: MIT License"]
+dynamic = ["version", "description"]
+
+[project.urls]
+Home = "https://axelrod.readthedocs.io"
