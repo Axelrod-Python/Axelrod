@@ -7,6 +7,7 @@ tournament by the given author.
 from typing import List
 
 import numpy as np
+
 from axelrod.action import Action
 from axelrod.interaction_utils import compute_final_score
 from axelrod.player import Player
@@ -204,7 +205,6 @@ class SecondByGladstein(Player):
 
 
 class SecondByTranquilizer(Player):
-
     """
     Submitted to Axelrod's second tournament by Craig Feathers
 
@@ -341,7 +341,6 @@ class SecondByTranquilizer(Player):
         self.dict = {C: 0, D: 1}
 
     def update_state(self, opponent):
-
         """
         Calculates the ratio values for the one_turn_after_good_defection_ratio,
         two_turns_after_good_defection_ratio and the probability values,
@@ -1349,9 +1348,9 @@ class SecondByHarrington(Player):
         if self.detect_streak(opponent.history[-1]):
             return self.try_return(D, inc_parity=True)
         if self.detect_parity_streak(opponent.history[-1]):
-            self.parity_streak[
-                self.parity_bit
-            ] = 0  # Reset `parity_streak` when we hit the limit.
+            self.parity_streak[self.parity_bit] = (
+                0  # Reset `parity_streak` when we hit the limit.
+            )
             self.parity_hits += (
                 1  # Keep track of how many times we hit the limit.
             )

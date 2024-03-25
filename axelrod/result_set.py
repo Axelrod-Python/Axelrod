@@ -9,6 +9,7 @@ import dask as da
 import dask.dataframe as dd
 import numpy as np
 import tqdm
+
 from axelrod.action import Action
 
 from . import eigen

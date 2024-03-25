@@ -133,7 +133,8 @@ def StrategyTransformerFactory(
 
                 def dual_inner_strategy(self, opponent):
                     """The dual wrapper requires flipping the history. It may be more efficient
-                    to use a custom History class that tracks a flipped history and swaps labels."""
+                    to use a custom History class that tracks a flipped history and swaps labels.
+                    """
                     self._history = self.history.flip_plays()
                     proposed_action = inner_strategy(self, opponent)
                     self._history = self.history.flip_plays()

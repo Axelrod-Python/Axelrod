@@ -1,5 +1,9 @@
 """Tests for the strategy utils."""
+
 import unittest
+
+from hypothesis import given, settings
+from hypothesis.strategies import integers, lists, sampled_from
 
 import axelrod as axl
 from axelrod._strategy_utils import (
@@ -7,8 +11,6 @@ from axelrod._strategy_utils import (
     recursive_thue_morse,
     thue_morse_generator,
 )
-from hypothesis import given, settings
-from hypothesis.strategies import integers, lists, sampled_from
 
 C, D = axl.Action.C, axl.Action.D
 

@@ -1,4 +1,5 @@
 """Tests for the main tournament class."""
+
 import io
 import logging
 import os
@@ -9,9 +10,13 @@ import warnings
 from multiprocessing import Queue, cpu_count
 from unittest.mock import MagicMock, patch
 
-import axelrod as axl
 import numpy as np
 import pandas as pd
+from hypothesis import example, given, settings
+from hypothesis.strategies import floats, integers
+from tqdm import tqdm
+
+import axelrod as axl
 from axelrod.load_data_ import axl_filename
 from axelrod.tests.property import (
     prob_end_tournaments,
@@ -20,9 +25,6 @@ from axelrod.tests.property import (
     tournaments,
 )
 from axelrod.tournament import _close_objects
-from hypothesis import example, given, settings
-from hypothesis.strategies import floats, integers
-from tqdm import tqdm
 
 C, D = axl.Action.C, axl.Action.D
 

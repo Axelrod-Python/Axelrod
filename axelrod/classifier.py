@@ -14,6 +14,7 @@ from typing import (
 )
 
 import yaml
+
 from axelrod.makes_use_of import makes_use_of
 from axelrod.player import Player
 

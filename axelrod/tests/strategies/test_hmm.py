@@ -1,4 +1,5 @@
 """Tests for Hidden Markov Model Strategies."""
+
 import unittest
 
 import axelrod as axl

@@ -1,10 +1,11 @@
 """Tests for the various Meta strategies."""
 
+from hypothesis import HealthCheck, given, settings
+from hypothesis.strategies import integers
+
 import axelrod as axl
 from axelrod.classifier import Classifiers
 from axelrod.tests.property import strategy_lists
-from hypothesis import given, settings
-from hypothesis.strategies import integers
 
 from .test_player import TestPlayer
 
@@ -67,7 +68,11 @@ class TestMetaPlayer(TestPlayer):
         )
 
     @given(seed=integers(min_value=1, max_value=20000000))
-    @settings(max_examples=1, deadline=None)
+    @settings(
+        max_examples=1,
+        deadline=None,
+        suppress_health_check=(HealthCheck.differing_executors,),
+    )
     def test_clone(self, seed):
         # Test that the cloned player produces identical play
         player1 = self.player()
@@ -97,8 +102,12 @@ class TestMetaPlayer(TestPlayer):
         with self.assertRaises(TypeError):
             p.update_histories(C)
 
-    @settings(max_examples=5, deadline=None)
     @given(opponent_list=strategy_lists(max_size=1))
+    @settings(
+        max_examples=5,
+        deadline=None,
+        suppress_health_check=(HealthCheck.differing_executors,),
+    )
     def test_players_return_valid_actions(self, opponent_list):
         """
         Whenever a new strategy is added to the library this potentially

@@ -1,6 +1,9 @@
 """Tests for the Cycler strategies."""
+
 import itertools
 import unittest
+
+import pytest
 
 import axelrod as axl
 from axelrod._strategy_utils import detect_cycle
@@ -106,6 +109,7 @@ class TestBasicCycler(TestPlayer):
         self.assertRaises(ValueError, axl.Cycler, cycle="CdDC")
 
 
+@pytest.mark.skip(reason="This is a function used to test other strategies.")
 def test_cycler_factory(cycle_str):
     class TestCyclerChild(TestPlayer):
 

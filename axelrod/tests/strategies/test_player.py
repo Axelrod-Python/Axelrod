@@ -4,11 +4,13 @@ import types
 import unittest
 import warnings
 
-import axelrod as axl
 import numpy as np
-from axelrod.tests.property import strategy_lists
-from hypothesis import given, settings
+import pytest
+from hypothesis import HealthCheck, given, settings
 from hypothesis.strategies import integers, sampled_from
+
+import axelrod as axl
+from axelrod.tests.property import strategy_lists
 
 C, D = axl.Action.C, axl.Action.D
 random = axl.RandomGenerator()
@@ -420,7 +422,11 @@ class TestPlayer(unittest.TestCase):
         opponent=sampled_from(short_run_time_short_mem),
         seed=integers(min_value=1, max_value=200),
     )
-    @settings(max_examples=1, deadline=None)
+    @settings(
+        max_examples=1,
+        deadline=None,
+        suppress_health_check=(HealthCheck.differing_executors,),
+    )
     def test_equality_of_clone(self, seed, opponent):
         p1 = self.player()
         p2 = p1.clone()
@@ -430,7 +436,11 @@ class TestPlayer(unittest.TestCase):
         opponent=sampled_from(axl.short_run_time_strategies),
         seed=integers(min_value=1, max_value=200),
     )
-    @settings(max_examples=1, deadline=None)
+    @settings(
+        max_examples=1,
+        deadline=None,
+        suppress_health_check=(HealthCheck.differing_executors,),
+    )
     def test_equality_of_pickle_clone(self, seed, opponent):
         p1 = self.player()
         p2 = pickle.loads(pickle.dumps(p1))
@@ -463,7 +473,11 @@ class TestPlayer(unittest.TestCase):
         turns=integers(min_value=5, max_value=10),
         noise=integers(min_value=0, max_value=10),
     )
-    @settings(max_examples=1, deadline=None)
+    @settings(
+        max_examples=1,
+        deadline=None,
+        suppress_health_check=(HealthCheck.differing_executors,),
+    )
     def test_clone_reproducible_play(self, seed, turns, noise):
         # Test that the cloned player produces identical play
         player = self.player()
@@ -503,7 +517,11 @@ class TestPlayer(unittest.TestCase):
         seed=integers(min_value=1, max_value=200),
         turns=integers(min_value=1, max_value=200),
     )
-    @settings(max_examples=1, deadline=None)
+    @settings(
+        max_examples=1,
+        deadline=None,
+        suppress_health_check=(HealthCheck.differing_executors,),
+    )
     def test_memory_depth_upper_bound(self, strategies, seed, turns):
         """
         Test that the memory depth is indeed an upper bound.
@@ -699,6 +717,7 @@ class TestMatch(unittest.TestCase):
             self.versus_test(p1, p2, actions1, actions2)
 
 
+@pytest.mark.skip(reason="This is a function used to test other strategies.")
 def test_four_vector(test_class, expected_dictionary):
     """
     Checks that two dictionaries match -- the four-vector defining
@@ -711,6 +730,7 @@ def test_four_vector(test_class, expected_dictionary):
         )
 
 
+@pytest.mark.skip(reason="This is a function used to test other strategies.")
 def test_memory(player, opponent, memory_length, seed=0, turns=10):
     """
     Checks if a player reacts to the plays of an opponent in the same way if

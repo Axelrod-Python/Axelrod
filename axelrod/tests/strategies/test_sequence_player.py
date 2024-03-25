@@ -1,4 +1,5 @@
 """Tests for the Thue-Morse strategies."""
+
 import unittest
 
 import axelrod as axl

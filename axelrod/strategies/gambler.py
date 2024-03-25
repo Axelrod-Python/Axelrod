@@ -4,6 +4,7 @@ swarm algorithms.
 For the original see:
  https://gist.github.com/GDKO/60c3d0fd423598f3c4e4
 """
+
 from typing import Any
 
 from axelrod.action import Action, actions_to_str, str_to_actions

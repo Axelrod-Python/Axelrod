@@ -1,8 +1,9 @@
 from typing import Optional
 
 import numpy as np
-from axelrod.action import Action
 from numpy.random import RandomState
+
+from axelrod.action import Action
 
 C, D = Action.C, Action.D
 

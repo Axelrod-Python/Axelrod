@@ -1,4 +1,5 @@
 """Tests for Finite State Machine Strategies."""
+
 import unittest
 
 import axelrod as axl

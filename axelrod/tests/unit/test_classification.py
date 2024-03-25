@@ -5,8 +5,9 @@ import unittest
 import warnings
 from typing import Any, Text
 
-import axelrod as axl
 import yaml
+
+import axelrod as axl
 from axelrod.classifier import (
     Classifier,
     Classifiers,

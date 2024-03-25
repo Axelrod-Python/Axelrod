@@ -1,13 +1,12 @@
 import unittest
 
 import numpy as np
+from hypothesis import given, settings
+from hypothesis.extra.numpy import array_shapes, arrays
+from hypothesis.strategies import integers
 
 import axelrod as axl
-from axelrod.tests.property import games, asymmetric_games
-from hypothesis import given, settings
-from hypothesis.strategies import integers
-from hypothesis.extra.numpy import arrays, array_shapes
-
+from axelrod.tests.property import asymmetric_games, games
 
 C, D = axl.Action.C, axl.Action.D
 
@@ -86,17 +85,20 @@ class TestGame(unittest.TestCase):
     def test_integer_actions(self, game):
         """Test Actions and integers are treated equivalently."""
         pair_ints = {
-            (C, C): (0 ,0),
+            (C, C): (0, 0),
             (C, D): (0, 1),
             (D, C): (1, 0),
-            (D, D): (1, 1)
+            (D, D): (1, 1),
         }
         for key, value in pair_ints.items():
             self.assertEqual(game.score(key), game.score(value))
 
+
 class TestAsymmetricGame(unittest.TestCase):
-    @given(A=arrays(int, array_shapes(min_dims=2, max_dims=2, min_side=2)),
-           B=arrays(int, array_shapes(min_dims=2, max_dims=2, min_side=2)))
+    @given(
+        A=arrays(int, array_shapes(min_dims=2, max_dims=2, min_side=2)),
+        B=arrays(int, array_shapes(min_dims=2, max_dims=2, min_side=2)),
+    )
     @settings(max_examples=5)
     def test_invalid_matrices(self, A, B):
         """Test that an error is raised when the matrices aren't the right size."""
@@ -114,17 +116,23 @@ class TestAsymmetricGame(unittest.TestCase):
     @settings(max_examples=5)
     def test_random_repr(self, asymgame):
         """Test repr with random scores."""
-        expected_repr = "Axelrod game with matrices: {}".format((asymgame.A, asymgame.B))
+        expected_repr = "Axelrod game with matrices: {}".format(
+            (asymgame.A, asymgame.B)
+        )
         self.assertEqual(expected_repr, asymgame.__repr__())
         self.assertEqual(expected_repr, str(asymgame))
 
-    @given(asymgame1=asymmetric_games(),
-           asymgame2=asymmetric_games())
+    @given(asymgame1=asymmetric_games(), asymgame2=asymmetric_games())
     @settings(max_examples=5)
     def test_equality(self, asymgame1, asymgame2):
         """Tests equality of AsymmetricGames based on their matrices."""
-        self.assertFalse(asymgame1=='foo')
+        self.assertFalse(asymgame1 == "foo")
         self.assertEqual(asymgame1, asymgame1)
         self.assertEqual(asymgame2, asymgame2)
-        self.assertEqual((asymgame1==asymgame2), (asymgame1.A.all() == asymgame2.A.all()
-                                                  and asymgame1.B.all() == asymgame2.B.all()))
+        self.assertEqual(
+            (asymgame1 == asymgame2),
+            (
+                asymgame1.A.all() == asymgame2.A.all()
+                and asymgame1.B.all() == asymgame2.B.all()
+            ),
+        )

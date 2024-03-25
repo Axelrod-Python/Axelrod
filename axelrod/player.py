@@ -6,6 +6,7 @@ import warnings
 from typing import Any, Dict
 
 import numpy as np
+
 from axelrod import _module_random
 from axelrod.action import Action
 from axelrod.game import DefaultGame
@@ -121,7 +122,7 @@ class Player(object, metaclass=PostInitCaller):
     def _post_transform(self):
         """Handles post transform tasks such as further reclassifying."""
         # Reclassify strategy post __init__, if needed.
-        for (reclassifier, args, kwargs) in self._reclassifiers:
+        for reclassifier, args, kwargs in self._reclassifiers:
             self.classifier = reclassifier(self.classifier, *args, **kwargs)
 
     def __eq__(self, other):

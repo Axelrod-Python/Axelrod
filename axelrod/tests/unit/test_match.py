@@ -1,12 +1,13 @@
 import unittest
 from collections import Counter
 
+from hypothesis import example, given
+from hypothesis.strategies import floats, integers
+
 import axelrod as axl
 from axelrod.deterministic_cache import DeterministicCache
 from axelrod.random_ import RandomGenerator
 from axelrod.tests.property import games
-from hypothesis import example, given
-from hypothesis.strategies import floats, integers
 
 C, D = axl.Action.C, axl.Action.D
 

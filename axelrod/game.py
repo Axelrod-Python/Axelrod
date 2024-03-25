@@ -1,5 +1,5 @@
-from typing import Tuple, Union
 from enum import Enum
+from typing import Tuple, Union
 
 import numpy as np
 
@@ -71,6 +71,7 @@ class AsymmetricGame(object):
             if isinstance(x, Enum):
                 return x.value
             return x
+
         row, col = map(get_value, pair)
 
         return (self.A[row][col], self.B[row][col])
@@ -97,7 +98,9 @@ class Game(AsymmetricGame):
         The numerical score attribute to all combinations of action pairs.
     """
 
-    def __init__(self, r: Score = 3, s: Score = 0, t: Score = 5, p: Score = 1) -> None:
+    def __init__(
+        self, r: Score = 3, s: Score = 0, t: Score = 5, p: Score = 1
+    ) -> None:
         """Create a new game object.
 
         Parameters

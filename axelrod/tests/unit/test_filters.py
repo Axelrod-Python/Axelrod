@@ -1,10 +1,11 @@
 import unittest
 
+from hypothesis import example, given, settings
+from hypothesis.strategies import integers
+
 import axelrod as axl
 from axelrod.player import Player
 from axelrod.strategies._filters import *
-from hypothesis import example, given, settings
-from hypothesis.strategies import integers
 
 
 class TestFilters(unittest.TestCase):

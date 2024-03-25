@@ -1,2 +1,0 @@
--r requirements.txt
-prompt-toolkit>=3.0
