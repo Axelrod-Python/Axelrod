@@ -92,6 +92,13 @@ class TestHistory(unittest.TestCase):
         self.assertEqual(flipped_flipped_history.defections, 2)
 
 
+def test_coplays():
+    plays = (C, C, D)
+    coplays = (C, C, C)
+    history = History(plays=plays, coplays=coplays)
+    assert history.coplays == list(coplays)
+
+
 class TestLimitedHistory(unittest.TestCase):
     def test_memory_depth(self):
         h = LimitedHistory(memory_depth=3)

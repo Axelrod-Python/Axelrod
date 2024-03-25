@@ -15,4 +15,3 @@ Contents:
    summarising_tournaments.rst
    visualising_results.rst
    moran.rst
-   human_interaction.rst

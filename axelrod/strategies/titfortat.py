@@ -945,7 +945,7 @@ class BurnBothEnds(Player):
         if not opponent.history:
             # Make sure we cooperate first turn
             return C
-        # BBE modification 
+        # BBE modification
         if opponent.history[-1] == C:
             # Cooperate with 0.9
             return self._random.random_choice(0.9)

@@ -1,4 +1,5 @@
 """Tests for the Memoryone strategies."""
+
 import unittest
 import warnings
 

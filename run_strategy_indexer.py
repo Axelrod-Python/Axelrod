@@ -2,11 +2,12 @@
 A script to check that all strategy modules have been included in
 `./docs/reference/all_strategies.rst`
 """
+
 import pathlib
 import sys
 
 default_index_path = pathlib.Path("./docs/reference/strategy_index.rst")
-excluded_modules = ("_strategies", "__init__", "_filters", "human")
+excluded_modules = ("_strategies", "__init__", "_filters")
 
 
 def check_module(

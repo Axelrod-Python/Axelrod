@@ -2,6 +2,7 @@
 Revised Downing implemented from the Fortran source code for the second of
 Axelrod's tournaments.
 """
+
 from axelrod.action import Action
 from axelrod.player import Player
 

@@ -1,4 +1,5 @@
 """Tests for the random functions."""
+
 import unittest
 from collections import Counter
 

@@ -2,12 +2,13 @@ import itertools
 import unittest
 from collections import Counter
 
-import axelrod as axl
 import matplotlib.pyplot as plt
-from axelrod import MoranProcess
-from axelrod.tests.property import strategy_lists
 from hypothesis import example, given, settings
 from hypothesis.strategies import integers
+
+import axelrod as axl
+from axelrod import MoranProcess
+from axelrod.tests.property import strategy_lists
 
 C, D = axl.Action.C, axl.Action.D
 random = axl.RandomGenerator()
@@ -194,7 +195,9 @@ class TestMoranProcess(unittest.TestCase):
 
     def test_different_match(self):
         """Test alternative Match class, mainly to show that the results are different
-        than the results of `test_different_game` where the same seed is used."""
+        than the results of `test_different_game` where the same seed is used.
+        """
+
         # Using a different game where the scores are all constant
         class StandInMatch(axl.Match):
             """A Match were all players get a score of 3"""

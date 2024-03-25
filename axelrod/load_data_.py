@@ -1,7 +1,7 @@
 import pathlib
+import pkgutil
 from typing import Dict, List, Text, Tuple
 
-import pkgutil
 
 def axl_filename(path: pathlib.Path) -> pathlib.Path:
     """Given a path under Axelrod/, return absolute filepath.
@@ -27,7 +27,7 @@ def load_file(filename: str, directory: str) -> List[List[str]]:
     path = str(pathlib.Path(directory) / filename)
     data_bytes = pkgutil.get_data(__name__, path)
     data = data_bytes.decode("UTF-8", "replace")
-    
+
     rows = []
     for line in data.split("\n"):
         if line.startswith("#") or len(line) == 0:
@@ -57,7 +57,12 @@ def load_pso_tables(filename="pso_gambler.csv", directory="data"):
     rows = load_file(filename, directory)
     d = dict()
     for row in rows:
-        name, a, b, c, = (
+        (
+            name,
+            a,
+            b,
+            c,
+        ) = (
             str(row[0]),
             int(row[1]),
             int(row[2]),

@@ -1,6 +1,7 @@
 from typing import List, Tuple
 
 import numpy as np
+
 from axelrod.action import Action
 from axelrod.evolvable_player import (
     EvolvablePlayer,

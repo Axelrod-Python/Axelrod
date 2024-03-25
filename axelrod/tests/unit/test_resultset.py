@@ -3,14 +3,15 @@ import pathlib
 import unittest
 from collections import Counter
 
-import axelrod as axl
 import pandas as pd
-from axelrod.load_data_ import axl_filename
-from axelrod.result_set import create_counter_dict
-from axelrod.tests.property import prob_end_tournaments, tournaments
 from dask.dataframe.core import DataFrame
 from hypothesis import given, settings
 from numpy import mean, nanmedian, std
+
+import axelrod as axl
+from axelrod.load_data_ import axl_filename
+from axelrod.result_set import create_counter_dict
+from axelrod.tests.property import prob_end_tournaments, tournaments
 
 C, D = axl.Action.C, axl.Action.D
 
@@ -746,6 +747,7 @@ class TestResultSetSpatialStructure(TestResultSet):
         cls.filename = str(axl_filename(path))
         cls.players = [axl.Alternator(), axl.TitForTat(), axl.Defector()]
         cls.turns = 5
+        cls.repetitions = 3
         cls.edges = [(0, 1), (0, 2)]
 
         cls.expected_match_lengths = [
@@ -956,6 +958,7 @@ class TestResultSetSpatialStructureTwo(TestResultSetSpatialStructure):
             axl.Cooperator(),
         ]
         cls.turns = 5
+        cls.repetitions = 3
         cls.edges = [(0, 1), (2, 3)]
 
         cls.expected_match_lengths = [
@@ -1179,6 +1182,7 @@ class TestResultSetSpatialStructureThree(TestResultSetSpatialStructure):
             axl.Cooperator(),
         ]
         cls.turns = 5
+        cls.repetitions = 3
         cls.edges = [(0, 0), (1, 1), (2, 2), (3, 3)]
 
         cls.expected_match_lengths = [

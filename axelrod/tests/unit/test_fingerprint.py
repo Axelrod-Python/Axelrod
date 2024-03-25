@@ -4,13 +4,14 @@ import unittest
 from tempfile import mkstemp
 from unittest.mock import patch
 
-import axelrod as axl
 import matplotlib.pyplot
 import numpy as np
+from hypothesis import given, settings
+
+import axelrod as axl
 from axelrod.fingerprint import AshlockFingerprint, Point, TransitiveFingerprint
 from axelrod.load_data_ import axl_filename
 from axelrod.tests.property import strategy_lists
-from hypothesis import given, settings
 
 C, D = axl.Action.C, axl.Action.D
 

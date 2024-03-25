@@ -1,10 +1,11 @@
 import unittest
 import warnings
 
-import axelrod as axl
-from axelrod.tests.property import strategy_lists
 from hypothesis import example, given, settings
 from hypothesis.strategies import integers, lists, sampled_from
+
+import axelrod as axl
+from axelrod.tests.property import strategy_lists
 
 
 def classifiers_lists(min_size=1, max_size=5):

@@ -1,5 +1,6 @@
 """Test for the Gambler strategy. Most tests come from the LookerUp test suite.
 """
+
 import copy
 import unittest
 
@@ -529,7 +530,7 @@ class TestEvolvableGambler(unittest.TestCase):
         self.assertRaises(
             AttributeError,
             axl.EvolvableGambler.__getattribute__,
-            *[player, "vector"]
+            *[player, "vector"],
         )
 
         vector = [random.random() for _ in range(8)]

@@ -176,7 +176,7 @@ class Plot(object):
         names: namesType,
         title: titleType = None,
         ax: matplotlib.axes.SubplotBase = None,
-        cmap: str = 'viridis'
+        cmap: str = "viridis",
     ) -> matplotlib.figure.Figure:
         """Generic heatmap plot"""
 

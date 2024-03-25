@@ -1,8 +1,9 @@
 from typing import Dict, Tuple
 
+from numpy import heaviside
+
 from axelrod.action import Action
 from axelrod.player import Player
-from numpy import heaviside
 
 C, D = Action.C, Action.D
 

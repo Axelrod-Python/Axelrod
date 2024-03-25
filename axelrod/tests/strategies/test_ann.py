@@ -1,4 +1,5 @@
 """Tests for the ANN strategy."""
+
 import unittest
 
 import axelrod as axl
