@@ -9,7 +9,7 @@ C, D = axl.Action.C, axl.Action.D
 
 class TestEpsilonGreedy(TestPlayer):
 
-    name = "$\varepsilon$-greedy: 0.1, 0.0, 0.0, inf"
+    name = "$\varepsilon$-greedy: 0.1, 0.0, 0.0, -1.0"
     player = axl.EpsilonGreedy
     expected_classifier = {
         "memory_depth": float("inf"),
