@@ -28,7 +28,7 @@ class Greedy(Player):
         "manipulates_state": False,
     }
 
-    UNIFORM = np.inf  # constant that replaces weight when rewards aren't weighted
+    UNIFORM = -1.0  # constant that replaces weight when rewards aren't weighted
 
     def __init__(
         self,
@@ -46,16 +46,16 @@ class Greedy(Player):
         recency_weight
             0.0 <= recency_weight <= 1.0
             The exponential recency weight used in calculating the average reward.
-            If this argument is not provided, the player will not weigh rewards based on recency.
+            If this argument is equal to -1 or is not provided, the player will not weigh rewards based on recency.
         """
         super().__init__()
         self._rewards = {C: init_c_reward, D: init_d_reward}
         self.weight = recency_weight
 
-        # treat out of range values as extremes
-        if self.weight <= 0:
+        # limit parameter value range
+        if (self.weight != self.UNIFORM) and self.weight <= 0:
             self.weight = 0.0
-        if (not np.isinf(self.weight)) and (self.weight >= 1):
+        if self.weight >= 1:
             self.weight = 1.0
 
     def update_rewards(self, opponent: Player):
@@ -66,7 +66,7 @@ class Greedy(Player):
         last_score = game.score(last_round)[0]
 
         # if UNIFORM, use 1 / total number of times the updated action was taken previously
-        if np.isinf(self.weight):
+        if self.weight == self.UNIFORM:
             weight = 1 / (
                 self.history.cooperations if last_play == C else self.history.defections
             )
@@ -78,7 +78,6 @@ class Greedy(Player):
         )
 
     def strategy(self, opponent: Player) -> Action:
-        """Actual strategy definition that determines player's action."""
         # if not the first turn
         if len(self.history) != 0:
             self.update_rewards(opponent)
@@ -89,7 +88,7 @@ class Greedy(Player):
 
 class EpsilonGreedy(Greedy):
     """
-    Has a 1 - epsilon probability of behaving like Greedy(), and plays randomly otherwise.
+    Has a 1 - epsilon probability of behaving like Greedy; otherwise, randomly choose to cooperate or defect.
 
     Names:
 
@@ -144,7 +143,6 @@ class EpsilonGreedy(Greedy):
             self.classifier["stochastic"] = False
 
     def strategy(self, opponent: Player) -> Action:
-        """Actual strategy definition that determines player's action."""
         # this will also update the reward appropriately
         greedy_action = super().strategy(opponent)
 

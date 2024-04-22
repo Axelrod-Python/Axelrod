@@ -90,7 +90,7 @@ from .darwin import Darwin
 from .dbs import DBS
 from .defector import Defector, TrickyDefector
 from .doubler import Doubler
-from .armed_bandits import Greedy, EpsilonGreedy
+from .bandits import Greedy, EpsilonGreedy
 from .finite_state_machines import (
     TF1,
     TF2,

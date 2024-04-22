@@ -18,7 +18,7 @@ Here are the docstrings of all the strategies in the library.
    :members:
 .. automodule:: axelrod.strategies.appeaser
    :members:
-.. automodule:: axelrod.strategies.armed_bandits
+.. automodule:: axelrod.strategies.bandits
    :members:
 .. automodule:: axelrod.strategies.averagecopier
    :members:
