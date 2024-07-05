@@ -238,12 +238,15 @@ from .sequence_player import (  # pylint: disable=unused-import
 )
 from .shortmem import ShortMem
 from .stalker import Stalker
+from .frequency_analyzer import FreqAnalyzer
 from .titfortat import (
     AdaptiveTitForTat,
     Alexei,
     AntiTitForTat,
     Bully,
     BurnBothEnds,
+    SofteningTitForTat,
+    HardeningTitForTat,
     ContriteTitForTat,
     DynamicTwoTitsForTat,
     EugineNier,
@@ -366,6 +369,7 @@ all_strategies = [
     ForgivingTitForTat,
     Fortress3,
     Fortress4,
+    FreqAnalyzer,
     GTFT,
     GeneralSoftGrudger,
     GoByMajority,
@@ -392,6 +396,8 @@ all_strategies = [
     Hopeless,
     Inverse,
     InversePunisher,
+    SofteningTitForTat,
+    HardeningTitForTat,
     KnowledgeableWorseAndWorse,
     LevelPunisher,
     LimitedRetaliate,
