@@ -1,17 +1,24 @@
 # Citations
 
+### 2024
+
+* Macmillan-Scott, Olivia, Akin Ünver, and Mirco Musolesi. "Game-theoretic agent-based modelling of micro-level conflict: Evidence from the ISIS-Kurdish war." [Plos one 19.6 (2024)](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0297483): e0297483.
+* Diaz, Manfred, Liam Paull, and Andrea Tacchetti. "Rethinking Teacher-Student Curriculum Learning through the Cooperative Mechanics of Experience." [arXiv:2404.03084](https://arxiv.org/abs/2404.03084) (2024).
+
 ### 2023
 
 * Hutter, Adrian. "Balancing Cooperativeness and Adaptiveness in the (Noisy) Iterated Prisoner's Dilemma." [arXiv:2303.03519](https://arxiv.org/abs/2303.03519).
 * Domingos, Elias Fernández, Francisco C. Santos, and Tom Lenaerts. "EGTtools: Evolutionary game dynamics in Python". [Iscience 26.4 ](https://www.cell.com/iscience/pdf/S2589-0042(23)00496-0.pdf). (2023).
+* Márquez, Fausto Pedro García, et al., eds. IoT and Data Science in Engineering Management: Proceedings of the 16th International Conference on Industrial Engineering and Industrial Management and XXVI Congreso de Ingeniería de Organización. Vol. 160. Springer Nature, 2023.
 
 ### 2022
 
-* Knight, Vincent, and Geraint Palmer. Applied Mathematics with Open-source Software: Operational Research Problems with Python and R. CRC Press, 2022.
+* Knight, Vincent, and Geraint Palmer. Applied Mathematics with Open-source Software: Operational Research Problems with Python and R. [CRC Press](https://www.taylorfrancis.com/books/mono/10.1201/9780429328534/applied-mathematics-open-source-software-vincent-knight-geraint-palmer), 2022.
 
 ### 2021
 * Glynatsi, Nikoleta E., and Vincent A. Knight. "A bibliometric study of research topics, collaboration, and centrality in the iterated prisoner’s dilemma." Humanities and Social Sciences Communications 8.1 (2021): 1-12. [Nature.com](https://www.nature.com/articles/s41599-021-00718-9) [ArXiv](https://arxiv.org/abs/1911.06128)
 * Glynatsi, Nikoleta E., and Vincent A. Knight. "Game Theory and Python: An educational tutorial to game theory and repeated games using Python." Journal of Open Source Education, 4(39), 78. [jose.theoj.org](https://doi.org/10.21105/jose.00078)
+* Vincent, Frederick M., and Dashiell EA Fryer. "Top Score in Axelrod Tournament." [arXiv:2104.03347](https://arxiv.org/abs/2104.03347) (2021).
 
 ### 2020
 
@@ -56,6 +63,7 @@
 
 * Wang, Shiheng. [Strategies and Best Responses in The Iterated Prisoner’s Dilemma](https://search.proquest.com/openview/796acc73fdddc4f3635b58b4bfe1f606/1?pq-origsite=gscholar&cbl=2026366&diss=y). Hong Kong University of Science and Technology (Hong Kong), 2021.
 * Dollbo, Anna. MIXED MEMORY Q-LEARNER: An adaptive reinforcement learning algorithm for the Iterated Prisoner’s Dilemma. [BS thesis](https://gupea.ub.gu.se/handle/2077/69664). 2021.
+* Kies, Martin. Machine learning in economics. [Diss. Universität Ulm](https://oparu.uni-ulm.de/server/api/core/bitstreams/e90ae5d8-6a4b-467e-91ee-75fe0df7c99a/content), 2020.
 * Glynatsi, Nikoleta. "Understanding responses to environments for the Prisoner's Dilemma: A meta analysis, multidimensional optimisation and machine learning approach". PhD Thesis, Cardiff University. (2020) [Available Online](http://orca.cf.ac.uk/135221/).
 * Santana, Jonas Cardoso Carvalho. "Aprendizado de máquina e o dilema dos prisioneiros". (2020)
 * Black, Ben. "An Empirical Evaluation of the Ohtsuki-Nowak Approximation." [Master's Thesis](https://www.lancaster.ac.uk/~blackb/documents/MScDiss.pdf). (2018).
