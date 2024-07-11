@@ -951,3 +951,4 @@ class BurnBothEnds(Player):
             return self._random.random_choice(0.9)
         # Else TFT. Opponent played D, so play D in return.
         return D
+    
