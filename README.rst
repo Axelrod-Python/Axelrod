@@ -7,8 +7,6 @@
 .. image:: https://github.com/Axelrod-Python/Axelrod/workflows/CI/badge.svg
     :target: https://github.com/Axelrod-Python/Axelrod/actions
 
-|Join the chat at https://gitter.im/Axelrod-Python/Axelrod|
-
 Axelrod
 =======
 
@@ -32,11 +30,11 @@ Features
 With Axelrod you:
 
 - have access `to over 200 strategies
-  <http://axelrod.readthedocs.io/en/stable/reference/all_strategies.html>`_, including original and classics like Tit
+  <https://axelrod.readthedocs.io/en/stable/reference/strategy_index.html>`_, including original and classics like Tit
   For Tat and Win Stay Lose Shift. These are extendable through parametrization
   and a collection of strategy transformers.
 - can create `head to head matches
-  <http://axelrod.readthedocs.io/en/stable/tutorials/getting_started/match.html>`_ between pairs of strategies.
+  <https://axelrod.readthedocs.io/en/stable/tutorials/new_to_game_theory_and_or_python/match.html>`_ between pairs of strategies.
 - can create `tournaments
   <http://axelrod.readthedocs.io/en/stable/tutorials/getting_started/tournament.html>`_ over a number of strategies.
 - can study population dynamics through `Moran processes
