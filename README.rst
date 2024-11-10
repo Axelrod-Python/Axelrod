@@ -36,23 +36,23 @@ With Axelrod you:
 - can create `head to head matches
   <https://axelrod.readthedocs.io/en/stable/tutorials/new_to_game_theory_and_or_python/match.html>`_ between pairs of strategies.
 - can create `tournaments
-  <http://axelrod.readthedocs.io/en/stable/tutorials/getting_started/tournament.html>`_ over a number of strategies.
+  <https://axelrod.readthedocs.io/en/stable/tutorials/new_to_game_theory_and_or_python/tournament.html>`_ over a number of strategies.
 - can study population dynamics through `Moran processes
-  <http://axelrod.readthedocs.io/en/stable/tutorials/getting_started/moran.html>`_ and an `infinite
+  <https://axelrod.readthedocs.io/en/stable/tutorials/new_to_game_theory_and_or_python/moran.html>`_ and an `infinite
   population model
-  <http://axelrod.readthedocs.io/en/stable/tutorials/further_topics/ecological_variant.html>`_.
+  <https://axelrod.readthedocs.io/en/stable/how-to/run_axelrods_ecological_variant.html>`_.
 - can analyse detailed `results of tournaments
-  <http://axelrod.readthedocs.io/en/stable/tutorials/getting_started/summarising_tournaments.html>`_ and matches.
+  <https://axelrod.readthedocs.io/en/stable/tutorials/new_to_game_theory_and_or_python/summarising_tournaments.html>`_ and matches.
 - can `visualise results
-  <http://axelrod.readthedocs.io/en/stable/tutorials/getting_started/visualising_results.html>`_ of tournaments.
+  <https://axelrod.readthedocs.io/en/stable/tutorials/new_to_game_theory_and_or_python/visualising_results.html>`_ of tournaments.
 
   .. image:: http://axelrod.readthedocs.io/en/stable/_images/demo_strategies_boxplot.svg
      :height: 300 px
      :align: center
 
-- can reproduce a number of contemporary research topics such as `fingerprinting <http://axelrod.readthedocs.io/en/stable/tutorials/further_topics/fingerprinting.html>`_ of
+- can reproduce a number of contemporary research topics such as `fingerprinting <https://axelrod.readthedocs.io/en/stable/how-to/fingerprint.html>`_ of
   strategies and `morality metrics
-  <http://axelrod.readthedocs.io/en/stable/tutorials/further_topics/morality_metrics.html>`_.
+  <https://axelrod.readthedocs.io/en/stable/how-to/calculate_morality_metrics.html>`_.
 
   .. image:: https://github.com/Axelrod-Python/Axelrod-fingerprint/raw/master/assets/Tricky_Defector.png
      :height: 300 px
@@ -98,8 +98,7 @@ Examples
 --------
 
 - https://github.com/Axelrod-Python/tournament is a tournament pitting all the
-  strategies in the repository against each other. These results can be easily
-  viewed at http://axelrod-tournament.readthedocs.org.
+  strategies in the repository against each other.
 - https://github.com/Axelrod-Python/Axelrod-notebooks contains a set of example
   Jupyter notebooks.
 - https://github.com/Axelrod-Python/Axelrod-fingerprint contains fingerprints
@@ -112,7 +111,7 @@ All contributions are welcome!
 
 You can find helpful instructions about contributing in the
 documentation:
-https://axelrod.readthedocs.io/en/latest/how-to/contributing/index.html
+https://axelrod.readthedocs.io/en/stable/how-to/contributing/index.html
 
 Publications
 ------------
