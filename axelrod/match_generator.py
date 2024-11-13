@@ -1,4 +1,5 @@
 from axelrod.random_ import BulkRandomGenerator
+from .graph import complete_graph
 
 
 class MatchGenerator(object):
@@ -72,10 +73,9 @@ class MatchGenerator(object):
         tuples
             ((player1 index, player2 index), match object)
         """
+        edges = self.edges
         if self.edges is None:
-            edges = complete_graph(self.players)
-        else:
-            edges = self.edges
+            edges = complete_graph(len(self.players), loops=True, directed=True).edges
 
         for index_pair in edges:
             match_params = self.build_single_match_params()
@@ -93,15 +93,6 @@ class MatchGenerator(object):
             "prob_end": self.prob_end,
             "match_attributes": self.match_attributes,
         }
-
-
-def complete_graph(players):
-    """
-    Return generator of edges of a complete graph on a set of players
-    """
-    for player1_index, _ in enumerate(players):
-        for player2_index in range(player1_index, len(players)):
-            yield (player1_index, player2_index)
 
 
 def graph_is_connected(edges, players):

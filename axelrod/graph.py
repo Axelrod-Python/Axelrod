@@ -46,6 +46,7 @@ class Graph(object):
         self._edges = []
         if edges:
             self._add_edges(edges)
+        self._vertices = list(self.in_mapping.keys() | self.out_mapping.keys())
 
     def _add_edge(self, source, target, weight=None):
         if (source, target) not in self._edges:
@@ -77,7 +78,7 @@ class Graph(object):
 
     @property
     def vertices(self):
-        return list(self.out_mapping.keys())
+        return self._vertices
 
     def out_dict(self, source):
         """Returns a dictionary of the outgoing edges of source with weights."""
