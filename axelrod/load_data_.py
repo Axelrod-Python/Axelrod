@@ -26,6 +26,8 @@ def load_file(filename: str, directory: str) -> List[List[str]]:
 
     path = str(pathlib.Path(directory) / filename)
     data_bytes = pkgutil.get_data(__name__, path)
+    if data_bytes is None:
+        raise FileNotFoundError(path)
     data = data_bytes.decode("UTF-8", "replace")
 
     rows = []

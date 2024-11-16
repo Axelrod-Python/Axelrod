@@ -2,6 +2,7 @@ from enum import Enum
 from typing import Tuple, Union
 
 import numpy as np
+import numpy.typing as npt
 
 from axelrod import Action
 
@@ -20,7 +21,7 @@ class AsymmetricGame(object):
     """
 
     # pylint: disable=invalid-name
-    def __init__(self, A: np.array, B: np.array) -> None:
+    def __init__(self, A: npt.NDArray, B: npt.NDArray) -> None:
         """
         Creates an asymmetric game from two matrices.
 
