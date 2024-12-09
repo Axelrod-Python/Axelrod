@@ -1,6 +1,6 @@
 import pathlib
 import pkgutil
-from typing import Dict, List, Text, Tuple
+from typing import Callable, Dict, List, Optional, Tuple
 
 
 def axl_filename(path: pathlib.Path) -> pathlib.Path:
@@ -20,14 +20,18 @@ def axl_filename(path: pathlib.Path) -> pathlib.Path:
     return axl_path / path
 
 
-def load_file(filename: str, directory: str) -> List[List[str]]:
+def load_file(
+    filename: str,
+    directory: str,
+    get_data: Callable[[str, str], Optional[bytes]] = pkgutil.get_data,
+) -> List[List[str]]:
     """Loads a data file stored in the Axelrod library's data subdirectory,
     likely for parameters for a strategy."""
 
     path = str(pathlib.Path(directory) / filename)
-    data_bytes = pkgutil.get_data(__name__, path)
+    data_bytes = get_data(__name__, path)
     if data_bytes is None:
-        raise FileNotFoundError(path)
+        raise FileNotFoundError(f"Some loader issue for path {path}")
     data = data_bytes.decode("UTF-8", "replace")
 
     rows = []

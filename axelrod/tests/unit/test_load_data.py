@@ -18,5 +18,12 @@ class TestLoadData(unittest.TestCase):
 
     def test_raise_error_if_file_empty(self):
         path = pathlib.Path("not/a/file.py")
-        with self.assertRaisesRegex(FileNotFoundError, str(path)):
+        with self.assertRaises(FileNotFoundError):
             load_file(path, ".")
+
+    def test_raise_error_if_something(self):
+        dirname = os.path.dirname(__file__)
+        path = os.path.join(dirname, "../../strategies/titfortat.py")
+        bad_loader = lambda _, __: None
+        with self.assertRaises(FileNotFoundError):
+            load_file(path, ".", bad_loader)
