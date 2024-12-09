@@ -14,7 +14,7 @@ else:
 
 import pickle
 from collections import UserDict
-from typing import List, Tuple
+from typing import List, Optional, Tuple
 
 from axelrod import Classifiers
 
@@ -104,7 +104,7 @@ class DeterministicCache(UserDict):
     methods to save/load the cache to/from a file.
     """
 
-    def __init__(self, file_name: str = None) -> None:
+    def __init__(self, file_name: Optional[str] = None) -> None:
         """Initialize a new cache.
 
         Parameters

@@ -1,5 +1,5 @@
 import itertools
-from typing import Any, Dict, List, Sequence, Text, Tuple
+from typing import Any, Dict, List, Optional, Sequence, Text, Tuple
 
 from axelrod.action import Action
 from axelrod.evolvable_player import (
@@ -145,12 +145,12 @@ class EvolvableFSMPlayer(FSMPlayer, EvolvablePlayer):
 
     def __init__(
         self,
-        transitions: tuple = None,
-        initial_state: int = None,
+        transitions: Optional[tuple] = None,
+        initial_state: Optional[int] = None,
         initial_action: Action = None,
-        num_states: int = None,
+        num_states: Optional[int] = None,
         mutation_probability: float = 0.1,
-        seed: int = None,
+        seed: Optional[int] = None,
     ) -> None:
         """If transitions, initial_state, and initial_action are None
         then generate random parameters using num_states."""
@@ -189,10 +189,10 @@ class EvolvableFSMPlayer(FSMPlayer, EvolvablePlayer):
 
     def _normalize_parameters(
         self,
-        transitions: Tuple = None,
-        initial_state: int = None,
+        transitions: Optional[Tuple] = None,
+        initial_state: Optional[int] = None,
         initial_action: Action = None,
-        num_states: int = None,
+        num_states: Optional[int] = None,
     ) -> Tuple[Tuple, int, Action, int]:
         if not (
             (transitions is not None)

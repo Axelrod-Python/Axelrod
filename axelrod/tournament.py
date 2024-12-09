@@ -28,13 +28,13 @@ class Tournament(object):
         players: List[Player],
         name: str = "axelrod",
         game: Game = None,
-        turns: int = None,
-        prob_end: float = None,
+        turns: Optional[int] = None,
+        prob_end: Optional[float] = None,
         repetitions: int = 10,
         noise: float = 0,
-        edges: List[Tuple] = None,
-        match_attributes: dict = None,
-        seed: int = None,
+        edges: Optional[List[Tuple]] = None,
+        match_attributes: Optional[dict] = None,
+        seed: Optional[int] = None,
     ) -> None:
         """
         Parameters
@@ -110,8 +110,8 @@ class Tournament(object):
     def play(
         self,
         build_results: bool = True,
-        filename: str = None,
-        processes: int = None,
+        filename: Optional[str] = None,
+        processes: Optional[int] = None,
         progress_bar: bool = True,
     ) -> ResultSet:
         """

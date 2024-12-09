@@ -1,3 +1,5 @@
+from typing import Optional
+
 from axelrod._strategy_utils import detect_cycle
 from axelrod.action import Action
 from axelrod.player import Player
@@ -32,7 +34,7 @@ class Calculator(Player):
         self.joss_instance = Joss()
         super().__init__()
 
-    def set_seed(self, seed: int = None):
+    def set_seed(self, seed: Optional[int] = None):
         super().set_seed(seed)
         self.joss_instance.set_seed(seed)
 

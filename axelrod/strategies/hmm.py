@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 from axelrod.action import Action
 from axelrod.evolvable_player import (
@@ -254,7 +254,7 @@ class EvolvableHMMPlayer(HMMPlayer, EvolvablePlayer):
         initial_action=C,
         num_states=None,
         mutation_probability=None,
-        seed: int = None,
+        seed: Optional[int] = None,
     ) -> None:
         EvolvablePlayer.__init__(self, seed=seed)
         (

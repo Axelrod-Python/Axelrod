@@ -1,5 +1,5 @@
 from itertools import cycle
-from typing import List
+from typing import List, Optional
 
 from axelrod.action import Action
 from axelrod.player import Player
@@ -14,7 +14,7 @@ class MockPlayer(Player):
 
     name = "Mock Player"
 
-    def __init__(self, actions: List[Action] = None) -> None:
+    def __init__(self, actions: Optional[List[Action]] = None) -> None:
         super().__init__()
         if not actions:
             actions = []

@@ -2,7 +2,7 @@
 files, including titfortat.py and zero_determinant.py"""
 
 import warnings
-from typing import Tuple
+from typing import Optional, Tuple
 
 from axelrod.action import Action
 from axelrod.player import Player
@@ -68,7 +68,7 @@ class MemoryOnePlayer(Player):
 
     def __init__(
         self,
-        four_vector: Tuple[float, float, float, float] = None,
+        four_vector: Optional[Tuple[float, float, float, float]] = None,
         initial: Action = C,
     ) -> None:
         """
@@ -179,7 +179,7 @@ class GTFT(MemoryOnePlayer):
         "manipulates_state": False,
     }
 
-    def __init__(self, p: float = None) -> None:
+    def __init__(self, p: Optional[float] = None) -> None:
         """
         Parameters
 

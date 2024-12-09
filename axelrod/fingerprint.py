@@ -1,7 +1,7 @@
 import os
 from collections import namedtuple
 from tempfile import mkstemp
-from typing import Any, List, Union
+from typing import Any, List, Optional, Union
 
 import dask.dataframe as dd
 import matplotlib.pyplot as plt
@@ -280,10 +280,10 @@ class AshlockFingerprint(object):
         turns: int = 50,
         repetitions: int = 10,
         step: float = 0.01,
-        processes: int = None,
-        filename: str = None,
+        processes: Optional[int] = None,
+        filename: Optional[str] = None,
         progress_bar: bool = True,
-        seed: int = None,
+        seed: Optional[int] = None,
     ) -> dict:
         """Build and play the spatial tournament.
 
@@ -358,7 +358,7 @@ class AshlockFingerprint(object):
         self,
         cmap: str = "seismic",
         interpolation: str = "none",
-        title: str = None,
+        title: Optional[str] = None,
         colorbar: bool = True,
         labels: bool = True,
     ) -> plt.Figure:
@@ -437,11 +437,11 @@ class TransitiveFingerprint(object):
         self,
         turns: int = 50,
         repetitions: int = 1000,
-        noise: float = None,
-        processes: int = None,
-        filename: str = None,
+        noise: Optional[float] = None,
+        processes: Optional[int] = None,
+        filename: Optional[str] = None,
         progress_bar: bool = True,
-        seed: int = None,
+        seed: Optional[int] = None,
     ) -> np.ndarray:
         """Creates a spatial tournament to run the necessary matches to obtain
         fingerprint data.
@@ -556,7 +556,7 @@ class TransitiveFingerprint(object):
         self,
         cmap: str = "viridis",
         interpolation: str = "none",
-        title: str = None,
+        title: Optional[str] = None,
         colorbar: bool = True,
         labels: bool = True,
         display_names: bool = False,

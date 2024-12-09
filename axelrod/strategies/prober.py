@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from axelrod.action import Action
 from axelrod.player import Player
@@ -67,7 +67,7 @@ class Detective(Player):
         "manipulates_state": False,
     }
 
-    def __init__(self, initial_actions: List[Action] = None) -> None:
+    def __init__(self, initial_actions: Optional[List[Action]] = None) -> None:
         super().__init__()
         if initial_actions is None:
             self.initial_actions = [C, D, C, C]

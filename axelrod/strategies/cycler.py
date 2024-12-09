@@ -1,6 +1,6 @@
 import copy
 import itertools
-from typing import List, Tuple
+from typing import List, Optional, Tuple
 
 from axelrod.action import Action, actions_to_str, str_to_actions
 from axelrod.evolvable_player import (
@@ -109,11 +109,11 @@ class EvolvableCycler(Cycler, EvolvablePlayer):
 
     def __init__(
         self,
-        cycle: str = None,
-        cycle_length: int = None,
+        cycle: Optional[str] = None,
+        cycle_length: Optional[int] = None,
         mutation_probability: float = 0.2,
         mutation_potency: int = 1,
-        seed: int = None,
+        seed: Optional[int] = None,
     ) -> None:
         EvolvablePlayer.__init__(self, seed=seed)
         cycle, cycle_length = self._normalize_parameters(cycle, cycle_length)

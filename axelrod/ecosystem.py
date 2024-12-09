@@ -12,7 +12,7 @@ ecosystem.reproduce(100)
 """
 
 import random
-from typing import Callable, List
+from typing import Callable, List, Optional
 
 from axelrod.result_set import ResultSet
 
@@ -29,8 +29,8 @@ class Ecosystem(object):
     def __init__(
         self,
         results: ResultSet,
-        fitness: Callable[[float], float] = None,
-        population: List[int] = None,
+        fitness: Optional[Callable[[float], float]] = None,
+        population: Optional[List[int]] = None,
     ) -> None:
         """Create a new ecosystem.
 
