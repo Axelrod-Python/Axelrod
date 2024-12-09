@@ -255,3 +255,23 @@ class TestPlot(unittest.TestCase):
                 progress_bar=True,
             )
         )
+
+    def test_figure_generation_failure_violinplot(self):
+        plot = axl.Plot(self.test_result_set)
+        with self.assertRaises(RuntimeError):
+            plot._violinplot(
+                [0, 0, 0], ["a", "b", "c"], get_figure=lambda _: None
+            )
+
+    def test_figure_generation_failure_payoff_heatmap(self):
+        plot = axl.Plot(self.test_result_set)
+        with self.assertRaises(RuntimeError):
+            plot._payoff_heatmap(
+                [0, 0, 0], ["a", "b", "c"], get_figure=lambda _: None
+            )
+
+    def test_figure_generation_failure_stackplot(self):
+        plot = axl.Plot(self.test_result_set)
+        eco = axl.Ecosystem(self.test_result_set)
+        with self.assertRaises(RuntimeError):
+            plot.stackplot(eco, get_figure=lambda _: None)
