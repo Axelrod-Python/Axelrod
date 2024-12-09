@@ -198,7 +198,10 @@ class ANN(Player):
     }
 
     def __init__(
-        self, num_features: int, num_hidden: int, weights: Optional[List[float]] = None
+        self,
+        num_features: int,
+        num_hidden: int,
+        weights: Optional[List[float]] = None,
     ) -> None:
         Player.__init__(self)
         self.num_features = num_features
