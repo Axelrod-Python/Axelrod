@@ -6,7 +6,10 @@ from setuptools import setup
 # Read in the requirements files.
 requirements = defaultdict(list)
 
-requirements_directory = pathlib.Path.cwd() / "requirements"
+# requirements_directory = pathlib.Path.cwd() / "requirements"
+# MG: Changed the requirements directory to "docs" as the requirements.txt file is located there.
+# This modification ensures that the setup script can locate the requirements correctly.
+requirements_directory = pathlib.Path.cwd() / "docs"
 for filename in requirements_directory.glob("*.txt"):
     variant = filename.stem
     with filename.open() as libraries:
