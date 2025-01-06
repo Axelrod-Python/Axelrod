@@ -1,3 +1,24 @@
+# v4.13.2, 2025-01-06
+
+Mainly internal changes: fix for `TestOpponent` class and updates to various files.
+
+- Fixed `TestOpponent` class in `axelrod/tests/strategies/test_player.py` to remove the `__init__` constructor and replaced it with a static `strategy` method to resolve PytestCollectionWarning.
+  - The class now defines a `strategy` method that returns `C`, as required for it to be collectable by pytest.
+  
+  ```python
+  class OpponentTest(axl.Player):
+      """A player who only exists so we have something to test against"""
+  
+      name = "OpponentTest"
+      classifier = _test_classifier
+  
+      @staticmethod
+      def strategy(opponent):
+          return C
+
+- **Updated docs/Makefile**.
+- **Updated setup.py**.
+
 # v4.13.1, 2024-10-02
 
 Mainly internal changes: move to pyproject.toml.
