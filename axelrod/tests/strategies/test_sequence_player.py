@@ -6,7 +6,7 @@ import axelrod as axl
 from axelrod._strategy_utils import recursive_thue_morse
 from axelrod.strategies.sequence_player import SequencePlayer
 
-from .test_player import TestOpponent, TestPlayer
+from .test_player import OpponentTest, TestPlayer
 
 C, D = axl.Action.C, axl.Action.D
 
@@ -26,7 +26,7 @@ class TestSequencePlayer(unittest.TestCase):
             yield 1
 
         player = SequencePlayer(generator_function=cooperate_gen)
-        opponent = TestOpponent()
+        opponent = OpponentTest()
         self.assertEqual(C, player.strategy(opponent))
 
 
