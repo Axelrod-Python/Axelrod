@@ -12,7 +12,8 @@ from axelrod.makes_use_of import (
 from axelrod.strategy_transformers import final_sequence
 
 
-class TestMakesUseOfLengthAndGamePlayer(axl.Player):
+# class TestMakesUseOfLengthAndGamePlayer(axl.Player):
+class MakesUseOfLengthAndGamePlayer(axl.Player):
     """
     Should have some function that uses length
     """
@@ -45,7 +46,7 @@ class TestMakesUseOfNothingPlayer(axl.Player):
 class TestMakesUseOf(unittest.TestCase):
     def test_makes_use_of_length_and_game(self):
         self.assertEqual(
-            makes_use_of(TestMakesUseOfLengthAndGamePlayer()),
+            makes_use_of(MakesUseOfLengthAndGamePlayer()),
             {"length", "game"},
         )
 
