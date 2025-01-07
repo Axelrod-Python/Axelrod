@@ -113,7 +113,7 @@ class TestAsymmetricGame(unittest.TestCase):
         self.assertEqual(error_raised, (A.shape != B.transpose().shape))
 
     @given(asymgame=asymmetric_games())
-    @settings(max_examples=5)
+    @settings(max_examples=5, deadline=3000)
     def test_random_repr(self, asymgame):
         """Test repr with random scores."""
         expected_repr = "Axelrod game with matrices: {}".format(

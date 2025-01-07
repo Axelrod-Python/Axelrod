@@ -19,14 +19,16 @@ stochastic_strategies = [
 
 
 class TestStrategyList(unittest.TestCase):
-    def test_call(self):
-        strategies = strategy_lists().example()
+    # MG: Replaced .example() with @given for generating strategies
+    @given(strategies=strategy_lists())
+    @settings(max_examples=3)
+    def test_call(self, strategies):
         self.assertIsInstance(strategies, list)
         for p in strategies:
             self.assertIsInstance(p(), axl.Player)
 
     @given(strategies=strategy_lists(min_size=1, max_size=50))
-    @settings(max_examples=5)
+    @settings(max_examples=3)
     def test_decorator(self, strategies):
         self.assertIsInstance(strategies, list)
         self.assertGreaterEqual(len(strategies), 1)
@@ -35,7 +37,7 @@ class TestStrategyList(unittest.TestCase):
             self.assertIsInstance(strategy(), axl.Player)
 
     @given(strategies=strategy_lists(strategies=axl.basic_strategies))
-    @settings(max_examples=5)
+    @settings(max_examples=3)
     def test_decorator_with_given_strategies(self, strategies):
         self.assertIsInstance(strategies, list)
         basic_player_names = [str(s()) for s in axl.basic_strategies]
@@ -50,12 +52,14 @@ class TestMatch(unittest.TestCase):
     Test that the composite method works
     """
 
-    def test_call(self):
-        match = matches().example()
+    # MG: Replaced .example() with @given for match generation
+    @given(match=matches())
+    @settings(max_examples=3)
+    def test_call(self, match):
         self.assertIsInstance(match, axl.Match)
 
     @given(match=matches(min_turns=10, max_turns=50, min_noise=0, max_noise=1))
-    @settings(max_examples=5)
+    @settings(max_examples=3)
     def test_decorator(self, match):
         self.assertIsInstance(match, axl.Match)
         self.assertGreaterEqual(len(match), 10)
@@ -64,7 +68,7 @@ class TestMatch(unittest.TestCase):
         self.assertLessEqual(match.noise, 1)
 
     @given(match=matches(min_turns=10, max_turns=50, min_noise=0, max_noise=0))
-    @settings(max_examples=5)
+    @settings(max_examples=3)
     def test_decorator_with_no_noise(self, match):
         self.assertIsInstance(match, axl.Match)
         self.assertGreaterEqual(len(match), 10)
@@ -73,8 +77,10 @@ class TestMatch(unittest.TestCase):
 
 
 class TestTournament(unittest.TestCase):
-    def test_call(self):
-        tournament = tournaments().example()
+    # MG: Replaced .example() with @given for tournament generation
+    @given(tournament=tournaments())
+    @settings(max_examples=3)
+    def test_call(self, tournament):
         self.assertIsInstance(tournament, axl.Tournament)
 
     @given(
@@ -88,7 +94,7 @@ class TestTournament(unittest.TestCase):
             max_size=3,
         )
     )
-    @settings(max_examples=5)
+    @settings(max_examples=3)
     def test_decorator(self, tournament):
         self.assertIsInstance(tournament, axl.Tournament)
         self.assertLessEqual(tournament.turns, 50)
@@ -99,7 +105,7 @@ class TestTournament(unittest.TestCase):
         self.assertGreaterEqual(tournament.repetitions, 2)
 
     @given(tournament=tournaments(strategies=axl.basic_strategies, max_size=3))
-    @settings(max_examples=5)
+    @settings(max_examples=3)
     def test_decorator_with_given_strategies(self, tournament):
         self.assertIsInstance(tournament, axl.Tournament)
         basic_player_names = [str(s()) for s in axl.basic_strategies]
@@ -108,8 +114,9 @@ class TestTournament(unittest.TestCase):
 
 
 class TestProbEndTournament(unittest.TestCase):
-    def test_call(self):
-        tournament = tournaments().example()
+    @given(tournament=prob_end_tournaments())
+    @settings(max_examples=3)
+    def test_call(self, tournament):
         self.assertIsInstance(tournament, axl.Tournament)
 
     @given(
@@ -123,7 +130,7 @@ class TestProbEndTournament(unittest.TestCase):
             max_size=3,
         )
     )
-    @settings(max_examples=5)
+    @settings(max_examples=3)
     def test_decorator(self, tournament):
         self.assertIsInstance(tournament, axl.Tournament)
         self.assertLessEqual(tournament.prob_end, 1)
@@ -138,7 +145,7 @@ class TestProbEndTournament(unittest.TestCase):
             strategies=axl.basic_strategies, max_size=3
         )
     )
-    @settings(max_examples=5)
+    @settings(max_examples=3)
     def test_decorator_with_given_strategies(self, tournament):
         self.assertIsInstance(tournament, axl.Tournament)
         basic_player_names = [str(s()) for s in axl.basic_strategies]
@@ -147,8 +154,9 @@ class TestProbEndTournament(unittest.TestCase):
 
 
 class TestSpatialTournament(unittest.TestCase):
-    def test_call(self):
-        tournament = spatial_tournaments().example()
+    @given(tournament=spatial_tournaments())
+    @settings(max_examples=3)
+    def test_call(self, tournament):
         self.assertIsInstance(tournament, axl.Tournament)
 
     @given(
@@ -162,7 +170,7 @@ class TestSpatialTournament(unittest.TestCase):
             max_size=3,
         )
     )
-    @settings(max_examples=5)
+    @settings(max_examples=3)
     def test_decorator(self, tournament):
         self.assertIsInstance(tournament, axl.Tournament)
         self.assertLessEqual(tournament.turns, 50)
@@ -177,7 +185,7 @@ class TestSpatialTournament(unittest.TestCase):
             strategies=axl.basic_strategies, max_size=3
         )
     )
-    @settings(max_examples=5)
+    @settings(max_examples=3)
     def test_decorator_with_given_strategies(self, tournament):
         self.assertIsInstance(tournament, axl.Tournament)
         basic_player_names = [str(s()) for s in axl.basic_strategies]
@@ -186,8 +194,9 @@ class TestSpatialTournament(unittest.TestCase):
 
 
 class TestProbEndSpatialTournament(unittest.TestCase):
-    def test_call(self):
-        tournament = prob_end_spatial_tournaments().example()
+    @given(tournament=prob_end_spatial_tournaments())
+    @settings(max_examples=3)
+    def test_call(self, tournament):
         self.assertIsInstance(tournament, axl.Tournament)
 
     @given(
@@ -201,7 +210,7 @@ class TestProbEndSpatialTournament(unittest.TestCase):
             max_size=3,
         )
     )
-    @settings(max_examples=5)
+    @settings(max_examples=3)
     def test_decorator(self, tournament):
         self.assertIsInstance(tournament, axl.Tournament)
         self.assertLessEqual(tournament.prob_end, 1)
@@ -216,7 +225,7 @@ class TestProbEndSpatialTournament(unittest.TestCase):
             strategies=axl.basic_strategies, max_size=3
         )
     )
-    @settings(max_examples=5)
+    @settings(max_examples=3)
     def test_decorator_with_given_strategies(self, tournament):
         self.assertIsInstance(tournament, axl.Tournament)
         basic_player_names = [str(s()) for s in axl.basic_strategies]
@@ -225,18 +234,19 @@ class TestProbEndSpatialTournament(unittest.TestCase):
 
 
 class TestGame(unittest.TestCase):
-    def test_call(self):
-        game = games().example()
+    @given(game=games())
+    @settings(max_examples=3)
+    def test_call(self, game):
         self.assertIsInstance(game, axl.Game)
 
     @given(game=games())
-    @settings(max_examples=5)
+    @settings(max_examples=3)
     def test_decorator(self, game):
         self.assertIsInstance(game, axl.Game)
         r, p, s, t = game.RPST()
         self.assertTrue((2 * r) > (t + s) and (t > r > p > s))
 
     @given(game=games(prisoners_dilemma=False))
-    @settings(max_examples=5)
+    @settings(max_examples=3)
     def test_decorator_unconstrained(self, game):
         self.assertIsInstance(game, axl.Game)

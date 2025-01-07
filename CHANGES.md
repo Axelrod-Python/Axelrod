@@ -4,18 +4,9 @@ Mainly internal changes: fix for `TestOpponent` class and updates to various fil
 
 - Fixed `TestOpponent` class in `axelrod/tests/strategies/test_player.py` to remove the `__init__` constructor and replaced it with a static `strategy` method to resolve PytestCollectionWarning.
   - The class now defines a `strategy` method that returns `C`, as required for it to be collectable by pytest.
-  
-  ```python
-  class OpponentTest(axl.Player):
-      """A player who only exists so we have something to test against"""
-  
-      name = "OpponentTest"
-      classifier = _test_classifier
-  
-      @staticmethod
-      def strategy(opponent):
-          return C
 
+- Renamed `TestMakesUseOfLengthAndGamePlayer` class to `MakesUseOfLengthAndGamePlayer` in axelrod/tests/unit/test_makes_use_of.py to resolve PytestCollectionWarning.
+- Renamed `TestMakesUseOfNothingPlayer` class to `MakesUseOfNothingPlayer` in axelrod/tests/unit/test_makes_use_of.py to resolve PytestCollectionWarning.
 - **Updated docs/Makefile**.
 - **Updated setup.py**.
 

@@ -349,6 +349,7 @@ class TestPlayerClass(unittest.TestCase):
             TypeError, ParameterisedTestPlayer, "other", "other", "other"
         )
 
+
 # TestPlayer class for testing against a known opponent
 # class TestOpponent(axl.Player):
 #     """A player who only exists so we have something to test against"""
@@ -360,6 +361,7 @@ class TestPlayerClass(unittest.TestCase):
 #     def strategy(opponent):
 #         return C
 
+
 class OpponentTest(axl.Player):
     """A player who only exists so we have something to test against"""
 
@@ -369,6 +371,7 @@ class OpponentTest(axl.Player):
     @staticmethod
     def strategy(opponent):
         return C
+
 
 class TestPlayer(unittest.TestCase):
     """A Test class from which other player test classes are inherited."""
@@ -642,7 +645,7 @@ class TestPlayer(unittest.TestCase):
             "stochastic" in player.classifier,
             msg="stochastic not in classifier",
         )
-        # OpponentTest 
+        # OpponentTest
         for key in OpponentTest.classifier:
             self.assertEqual(
                 axl.Classifiers[key](player),
