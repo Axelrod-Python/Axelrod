@@ -97,9 +97,14 @@ class TestTournament(unittest.TestCase):
                 turns=2,
                 repetitions=2,
             )
-            path = pathlib.Path(
-                "test_outputs/stochastic_tournament_{}.csv".format(_)
-            )
+            # path = pathlib.Path(
+            #     "test_outputs/stochastic_tournament_{}.csv".format(_)
+            # )
+            # MG: Changed to use right filename "deterministic_tournament_{}.csv"
+            path = pathlib.Path(f"test_outputs/deterministic_tournament_{_}.csv")
+            # MG: Control for file existence before new execution
+            if path.exists():
+                path.unlink()
             files.append(axl_filename(path))
             tournament.play(
                 progress_bar=False, filename=files[-1], build_results=False
