@@ -122,6 +122,12 @@ class MoranProcess(object):
         self._random = RandomGenerator(seed=seed)
         self._bulk_random = BulkRandomGenerator(self._random.random_seed_int())
         self.set_players()
+        
+        # Dedupe initial players as mutation targets
+        initial_players_by_name = {
+            player.name: player for player in self.initial_players
+        }
+        self.mutation_targets = [pi for pi in initial_players_by_name.values()]
 
         if interaction_graph is None:
             interaction_graph = complete_graph(len(players), loops=False)
@@ -211,7 +217,7 @@ class MoranProcess(object):
         # Choose another strategy at random from the initial population
         player = None
         while player is None or str(player) == str(self.players[index]):
-            player = self._random.choice(self.initial_players)
+            player = self._random.choice(self.mutation_targets)
         return player.clone()
 
     def death(self, index: int = None) -> int:
