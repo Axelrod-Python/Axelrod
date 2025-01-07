@@ -101,7 +101,9 @@ class TestTournament(unittest.TestCase):
             #     "test_outputs/stochastic_tournament_{}.csv".format(_)
             # )
             # MG: Changed to use right filename "deterministic_tournament_{}.csv"
-            path = pathlib.Path(f"test_outputs/deterministic_tournament_{_}.csv")
+            path = pathlib.Path(
+                f"test_outputs/deterministic_tournament_{_}.csv"
+            )
             # MG: Control for file existence before new execution
             if path.exists():
                 path.unlink()
