@@ -59,7 +59,7 @@ class FrequencyAnalyzer(Player):
             The probability to cooperate
         """
         super().__init__()
-        self.minimum_cooperation_ratio = 0.15
+        self.minimum_cooperation_ratio = 0.25
         self.frequency_table = dict()
         self.last_sequence = ''
         self.current_sequence = ''
@@ -83,7 +83,7 @@ class FrequencyAnalyzer(Player):
         else:
             try:
                 results = self.frequency_table[self.current_sequence]
-                cooperates = results.count('C')
+                cooperates = results.count(C)
                 if (cooperates / len(self.history)) > self.minimum_cooperation_ratio:
                     return C
                 return D
