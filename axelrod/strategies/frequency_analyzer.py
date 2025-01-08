@@ -96,7 +96,9 @@ class FrequencyAnalyzer(Player):
             try:
                 results = self.frequency_table[self.current_sequence]
                 cooperates = results.count(C)
-                if (cooperates / len(self.history)) > self.minimum_cooperation_ratio:
+                if (
+                    cooperates / len(self.history)
+                ) > self.minimum_cooperation_ratio:
                     return C
                 return D
             except:
