@@ -7,9 +7,10 @@ from axelrod.strategy_transformers import (
 
 C, D = Action.C, Action.D
 
+
 class FrequencyAnalyzer(Player):
     """
-    A player starts by playing TitForTat for the first 30 turns (dataset generation phase). 
+    A player starts by playing TitForTat for the first 30 turns (dataset generation phase).
 
     Take the matrix of last 2 moves by both Player and Opponent.
 
@@ -30,7 +31,7 @@ class FrequencyAnalyzer(Player):
 
     During dataset generation phase, Player will play TitForTat. After end of dataset generation phase,
     Player will switch strategies. Upon encountering a particular 4-move sequence in the game, Player will look up history
-    of subsequent Opponent move. If ratio of defections to total moves exceeds p, Player will defect. Otherwise, 
+    of subsequent Opponent move. If ratio of defections to total moves exceeds p, Player will defect. Otherwise,
     Player will cooperate.
 
     Could fall under "Hunter" class of strategies.
@@ -51,6 +52,7 @@ class FrequencyAnalyzer(Player):
         "manipulates_source": False,
         "manipulates_state": False,
     }
+
     def __init__(self) -> None:
         """
         Parameters
@@ -61,14 +63,24 @@ class FrequencyAnalyzer(Player):
         super().__init__()
         self.minimum_cooperation_ratio = 0.25
         self.frequency_table = dict()
-        self.last_sequence = ''
-        self.current_sequence = ''
+        self.last_sequence = ""
+        self.current_sequence = ""
 
     def strategy(self, opponent: Player) -> Action:
         """This is the actual strategy"""
         if len(self.history) > 5:
-            self.last_sequence = str(opponent.history[-3]) + str(self.history[-3]) + str(opponent.history[-2]) + str(self.history[-2])
-            self.current_sequence = str(opponent.history[-2]) + str(self.history[-2]) + str(opponent.history[-1]) + str(self.history[-1])
+            self.last_sequence = (
+                str(opponent.history[-3])
+                + str(self.history[-3])
+                + str(opponent.history[-2])
+                + str(self.history[-2])
+            )
+            self.current_sequence = (
+                str(opponent.history[-2])
+                + str(self.history[-2])
+                + str(opponent.history[-1])
+                + str(self.history[-1])
+            )
             self.update_table(opponent)
 
         if len(self.history) < 30:
@@ -100,4 +112,3 @@ class FrequencyAnalyzer(Player):
             self.frequency_table[self.last_sequence] = results
         else:
             self.frequency_table[self.last_sequence] = [opponent.history[-1]]
-        
