@@ -59,7 +59,7 @@ class FrequencyAnalyzer(Player):
             The probability to cooperate
         """
         super().__init__()
-        self.minimum_cooperation_ratio = 0.8
+        self.minimum_cooperation_ratio = 0.15
         self.frequency_table = dict()
         self.last_sequence = ''
         self.current_sequence = ''
@@ -88,8 +88,6 @@ class FrequencyAnalyzer(Player):
                     return C
                 return D
             except:
-                if not self.history:
-                    return C
                 # React to the opponent's last move
                 if opponent.history[-1] == D:
                     return D
