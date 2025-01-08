@@ -47,8 +47,57 @@ class Test(TestPlayer):
     
     def test_strategy_random(self):
         # Test of 50 turns against random strategy
-        opponent_actions = [C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, D, C, C, C, C, D, D, C, C, C, D, D, D, C, C, D, D, D, D]
-        expected = [(C, C), (C, C), (C, C), (C, C), (C, C), (C, C), (C, C), (C, C), (C, C), (C, C), (C, C), (C, C), (C, C), (C, C), (C, C), (C, C), (C, C), (C, C), (C, C), (C, C), (C, C), (C, C), (C, C), (C, C), (C, C), (C, C), (C, C), (C, C), (C, C), (C, C), (D, C), (C, D), (D, C), (C, C), (C, C), (D, C), (D, D), (D, D), (D, C), (C, C), (D, C), (D, D), (D, D), (D, D), (D, C), (D, C), (C, D), (D, D), (D, D), (D, D)]
+        opponent_actions = [C, D, D, D, D, D, D, C, D, C, D, C, D, C, D, D, C, D, C, D, D, C, D, D, D, D, D, C, C, D, D, C, C, C, D, D, C, D, C, C, C, D, D, C, C, C, D, C, D, D]
+        expected = [(C, C), 
+         (C, D), 
+         (D, D), 
+         (D, D), 
+         (D, D), 
+         (D, D), 
+         (D, D), 
+         (D, C), 
+         (C, D), 
+         (D, C), 
+         (C, D), 
+         (D, C), 
+         (C, D), 
+         (D, C), 
+         (C, D), 
+         (D, D), 
+         (D, C), 
+         (C, D), 
+         (D, C), 
+         (C, D), 
+         (D, D), 
+         (D, C), 
+         (C, D), 
+         (D, D), 
+         (D, D), 
+         (D, D), 
+         (D, D), 
+         (D, C), 
+         (C, C), 
+         (C, D), #rd 30 (end of dataset generation phase) 
+         (D, D), 
+         (D, C), 
+         (D, C), #example of non TFT (by this point, FrequencyAnalyzer is generally distrustful of opponent)
+         (C, C), 
+         (D, D), 
+         (D, D), 
+         (D, C), 
+         (D, D), 
+         (D, C), 
+         (D, C), 
+         (D, C), 
+         (D, D), 
+         (D, D), 
+         (D, C), 
+         (D, C), 
+         (D, C), 
+         (D, D), 
+         (D, C), 
+         (D, D), 
+         (D, D)]
         self.versus_test(
             axl.MockPlayer(opponent_actions), expected_actions=expected, seed=4
         )
