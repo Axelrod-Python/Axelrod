@@ -2,6 +2,9 @@
 
 ### 2024
 
+* Glynatsi, Nikoleta E., Vincent Knight, and Marc Harper. "Properties of winning Iterated Prisoner’s Dilemma strategies." [PLOS Computational Biology 20.12 (2024): e1012644](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012644).
+* Knight, Vincent, et al. "Recognising and evaluating the effectiveness of extortion in the Iterated Prisoner’s Dilemma." [PloS one 19.7 (2024): e0304641](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0304641).
+* Bucciarelli, Edgardo, et al. "Studying the Distribution of Strategies in the Two-Scenario Snowdrift Game." [Digital (Eco) Systems and Societal Challenges. Springer, Cham, 2024. 407-428.](https://link.springer.com/chapter/10.1007/978-3-031-75586-6_22)
 * Macmillan-Scott, Olivia, Akin Ünver, and Mirco Musolesi. "Game-theoretic agent-based modelling of micro-level conflict: Evidence from the ISIS-Kurdish war." [Plos one 19.6 (2024)](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0297483): e0297483.
 * Diaz, Manfred, Liam Paull, and Andrea Tacchetti. "Rethinking Teacher-Student Curriculum Learning through the Cooperative Mechanics of Experience." [arXiv:2404.03084](https://arxiv.org/abs/2404.03084) (2024).
 
@@ -24,7 +27,6 @@
 
 * Kies, Martin. "Finding Best Answers for the Iterated Prisoner’s Dilemma Using Improved Q-Learning." [Available at SSRN 3556714](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3556714) (2020).
 * Krapohl, Sebastian, Václav Ocelík, and Dawid M. Walentek. "The instability of globalization: applying evolutionary game theory to global trade cooperation." [Public Choice](https://ideas.repec.org/a/kap/pubcho/vyid10.1007_s11127-020-00799-1.html) (2020): 1-21.
-* Glynatsi, Nikoleta E., and Vincent A. Knight. "A meta analysis of tournaments and an evaluation of performance in the Iterated Prisoner's Dilemma" arXiv preprint arXiv:2001.05911 (2019). [ArXiv](https://arxiv.org/abs/2001.05911)
 * Wang, Shiheng, and Fangzhen Lin. "Nice Invincible Strategy for the Average-Payoff IPD." [Proceedings of the AAAI Conference on Artificial Intelligence](https://aaai.org/ojs/index.php/AAAI/article/view/5604)
 * Glynatsi, Nikoleta E., and Vincent A. Knight. "Using a theory of mind to find best responses to memory-one strategies." Sci Rep 10, 17287 (2020). [Scientific Reports](https://doi.org/10.1038/s41598-020-74181-y)
 
@@ -35,7 +37,6 @@
 * O'Neil, Daniel A., and Mikel D. Petty. "Synthesizing Social Networks with Iterated Prisoners' Dilemma." [Proceedings of the International Conference on Modeling, Simulation and Visualization Methods (MSV).](https://csce.ucmss.com/cr/books/2019/LFS/CSREA2019/MSV2345.pdf) The Steering Committee of The World Congress in Computer Science, Computer Engineering and Applied Computing (WorldComp), 2019.
 * Collins, David. "A Genetic Algorithm Approach to the Iterated Prisoner’s Dilemma." [Undergraduate Research in Natural and Clinical Science and Technology Journal](https://urncst.com/index.php/urncst/article/view/155) (2019): 1-9.
 * Wang, Shiheng, and Fangzhen Lin. "Invincible Strategies of Iterated Prisoner's Dilemma." Proceedings of the 18th International Conference on Autonomous Agents and MultiAgent Systems. International Foundation for Autonomous Agents and Multiagent Systems, 2019.  [ArXiv](https://arxiv.org/abs/1712.06488)
-* Knight, Vincent A., et al. "Recognising and evaluating the effectiveness of extortion in the Iterated Prisoner's Dilemma." arXiv preprint arXiv:1904.00973 (2019). [ArXiv](https://arxiv.org/abs/1904.00973)
 
 ### 2018
 * Garcia, Julian, and Matthijs van Veelen. "No strategy can win in the repeated prisoner’s dilemma: Linking game theory and computer simulations." Frontiers in Robotics and AI 5.102 (2018) [pdf](https://static1.squarespace.com/static/56d27a10b6aa606b54a190bf/t/5b864ef11ae6cf2ee0c6c207/1535528708649/20.pdf)
@@ -60,7 +61,8 @@
 * Knight, Vincent. "Playing Games: A Case Study in Active Learning Applied to Game Theory." [MSOR Connections 14.1 (2015): 28-38](https://journals.gre.ac.uk/index.php/msor/article/download/254/254).
 
 ### Dissertations
-
+* Boyd, Myron Spenser. Investigating and Quantifying Collaboration as a Performance Metric in Systems of Systems
+ [The George Washington University ProQuest Dissertations & Theses, 31556316.](https://www.proquest.com/openview/54d18afb1d41e22d711e097a95477d3b/1?pq-origsite=gscholar&cbl=18750&diss=y) 2024.  
 * Wang, Shiheng. [Strategies and Best Responses in The Iterated Prisoner’s Dilemma](https://search.proquest.com/openview/796acc73fdddc4f3635b58b4bfe1f606/1?pq-origsite=gscholar&cbl=2026366&diss=y). Hong Kong University of Science and Technology (Hong Kong), 2021.
 * Dollbo, Anna. MIXED MEMORY Q-LEARNER: An adaptive reinforcement learning algorithm for the Iterated Prisoner’s Dilemma. [BS thesis](https://gupea.ub.gu.se/handle/2077/69664). 2021.
 * Kies, Martin. Machine learning in economics. [Diss. Universität Ulm](https://oparu.uni-ulm.de/server/api/core/bitstreams/e90ae5d8-6a4b-467e-91ee-75fe0df7c99a/content), 2020.
