@@ -7,7 +7,7 @@ from axelrod.strategy_transformers import (
 
 C, D = Action.C, Action.D
 
-class FreqAnalyzer(Player):
+class FrequencyAnalyzer(Player):
     """
     A player starts by playing TitForTat for the first 30 turns (dataset generation phase). 
 
@@ -38,11 +38,11 @@ class FreqAnalyzer(Player):
 
     Names:
 
-    - FreqAnalyzer (FREQ): Original by Ian Miller
+    - FrequencyAnalyzer (FREQ): Original by Ian Miller
     """
 
     # These are various properties for the strategy
-    name = "FreqAnalyzer"
+    name = "FrequencyAnalyzer"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
@@ -59,7 +59,7 @@ class FreqAnalyzer(Player):
             The probability to cooperate
         """
         super().__init__()
-        self.minimum_cooperation_ratio = 0.5
+        self.minimum_cooperation_ratio = 0.8
         self.frequency_table = dict()
         self.last_sequence = ''
         self.current_sequence = ''
@@ -69,7 +69,6 @@ class FreqAnalyzer(Player):
         if len(self.history) > 5:
             self.last_sequence = str(opponent.history[-3]) + str(self.history[-3]) + str(opponent.history[-2]) + str(self.history[-2])
             self.current_sequence = str(opponent.history[-2]) + str(self.history[-2]) + str(opponent.history[-1]) + str(self.history[-1])
-
             self.update_table(opponent)
 
         if len(self.history) < 30:
@@ -97,16 +96,10 @@ class FreqAnalyzer(Player):
                 return C
 
     def update_table(self, opponent: Player):
-        print(self.frequency_table)
-        print("___________________")
-        print("current sequence is {}", self.last_sequence)
         if self.last_sequence in self.frequency_table.keys():
-            print("seen this key before")
-            print("freq table keys = {}", self.frequency_table.keys())
             results = self.frequency_table[self.last_sequence]
             results.append(opponent.history[-1])
             self.frequency_table[self.last_sequence] = results
         else:
-            print("not seen this key ever")
             self.frequency_table[self.last_sequence] = [opponent.history[-1]]
         
