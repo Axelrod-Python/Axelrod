@@ -83,29 +83,22 @@ class FrequencyAnalyzer(Player):
             )
             self.update_table(opponent)
 
-        if len(self.history) < 30:
-            # Play TitForTat
-            # First move
+        # dataset generation phase
+        if (len(self.history) < 30) or (
+            self.current_sequence not in self.frequency_table
+        ):
             if not self.history:
                 return C
-            # React to the opponent's last move
             if opponent.history[-1] == D:
                 return D
             return C
-        else:
-            try:
-                results = self.frequency_table[self.current_sequence]
-                cooperates = results.count(C)
-                if (
-                    cooperates / len(self.history)
-                ) > self.minimum_cooperation_ratio:
-                    return C
-                return D
-            except:
-                # React to the opponent's last move
-                if opponent.history[-1] == D:
-                    return D
-                return C
+
+        # post-dataset generation phase
+        results = self.frequency_table[self.current_sequence]
+        cooperates = results.count(C)
+        if (cooperates / len(self.history)) > self.minimum_cooperation_ratio:
+            return C
+        return D
 
     def update_table(self, opponent: Player):
         if self.last_sequence in self.frequency_table.keys():
