@@ -728,7 +728,7 @@ class ResultSet:
                 "CC_to_C_rate",
                 "CD_to_C_rate",
                 "DC_to_C_rate",
-                "DD_to_C_rate"
+                "DD_to_C_rate",
             ],
         )
 
@@ -770,7 +770,7 @@ class ResultSet:
                 self.cooperating_rating,
                 median_wins,
                 self.initial_cooperation_rate,
-                original_index
+                original_index,
             )
         )
 
