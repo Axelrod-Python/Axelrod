@@ -638,7 +638,6 @@ class TestResultSet(unittest.TestCase):
         ]
         tournament = axl.Tournament(players, turns=10, repetitions=3)
         results = tournament.play()
-        print(results.write_summary("other_test.csv"))
         summary = [
             (
                 0,
