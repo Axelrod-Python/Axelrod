@@ -709,6 +709,8 @@ class ResultSet:
         median_scores = map(np.nanmedian, self.normalised_scores)
         median_wins = map(np.nanmedian, self.wins)
 
+        original_index = {index for index, _player in enumerate(self.players)}
+
         self.player = namedtuple(
             "Player",
             [
@@ -718,6 +720,7 @@ class ResultSet:
                 "Cooperation_rating",
                 "Wins",
                 "Initial_C_rate",
+                "Original_index",
                 "CC_rate",
                 "CD_rate",
                 "DC_rate",
@@ -725,7 +728,7 @@ class ResultSet:
                 "CC_to_C_rate",
                 "CD_to_C_rate",
                 "DC_to_C_rate",
-                "DD_to_C_rate",
+                "DD_to_C_rate"
             ],
         )
 
@@ -767,6 +770,7 @@ class ResultSet:
                 self.cooperating_rating,
                 median_wins,
                 self.initial_cooperation_rate,
+                original_index
             )
         )
 
