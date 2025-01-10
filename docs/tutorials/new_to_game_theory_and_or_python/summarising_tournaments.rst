@@ -18,10 +18,10 @@ that summarises the results of the tournament::
     >>> summary = results.summarise()
     >>> import pprint
     >>> pprint.pprint(summary)
-    [Player(Rank=0, Name='Defector', Median_score=2.6, Cooperation_rating=0.0, Wins=3.0, Initial_C_rate=0.0, Original_index=1, CC_rate=0.0, CD_rate=0.0, DC_rate=0.4000000000000001, DD_rate=0.6, CC_to_C_rate=0, CD_to_C_rate=0, DC_to_C_rate=0, DD_to_C_rate=0),
-     Player(Rank=1, Name='Tit For Tat', Median_score=2.3000000000000003, Cooperation_rating=0.7, Wins=0.0, Initial_C_rate=1.0, Original_index=2, CC_rate=0.6666666666666666, CD_rate=0.03333333333333333, DC_rate=0.0, DD_rate=0.3, CC_to_C_rate=1.0, CD_to_C_rate=0, DC_to_C_rate=0, DD_to_C_rate=0),
-     Player(Rank=2, Name='Grudger', Median_score=2.3000000000000003, Cooperation_rating=0.7, Wins=0.0, Initial_C_rate=1.0, Original_index=3, CC_rate=0.6666666666666666, CD_rate=0.03333333333333333, DC_rate=0.0, DD_rate=0.3, CC_to_C_rate=1.0, CD_to_C_rate=0, DC_to_C_rate=0, DD_to_C_rate=0),
-     Player(Rank=3, Name='Cooperator', Median_score=2.0, Cooperation_rating=1.0, Wins=0.0, Initial_C_rate=1.0, Original_index=0, CC_rate=0.6666666666666666, CD_rate=0.3333333333333333, DC_rate=0.0, DD_rate=0.0, CC_to_C_rate=1.0, CD_to_C_rate=1.0, DC_to_C_rate=0, DD_to_C_rate=0)]
+    [Player(Rank=0, Name='Defector', Median_score=2.6..., Cooperation_rating=0.0, Wins=3.0, Initial_C_rate=0.0, Original_index=1, CC_rate=...),
+     Player(Rank=1, Name='Tit For Tat', Median_score=2.3..., Cooperation_rating=0...., Wins=0.0, Initial_C_rate=1.0, Original_index=2, CC_rate=...),
+     Player(Rank=2, Name='Grudger', Median_score=2.3..., Cooperation_rating=0...., Wins=0.0, Initial_C_rate=1.0, Original_index=3, CC_rate=...),
+     Player(Rank=3, Name='Cooperator', Median_score=2.0..., Cooperation_rating=1.0, Wins=0.0, Initial_C_rate=1.0, Original_index=0, CC_rate=...)]
 
 It is also possible to write this data directly to a csv file using the
 `write_summary` method::
