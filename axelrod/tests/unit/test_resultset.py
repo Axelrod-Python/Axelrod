@@ -638,7 +638,7 @@ class TestResultSet(unittest.TestCase):
         ]
         tournament = axl.Tournament(players, turns=10, repetitions=3)
         results = tournament.play()
-
+        print(results.write_summary("other_test.csv"))
         summary = [
             (
                 0,
@@ -647,6 +647,7 @@ class TestResultSet(unittest.TestCase):
                 0.0,
                 3.0,
                 0.0,
+                1,
                 0.0,
                 0.0,
                 0.4000000000000001,
@@ -663,6 +664,7 @@ class TestResultSet(unittest.TestCase):
                 0.7,
                 0.0,
                 1.0,
+                2,
                 0.6666666666666666,
                 0.03333333333333333,
                 0.0,
@@ -679,6 +681,7 @@ class TestResultSet(unittest.TestCase):
                 0.7,
                 0.0,
                 1.0,
+                3,
                 0.6666666666666666,
                 0.03333333333333333,
                 0.0,
@@ -695,6 +698,7 @@ class TestResultSet(unittest.TestCase):
                 1.0,
                 0.0,
                 1.0,
+                0,
                 0.6666666666666666,
                 0.3333333333333333,
                 0.0,
@@ -724,7 +728,7 @@ class TestResultSet(unittest.TestCase):
             csvreader = csv.reader(csvfile)
             for row in csvreader:
                 ranked_names.append(row[1])
-                self.assertEqual(len(row), 14)
+                self.assertEqual(len(row), 15)
         self.assertEqual(ranked_names[0], "Name")
         self.assertEqual(ranked_names[1:], rs.ranked_names)
 
