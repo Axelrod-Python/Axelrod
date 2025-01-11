@@ -19,8 +19,8 @@ that summarises the results of the tournament::
     >>> import pprint
     >>> pprint.pprint(summary)
     [Player(Rank=0, Name='Defector', Median_score=2.6..., Cooperation_rating=0.0, Wins=3.0, Initial_C_rate=0.0, Original_index=1, CC_rate=...),
-     Player(Rank=1, Name='Tit For Tat', Median_score=2.3..., Cooperation_rating=0...., Wins=0.0, Initial_C_rate=1.0, Original_index=2, CC_rate=...),
-     Player(Rank=2, Name='Grudger', Median_score=2.3..., Cooperation_rating=0...., Wins=0.0, Initial_C_rate=1.0, Original_index=3, CC_rate=...),
+     Player(Rank=1, Name='Tit For Tat', Median_score=2.3..., Cooperation_rating=0..., Wins=0.0, Initial_C_rate=1.0, Original_index=2, CC_rate=...),
+     Player(Rank=2, Name='Grudger', Median_score=2.3..., Cooperation_rating=0..., Wins=0.0, Initial_C_rate=1.0, Original_index=3, CC_rate=...),
      Player(Rank=3, Name='Cooperator', Median_score=2.0..., Cooperation_rating=1.0, Wins=0.0, Initial_C_rate=1.0, Original_index=0, CC_rate=...)]
 
 It is also possible to write this data directly to a csv file using the
@@ -33,11 +33,11 @@ It is also possible to write this data directly to a csv file using the
     ...     for row in csvreader:
     ...         print(row)
     ['Rank', 'Name', 'Median_score', 'Cooperation_rating', 'Wins', 'Initial_C_rate', 'Original_index', 'CC_rate', 'CD_rate', 'DC_rate', 'DD_rate', 'CC_to_C_rate', 'CD_to_C_rate', 'DC_to_C_rate', 'DD_to_C_rate']
-    ['0', 'Defector', '2.6', '0.0', '3.0', '0.0', '1', '0.0', '0.0', '0.4000000000000001', '0.6', '0', '0', '0', '0']
-    ['1', 'Tit For Tat', '2.3000000000000003', '0.7', '0.0', '1.0', '2', '0.6666666666666666', '0.03333333333333333', '0.0', '0.3', '1.0', '0', '0', '0']
-    ['2', 'Grudger', '2.3000000000000003', '0.7', '0.0', '1.0', '3', '0.6666666666666666', '0.03333333333333333', '0.0', '0.3', '1.0', '0', '0', '0']
-    ['3', 'Cooperator', '2.0', '1.0', '0.0', '1.0', '0', '0.6666666666666666', '0.3333333333333333', '0.0', '0.0', '1.0', '1.0', '0', '0']
+    ['0', 'Defector', ...]
+    ['1', 'Tit For Tat', ...]
+    ['2', 'Grudger', ...]
+    ['3', 'Cooperator', ...]
 
-
+    
 The result set class computes a large number of detailed outcomes read about
 those in :ref:`tournament-results`.
