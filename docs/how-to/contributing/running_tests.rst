@@ -58,3 +58,21 @@ You can also run the doctests on any given file. For example, to run the
 doctests for the :code:`docs/tutorials/getting_started/match.rst` file::
 
     $ python -m doctest docs/tutorials/getting_started/match.rst
+
+Performance testing
+-------------------
+
+Performance is not automatically tested as of yet.  To check the performance
+of a change, first install pytest-benchmark::
+
+    $ pip install pytest-benchmark
+
+Then run benchmark.py before and after the change::
+
+    $ pytest benchmark.py
+
+Record the before and after report on the pull request.
+
+benchmark.py only tests the Moran process, which in turn tests a lot of other
+functionality.  If the function you're changing is not covered by the file,
+add another function.
