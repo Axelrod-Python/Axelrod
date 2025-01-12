@@ -38,6 +38,6 @@ It is also possible to write this data directly to a csv file using the
     ['2', 'Grudger', ...]
     ['3', 'Cooperator', ...]
 
-    
+
 The result set class computes a large number of detailed outcomes read about
 those in :ref:`tournament-results`.

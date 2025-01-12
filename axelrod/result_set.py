@@ -709,7 +709,7 @@ class ResultSet:
         median_scores = map(np.nanmedian, self.normalised_scores)
         median_wins = map(np.nanmedian, self.wins)
 
-        original_index = {index for index, _player in enumerate(self.players)}
+        original_index = [index for index, _player in enumerate(self.players)]
 
         self.player = namedtuple(
             "Player",
