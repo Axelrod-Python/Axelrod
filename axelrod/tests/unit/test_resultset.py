@@ -638,7 +638,7 @@ class TestResultSet(unittest.TestCase):
         ]
         tournament = axl.Tournament(players, turns=10, repetitions=3)
         results = tournament.play()
-        
+
         summary = [
             (
                 0,
