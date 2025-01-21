@@ -88,7 +88,7 @@ from .cycler import (
 from .cycler import Cycler, EvolvableCycler  # pylint: disable=unused-import
 from .darwin import Darwin
 from .dbs import DBS
-from .defector import Defector, TrickyDefector
+from .defector import Defector, TrickyDefector, ModalDefector
 from .doubler import Doubler
 from .finite_state_machines import (
     TF1,
@@ -252,6 +252,7 @@ from .titfortat import (
     HardTitFor2Tats,
     HardTitForTat,
     Michaelos,
+    ModalTFT,
     NTitsForMTats,
     OmegaTFT,
     OriginalGradual,
@@ -402,6 +403,8 @@ all_strategies = [
     MEM2,
     MathConstantHunter,
     Michaelos,
+    ModalDefector,
+    ModalTFT,
     NTitsForMTats,
     NaiveProber,
     Negation,
