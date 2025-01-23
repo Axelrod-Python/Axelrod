@@ -37,7 +37,7 @@ class Momentum(Player):
     def __init__(
         self,
         alpha=0.9914655399877477,  # Optimized by Genetic Algorithm. You can try to adapt it to any Env.
-        threshold=0.9676595613724907, # This one too
+        threshold=0.9676595613724907,  # This one too
     ) -> None:
         super().__init__()
         self.alpha = alpha
