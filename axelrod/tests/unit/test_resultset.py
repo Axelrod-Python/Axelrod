@@ -4,7 +4,6 @@ import unittest
 from collections import Counter
 
 import pandas as pd
-from dask.dataframe.core import DataFrame
 from hypothesis import given, settings
 from numpy import mean, nanmedian, std
 
