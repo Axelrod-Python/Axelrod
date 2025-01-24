@@ -65,7 +65,7 @@ Performance testing
 Performance is not automatically tested as of yet.  To check the performance
 of a change, first install pytest-benchmark::
 
-    $ pip install pytest-benchmark
+    $ python -m pip install pytest-benchmark
 
 Then run benchmark.py before and after the change::
 
