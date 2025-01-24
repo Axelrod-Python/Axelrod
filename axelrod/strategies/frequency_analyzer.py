@@ -62,7 +62,7 @@ class FrequencyAnalyzer(Player):
         """
         super().__init__()
         self.minimum_cooperation_ratio = 0.25
-        self.frequency_table = dict()
+        self.frequency_table: dict = dict()
         self.last_sequence = ""
         self.current_sequence = ""
 
