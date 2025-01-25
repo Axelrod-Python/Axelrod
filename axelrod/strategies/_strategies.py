@@ -193,6 +193,7 @@ from .memoryone import (  # pylint: disable=unused-import
 from .memorytwo import AON2, MEM2, DelayedAON1
 from .memorytwo import MemoryTwoPlayer  # pylint: disable=unused-import
 
+from .momentum import Momentum
 from .mutual import Desperate, Hopeless, Willing
 from .negation import Negation
 from .oncebitten import FoolMeOnce, ForgetfulFoolMeOnce, OnceBitten
@@ -402,6 +403,7 @@ all_strategies = [
     MEM2,
     MathConstantHunter,
     Michaelos,
+    Momentum,
     NTitsForMTats,
     NaiveProber,
     Negation,

@@ -76,6 +76,8 @@ Here are the docstrings of all the strategies in the library.
    :members:
 .. automodule:: axelrod.strategies.memoryone
    :members:
+.. automodule:: axelrod.strategies.momentum
+   :members:
 .. automodule:: axelrod.strategies.meta
    :members:
 .. automodule:: axelrod.strategies.mutual

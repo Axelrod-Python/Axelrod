@@ -41,6 +41,7 @@ modules = [
     "axelrod/strategies/mathematicalconstants.py",
     "axelrod/strategies/memoryone.py",
     "axelrod/strategies/memorytwo.py",
+    "axelrod/strategies/momentum.py",
     "axelrod/strategies/mutual.py",
     "axelrod/strategies/negation.py",
     "axelrod/strategies/oncebitten.py",
