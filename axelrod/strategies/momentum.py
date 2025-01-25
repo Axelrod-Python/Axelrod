@@ -16,12 +16,6 @@ class Momentum(Player):
     Names:
      - Momentum: Original name by Dong Won Moon
 
-    Notes:
-     - While I am an undergraduate student with limited experience in game theory, I
-       believe this strategy has potential in various scenarios.
-     - I encourage experts to explore and extend this idea in other contexts, such as
-       environments with noise, one-hot vectorization approaches at multiple actions.
-
     """
 
     name = "Momentum"
