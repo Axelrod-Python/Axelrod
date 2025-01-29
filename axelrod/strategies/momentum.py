@@ -13,6 +13,11 @@ class Momentum(Player):
     create significant and rapid changes in the player's behavior, much like how momentum
     responds to gradients in optimization.
 
+    Parameters:
+     - alpha:
+     - threshold:
+     - momentum:
+
     Names:
      - Momentum: Original name by Dong Won Moon
 
@@ -42,8 +47,8 @@ class Momentum(Player):
         return f"Momentum: {self.alpha}, {self.threshold}"
 
     def update_momentum(self, opponent_action):
-        action_value = 1 if opponent_action == C else 0
         # If the opponent defects, the momentum decreases, reflecting a loss of trust.
+        action_value = 1 if opponent_action == C else 0
         self.momentum = (
             self.alpha * self.momentum + (1 - self.alpha) * action_value
         )
