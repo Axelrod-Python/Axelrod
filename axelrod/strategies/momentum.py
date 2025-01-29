@@ -14,9 +14,9 @@ class Momentum(Player):
     responds to gradients in optimization.
 
     Parameters:
-     - alpha:
-     - threshold:
-     - momentum:
+     - alpha: Momentum decay factor that determines the rate of trust reduction. A higher value leads to slower decay, and the opponent's Defect acts as a trigger. (Optimized by Genetic Algorithm)
+     - threshold: The minimum momentum required to continue cooperation. If momentum falls below this value, the strategy switches to Defect as punishment. (Optimized by Genetic Algorithm)
+     - momentum: Represents the inertia of trust, dynamically changing based on past cooperation.
 
     Names:
      - Momentum: Original name by Dong Won Moon
@@ -35,8 +35,8 @@ class Momentum(Player):
 
     def __init__(
         self,
-        alpha=0.9914655399877477,  # Optimized by Genetic Algorithm. You can try to adapt it to any Env.
-        threshold=0.9676595613724907,  # This one too
+        alpha=0.9914655399877477,
+        threshold=0.9676595613724907,
     ) -> None:
         super().__init__()
         self.alpha = alpha
