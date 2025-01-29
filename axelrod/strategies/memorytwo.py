@@ -98,7 +98,7 @@ class MemoryTwoPlayer(Player):
 
     @staticmethod
     def compute_memory_depth(
-        sixteen_vector: Dict[Tuple[Action, Action], float]
+        sixteen_vector: Dict[Tuple[Action, Action], float],
     ) -> int:
         values = set(list(sixteen_vector.values()))
 
