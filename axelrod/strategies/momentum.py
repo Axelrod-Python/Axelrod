@@ -44,7 +44,7 @@ class Momentum(Player):
         self.momentum = 1.0
 
     def __repr__(self):
-        return f"Momentum: {self.alpha}, {self.threshold}"
+        return f"Momentum: {self.momentum}, Alpha: {self.alpha}, Threshold: {self.threshold}"
 
     def update_momentum(self, opponent_action):
         # If the opponent defects, the momentum decreases, reflecting a loss of trust.
