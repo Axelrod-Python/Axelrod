@@ -26,7 +26,7 @@ class TestMomentum(TestPlayer):
 
     def test_repr(self):
         player = self.player(alpha=0.9, threshold=0.8)
-        self.assertEqual(repr(player), "Momentum: 0.9, 0.8")
+        self.assertEqual(repr(player), "Momentum: 1.0, Alpha: 0.9, Threshold: 0.8")
 
     def test_strategy(self):
         actions = [(C, C)]
