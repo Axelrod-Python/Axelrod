@@ -1,5 +1,4 @@
-"""Test for the Gambler strategy. Most tests come from the LookerUp test suite.
-"""
+"""Test for the Gambler strategy. Most tests come from the LookerUp test suite."""
 
 import copy
 import unittest

@@ -36,7 +36,7 @@ def makes_use_of(player: Type[Player]) -> Set[Text]:
 
 
 def makes_use_of_variant(
-    player_or_method: Union[Callable, Type[Player]]
+    player_or_method: Union[Callable, Type[Player]],
 ) -> Set[Text]:
     """A version of makes_use_of that works on functions or player classes."""
     try:
