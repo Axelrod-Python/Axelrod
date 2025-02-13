@@ -1,3 +1,12 @@
+"$\varepsilon$-greedy":
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set
+    game: null
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: true
 $\phi$:
   inspects_source: false
   long_run_time: false
@@ -186,6 +195,14 @@ Bully:
   manipulates_state: false
   memory_depth: 1
   stochastic: false
+Burn Both Ends:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 1
+  stochastic: true
 Bush Mosteller:
   inspects_source: false
   long_run_time: false
@@ -195,6 +212,14 @@ Bush Mosteller:
   manipulates_state: false
   memory_depth: .inf
   stochastic: true
+CAPRI:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 3
+  stochastic: false
 Calculator:
   inspects_source: false
   long_run_time: false
@@ -463,6 +488,14 @@ Evolved FSM 4:
   manipulates_state: false
   memory_depth: .inf
   stochastic: false
+Evolved FSM 6:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
 Evolved HMM 5:
   inspects_source: false
   long_run_time: false
@@ -660,30 +693,6 @@ GTFT:
   manipulates_state: false
   memory_depth: 1
   stochastic: true
-Geller:
-  inspects_source: true
-  long_run_time: false
-  makes_use_of: !!set {}
-  manipulates_source: false
-  manipulates_state: false
-  memory_depth: .inf
-  stochastic: true
-Geller Cooperator:
-  inspects_source: true
-  long_run_time: false
-  makes_use_of: !!set {}
-  manipulates_source: false
-  manipulates_state: false
-  memory_depth: .inf
-  stochastic: false
-Geller Defector:
-  inspects_source: true
-  long_run_time: false
-  makes_use_of: !!set {}
-  manipulates_source: false
-  manipulates_state: false
-  memory_depth: .inf
-  stochastic: false
 General Soft Grudger:
   inspects_source: false
   long_run_time: false
@@ -1091,47 +1100,6 @@ Michaelos:
   manipulates_state: false
   memory_depth: .inf
   stochastic: true
-Mind Bender:
-  inspects_source: false
-  long_run_time: false
-  makes_use_of: !!set {}
-  manipulates_source: true
-  manipulates_state: false
-  memory_depth: -10
-  stochastic: false
-Mind Controller:
-  inspects_source: false
-  long_run_time: false
-  makes_use_of: !!set {}
-  manipulates_source: true
-  manipulates_state: false
-  memory_depth: -10
-  stochastic: false
-Mind Reader:
-  inspects_source: true
-  long_run_time: false
-  makes_use_of: !!set
-    game: null
-  manipulates_source: false
-  manipulates_state: false
-  memory_depth: .inf
-  stochastic: false
-Mind Warper:
-  inspects_source: false
-  long_run_time: false
-  makes_use_of: !!set {}
-  manipulates_source: true
-  manipulates_state: false
-  memory_depth: -10
-  stochastic: false
-Mirror Mind Reader:
-  inspects_source: true
-  long_run_time: false
-  makes_use_of: !!set {}
-  manipulates_source: true
-  manipulates_state: false
-  memory_depth: .inf
-  stochastic: false
 N Tit(s) For M Tat(s):
   inspects_source: false
   long_run_time: false
@@ -1333,15 +1301,6 @@ Prober 4:
   long_run_time: false
   makes_use_of: !!set {}
   manipulates_source: false
-  manipulates_state: false
-  memory_depth: .inf
-  stochastic: false
-Protected Mind Reader:
-  inspects_source: true
-  long_run_time: false
-  makes_use_of: !!set
-    game: null
-  manipulates_source: true
   manipulates_state: false
   memory_depth: .inf
   stochastic: false
@@ -1725,6 +1684,14 @@ Spiteful Tit For Tat:
   manipulates_state: false
   memory_depth: .inf
   stochastic: false
+SpitefulCC:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
 Stalker:
   inspects_source: false
   long_run_time: false
@@ -2032,3 +1999,12 @@ ZD-SET-2:
   manipulates_state: false
   memory_depth: 1
   stochastic: true
+greedy:
+  inspects_source: false
+  long_run_time: false
+  makes_use_of: !!set
+    game: null
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: .inf
+  stochastic: false
