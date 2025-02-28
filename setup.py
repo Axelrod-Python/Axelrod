@@ -1,6 +1,7 @@
-from collections import defaultdict
 import os
 import pathlib
+from collections import defaultdict
+
 from setuptools import setup
 
 # Read in the requirements files.

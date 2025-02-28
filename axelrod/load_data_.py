@@ -2,6 +2,8 @@ import pathlib
 import pkgutil
 from typing import Callable, Dict, List, Optional, Tuple
 
+import torch
+
 
 def axl_filename(path: pathlib.Path) -> pathlib.Path:
     """Given a path under Axelrod/, return absolute filepath.
@@ -77,3 +79,12 @@ def load_pso_tables(filename="pso_gambler.csv", directory="data"):
         values = list(map(float, row[4:]))
         d[(name, int(a), int(b), int(c))] = values
     return d
+
+
+def load_attention_model_weights(
+    filename="model_attention.pth", directory="axelrod/data"
+):
+    """Load attention model weights."""
+    path = str(axl_filename(pathlib.Path(directory) / filename))
+    weights = torch.load(path, map_location=torch.device("cpu"))
+    return weights

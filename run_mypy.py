@@ -20,6 +20,7 @@ modules = [
     "axelrod/strategies/ann.py",
     "axelrod/strategies/apavlov.py",
     "axelrod/strategies/appeaser.py",
+    "axelrod/strategies/attention.py",
     "axelrod/strategies/averagecopier.py",
     "axelrod/strategies/axelrod_first.py",
     "axelrod/strategies/axelrod_second.py",

@@ -30,6 +30,7 @@ from .ann import EvolvedANN, EvolvedANN5, EvolvedANNNoise05
 from .ann import ANN, EvolvableANN  # pylint: disable=unused-import
 from .apavlov import APavlov2006, APavlov2011
 from .appeaser import Appeaser
+from .attention import Attention, EvolvedAttention
 from .averagecopier import AverageCopier, NiceAverageCopier
 from .axelrod_first import (
     FirstByDavis,
@@ -303,6 +304,7 @@ all_strategies = [
     AntiCycler,
     AntiTitForTat,
     Appeaser,
+    Attention,
     ArrogantQLearner,
     AverageCopier,
     BackStabber,
@@ -348,6 +350,7 @@ all_strategies = [
     EvolvedHMM5,
     EvolvedLookerUp1_1_1,
     EvolvedLookerUp2_2_2,
+    EvolvedAttention,
     FirmButFair,
     FirstByAnonymous,
     FirstByDavis,
