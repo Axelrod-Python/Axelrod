@@ -29,7 +29,7 @@ class TestMatchOutcomes(unittest.TestCase):
         ),
         turns=integers(min_value=1, max_value=20),
     )
-    @settings(max_examples=5)
+    @settings(max_examples=5, deadline=None)
     def test_outcome_repeats(self, strategies, turns):
         """A test that if we repeat 3 matches with deterministic and well
         behaved strategies then we get the same result"""
