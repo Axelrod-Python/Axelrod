@@ -80,7 +80,7 @@ class TestEvolvedAttention(TestPlayer):
         "memory_depth": MEMORY_LENGTH,
         "stochastic": False,
         "makes_use_of": set(),
-        "long_run_time": False,
+        "long_run_time": True,
         "inspects_source": False,
         "manipulates_source": False,
         "manipulates_state": False,

@@ -344,7 +344,7 @@ class EvolvedAttention(Player):
     classifier = {
         "memory_depth": MEMORY_LENGTH,
         "stochastic": False,
-        "long_run_time": False,
+        "long_run_time": True,
         "inspects_source": False,
         "manipulates_source": False,
         "manipulates_state": False,

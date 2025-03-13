@@ -441,7 +441,7 @@ Evolved ANN 5 Noise 05:
   stochastic: false
 EvolvedAttention:
   inspects_source: false
-  long_run_time: false
+  long_run_time: True
   makes_use_of: !!set {}
   manipulates_source: false
   manipulates_state: false
