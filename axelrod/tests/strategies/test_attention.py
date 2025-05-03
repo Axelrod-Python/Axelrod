@@ -94,3 +94,19 @@ class TestEvolvedAttention(TestPlayer):
     def test_versus_cooperator(self):
         actions = [(C, C)] * 5
         self.versus_test(axl.Cooperator(), expected_actions=actions)
+
+    def test_versus_defector(self):
+        actions = [(C, D), (C, D)] + [(D, D)] * 3
+        self.versus_test(axl.Defector(), expected_actions=actions)
+
+    def test_versus_alternator(self):
+        actions = [(C, C), (C, D), (C, C), (D, D), (D, C), (D, D)]
+        self.versus_test(axl.Alternator(), expected_actions=actions)
+
+    def test_versus_handshake(self):
+        actions = [(C, C), (C, D), (C, D), (D, D), (D, D), (C, D)]
+        self.versus_test(axl.Handshake(), expected_actions=actions)
+
+    def test_versus_hopeless(self):
+        actions = [(C, D), (C, C), (D, D), (C, C), (C, D), (D, C)]
+        self.versus_test(axl.Hopeless(), expected_actions=actions)
