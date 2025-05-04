@@ -86,5 +86,7 @@ def load_attention_model_weights(
 ):
     """Load attention model weights."""
     path = str(axl_filename(pathlib.Path(directory) / filename))
-    weights = torch.load(path, map_location=torch.device("cpu"))
+    weights = torch.load(
+        path, map_location=torch.device("cpu"), weights_only=True
+    )
     return weights

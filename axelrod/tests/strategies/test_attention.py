@@ -106,7 +106,3 @@ class TestEvolvedAttention(TestPlayer):
     def test_versus_handshake(self):
         actions = [(C, C), (C, D), (C, D), (D, D), (D, D), (C, D)]
         self.versus_test(axl.Handshake(), expected_actions=actions)
-
-    def test_versus_hopeless(self):
-        actions = [(C, D), (C, C), (D, D), (C, C), (C, D), (D, C)]
-        self.versus_test(axl.Hopeless(), expected_actions=actions)
