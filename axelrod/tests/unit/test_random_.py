@@ -71,9 +71,10 @@ class TestBulkRandomGenerator(unittest.TestCase):
 class TestPdf(unittest.TestCase):
     """A suite of tests for the Pdf class"""
 
+    seed = 0
     observations = [(C, D)] * 4 + [(C, C)] * 12 + [(D, C)] * 2 + [(D, D)] * 15
     counter = Counter(observations)
-    pdf = axl.Pdf(counter)
+    pdf = axl.Pdf(counter, seed=seed)
 
     def test_init(self):
         self.assertEqual(set(self.pdf.sample_space), set(self.counter.keys()))
@@ -84,9 +85,7 @@ class TestPdf(unittest.TestCase):
     def test_sample(self):
         """Test that sample maps to correct domain"""
         all_samples = []
-        random = RandomGenerator()
-        random.seed(0)
-        for sample in range(100):
+        for _ in range(100):
             all_samples.append(self.pdf.sample())
 
         self.assertEqual(len(all_samples), 100)
