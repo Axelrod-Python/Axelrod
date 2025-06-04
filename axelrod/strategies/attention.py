@@ -18,8 +18,6 @@ PAD_TOKEN = 1
 
 DEVICES = torch.device("cpu")
 
-model_weights = load_attention_model_weights()
-
 
 class GameState(IntEnum):
     CooperateDefect = 2
@@ -354,13 +352,20 @@ class EvolvedAttention(Player):
         self,
     ) -> None:
         super().__init__()
-        self.model = PlayerModel(PlayerConfig())
-        self.model.load_state_dict(model_weights)
-        self.model.to(DEVICES)
-        self.model.eval()
+        self.model = None
+
+    def load_model(self) -> None:
+        """Load the model weights."""
+        if self.model is None:
+            self.model = PlayerModel(PlayerConfig())
+            self.model.load_state_dict(load_attention_model_weights())
+            self.model.to(DEVICES)
+            self.model.eval()
 
     def strategy(self, opponent: Player) -> Action:
         """Actual strategy definition that determines player's action."""
+        # Load the model if not already loaded
+        self.load_model()
         # Compute features
         features = compute_features(self, opponent).unsqueeze(0).to(DEVICES)
 

@@ -1,10 +1,12 @@
 """Tests for the Attention strategies."""
 
 import unittest
+from unittest.mock import patch
 
 import torch
 
 import axelrod as axl
+from axelrod.load_data_ import load_attention_model_weights
 from axelrod.strategies.attention import (
     MEMORY_LENGTH,
     GameState,
@@ -89,7 +91,21 @@ class TestEvolvedAttention(TestPlayer):
     def test_model_initialization(self):
         """Test that the model is initialized correctly."""
         player = self.player()
-        self.assertIsInstance(player.model, PlayerModel)
+        self.assertIsNone(player.model)
+
+    def test_load_model(self):
+        """Test that the model can be loaded correctly."""
+        with patch(
+            "axelrod.strategies.attention.load_attention_model_weights",
+            wraps=load_attention_model_weights,
+        ) as load_attention_model_weights_spy:
+            player = self.player()
+            self.assertIsNone(player.model)
+            player.load_model()
+            self.assertIsInstance(player.model, PlayerModel)
+            player.load_model()
+            self.assertIsInstance(player.model, PlayerModel)
+            load_attention_model_weights_spy.assert_called_once()
 
     def test_versus_cooperator(self):
         actions = [(C, C)] * 5
