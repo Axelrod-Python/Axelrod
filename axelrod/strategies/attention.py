@@ -352,7 +352,7 @@ class EvolvedAttention(Player):
         self,
     ) -> None:
         super().__init__()
-        self.model = None
+        self.model: Optional[PlayerModel] = None
 
     def load_model(self) -> None:
         """Load the model weights."""
@@ -366,6 +366,8 @@ class EvolvedAttention(Player):
         """Actual strategy definition that determines player's action."""
         # Load the model if not already loaded
         self.load_model()
+        assert self.model is not None, "Model must be loaded before playing."
+
         # Compute features
         features = compute_features(self, opponent).unsqueeze(0).to(DEVICES)
 
