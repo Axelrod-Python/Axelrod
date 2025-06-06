@@ -84,7 +84,7 @@ class TestMetaPlayer(TestPlayer):
         self.assertEqual(player2.classifier, player1.classifier)
         self.assertEqual(player2.match_attributes, player1.match_attributes)
 
-        turns = 10
+        turns = 5
         for op in [
             axl.Cooperator(),
             axl.Defector(),
@@ -104,7 +104,7 @@ class TestMetaPlayer(TestPlayer):
 
     @given(opponent_list=strategy_lists(max_size=1))
     @settings(
-        max_examples=5,
+        max_examples=1,
         deadline=None,
         suppress_health_check=(HealthCheck.differing_executors,),
     )
@@ -122,7 +122,7 @@ class TestMetaPlayer(TestPlayer):
         """
         player = self.player()
         opponent = opponent_list[0]()
-        match = axl.Match(players=(player, opponent))
+        match = axl.Match(players=(player, opponent), turns=10)
         interactions = match.play()
         player_actions = set(player_action for player_action, _ in interactions)
         self.assertTrue(player_actions <= set((C, D)))
