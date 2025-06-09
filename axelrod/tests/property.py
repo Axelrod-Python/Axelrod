@@ -363,7 +363,7 @@ def games(draw, prisoners_dilemma=True, max_value=100):
 
     if prisoners_dilemma:
         s_upper_bound = max_value - 4  # Ensures there is enough room
-        s = draw(integers(max_value=s_upper_bound))
+        s = draw(integers(min_value=0, max_value=s_upper_bound))
 
         t_lower_bound = s + 3  # Ensures there is enough room
         t = draw(integers(min_value=t_lower_bound, max_value=max_value))

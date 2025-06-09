@@ -49,7 +49,7 @@ class Golden(CotoDeRatio):
     - Golden: Original Name by Timothy Standen
     """
 
-    name = "$\phi$"
+    name = "$\\phi$"
     ratio = (1 + math.sqrt(5)) / 2
 
 
@@ -62,7 +62,7 @@ class Pi(CotoDeRatio):
     - Pi: Original Name by Timothy Standen
     """
 
-    name = "$\pi$"
+    name = "$\\pi$"
     ratio = math.pi
 
 

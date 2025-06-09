@@ -441,16 +441,16 @@ class SecondByGrofman(Player):
     1. First it cooperates on the first two rounds
     2. For rounds 3-7 inclusive, it plays the same as the opponent's last move
     3. Thereafter, it applies the following logic, looking at its memory of the
-       last 8\* rounds (ignoring the most recent round).
+       last 8\\* rounds (ignoring the most recent round).
 
       - If its own previous move was C and the opponent has defected less than
-        3 times in the last 8\* rounds, cooperate
+        3 times in the last 8\\* rounds, cooperate
       - If its own previous move was C and the opponent has defected 3 or
-        more times in the last 8\* rounds, defect
+        more times in the last 8\\* rounds, defect
       - If its own previous move was D and the opponent has defected only once
-        or not at all in the last 8\* rounds, cooperate
+        or not at all in the last 8\\* rounds, cooperate
       - If its own previous move was D and the opponent has defected more than
-        once in the last 8\* rounds, defect
+        once in the last 8\\* rounds, defect
 
     The code looks at the first 7 of the last 8 rounds, ignoring the most
     recent round.

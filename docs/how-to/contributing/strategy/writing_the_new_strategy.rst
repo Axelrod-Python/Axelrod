@@ -83,10 +83,10 @@ strategy::
     name = 'Tit For Tat'
 
 Note that this is mainly used in plots by :code:`matplotlib` so you can use
-LaTeX if you want to.  For example there is strategy with :math:`\pi` as a
+LaTeX if you want to.  For example there is strategy with :math:`\\pi` as a
 name::
 
-    name = '$\pi$'
+    name = '$\\pi$'
 
 Following that you can add in the :code:`classifier` dictionary::
 

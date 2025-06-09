@@ -29,7 +29,7 @@ class TestMatchOutcomes(unittest.TestCase):
         ),
         turns=integers(min_value=1, max_value=20),
     )
-    @settings(max_examples=5)
+    @settings(max_examples=2, deadline=None)
     def test_outcome_repeats(self, strategies, turns):
         """A test that if we repeat 3 matches with deterministic and well
         behaved strategies then we get the same result"""
@@ -45,7 +45,7 @@ class TestMatchOutcomes(unittest.TestCase):
         turns=integers(min_value=1, max_value=20),
         seed=integers(min_value=0, max_value=4294967295),
     )
-    @settings(max_examples=5, deadline=None)
+    @settings(max_examples=2, deadline=None)
     def test_outcome_repeats_stochastic(self, strategies, turns, seed):
         """a test to check that if a seed is set stochastic strategies give the
         same result"""

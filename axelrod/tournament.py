@@ -3,7 +3,11 @@ import logging
 import os
 import warnings
 from collections import defaultdict
-from multiprocessing import Process, Queue, cpu_count
+from multiprocessing import Process, Queue, cpu_count, set_start_method
+
+# This is necessary for the code to work on Linux
+# torch multiprocessing is not compatible with the default 'fork' method
+set_start_method("spawn", force=True)
 from tempfile import mkstemp
 from typing import List, Optional, Tuple
 

@@ -44,6 +44,12 @@ class Test(TestPlayer):
         self.versus_test(
             axl.MockPlayer(opponent_actions), expected_actions=expected, seed=4
         )
+        # Test games after dataset generation phase (> 30 turns)
+        opponent_actions = [C] * 50
+        expected = [(C, C)] * 50
+        self.versus_test(
+            axl.MockPlayer(opponent_actions), expected_actions=expected, seed=4
+        )
 
     def test_strategy_random(self):
         # Test of 50 turns against random strategy

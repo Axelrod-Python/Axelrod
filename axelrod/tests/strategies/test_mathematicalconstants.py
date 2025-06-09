@@ -9,7 +9,7 @@ C, D = axl.Action.C, axl.Action.D
 
 class TestGolden(TestPlayer):
 
-    name = "$\phi$"
+    name = "$\\phi$"
     player = axl.Golden
     expected_classifier = {
         "memory_depth": float("inf"),  # Long memory
@@ -34,7 +34,7 @@ class TestGolden(TestPlayer):
 
 class TestPi(TestPlayer):
 
-    name = "$\pi$"
+    name = "$\\pi$"
     player = axl.Pi
     expected_classifier = {
         "memory_depth": float("inf"),  # Long memory

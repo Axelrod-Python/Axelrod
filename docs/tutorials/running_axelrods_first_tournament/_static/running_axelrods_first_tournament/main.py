@@ -2,8 +2,9 @@
 Script to obtain plots for the running axelrod tournament tutorial.
 """
 
-import axelrod as axl
 import matplotlib.pyplot as plt
+
+import axelrod as axl
 
 first_tournament_participants_ordered_by_reported_rank = [
     s() for s in axl.axelrod_first_strategies

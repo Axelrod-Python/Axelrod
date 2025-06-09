@@ -1,4 +1,4 @@
-$\phi$:
+$\\phi$:
   inspects_source: false
   long_run_time: false
   makes_use_of: !!set {}
@@ -6,7 +6,7 @@ $\phi$:
   manipulates_state: false
   memory_depth: .inf
   stochastic: false
-$\pi$:
+$\\pi$:
   inspects_source: false
   long_run_time: false
   makes_use_of: !!set {}
@@ -438,6 +438,14 @@ Evolved ANN 5 Noise 05:
   manipulates_source: false
   manipulates_state: false
   memory_depth: .inf
+  stochastic: false
+EvolvedAttention:
+  inspects_source: false
+  long_run_time: True
+  makes_use_of: !!set {}
+  manipulates_source: false
+  manipulates_state: false
+  memory_depth: 200
   stochastic: false
 Evolved FSM 16:
   inspects_source: false

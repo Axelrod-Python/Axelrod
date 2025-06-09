@@ -12,7 +12,7 @@ class LRPlayer(MemoryOnePlayer):
 
     The parameter :math:`s` is called the slope and the parameter :math:`l` the
     baseline payoff. For extortionate strategies, the extortion factor
-    :math:`\chi` is the inverse of the slope :math:`s`.
+    :math:`\\chi` is the inverse of the slope :math:`s`.
 
     For the standard prisoner's dilemma where :math:`T > R > P > S` and
     :math:`R > (T + S) / 2 > P`, a pair :math:`(l, s)` is enforceable iff
