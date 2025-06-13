@@ -1,3 +1,22 @@
+# v4.13.1, 2025-06-13
+
+Mainly internal changes: move to pyproject.toml.
+
+- Add the Momentum Strategy: https://github.com/Axelrod-Python/Axelrod/pull/1469
+- Add the EvolvedAttention Strategy: https://github.com/Axelrod-Python/Axelrod/pull/1471
+- Add the freqAnalyzer strategy: https://github.com/Axelrod-Python/Axelrod/pull/1444
+- Add the strategy index to the tournament summary: https://github.com/Axelrod-Python/Axelrod/pull/1466
+- A number of internal and dev improvements and fixes:
+  https://github.com/Axelrod-Python/Axelrod/pull/1457
+  https://github.com/Axelrod-Python/Axelrod/pull/1464
+  https://github.com/Axelrod-Python/Axelrod/pull/1458
+  https://github.com/Axelrod-Python/Axelrod/pull/1453
+  https://github.com/Axelrod-Python/Axelrod/pull/1456
+  https://github.com/Axelrod-Python/Axelrod/pull/1450
+  https://github.com/Axelrod-Python/Axelrod/pull/1452
+
+https://github.com/Axelrod-Python/Axelrod/compare/v4.14.0..v4.13.1
+
 # v4.13.1, 2024-10-02
 
 Mainly internal changes: move to pyproject.toml.
