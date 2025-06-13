@@ -128,3 +128,7 @@ test_outputs/test_results_from_file.csv
 test_outputs/test_results_from_file_tmp.csv
 test_outputs/test_tournament.csv
 test_outputs/tran_fin.csv
+
+# Flit files
+.pypirc
+pyproject.flit
