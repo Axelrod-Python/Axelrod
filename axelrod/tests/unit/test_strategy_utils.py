@@ -2,7 +2,7 @@
 
 import unittest
 
-from hypothesis import given, settings, HealthCheck
+from hypothesis import HealthCheck, given, settings
 from hypothesis.strategies import integers, lists, sampled_from
 
 import axelrod as axl
