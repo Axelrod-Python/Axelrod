@@ -7,6 +7,9 @@
 .. image:: https://github.com/Axelrod-Python/Axelrod/workflows/CI/badge.svg
     :target: https://github.com/Axelrod-Python/Axelrod/actions
 
+Join `the Game Theory Discord <https://github.com/drvinceknight/equilibrium_explorers>`_
+server to chat -- `direct invite link <https://discord.gg/NfTAkhAeyc>`_.
+
 Axelrod
 =======
 

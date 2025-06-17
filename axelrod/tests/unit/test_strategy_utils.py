@@ -2,7 +2,7 @@
 
 import unittest
 
-from hypothesis import given, settings
+from hypothesis import HealthCheck, given, settings
 from hypothesis.strategies import integers, lists, sampled_from
 
 import axelrod as axl
@@ -20,7 +20,7 @@ class TestDetectCycle(unittest.TestCase):
         cycle=lists(sampled_from([C, D]), min_size=2, max_size=10),
         period=integers(min_value=3, max_value=10),
     )
-    @settings(max_examples=5)
+    @settings(max_examples=5, suppress_health_check=(HealthCheck.too_slow,))
     def test_finds_cycle(self, cycle, period):
         history = cycle * period
         detected = detect_cycle(history)
