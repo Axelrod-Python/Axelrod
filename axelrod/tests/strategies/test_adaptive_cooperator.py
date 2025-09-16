@@ -14,9 +14,6 @@ class TestAdaptiveCooperator(TestPlayer):
         'manipulates_state': False
     }
 
-    def test_first__strategy(self):
-        self.first_play_test(C)
-
     def test_strategy_cooperator(self):
         actions = [(C, C), (C, C), (C, C), (C, C), (C, C)]
         self.versus_test(axelrod.Cooperator(), expected_actions=actions)
