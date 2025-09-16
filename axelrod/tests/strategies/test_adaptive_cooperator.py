@@ -7,7 +7,7 @@ class TestAdaptiveCooperator(TestPlayer):
     name = 'Adaptive Cooperator'
     player = axelrod.AdaptiveCooperator
     expected_classifier = {
-        'memory': 1,
+       "memory_depth": 1,
         'stochastic': False,
         'inspects_source': False,
         'manipulates_source': False,
