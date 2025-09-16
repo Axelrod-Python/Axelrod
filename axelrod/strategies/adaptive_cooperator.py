@@ -14,7 +14,7 @@ class AdaptiveCooperator(Player):
 
     name = 'Adaptive Cooperator'
     classifier = {
-        'memory': 1,
+        "memory_depth": 1,
         'stochastic': False,
         'inspects_source': False,
         'manipulates_source': False,
