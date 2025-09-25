@@ -26,3 +26,6 @@ class TestAdaptiveCooperator(TestPlayer):
         actions = [(C, C), (C, D), (D, C), (D, D), (D, C)]
         self.versus_test(axelrod.Alternator(), expected_actions=actions)
 
+    def test_strategy_tit4tat(self):
+        actions = [(C, C), (C, C), (C, C), (C, C), (C, C)]
+        self.versus_test(axelrod.TitForTat(), expected_actions=actions)
