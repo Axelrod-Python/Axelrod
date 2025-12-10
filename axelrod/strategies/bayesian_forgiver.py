@@ -125,7 +125,8 @@ class BayesianForgiver(Player):
         # Adaptive forgiveness threshold
         # Higher uncertainty → higher threshold → more forgiving
         forgiveness_threshold = (
-            self.base_forgiveness_threshold + self.uncertainty_factor * uncertainty
+            self.base_forgiveness_threshold
+            + self.uncertainty_factor * uncertainty
         )
 
         # Decision logic
