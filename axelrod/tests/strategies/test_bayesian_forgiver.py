@@ -76,6 +76,25 @@ class TestBayesianForgiver(TestPlayer):
         actions = [(C, C), (C, C), (C, C), (C, C), (C, D)]
         self.versus_test(axl.Random(), expected_actions=actions, seed=3)
 
+    def test_forgiveness_high_cooperation(self):
+        """Test that forgiveness occurs when opponent has high cooperation rate."""
+        # Opponent cooperates many times, then defects - should forgive
+        # This tests the forgiveness path (mean_cooperation >= threshold)
+        opponent = axl.MockPlayer(actions=[C, C, C, C, C, C, C, C, D, C])
+        actions = [
+            (C, C),  # alpha=2, beta=1
+            (C, C),  # alpha=3, beta=1
+            (C, C),  # alpha=4, beta=1
+            (C, C),  # alpha=5, beta=1
+            (C, C),  # alpha=6, beta=1
+            (C, C),  # alpha=7, beta=1
+            (C, C),  # alpha=8, beta=1
+            (C, C),  # alpha=9, beta=1
+            (C, D),  # Opponent defects: alpha=9, beta=2, mean=9/11=0.818
+            (C, C),  # mean >= threshold → FORGIVE! Return C
+        ]
+        self.versus_test(opponent, expected_actions=actions)
+
     def test_vs_mock_single_defection(self):
         """Test response to a single defection."""
         # Opponent cooperates then defects once then cooperates
