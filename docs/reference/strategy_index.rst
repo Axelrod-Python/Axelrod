@@ -28,6 +28,8 @@ Here are the docstrings of all the strategies in the library.
    :members:
 .. automodule:: axelrod.strategies.backstabber
    :members:
+.. automodule:: axelrod.strategies.bayesian_forgiver
+   :members:
 .. automodule:: axelrod.strategies.better_and_better
    :members:
 .. automodule:: axelrod.strategies.bush_mosteller
