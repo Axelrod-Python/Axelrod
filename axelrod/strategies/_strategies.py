@@ -73,6 +73,7 @@ from .axelrod_second import (
     SecondByYamachi,
 )
 from .backstabber import BackStabber, DoubleCrosser
+from .bayesian_forgiver import BayesianForgiver
 from .better_and_better import BetterAndBetter
 from .bush_mosteller import BushMosteller
 from .calculator import Calculator
@@ -307,6 +308,7 @@ all_strategies = [
     ArrogantQLearner,
     AverageCopier,
     BackStabber,
+    BayesianForgiver,
     BetterAndBetter,
     Bully,
     BurnBothEnds,
