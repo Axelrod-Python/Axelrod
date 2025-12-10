@@ -37,7 +37,7 @@ dependencies = [
 
 [project.optional-dependencies]
 development = [
-    "hypothesis==5.19.3",
+    "hypothesis==6.148.7",
 ]
 human = [
     "prompt-toolkit>=3.0",
