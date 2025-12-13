@@ -21,7 +21,7 @@ class BayesianForgiver(Player):
     opponent's cooperation probability. It uses both the mean (expected cooperation
     rate) and variance (uncertainty) to make decisions:
 
-    - When uncertain about the opponent's nature, it is optimistic and forgives more
+    - When uncertain about the opponent's nature, it is cautious
     - When certain the opponent is hostile, it punishes consistently
     - When certain the opponent is cooperative, it cooperates consistently
 
@@ -32,7 +32,7 @@ class BayesianForgiver(Player):
     4. Calculate mean = alpha / (alpha + beta)
     5. Calculate uncertainty (std deviation)
     6. Adaptive forgiveness: threshold = base_threshold + uncertainty_factor * uncertainty
-    7. Forgive if mean > threshold, otherwise punish
+    7. Forgive a defection only if the estimated cooperation rate clears this threshold
 
     Names:
     - Bayesian Forgiver: Original name by Matt Hodges
@@ -72,8 +72,7 @@ class BayesianForgiver(Player):
             Base threshold for forgiveness decision (default: 0.45)
             If estimated cooperation probability > threshold, forgive defections
         uncertainty_factor : float
-            How much uncertainty increases forgiveness (default: 2.5)
-            Higher values mean more optimism under uncertainty
+            How much uncertainty increases the forgiveness threshold (default: 2.5)
 
         Note: Default parameters have been optimized through grid search
         to maximize performance against common IPD strategies.
@@ -123,7 +122,6 @@ class BayesianForgiver(Player):
         uncertainty = variance**0.5
 
         # Adaptive forgiveness threshold
-        # Higher uncertainty → higher threshold → more forgiving
         forgiveness_threshold = (
             self.base_forgiveness_threshold
             + self.uncertainty_factor * uncertainty
@@ -136,8 +134,7 @@ class BayesianForgiver(Player):
         else:
             # Opponent defected last round - decide whether to forgive or punish
             if mean_cooperation >= forgiveness_threshold:
-                # Opponent's estimated cooperation rate is high enough to forgive
-                # OR we're uncertain enough to be optimistic
+                # Forgive only when the estimated cooperation rate is high enough.
                 return C
             else:
                 # Opponent appears to be hostile with sufficient confidence
