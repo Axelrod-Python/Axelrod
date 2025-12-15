@@ -110,7 +110,11 @@ Examples
 Contributing
 ------------
 
-All contributions are welcome!
+All artisanal contributions are welcome!
+
+*Code Generation Policy*:
+
+*We do not accept any content that has been created with the assistance of generative code tools.*
 
 You can find helpful instructions about contributing in the
 documentation:
