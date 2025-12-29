@@ -76,6 +76,7 @@ from .backstabber import BackStabber, DoubleCrosser
 from .better_and_better import BetterAndBetter
 from .bush_mosteller import BushMosteller
 from .calculator import Calculator
+from .chimera import Chimera
 from .cooperator import Cooperator, TrickyCooperator
 from .cycler import (
     AntiCycler,
@@ -314,6 +315,7 @@ all_strategies = [
     Calculator,
     Capri,
     CautiousQLearner,
+    Chimera,
     CollectiveStrategy,
     ContriteTitForTat,
     Cooperator,
