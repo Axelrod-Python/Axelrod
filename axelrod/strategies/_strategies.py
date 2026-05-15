@@ -116,6 +116,7 @@ from .finite_state_machines import (  # pylint: disable=unused-import
     FSMPlayer,
 )
 from .forgiver import Forgiver, ForgivingTitForTat
+from .four_duality_optimizer import FourDualityOptimizer1
 from .gambler import (
     PSOGambler1_1_1,
     PSOGambler2_2_2,
