@@ -26,4 +26,6 @@ class TestFourDualityOptimizer1(TestPlayer):
         actions = [(C, C), (C, C)] + [(C, C)] * 20
         self.versus_test(axl.Cooperator(), expected_actions=actions)
 
+        actions = [(C, C), (C, C)] + [(C, C)] * 20
+        self.versus_test(axl.TitForTat(), expected_actions=actions)
 
