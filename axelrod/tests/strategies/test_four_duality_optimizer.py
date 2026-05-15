@@ -10,7 +10,7 @@ C, D = axl.Action.C, axl.Action.D
 class TestFourDualityOptimizer1(TestPlayer):
 
     name = "4-Duality Optimizer 1"
-    player = axl.Handshake
+    player = axl.FourDualityOptimizer1
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": False,
