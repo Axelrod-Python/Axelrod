@@ -2,7 +2,7 @@
 
 import axelrod as axl
 
-from .test_four_duality_optimizer import TestFourDualityOptimizer1
+from .test_player import TestPlayer
 
 C, D = axl.Action.C, axl.Action.D
 
