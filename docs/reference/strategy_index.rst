@@ -50,6 +50,8 @@ Here are the docstrings of all the strategies in the library.
    :members:
 .. automodule:: axelrod.strategies.forgiver
    :members:
+.. automodule:: axelrod.strategies.four_duality_optimizer
+   :members:
 .. automodule:: axelrod.strategies.frequency_analyzer
    :members:
 .. automodule:: axelrod.strategies.gambler
