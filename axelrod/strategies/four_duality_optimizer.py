@@ -11,6 +11,7 @@ class FourDualityOptimizer1(Player):
     when the other agent performs a series of betrayals of length greater than 1,
     respond with a series of betrayals whose number is equal to the number
     of series of betrayals performed by the other agent since the beginning.
+    Based on the IPD analysis presented in the paper: https://philpapers.org/rec/FRACCP
 
     Names:
     4-Duality Optimizer 1 original by Paul Franceschi
