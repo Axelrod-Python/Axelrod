@@ -32,3 +32,7 @@ class TestFourDualityOptimizer1(TestPlayer):
         actions = [(C, C), (C, C)] + [(C, C)] * 20
         self.versus_test(axl.Retaliate(), expected_actions=actions)
 
+        actions = [(C, D), (C, D)] + [(D, D)]
+        self.versus_test(axl.Defector(), expected_actions=actions)
+
+
