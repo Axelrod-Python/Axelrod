@@ -157,21 +157,6 @@ def optimize_against(opponent: np.ndarray, init_state_idx: int,
     return -1 * loss, strat
 
 class ISO(Player):
-    """Optimal response against a memory-1 opponent model.
-
-    Estimates the opponent's memory-1 (order-1) conditional cooperation
-    probabilities, which together with its own memory-1 strategy induce a
-    Markov chain over outcome pairs. Computes the exact expected discounted
-    long-term payoff in closed form via the chain's stationary/resolvent
-    solution, then optimizes its own memory-1 policy to maximize it. A
-    simplification and refinement of DBS: it replaces bounded-depth tree
-    search with the exact infinite-horizon value, yielding stronger play
-    against exploitable opponents at lower complexity. Adaptive only w.r.t.
-    memory-1 opponents (the model is misspecified for higher-memory play).
-
-    Names:
-    - ISO: [Hutter2023]_
-    """
     name = "ISO"
     classifier = {
         "memory_depth": float("inf"),
@@ -236,6 +221,9 @@ class ISO(Player):
         return -1
 
     def update(self, opponent: Player) -> float:
+        """Updates the opponent model and our policy.
+
+        Returns our expected reward per step."""
         self._update_opponent_model(opponent)
         state_idx = self._get_state_idx(opponent)
         expected, my_policy = optimize_against(self.opp_model,
@@ -244,7 +232,7 @@ class ISO(Player):
         self.my_policy = my_policy
         return expected
 
-    def act(self, opponent) -> Action:
+    def act(self, opponent: Player) -> Action:
         state_idx = self._get_state_idx(opponent)
         pr_c = self.my_policy[state_idx]
         return C if np.random.uniform() < pr_c else D
