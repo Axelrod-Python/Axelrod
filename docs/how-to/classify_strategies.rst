@@ -57,7 +57,7 @@ strategies::
     ... }
     >>> strategies = axl.filtered_strategies(filterset)
     >>> len(strategies)
-    88
+    89
 
 Or, to find out how many strategies only use 1 turn worth of memory to
 make a decision::
@@ -90,7 +90,7 @@ length of each match of the tournament::
     ... }
     >>> strategies = axl.filtered_strategies(filterset)
     >>> len(strategies)
-    22
+    23
 
 Note that in the filterset dictionary, the value for the 'makes_use_of' key
 must be a list. Here is how we might identify the number of strategies that use
