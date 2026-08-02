@@ -48,7 +48,8 @@ def _create_points(step: float, progress_bar: bool = True) -> List[Point]:
     points = []
     for x in np.linspace(0, 1, num):
         for y in np.linspace(0, 1, num):
-            points.append(Point(x, y))
+            # Cast to Python float so probe names/repr stay stable across NumPy versions
+            points.append(Point(float(x), float(y)))
 
             if progress_bar:
                 p_bar.update()
