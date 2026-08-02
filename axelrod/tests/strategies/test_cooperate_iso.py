@@ -82,7 +82,7 @@ class TestISO(TestPlayer):
     expected_classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
-        "makes_use_of": {"noise"},
+        "makes_use_of": {"noise", "game"},
         "long_run_time": True,
         "inspects_source": False,
         "manipulates_source": False,
@@ -123,8 +123,8 @@ class TestISO(TestPlayer):
         player = self.player()
         opponent = axl.MockPlayer()
         
-        # Manually construct a 2-turn history 
         # Turn 1: Both played C
+        # history.append(action, coplay)
         player.history.append(C, C)
         opponent.history.append(C, C)
         
@@ -134,13 +134,16 @@ class TestISO(TestPlayer):
         
         player._update_opponent_model(opponent)
         
-        # The opponent played D after CC, so opp_after_CC should append 0
-        self.assertEqual(player.opp_after_CC, [1, 0])
+        # Check EWMA accumulator state [numerator, denominator] for CC
+        # Initial state was [1.0, 1.0]; after seeing D (0.0):
+        # num = 0.99 * 1.0 + 0.0 = 0.99
+        # den = 0.99 * 1.0 + 1.0 = 1.99
+        self.assertAlmostEqual(player.ewma_CC[0], 0.99, places=6)
+        self.assertAlmostEqual(player.ewma_CC[1], 1.99, places=6)
         
-        # Check discount logic: weights = [0.99, 1.0]. 
-        # Mean should be (0.99*1 + 1.0*0) / 1.99
+        # Check discount logic: mean = num / den
         expected_mean = 0.99 / 1.99
-        self.assertAlmostEqual(player.opp_pr_c_after_CC, expected_mean, places=4)
+        self.assertAlmostEqual(player.opp_model[0], expected_mean, places=4)
 
     @patch("axelrod.strategies.cooperate_iso.optimize_against")
     def test_strategy_with_mocked_optimizer(self, mock_optimize):

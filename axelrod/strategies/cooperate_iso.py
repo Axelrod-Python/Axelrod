@@ -3,6 +3,7 @@ import numpy as np
 import torch
 from torch import optim
 
+import axelrod as axl
 from axelrod.action import Action
 from axelrod.player import Player
 
@@ -42,9 +43,6 @@ class LongtermTfT(Player):
         self.n_tft_would_c = 0
         self.n_d_when_tft_would_c = 0
         self.z = 0.
-        # Estimate of the opponent's rate of playing D after C, taking noise
-        # into account.
-        self.opp_pr_d_after_c = 0.
 
     def receive_match_attributes(self):
         self.noise = self.match_attributes.get("noise", 0.0)
@@ -72,97 +70,109 @@ class LongtermTfT(Player):
             return opponent.history[-1]
 
 def are_same_binomial(p1: float, n1: int, p2: float, n2: int, min_abs_z: float = 2.0) -> bool:
+    """
+    Tests if two binomial proportions are statistically indistinguishable 
+    using a pooled two-proportion z-test.
+    """
     p = (n1 * p1 + n2 * p2) / (n1 + n2)
+    if p in (0., 1.):
+        return p1 == p2
     z = (p1 - p2) / np.sqrt(p * (1 - p) * (1 / n1 + 1 / n2))
     return abs(z) < min_abs_z
 
 def has_greater_mean(ary1: np.ndarray, ary2: np.ndarray, min_z: float = 2.0) -> bool:
-    """Tests if ary1 has a greater mean than ary2"""
+    """
+    Tests if the mean of the first array is significantly greater than 
+    the second array using a two-sample z-test.
+    """
     se1 = np.std(ary1) / np.sqrt(len(ary1))
     se2 = np.std(ary2) / np.sqrt(len(ary2))
     if se1 == 0 and se2 == 0:
         return ary1.mean() > ary2.mean()
     return (ary1.mean() - ary2.mean()) / np.sqrt(se1**2 + se2**2) > min_z
 
-def find_recent_average(ary, discount_factor: float = 0.99) -> float:
-    assert len(ary) > 0
-    assert 0 < discount_factor <= 1
-    ary = np.array(ary)
-    N = len(ary)
-    weights = np.array([discount_factor**((N-1)-i) for i in range(N)])
-    return (weights * ary).sum() / weights.sum()
-
-def optimize_constrained(loss_fn,
-                         starting_points=[[0.5, 0.5, 0.5, 0.5]],
-                         lr=0.1,
-                         n_steps=100):
-    # Constrains all params to [0, 1].
-    min_loss_so_far = None
-    best_params_so_far = None
-    for point in starting_points:
-        params = torch.Tensor(point)
-        params.requires_grad_()
-        opt = optim.Adam([params], lr=lr)
-        for i in range(n_steps):
-            loss = loss_fn(params)
-            loss_value = loss.detach().numpy().sum()
-            if min_loss_so_far is None or loss_value < min_loss_so_far:
-                min_loss_so_far = loss_value
-                best_params_so_far = params.detach().numpy()
-            opt.zero_grad()
-            loss.backward()
-            opt.step()
-            with torch.no_grad():
-                for param in params:
-                    param.clamp_(0, 1)
-    return min_loss_so_far, best_params_so_far
-
-# opp_strategy already includes the effect of noise.
-def get_reward(my_strategy: torch.Tensor,
-               opp_strategy: torch.Tensor,
-               init_state: torch.Tensor,
-               p_end: float,
-               p_noise: float = 0.,
-               RSTP=(3, 0, 5, 1)):
-    # Apply p_noise only to own strategy, not to opponent.
+def get_reward(
+    my_strategy: torch.Tensor,
+    opp_strategy: torch.Tensor,
+    init_state: torch.Tensor,
+    p_end: float,
+    p_noise: float,
+    RPST: tuple[float, float, float, float],
+) -> float:
+    """
+    Calculates the expected average reward per step for a given policy 
+    against a specific opponent strategy (including the effect of noise), 
+    utilizing Markov transition matrices.
+    """
+    # Apply p_noise only to own strategy, not to opponent
+    # (the opponen strategy already includes noise effects).
     own = my_strategy + p_noise * (1 - 2 * my_strategy)
     # Flip CD/DC for opponent
     opp = torch.Tensor(
         [opp_strategy[0], opp_strategy[2], opp_strategy[1], opp_strategy[3]])
-    T = torch.stack([own * opp,
-                     own * (1 - opp),
-                     (1 - own) * opp,
-                     (1 - own) * (1 - opp)])
-    T = torch.transpose(T, 0, 1)
-    TT = torch.inverse(torch.eye(4) - (1 - p_end) * T)
-    rewards = torch.tensor(RSTP, dtype=torch.float)
+    trans_mat = torch.stack([own * opp,
+                             own * (1 - opp),
+                             (1 - own) * opp,
+                             (1 - own) * (1 - opp)])
+    trans_mat = torch.transpose(trans_mat, 0, 1)
+    R, P, S, T = RPST
+    rewards = torch.tensor((R, S, T, P), dtype=torch.float)
     # Don't include init state in summed rewards.
-    reward = torch.dot(init_state, torch.matmul(TT, rewards) - rewards)
+    inv = torch.inverse(torch.eye(4) - (1 - p_end) * trans_mat)
+    reward = torch.dot(init_state, torch.matmul(inv, rewards) - rewards)
     # Avg. reward per step
     return p_end * reward / (1 - p_end)
 
-# The opponent model is assumed to already include the effect of noise.
-# init_state_idx in [0, 1, 2, 3]
-def optimize_against(opponent: np.ndarray, init_state_idx: int,
-                     p_end: float = 1e-2, p_noise: float = 0) -> np.ndarray:
-    opp = torch.Tensor(opponent)
+def optimize_against(
+    opponent: np.ndarray,
+    init_state_idx: int,
+    p_end: float,
+    p_noise: float,
+    RPST: tuple[float, float, float, float],
+    lr: float = 0.1,
+    n_steps: float = 50,
+) -> tuple[float, np.ndarray]:
+    """
+    Discovers the optimal response strategy (policy) against a fixed opponent 
+    model by maximizing the expected reward from a given starting state 
+    (init_state_idx in [0, 1, 2, 3]).
+    """
+    opp = torch.tensor(opponent, dtype=torch.float32)
     assert p_noise < 0.5
-    opp.clamp_(min=p_noise, max=1-p_noise)
-    init_state = [0] * 4
-    init_state[init_state_idx] = 1
-    init_state = torch.Tensor(init_state)
-    def loss_fn(strategy: torch.Tensor):
-        return -1 * get_reward(strategy, opp, init_state, p_end=p_end, p_noise=p_noise)
-    # Only 50 steps to save time
-    loss, strat = optimize_constrained(loss_fn, n_steps=50)
-    return -1 * loss, strat
+    opp.clamp_(min=p_noise, max=1.0 - p_noise)
+
+    init_state = torch.zeros(4, dtype=torch.float32)
+    init_state[init_state_idx] = 1.0
+
+    params = torch.tensor([0.5, 0.5, 0.5, 0.5], requires_grad=True)
+    opt = optim.Adam([params], lr=lr)
+
+    min_loss = float("inf")
+    best_params = None
+
+    for _ in range(n_steps):
+        loss = -get_reward(params, opp, init_state, p_end, p_noise, RPST)
+        loss_val = loss.item()
+
+        if loss_val < min_loss:
+            min_loss = loss_val
+            best_params = params.detach().numpy().copy()
+
+        opt.zero_grad()
+        loss.backward()
+        opt.step()
+
+        with torch.no_grad():
+            params.clamp_(0.0, 1.0)
+
+    return -min_loss, best_params
 
 class ISO(Player):
     name = "ISO"
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
-        "makes_use_of": {"noise"},
+        "makes_use_of": {"noise", "game"},
         "long_run_time": True,
         "inspects_source": False,
         "manipulates_source": False,
@@ -171,41 +181,48 @@ class ISO(Player):
 
     def __init__(self):
         super().__init__()
-        # Opponent's action in certain situations. 1 is C, 0 is D.
-        # Start by assuming the opponent played in accordance with TfT once.
-        self.opp_after_CC = [1]
-        self.opp_after_CD = [1]
-        self.opp_after_DC = [0]
-        self.opp_after_DD = [0]
-        # Recent averages of cooperation rates
-        self.opp_pr_c_after_CC = np.mean(self.opp_after_CC)
-        self.opp_pr_c_after_CD = np.mean(self.opp_after_CD)
-        self.opp_pr_c_after_DC = np.mean(self.opp_after_DC)
-        self.opp_pr_c_after_DD = np.mean(self.opp_after_DD)
-        self.opp_model = [1., 0., 1., 0.]
-        self.my_policy = [1., 0., 1., 0.]
+        self.discount_factor = 0.99
+
+        # Track (numerator, denominator) for each state.
+        self.ewma_CC = [1.0, 1.0]
+        self.ewma_CD = [1.0, 1.0]
+        self.ewma_DC = [0.0, 1.0]
+        self.ewma_DD = [0.0, 1.0]
+
+        # Initial cooperation probabilities (num / den)
+        self.opp_model = [1.0, 0.0, 1.0, 0.0]
+        self.my_policy = [1.0, 0.0, 1.0, 0.0]
 
     def receive_match_attributes(self):
         self.noise = self.match_attributes.get("noise", 0.0)
+        game = self.match_attributes.get("game", axl.DefaultGame)
+        self.RPST = game.RPST()
 
-    def _update_opponent_model(self, opponent):
+    def _update_single_ewma(self, state_ewma: list[float], action_val: float) -> float:
+        """Updates the (numerator, denominator) pair in-place and returns the new average."""
+        state_ewma[0] = self.discount_factor * state_ewma[0] + action_val
+        state_ewma[1] = self.discount_factor * state_ewma[1] + 1.0
+        return state_ewma[0] / state_ewma[1]
+
+    def _update_opponent_model(self, opponent: Player):
         if len(self.history) < 2:
             return
-        prev = (self.history[-2], opponent.history[-2])
-        opp_act = 1 if opponent.history[-1] == C else 0
-        if prev == (C, C):
-            self.opp_after_CC.append(opp_act)
-            self.opp_pr_c_after_CC = find_recent_average(self.opp_after_CC)
-        elif prev == (C, D):
-            self.opp_after_CD.append(opp_act)
-            self.opp_pr_c_after_CD = find_recent_average(self.opp_after_CD)
-        elif prev == (D, C):
-            self.opp_after_DC.append(opp_act)
-            self.opp_pr_c_after_DC = find_recent_average(self.opp_after_DC)
-        elif prev == (D, D):
-            self.opp_after_DD.append(opp_act)
-            self.opp_pr_c_after_DD = find_recent_average(self.opp_after_DD)
-        self.opp_model = [self.opp_pr_c_after_CC, self.opp_pr_c_after_DC, self.opp_pr_c_after_CD, self.opp_pr_c_after_DD]
+
+        prev_state = (self.history[-2], opponent.history[-2])
+        opp_act = 1.0 if opponent.history[-1] == C else 0.0
+
+        if prev_state == (C, C):
+            pr_c = self._update_single_ewma(self.ewma_CC, opp_act)
+            self.opp_model[0] = pr_c
+        elif prev_state == (C, D):
+            pr_c = self._update_single_ewma(self.ewma_CD, opp_act)
+            self.opp_model[2] = pr_c
+        elif prev_state == (D, C):
+            pr_c = self._update_single_ewma(self.ewma_DC, opp_act)
+            self.opp_model[1] = pr_c
+        elif prev_state == (D, D):
+            pr_c = self._update_single_ewma(self.ewma_DD, opp_act)
+            self.opp_model[3] = pr_c
 
     def _get_state_idx(self, opponent) -> int:
         if not self.history:
@@ -230,14 +247,16 @@ class ISO(Player):
         state_idx = self._get_state_idx(opponent)
         expected, my_policy = optimize_against(self.opp_model,
                                                init_state_idx=state_idx,
-                                               p_noise=self.noise)
+                                               p_noise=self.noise,
+                                               RPST=self.RPST,
+                                               p_end=1e-2)
         self.my_policy = my_policy
         return expected
 
     def act(self, opponent: Player) -> Action:
         state_idx = self._get_state_idx(opponent)
         pr_c = self.my_policy[state_idx]
-        return C if np.random.uniform() < pr_c else D
+        return self._random.random_choice(pr_c)
 
     def strategy(self, opponent: Player) -> Action:
         _ = self.update(opponent)
