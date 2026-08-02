@@ -30,6 +30,7 @@ class LongtermTfT(Player):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
+        "makes_use_of": {"noise"},
         "long_run_time": False,
         "inspects_source": False,
         "manipulates_source": False,
@@ -46,7 +47,7 @@ class LongtermTfT(Player):
         self.opp_pr_d_after_c = 0.
 
     def receive_match_attributes(self):
-        self.noise = self.match_attributes["noise"]
+        self.noise = self.match_attributes.get("noise", 0.0)
 
     def strategy(self, opponent: Player) -> Action:
         if not self.history:
@@ -161,6 +162,7 @@ class ISO(Player):
     classifier = {
         "memory_depth": float("inf"),
         "stochastic": True,
+        "makes_use_of": {"noise"},
         "long_run_time": True,
         "inspects_source": False,
         "manipulates_source": False,
@@ -184,7 +186,7 @@ class ISO(Player):
         self.my_policy = [1., 0., 1., 0.]
 
     def receive_match_attributes(self):
-        self.noise = self.match_attributes["noise"]
+        self.noise = self.match_attributes.get("noise", 0.0)
 
     def _update_opponent_model(self, opponent):
         if len(self.history) < 2:
