@@ -139,7 +139,9 @@ class TestZeroResp(TestPlayer):
         )
         match.play()
         self.assertGreater(len(player.history), 0)
-        self.assertTrue(player.is_red_line or player.debt > 0 or player.defections > 0)
+        self.assertTrue(
+            player.is_red_line or player.debt > 0 or player.defections > 0
+        )
 
         player.reset()
         self.assertEqual(player, clone)
@@ -231,7 +233,9 @@ class TestZeroResp(TestPlayer):
 
         # Fallback when length unknown
         player.set_match_attributes(length=-1)
-        self.assertEqual(player._effective_length(), player._DEFAULT_MATCH_LENGTH)
+        self.assertEqual(
+            player._effective_length(), player._DEFAULT_MATCH_LENGTH
+        )
 
     def test_live_coop_rate_empty_history(self):
         """With no observations, live coop rate defaults to 1.0."""

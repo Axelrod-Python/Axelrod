@@ -197,7 +197,7 @@ class GTFT(MemoryOnePlayer):
         pass
 
     def receive_match_attributes(self):
-        (R, P, S, T) = self.match_attributes["game"].RPST()
+        R, P, S, T = self.match_attributes["game"].RPST()
         if self.p is None:
             self.p = min(1 - (T - R) / (R - S), (R - P) / (T - P))
         four_vector = [1, self.p, 1, self.p]
