@@ -284,6 +284,7 @@ from .zero_determinant import (
     ZDMischief,
     ZDSet2,
 )
+from .zeroresp import ZeroResp
 
 # Note: Meta* strategies are handled in .__init__.py
 
@@ -509,5 +510,6 @@ all_strategies = [
     ZDMem2,
     ZDMischief,
     ZDSet2,
+    ZeroResp,
     e,
 ]
