@@ -48,7 +48,7 @@ def _create_points(step: float, progress_bar: bool = True) -> List[Point]:
     points = []
     for x in np.linspace(0, 1, num):
         for y in np.linspace(0, 1, num):
-            points.append(Point(x, y))
+            points.append(Point(float(x), float(y)))
 
             if progress_bar:
                 p_bar.update()
@@ -525,9 +525,8 @@ class TransitiveFingerprint(object):
             opponent in each turn. The ith row corresponds to the ith opponent
             and the jth column the jth turn.
         """
-        did_c = np.vectorize(
-            lambda actions: [int(action == "C") for action in actions]
-        )
+        def did_c(actions):
+            return [int(action == "C") for action in actions]
 
         cooperation_rates = {}
         df = dd.read_csv(filename)
