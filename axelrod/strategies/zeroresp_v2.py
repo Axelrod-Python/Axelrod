@@ -1,13 +1,12 @@
 """
-ZeroResp v2: adaptive IPD strategy (epochs, red line, early sharp, contrition).
+ZeroResp v2 (revision 2.2): adaptive IPD strategy.
 
-Builds on ZeroResp with early-window retaliation, echo-shield, one-shot noise
-forgiveness, and deadlock breaking.
+Tournament-tuned state machine with short adaptive retaliation, noise-aware
+forgiveness, deadlock recovery, red-line ban, and smart end-game logic.
 """
 
 from __future__ import annotations
 
-import math
 from enum import Enum, auto
 from typing import List, Optional, Tuple
 
@@ -27,23 +26,28 @@ class _State(Enum):
 
 class ZeroRespV2(Player):
     """
-    ZeroResp v2 — tournament-tuned adaptive state machine.
+    ZeroResp v2 — tournament-tuned adaptive state machine (revision 2.2).
 
-    Keeps the ZeroResp backbone (dynamic epochs, stochastic mid-game buffer,
-    systemic red line, anti-raider, finite-horizon harvest) and adds:
+    Keeps the ZeroResp backbone (dynamic epochs, systemic red line, anti-raider)
+    and adds:
 
     1. **Early sharp** — in the first few turns, retaliate with delay 1 so
        probers that check early punishment are answered.
-    2. **Contrition / echo-shield** — after a queued retaliatory D, ignore one
+    2. **Short adaptive buffer** — mid-game delay is 1–2 turns (not a long
+       6–16 window), collapsing to 1 under hostility or late pressure.
+    3. **Contrition / echo-shield** — after a queued retaliatory D, ignore one
        mirror D to avoid cascade wars with Suspicious TFT-style reciprocators.
-    3. **One-shot forgive** — the first isolated mid-game D after a long clean
-       mutual-cooperation stretch is treated as noise (once per match).
-    4. **Deadlock break** — CD/DC alternating loops force a cooperative reset
+    4. **Noise-aware one-shot forgive** — isolated mid-game D after a long clean
+       mutual-cooperation stretch is treated as noise (up to twice per match).
+    5. **Deadlock break** — CD/DC alternating loops force a cooperative reset
        (Omega-TFT inspired) without permanent softness.
+    6. **Smart end-game harvest / grim probe** — only with known finite length
+       and a short remaining horizon; cautious against never-defectors.
 
     Names:
 
-    - ZeroResp v2: Original name by EpochRedLine / SovereignStabilizer authors
+    - ZeroResp v2: Library display name
+    - ZeroResp v2.2: Implementation revision (this module)
     - ZeroRespV2: Class identifier
     """
 
@@ -62,15 +66,26 @@ class ZeroRespV2(Player):
     _LIVE_INTEL_MIN_SAMPLES = 10
     _HOSTILE_COOP_THRESHOLD = 0.4
     _SOFT_HOSTILE_COOP = 0.7
+
     EARLY_WINDOW = 5
     ONE_SHOT_PEACE = 12
     DEADLOCK_THRESHOLD = 3
 
-    def __init__(self) -> None:
+    # revision 2.2 tuning
+    HARVEST_WINDOW = 5
+    HARVEST_FORGIVENESS = 0.8
+    ONE_SHOT_MAX = 2
+    GRIM_LAST_SAFE = 1
+    PROBE_WINDOW = 4
+    PROBE_PROB = 0.15
+
+    def __init__(self, base_epoch: int = 25) -> None:
         """Initialise epoch, red-line, and v2 counters."""
         super().__init__()
-        self.base_epoch = 25
+        self.base_epoch = int(base_epoch)
+        self._init_state()
 
+    def _init_state(self) -> None:
         self._state = _State.COOPERATIVE
         self.is_red_line = False
         self.epoch_step = 0
@@ -85,12 +100,13 @@ class ZeroRespV2(Player):
         self.last_my: Action = C
         self.late_defects = 0
 
-        # v2 modules
         self.echo_forgive = 0
+        self.one_shot_forgives = 0
         self.one_shot_used = False
         self.clean_peace = 0
         self.deadlock = 0
         self._last_pair: Optional[Tuple[Action, Action]] = None
+        self.probe_fired = False
 
     # ------------------------------------------------------------------
     # Helpers
@@ -154,7 +170,6 @@ class ZeroRespV2(Player):
                 self.opp_defects += 1
                 if step > self._late_threshold():
                     self.late_defects += 1
-                # one-shot forgive reads clean_peace before we clear it
                 self._on_defect(step)
                 self.clean_peace = 0
             else:
@@ -165,7 +180,6 @@ class ZeroRespV2(Player):
                 else:
                     self.clean_peace = 0
 
-            # Deadlock meter: alternating (C,D)/(D,C) exploitation pairs
             pair = (my_prev, opp_last)
             if self._last_pair is not None:
                 a0, b0 = self._last_pair
@@ -201,17 +215,31 @@ class ZeroRespV2(Player):
             self._close_epoch()
             return self._play(C)
 
-        # End-game harvest vs forgiving victims (known finite length)
+        # Smart harvest + grim probe (known finite horizon only)
         known_len = self._match_length()
-        if known_len is not None and self.opp_len > 50:
-            p_end = 1.0 / (1.0 + math.exp(-10.0 * (step / known_len - 0.85)))
-            forgiveness = self.opp_coops_after_my_D / max(1, self.my_D)
-            is_grim = self.opp_len > 50 and self.opp_defects == 0
-            is_victim = forgiveness > 0.6 or (
-                self.opp_defects / max(1, self.opp_len) < 0.03
-            )
-            if p_end > 0.75 and is_victim and not is_grim:
-                return self._play(D)
+        if known_len is not None and self.opp_len > 30:
+            remaining = known_len - step
+            if remaining < self.HARVEST_WINDOW:
+                forgiveness = self.opp_coops_after_my_D / max(1, self.my_D)
+                low_defect = (self.opp_defects / max(1, self.opp_len)) < 0.02
+                high_forgive = forgiveness > self.HARVEST_FORGIVENESS
+                is_victim = high_forgive or low_defect
+                is_grim = self.opp_len > 50 and self.opp_defects == 0
+
+                if is_grim:
+                    if remaining <= self.GRIM_LAST_SAFE:
+                        return self._play(D)
+                    if self.probe_fired:
+                        return self._play(D)
+                    if remaining <= self.PROBE_WINDOW and self.my_D == 0:
+                        if self._random.random() < self.PROBE_PROB:
+                            self.probe_fired = True
+                            return self._play(D)
+                else:
+                    if self.probe_fired and remaining <= self.PROBE_WINDOW:
+                        return self._play(D)
+                    if is_victim:
+                        return self._play(D)
 
         # Queued delayed retaliation
         if step in self.queue:
@@ -238,17 +266,19 @@ class ZeroRespV2(Player):
             self.echo_forgive -= 1
             return
 
-        # One-shot forgive: first isolated mid-game noise after long peace
+        # Noise-aware forgive after long clean peace
         if (
-            not self.one_shot_used
-            and self.opp_defects == 1
+            self.one_shot_forgives < self.ONE_SHOT_MAX
+            and self.opp_defects <= 3
             and step > self.EARLY_WINDOW
             and self.clean_peace >= self.ONE_SHOT_PEACE
             and self.debt <= 0
             and not self.queue
             and self._state == _State.COOPERATIVE
             and self.late_defects == 0
+            and not self._is_soft_hostile()
         ):
+            self.one_shot_forgives += 1
             self.one_shot_used = True
             return
 
@@ -270,13 +300,13 @@ class ZeroRespV2(Player):
             self._enter_red_line()
             return
 
-        # Early sharp vs mid-game stochastic delay
+        # Early sharp / hostile: delay 1; else short stochastic delay 1–2
         if self._is_hostile() or self.late_defects > 0:
             delay = 1
         elif step <= self.EARLY_WINDOW or self.opp_len <= 3:
             delay = 1
         else:
-            delay = 5 + int(self._random.randint(1, 11))
+            delay = 1 + int(self._random.randint(0, 1))
 
         self.queue.append(step + delay)
 

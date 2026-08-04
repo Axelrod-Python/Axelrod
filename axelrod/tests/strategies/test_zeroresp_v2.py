@@ -299,11 +299,10 @@ class TestZeroRespV2(TestPlayer):
             attrs={"is_red_line": False},
         )
 
-    def test_midgame_stochastic_buffer(self):
-        """After early window, isolated D uses long random delay (not immediate)."""
+    def test_midgame_noise_forgive_and_buffer(self):
+        """After long clean peace, isolated D is forgiven; later D is buffered."""
         player = self.player()
-        # Long peace so one-shot may fire first; use two defects after peace
-        # First D after peace → one-shot; second → schedule
+        # First D after peace → one-shot forgive; second → short schedule
         opp = [C] * 15 + [D, C, C, D] + [C] * 20
         axl.Match(
             (player, axl.MockPlayer(actions=opp)),
@@ -312,6 +311,7 @@ class TestZeroRespV2(TestPlayer):
             match_attributes={"length": 200},
         ).play()
         self.assertTrue(player.one_shot_used)
+        self.assertGreaterEqual(player.one_shot_forgives, 1)
 
     def test_dd_and_cc_reset_deadlock(self):
         player = self.player()
