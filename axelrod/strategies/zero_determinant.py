@@ -134,7 +134,7 @@ class ZDExtort2(LRPlayer):
         super().__init__(phi, s, None)
 
     def receive_match_attributes(self):
-        (R, P, S, T) = self.match_attributes["game"].RPST()
+        R, P, S, T = self.match_attributes["game"].RPST()
         self.l = P
         super().receive_match_attributes()
 
@@ -228,7 +228,7 @@ class ZDGTFT2(LRPlayer):
         super().__init__(phi, s, None)
 
     def receive_match_attributes(self):
-        (R, P, S, T) = self.match_attributes["game"].RPST()
+        R, P, S, T = self.match_attributes["game"].RPST()
         self.l = R
         super().receive_match_attributes()
 
