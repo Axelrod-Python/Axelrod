@@ -10,7 +10,8 @@ C, D = axl.Action.C, axl.Action.D
 
 class TestZeroRespV2(TestPlayer):
 
-    name = "ZeroResp v2"
+    # Player.__repr__ appends init kwargs → "ZeroResp v2: 25" (base_epoch)
+    name = "ZeroResp v2: 25"
     player = axl.ZeroRespV2
     expected_classifier = {
         "memory_depth": float("inf"),
@@ -331,3 +332,83 @@ class TestZeroRespV2(TestPlayer):
         ).play()
         # After CC pair, deadlock should reset in observe
         self.assertEqual(player.deadlock, 0)
+
+    def _endgame_player(
+        self,
+        *,
+        hist_len: int,
+        length: int,
+        opp_len: int,
+        opp_defects: int,
+        my_D: int,
+        probe_fired: bool,
+        seed: int = 0,
+        opp_coops_after_my_D: int = 0,
+    ):
+        """Build a player mid end-game harvest window (known finite length)."""
+        player = self.player()
+        player.set_seed(seed)
+        player.set_match_attributes(length=length)
+        for _ in range(hist_len):
+            player.history.append(C, C)
+        player.opp_len = opp_len
+        player.opp_defects = opp_defects
+        player.my_D = my_D
+        player.opp_coops_after_my_D = opp_coops_after_my_D
+        player.probe_fired = probe_fired
+        player.last_my = C
+        return player
+
+    def test_grim_last_safe_defects(self):
+        """vs never-defector: last-turn safe harvest is D (rev 2.2 grim)."""
+        # remaining = length - step = 60 - 59 = 1 <= GRIM_LAST_SAFE
+        player = self._endgame_player(
+            hist_len=58,
+            length=60,
+            opp_len=55,
+            opp_defects=0,
+            my_D=0,
+            probe_fired=False,
+        )
+        self.assertEqual(player.strategy(axl.Cooperator()), D)
+
+    def test_grim_after_probe_keeps_defecting(self):
+        """Once probe_fired against pure cooperator, stay D in harvest window."""
+        player = self._endgame_player(
+            hist_len=56,
+            length=60,
+            opp_len=55,
+            opp_defects=0,
+            my_D=1,
+            probe_fired=True,
+        )
+        self.assertEqual(player.strategy(axl.Cooperator()), D)
+
+    def test_grim_stochastic_probe_fires(self):
+        """With remaining in PROBE_WINDOW and my_D==0, probe can fire (seeded)."""
+        player = self._endgame_player(
+            hist_len=56,
+            length=60,
+            opp_len=55,
+            opp_defects=0,
+            my_D=0,
+            probe_fired=False,
+            seed=7,
+        )
+        action = player.strategy(axl.Cooperator())
+        self.assertEqual(action, D)
+        self.assertTrue(player.probe_fired)
+
+    def test_non_grim_probe_fired_stays_d_in_window(self):
+        """Non-grim end-game: if probe already fired, defect in PROBE_WINDOW."""
+        # opp_len <= 50 → not is_grim; high defect rate → not is_victim
+        player = self._endgame_player(
+            hist_len=56,
+            length=60,
+            opp_len=40,
+            opp_defects=10,
+            my_D=5,
+            probe_fired=True,
+            opp_coops_after_my_D=0,
+        )
+        self.assertEqual(player.strategy(axl.Cooperator()), D)
