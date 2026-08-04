@@ -60,10 +60,7 @@ class LongtermTfT(Player):
             std_expected_ds = np.sqrt(self.noise * (1-self.noise) * self.n_tft_would_c)
             # This becomes n_d_when_tft_would_c for noise->0
             self.z = (self.n_d_when_tft_would_c - n_expected_ds) / max(1., std_expected_ds)
-        if self.n_tft_would_c < 5 and self.n_d_when_tft_would_c < 3:
-            # TfT
-            return opponent.history[-1]
-        elif self.z < 2:
+        if self.n_tft_would_c >= 5 and self.z < 2:
             return C
         else:
             # TfT
@@ -168,6 +165,21 @@ def optimize_against(
     return -min_loss, best_params
 
 class ISO(Player):
+    """Optimal response against a memory-1 opponent model.
+
+    Estimates the opponent's memory-1 (order-1) conditional cooperation
+    probabilities, which together with its own memory-1 strategy induce a
+    Markov chain over outcome pairs. Computes the exact expected discounted
+    long-term payoff in closed form via the chain's stationary/resolvent
+    solution, then optimizes its own memory-1 policy to maximize it. A
+    simplification and refinement of DBS: it replaces bounded-depth tree
+    search with the exact infinite-horizon value, yielding stronger play
+    against exploitable opponents at lower complexity. Adaptive only w.r.t.
+    memory-1 opponents (the model is misspecified for higher-memory play).
+
+    Names:
+    - ISO: [Hutter2023]_
+    """
     name = "ISO"
     classifier = {
         "memory_depth": float("inf"),
@@ -195,8 +207,7 @@ class ISO(Player):
 
     def receive_match_attributes(self):
         self.noise = self.match_attributes.get("noise", 0.0)
-        game = self.match_attributes.get("game", axl.DefaultGame)
-        self.RPST = game.RPST()
+        self.RPST = self.match_attributes['game'].RPST()
 
     def _update_single_ewma(self, state_ewma: list[float], action_val: float) -> float:
         """Updates the (numerator, denominator) pair in-place and returns the new average."""
@@ -261,3 +272,93 @@ class ISO(Player):
     def strategy(self, opponent: Player) -> Action:
         _ = self.update(opponent)
         return self.act(opponent)
+
+class CooperateISO(Player):
+    """Forgiving cooperation combined with optimal exploitation.
+
+    Seeks to establish and sustain mutual cooperation using LongtermTFT's
+    noise-robust forgiveness, while switching to ISO to respond optimally
+    to opponents that can be exploited. In effect: cooperate with
+    cooperators, exploit the exploitable. This combination is the paper's
+    tournament-strong strategy, outperforming prior champions against the
+    Axelrod library across noise levels of 0–10%.
+
+    Names:
+    - CooperateISO: [Hutter2023]_
+    """
+    name = "CooperateISO"
+    classifier = {
+        "memory_depth": float("inf"),
+        "stochastic": True,
+        "makes_use_of": {"noise", "game"},
+        "long_run_time": True,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+    def __init__(self):
+        self.iso_instance = ISO()
+        super().__init__()
+        self.n_tft_would_c = 0
+        self.n_d_when_tft_would_c = 0
+        self.z = 0.
+        # Estimate of the opponent's rate of playing D after C, taking noise
+        # into account.
+        self.opp_pr_d_after_c = 0.
+        self.playing_iso = False
+        self.reward_history = []
+
+    def set_seed(self, seed: int = None):
+        super().set_seed(seed)
+        self.iso_instance.set_seed(seed)
+
+    def receive_match_attributes(self):
+        super().receive_match_attributes()
+        self.RPST = self.match_attributes['game'].RPST()
+        self.noise = self.match_attributes['noise']
+        self.iso_instance.noise = self.noise
+
+    def _update_reward_history(self, opponent):
+        R, P, S, T = self.RPST
+        state = (self.history[-1], opponent.history[-1])
+        if state == (C, C):
+            self.reward_history.append(R)
+        elif state == (C, D):
+            self.reward_history.append(S)
+        elif state == (D, C):
+            self.reward_history.append(T)
+        elif state == (D, D):
+            self.reward_history.append(P)
+
+    def strategy(self, opponent: Player) -> Action:
+        if not self.history:
+            return C
+        self.iso_instance.history.append(self.history[-1], opponent.history[-1])
+        if self.playing_iso:
+            return self.iso_instance.strategy(opponent)
+        self._update_reward_history(opponent)
+        expected = self.iso_instance.update(opponent)
+        if len(self.history) == 1:
+            return opponent.history[-1]
+        if self.history[-2] == C:
+            self.n_tft_would_c += 1
+            if opponent.history[-1] == D:
+                self.n_d_when_tft_would_c += 1
+            n_expected_ds = self.n_tft_would_c * self.noise
+            std_expected_ds = np.sqrt(self.noise * (1-self.noise) * self.n_tft_would_c)
+            # This becomes n_d_when_tft_would_c for noise->0
+            self.z = (self.n_d_when_tft_would_c - n_expected_ds) / max(1., std_expected_ds)
+        # Should we start playing ISO?
+        R, P, _, _ = self.RPST
+        expected_gain = expected - np.mean(self.reward_history)
+        if len(self.reward_history) >= 10 and \
+        expected_gain > 2. * np.std(self.reward_history) / np.sqrt(len(self.reward_history)) and \
+        expected_gain > 0.05 * (R - P):
+            self.playing_iso = True
+            return self.iso_instance.act(opponent)
+        if self.n_tft_would_c >= 5 and self.z < 2:
+            return C
+        else:
+            # TfT
+            return opponent.history[-1]        
