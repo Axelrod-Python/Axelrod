@@ -5,7 +5,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.transforms as transforms
 import tqdm
-from numpy import arange, median, nan_to_num
+from numpy import arange, median, nan_to_num, ndarray
 
 from .load_data_ import axl_filename
 from .result_set import ResultSet
@@ -46,7 +46,7 @@ class Plot(object):
         width = max(self.num_players / 3, 12)
         height = width / 2
         spacing = 4
-        positions = spacing * arange(1, self.num_players + 1, 1)
+        positions: ndarray = spacing * arange(1, self.num_players + 1, 1)
         figure.set_size_inches(width, height)
         ax.violinplot(
             data,

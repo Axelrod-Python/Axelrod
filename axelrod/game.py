@@ -75,7 +75,10 @@ class AsymmetricGame(object):
 
         row, col = map(get_value, pair)
 
-        return (self.A[row][col], self.B[row][col])
+        # Use `.item()` to return native Python scalars rather than NumPy
+        # scalars, whose repr (`np.int64(3)`) would otherwise leak into the
+        # string representation of scores.
+        return (self.A[row][col].item(), self.B[row][col].item())
 
     def __repr__(self) -> str:
         return "Axelrod game with matrices: {}".format((self.A, self.B))

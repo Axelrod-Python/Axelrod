@@ -297,14 +297,15 @@ class ResultSet:
         for player_index, opponent_index in pairs:
             utilities = attribute[player_index][opponent_index]
             if utilities:
-                matrix[player_index][opponent_index] = func(utilities)
+                matrix[player_index][opponent_index] = float(func(utilities))
 
         return matrix
 
     @update_progress_bar
     def _build_payoff_diffs_means(self):
         payoff_diffs_means = [
-            [np.mean(diff) for diff in player] for player in self.score_diffs
+            [float(np.mean(diff)) for diff in player]
+            for player in self.score_diffs
         ]
 
         return payoff_diffs_means
@@ -432,7 +433,7 @@ class ResultSet:
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             normalised_cooperation = [
-                list(np.nan_to_num(row))
+                [float(value) for value in np.nan_to_num(row)]
                 for row in np.array(self.cooperation)
                 / sum(map(np.array, self.match_lengths))
             ]
@@ -448,12 +449,13 @@ class ResultSet:
         )
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
-            initial_cooperation_rate = list(
-                np.nan_to_num(
+            initial_cooperation_rate = [
+                float(rate)
+                for rate in np.nan_to_num(
                     np.array(self.initial_cooperation_count)
                     / interactions_array
                 )
-            )
+            ]
             return initial_cooperation_rate
 
     @update_progress_bar
@@ -706,8 +708,10 @@ class ResultSet:
 
         """
 
-        median_scores = map(np.nanmedian, self.normalised_scores)
-        median_wins = map(np.nanmedian, self.wins)
+        median_scores = [
+            float(np.nanmedian(scores)) for scores in self.normalised_scores
+        ]
+        median_wins = [float(np.nanmedian(wins)) for wins in self.wins]
 
         original_index = [index for index, _player in enumerate(self.players)]
 
@@ -756,7 +760,7 @@ class ResultSet:
                 ]
 
                 if len(counts) > 0:
-                    rate = np.mean(counts)
+                    rate = float(np.mean(counts))
                 else:
                     rate = 0
 

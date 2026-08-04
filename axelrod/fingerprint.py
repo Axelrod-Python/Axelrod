@@ -177,11 +177,13 @@ def _generate_data(interactions: dict, points: list, edges: list) -> dict:
         the values are the mean score for the corresponding interactions.
     """
     edge_scores = [
-        np.mean(
-            [
-                compute_final_score_per_turn(scores)[0]
-                for scores in interactions[edge]
-            ]
+        float(
+            np.mean(
+                [
+                    compute_final_score_per_turn(scores)[0]
+                    for scores in interactions[edge]
+                ]
+            )
         )
         for edge in edges
     ]
@@ -212,7 +214,7 @@ def _reshape_data(data: dict, points: list, size: int) -> np.ndarray:
         the standard origin.
     """
     ordered_data = [data[point] for point in points]
-    shaped_data = np.reshape(ordered_data, (size, size), order="F")
+    shaped_data: np.ndarray = np.reshape(ordered_data, (size, size), order="F")
     plotting_data = np.flipud(shaped_data)
     return plotting_data
 
@@ -525,6 +527,7 @@ class TransitiveFingerprint(object):
             opponent in each turn. The ith row corresponds to the ith opponent
             and the jth column the jth turn.
         """
+
         def did_c(actions):
             return [int(action == "C") for action in actions]
 

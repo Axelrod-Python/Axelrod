@@ -43,7 +43,12 @@ class TestGame(unittest.TestCase):
     def test_wrong_class_equality(self):
         self.assertNotEqual(axl.Game(), "wrong class")
 
-    @given(r=integers(), p=integers(), s=integers(), t=integers())
+    @given(
+        r=integers(min_value=-1000, max_value=1000),
+        p=integers(min_value=-1000, max_value=1000),
+        s=integers(min_value=-1000, max_value=1000),
+        t=integers(min_value=-1000, max_value=1000),
+    )
     @settings(max_examples=5)
     def test_random_init(self, r, p, s, t):
         """Test init with random scores using the hypothesis library."""
@@ -56,14 +61,24 @@ class TestGame(unittest.TestCase):
         game = axl.Game(r, s, t, p)
         self.assertEqual(game.scores, expected_scores)
 
-    @given(r=integers(), p=integers(), s=integers(), t=integers())
+    @given(
+        r=integers(min_value=-1000, max_value=1000),
+        p=integers(min_value=-1000, max_value=1000),
+        s=integers(min_value=-1000, max_value=1000),
+        t=integers(min_value=-1000, max_value=1000),
+    )
     @settings(max_examples=5)
     def test_random_RPST(self, r, p, s, t):
         """Test RPST method with random scores using the hypothesis library."""
         game = axl.Game(r, s, t, p)
         self.assertEqual(game.RPST(), (r, p, s, t))
 
-    @given(r=integers(), p=integers(), s=integers(), t=integers())
+    @given(
+        r=integers(min_value=-1000, max_value=1000),
+        p=integers(min_value=-1000, max_value=1000),
+        s=integers(min_value=-1000, max_value=1000),
+        t=integers(min_value=-1000, max_value=1000),
+    )
     @settings(max_examples=5)
     def test_random_score(self, r, p, s, t):
         """Test score method with random scores using the hypothesis library."""

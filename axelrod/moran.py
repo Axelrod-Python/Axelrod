@@ -189,6 +189,7 @@ class MoranProcess(object):
         An index of the above list selected at random proportionally to the list
         element divided by the total.
         """
+        csums: np.ndarray
         if fitness_transformation is None:
             csums = np.cumsum(scores)
         else:
