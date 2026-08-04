@@ -1,8 +1,8 @@
 import axelrod as axl
 from axelrod.action import Action
 from axelrod.tests.strategies.test_player import TestPlayer
-from axelrod.strategies.cooperate_iso import LongtermTfT, ISO
-from unittest.mock import patch
+from axelrod.strategies.cooperate_iso import LongtermTfT, ISO, CooperateISO
+from unittest.mock import patch, MagicMock
 
 C, D = Action.C, Action.D
 
@@ -189,3 +189,113 @@ class TestISO(TestPlayer):
         # Ensure all resulting policy probabilities are valid bounded floats
         for pr_c in player.my_policy:
             self.assertTrue(0.0 <= pr_c <= 1.0)
+
+class TestCooperateISO(TestPlayer):
+    name = "CooperateISO"
+    player = CooperateISO
+    
+    expected_classifier = {
+        "memory_depth": float("inf"),
+        "stochastic": True,
+        "makes_use_of": {"noise", "game"},
+        "long_run_time": True,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
+    }
+
+    def test_update_reward_history(self):
+        """Unit test for ensuring the reward history accurately maps RPST to match states."""
+        player = self.player()
+        player.RPST = (3, 1, 0, 5) 
+        opponent = axl.MockPlayer()
+
+        # Turn 1: Mutual Cooperation (C, C) -> Should append R (3)
+        player.history.append(C, C)
+        opponent.history.append(C, C)
+        player._update_reward_history(opponent)
+        self.assertEqual(player.reward_history, [3])
+
+        # Turn 2: Sucker's payoff (C, D) -> Should append S (0)
+        player.history.append(C, D)
+        opponent.history.append(D, C)
+        player._update_reward_history(opponent)
+        self.assertEqual(player.reward_history, [3, 0])
+
+        # Turn 3: Temptation (D, C) -> Should append T (5)
+        player.history.append(D, C)
+        opponent.history.append(C, D)
+        player._update_reward_history(opponent)
+        self.assertEqual(player.reward_history, [3, 0, 5])
+
+        # Turn 4: Punishment (D, D) -> Should append P (1)
+        player.history.append(D, D)
+        opponent.history.append(D, D)
+        player._update_reward_history(opponent)
+        self.assertEqual(player.reward_history, [3, 0, 5, 1])
+
+    @patch("axelrod.strategies.cooperate_iso.ISO.update")
+    @patch("axelrod.strategies.cooperate_iso.ISO.act")
+    def test_maintains_tft_when_iso_not_profitable(self, mock_act, mock_update):
+        """
+        Tests that if ISO's expected reward does not beat the historical average,
+        the strategy maintains LongtermTfT behavior.
+        """
+        # ISO update always returns 0.0 (highly unprofitable)
+        mock_update.return_value = 0.0
+        
+        expected = [
+            (C, C),  # T1: No history, defaults to C
+            (C, D),  # T2: Mirrors Opponent's T1 (C)
+            (D, D),  # T3: Mirrors Opponent's T2 (D)
+            (D, C),  # T4: Mirrors Opponent's T3 (D)
+            (C, C),  # T5: Mirrors Opponent's T4 (C)
+        ]
+        
+        self.versus_test(
+            opponent=axl.MockPlayer(actions=[C, D, D, C, C]),
+            expected_actions=expected,
+            match_attributes={"noise": 0.0, "game": axl.DefaultGame}
+        )
+        # Because we never switched to ISO, act() should never have been called
+        mock_act.assert_not_called()
+
+    @patch("axelrod.strategies.cooperate_iso.ISO.update")
+    @patch("axelrod.strategies.cooperate_iso.ISO.act")
+    def test_switches_to_iso_when_profitable(self, mock_act, mock_update):
+        """
+        Tests the switch condition: if we have 10 rounds of history and ISO predicts
+        a sufficiently high expected gain, the strategy flips to playing ISO.
+        """
+        # We will mock ISO to return D whenever it acts
+        mock_act.return_value = D
+        
+        # We play 11 rounds. 
+        # Turns 1-10: ISO predicts 3.0 (same as average for mutual cooperation, so expected_gain = 0)
+        # Turn 11: ISO suddenly predicts 5.0. expected_gain (2.0) crosses the threshold.
+        mock_update.side_effect = [3.0] * 9 + [5.0]
+
+        # T1 to T10: Mutual cooperation (LongtermTfT mirroring)
+        expected = [(C, C)] * 10
+        
+        # T11: The threshold is crossed, we switch to ISO, which our mock says will return D
+        expected.append((D, C))
+
+        self.versus_test(
+            opponent=axl.MockPlayer(actions=[C] * 11),
+            expected_actions=expected,
+            match_attributes={"noise": 0.0, "game": axl.DefaultGame}
+        )
+        
+        # Verify ISO took over on the final turn
+        mock_act.assert_called_once()
+
+    def test_set_seed(self):
+        """Ensures random seeds are passed down to the inner ISO instance."""
+        player = self.player()
+        
+        # Mock the internal ISO instance's set_seed method
+        player.iso_instance.set_seed = MagicMock()
+        
+        player.set_seed(42)
+        player.iso_instance.set_seed.assert_called_once_with(42)
