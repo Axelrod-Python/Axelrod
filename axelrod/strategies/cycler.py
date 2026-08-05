@@ -95,6 +95,28 @@ class Cycler(Player):
         """Actual strategy definition that determines player's action."""
         return next(self.cycle_iter)
 
+    def __getstate__(self):
+        """Used for pickling.
+
+        The `cycle_iter` attribute is an `itertools.cycle` object, which
+        cannot be pickled from Python 3.14 onwards. We drop it here and
+        rebuild it in `__setstate__`."""
+        state = self.__dict__.copy()
+        del state["cycle_iter"]
+        return state
+
+    def __setstate__(self, state):
+        """Used for unpickling, rebuilding the dropped `cycle_iter`.
+
+        A fresh `itertools.cycle` starts at the beginning of the cycle, so we
+        advance it to the position reached before pickling. The strategy
+        consumes one action per turn, hence the position is the number of
+        turns played modulo the cycle length."""
+        self.__dict__.update(state)
+        self.set_cycle(cycle=self.cycle)
+        for _ in range(len(self.history) % len(self.cycle)):
+            next(self.cycle_iter)
+
     def set_cycle(self, cycle: str):
         """Set or change the cycle."""
         self.cycle = cycle

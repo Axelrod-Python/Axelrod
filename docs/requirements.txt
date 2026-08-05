@@ -1,4 +1,4 @@
 docutils>=0.18.1
-numpy==1.24.3  # numpy isn't mocked due to complex use in doctests
+numpy>=2.1  # numpy isn't mocked due to complex use in doctests
 mock>=5.1.0
 torch>=2.6.0
