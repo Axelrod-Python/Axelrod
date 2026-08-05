@@ -63,28 +63,6 @@ class LongtermTfT(Player):
             # TfT
             return opponent.history[-1]
 
-def are_same_binomial(p1: float, n1: int, p2: float, n2: int, min_abs_z: float = 2.0) -> bool:
-    """
-    Tests if two binomial proportions are statistically indistinguishable 
-    using a pooled two-proportion z-test.
-    """
-    p = (n1 * p1 + n2 * p2) / (n1 + n2)
-    if p in (0., 1.):
-        return p1 == p2
-    z = (p1 - p2) / np.sqrt(p * (1 - p) * (1 / n1 + 1 / n2))
-    return abs(z) < min_abs_z
-
-def has_greater_mean(ary1: np.ndarray, ary2: np.ndarray, min_z: float = 2.0) -> bool:
-    """
-    Tests if the mean of the first array is significantly greater than 
-    the second array using a two-sample z-test.
-    """
-    se1 = np.std(ary1) / np.sqrt(len(ary1))
-    se2 = np.std(ary2) / np.sqrt(len(ary2))
-    if se1 == 0 and se2 == 0:
-        return ary1.mean() > ary2.mean()
-    return (ary1.mean() - ary2.mean()) / np.sqrt(se1**2 + se2**2) > min_z
-
 def get_reward(
     my_strategy: np.ndarray,
     opp_strategy: np.ndarray,

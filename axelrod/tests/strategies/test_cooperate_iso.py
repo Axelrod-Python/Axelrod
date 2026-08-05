@@ -174,36 +174,37 @@ class TestISO(TestPlayer):
             match_attributes={"noise": 0.1}
         )
 
-    def test_vs_cooperator_defects(self):
-        """ISO should learn to defect against a pure cooperator."""
-        random.seed(42)
-        np.random.seed(42)
-        
+    def test_vs_random_defects(self):
+        """ISO should learn to defect against a random player."""
         player = self.player()
-        opponent = axl.Cooperator()
+        opponent = axl.Random()
         
-        match = axl.Match([player, opponent], turns=40, noise=0.05)
+        match = axl.Match([player, opponent], turns=200, noise=0.05, seed=42)
         match.play()
 
-        for pr_c in player.my_policy[:3]:
+        print(player.opp_model)
+        print(player.my_policy)
+        for pr_c in player.my_policy:
             self.assertLess(pr_c, 0.1), player.my_policy
         
         self.assertEqual(player.history[-1], D)
 
 
     def test_vs_tit_for_tat_with_noise_cooperates(self):
-        """Against TitForTat under noise, ISO should learn that cooperation avoids retaliation."""
-        random.seed(42)
-        np.random.seed(42)
-        
+        """Against TitForTat under noise, ISO should learn that cooperation avoids retaliation."""       
         player = self.player()
         opponent = axl.TitForTat()
         
-        match = axl.Match([player, opponent], turns=40, noise=0.05)
+        match = axl.Match([player, opponent], turns=200, noise=0.05, seed=42)
         match.play()
 
+        print(player.opp_model)
+        print(player.my_policy)
         for pr_c in player.my_policy:
             self.assertGreater(pr_c, 0.9), player.my_policy        
+
+        self.assertEqual(player.history[-1], C)
+
 
     def test_optimization_runs(self):
         """Runs an actual match for a few turns to ensure optimization executes without crashing."""
