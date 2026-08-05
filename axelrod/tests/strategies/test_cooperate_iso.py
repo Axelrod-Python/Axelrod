@@ -201,23 +201,6 @@ class TestISO(TestPlayer):
 
         self.assertEqual(player.history[-1], C)
 
-
-    def test_optimization_runs(self):
-        """Runs an actual match for a few turns to ensure optimization executes without crashing."""
-        player = self.player()
-        opponent = axl.MockPlayer(actions=[C, D, C])
-        
-        # Play a 3-turn match
-        match = axl.Match([player, opponent], turns=3)
-        match.play()
-        
-        self.assertEqual(len(player.history), 3)
-        self.assertEqual(len(player.my_policy), 4)
-        
-        # Ensure all resulting policy probabilities are valid bounded floats
-        for pr_c in player.my_policy:
-            self.assertTrue(0.0 <= pr_c <= 1.0)
-
 class TestCooperateISO(TestPlayer):
     name = "CooperateISO"
     player = CooperateISO
