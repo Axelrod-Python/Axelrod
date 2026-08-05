@@ -27,7 +27,7 @@ class LongtermTfT(Player):
     name = "LongtermTfT"
     classifier = {
         "memory_depth": float("inf"),
-        "stochastic": True,
+        "stochastic": False,
         "makes_use_of": {"noise"},
         "long_run_time": False,
         "inspects_source": False,
