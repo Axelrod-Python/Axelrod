@@ -34,7 +34,6 @@ MOCK_MODULES = [
     "prompt_toolkit.styles",
     "prompt_toolkit.token",
     "prompt_toolkit.validation",
-    "scipy",
     "scipy.stats",
     "tqdm",
     "yaml",
