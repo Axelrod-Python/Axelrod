@@ -118,3 +118,7 @@ Here are the docstrings of all the strategies in the library.
    :members:
 .. automodule:: axelrod.strategies.zero_determinant
    :members:
+.. automodule:: axelrod.strategies.zeroresp
+   :members:
+.. automodule:: axelrod.strategies.zeroresp_v2
+   :members:
