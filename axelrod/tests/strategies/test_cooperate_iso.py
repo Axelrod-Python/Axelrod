@@ -182,8 +182,6 @@ class TestISO(TestPlayer):
         match = axl.Match([player, opponent], turns=200, noise=0.05, seed=42)
         match.play()
 
-        print(player.opp_model)
-        print(player.my_policy)
         for pr_c in player.my_policy:
             self.assertLess(pr_c, 0.1), player.my_policy
         
@@ -198,8 +196,6 @@ class TestISO(TestPlayer):
         match = axl.Match([player, opponent], turns=200, noise=0.05, seed=42)
         match.play()
 
-        print(player.opp_model)
-        print(player.my_policy)
         for pr_c in player.my_policy:
             self.assertGreater(pr_c, 0.9), player.my_policy        
 
