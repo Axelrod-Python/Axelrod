@@ -377,10 +377,10 @@ def games(draw, prisoners_dilemma=True, max_value=100):
         p = draw(integers(min_value=p_lower_bound, max_value=p_upper_bound))
 
     else:
-        s = draw(integers(max_value=max_value))
-        t = draw(integers(max_value=max_value))
-        r = draw(integers(max_value=max_value))
-        p = draw(integers(max_value=max_value))
+        s = draw(integers(min_value=-max_value, max_value=max_value))
+        t = draw(integers(min_value=-max_value, max_value=max_value))
+        r = draw(integers(min_value=-max_value, max_value=max_value))
+        p = draw(integers(min_value=-max_value, max_value=max_value))
 
     game = axl.Game(r=r, s=s, t=t, p=p)
     return game

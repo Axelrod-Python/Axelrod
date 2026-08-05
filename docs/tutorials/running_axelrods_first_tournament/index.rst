@@ -123,29 +123,28 @@ given in [Axelrod1980]_ and there is no source code to base this on. This leads
 to some strategies being ambiguous. These are all clearly explained in the
 strategy docstrings. For example::
 
-    >>> print(axl.FirstByAnonymous.__doc__)
+    >>> import inspect
+    >>> print(inspect.getdoc(axl.FirstByAnonymous))
+    Submitted to Axelrod's first tournament by a graduate student whose name was
+    withheld.
     <BLANKLINE>
-        Submitted to Axelrod's first tournament by a graduate student whose name was
-        withheld.
+    The description written in [Axelrod1980]_ is:
     <BLANKLINE>
-        The description written in [Axelrod1980]_ is:
+    > "This rule has a probability of cooperating, P, which is initially 30% and
+    > is updated every 10 moves. P is adjusted if the other player seems random,
+    > very cooperative, or very uncooperative. P is also adjusted after move 130
+    > if the rule has a lower score than the other player. Unfortunately, the
+    > complex process of adjustment frequently left the probability of cooperation
+    > in the 30% to 70% range, and therefore the rule appeared random to many
+    > other players."
     <BLANKLINE>
-        > "This rule has a probability of cooperating, P, which is initially 30% and
-        > is updated every 10 moves. P is adjusted if the other player seems random,
-        > very cooperative, or very uncooperative. P is also adjusted after move 130
-        > if the rule has a lower score than the other player. Unfortunately, the
-        > complex process of adjustment frequently left the probability of cooperation
-        > in the 30% to 70% range, and therefore the rule appeared random to many
-        > other players."
+    Given the lack of detail this strategy is implemented based on the final
+    sentence of the description which is to have a cooperation probability that
+    is uniformly random in the 30 to 70% range.
     <BLANKLINE>
-        Given the lack of detail this strategy is implemented based on the final
-        sentence of the description which is to have a cooperation probability that
-        is uniformly random in the 30 to 70% range.
+    Names:
     <BLANKLINE>
-        Names:
-    <BLANKLINE>
-        - (Name withheld): [Axelrod1980]_
-    <BLANKLINE>
+    - (Name withheld): [Axelrod1980]_
 
 Other outcomes
 --------------

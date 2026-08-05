@@ -392,7 +392,11 @@ class TestPickle(unittest.TestCase):
 
         un_transformed = LocalCooperator()
 
-        self.assertRaises(AttributeError, pickle.dumps, un_transformed)
+        # Pickling a local class raises AttributeError up to Python 3.12 and
+        # PicklingError from Python 3.13 onwards.
+        self.assertRaises(
+            (AttributeError, pickle.PicklingError), pickle.dumps, un_transformed
+        )
 
         player = axl.strategy_transformers.FlipTransformer()(LocalCooperator)()
         pickled = pickle.dumps(player)

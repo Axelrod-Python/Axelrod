@@ -210,7 +210,7 @@ class ANN(Player):
 
     def _process_weights(self, weights, num_features, num_hidden):
         self.weights = list(weights)
-        (i2h, h2o, bias) = split_weights(weights, num_features, num_hidden)
+        i2h, h2o, bias = split_weights(weights, num_features, num_hidden)
         self.input_to_hidden_layer_weights = np.array(i2h)
         self.hidden_to_output_layer_weights = np.array(h2o)
         self.bias_weights = np.array(bias)

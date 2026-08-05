@@ -81,7 +81,7 @@ class TestGTFT(TestPlayer):
         )
 
     def test_four_vector(self):
-        (R, P, S, T) = axl.Game().RPST()
+        R, P, S, T = axl.Game().RPST()
         p = min(1 - (T - R) / (R - S), (R - P) / (T - P))
         expected_dictionary = {(C, C): 1.0, (C, D): p, (D, C): 1.0, (D, D): p}
         test_four_vector(self, expected_dictionary)

@@ -22,7 +22,7 @@ class TestRiskyQLearner(TestPlayer):
     }
 
     def test_payoff_matrix(self):
-        (R, P, S, T) = axl.Game().RPST()
+        R, P, S, T = axl.Game().RPST()
         payoff_matrix = {C: {C: R, D: S}, D: {C: T, D: P}}
         player = self.player()
         self.assertEqual(player.payoff_matrix, payoff_matrix)
