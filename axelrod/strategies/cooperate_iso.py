@@ -1,12 +1,9 @@
 import numpy as np
 
-import torch
-from torch import optim
-
-import axelrod as axl
 from axelrod.action import Action
 from axelrod.player import Player
 
+from scipy.optimize import minimize
 
 
 C, D = Action.C, Action.D
@@ -89,36 +86,44 @@ def has_greater_mean(ary1: np.ndarray, ary2: np.ndarray, min_z: float = 2.0) -> 
     return (ary1.mean() - ary2.mean()) / np.sqrt(se1**2 + se2**2) > min_z
 
 def get_reward(
-    my_strategy: torch.Tensor,
-    opp_strategy: torch.Tensor,
-    init_state: torch.Tensor,
+    my_strategy: np.ndarray,
+    opp_strategy: np.ndarray,
+    init_state: np.ndarray,
     p_end: float,
     p_noise: float,
     RPST: tuple[float, float, float, float],
 ) -> float:
     """
-    Calculates the expected average reward per step for a given policy 
-    against a specific opponent strategy (including the effect of noise), 
+    Calculates the expected average reward per step for a given policy
+    against a specific opponent strategy (including the effect of noise),
     utilizing Markov transition matrices.
     """
     # Apply p_noise only to own strategy, not to opponent
-    # (the opponen strategy already includes noise effects).
-    own = my_strategy + p_noise * (1 - 2 * my_strategy)
-    # Flip CD/DC for opponent
-    opp = torch.Tensor(
-        [opp_strategy[0], opp_strategy[2], opp_strategy[1], opp_strategy[3]])
-    trans_mat = torch.stack([own * opp,
-                             own * (1 - opp),
-                             (1 - own) * opp,
-                             (1 - own) * (1 - opp)])
-    trans_mat = torch.transpose(trans_mat, 0, 1)
+    # (the opponent strategy already includes noise effects).
+    own = my_strategy + p_noise * (1.0 - 2.0 * my_strategy)
+
+    # Flip CD/DC for opponent using NumPy advanced indexing
+    opp = opp_strategy[[0, 2, 1, 3]]
+
+    # Build and transpose the transition matrix
+    trans_mat = np.array([
+        own * opp,
+        own * (1.0 - opp),
+        (1.0 - own) * opp,
+        (1.0 - own) * (1.0 - opp)
+    ]).T
+
     R, P, S, T = RPST
-    rewards = torch.tensor((R, S, T, P), dtype=torch.float)
+    rewards = np.array([R, S, T, P], dtype=float)
+
     # Don't include init state in summed rewards.
-    inv = torch.inverse(torch.eye(4) - (1 - p_end) * trans_mat)
-    reward = torch.dot(init_state, torch.matmul(inv, rewards) - rewards)
+    inv = np.linalg.inv(np.eye(4) - (1.0 - p_end) * trans_mat)
+
+    # Calculate expected reward using the @ operator for matrix multiplication
+    reward = init_state @ (inv @ rewards - rewards)
+
     # Avg. reward per step
-    return p_end * reward / (1 - p_end)
+    return p_end * float(reward) / (1.0 - p_end)
 
 def optimize_against(
     opponent: np.ndarray,
@@ -126,43 +131,41 @@ def optimize_against(
     p_end: float,
     p_noise: float,
     RPST: tuple[float, float, float, float],
-    lr: float = 0.1,
-    n_steps: float = 50,
 ) -> tuple[float, np.ndarray]:
     """
-    Discovers the optimal response strategy (policy) against a fixed opponent 
-    model by maximizing the expected reward from a given starting state 
-    (init_state_idx in [0, 1, 2, 3]).
+    Discovers the optimal response strategy (policy) against a fixed opponent
+    model by maximizing the expected reward from a given starting state.
     """
-    opp = torch.tensor(opponent, dtype=torch.float32)
     assert p_noise < 0.5
-    opp.clamp_(min=p_noise, max=1.0 - p_noise)
 
-    init_state = torch.zeros(4, dtype=torch.float32)
+    # Clamp opponent array directly using NumPy
+    opp = np.clip(opponent, p_noise, 1.0 - p_noise)
+
+    # Setup initial state
+    init_state = np.zeros(4, dtype=np.float32)
     init_state[init_state_idx] = 1.0
 
-    params = torch.tensor([0.5, 0.5, 0.5, 0.5], requires_grad=True)
-    opt = optim.Adam([params], lr=lr)
+    # Define the objective function to minimize (negative reward)
+    def objective(params: np.ndarray) -> float:
+        return -get_reward(params, opp, init_state, p_end, p_noise, RPST)
 
-    min_loss = float("inf")
-    best_params = None
+    # Initial parameter guess
+    x0 = np.array([0.5, 0.5, 0.5, 0.5])
 
-    for _ in range(n_steps):
-        loss = -get_reward(params, opp, init_state, p_end, p_noise, RPST)
-        loss_val = loss.item()
+    # Bounds equivalent to params.clamp_(0.0, 1.0)
+    bounds = [(0.0, 1.0), (0.0, 1.0), (0.0, 1.0), (0.0, 1.0)]
 
-        if loss_val < min_loss:
-            min_loss = loss_val
-            best_params = params.detach().numpy().copy()
+    # Optimize using L-BFGS-B
+    result = minimize(
+        objective,
+        x0,
+        method='L-BFGS-B',
+        bounds=bounds,
+        options={'maxiter': 50}
+    )
 
-        opt.zero_grad()
-        loss.backward()
-        opt.step()
-
-        with torch.no_grad():
-            params.clamp_(0.0, 1.0)
-
-    return -min_loss, best_params
+    # result.fun is the minimum loss (-reward), result.x are the optimal parameters
+    return -result.fun, result.x
 
 class ISO(Player):
     """Optimal response against a memory-1 opponent model.
