@@ -63,6 +63,8 @@ class LongtermTfT(Player):
             # TfT
             return opponent.history[-1]
 
+# We describe memory-1 strategies as length-4 arrays, quantifying the probability of cooperation in the states [CC, CD, DC, DD].
+
 def get_reward(
     my_strategy: np.ndarray,
     opp_strategy: np.ndarray,
@@ -80,10 +82,10 @@ def get_reward(
     # (the opponent strategy already includes noise effects).
     own = my_strategy + p_noise * (1.0 - 2.0 * my_strategy)
 
-    # Flip CD/DC for opponent using NumPy advanced indexing
+    # Flip CD/DC for opponent.
     opp = opp_strategy[[0, 2, 1, 3]]
 
-    # Build and transpose the transition matrix
+    # Build the transition matrix.
     trans_mat = np.array([
         own * opp,
         own * (1.0 - opp),
@@ -97,7 +99,7 @@ def get_reward(
     # Don't include init state in summed rewards.
     inv = np.linalg.inv(np.eye(4) - (1.0 - p_end) * trans_mat)
 
-    # Calculate expected reward using the @ operator for matrix multiplication
+    # Calculate expected reward,
     reward = init_state @ (inv @ rewards - rewards)
 
     # Avg. reward per step
@@ -116,7 +118,7 @@ def optimize_against(
     """
     assert p_noise < 0.5
 
-    # Clamp opponent array directly using NumPy
+    # Clamp to possible values, given noise
     opp = np.clip(opponent, p_noise, 1.0 - p_noise)
 
     # Setup initial state
@@ -127,19 +129,14 @@ def optimize_against(
     def objective(params: np.ndarray) -> float:
         return -get_reward(params, opp, init_state, p_end, p_noise, RPST)
 
-    # Initial parameter guess
     x0 = np.array([0.5, 0.5, 0.5, 0.5])
-
-    # Bounds equivalent to params.clamp_(0.0, 1.0)
     bounds = [(0.0, 1.0), (0.0, 1.0), (0.0, 1.0), (0.0, 1.0)]
-
-    # Optimize using L-BFGS-B
     result = minimize(
         objective,
         x0,
-        method='L-BFGS-B',
+        method="L-BFGS-B",
         bounds=bounds,
-        options={'maxiter': 50}
+        options={"maxiter": 50}
     )
 
     # result.fun is the minimum loss (-reward), result.x are the optimal parameters
@@ -178,7 +175,7 @@ class ISO(Player):
 
         # Track the opponent's rate of cooperation (numerator, denominator) for each state.
         # Assume we have seen the opponent play following TfT once in each state,
-        # to make the opponent-model well-defined from teh start.
+        # to make the opponent-model well-defined from the start.
         self.ewma_CC = [1.0, 1.0]
         self.ewma_CD = [1.0, 1.0]
         self.ewma_DC = [0.0, 1.0]
@@ -190,7 +187,7 @@ class ISO(Player):
 
     def receive_match_attributes(self):
         self.noise = self.match_attributes.get("noise", 0.0)
-        self.RPST = self.match_attributes['game'].RPST()
+        self.RPST = self.match_attributes["game"].RPST()
 
     def _update_single_ewma(self, state_ewma: list[float], action_val: float) -> float:
         """Updates the (numerator, denominator) pair in-place and returns the new average."""
@@ -236,7 +233,8 @@ class ISO(Player):
     def update(self, opponent: Player) -> float:
         """Updates the opponent model and our policy.
 
-        Returns our expected reward per step."""
+        Returns our expected reward per step.
+        """
         self._update_opponent_model(opponent)
         state_idx = self._get_state_idx(opponent)
         expected, my_policy = optimize_against(self.opp_model,
@@ -298,8 +296,8 @@ class CooperateISO(Player):
 
     def receive_match_attributes(self):
         super().receive_match_attributes()
-        self.RPST = self.match_attributes['game'].RPST()
-        self.noise = self.match_attributes['noise']
+        self.RPST = self.match_attributes["game"].RPST()
+        self.noise = self.match_attributes["noise"]
         self.iso_instance.noise = self.noise
 
     def _update_reward_history(self, opponent):
