@@ -1,3 +1,6 @@
+import random
+import numpy as np
+
 import axelrod as axl
 from axelrod.action import Action
 from axelrod.tests.strategies.test_player import TestPlayer
@@ -171,11 +174,42 @@ class TestISO(TestPlayer):
             match_attributes={"noise": 0.1}
         )
 
-    def test_pytorch_optimization_runs(self):
-        """
-        Runs an actual match for a few turns to ensure the PyTorch tensors 
-        and Adam optimizer compile and execute without crashing.
-        """
+    def test_vs_cooperator_defects(self):
+        """ISO should learn to defect against a pure cooperator to exploit T > R."""
+        # 1. Seed both standard random and numpy random
+        random.seed(42)
+        np.random.seed(42)
+        
+        player = self.player()
+        opponent = axl.Cooperator()
+        
+        match = axl.Match([player, opponent], turns=30)
+        match.play()
+
+        print(player.my_policy)
+        for pr_c in player.my_policy:
+            self.assertLess(pr_c, 0.15), player.my_policy
+        
+        self.assertEqual(player.history[-1], D)
+
+
+    def test_vs_tit_for_tat_with_noise_cooperates(self):
+        """Against TitForTat under noise, ISO should learn that cooperation avoids retaliation."""
+        # 1. Seed both standard random and numpy random
+        random.seed(42)
+        np.random.seed(42)
+        
+        player = self.player()
+        opponent = axl.TitForTat()
+        
+        # Run a match with non-zero noise (deterministically)
+        match = axl.Match([player, opponent], turns=40, noise=0.05)
+        match.play()
+
+        self.assertGreater(player.my_policy[0], 0.85)
+
+    def test_optimization_runs(self):
+        """Runs an actual match for a few turns to ensure optimization executes without crashing."""
         player = self.player()
         opponent = axl.MockPlayer(actions=[C, D, C])
         
