@@ -176,7 +176,9 @@ class ISO(Player):
         super().__init__()
         self.discount_factor = 0.99
 
-        # Track (numerator, denominator) for each state.
+        # Track the opponent's rate of cooperation (numerator, denominator) for each state.
+        # Assume we have seen the opponent play following TfT once in each state,
+        # to make the opponent-model well-defined from teh start.
         self.ewma_CC = [1.0, 1.0]
         self.ewma_CD = [1.0, 1.0]
         self.ewma_DC = [0.0, 1.0]
@@ -260,7 +262,7 @@ class CooperateISO(Player):
     Seeks to establish and sustain mutual cooperation using LongtermTFT's
     noise-robust forgiveness, while switching to ISO to respond optimally
     to opponents that can be exploited. In effect: cooperate with
-    cooperators, exploit the exploitable. This combination is the paper's
+    retaliators, exploit the exploitable. This combination is the paper's
     tournament-strong strategy, outperforming prior champions against the
     Axelrod library across noise levels of 0–10%.
 
