@@ -1,5 +1,9 @@
 # Citations
 
+### 2026
+
+* Oleksii Ignatenko and Nazarii Tkach. "Opponent Modeling and Value of Information in Deep Reinforcement Learning for the Iterated Prisoner's Dilemma" [New Frontiers in Game-Theoretic Learning - NExT-Game](https://openreview.net/forum?id=jiBoYmPAcm).
+
 ### 2024
 
 * Glynatsi, Nikoleta E., Vincent Knight, and Marc Harper. "Properties of winning Iterated Prisoner’s Dilemma strategies." [PLOS Computational Biology 20.12 (2024): e1012644](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012644).
