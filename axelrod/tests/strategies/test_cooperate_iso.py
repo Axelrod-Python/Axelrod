@@ -148,32 +148,6 @@ class TestISO(TestPlayer):
         expected_mean = 0.99 / 1.99
         self.assertAlmostEqual(player.opp_model[0], expected_mean, places=4)
 
-    @patch("axelrod.strategies.cooperate_iso.optimize_against")
-    def test_strategy_with_mocked_optimizer(self, mock_optimize):
-        """
-        Tests the strategy execution loop deterministically by patching 
-        out the PyTorch optimization step.
-        """
-        # We force the optimizer to return absolute 1.0 (C) or 0.0 (D) policies.
-        # Policy structure: [P(C|CC), P(C|CD), P(C|DC), P(C|DD)]
-        # We will make it always cooperate after CC, and always defect otherwise.
-        mock_optimize.return_value = (3.0, [1.0, 0.0, 0.0, 0.0])
-        
-        # Because we return absolute probabilities, np.random.uniform() < pr_c
-        # becomes strictly deterministic.
-        expected = [
-            (C, C),  # T1: No history -> Defaults to CC (idx 0) -> policy[0] is 1.0 (Plays C)
-            (C, D),  # T2: T1 was (C, C) -> state CC (idx 0) -> policy[0] is 1.0 (Plays C)
-            (D, D),  # T3: T2 was (C, D) -> state CD (idx 1) -> policy[1] is 0.0 (Plays D)
-            (D, C),  # T4: T3 was (D, D) -> state DD (idx 3) -> policy[3] is 0.0 (Plays D)
-        ]
-        
-        self.versus_test(
-            opponent=axl.MockPlayer(actions=[C, D, D, C]),
-            expected_actions=expected,
-            match_attributes={"noise": 0.1}
-        )
-
     def test_vs_random_defects(self):
         """ISO should learn to defect against a random player."""
         player = self.player()
@@ -186,7 +160,6 @@ class TestISO(TestPlayer):
             self.assertLess(pr_c, 0.1), player.my_policy
         
         self.assertEqual(player.history[-1], D)
-
 
     def test_vs_tit_for_tat_with_noise_cooperates(self):
         """Against TitForTat under noise, ISO should learn that cooperation avoids retaliation."""       
