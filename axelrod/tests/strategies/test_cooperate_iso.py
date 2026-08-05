@@ -1,11 +1,12 @@
 import random
+from unittest.mock import MagicMock, patch
+
 import numpy as np
 
 import axelrod as axl
 from axelrod.action import Action
+from axelrod.strategies.cooperate_iso import ISO, CooperateISO, LongtermTfT
 from axelrod.tests.strategies.test_player import TestPlayer
-from axelrod.strategies.cooperate_iso import LongtermTfT, ISO, CooperateISO
-from unittest.mock import patch, MagicMock
 
 C, D = Action.C, Action.D
 

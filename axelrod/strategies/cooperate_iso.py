@@ -1,9 +1,8 @@
 import numpy as np
+from scipy.optimize import minimize
 
 from axelrod.action import Action
 from axelrod.player import Player
-
-from scipy.optimize import minimize
 
 C, D = Action.C, Action.D
 
