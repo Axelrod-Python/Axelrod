@@ -101,29 +101,34 @@ class TestISO(TestPlayer):
         player = self.player()
         opponent = axl.MockPlayer(actions=[C, D, C, D])
 
-        # T1: No history -> Defaults to 0 (CC)
+        # No history -> Defaults to 0 (CC)
         self.assertEqual(player._get_state_idx(opponent), 0)
 
-        # T2: CC
+        # CC
         # History.append(play, coplay)
         player.history.append(C, C)
         opponent.history.append(C, C)
         self.assertEqual(player._get_state_idx(opponent), 0)
 
-        # T3: CD
+        # CD
         player.history.append(C, D)
         opponent.history.append(D, C)
         self.assertEqual(player._get_state_idx(opponent), 1)
 
-        # T4: DC
+        # DC
         player.history.append(D, C)
         opponent.history.append(C, D)
         self.assertEqual(player._get_state_idx(opponent), 2)
 
-        # T5: DD
+        # DD
         player.history.append(D, D)
         opponent.history.append(D, D)
         self.assertEqual(player._get_state_idx(opponent), 3)
+
+        # Invalid values
+        player.history.append('C', 'C')
+        opponent.history.append('C', 'C')
+        self.assertEqual(player._get_state_idx(opponent), -1)
 
     def test_update_opponent_model(self):
         """Unit test for the discounted moving average calculation."""
@@ -278,6 +283,36 @@ class TestCooperateISO(TestPlayer):
 
         # Verify ISO took over on the final turn
         mock_act.assert_called_once()
+
+    @patch("axelrod.strategies.cooperate_iso.ISO.update")
+    @patch("axelrod.strategies.cooperate_iso.ISO.act")
+    @patch("axelrod.strategies.cooperate_iso.ISO.strategy")
+    def test_continues_playing_iso_on_subsequent_turns(
+        self, mock_strategy, mock_act, mock_update
+    ):
+        """
+        Tests that once playing_iso is True, strategy() delegates directly
+        to self.iso_instance.strategy(opponent) on following turns.
+        """
+        mock_act.return_value = D
+        mock_strategy.return_value = D
+
+        # 9 turns of 3.0, then 5.0 for turns 10 and 11
+        mock_update.side_effect = [3.0] * 9 + [5.0, 5.0]
+
+        # T1 to T10: Mutual cooperation
+        # T11: Switches to ISO (calls act())
+        # T12: Already playing ISO (calls strategy())
+        expected = [(C, C)] * 10 + [(D, C), (D, C)]
+
+        self.versus_test(
+            opponent=axl.MockPlayer(actions=[C] * 12),
+            expected_actions=expected,
+            match_attributes={"noise": 0.0, "game": axl.DefaultGame},
+        )
+
+        mock_act.assert_called_once()
+        mock_strategy.assert_called_once()
 
     def test_set_seed(self):
         """Ensures random seeds are passed down to the inner ISO instance."""
