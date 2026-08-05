@@ -5,8 +5,8 @@ from axelrod.player import Player
 
 from scipy.optimize import minimize
 
-
 C, D = Action.C, Action.D
+
 
 class LongtermTfT(Player):
     """Noise-tolerant Tit-for-Tat.
@@ -24,6 +24,7 @@ class LongtermTfT(Player):
     Names:
     - Longterm TFT: [Hutter2023]_
     """
+
     name = "LongtermTfT"
     classifier = {
         "memory_depth": float("inf"),
@@ -39,7 +40,7 @@ class LongtermTfT(Player):
         super().__init__()
         self.n_tft_would_c = 0
         self.n_d_when_tft_would_c = 0
-        self.z = 0.
+        self.z = 0.0
 
     def receive_match_attributes(self):
         self.noise = self.match_attributes.get("noise", 0.0)
@@ -54,16 +55,22 @@ class LongtermTfT(Player):
             if opponent.history[-1] == D:
                 self.n_d_when_tft_would_c += 1
             n_expected_ds = self.n_tft_would_c * self.noise
-            std_expected_ds = np.sqrt(self.noise * (1-self.noise) * self.n_tft_would_c)
+            std_expected_ds = np.sqrt(
+                self.noise * (1 - self.noise) * self.n_tft_would_c
+            )
             # This becomes n_d_when_tft_would_c for noise->0
-            self.z = (self.n_d_when_tft_would_c - n_expected_ds) / max(1., std_expected_ds)
+            self.z = (self.n_d_when_tft_would_c - n_expected_ds) / max(
+                1.0, std_expected_ds
+            )
         if self.n_tft_would_c >= 5 and self.z < 2:
             return C
         else:
             # TfT
             return opponent.history[-1]
 
+
 # We describe memory-1 strategies as length-4 arrays, quantifying the probability of cooperation in the states [CC, CD, DC, DD].
+
 
 def get_reward(
     my_strategy: np.ndarray,
@@ -86,12 +93,14 @@ def get_reward(
     opp = opp_strategy[[0, 2, 1, 3]]
 
     # Build the transition matrix.
-    trans_mat = np.array([
-        own * opp,
-        own * (1.0 - opp),
-        (1.0 - own) * opp,
-        (1.0 - own) * (1.0 - opp)
-    ]).T
+    trans_mat = np.array(
+        [
+            own * opp,
+            own * (1.0 - opp),
+            (1.0 - own) * opp,
+            (1.0 - own) * (1.0 - opp),
+        ]
+    ).T
 
     R, P, S, T = RPST
     rewards = np.array([R, S, T, P], dtype=float)
@@ -104,6 +113,7 @@ def get_reward(
 
     # Avg. reward per step
     return p_end * float(reward) / (1.0 - p_end)
+
 
 def optimize_against(
     opponent: np.ndarray,
@@ -132,15 +142,12 @@ def optimize_against(
     x0 = np.array([0.5, 0.5, 0.5, 0.5])
     bounds = [(0.0, 1.0), (0.0, 1.0), (0.0, 1.0), (0.0, 1.0)]
     result = minimize(
-        objective,
-        x0,
-        method="L-BFGS-B",
-        bounds=bounds,
-        options={"maxiter": 50}
+        objective, x0, method="L-BFGS-B", bounds=bounds, options={"maxiter": 50}
     )
 
     # result.fun is the minimum loss (-reward), result.x are the optimal parameters
     return -result.fun, result.x
+
 
 class ISO(Player):
     """Optimal response against a memory-1 opponent model.
@@ -158,6 +165,7 @@ class ISO(Player):
     Names:
     - ISO: [Hutter2023]_
     """
+
     name = "ISO"
     classifier = {
         "memory_depth": float("inf"),
@@ -189,7 +197,9 @@ class ISO(Player):
         self.noise = self.match_attributes.get("noise", 0.0)
         self.RPST = self.match_attributes["game"].RPST()
 
-    def _update_single_ewma(self, state_ewma: list[float], action_val: float) -> float:
+    def _update_single_ewma(
+        self, state_ewma: list[float], action_val: float
+    ) -> float:
         """Updates the (numerator, denominator) pair in-place and returns the new average."""
         state_ewma[0] = self.discount_factor * state_ewma[0] + action_val
         state_ewma[1] = self.discount_factor * state_ewma[1] + 1.0
@@ -237,11 +247,13 @@ class ISO(Player):
         """
         self._update_opponent_model(opponent)
         state_idx = self._get_state_idx(opponent)
-        expected, my_policy = optimize_against(self.opp_model,
-                                               init_state_idx=state_idx,
-                                               p_noise=self.noise,
-                                               RPST=self.RPST,
-                                               p_end=1e-2)
+        expected, my_policy = optimize_against(
+            self.opp_model,
+            init_state_idx=state_idx,
+            p_noise=self.noise,
+            RPST=self.RPST,
+            p_end=1e-2,
+        )
         self.my_policy = my_policy
         return expected
 
@@ -253,6 +265,7 @@ class ISO(Player):
     def strategy(self, opponent: Player) -> Action:
         _ = self.update(opponent)
         return self.act(opponent)
+
 
 class CooperateISO(Player):
     """Forgiving cooperation combined with optimal exploitation.
@@ -267,6 +280,7 @@ class CooperateISO(Player):
     Names:
     - CooperateISO: [Hutter2023]_
     """
+
     name = "CooperateISO"
     classifier = {
         "memory_depth": float("inf"),
@@ -283,10 +297,10 @@ class CooperateISO(Player):
         super().__init__()
         self.n_tft_would_c = 0
         self.n_d_when_tft_would_c = 0
-        self.z = 0.
+        self.z = 0.0
         # Estimate of the opponent's rate of playing D after C, taking noise
         # into account.
-        self.opp_pr_d_after_c = 0.
+        self.opp_pr_d_after_c = 0.0
         self.playing_iso = False
         self.reward_history = []
 
@@ -327,19 +341,28 @@ class CooperateISO(Player):
             if opponent.history[-1] == D:
                 self.n_d_when_tft_would_c += 1
             n_expected_ds = self.n_tft_would_c * self.noise
-            std_expected_ds = np.sqrt(self.noise * (1-self.noise) * self.n_tft_would_c)
+            std_expected_ds = np.sqrt(
+                self.noise * (1 - self.noise) * self.n_tft_would_c
+            )
             # This becomes n_d_when_tft_would_c for noise->0
-            self.z = (self.n_d_when_tft_would_c - n_expected_ds) / max(1., std_expected_ds)
+            self.z = (self.n_d_when_tft_would_c - n_expected_ds) / max(
+                1.0, std_expected_ds
+            )
         # Should we start playing ISO?
         R, P, _, _ = self.RPST
         expected_gain = expected - np.mean(self.reward_history)
-        if len(self.reward_history) >= 10 and \
-        expected_gain > 2. * np.std(self.reward_history) / np.sqrt(len(self.reward_history)) and \
-        expected_gain > 0.05 * (R - P):
+        if (
+            len(self.reward_history) >= 10
+            and expected_gain
+            > 2.0
+            * np.std(self.reward_history)
+            / np.sqrt(len(self.reward_history))
+            and expected_gain > 0.05 * (R - P)
+        ):
             self.playing_iso = True
             return self.iso_instance.act(opponent)
         if self.n_tft_would_c >= 5 and self.z < 2:
             return C
         else:
             # TfT
-            return opponent.history[-1]        
+            return opponent.history[-1]
