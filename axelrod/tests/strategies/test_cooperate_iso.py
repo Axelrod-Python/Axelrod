@@ -126,8 +126,8 @@ class TestISO(TestPlayer):
         self.assertEqual(player._get_state_idx(opponent), 3)
 
         # Invalid values
-        player.history.append('C', 'C')
-        opponent.history.append('C', 'C')
+        player.history.append("C", "C")
+        opponent.history.append("C", "C")
         self.assertEqual(player._get_state_idx(opponent), -1)
 
     def test_update_opponent_model(self):
