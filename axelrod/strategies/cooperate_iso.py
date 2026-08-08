@@ -165,7 +165,7 @@ class ISO(Player):
         """Initializes discount factors, opponent models, and policy state.
 
         Tracks the opponent's rate of cooperation (numerator, denominator) for each
-        state. Assumes having seen the opponent play following TfT once in each state 
+        state. Assumes having seen the opponent play following TfT once in each state
         to make the opponent-model well-defined from the start.
 
         Sets initial cooperation probabilities (num / den) for opp_model and my_policy.

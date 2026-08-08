@@ -30,7 +30,7 @@ class TestLongtermTfT(TestPlayer):
         Tests that the strategy strictly defaults to Tit-for-Tat
         when the threshold conditions (n_tft_would_c < 5) are active.
         """
-        expected = [(C, C), (C, D), (D, D), (D, C),(C, C)]
+        expected = [(C, C), (C, D), (D, D), (D, C), (C, C)]
         _, opponent_actions = zip(*expected)
 
         self.versus_test(
@@ -48,7 +48,7 @@ class TestLongtermTfT(TestPlayer):
         """
         # (Player Action, Opponent Action)
         expected = [
-            (C, C), 
+            (C, C),
             (C, C),
             (C, C),
             (C, C),
@@ -89,7 +89,7 @@ class TestISO(TestPlayer):
 
     def test_get_state_idx(self):
         """Unit test for the state indexing logic mapping history to 0,1,2,3.
-        
+
         Also testing invalid values -> -1."""
         player = self.player()
         opponent = axl.MockPlayer(actions=[C, D, C, D])
