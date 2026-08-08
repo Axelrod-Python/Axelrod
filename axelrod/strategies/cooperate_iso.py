@@ -79,19 +79,16 @@ def get_reward(
     p_noise: float,
     RPST: tuple[float, float, float, float],
 ) -> float:
-    """
-    Calculates the expected average reward per step for a given policy
+    """Calculates the expected average reward per step for a given policy
     against a specific opponent strategy (including the effect of noise),
     utilizing Markov transition matrices.
-    """
-    # Apply p_noise only to own strategy, not to opponent
-    # (the opponent strategy already includes noise effects).
-    own = my_strategy + p_noise * (1.0 - 2.0 * my_strategy)
 
-    # Flip CD/DC for opponent.
+    Applies p_noise only to own strategy (the opponent strategy already includes
+    noise effects) and flips CD/DC indices for the opponent.
+    """
+    own = my_strategy + p_noise * (1.0 - 2.0 * my_strategy)
     opp = opp_strategy[[0, 2, 1, 3]]
 
-    # Build the transition matrix.
     trans_mat = np.array(
         [
             own * opp,
@@ -103,14 +100,8 @@ def get_reward(
 
     R, P, S, T = RPST
     rewards = np.array([R, S, T, P], dtype=float)
-
-    # Don't include init state in summed rewards.
     inv = np.linalg.inv(np.eye(4) - (1.0 - p_end) * trans_mat)
-
-    # Calculate expected reward,
     reward = init_state @ (inv @ rewards - rewards)
-
-    # Avg. reward per step
     return p_end * float(reward) / (1.0 - p_end)
 
 
@@ -127,14 +118,11 @@ def optimize_against(
     """
     assert p_noise < 0.5
 
-    # Clamp to possible values, given noise
     opp = np.clip(opponent, p_noise, 1.0 - p_noise)
 
-    # Setup initial state
     init_state = np.zeros(4, dtype=np.float32)
     init_state[init_state_idx] = 1.0
 
-    # Define the objective function to minimize (negative reward)
     def objective(params: np.ndarray) -> float:
         return -get_reward(params, opp, init_state, p_end, p_noise, RPST)
 
@@ -144,7 +132,6 @@ def optimize_against(
         objective, x0, method="L-BFGS-B", bounds=bounds, options={"maxiter": 50}
     )
 
-    # result.fun is the minimum loss (-reward), result.x are the optimal parameters
     return -result.fun, result.x
 
 
@@ -177,18 +164,22 @@ class ISO(Player):
     }
 
     def __init__(self):
+        """Initializes discount factors, opponent models, and policy state.
+
+        Tracks the opponent's rate of cooperation (numerator, denominator) for each
+        state. Assumes having seen the opponent play following TfT once in each state 
+        to make the opponent-model well-defined from the start.
+
+        Sets initial cooperation probabilities (num / den) for opp_model and my_policy.
+        """
         super().__init__()
         self.discount_factor = 0.99
 
-        # Track the opponent's rate of cooperation (numerator, denominator) for each state.
-        # Assume we have seen the opponent play following TfT once in each state,
-        # to make the opponent-model well-defined from the start.
         self.ewma_CC = [1.0, 1.0]
         self.ewma_CD = [1.0, 1.0]
         self.ewma_DC = [0.0, 1.0]
         self.ewma_DD = [0.0, 1.0]
 
-        # Initial cooperation probabilities (num / den)
         self.opp_model = [1.0, 0.0, 1.0, 0.0]
         self.my_policy = [1.0, 0.0, 1.0, 0.0]
 
@@ -226,7 +217,6 @@ class ISO(Player):
 
     def _get_state_idx(self, opponent) -> int:
         if not self.history:
-            # Pretend we started with CC
             return 0
         state = (self.history[-1], opponent.history[-1])
         if state == (C, C):
@@ -297,11 +287,8 @@ class CooperateISO(Player):
         self.n_tft_would_c = 0
         self.n_d_when_tft_would_c = 0
         self.z = 0.0
-        self.opp_pr_d_after_c = 0.0
         self.playing_iso = False
-        self.reward_history = []
 
-    def set_seed(self, seed: int = None):
         super().set_seed(seed)
         self.iso_instance.set_seed(seed)
 
@@ -345,7 +332,6 @@ class CooperateISO(Player):
             self.z = (self.n_d_when_tft_would_c - n_expected_ds) / max(
                 1.0, std_expected_ds
             )
-        # Should we start playing ISO?
         R, P, _, _ = self.RPST
         expected_gain = expected - np.mean(self.reward_history)
         if (
@@ -361,5 +347,4 @@ class CooperateISO(Player):
         if self.n_tft_would_c >= 5 and self.z < 2:
             return C
         else:
-            # TfT
             return opponent.history[-1]
