@@ -137,6 +137,8 @@ class TestTournament(unittest.TestCase):
 
 class TestNoisyTournament(unittest.TestCase):
     def test_noisy_tournament(self):
+        axl.seed(42)
+
         # Defector should win for low noise
         players = [axl.Cooperator(), axl.Defector()]
         tournament = axl.Tournament(players, turns=5, repetitions=3, noise=0.0)
