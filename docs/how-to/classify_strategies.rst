@@ -57,7 +57,7 @@ strategies::
     ... }
     >>> strategies = axl.filtered_strategies(filterset)
     >>> len(strategies)
-    88
+    90
 
 Or, to find out how many strategies only use 1 turn worth of memory to
 make a decision::
@@ -110,7 +110,7 @@ Some strategies have been classified as having a particularly long run time::
     ... }
     >>> strategies = axl.filtered_strategies(filterset)
     >>> len(strategies)
-    19
+    21
 
 Strategies that :code:`manipulate_source`, :code:`manipulate_state`
 and/or :code:`inspect_source` return :code:`False` for the

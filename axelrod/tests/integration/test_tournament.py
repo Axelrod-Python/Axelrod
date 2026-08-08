@@ -145,7 +145,9 @@ class TestNoisyTournament(unittest.TestCase):
 
         # If the noise is large enough, cooperator should win
         players = [axl.Cooperator(), axl.Defector()]
-        tournament = axl.Tournament(players, turns=5, repetitions=3, noise=0.75)
+        tournament = axl.Tournament(
+            players, turns=5, repetitions=3, noise=0.75, seed=42
+        )
         results = tournament.play(progress_bar=False)
         self.assertEqual(results.ranked_names[0], "Cooperator")
 

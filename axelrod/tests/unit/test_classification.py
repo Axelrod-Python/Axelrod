@@ -302,8 +302,10 @@ class TestStrategies(unittest.TestCase):
 
     def test_long_run_strategies(self):
         long_run_time_strategies = [
+            axl.CooperateISO,
             axl.DBS,
             axl.EvolvedAttention,
+            axl.ISO,
             axl.MetaMajority,
             axl.MetaMajorityFiniteMemory,
             axl.MetaMajorityLongMemory,

@@ -34,6 +34,8 @@ Here are the docstrings of all the strategies in the library.
    :members:
 .. automodule:: axelrod.strategies.calculator
    :members:
+.. automodule:: axelrod.strategies.cooperate_iso
+   :members:
 .. automodule:: axelrod.strategies.cooperator
    :members:
 .. automodule:: axelrod.strategies.cycler
