@@ -137,8 +137,6 @@ class TestTournament(unittest.TestCase):
 
 class TestNoisyTournament(unittest.TestCase):
     def test_noisy_tournament(self):
-        axl.seed(42)
-
         # Defector should win for low noise
         players = [axl.Cooperator(), axl.Defector()]
         tournament = axl.Tournament(players, turns=5, repetitions=3, noise=0.0)
@@ -147,7 +145,7 @@ class TestNoisyTournament(unittest.TestCase):
 
         # If the noise is large enough, cooperator should win
         players = [axl.Cooperator(), axl.Defector()]
-        tournament = axl.Tournament(players, turns=5, repetitions=3, noise=0.75)
+        tournament = axl.Tournament(players, turns=5, repetitions=3, noise=0.75, seed=42)
         results = tournament.play(progress_bar=False)
         self.assertEqual(results.ranked_names[0], "Cooperator")
 
