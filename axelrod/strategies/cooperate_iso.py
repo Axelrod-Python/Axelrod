@@ -57,18 +57,13 @@ class LongtermTfT(Player):
             std_expected_ds = np.sqrt(
                 self.noise * (1 - self.noise) * self.n_tft_would_c
             )
-            # This becomes n_d_when_tft_would_c for noise->0
             self.z = (self.n_d_when_tft_would_c - n_expected_ds) / max(
                 1.0, std_expected_ds
             )
         if self.n_tft_would_c >= 5 and self.z < 2:
             return C
         else:
-            # TfT
             return opponent.history[-1]
-
-
-# We describe memory-1 strategies as length-4 arrays, quantifying the probability of cooperation in the states [CC, CD, DC, DD].
 
 
 def get_reward(
@@ -82,6 +77,9 @@ def get_reward(
     """Calculates the expected average reward per step for a given policy
     against a specific opponent strategy (including the effect of noise),
     utilizing Markov transition matrices.
+
+    Memory-1 strategies are described as length-4 arrays, quantifying the probability
+    of cooperation in the states [CC, CD, DC, DD].
 
     Applies p_noise only to own strategy (the opponent strategy already includes
     noise effects) and flips CD/DC indices for the opponent.
@@ -328,7 +326,6 @@ class CooperateISO(Player):
             std_expected_ds = np.sqrt(
                 self.noise * (1 - self.noise) * self.n_tft_would_c
             )
-            # This becomes n_d_when_tft_would_c for noise->0
             self.z = (self.n_d_when_tft_would_c - n_expected_ds) / max(
                 1.0, std_expected_ds
             )
