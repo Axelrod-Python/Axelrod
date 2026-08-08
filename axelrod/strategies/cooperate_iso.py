@@ -297,8 +297,6 @@ class CooperateISO(Player):
         self.n_tft_would_c = 0
         self.n_d_when_tft_would_c = 0
         self.z = 0.0
-        # Estimate of the opponent's rate of playing D after C, taking noise
-        # into account.
         self.opp_pr_d_after_c = 0.0
         self.playing_iso = False
         self.reward_history = []
