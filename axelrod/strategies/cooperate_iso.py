@@ -286,7 +286,9 @@ class CooperateISO(Player):
         self.n_d_when_tft_would_c = 0
         self.z = 0.0
         self.playing_iso = False
+        self.reward_history = []
 
+    def set_seed(self, seed: int = None):
         super().set_seed(seed)
         self.iso_instance.set_seed(seed)
 

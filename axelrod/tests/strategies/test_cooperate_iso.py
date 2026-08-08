@@ -30,17 +30,11 @@ class TestLongtermTfT(TestPlayer):
         Tests that the strategy strictly defaults to Tit-for-Tat
         when the threshold conditions (n_tft_would_c < 5) are active.
         """
-        # (Player Action, Opponent Action)
-        expected = [
-            (C, C),  # T1: No history, defaults to C
-            (C, D),  # T2: Mirrors Opponent's T1 (C)
-            (D, D),  # T3: Mirrors Opponent's T2 (D)
-            (D, C),  # T4: Mirrors Opponent's T3 (D)
-            (C, C),  # T5: Mirrors Opponent's T4 (C)
-        ]
+        expected = [(C, C), (C, D), (D, D), (D, C),(C, C)]
+        _, opponent_actions = zip(*expected)
 
         self.versus_test(
-            opponent=axl.MockPlayer(actions=[C, D, D, C, C]),
+            opponent=axl.MockPlayer(actions=opponent_actions),
             expected_actions=expected,
             match_attributes={"noise": 0.1},
         )
@@ -49,30 +43,27 @@ class TestLongtermTfT(TestPlayer):
         """
         Tests the transition from TfT to the forgiving Z-score phase,
         and verifies that it retaliates when Z >= 2.
+
+        Z >= 2 is reached on the 9th turn (n_c=7, n_d=3), so we retaliate.
         """
         # (Player Action, Opponent Action)
         expected = [
-            (C, C),  # T1: History len 0
-            (C, C),  # T2: History len 1
-            (C, C),  # T3: n_c=1, n_d=0 -> TfT (plays C)
-            (C, C),  # T4: n_c=2, n_d=0 -> TfT (plays C)
-            (C, C),  # T5: n_c=3, n_d=0 -> TfT (plays C)
-            # --- Z-Score Phase Begins (n_c reaches 4, about to be 5) ---
-            (C, D),  # T6: n_c=4, n_d=0 -> TfT (plays C). Opp defects.
-            # Opponent defected, but Z-score is low (Z=0.5), so player forgives.
+            (C, C), 
+            (C, C),
+            (C, C),
+            (C, C),
+            (C, C),
+            (C, D),
             (
                 C,
                 D,
-            ),  # T7: n_c=5, n_d=1 -> Forgives (plays C). Opp defects again.
-            # Z-score climbs (Z=1.4) but stays < 2.
+            ),
             (
                 C,
                 D,
-            ),  # T8: n_c=6, n_d=2 -> Forgives (plays C). Opp defects 3rd time.
-            # Z-score hits Z=2.3 (>= 2). Strategy falls back to TfT and retaliates.
-            (D, C),  # T9: n_c=7, n_d=3 -> Retaliates (plays D). Opp plays C.
-            # Mirroring Opponent's C from T9 (Z=2.2, TfT mode).
-            (C, C),  # T10: n_c=8, n_d=3 -> TfT (plays C).
+            ),
+            (D, C),
+            (C, C),
         ]
 
         self.versus_test(
@@ -97,35 +88,30 @@ class TestISO(TestPlayer):
     }
 
     def test_get_state_idx(self):
-        """Unit test for the state indexing logic mapping history to 0,1,2,3."""
+        """Unit test for the state indexing logic mapping history to 0,1,2,3.
+        
+        Also testing invalid values -> -1."""
         player = self.player()
         opponent = axl.MockPlayer(actions=[C, D, C, D])
 
-        # No history -> Defaults to 0 (CC)
         self.assertEqual(player._get_state_idx(opponent), 0)
 
-        # CC
-        # History.append(play, coplay)
         player.history.append(C, C)
         opponent.history.append(C, C)
         self.assertEqual(player._get_state_idx(opponent), 0)
 
-        # CD
         player.history.append(C, D)
         opponent.history.append(D, C)
         self.assertEqual(player._get_state_idx(opponent), 1)
 
-        # DC
         player.history.append(D, C)
         opponent.history.append(C, D)
         self.assertEqual(player._get_state_idx(opponent), 2)
 
-        # DD
         player.history.append(D, D)
         opponent.history.append(D, D)
         self.assertEqual(player._get_state_idx(opponent), 3)
 
-        # Invalid values
         player.history.append("C", "C")
         opponent.history.append("C", "C")
         self.assertEqual(player._get_state_idx(opponent), -1)
@@ -135,25 +121,17 @@ class TestISO(TestPlayer):
         player = self.player()
         opponent = axl.MockPlayer()
 
-        # Turn 1: Both played C
-        # history.append(action, coplay)
         player.history.append(C, C)
         opponent.history.append(C, C)
 
-        # Turn 2: Player played C, Opponent played D
         player.history.append(C, D)
         opponent.history.append(D, C)
 
         player._update_opponent_model(opponent)
 
-        # Check EWMA accumulator state [numerator, denominator] for CC
-        # Initial state was [1.0, 1.0]; after seeing D (0.0):
-        # num = 0.99 * 1.0 + 0.0 = 0.99
-        # den = 0.99 * 1.0 + 1.0 = 1.99
         self.assertAlmostEqual(player.ewma_CC[0], 0.99, places=6)
         self.assertAlmostEqual(player.ewma_CC[1], 1.99, places=6)
 
-        # Check discount logic: mean = num / den
         expected_mean = 0.99 / 1.99
         self.assertAlmostEqual(player.opp_model[0], expected_mean, places=4)
 
@@ -204,25 +182,21 @@ class TestCooperateISO(TestPlayer):
         player.RPST = (3, 1, 0, 5)
         opponent = axl.MockPlayer()
 
-        # Turn 1: Mutual Cooperation (C, C) -> Should append R (3)
         player.history.append(C, C)
         opponent.history.append(C, C)
         player._update_reward_history(opponent)
         self.assertEqual(player.reward_history, [3])
 
-        # Turn 2: Sucker's payoff (C, D) -> Should append S (0)
         player.history.append(C, D)
         opponent.history.append(D, C)
         player._update_reward_history(opponent)
         self.assertEqual(player.reward_history, [3, 0])
 
-        # Turn 3: Temptation (D, C) -> Should append T (5)
         player.history.append(D, C)
         opponent.history.append(C, D)
         player._update_reward_history(opponent)
         self.assertEqual(player.reward_history, [3, 0, 5])
 
-        # Turn 4: Punishment (D, D) -> Should append P (1)
         player.history.append(D, D)
         opponent.history.append(D, D)
         player._update_reward_history(opponent)
@@ -235,15 +209,14 @@ class TestCooperateISO(TestPlayer):
         Tests that if ISO's expected reward does not beat the historical average,
         the strategy maintains LongtermTfT behavior.
         """
-        # ISO update always returns 0.0 (highly unprofitable)
         mock_update.return_value = 0.0
 
         expected = [
-            (C, C),  # T1: No history, defaults to C
-            (C, D),  # T2: Mirrors Opponent's T1 (C)
-            (D, D),  # T3: Mirrors Opponent's T2 (D)
-            (D, C),  # T4: Mirrors Opponent's T3 (D)
-            (C, C),  # T5: Mirrors Opponent's T4 (C)
+            (C, C),
+            (C, D),
+            (D, D),
+            (D, C),
+            (C, C),
         ]
 
         self.versus_test(
@@ -251,7 +224,6 @@ class TestCooperateISO(TestPlayer):
             expected_actions=expected,
             match_attributes={"noise": 0.0, "game": axl.DefaultGame},
         )
-        # Because we never switched to ISO, act() should never have been called
         mock_act.assert_not_called()
 
     @patch("axelrod.strategies.cooperate_iso.ISO.update")
@@ -261,18 +233,12 @@ class TestCooperateISO(TestPlayer):
         Tests the switch condition: if we have 10 rounds of history and ISO predicts
         a sufficiently high expected gain, the strategy flips to playing ISO.
         """
-        # We will mock ISO to return D whenever it acts
         mock_act.return_value = D
 
-        # We play 11 rounds.
-        # Turns 1-10: ISO predicts 3.0 (same as average for mutual cooperation, so expected_gain = 0)
-        # Turn 11: ISO suddenly predicts 5.0. expected_gain (2.0) crosses the threshold.
         mock_update.side_effect = [3.0] * 9 + [5.0]
 
-        # T1 to T10: Mutual cooperation (LongtermTfT mirroring)
         expected = [(C, C)] * 10
 
-        # T11: The threshold is crossed, we switch to ISO, which our mock says will return D
         expected.append((D, C))
 
         self.versus_test(
@@ -281,7 +247,6 @@ class TestCooperateISO(TestPlayer):
             match_attributes={"noise": 0.0, "game": axl.DefaultGame},
         )
 
-        # Verify ISO took over on the final turn
         mock_act.assert_called_once()
 
     @patch("axelrod.strategies.cooperate_iso.ISO.update")
@@ -297,12 +262,8 @@ class TestCooperateISO(TestPlayer):
         mock_act.return_value = D
         mock_strategy.return_value = D
 
-        # 9 turns of 3.0, then 5.0 for turns 10 and 11
         mock_update.side_effect = [3.0] * 9 + [5.0, 5.0]
 
-        # T1 to T10: Mutual cooperation
-        # T11: Switches to ISO (calls act())
-        # T12: Already playing ISO (calls strategy())
         expected = [(C, C)] * 10 + [(D, C), (D, C)]
 
         self.versus_test(
@@ -318,7 +279,6 @@ class TestCooperateISO(TestPlayer):
         """Ensures random seeds are passed down to the inner ISO instance."""
         player = self.player()
 
-        # Mock the internal ISO instance's set_seed method
         player.iso_instance.set_seed = MagicMock()
 
         player.set_seed(42)
