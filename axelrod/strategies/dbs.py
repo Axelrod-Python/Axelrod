@@ -442,15 +442,47 @@ def minimax_tree_search(begin_node, policy, max_depth):
             return node_value
 
 
+def _root_values(outcome, policy, depth):
+    """Evaluate a positive-depth search using four values per layer.
+
+    With the learned policy fixed during a search, a subtree depends only on
+    its previous outcome and remaining depth. Reusing these four values makes
+    the search linear in depth, with constant working space. Keep the arithmetic
+    order of minimax_tree_search: floating-point reassociation can change ties.
+    """
+    outcomes = ((C, C), (C, D), (D, C), (D, D))
+    rewards = (3, 0, 5, 1)
+    outcome = (outcome[0], outcome[1])
+    if depth > 1:
+        probabilities = tuple(policy[position] for position in outcomes)
+    values = rewards
+    for _ in range(1, depth):
+        cc, cd, dc, dd = values
+        values = tuple(
+            max(p * cc + (1 - p) * cd, p * dc + (1 - p) * dd) + reward
+            for p, reward in zip(probabilities, rewards)
+        )
+    p = policy[outcome]
+    reward = rewards[outcomes.index(outcome)]
+    return (
+        (p * values[0] + (1 - p) * values[1]) + reward,
+        (p * values[2] + (1 - p) * values[3]) + reward,
+    )
+
+
 def move_gen(outcome, policy, depth_search_tree=5):
     """
     Returns the best move considering opponent's policy and last move,
     using tree-search procedure.
     """
-    current_node = DeterministicNode(outcome[0], outcome[1], depth=0)
-    values_of_choices = minimax_tree_search(
-        current_node, policy, depth_search_tree
-    )
+    if type(depth_search_tree) is int and depth_search_tree > 0:
+        values_of_choices = _root_values(outcome, policy, depth_search_tree)
+    else:
+        # Retain the original behavior for zero/negative and non-integer depths.
+        current_node = DeterministicNode(outcome[0], outcome[1], depth=0)
+        values_of_choices = minimax_tree_search(
+            current_node, policy, depth_search_tree
+        )
     # Returns the Action which correspond to the best choice in terms of
     # expected value. In case value(C) == value(D), returns C.
     actions_tuple = (C, D)
