@@ -354,7 +354,8 @@ class MoranProcess(object):
         else:
             # birth-death is global
             sources = sorted(self.locations)
-        for i, source in enumerate(sources):
+        for source in sources:
+            i = self.index[source]
             for target in sorted(self.interaction_graph.out_vertices(source)):
                 j = self.index[target]
                 if (self.players[i] is None) or (self.players[j] is None):

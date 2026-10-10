@@ -572,6 +572,31 @@ class GraphMoranProcess(unittest.TestCase):
             winner2 = mp.winning_strategy_name
             self.assertEqual((winner == winner2), outcome)
 
+    def test_death_birth_matchup_indices_use_player_positions(self):
+        """Regression test: in death-birth mode the matchup pairs must be
+        player positions, not positions in the dead node's neighbour list.
+
+        On a 5-cycle, when the player on vertex 2 dies its neighbours
+        (vertices 1 and 3) each play their own out-neighbours, so the
+        matchups are (1, 0) and (3, 4).
+        """
+        N = 5
+        players = [axl.Cooperator(), axl.Defector(), axl.TitForTat(),
+                   axl.Cooperator(), axl.Defector()]
+        mp = MoranProcess(
+            players,
+            interaction_graph=axl.graph.cycle(N),
+            mode="db",
+            seed=1,
+        )
+        # Reproduce the state __next__ creates before score_all()
+        mp.dead = 2
+        mp.players[2] = None
+        self.assertEqual(mp._matchup_indices(), {(1, 0), (3, 4)})
+        scores = mp.score_all()
+        # Only the two neighbours of the dead node and their opponents play
+        self.assertEqual(scores, [0.0, 5.0, 0, 0.0, 5.0])
+
 
 class TestApproximateMoranProcess(unittest.TestCase):
     """A suite of tests for the ApproximateMoranProcess"""
