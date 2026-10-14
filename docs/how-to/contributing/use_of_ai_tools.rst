@@ -1,12 +1,12 @@
 Use of AI tools
 ===============
 
-You are welcome to use AI tools (code assistants, large language models) when
+You may use AI tools (code assistants, large language models) when
 contributing to the library. If you do, the description of your pull request
 must say which parts were AI-generated. Autocomplete and spelling fixes do not
 count.
 
-We also ask the following:
+We also require the following:
 
 - You are responsible for your contribution: you should understand it, have
   tested it and be able to explain every line.

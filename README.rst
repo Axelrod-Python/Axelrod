@@ -116,6 +116,9 @@ You can find helpful instructions about contributing in the
 documentation:
 https://axelrod.readthedocs.io/en/stable/how-to/contributing/index.html
 
+Our policy on the use of AI tools is at
+https://axelrod.readthedocs.io/en/stable/how-to/contributing/use_of_ai_tools.html
+
 Publications
 ------------
 
