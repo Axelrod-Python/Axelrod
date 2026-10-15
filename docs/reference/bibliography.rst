@@ -54,9 +54,9 @@ documentation.
 .. [Nowak1992] Nowak, M.., & May, R. M. (1992). Evolutionary games and spatial chaos. Nature. http://doi.org/10.1038/359826a0
 .. [Nowak1993] Nowak, M., & Sigmund, K. (1993). A strategy of win-stay, lose-shift that outperforms tit-for-tat in the Prisoner’s Dilemma game. Nature, 364(6432), 56–58. http://doi.org/10.1038/364056a0
 .. [Ohtsuki2006] Ohtsuki, Hisashi, et al. "A simple rule for the evolution of cooperation on graphs and social networks." Nature 441.7092 (2006): 502.
-.. [PD2017] http://www.prisoners-dilemma.com/competition.html (Accessed: 6 June 2017). Archived at https://web.archive.org/web/20171227021632/http://www.prisoners-dilemma.com/competition.html
+.. [PD2017] Archived at https://web.archive.org/web/20180820061453/http://www.prisoners-dilemma.com/competition.html (Accessed: 13 July 2026).
 .. [Press2012] Press, W. H., & Dyson, F. J. (2012). Iterated Prisoner’s Dilemma contains strategies that dominate any evolutionary opponent. Proceedings of the National Academy of Sciences, 109(26), 10409–10413.  http://doi.org/10.1073/pnas.1206569109
-.. [Prison1998] LIFL (1998) PRISON. Available at: http://www.lifl.fr/IPD/ipd.frame.html (Accessed: 19 September 2016).
+.. [Prison1998] LIFL (1998) PRISON. Archived at: https://web.archive.org/web/20181215121529/http://www.lifl.fr/IPD/ipd.frame.html (Accessed: 13 July 2026).
 .. [Robson1990] Robson, Arthur J. "Efficiency in evolutionary games: Darwin, Nash and the secret handshake." Journal of theoretical Biology 144.3 (1990): 379-396.
 .. [Roemheld2013] Roemheld, Lars. "Evolutionary Extortion and Mischief: Zero Determinant strategies in iterated 2x2 games". Available at: https://arxiv.org/abs/1308.2576
 .. [Singer-Clark2014] Singer-Clark, T. (2014). Morality Metrics On Iterated Prisoner’s Dilemma Players.
