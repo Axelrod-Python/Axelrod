@@ -76,6 +76,7 @@ from .backstabber import BackStabber, DoubleCrosser
 from .better_and_better import BetterAndBetter
 from .bush_mosteller import BushMosteller
 from .calculator import Calculator
+from .cooperate_iso import LongtermTfT, ISO, CooperateISO
 from .cooperator import Cooperator, TrickyCooperator
 from .cycler import (
     AntiCycler,
@@ -316,6 +317,7 @@ all_strategies = [
     CautiousQLearner,
     CollectiveStrategy,
     ContriteTitForTat,
+    CooperateISO,
     Cooperator,
     CooperatorHunter,
     CycleHunter,
@@ -397,11 +399,13 @@ all_strategies = [
     Hopeless,
     Inverse,
     InversePunisher,
+    ISO,
     KnowledgeableWorseAndWorse,
     LevelPunisher,
     LimitedRetaliate,
     LimitedRetaliate2,
     LimitedRetaliate3,
+    LongtermTfT,
     MEM2,
     MathConstantHunter,
     Michaelos,

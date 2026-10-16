@@ -33,6 +33,7 @@ documentation.
 .. [Hauert2002] Hauert, Christoph, and Olaf Stenull. "Simple adaptive strategy wins the prisoner's dilemma." Journal of Theoretical Biology 218.3 (2002): 261-272.
 .. [Hilbe2013] Hilbe, C., Nowak, M.A. and Traulsen, A. (2013). Adaptive dynamics of extortion and compliance, PLoS ONE, 8(11), p. e77886. doi: 10.1371/journal.pone.0077886.
 .. [Hilbe2017] Hilbe, C., Martinez-Vaquero, L. A., Chatterjee K., Nowak M. A. (2017). Memory-n strategies of direct reciprocity, Proceedings of the National Academy of Sciences May 2017, 114 (18) 4715-4720; doi: 10.1073/pnas.1621239114.
+.. [Hutter2023] Hutter, A. (2023). "Balancing Cooperativeness and Adaptiveness in the (Noisy) Iterated Prisoner's Dilemma." Available at: https://arxiv.org/abs/2303.03519
 .. [Kuhn2017] Kuhn, Steven, "Prisoner's Dilemma", The Stanford Encyclopedia of Philosophy (Spring 2017 Edition), Edward N. Zalta (ed.), https://plato.stanford.edu/archives/spr2017/entries/prisoner-dilemma/
 .. [Kraines1989] Kraines, David, and Vivian Kraines. "Pavlov and the prisoner's dilemma." Theory and decision 26.1 (1989): 47-79. doi:10.1007/BF00134056
 .. [Krapohl2020] Krapohl, S., Ocelík, V. & Walentek, D.M. The instability of globalization: applying evolutionary game theory to global trade cooperation. Public Choice 188, 31–51 (2021). https://doi.org/10.1007/s11127-020-00799-1
