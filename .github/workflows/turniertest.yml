@@ -1,0 +1,26 @@
+name: Mein eigenes Axelrod Turnier
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run-tournament:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Code ausleihen
+        uses: actions/checkout@v4
+
+      - name: Python vorbereiten
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: System-Abhängigkeiten und Axelrod installieren
+        run: |
+          pip install --upgrade pip setuptools wheel
+          # Das sind die fehlenden Pakete, die die KIs zum Überleben brauchen:
+          pip install numpy scipy
+          pip install -e .
+
+      - name: Turnier starten
+        run: python turniertest.py # Oder hier den Namen deiner großen Datei eintragen!
