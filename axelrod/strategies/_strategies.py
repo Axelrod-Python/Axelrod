@@ -24,6 +24,7 @@ annotated as to avoid some static testing. For example:
 import warnings
 
 from .adaptive import Adaptive
+from .adaptive_cooperator import AdaptiveCooperator
 from .adaptor import AdaptorBrief, AdaptorLong
 from .alternator import Alternator
 from .ann import EvolvedANN, EvolvedANN5, EvolvedANNNoise05
@@ -294,6 +295,7 @@ all_strategies = [
     APavlov2006,
     APavlov2011,
     Adaptive,
+    AdaptiveCooperator,
     AdaptiveTitForTat,
     AdaptorBrief,
     AdaptorLong,
