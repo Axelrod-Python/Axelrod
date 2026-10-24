@@ -1,4 +1,4 @@
-"""Tests for the ZeroResp strategy (v5.3)."""
+"""Tests for the ZeroResp strategy (v5.4.4)."""
 
 import inspect
 import unittest
@@ -28,7 +28,7 @@ def _play(player, opponent, turns, seed=0, length=None, noise=0.0):
 class TestZeroResp(TestPlayer):
 
     # Player.__repr__ appends init kwargs (base_epoch, use_profiles).
-    name = "ZeroResp v5.3: 25, True"
+    name = "ZeroResp v5.4.4: 25, True"
     player = axl.ZeroResp
     expected_classifier = {
         "memory_depth": float("inf"),
@@ -83,7 +83,7 @@ class TestZeroResp(TestPlayer):
 
     def test_name_and_classifier(self):
         player = self.player()
-        self.assertEqual(player.name, "ZeroResp v5.3")
+        self.assertEqual(player.name, "ZeroResp v5.4.4")
         self.assertTrue(player.classifier["manipulates_state"])
         self.assertTrue(player.classifier["stochastic"])
         self.assertEqual(player.classifier["memory_depth"], float("inf"))
@@ -232,7 +232,7 @@ class TestZeroResp(TestPlayer):
 
 
 class TestZeroRespNoiseLadder(unittest.TestCase):
-    """v5.3 noise ladder. Not a registered strategy of its own."""
+    """Noise ladder helpers. Not a registered strategy of its own."""
 
     def setUp(self):
         ZeroResp._global_profiles = {}
@@ -835,3 +835,93 @@ class TestZeroRespBranchCoverage(unittest.TestCase):
         player._contrite = True
         self.assertEqual(player.strategy(axl.Cooperator()), C)
         self.assertFalse(player._contrite)
+
+    def test_v54_profile_memory_and_legacy_harvest(self):
+        """profile_memory softens min_d; adaptive_harvest=False uses forg>0.6."""
+        player = self._player()
+        player.set_seed(7)
+        player._known_soft_opponent = True
+        player.my_D = 1
+        player.opp_coops_after_my_D = 1
+        player.nl_balance = 1
+        player.nl_evidence = 1
+        player.tactical = "adaptive"
+        player._nl_ladder(30)
+        self.assertGreaterEqual(player.nl_harvest_size, player.NL_HARVEST_MIN)
+
+        player = self._player(adaptive_harvest=False)
+        player.set_seed(8)
+        player.my_D = 3
+        player.opp_coops_after_my_D = 3  # forg = 1.0 > 0.6
+        player.nl_balance = 1
+        player.nl_evidence = 1
+        player.tactical = "adaptive"
+        player._nl_ladder(30)
+        self.assertGreaterEqual(player.nl_harvest_size, player.NL_HARVEST_MIN)
+        self.assertGreaterEqual(player.nl_harvest_scheduled_at, 36)
+
+    def test_v54_balance_apology_gates_and_cycler(self):
+        """balance_apology: coop floor, responsiveness, cycler contour block."""
+        # Cycler contour blocks apology against a fixed period-2 opponent.
+        player = self._player()
+        player.nl_balance = player.NL_BALANCE_FLOOR
+        player.match_attributes["noise"] = 0.05
+        opp = axl.Alternator()
+        # Seed enough history for period detection (min 12, period 2).
+        hist_me = [C, D] * 9
+        hist_opp = [C, D] * 9
+        player.history.extend(hist_me, hist_opp)
+        opp.history.extend(hist_opp, hist_me)
+        player.opp_len = len(hist_opp)
+        before = player.echo_forgive
+        player.strategy(opp)
+        self.assertTrue(player._fixed_period_latch)
+        # Apology must not fire when cycler is latched.
+        self.assertEqual(player.echo_forgive, before)
+
+        # Responsiveness gate: delta_p >= 0.35 allows apology (TFT-shaped history).
+        player = self._player(cycler_contour=False)
+        player.nl_balance = player.NL_BALANCE_FLOOR
+        player.match_attributes["noise"] = 0.05
+        player.nl_scheduled = [{"turn": 9, "kind": "strike"}]
+        player.nl_harvest_left = 2
+        player.nl_evidence = 2
+        my = [C, D] * 8
+        their = [C] + my[:-1]  # Tit-for-tat reply to our previous move
+        player.history.extend(my, their)
+        foe = axl.TitForTat()
+        foe.history.extend(their, my)
+        player.opp_len = len(their)
+        player.strategy(foe)
+        self.assertGreaterEqual(player.echo_forgive, 2)
+        self.assertEqual(player.nl_scheduled, [])
+        self.assertEqual(player.nl_harvest_left, 0)
+        self.assertEqual(player.nl_evidence, 0)
+
+        # Coop-rate floor blocks apology when opponent mostly defects.
+        player = self._player(cycler_contour=False)
+        player.nl_balance = player.NL_BALANCE_FLOOR
+        player.match_attributes["noise"] = 0.05
+        player.echo_forgive = 0
+        my = [C] * 16
+        their = [D] * 16
+        player.history.extend(my, their)
+        foe = axl.Defector()
+        foe.history.extend(their, my)
+        player.opp_len = 16
+        player.opp_defects = 14  # live coop rate 2/16 = 0.125 < 0.60
+        player.strategy(foe)
+        self.assertEqual(player.echo_forgive, 0)
+
+        # Few own D's (<2): can_apologize True without delta_p check.
+        player = self._player(cycler_contour=False)
+        player.nl_balance = player.NL_BALANCE_FLOOR
+        player.match_attributes["noise"] = 0.05
+        my = [C] * 10 + [D]
+        their = [C] * 11
+        player.history.extend(my, their)
+        foe = axl.Cooperator()
+        foe.history.extend(their, my)
+        player.opp_len = 11
+        player.strategy(foe)
+        self.assertGreaterEqual(player.echo_forgive, 2)
