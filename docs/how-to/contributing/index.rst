@@ -10,6 +10,7 @@ Contents:
    :maxdepth: 2
 
    guidelines.rst
+   use_of_ai_tools.rst
    setting_up_the_environment.rst
    strategy/index.rst
    library/index.rst
