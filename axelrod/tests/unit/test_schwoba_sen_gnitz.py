@@ -3,8 +3,8 @@ import axelrod as axl
 from axelrod.action import Action
 from axelrod.strategies.schwoba_sen_gnitz import SchwobaSenGnitz
 
-class TestSchwobaSenGnitz(axl.TestPlayer):
-    name = "Schwoba sen gnitz"
+class TestSchwoba_Sen_Gnitz(axl.TestPlayer):
+    name = "Schwoba_sen_gnitz"
     player = SchwobaSenGnitz
 
     def test_strategy_initial_cooperation(self):
