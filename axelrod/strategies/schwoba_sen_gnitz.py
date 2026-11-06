@@ -12,7 +12,7 @@ class SchwobaSenGnitz(Player):
     Erkennt nach 10 Runden unversöhnliche Gegner und riegelt ab.
     """
 
-    name = "Schwoba sen gnitz"
+    name = "schwoba sen gnitz"
     authors = ["Georg 'HackyHackberger' Schmidt"]
     classifier = {
         "memory_depth": float("inf"),
@@ -38,13 +38,18 @@ class SchwobaSenGnitz(Player):
         if runde == 0:
             return Action.C
 
+        # Absicherung für den Zugriff auf die Historie des Gegners
+        if not opponent.history:
+            return Action.C
+
         if not self.raubtier_erwacht and opponent.history[-1] == Action.D:
             self.raubtier_erwacht = True
 
         if not self.raubtier_erwacht:
             return Action.C
 
-        if runde >= 10:
+        # Sicherer Zugriff auf die letzten 10 Runden des Gegners
+        if runde >= 10 and len(opponent.history) >= 10:
             letzte_10_gegner = opponent.history[-10:]
             if all(zug == Action.D for zug in letzte_10_gegner):
                 self.schutz_modus_aktiviert = True
