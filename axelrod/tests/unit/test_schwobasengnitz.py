@@ -1,7 +1,7 @@
 import random
 import axelrod as axl
 from axelrod.action import Action
-from axelrod.strategies.schwobasengnitz import SchwobaSenGnitz
+from axelrod.strategies.schwoba_sen_gnitz import SchwobaSenGnitz
 
 class TestSchwobaSenGnitz(axl.TestPlayer):
     name = "Schwoba sen gnitz"
