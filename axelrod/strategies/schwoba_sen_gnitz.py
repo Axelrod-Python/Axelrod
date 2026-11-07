@@ -1,21 +1,15 @@
 import random
+from typing import List, Dict, Any
 from axelrod.action import Action
 from axelrod.player import Player
 
 
 class SchwobaSenGnitz(Player):
-    """Schwoba sen gnitz (Schwaben sind gerissen) - Python-Version 2026.
+    """Schwoba sen gnitz."""
 
-    Autor: Georg 'HackyHackberger' Schmidt (1985 / 2026)
-    Ursprünglicher Code in Turbo Pascal, 1985
-    Startet 100 % friedlich. Nach dem ersten gegnerischen Verrat erwacht die
-    optimierte gnitze Technik: 10,2 % Sondierung, 89,7 % Deeskalation.
-    Erkennt nach 10 Runden unversöhnliche Gegner und riegelt ab.
-    """
-
-    name = "schwoba sen gnitz"
-    authors = ["Georg 'HackyHackberger' Schmidt"]
-    classifier = {
+    name: str = "schwoba sen gnitz"
+    authors: List[str] = ["Georg 'HackyHackberger' Schmidt"]
+    classifier: Dict[str, Any] = {
         "memory_depth": float("inf"),
         "stochastic": True,
         "makes_use_of": set(),
@@ -48,7 +42,6 @@ class SchwobaSenGnitz(Player):
         if not self.raubtier_erwacht:
             return Action.C
 
-        # Sicherer Zugriff auf die letzten 10 Runden
         if runde >= 10 and len(opponent.history) >= 10:
             letzte_10_gegner = opponent.history[-10:]
             if all(zug == Action.D for zug in letzte_10_gegner):
@@ -58,13 +51,11 @@ class SchwobaSenGnitz(Player):
             return Action.D
 
         if opponent.history[-1] == Action.D:
-            # 89,7 % Deeskalations-Bremse
             if random.random() < 0.897:
                 return Action.C
             else:
                 return Action.D
 
-        # 10,2 % gnitze Sondierung
         if random.random() < 0.102:
             return Action.D
 
