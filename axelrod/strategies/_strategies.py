@@ -284,6 +284,7 @@ from .zero_determinant import (
     ZDMischief,
     ZDSet2,
 )
+from .schwoba_sen_gnitz import SchwobaSenGnitz
 
 # Note: Meta* strategies are handled in .__init__.py
 
@@ -438,6 +439,7 @@ all_strategies = [
     RevisedDowning,
     Ripoff,
     RiskyQLearner,
+    SchwobaSenGnitz,
     SecondByAppold,
     SecondByBlack,
     SecondByBorufsen,
