@@ -581,8 +581,13 @@ class GraphMoranProcess(unittest.TestCase):
         matchups are (1, 0) and (3, 4).
         """
         N = 5
-        players = [axl.Cooperator(), axl.Defector(), axl.TitForTat(),
-                   axl.Cooperator(), axl.Defector()]
+        players = [
+            axl.Cooperator(),
+            axl.Defector(),
+            axl.TitForTat(),
+            axl.Cooperator(),
+            axl.Defector(),
+        ]
         mp = MoranProcess(
             players,
             interaction_graph=axl.graph.cycle(N),
